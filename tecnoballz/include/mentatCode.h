@@ -4,7 +4,7 @@
 // file		: "mentatCode.h"
 // created	: 2002-08-18
 // updates	: 2005-01-11
-// ID		: $Id: mentatCode.h,v 1.5 2005/01/15 10:18:50 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.6 2005/01/19 20:38:11 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -95,7 +95,7 @@ class mentatCode
 		static const Uint32	MAX_PLAYER = 6;	
 	
 	public:
-		static Sint32		is_verbose;		//1 = verbose mode
+		static bool		is_verbose;		//1 = verbose mode
 		static Sint32		bg4_colors;		//1 = force 4 colors background
 		static Sint32		resolution;		//1:320*240 or 2:640*480 pixels
 		static Uint32		double_mem;		//double memory size of all allocations 

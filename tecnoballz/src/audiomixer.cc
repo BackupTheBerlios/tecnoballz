@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "audiomixer.cc"
 // created	: 2004-03-22
-// updates	: 2005-01-15
+// updates	: 2005-01-19
 // functions	: handler music and sound
-// id		: $Id: audiomixer.cc,v 1.2 2005/01/15 19:59:58 gurumeditation Exp $
+// id		: $Id: audiomixer.cc,v 1.3 2005/01/19 20:38:11 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -28,7 +28,7 @@
 
 
 
-Sint32 audiomixer::audioactif = 1;
+bool audiomixer::audioactif = true;
 
 //######################################################################
 // positions in music modules

@@ -24,6 +24,7 @@ MODC =	audiomixer \
 	BOB_killer \
 	briqueCote \
 	clavierMac \
+	configfile \
 	ecran_hard \
 	ejectBalls \
 	escapeMenu \
@@ -38,6 +39,7 @@ MODC =	audiomixer \
 	lesBriques \
 	level_data \
 	liste_BOBs \
+	lispreader \
 	main \
 	mentatCode \
 	menu_tecno \

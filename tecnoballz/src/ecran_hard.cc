@@ -4,7 +4,7 @@
 // file		: "ecran_hard.cc"
 // created	: 2002-08-17
 // updates	: 2005-01-10
-// id		: $Id: ecran_hard.cc,v 1.2 2005/01/10 09:29:43 gurumeditation Exp $
+// id		: $Id: ecran_hard.cc,v 1.3 2005/01/19 20:38:11 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -26,8 +26,8 @@
 #include "../include/ressources.h"
 
 char 	ecran_hard::nomfenetre[25] = "TecnoballZ by TLK Games\0";
-Sint32	ecran_hard::optionfull = 0;
-Sint32	ecran_hard::optionsync = -1;
+bool	ecran_hard::optionfull = false;
+bool	ecran_hard::optionsync = true;
 
 //------------------------------------------------------------------------------
 // create the object
@@ -260,7 +260,8 @@ void ecran_hard::fullscreen()
 {
 	if(keyGestion->specialKey(clavierMac::FULLSCFLAG) &&
 		keyGestion->getCursPos() < 0)
-	{	optionfull = ~optionfull;
+	{	if(optionfull) optionfull = false;
+		else optionfull = true;
 		ecran_gere->init_video();
 		ecran_gere->palette_go(ze_palette);
 		keyfscreen = 0;
@@ -278,8 +279,8 @@ Uint32 ecran_hard::waitVBlank()
 	Uint32 durat = 0;
 	countframe++;
 	durat = SDL_GetTicks() - datepreced;
-	optionsync = 1;
-	if(optionsync > 0)
+	optionsync = true;
+	if(optionsync)
 	{	wait_total += durat;
 		if(--wait_count <= 0)
 		{	//wait_diffv = durat;

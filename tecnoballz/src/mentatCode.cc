@@ -4,7 +4,7 @@
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
 // updates	: 2005-01-15
-// id		: $Id: mentatCode.cc,v 1.4 2005/01/15 20:40:29 gurumeditation Exp $
+// id		: $Id: mentatCode.cc,v 1.5 2005/01/19 20:38:11 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -39,7 +39,7 @@
 //.............................................................................
 Sint32				mentatCode::arg_jumper = -1;
 Sint32				mentatCode::bg4_colors = 0;	//force 4 colors background
-Sint32				mentatCode::is_verbose = 0;
+bool				mentatCode::is_verbose = 0;
 Sint32				mentatCode::num_erreur = 0;	//error number
 Sint32				mentatCode::counterObj = 0;	//number of objects
 Sint32				mentatCode::hasard_val = 0;	//random value

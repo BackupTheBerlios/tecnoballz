@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.2 2005/01/18 07:08:28 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.3 2005/01/19 20:38:11 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -241,11 +241,15 @@ Sint32 ze_gadgets::gadgetShop()
 		bonus->BOB_desact();
 		y += h;
 	}
-	bonus = *(liste++);							//bonus drag and drop
+	
+	//initialize bonus sprite object for the drag and drop 
+	bonus = *(liste++);
 	bonus->coordonnee(0, 0);
 	bonus->BOB_desact();
+
+	//initialize bonus sprite object that display indicator   
 	bonus = *liste;
-	bonus->coordonnee(SGADGET_X2 * resolution, SGADGET_Y2 * resolution);	//bonus indicator
+	bonus->coordonnee(SGADGET_X2 * resolution, SGADGET_Y2 * resolution);
 	bonus->BOB_desact();
 	temoin_gad = bonus;
 	return (erreur_num);
@@ -331,18 +335,23 @@ void ze_gadgets::animations(Sint32 value)
 void ze_gadgets::gadgetKeys()
 {
 	if (!cheat_flag) return;
-	if(	!keyGestion->test_Kcode(SDLK_RSHIFT) ||
-		keyGestion->test_Kcode(SDLK_LSHIFT) ||
-		!keyGestion->test_Kcode(SDLK_RCTRL) ||
+	if(	keyGestion->test_Kcode(SDLK_LSHIFT) ||
 		keyGestion->test_Kcode(SDLK_LCTRL) ||
 		keyGestion->test_Kcode(SDLK_RALT) ||
+#ifndef TU_TRICHES
+		!keyGestion->test_Kcode(SDLK_RSHIFT) ||
+		!keyGestion->test_Kcode(SDLK_RCTRL) ||
+#else
+		keyGestion->test_Kcode(SDLK_RSHIFT) ||
+		keyGestion->test_Kcode(SDLK_RCTRL) ||
+#endif
 		keyGestion->test_Kcode(SDLK_LALT))
-	return;
+		return;
 	Sint16 *liste = keysTriche;
-	while (Sint16 k = *(liste++)) 		// k = SDL key code
-	{	Sint16 g = *(liste++);			// g = gadget code (bonus or malus)
-		if(keyGestion->test_Kcode(k))	// key pressed ?
-			*(liste++) = 1;				// yes, set key state pressed
+	while (Sint16 k = *(liste++)) 		//k = SDL key code
+	{	Sint16 g = *(liste++);		//g = gadget code (bonus or malus)
+		if(keyGestion->test_Kcode(k))	//key pressed ?
+			*(liste++) = 1;		//yes, set key state pressed
 		else
 		{	if (*liste)
 				gadget_run(bumpSelect, g);

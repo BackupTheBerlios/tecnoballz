@@ -1,10 +1,11 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "audiomixer.h"
-// created		: 2004-03-22
-// updates		: 2004-10-24
+// created	: 2004-03-22
+// updatesx	: 2005-01-19
 // functions	: handler music and sound
+// id		: $Id: audiomixer.h,v 1.2 2005/01/19 20:38:11 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -71,24 +72,24 @@ typedef enum
 
 // numbers of the sounds
 typedef enum
-{	S_ENLEVVIE,	// lose a life
-	S_RAKEXPLO,	// explosion of the bumper
-	S_AJOUTVIE,	// extra life
-	S_MONNAIES,	// collect money
-	S_TILTALAR, // alarm 
-	S_GADGETGO, // collect option (extra balls, power balls)
-	S_TECNOBAL, // "tecno" sound
+{	S_ENLEVVIE,	//lose a life
+	S_RAKEXPLO,	//explosion of the bumper
+	S_AJOUTVIE,	//extra life
+	S_MONNAIES,	//collect money
+	S_TILTALAR,	//alarm 
+	S_GADGETGO,	//collect option (extra balls, power balls)
+	S_TECNOBAL,	//"tecno" sound
 	S_ATOMAPPA,
-	S_TRANSFOR, // bumper transformation (expand, glue)
-	S_TIR_GARD,	// guard's fire
-	S_RAK_TIRS,	// bumper's fire
-	S_BIGEXPLO,	// guard's explosion
-	S_CASSEIND,	// break a indestructible brick
-	S_ATOM_EXP, //
-	S_GARDIENT, // hit the guard
+	S_TRANSFOR,	//bumper transformation (expand, glue)
+	S_TIR_GARD,	//guard's fire
+	S_RAK_TIRS,	//bumper's fire
+	S_BIGEXPLO,	//guard's explosion
+	S_CASSEIND,	//break a indestructible brick
+	S_ATOM_EXP,	//
+	S_GARDIENT,	//hit the guard
 	S_TO_ATOMS,	//
-	S_TOINDES1,	// hit the indestructible brick 1
-	S_TOINDES2,	// hit the indestructible brick 2
+	S_TOINDES1,	//hit the indestructible brick 1
+	S_TOINDES2,	//hit the indestructible brick 2
 	S_TOUCHRAK,
 	S_BRICOTES,
 	S_TOUBRIK1,
@@ -105,7 +106,7 @@ typedef enum
 class audiomixer:public virtual mentatCode
 {
 	public:
-		static Sint32	audioactif;		// 1 = SDL_mixer is enable
+		static bool	audioactif;		//1 = SDL_mixer is enable
 
 	public:
 				audiomixer();

@@ -3,8 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "tableaux_Z.cc"
 // created	: ?
-// updates	: 2005-01-18
+// updates	: 2005-01-19
 // fonctions	: manage bricks levels
+// id		: $Id: tableaux_Z.cc,v 1.4 2005/01/19 20:38:11 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -404,6 +405,7 @@ Sint32 tableaux_Z::zeMainLoop()
 			
 			//handle the "less bricks" option
 			briquesTab->lessbricks();
+			
 			theBumpers->bp_deplace();	//move bumpers
 			if(tecZ_barre->resteBrick())
 			{	theBumpers->lacheBalle();
@@ -415,10 +417,10 @@ Sint32 tableaux_Z::zeMainLoop()
 			tecno_fire::gestionTir();
 			les_atomes->atom_depla();
 			pt_magneye->execution1();
-			gereCapsul->bouge_fric();	// move capsules of money
-			gereGadget->bouge_gads();	// move bonuses and maluses
+			gereCapsul->bouge_fric();	//move capsules of money
+			gereGadget->bouge_gads();	//move bonuses and maluses
 			gereGadget->gadgetKeys();
-			ptGemstone->moving_gem();	// move gems
+			ptGemstone->moving_gem();	//move gems
 			gere_texte->goMoveText();
 			if(BottomWall->thecounter < 1)
 				BottomWall->BOB_desact();
@@ -442,7 +444,7 @@ Sint32 tableaux_Z::zeMainLoop()
 		{	if(count_next > 0)
  			{	count_next++;
 				Sint32 endmu = 0;
-				if(count_next > 500)
+				if(count_next > 350)
 				{	endmu = 1;
 #ifndef SOUNDISOFF	
 					endmu = ptAudiomix->winn_isend();

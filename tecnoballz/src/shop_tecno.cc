@@ -1,10 +1,11 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "shop_tecno.cc"
-// created		: ?
-// updates		: 2004-10-23
+// created	: ?
+// updates	: 2005-01-19
 // fonction	: manage the shop
+// id		: $Id: shop_tecno.cc,v 1.2 2005/01/19 20:38:11 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -172,10 +173,10 @@ Sint32 shop_tecno::first_init()
 	//###################################################################
 	error_init(ptrEscMenu->first_init
 	(	image_BOBs,
-		1,					//menu number
+		1,			//menu number
 		320 * resolution,	//width of screen (center)
-		1,					//restaure background where leaves
-		1					//initialize color table
+		1,			//restaure background where leaves
+		1			//initialize color table
 	));
 	
 
@@ -219,10 +220,6 @@ Sint32 shop_tecno::zeMainLoop()
 	//###################################################################
 	// copy the "tampon" memory in the "buffer" memory
 	//###################################################################
-	
-	/*ecran_gere->tampon_RAZ(246, 290 * resolution, 3 * resolution, 
-		26 * resolution, 180 * resolution);*/
-	
 	ecran_gere->tamponBuff(290* resolution, 3 * resolution, 
 		26 * resolution, 180 * resolution);
 	
@@ -328,7 +325,7 @@ void shop_tecno::aff_course()
 //------------------------------------------------------------------------------
 // return index of the selected bonus, and calculate position of LED indicator
 //	input	=>	x: abscissa of the mouse pointer
-//			=>	y: ordinate of the mouse pointer
+//		=>	y: ordinate of the mouse pointer
 //	output	<=	index: 0 to 24 (-1: disable)
 //------------------------------------------------------------------------------
 Sint32 shop_tecno::testkursor(Sint32 x, Sint32 y)
@@ -510,10 +507,9 @@ void shop_tecno::faitcourse(Sint32 gadnu)
 						ptTxt += STEXTWIDHT;
 					if(arean >= 4 && i == 4)
 						ptTxt += STEXTWIDHT;
-						
-					// area 2 => bumper 3 
-					// area 3 => bumper 3 & 2 
-					// area 4 & 5 => bumper 3 & 2 & 4 
+					//area 2 => bumper 3 
+					//area 3 => bumper 3 & 2 
+					//area 4 & 5 => bumper 3 & 2 & 4 
 				}
 				for(Sint32 j = 0; j < STEXTWIDHT; j++)
 					*(ptDes++) = *(ptTxt++);
@@ -798,11 +794,11 @@ void shop_tecno::pos_select()
 		y = cadre_ymin;
 	if(y > cadre_ymax)
 		y = cadre_ymax;
-	cadre_posy = y ;						//cursor y coordinate
+	cadre_posy = y ;				//cursor y coordinate
 	
 	Sint32 x = objetMouse->retournePX();
 	y = objetMouse->retournePY();
-	cadre_flag = 0;							//don't display cursor (by default)
+	cadre_flag = 0;					//don't display cursor (by default)
 	cadre_offs = -1;
 
 	//at least one bonus ?
@@ -1030,15 +1026,15 @@ char shop_tecno::shoptext12[] =
 //*- RB --------------------------------------------------------------------*
 	"          OK          " \
 	"       FOR  THE       " \
-	"        ROBOT!        " \
+	"     ROBOT BUMPER!    " \
 //*- CT --------------------------------------------------------------------*
 	"          OK          " \
 	"       FOR  THE       " \
-	"     CONTROLATOR!     " \
+	" CONTROL BALL OPTION  " \
 //*- GL --------------------------------------------------------------------*
-	"                      " \
-	"   OK FOR THE GLUE    " \
-	"                      " \
+	"          OK          " \
+	"       FOR  THE       " \
+	"     GLUE  OPTION     " \
 //*- XX --------------------------------------------------------------------*
 	"      GO AND SEE      " \
 	"        MY LOVE       " \
@@ -1064,7 +1060,7 @@ char shop_tecno::info_text1[] =
 	"                      " \
 
 	"      TLK  GAMES      " \
-	"     TECNOBALL  Z     " \
+	"      TECNOBALLZ      " \
 	"      TLK  GAMES      " \
 
 	"  LA CORRUPTION REVET " \

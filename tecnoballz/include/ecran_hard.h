@@ -1,9 +1,10 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file         : "ecran_hard.hpp"
+// file         : "ecran_hard.h"
 // created      : 2002-08-17
-// updates      : 2004-04-19
+// updates      : 2005-01-19
+// id		: $Id: ecran_hard.h,v 1.2 2005/01/19 20:38:11 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -31,15 +32,15 @@ class ecran_hard:public virtual mentatCode
 		static const Sint32		SHADOWOFFY = 4;
 		static const unsigned char	SHADOW_PIX = 0x80;
 		static const Uint32		SHADOWLONG = 0x80808080;   
-		static Sint32			optionfull;	// 1 = full screen mode
-		static Sint32			optionsync;	// 1 = no synchronisation
+		static bool			optionfull;	// 1 = full screen mode
+		static bool			optionsync;	// 1 = no synchronisation
 	
 	
 	private:
 		Uint32			keyfscreen;	// 1 = full screen mode
 		
 		static const Uint32	bitspixels = 8;
-		Sint32				offsetplus;
+		Sint32			offsetplus;
     
 		SDL_Surface*		sdl_screen;	// main window
 		SDL_Surface*		bufSurface;	// surface where all is display
