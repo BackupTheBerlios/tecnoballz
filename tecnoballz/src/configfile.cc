@@ -2,9 +2,9 @@
 // Copyright (C) 1998-2005 TLK Games all rights reserved.
 //------------------------------------------------------------------------------
 // file         : "configfile.cpp"
-// created      : 2005-12-12
-// updates      : 2005-01-08
-// id		: $Id: configfile.cc,v 1.1 2005/01/19 20:38:11 gurumeditation Exp $
+// created      : 2005-01-20
+// updates      : 2005-01-20
+// id		: $Id: configfile.cc,v 1.2 2005/01/20 06:35:10 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -50,7 +50,7 @@
 void	configfile::resetvalue()
 {
 	audiomixer::audioactif = 1;
-	resolution = 640;
+	resolution = 2;
 	is_verbose = 0;
 	ecran_hard::optionfull = 0;
 	hardChoice = 1;	
@@ -122,7 +122,10 @@ void configfile::loadconfig()
 		audiomixer::audioactif = 1;
 	if (!reader.read_bool("verbose", &is_verbose))
 		is_verbose = 0;
-	if(ecran_hard::optionfull) ecran_hard::optionfull  = -1;
+	if (!reader.read_int("resolution", &resolution))
+		resolution = 2;
+	if(resolution < 1 || resolution > 2) resolution = 2;
+	
 	lisp_free(root_obj);
 }
 
@@ -173,84 +176,94 @@ FILE * configfile::fopen_data(const char *fname, const char *fmode)
 //------------------------------------------------------------------------------
 Sint32 configfile::scanZeArgs(Sint32 nbArg, char **ptArg) 
 {
-	for(Sint32 _iIndex = 1; _iIndex < nbArg; _iIndex++)
+	Sint32 _iIndex;
+	for(_iIndex = 1; _iIndex < nbArg; _iIndex++)
 	{	
+		// arguments commence tous par un tiret
 		if(*ptArg[_iIndex] != '-')
 			continue;
-
-		//######################################################
-		// help
-		//######################################################
+	
 		if(!strcmp(ptArg[_iIndex], "-h") ||
 			!strcmp(ptArg[_iIndex], "--help"))
-		{
-			fprintf(stdout, "\noptions:\n"
-				"-h, --help     print Help (this message) and exit\n"
-  				"--version      print version information and exit\n"
-				"--320          game run in a 320*200 window (slow machine)\n");
-#ifdef SDL_TLK
-			fprintf(stdout,
-				"--window       windowed mode (full screen by default) \n");
-#endif
-			fprintf(stdout,
-				"-v             verbose mode\n"
-				"--verbose      verbose mode (more messages)\n"
-				"--nosound      force no sound\n"
-				"--nosync       disable timer\n"
-				"--easy         easy bonuses\n"
-				"--hard         hard bonuses\n"
-				"--------------------------------------------------------------\n"
-				"keys recognized during the game:\n"
-				"CTRL+S         enable/disable the music\n"
-				"CTRL+Q         finish the play current\n"
-				"CTRL+A         about Powermanga\n"
-				"F10            quit Powermanga\n"
-				"P              enable/disable pause\n");
-#ifdef SDL_TLK
-			fprintf(stdout,
-				"F              switch between full screen and windowed mode\n");
-#endif
-return 0;
-			
+		{	printf("\noptions:\n");
+			printf("-h, --help     print Help (this message) and exit\n");
+			printf("--version      print version information and exit\n");
+			printf("--full         full screen\n");
+			printf("--320          game run in a 320*200 window\n");
+			printf("--verbose      verbose mode\n");
+			printf("--nosound      force no sound\n");
+			printf("--------------------------------------------------------------\n");
+			printf("keys recognized during the game:\n");
+			printf("CTRL+S         enable/disable sound\n");
+			printf("CTRL+D         enable/disable music\n");
+			printf("CTRL+F         enable/disable sound effects\n");
+			printf("CTRL+X         finish the play current\n");
+			printf("CTRL+Q         return to the main menu\n");
+			printf("CTRL+ESC       quit TecnoballZ\n");
+			printf("P              enable/disable pause\n");
+			printf("F              full screen/window mode\n");
+			printf("\n");
+			return 0;
 		}
-
 	
 		if(!strcmp(ptArg[_iIndex], "--version"))
-		{	//printf(POWERMANGA_VERSION);
+		{	printf(TECNOBALLZ_VERSION);
 			printf("\n");
-			printf("copyright (c) 1998-2005 TLK Games\n");
+			printf("copyright (c) 1991-2005 TLK Games\n");
 			printf("website: http://linux.tlk.fr\n");
 			return 0;
-		}	
+		}
 
-		//######################################################
-		//force window mode
-		//######################################################
+		if(!strcmp(ptArg[_iIndex], "--full"))
+		{	ecran_hard::optionfull = true;
+			continue;
+		}
+
 		if(!strcmp(ptArg[_iIndex], "--window"))
-		{	ecran_hard::optionfull = 0;
+		{	ecran_hard::optionfull = false;
+			continue;
+		}
+		
+		if(!strcmp(ptArg[_iIndex], "--verbose") ||
+			!strcmp(ptArg[_iIndex], "-v"))
+		{	is_verbose = true; 
+			continue;
+		}
+		
+		if(!strcmp(ptArg[_iIndex], "--320"))
+		{	resolution = 1;
 			continue;
 		}
 
-		//######################################################
-		// enable verbose mode		
-		//######################################################
-		if(!strcmp(ptArg[_iIndex], "-v"))
-		{	is_verbose = 1;
+		if(!strcmp(ptArg[_iIndex], "--nosync"))
+		{	ecran_hard::optionsync = false;
 			continue;
 		}
-		if(!strcmp(ptArg[_iIndex], "--verbose"))
-		{	is_verbose = 1;
+#ifndef SOUNDISOFF		
+		if(!strcmp(ptArg[_iIndex], "--sound"))
+		{	audiomixer::audioactif = true; 
 			continue;
 		}
-
-		//######################################################
-		// disable sound
-		//######################################################
 		if(!strcmp(ptArg[_iIndex], "--nosound"))
-		{	audiomixer::audioactif = 0 ;
+		{	audiomixer::audioactif = false; 
+			continue;
+		}
+#endif
+		// use 4 colors background in 640x480
+		if(!strcmp(ptArg[_iIndex], "--bg4"))
+		{	bg4_colors = true; 
+			continue;
+		}
+
+		//start at brick or guard level
+		if(!strcmp(ptArg[_iIndex], "--guard"))
+		{	arg_jumper = 3; 
+			continue;
+		}
+		if(!strcmp(ptArg[_iIndex], "--brick"))
+		{	arg_jumper = 1; 
 			continue;
 		}
 	}
 	return 1;
 }
-

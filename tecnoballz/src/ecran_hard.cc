@@ -4,7 +4,7 @@
 // file		: "ecran_hard.cc"
 // created	: 2002-08-17
 // updates	: 2005-01-10
-// id		: $Id: ecran_hard.cc,v 1.3 2005/01/19 20:38:11 gurumeditation Exp $
+// id		: $Id: ecran_hard.cc,v 1.4 2005/01/20 06:35:10 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -115,6 +115,9 @@ Sint32 ecran_hard::init_video()
 	ecranlarge = 320 * resolution;
 	ecranhaute = 240 * resolution;
 	offsetplus = 64 * resolution;
+	if(is_verbose)
+		fprintf(stdout,	"ecran_hard::init_video() %i * %i \n",
+			ecranlarge,ecranhaute);
 
 	//###################################################################
 	// initialize SDL screen

@@ -4,7 +4,7 @@
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
 // updates	: 2005-01-15
-// id		: $Id: mentatCode.cc,v 1.5 2005/01/19 20:38:11 gurumeditation Exp $
+// id		: $Id: mentatCode.cc,v 1.6 2005/01/20 06:35:10 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -83,6 +83,8 @@ char				mentatCode::zeAreaCode[11] =
 //------------------------------------------------------------------------------
 Sint32 mentatCode::first_init()
 {
+	if(is_verbose)
+		printf("mentatCode::first_init() [START]\n");
 	hasard_val = (Sint32)first_init;
 	memGestion = new RAM_killer();
 	memGestion->initialise(8000);
@@ -105,6 +107,8 @@ Sint32 mentatCode::first_init()
 	num_erreur = ptAudiomix->retour_err();
 	if(num_erreur) return (num_erreur);
 #endif	
+	if(is_verbose)
+		printf("mentatCode::first_init() [ecran_hard::ecran_init]\n");
 	ecran_gere = new ecran_hard();
 	num_erreur = ecran_gere->ecran_init();
 	if(num_erreur) return (num_erreur);
@@ -143,6 +147,8 @@ Sint32 mentatCode::first_init()
 
 	if(arg_jumper > 0)
 		super_jump = arg_jumper;
+	if(is_verbose)
+		printf("mentatCode::first_init() [STOP]\n");
 	return num_erreur;
 }
 
