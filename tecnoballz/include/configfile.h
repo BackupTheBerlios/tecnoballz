@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2005-01-19
-// id		: $Id: configfile.h,v 1.1 2005/01/19 20:38:11 gurumeditation Exp $
+// id		: $Id: configfile.h,v 1.2 2005/01/22 20:44:24 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -52,9 +52,18 @@ class configfile:public virtual mentatCode
 		Uint32		difficulty;*/	
 	
 	private:
+		static char	stringname[7];
 		char		config_dir[512]; 
 		char		configname[512];
-	
+		char		thePlayer1[7];
+		char		thePlayer2[7];
+		char		thePlayer3[7];
+		char		thePlayer4[7];
+		char		thePlayer5[7];
+		char		thePlayer6[7];
+		char		thePlayer7[7];
+		char*		thePlayers[6];
+
 	public:
 				configfile();
 				~configfile();
