@@ -1,0 +1,172 @@
+# GNU 
+prefix = @prefix@
+datadir = @datadir@/tecnoballz
+
+# compiler
+DEBUG=
+CC = @CC@
+CXX = g++
+CFLAGS = @CFLAGS@
+
+
+# program name
+tecnoballz	= tecnoballz
+PROG     	= src/$(tecnoballz)
+
+# flags
+CXXFLAGS 	= $(DEBUG) $(CFLAGS) 
+
+# libs
+LDFLAGS = @LDFLAGS@
+LIBS = @LIBS@ -L./src
+
+# paths
+PREFIX		= $(prefix)
+DATADIR		= $(datadir)
+VARDIR		= /var/lib/games
+BINDIR		= $(prefix)/bin
+
+# data dir 
+DATAFILES	= src/TecnoballZ/*.data src/TecnoballZ/*.list src/TecnoballZ/*.bmp
+SOUNDS		= $(DATADIR)/sounds
+MUSICS		= $(DATADIR)/musics
+BITMAPS		= $(DATADIR)/bitmaps
+TEXTURES	= $(DATADIR)/textures
+SCREEN_320	= $(DATADIR)/lores
+SCREEN_640	= $(DATADIR)/hires
+
+MODC =	src/audiomixer \
+	src/ballDirect \
+	src/barreScore \
+	src/BOB_killer \
+	src/briqueCote \
+	src/clavierMac \
+	src/configfile \
+	src/ecran_hard \
+	src/ejectBalls \
+	src/escapeMenu \
+	src/fond_ecran \
+	src/gard_tecno \
+	src/GFX_bitmap \
+	src/GIF_bitMap \
+	src/giga_blitz \
+	src/head_anima \
+	src/joueurData \
+	src/lastScroll \
+	src/lesBriques \
+	src/level_data \
+	src/liste_BOBs \
+	src/main \
+	src/mentatCode \
+	src/menu_tecno \
+	src/mousePoint \
+	src/print_menu \
+	src/printmoney \
+	src/print_text \
+	src/RAM_killer \
+	src/ressources \
+	src/runGestion \
+	src/score_over \
+	src/scoretable \
+	src/scrolledit \
+	src/shop_tecno \
+	src/tableaux_Z \
+	src/lispreader \
+	src/technoBall \
+	src/techno_eye \
+	src/techno_gem \
+	src/tecno_boui \
+	src/tecno_bump \
+	src/tecno_caps \
+	src/tecnoDefil \
+	src/tecno_fire \
+	src/tecno_gads \
+	src/tecno_gard \
+	src/tecno_miss \
+	src/tecno_text \
+	src/zeBouiBoui \
+	src/zeCapsules \
+	src/zeCongBall \
+	src/zeDefilTxt \
+	src/zeFireBump \
+	src/ze_gadgets \
+	src/zeGameOver \
+	src/zeGemstone \
+	src/zeGigaBlit \
+	src/zeguardian \
+	src/zeMiniMess \
+	src/ze_magneye \
+	src/zeMissiles \
+	src/zeMoveText \
+	src/zeNewBalls \
+	src/zeRaquette \
+	src/zexplosion
+
+MODULES = $(MODC) 
+OBJ     = $(addsuffix .o,   $(MODULES))
+SRCC    = $(addsuffix , $(MODC))
+
+build: all
+
+install: install_bin install_data install_vars
+uninstall: uninstall_bin uninstall_data uninstall_vars
+
+uninstall_bin:
+	rm -f $(BINDIR)/$(tecnoballz)
+
+install_bin:
+	install -d $(BINDIR) 
+	install --owner=root --group=games --mode=2755 $(PROG) $(BINDIR)
+
+uninstall_vars:
+	rm -f $(VARDIR)/tecnoballz.hi
+
+install_vars:
+	install --owner=root --group=games --mode=0770 -d $(VARDIR) 
+	install --owner=root --group=games --mode=0664 tecnoballz.hi $(VARDIR)
+
+uninstall_data:
+	rm -f $(DATADIR)/*.bmp $(DATADIR)/*.list $(DATADIR)/*.data
+	rm -rf $(MUSICS)
+	rm -rf $(SOUNDS)
+	rm -rf $(BITMAPS)
+	rm -rf $(TEXTURES)
+	rm -rf $(SCREEN_320)
+	rm -rf $(SCREEN_640)
+	rmdir $(DATADIR)
+	
+install_data:
+	install -d $(DATADIR) 
+	install --owner=root --group=root --mode=0644 $(DATAFILES) $(DATADIR)
+	install -d $(MUSICS) 
+	install -d $(SOUNDS) 
+	install -d $(BITMAPS)
+	install -d $(TEXTURES)
+	install --owner=root --group=root --mode=0644 src/TecnoballZ/musics/*.mod $(MUSICS)
+	install --owner=root --group=root --mode=0644 src/TecnoballZ/sounds/*.wav $(SOUNDS)
+	install --owner=root --group=root --mode=0644 src/TecnoballZ/*.bmp $(BITMAPS)
+	install --owner=root --group=root --mode=0644 src/TecnoballZ/textures/*.bmp $(TEXTURES)
+	install -d $(SCREEN_320)
+	install -d $(SCREEN_640)
+	install --owner=root --group=root --mode=0644 src/TecnoballZ/lores/*.bmp $(SCREEN_320)
+	install --owner=root --group=root --mode=0644 src/TecnoballZ/hires/*.bmp $(SCREEN_640)
+	
+
+all: $(PROG)
+
+.o: 
+	$(CXX) $(CXXFLAGS) -DPROG=\"$(PROG)\" -o $@ -c $(DEFINES) $<
+
+
+$(PROG): $(OBJ)
+	$(CXX) $(LIBS) $(LDFLAGS) $(OBJ) -o $@
+
+clean:
+	rm -f 	$(OBJ) \
+		nomfichierscore.o \
+		$(PROG)
+	rm -f build-stamp config.log config.status configure-stamp
+
+cleanall:
+	rm -f $(PROG) $(OBJ)  nomfichierscore
+
