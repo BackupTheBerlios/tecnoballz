@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "ressources.cc"
 // created	: 2004-04-20
-// updates	: 2005-01-10
+// updates	: 2005-01-15
 // fonctions	: manage ressources
-// id		: $Id: ressources.cc,v 1.4 2005/01/10 07:26:58 gurumeditation Exp $
+// id		: $Id: ressources.cc,v 1.5 2005/01/15 19:59:58 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -191,7 +191,8 @@ char* ressources::getMusFile(Sint32 ident)
 	pfile = musicfiles[ident];
 	strcat(stringtemp, pfile);
 	//printf("ressources::getMusFile(%i) = %s\n", ident, stringtemp);
-	return stringtemp;
+	return locateFile(stringtemp);
+	//return stringtemp;
 }
 
 //------------------------------------------------------------------------------
@@ -206,7 +207,8 @@ char* ressources::getSndFile(Sint32 ident)
 	pfile = soundfiles[ident];
 	strcat(stringtemp, pfile);
 	//printf("ressources::getSndFile(%i) = %s\n", ident, stringtemp);
-	return stringtemp;
+	return locateFile(stringtemp);
+	//return stringtemp;
 }
 
 //------------------------------------------------------------------------------

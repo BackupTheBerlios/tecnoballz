@@ -1,10 +1,11 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "audiomixer.cc"
-// created		: 2004-03-22
-// updates		: 2004-10-24
+// created	: 2004-03-22
+// updates	: 2005-01-15
 // functions	: handler music and sound
+// id		: $Id: audiomixer.cc,v 1.2 2005/01/15 19:59:58 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -13,12 +14,12 @@
 // 
 // This program is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+// FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA  02111-1307, USA.
+// Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
 #include "../include/audiomixer.h"
 #ifndef SOUNDISOFF
@@ -43,10 +44,10 @@ const musics_pos audiomixer::ptMusicpos[] =
 		24,		// lost ball in "bricks level"
 		25		// shop music
 	},
-	{0, 0,  15, 15,  22, 23, 24},
-	{0, 0,  15, 15,  28, 29, 30},
-	{0, 0,  11, 11,  18, 19, 20},
-	{0, 0,  15, 15,  30, 31, 32}
+	{0, 0, 15, 15, 22, 23, 24},
+	{0, 0, 15, 15, 28, 29, 30},
+	{0, 0, 11, 11, 18, 19, 20},
+	{0, 0, 15, 15, 30, 31, 32}
 };
 
 //######################################################################
@@ -116,7 +117,7 @@ Sint32 audiomixer::initialise()
 			SDL_GetError());
 			audioactif = 0;
 			return E_NO_ERROR;
-    }
+	}
 	if(Mix_OpenAudio(44100, AUDIO_S16, 2, 4096))
 	{	fprintf(stderr,"audiomixer::initialise(): %s\n",SDL_GetError());
 		audioactif = 0;
@@ -143,7 +144,8 @@ Sint32 audiomixer::initialise()
 		
 		Mix_Chunk* ptWav = Mix_LoadWAV(pathname);
 		if(!ptWav)
-		{	fprintf(stderr, "audiomixer::initialise() %s\n", SDL_GetError());
+		{	fprintf(stderr, "audiomixer::initialise() "
+				"Mix_LoadWAV(%s): %s\n", pathname, SDL_GetError());
 			audioactif = 0;
 			return (E_NO_ERROR);
 		}
@@ -184,7 +186,7 @@ void audiomixer::query_spec()
 			case AUDIO_S16MSB: fmStr = "S16MSB";
 				break;
 		}
-		printf("opened=%d times  frequency=%dHz  format=%s  channels=%d",
+		printf("opened=%d times frequency=%dHz format=%s channels=%d",
 				nopen, frequ, fmStr, nchan);
 	}
 }
@@ -202,7 +204,7 @@ Sint32 audiomixer::levelmusic(Uint32 narea, Uint32 level)
 	levelTecno = level;
 	Uint32 music = area_music(narea);
 	Uint32 paire = level & 0x1;
-	if((level <= 5 &&  paire) || (level > 5 && !paire))
+	if((level <= 5 && paire) || (level > 5 && !paire))
 	{	modposloop = ptMusicpos[music].loopmusic1;
 		position_1 = ptMusicpos[music].pos_music1; 
 		position_2 = ptMusicpos[music].pos_music2 - 1;
@@ -336,7 +338,7 @@ Sint32 audiomixer::playModule(Uint32 modnu)
 			"audiomixer::playModule () modnu %i %s has no file \n",
 			modnu, pathname);
 		return (erreur_num = E_SDLMIXER);
-   	}
+ 	}
 
 	//###################################################################
 	// load the music in memory
@@ -346,7 +348,7 @@ Sint32 audiomixer::playModule(Uint32 modnu)
 	{	fprintf(stderr, "audiomixer::charge_mod () erreur %s\n",
 			SDL_GetError());
 		return (erreur_num = E_SDLMIXER);
-   	}
+	}
 	Sint32 *p = (Sint32 *)pMixmodule;
 	ptModAmiga = (MODULE *)p[1];
 
@@ -415,7 +417,7 @@ void audiomixer::execution1()
 		else
 		{	if(keyGestion->specKeyRaz(clavierMac::MUSIC_FLAG))
 			{	music_flag = ~music_flag;
-				//printf("[CTRL] + [D] : %i %i\n", music_flag,  musicVolum);
+				//printf("[CTRL] + [D] : %i %i\n", music_flag, musicVolum);
 				if(music_flag)
 					Mix_VolumeMusic(musicVolum);
 				else
@@ -448,7 +450,7 @@ void audiomixer::snd_handle()
 //------------------------------------------------------------------------------
 void audiomixer::sound_play (Uint32 sndnu)
 {	if (!flag_sound) return;
-	soundtable[sndnu]  = 1;
+	soundtable[sndnu] = 1;
 }
 
 //------------------------------------------------------------------------------
