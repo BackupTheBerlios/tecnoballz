@@ -3,8 +3,8 @@
 //-----------------------------------------------------------------------------
 // file		: "mentatCode.h"
 // created	: 2002-08-18
-// updates	: 2005-01-11
-// ID		: $Id: mentatCode.h,v 1.6 2005/01/19 20:38:11 gurumeditation Exp $
+// updates	: 2005-01-23
+// ID		: $Id: mentatCode.h,v 1.7 2005/01/23 19:52:24 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -42,9 +42,11 @@
 #include "SDL/SDL.h"
 #endif //WIN32
 //...............................................................................
+#include "../include/configfile.h"
+//...............................................................................
 #ifndef __MENTATCODE__
 #define __MENTATCODE__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.90+ (2005-01-15)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.90+ (2005-01-23)"
 #define TU_TRICHES		//devel only
 #define BYTES_COPY		//force bytes copy (SPARC unaligned memory access)
 #ifndef SCOREFILE
@@ -55,6 +57,7 @@
 #endif
 //...............................................................................
 class mentatCode;
+class configfile;
 class scoretable;
 class ressources;
 class level_data;
@@ -130,7 +133,7 @@ class mentatCode
 		static Uint32		cheat_flag;		//E + T + B + Return (into shop)
 		static Uint32		birth_flag;		//1 = all names is 040670
 		static Sint32		vieInitial;		//nmber of initial lives
-		static Uint32		nuOfPlayer;
+		static Sint32		nuOfPlayer;
 		static const char	nomprefix[];
 		static char		chainelog[100];
 		static const Uint32	LEVEL_AREA = 12;
@@ -158,11 +161,11 @@ class mentatCode
 		static char		zeAreaCode[11];
 
 	public:
-		static Sint32		first_init();
+		static Sint32		first_init(configfile* pConf);
 		static Sint32		game_begin();
 		static void		fullscreen();
 		static void		objectKill();
-		static Sint32		desinstall();
+		static Sint32		desinstall(configfile* pConf);
  
 		static void		ecritLog(char *f_nom, char* chain);
 		static void		intToASCII(Sint32 value, char *strng, Uint32 reste);

@@ -3,8 +3,8 @@
 //-----------------------------------------------------------------------------
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
-// updates	: 2005-01-15
-// id		: $Id: mentatCode.cc,v 1.6 2005/01/20 06:35:10 gurumeditation Exp $
+// updates	: 2005-01-23
+// id		: $Id: mentatCode.cc,v 1.7 2005/01/23 19:52:24 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -71,7 +71,7 @@ Uint32				mentatCode::birth_flag = 0;	//all name are "040670"
 Uint32				mentatCode::double_mem = 1;	//2=double all allocations
 Sint32				mentatCode::hardChoice = 1;
 Sint32				mentatCode::vieInitial = 8;
-Uint32				mentatCode::nuOfPlayer = 1;
+Sint32				mentatCode::nuOfPlayer = 1;
 char				mentatCode::chainelog[100];
 const char			mentatCode::nomprefix[] = PREFIX;
 Sint32				mentatCode::resolution = 2; 
@@ -81,7 +81,7 @@ char				mentatCode::zeAreaCode[11] =
 //------------------------------------------------------------------------------
 // once initialization
 //------------------------------------------------------------------------------
-Sint32 mentatCode::first_init()
+Sint32 mentatCode::first_init(configfile* pConf)
 {
 	if(is_verbose)
 		printf("mentatCode::first_init() [START]\n");
@@ -127,6 +127,9 @@ Sint32 mentatCode::first_init()
 	//###################################################################
 	// retrieve user
 	//###################################################################
+	for(Uint32 i = 0; i < 6; i++)
+		joueurData::playerlist[i]->setNewName(pConf->get_player(i));
+	/*
 	char *pUser = getenv("USER");
 	if (pUser)
 		joueurData::playerlist[0]->setNewName(pUser);
@@ -138,7 +141,8 @@ Sint32 mentatCode::first_init()
 	joueurData::playerlist[3]->setNewName("GERARD");
 	joueurData::playerlist[4]->setNewName("RAOUL ");
 	joueurData::playerlist[5]->setNewName("MARCEL");
-
+	*/
+	
 	super_jump = 4;	//menu
 	//super_jump = 1;		//bricks level (test only)
 	//super_jump = 3;		//guards level (test only)
@@ -310,8 +314,11 @@ void mentatCode::objectKill()
 //------------------------------------------------------------------------------
 // game exit: relase all objects
 //------------------------------------------------------------------------------
-Sint32 mentatCode::desinstall()
+Sint32 mentatCode::desinstall(configfile* pConf)
 {
+	//save players names into config file
+	for(Uint32 i = 0; i < 6; i++)
+		pConf->set_player(i, joueurData::playerlist[i]->returnName());
 	if(is_verbose)
 		printf("==1 objectKill \n");
 	objectKill();

@@ -3,8 +3,8 @@
 //-----------------------------------------------------------------------------
 // file         : "main.cc"
 // created      : 2002-08-21
-// updates      : 2005-01-20
-// id		: $Id: main.cc,v 1.2 2005/01/20 06:35:10 gurumeditation Exp $
+// updates      : 2005-01-23
+// id		: $Id: main.cc,v 1.3 2005/01/23 19:52:24 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -41,13 +41,13 @@ int main(Sint32 nbArg, char **ptArg)
 		printf("===========================================================\n");
 	}
 	Sint32 error = 0;
-	error = mentatCode::first_init();
+	error = mentatCode::first_init(&oConfigure);
 	if(error) return error;
 	error = mentatCode::game_begin();
 	if(error) return error;
 	if(mentatCode::is_verbose) 
 		printf("===========================================================\n");
-	error = mentatCode::desinstall();
+	error = mentatCode::desinstall(&oConfigure);
 	if(error) return error;
 	if(mentatCode::is_verbose) 
 		printf("END =======================================================\n");

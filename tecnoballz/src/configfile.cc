@@ -3,8 +3,8 @@
 //------------------------------------------------------------------------------
 // file         : "configfile.cpp"
 // created      : 2005-01-19
-// updates      : 2005-01-21
-// id		: $Id: configfile.cc,v 1.5 2005/01/21 19:56:11 gurumeditation Exp $
+// updates      : 2005-01-23
+// id		: $Id: configfile.cc,v 1.6 2005/01/23 19:52:24 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -34,7 +34,6 @@
 //------------------------------------------------------------------------------
 	configfile::configfile()
 {
-	printf("NEW\n");
 	thePlayers[0] = &thePlayer1[0];	
 	thePlayers[1] = &thePlayer2[1];	
 	thePlayers[2] = &thePlayer3[2];	
@@ -68,12 +67,12 @@ void	configfile::resetvalue()
 	ecran_hard::optionfull = 0;
 	hardChoice = 1;	
 	vieInitial = 8;
+	nuOfPlayer = 1;
 	char *pUser = getenv("USER");
 	if (!pUser)
 		pUser = stringname; 
 	for(Uint32 i = 0; i < 6; i++) 
 		strncpy(thePlayers[i], pUser, 6);	
-	
 }
 
 //------------------------------------------------------------------------------
@@ -112,8 +111,6 @@ Sint32 configfile::tocheckdir()
 //------------------------------------------------------------------------------
 void configfile::loadconfig()
 {
-	printf("configfile::loadconfig()\n");
-	
 	//reset all values
 	resetvalue();
 
@@ -148,20 +145,59 @@ void configfile::loadconfig()
 		audiomixer::audioactif = 1;
 	if (!reader.read_bool("verbose", &is_verbose))
 		is_verbose = 0;
+
+	//read window resolution: 1 = 320 * 240; 2 = 640 * 480
 	if (!reader.read_int("resolution", &resolution))
 		resolution = 2;
 	if(resolution < 1 || resolution > 2) resolution = 2;
+
+	//read number of lifes: 1 to 9
 	if (!reader.read_int("lifes", &vieInitial))
 		vieInitial = 8 ;
 	if(vieInitial < 1 || vieInitial > 9) vieInitial = 8;
 	
+	//read difficulty 1 (easy), 2 (hard), 3 (madness) or 4 (suicidal)
 	if (!reader.read_int("difficulty", &hardChoice))
 		hardChoice = 1 ;
 	if(hardChoice < 1 || hardChoice > 4) hardChoice = 1;
 	
-	lisp_free(root_obj);
+	//read number of players: 1 to 6
+	if (!reader.read_int("players", &nuOfPlayer))
+		nuOfPlayer = 1 ;
+	if(nuOfPlayer < 1 || nuOfPlayer > 6) nuOfPlayer = 1;
+
+	//read players names
+	std::string sName;
+	char cName[7];
 	for(Uint32 i = 0; i < 6; i++) 
-		printf("nom %i: %s\n", i,thePlayers[i]);
+	{	sprintf(cName, "%s%d", "player", i + 1);
+		if(reader.read_string (cName, &sName))
+		{	//printf("LOAD : %s %s\n", cName, sName.c_str());
+			strncpy(thePlayers[i], sName.c_str(), 6);
+		}
+		
+	}
+	lisp_free(root_obj);
+	//for(Uint32 i = 0; i < 6; i++) 
+	//	printf("name %i: %s\n", i,thePlayers[i]);
+}
+
+//------------------------------------------------------------------------------
+// return current player name, which read from config file
+//------------------------------------------------------------------------------
+char* configfile::get_player(Uint32 nplay)
+{
+	if(nplay >= 6) nplay = 6 - 1;
+	return thePlayers[nplay];
+}
+
+//------------------------------------------------------------------------------
+// set player name
+//------------------------------------------------------------------------------
+void configfile::set_player(Uint32 nplay, char* pChar)
+{
+	if(nplay >= 6) nplay = 6 - 1;
+	strncpy(thePlayers[nplay], pChar, 6);
 }
 
 //------------------------------------------------------------------------------
@@ -180,12 +216,16 @@ void configfile::saveconfig()
 		fprintf(config, "\t(verbose %s)\n", is_verbose ? "#t" : "#f");
 		fprintf(config, "\n\t;; window size 1 (low-res) or 2 (high-res):\n");
 	       	fprintf(config, "\t(resolution  %d)\n", resolution);
-		fprintf(config, "\n\t;; difficulty 1 (easy), 2 (hard), 3 (madness) or 4 (suicide)\n");
+		fprintf(config, "\n\t;; difficulty 1 (easy), 2 (hard), 3 (madness) or 4 (suicidal)\n");
       		fprintf(config, "\t(difficulty   %d)\n", hardChoice);
 		fprintf(config, "\n\t;; number of lifes (1 to 9)\n");
       		fprintf(config, "\t(lifes   %d)\n", vieInitial);
+		fprintf(config, "\n\t;; number of players (1 to 6)\n");
+      		fprintf(config, "\t(players   %d)\n", nuOfPlayer);
+		fprintf(config, "\n\t;; players names\n");
+		for(Uint32 i = 0; i < 6; i++)
+      			fprintf(config, "\t(player%i      \"%s\")\n",i + 1 , thePlayers[i]);
 		fprintf(config, ")\n");
-
 	}
 
 }
@@ -208,7 +248,6 @@ FILE * configfile::fopen_data(const char *fname, const char *fmode)
 	return(fi);
 }
 
-
 //------------------------------------------------------------------------------
 // analyse command line paramaters
 //------------------------------------------------------------------------------
@@ -217,7 +256,6 @@ Sint32 configfile::scanZeArgs(Sint32 nbArg, char **ptArg)
 	Sint32 _iIndex;
 	for(_iIndex = 1; _iIndex < nbArg; _iIndex++)
 	{	
-		// arguments commence tous par un tiret
 		if(*ptArg[_iIndex] != '-')
 			continue;
 	
@@ -305,6 +343,4 @@ Sint32 configfile::scanZeArgs(Sint32 nbArg, char **ptArg)
 	}
 	return 1;
 }
-
-char	configfile::stringname[7] = "LINUX!";
-
+char	configfile::stringname[7] = "YANIS ";

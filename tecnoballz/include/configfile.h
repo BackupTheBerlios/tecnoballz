@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2005-01-19
-// id		: $Id: configfile.h,v 1.2 2005/01/22 20:44:24 gurumeditation Exp $
+// id		: $Id: configfile.h,v 1.3 2005/01/23 19:52:24 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -71,6 +71,8 @@ class configfile:public virtual mentatCode
 		void		loadconfig();
 		void		saveconfig();
 		Sint32		scanZeArgs(Sint32 nbArg, char **ptArg); 
+		char*		get_player(Uint32);
+		void		set_player(Uint32 nplay, char* pChar);
 
 	private:
 		Sint32		tocheckdir();
