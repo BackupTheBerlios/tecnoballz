@@ -1,9 +1,10 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "mentatCode.h"
-// created		: 2002-08-18
-// updates		: 2004-10-08
+// created	: 2002-08-18
+// updates	: 2005-01-04
+// ID		: $Id: mentatCode.h,v 1.2 2005/01/04 20:50:30 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -43,8 +44,9 @@
 //...............................................................................
 #ifndef __MENTATCODE__
 #define __MENTATCODE__
-#define TECNOBALLZ_VERSION      "TECNOBALLZ 0.90  (2004-10-27)"
+#define TECNOBALLZ_VERSION      "TECNOBALLZ 0.90+  (2005-01-04)"
 //#define TU_TRICHES		//devel only
+#define BYTES_COPY		//force bytes copy (SPARC unaligned memory access)
 #ifndef SCOREFILE
 #define SCOREFILE "tecnoball"
 #endif
