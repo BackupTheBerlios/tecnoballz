@@ -1,10 +1,11 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "fond_ecran.cc"
-// created		: ?
-// updates		: 2004-10-17
+// created	: ?
+// updates	: 2005-01-07
 // fonctions	: display background (bricks levels)
+// Id		: $Id: fond_ecran.cc,v 1.2 2005/01/07 12:10:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -83,7 +84,11 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 			 if(nbkdg > 77)
 				nbkdg = nbkdg - 77;
 			//nbkdg = 79; // test only
-			 char *pathname = pRessource->getTexFile(nbkdg);
+			char *pathname = pRessource->getTexFile(nbkdg);
+			if (!pathname) {
+				erreur_num = E_FILERROR;
+				return erreur_num;
+			}
 			if(is_verbose)
 				 printf("fond_ecran::instalFond() : try to initialize %s\n", 
 					pathname);
