@@ -1,9 +1,10 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "mentatCode.cc"
-// created		: 2002-08-18
-// updates		: 2004-10-25
+// created	: 2002-08-18
+// updates	: 2005-01-11
+// id		: $Id: mentatCode.cc,v 1.3 2005/01/11 12:52:44 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -37,49 +38,44 @@
 #include "../include/scrolledit.h"
 //.............................................................................
 Sint32				mentatCode::arg_jumper = -1;
-Sint32				mentatCode::bg4_colors = 0;		//force 4 colors background
+Sint32				mentatCode::bg4_colors = 0;	//force 4 colors background
 Sint32				mentatCode::is_verbose = 0;
-Sint32				mentatCode::num_erreur = 0;		//error number
-Sint32				mentatCode::counterObj = 0;		//number of objects
-Sint32				mentatCode::hasard_val = 0;		//random value
+Sint32				mentatCode::num_erreur = 0;	//error number
+Sint32				mentatCode::counterObj = 0;	//number of objects
+Sint32				mentatCode::hasard_val = 0;	//random value
 Sint32				mentatCode::countframe = 0;
 scoretable*			mentatCode::ptScoreTab = NULL;	//manage best scores
 ressources*			mentatCode::pRessource = NULL;	//manage resources
 level_data*			mentatCode::ptLev_data = NULL;	//manage levels
-RAM_killer*			mentatCode::memGestion = 0;		//manage memory allocation  
+RAM_killer*			mentatCode::memGestion = NULL;	//manage memory allocation  
 #ifndef SOUNDISOFF
-audiomixer*			mentatCode::ptAudiomix = 0;		// objet gerant le son      
+audiomixer*			mentatCode::ptAudiomix = NULL;	//manage sound      
 #endif
-ecran_hard*			mentatCode::ecran_gere = 0;		// objet gerant ecran
-clavierMac*			mentatCode::keyGestion = 0;		// objet gerant le clavier
-liste_BOBs*			mentatCode::BOBgestion = 0;		// objet gerant les BOBs
-joueurData*			mentatCode::joueurGere = 0;		// objet gerant les joueurs
-Sint16*				mentatCode::table_cosL = 0;		// table de cosinus
-Sint16*				mentatCode::table_sinL = 0;		// table de sinus
-tableaux_Z*			mentatCode::tabGestion = NULL;	// Objet gerant les tableaux
-shop_tecno*			mentatCode::shpGestion = NULL;	// Objet gerant le magasin
-gard_tecno*			mentatCode::garGestion = NULL;	// Objet gerant les gardiens
-scrolledit*			mentatCode::ptScrollEd = NULL;	// Objet gerant editeur
-menu_tecno*			mentatCode::menGestion = NULL;	// Objet gerant le menu
-Sint32				mentatCode::super_jump = 1; // 1=tableaux ; 2=magasin ; 3=gardien ;4=menu ;5=gardiens
+ecran_hard*			mentatCode::ecran_gere = NULL;	//manage screen
+clavierMac*			mentatCode::keyGestion = NULL;	//keyboard handle
+liste_BOBs*			mentatCode::BOBgestion = NULL;	//sprites handle
+joueurData*			mentatCode::joueurGere = NULL;	//players handle
+Sint16*				mentatCode::table_cosL = NULL;	//cosinus table
+Sint16*				mentatCode::table_sinL = NULL;	//sinus table
+tableaux_Z*			mentatCode::tabGestion = NULL;	//bricks levels handle
+shop_tecno*			mentatCode::shpGestion = NULL;	//shop handle
+gard_tecno*			mentatCode::garGestion = NULL;	//guard handle
+scrolledit*			mentatCode::ptScrollEd = NULL;	//scroll editor handle
+menu_tecno*			mentatCode::menGestion = NULL;	//menu handle
+// 1:bricks level / 2:shop / 3:guards level / 4:main menu / 5:scrolling editor
+Sint32				mentatCode::super_jump = 1;
 Sint32				mentatCode::super_exit = 0;
 GIF_bitMap*			mentatCode::image_BOBs = 0;
 Uint32				mentatCode::cheat_flag = 0;
-Uint32				mentatCode::birth_flag = 0;				//040670
-Uint32				mentatCode::double_mem = 1;
+Uint32				mentatCode::birth_flag = 0;	//all name are "040670"
+Uint32				mentatCode::double_mem = 1;	//2=double all allocations
 Sint32				mentatCode::hardChoice = 1;
 Sint32				mentatCode::vieInitial = 8;
 Uint32				mentatCode::nuOfPlayer = 1;
-char				mentatCode::chainelog[100]="123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
-const char*			mentatCode::data_directories[] =
-{ ".",                                                         // Normally unused, except when running from the source directory...
-  0                                                            // Special value meaning "$(PREFIX)/share/games/powermanga/"
-                                                               // Also marks end of list
-};
-const char*			mentatCode::nomfichierscore[] = { SCOREFILE "-easy", SCOREFILE, SCOREFILE "-hard" };
-const char			mentatCode::nomprefix[]=PREFIX;
+char				mentatCode::chainelog[100];
+const char			mentatCode::nomprefix[] = PREFIX;
 Sint32				mentatCode::resolution = 2; 
-char				mentatCode::zeAreaCode[11]="..........";
+char				mentatCode::zeAreaCode[11];
 
 //------------------------------------------------------------------------------
 // once initialization
@@ -462,7 +458,7 @@ void mentatCode::bigendianw(Uint32* ptsrc, Uint32* ptdes)
 #else
 	char* s = (char *)ptsrc;
 	char* d = (char *)ptdes;
-	d[O] = s[3];
+	d[0] = s[3];
 	d[1] = s[2];
 	d[2] = s[1];
 	d[3] = s[0];
@@ -481,15 +477,3 @@ void mentatCode::bigendianr(Uint32* ptsrc, Uint32* ptdes)
 	d[0] = s[3];
 #endif
 }
-
-
-
-
-
-
-
-
-
-
-
-

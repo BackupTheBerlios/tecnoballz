@@ -3,8 +3,8 @@
 //-----------------------------------------------------------------------------
 // file		: "mentatCode.h"
 // created	: 2002-08-18
-// updates	: 2005-01-05
-// ID		: $Id: mentatCode.h,v 1.3 2005/01/11 05:34:55 gurumeditation Exp $
+// updates	: 2005-01-11
+// ID		: $Id: mentatCode.h,v 1.4 2005/01/11 12:52:44 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -13,12 +13,12 @@
 // 
 // This program is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+// FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA  02111-1307, USA.
+// Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
 #include <errno.h>
 #include <fcntl.h>
@@ -44,7 +44,7 @@
 //...............................................................................
 #ifndef __MENTATCODE__
 #define __MENTATCODE__
-#define TECNOBALLZ_VERSION      "TECNOBALLZ 0.90+  (2005-01-04)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.90+ (2005-01-11)"
 //#define TU_TRICHES		//devel only
 #define BYTES_COPY		//force bytes copy (SPARC unaligned memory access)
 #ifndef SCOREFILE
@@ -78,8 +78,8 @@ const Sint32 E_GENRIQUE = -1;	// erreur generique
 const Sint32 E_OUT_LIST = -2;	// erreur reservation de la liste memoire
 const Sint32 E_NOMEMORY = -3;	// erreur reservation : depassement memoire
 const Sint32 E_OUT_ZONE = -4;	// erreur reservation : maxium de zones memoire 
-const Sint32 E_NO_GIF87 = -5;	// fichier non GIF87a
-const Sint32 E_NORESGIF = -6;	// ressource GIF asbente
+//const Sint32 E_NO_GIF87 = -5;	// fichier non GIF87a
+//const Sint32 E_NORESGIF = -6;	// ressource GIF asbente
 const Sint32 E_NORESOUR = -7;	// ressource non presente
 const Sint32 E_SDLERROR = -8;
 const Sint32 E_FILERROR = -9;
@@ -91,29 +91,29 @@ class mentatCode
 {
 	public:
 		static const Sint32	NB_OPTIONS = 19;	//number maximum of bonus bought
-		static const Uint32 NDIFFICULT = 4;
+		static const Uint32	NDIFFICULT = 4;		//4 levels of difficulty
 		static const Uint32	MAX_PLAYER = 6;	
 	
 	public:
-		static Sint32		is_verbose;	//1 = verbose mode
-		static Sint32		bg4_colors;	//1 = force 4 colors background
-		static Sint32		resolution;	//1:320*240 or 2:640*480 pixels
-		static Uint32		double_mem;	//double memory size of all allocations 
+		static Sint32		is_verbose;		//1 = verbose mode
+		static Sint32		bg4_colors;		//1 = force 4 colors background
+		static Sint32		resolution;		//1:320*240 or 2:640*480 pixels
+		static Uint32		double_mem;		//double memory size of all allocations 
 		static Sint32		arg_jumper;
 
 	protected:
-		Sint32				numero_obj;		//object number
-		Sint32				erreur_num;		//error code
+		Sint32			numero_obj;		//object number
+		Sint32			erreur_num;		//error code
 
 		//###############################################################
 		// statics members 
 		//###############################################################
-    	static Sint32		counterObj;		//number of objects
-    	static Sint32		hasard_val;		//random value
-    	static Sint32		countframe;		//frame counter
-    	static Sint32		num_erreur;		//error number
+		static Sint32		counterObj;		//number of objects
+		static Sint32		hasard_val;		//random value
+		static Sint32		countframe;		//frame counter
+		static Sint32		num_erreur;		//error number
 	
-    	static Sint32		super_jump;		// game phase:
+		static Sint32		super_jump;		// game phase:
 											// - 0: bricks levels
 											// - 1: shop
 											// - 2: guards levels
@@ -129,18 +129,16 @@ class mentatCode
 
 		static Uint32		cheat_flag;		//E + T + B + Return (into shop)
 		static Uint32		birth_flag;		//1 = all names is 040670
-    	static Sint32		vieInitial;	// nombre de vies au depart
+		static Sint32		vieInitial;		//nmber of initial lives
 		static Uint32		nuOfPlayer;
-    	static const char*	data_directories[];
-    	static const char*	nomfichierscore[];
-    	static const char	nomprefix[];
-    	static char			chainelog[100];
+		static const char	nomprefix[];
+		static char		chainelog[100];
 		static const Uint32	LEVEL_AREA = 12;
 	
 		static scoretable*	ptScoreTab;		//mange best scores
 		static ressources*	pRessource;		//manage resources
-  		static level_data*	ptLev_data;		//manage levels
-		static RAM_killer*	memGestion;		//manage memory allocation      
+		static level_data*	ptLev_data;		//manage levels
+		static RAM_killer*	memGestion;		//manage memory allocation   
 #ifndef SOUNDISOFF
 		static audiomixer*	ptAudiomix;		//manage sounds and musics
 #endif
@@ -155,35 +153,30 @@ class mentatCode
 		static shop_tecno*	shpGestion;
 		static gard_tecno*	garGestion;
 		static menu_tecno*	menGestion;
-		static scrolledit*	ptScrollEd;     
+		static scrolledit*	ptScrollEd;  
 		static GIF_bitMap*	image_BOBs;
-		static char			zeAreaCode[11];
+		static char		zeAreaCode[11];
 
 	public:
-	
-	
-  
 		static Sint32		first_init();
 		static Sint32		game_begin();
-		static void			fullscreen();
-		static void			objectKill();
+		static void		fullscreen();
+		static void		objectKill();
 		static Sint32		desinstall();
-  
-		static void			ecritLog(char *f_nom, char* chain);
-		static void			intToASCII(Sint32 value, char *strng, Uint32 reste);
+ 
+		static void		ecritLog(char *f_nom, char* chain);
+		static void		intToASCII(Sint32 value, char *strng, Uint32 reste);
 
-							mentatCode();
-							~mentatCode();
-		void				mentatInit();
-		void				mentatKill();
-		Sint32				retour_err();
-		void				error_init(Sint32 error);
-		Sint32				get_number();
-		Sint32				chaine_cmp(char *srcPT, char *desPT, Sint32 taille);
-		Sint32				littleWord(char *memPT);
-		void				bigendianw(Uint32*, Uint32*);
-		void				bigendianr(Uint32*, Uint32*);
-	
-
+					mentatCode();
+					~mentatCode();
+		void			mentatInit();
+		void			mentatKill();
+		Sint32			retour_err();
+		void			error_init(Sint32 error);
+		Sint32			get_number();
+		Sint32			chaine_cmp(char *srcPT, char *desPT, Sint32 taille);
+		Sint32			littleWord(char *memPT);
+		void			bigendianw(Uint32*, Uint32*);
+		void			bigendianr(Uint32*, Uint32*);
 };
 #endif

@@ -1,1 +1,1 @@
-#define DATADIR "/usr/share/games/"
+#define DATADIR "/usr/share/games/tecnoballz"

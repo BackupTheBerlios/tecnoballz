@@ -1,10 +1,11 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "print_text.cc"
-// created		: ?
-// updates		: 2004-10-10
+// created	: ?
+// updates	: 2005-01-10
 // fonction	: display chars
+// id		: $Id: print_text.cc,v 1.2 2005/01/11 12:52:44 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -131,8 +132,8 @@ void print_text::affNombre1(char *desP1, Sint32 value, Sint32 baseN)
 {
 	Sint32 offSc = off_source;
 	Sint32 offDs = off_desti1;
+#ifndef BYTES_COPY	
 	Sint32 *basPT = (Sint32 *)fontes_adr;
-
 	if(resolution == 1)
 	{	while (baseN > 0)
 		{	Sint32 i = 0;
@@ -144,7 +145,7 @@ void print_text::affNombre1(char *desP1, Sint32 value, Sint32 baseN)
 			Sint32* s = (Sint32*)basPT;
 			Sint32* d = (Sint32*)desP1;
 			s = (Sint32*) ((char*)s + (i<<3));
-			for(i = 0; i< 8 ;i++)
+			for(i = 0; i < 8 ;i++)
 			{	d[0] = s[0];
 				d[1] = s[1];
 				s = (Sint32 *) ((char*)s + offSc);
@@ -165,7 +166,7 @@ void print_text::affNombre1(char *desP1, Sint32 value, Sint32 baseN)
 			Sint32* s = (Sint32*)basPT;
 			Sint32* d = (Sint32*)desP1;
 			s = (Sint32*) ((char*)s + (i<<4));
-			for(i = 0; i< 16 ;i++)
+			for(i = 0; i < 16 ;i++)
 			{	d[0] = s[0];
 				d[1] = s[1];
 				d[2] = s[2];
@@ -176,6 +177,71 @@ void print_text::affNombre1(char *desP1, Sint32 value, Sint32 baseN)
 			desP1 = desP1 + 16;
 		}
 	}
+#else
+	char *basPT = fontes_adr;
+	if(resolution == 1)
+	{	while (baseN > 0)
+		{	Sint32 i = 0;
+			while (value >= baseN)
+			{	value -= baseN;
+				i++;
+			}
+			baseN /= 10;
+			char* s = basPT;
+			char* d = desP1;
+			s = s + (i<<3);
+			s+=8;
+			for(i = 0; i < 8; i++)
+			{	d[0] = s[0];
+				d[1] = s[1];
+				d[2] = s[2];
+				d[3] = s[3];
+				d[4] = s[4];
+				d[5] = s[5];
+				d[6] = s[6];
+				d[7] = s[7];
+				s = s + offSc;
+				d = d + offDs;
+			}
+			desP1 = desP1 + 8;
+		}
+	}
+	else
+	{		
+		while (baseN > 0)
+		{	Sint32 i = 0;
+			while (value >= baseN)
+			{	value -= baseN;
+				i++;
+			}
+			baseN /= 10;
+			char* s = basPT;
+			char* d = desP1;
+			s = s + (i<<4);
+			for(i = 0; i < 16 ;i++)
+			{	d[0] = s[0];
+				d[1] = s[1];
+				d[2] = s[2];
+				d[3] = s[3];
+				d[4] = s[4];
+				d[5] = s[5];
+				d[6] = s[6];
+				d[7] = s[7];
+				d[8] = s[8];
+				d[9] = s[9];
+				d[10] = s[10];
+				d[11] = s[11];
+				d[12] = s[12];
+				d[13] = s[13];
+				d[14] = s[14];
+				d[15] = s[15];
+				s = s + offSc;
+				d = d + offDs;
+			}
+			desP1 = desP1 + 16;
+		}
+	}
+#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -205,8 +271,6 @@ void print_text::aff_texte1(char *desP1, char *chain, Sint32 total)
 				for(b = 0; b < 8; b++)
 				{	d[0] = s[0];
 					d[1] = s[1];
-					/*d[0] = 0xb4b4b4b4;
-					d[1] = 0xb4b4b4b4;*/
 					s = (Sint32 *) ((char*)s + offSc);
 					d = (Sint32 *) ((char*)d + offDs);
 				}
