@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "ressources.cc"
 // created	: 2004-04-20
-// updates	: 2005-01-06
+// updates	: 2005-01-07
 // fonctions	: manage ressources
-// id		: $Id: ressources.cc,v 1.2 2005/01/06 16:19:22 gurumeditation Exp $
+// id		: $Id: ressources.cc,v 1.3 2005/01/07 16:37:21 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -33,12 +33,13 @@
 
 char* ressources::fnamescore = "/var/lib/games/tecnoballz.hi";
 const char* ressources::folderlist[] =
-{	".",		// Normally unused, except when running from the source directory...
+{	"/",		// Normally unused, except when running from the source directory...
 	DATADIR,
+	"./TecnoballZ/",
 	0		// Special value meaning "$(PREFIX)/share/games/tecnoballz/"
 			// Also marks end of list
 };
-const char*	ressources::folderdata = "TecnoballZ/";
+//const char*	ressources::folderdata = "TecnoballZ/";
 const char*	ressources::folder_640 = "hires/";
 const char*	ressources::folder_320 = "lores/";
 char 		ressources::stringtemp[512];
@@ -144,7 +145,7 @@ char* ressources::getResData(Sint32 ident)
 {
 	char* pfile = getResFile(ident);
 	if (!pfile)
-		return 0;
+		return NULL;
 	return loadZeFile(pfile);
 }
 
@@ -154,21 +155,26 @@ char* ressources::getResData(Sint32 ident)
 char* ressources::getResFile(Sint32 ident)
 {	
 	const char* pfile;
-	strcpy(stringtemp, folderdata);
+	//strcpy(stringtemp, folderdata);
 	if (ident >= 4096)
 	{	ident -= 4096;
 		pfile = graphfiles[ident];
 		if (resolution == 1)
-			strcat(stringtemp, folder_320);
+			//strcat(stringtemp, folder_320);
+			strcpy(stringtemp, folder_320);
 		else
-			strcat(stringtemp, folder_640);
+			//strcat(stringtemp, folder_640);
+			strcpy(stringtemp, folder_640);
+		
+		//printf("*** ressources::getResFile() = %s \n", stringtemp);
 		strcat(stringtemp, pfile);
 	}
 	else 
 	{	pfile = standfiles[ident];
-		strcat(stringtemp, pfile);
+		//strcat(stringtemp, pfile);
+		strcpy(stringtemp, pfile);
 	}
-	//printf("ressources::getResFile(%i) = %s\n", ident, stringtemp);
+	//printf("*** ressources::getResFile(%i) = %s / pfile=%s\n", ident, stringtemp, pfile);
 	//return locateFile(stringtemp);
 	return stringtemp;
 }
@@ -179,8 +185,9 @@ char* ressources::getResFile(Sint32 ident)
 char* ressources::getMusFile(Sint32 ident)
 {	
 	const char* pfile;
-	strcpy(stringtemp, folderdata);
-	strcat(stringtemp, "musics/");
+	//strcpy(stringtemp, folderdata);
+	//strcat(stringtemp, "musics/");
+	strcpy(stringtemp, "musics/");
 	pfile = musicfiles[ident];
 	strcat(stringtemp, pfile);
 	//printf("ressources::getMusFile(%i) = %s\n", ident, stringtemp);
@@ -193,8 +200,9 @@ char* ressources::getMusFile(Sint32 ident)
 char* ressources::getSndFile(Sint32 ident)
 {	
 	const char* pfile;
-	strcpy(stringtemp, folderdata);
-	strcat(stringtemp, "sounds/");
+	//strcpy(stringtemp, folderdata);
+	//strcat(stringtemp, "sounds/");
+	strcpy(stringtemp, "sounds/");
 	pfile = soundfiles[ident];
 	strcat(stringtemp, pfile);
 	//printf("ressources::getSndFile(%i) = %s\n", ident, stringtemp);
@@ -206,11 +214,11 @@ char* ressources::getSndFile(Sint32 ident)
 //------------------------------------------------------------------------------
 char*	ressources::getTexFile(Sint32 nbkdg)
 {	
-	strcpy(stringtemp, folderdata);
-	strcat(stringtemp, "textures/");
+	//strcpy(stringtemp, folderdata);
+	//strcat(stringtemp, "textures/");
+	strcpy(stringtemp, "textures/");
 	intToASCII(nbkdg, ze_mapfile + 3, 1);
 	strcat(stringtemp, ze_mapfile);
-	//printf("ressources::getTexFile(%i) = %s\n", nbkdg, stringtemp);
 	return stringtemp;
 }
 
@@ -228,10 +236,10 @@ char *ressources::locateFile(const char *const name)
 {
 
 	if(is_verbose)
-		fprintf(stdout, "ressources::locateFile(%s)\n", name);
+		fprintf(stdout, "ressources::locateFile(%s) [START]\n", name);
 
 	//###################################################################
-	//clear path name string
+	// clear path name string
 	//###################################################################
 	for(Sint32 i = 0; i < 256; i++)
 		pathstring[i] = 0;
@@ -239,24 +247,29 @@ char *ressources::locateFile(const char *const name)
 	//###################################################################
 	// null pointer
 	//###################################################################
-	if(name == 0)
-		return 0;
+	if(name == NULL)
+		return NULL;
 	
 	//###################################################################
 	// if absolute path, return a pointer to a duplicate string
 	//###################################################################
+	char *pathname;
 	if(*name == '/')
-		return strdup(name);
-
+	{	pathname = &pathstring[0];
+		strcpy(pathname, name);
+		//printf("return %s\n", pathname);
+		return pathname;
+	}
 	for(const char **p = folderlist;; p++)
-	{	char *pathname;
+	{	
+		//printf("folderlist: %s\n", *p);
 		if(*p == 0)
 		{	const char *subdir = "/share/games/tecnoballz/";
 			pathname = &pathstring[0];
 			strcpy(pathname, nomprefix);
 			strcat(pathname, subdir);
 			strcat(pathname, name);
-	    }
+		}
 		else if(**p == '~')	// Not used anymore
 		{	static const char bogus = '\0';
 			static const char *home_dir = &bogus;
@@ -273,24 +286,28 @@ char *ressources::locateFile(const char *const name)
 		else
 		{	pathname = &pathstring[0];
 			strcpy(pathname, *p);
-			strcat(pathname, "/");
+			if(pathname[strlen(pathname) - 1] != '/')
+				strcat(pathname, "/");
 			strcat(pathname, name);
 		}
 		if(is_verbose)
-			fprintf(stdout, "ressources::locateFile(%s)\n", pathname);
+			fprintf(stdout, "ressources::locateFile() try %s\n", pathname);
 	
 #ifdef WIN32
 		struct _stat s;
 		if(_stat(pathname, &s) == 0 && !_S_ISDIR(s.st_mode))
-			return pathname;
+		{	return pathname;
+		}
 #else
 		struct stat s;
-		if(stat(pathname, &s) == 0 && !S_ISDIR(s.st_mode))
+		if(stat(pathname, &s) == 0 && !S_ISDIR(s.st_mode)) 
+		{	if(is_verbose) fprintf(stdout, "ressources::locateFile(%s) END\n", pathname);
 			return pathname;
+		}
 #endif
 		if(*p == 0) break;
 	}
-	fprintf(stderr, "ressources::locateFile: %s not found \n", name);
+	fprintf(stderr, "ressources::locateFile: %s not found\n", name);
 	return 0;	//not found.
 }
 
@@ -346,7 +363,7 @@ char *ressources::loadZeFile(char *fname, Uint32 *fsize)
 	if(pname == 0)
 	{	fprintf(stderr,
 			"ressources::loadZeFile() : can't locate file : %s\n\n", fname);
-		return 0;
+		return NULL;
 	}
   
   	//###################################################################
@@ -459,7 +476,9 @@ Sint32 ressources::load_sinus()
 {
 	table_cosL = (Sint16 *) getResData(ressources::RESCOSLIST);
 	if(!table_cosL)
-		num_erreur = E_FILERROR;
+	{	num_erreur = E_FILERROR;
+		return num_erreur;
+	}
 	else
 	{	table_sinL = table_cosL + 383;
 		num_erreur = E_NO_ERROR;
