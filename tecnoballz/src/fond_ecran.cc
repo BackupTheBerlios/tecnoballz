@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "fond_ecran.cc"
 // created	: ?
-// updates	: 2005-01-07
+// updates	: 2005-01-11
 // fonctions	: display background (bricks levels)
-// Id		: $Id: fond_ecran.cc,v 1.2 2005/01/07 12:10:53 gurumeditation Exp $
+// Id		: $Id: fond_ecran.cc,v 1.3 2005/01/11 11:02:11 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -33,7 +33,7 @@
 fond_ecran::fond_ecran()
 {
 	mentatInit();
-	iFond_type = 2;		// fond de 64*64 : new map
+	iFond_type = 2;		//fond de 64*64 : new map
 	colorActif = 0;
 	if(resolution == 1 || bg4_colors) iFond_type = 0;
 }
@@ -80,7 +80,6 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 		default:
 		{	if (nbkdg < 1)
 				nbkdg= (hasard_val & 127) + 1;
-			
 			 if(nbkdg > 77)
 				nbkdg = nbkdg - 77;
 			//nbkdg = 79; // test only
@@ -106,20 +105,19 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 
 	Sint32 dHorz = (ecran->bufferLarg() - 64 * resolution) / large - 1;
 	Sint32 oSour = fonds->GFX_nextLn();
-	//Sint32 dVert=ecran->bufferHaut() / haute-1;
 	Sint32 dVert = (240 * resolution) / haute - 1;
 	Sint32 mVert = (240 * resolution) % haute - 1;
 	if(mVert > 0) dVert++;
 	Sint32 baseX;
 	Sint32 baseY;
 	if(iFond_type < 2)
-	{	//hasard_val=42;
-		// selectionne une des 60 fonds
-		baseY = hasard_val & 0x3F;	// value 0 to 63
+	{	//hasard_val=42;					//test only
+		//select one of the 60 backgrounds
+		baseY = hasard_val & 0x3F;			//value 0 to 63
 		if(baseY >= 60)
 			baseY -= 60;
 		if(baseY & 0x1)
-			baseX = fonds->GFXlargeur() / 2;	// deuxieme partie 
+			baseX = fonds->GFXlargeur() / 2;	//second part
 		else
 			baseX = 0;
 		baseY >>= 1;
@@ -135,27 +133,21 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	// display background map 
 	//###############################################################
 	Sint32 src_X = 0;
-	Sint32 h = (Sint32)ecran;	// h=adresse de l'objet 'ecran_hard'
-	Sint32 k = (Sint32)fonds;	// k=adresse de l'objet 'fond'
+	Sint32 h = (Sint32)ecran;	//use pointer address as random value
+	Sint32 k = (Sint32)fonds;	//use pointer address as random value
 	Sint32 nline;
 	if(mVert > 0)
 		nline = mVert;
 	else
 		nline = haute;
 	for(Sint32 det_Y = dVert; det_Y >= 0; det_Y--)
-	{	
-		//if(det_Y == 0 && mVert > 0)
-		//	nline = mVert;
-		
-		//printf("fond_ecran::instalFond() :  det_Y = %i / mVert = %i\n", det_Y, mVert);
-		for(Sint32 det_X = dHorz; det_X > -1; det_X--)
+	{	for(Sint32 det_X = dHorz; det_X > -1; det_X--)
 		{	hasard_val = hasard_val + h + k + 1 + keyGestion->sourisGetX();
 			h = h + countframe + det_Y;
 			k = k + ecran->get_framepee();
 			src_X = hasard_val;
-			src_X &= 0x0f;	// index du tableau de 0 a 15
-			src_X = t_pos[src_X];	// lit une position pour la source (de 0 a 4)
-			//printf("(%ld):%ld \n", hasard_val, src_X);
+			src_X &= 0x0f;		//table index (0 to 15)
+			src_X = t_pos[src_X];	//source position (0 to 4)
 			src_X *= large;
 			char *srcPT = fonds->GFXadresse(baseX + src_X, baseY);
 			char *detPT = ecran->tampon_pos(det_X * large, det_Y * haute);
@@ -235,9 +227,9 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 // sources x position map background (original and new)
 //------------------------------------------------------------------------------
 Sint32 fond_ecran::table_pos1[16] =
-{ 3, 0, 0, 3, 4, 2, 1, 4, 3, 2, 1, 1, 0, 0, 2, 4 };
+{	3, 0, 0, 3, 4, 2, 1, 4, 3, 2, 1, 1, 0, 0, 2, 4 };
 Sint32 fond_ecran::table_pos2[16] =
-{ 3, 0, 0, 3, 4, 2, 1, 4, 3, 2, 1, 1, 5, 0, 5, 4 };
+{	3, 0, 0, 3, 4, 2, 1, 4, 3, 2, 1, 1, 5, 0, 5, 4 };
 
 
 //------------------------------------------------------------------------------
@@ -247,7 +239,7 @@ void fond_ecran::coulDuFond()
 {
 	Sint32 j = hasard_val & 0x1ff;
 	if(j >= 448)
-		j -= 448;	// 112 preset colors 
+		j -= 448;	//112 preset colors 
 	j = j & 0xfff0;
 	coulDuFond(j);
 }
@@ -305,8 +297,12 @@ void fond_ecran::coulDuFond(Sint32 zecol)
 	ecran->palette_go(palPT);
 }
 
-// 28 palettes predefinies ? (4
-// 112 * 3 = 448 composantes
+//------------------------------------------------------------------------------
+// preset palettes: 4 colors original background (mode 320x200)
+//------------------------------------------------------------------------------
+// 448 / 16	: 28 preset palettes
+// 4 * 4	: 16 composantes by palette
+// 112 * 4	: 448 composantes
 char fond_ecran::couleurs[448] = {
 0x00, 0x40, 0x20, 0x40, 0x00, 0x60, 0x40, 0x60, 0x00, 0x80, 0x60, 0x80, 0x00, 0xA0, 0x80, 0xA0, 0x00, 0x00, 0x20, 0x40, 0x00, 0x20,
 0x40, 0x60, 0x00, 0x40, 0x60, 0x80, 0x00, 0x60, 0x80, 0xA0, 0x00, 0x00, 0x20, 0x20, 0x00, 0x20, 0x40, 0x40, 0x00, 0x40, 0x60, 0x60,
