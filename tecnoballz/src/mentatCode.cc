@@ -3,8 +3,8 @@
 //-----------------------------------------------------------------------------
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
-// updates	: 2005-01-11
-// id		: $Id: mentatCode.cc,v 1.3 2005/01/11 12:52:44 gurumeditation Exp $
+// updates	: 2005-01-15
+// id		: $Id: mentatCode.cc,v 1.4 2005/01/15 20:40:29 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -75,7 +75,8 @@ Uint32				mentatCode::nuOfPlayer = 1;
 char				mentatCode::chainelog[100];
 const char			mentatCode::nomprefix[] = PREFIX;
 Sint32				mentatCode::resolution = 2; 
-char				mentatCode::zeAreaCode[11];
+char				mentatCode::zeAreaCode[11] =
+					"          ";
 
 //------------------------------------------------------------------------------
 // once initialization

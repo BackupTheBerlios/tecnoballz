@@ -1,10 +1,11 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "print_menu.cc"
-// created		: ?
-// updates		: 2004-10-25
+// created	: ?
+// updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
+// id		: $Id: print_menu.cc,v 1.2 2005/01/15 20:40:29 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +20,6 @@
 // You should have received a copy of the GNU General Public License along with
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA 02111-1307, USA.
-//
 //*****************************************************************************
 #include "../include/print_menu.h"
 #include "../include/ressources.h"
@@ -139,7 +139,6 @@ Sint32 print_menu::afficheTxt()
 	char *desP1 = adresseGFX;
 	Sint32 offSc = off_source;
 	Sint32 offDs = srceNextLn;
-	//Sint32 offD2 = srceNextLn * heightfont + ((resolution - 1) * srceNextLn);
 	Sint32 offD2 = srceNextLn * (space2next - 1);
 	Sint32 *basPT = (Sint32 *)caract_adr;
 	char *p = menu_liste[numeroMenu];
@@ -148,124 +147,177 @@ Sint32 print_menu::afficheTxt()
 
 	if(resolution == 1)
 	{
-	for(Sint32 k = 0; k < MENU_HAUTE; k++, desP1 += offD2)
-	{	if(y != k)
-		{	
-			//###########################################################
-			// display normal line of 32 characters
-			//###########################################################
-			for(j = 0; j < MENU_LARGE; j++)
-			{	a = *(p++) - 32;
-				if(a)
-				{	b = c[a];
-					Sint32 *s = (Sint32 *)basPT;
-					Sint32 *d = (Sint32 *)desP1;
-					b = b << 3;
-					s = (Sint32 *)((char *)s + b);
-					for(b = 0; b < 8; b++)
-					{	d[0] = s[0];
-						d[1] = s[1];
-						s = (Sint32 *)((char *)s + offSc);
-						d = (Sint32 *)((char *)d + offDs);
-					}
-				}
-				desP1 = desP1 + 8;
-			}
-		}
-		else
-		{	//###########################################################
-			// display selected line of 32 characters
-			//###########################################################
-			for(j = 0; j < MENU_LARGE; j++)
-			{	unsigned char pixel = cyclingtab[color];
-				char a = *(p++) - 32;
-				if(a)
-				{	b = c[a];
-					unsigned char *s = (unsigned char *)basPT;
-					unsigned char *d = (unsigned char *)desP1;
-					b = b << 3;
-					s = s + b;
-					for(b = 0; b < 8; b++)
-					{	for(Sint32 z = 0; z < 8; z++)
-						{	a = s[z];
-							if(a)
-							{	a = pixel;
-								d[z] = pixel;
-							}
+		//######################################################
+		// mode low-res (320 x 200)
+		//######################################################
+		for(Sint32 k = 0; k < MENU_HAUTE; k++, desP1 += offD2)
+		{	if(y != k)
+			{	
+				//######################################
+				// display normal line of 32 characters
+				//######################################
+				for(j = 0; j < MENU_LARGE; j++)
+				{	a = *(p++) - 32;
+					if(a)
+					{	b = c[a];
+						b = b << 3;
+#ifndef BYTES_COPY
+						Sint32 *s = (Sint32 *)basPT;
+						Sint32 *d = (Sint32 *)desP1;
+						s = (Sint32 *)((char *)s + b);
+						for(b = 0; b < 8; b++)
+						{	d[0] = s[0];
+							d[1] = s[1];
+							s = (Sint32 *)((char *)s + offSc);
+							d = (Sint32 *)((char *)d + offDs);
 						}
-						s = s + offSc;
-						d = d + offDs;
-					}
-				}
-				desP1 = desP1 + 8;
-				if(color++ > 32) color = 0;
-			}
-		}
-	}
-	
-	}
-	else
-	{
-	
-	for(Sint32 k = 0; k < MENU_HAUTE; k++, desP1 += offD2)
-	{	if(y != k)
-		{	
-			//###########################################################
-			// display normal line of 32 characters
-			//###########################################################
-			for(j = 0; j < MENU_LARGE; j++)
-			{	a = *(p++) - 32;
-				if(a)
-				{	b = c[a];
-					Sint32 *s = (Sint32 *)basPT;
-					Sint32 *d = (Sint32 *)desP1;
-					b = b << 4;
-					s = (Sint32 *)((char *)s + b);
-					for(b = 0; b < 16; b++)
-					{	d[0] = s[0];
-						d[1] = s[1];
-						d[2] = s[2];
-						d[3] = s[3];
-						s = (Sint32 *)((char *)s + offSc);
-						d = (Sint32 *)((char *)d + offDs);
-					}
-				}
-				desP1 = desP1 + 16;
-			}
-		}
-		else
-		{	//###########################################################
-			// display selected line of 32 characters
-			//###########################################################
-			for(j = 0; j < MENU_LARGE; j++)
-			{	unsigned char pixel = cyclingtab[color];
-				char a = *(p++) - 32;
-				if(a)
-				{	b = c[a];
-					unsigned char *s = (unsigned char *)basPT;
-					unsigned char *d = (unsigned char *)desP1;
-					b = b << 4;
-					s = s + b;
-					for(b = 0; b < 16; b++)
-					{	for(Sint32 z = 0; z < 16; z++)
-						{	a = s[z];
-							if(a)
-							{	a = pixel;
-								d[z] = pixel;
-							}
+#else
+
+						char *s = (char *)basPT;
+						char *d = desP1;
+						s += b;
+						for(b = 0; b < 8; b++)
+						{	d[0] = s[0];
+							d[1] = s[1];
+							d[2] = s[2];
+							d[3] = s[3];
+							d[4] = s[4];
+							d[5] = s[5];
+							d[6] = s[6];
+							d[7] = s[7];
+							s += offSc;
+							d += offDs;
 						}
-						s = s + offSc;
-						d = d + offDs;
+#endif
 					}
+					desP1 = desP1 + 8;
 				}
-				desP1 = desP1 + 16;
-				if(color++ > 32) color = 0;
+			}
+			else
+			{	//######################################
+				// display selected line of 32 characters
+				//######################################
+				for(j = 0; j < MENU_LARGE; j++)
+				{	unsigned char pixel = cyclingtab[color];
+					char a = *(p++) - 32;
+					if(a)
+					{	b = c[a];
+						unsigned char *s = (unsigned char *)basPT;
+						unsigned char *d = (unsigned char *)desP1;
+						b = b << 3;
+						s = s + b;
+						for(b = 0; b < 8; b++)
+						{	for(Sint32 z = 0; z < 8; z++)
+							{	a = s[z];
+								if(a)
+								{	a = pixel;
+									d[z] = pixel;
+								}
+							}
+							s = s + offSc;
+							d = d + offDs;
+						}
+					}
+					desP1 = desP1 + 8;
+					if(color++ > 32) color = 0;
+				}
 			}
 		}
 	}
 
-	}
+
+
+	//##############################################################
+	// mode hi-res (640 x 400)
+	//##############################################################
+	else
+	{
 	
+		for(Sint32 k = 0; k < MENU_HAUTE; k++, desP1 += offD2)
+		{	if(y != k)
+			{	
+				//###########################################################
+				// display normal line of 32 characters
+				//###########################################################
+				for(j = 0; j < MENU_LARGE; j++)
+				{	a = *(p++) - 32;
+					if(a)
+					{	b = c[a];
+						b = b << 4;
+#ifndef BYTES_COPY
+						Sint32 *s = (Sint32 *)basPT;
+						Sint32 *d = (Sint32 *)desP1;
+						s = (Sint32 *)((char *)s + b);
+						for(b = 0; b < 16; b++)
+						{	d[0] = s[0];
+							d[1] = s[1];
+							d[2] = s[2];
+							d[3] = s[3];
+							s = (Sint32 *)((char *)s + offSc);
+							d = (Sint32 *)((char *)d + offDs);
+						}
+#else
+
+						char *s = (char *)basPT;
+						char *d = desP1;
+						s += b;
+						for(b = 0; b < 16; b++)
+						{	d[0] = s[0];
+							d[1] = s[1];
+							d[2] = s[2];
+							d[3] = s[3];
+							d[4] = s[4];
+							d[5] = s[5];
+							d[6] = s[6];
+							d[7] = s[7];
+							d[8] = s[8];
+							d[9] = s[9];
+							d[10] = s[10];
+							d[11] = s[11];
+							d[12] = s[12];
+							d[13] = s[13];
+							d[14] = s[14];
+							d[15] = s[15];
+							s += offSc;
+							d += offDs;
+						}
+#endif
+					}
+						desP1 = desP1 + 16;
+				}
+			}
+			else
+			{	//###########################################################
+				// display selected line of 32 characters
+				//###########################################################
+				for(j = 0; j < MENU_LARGE; j++)
+				{	unsigned char pixel = cyclingtab[color];
+					char a = *(p++) - 32;
+					if(a)
+					{	b = c[a];
+						unsigned char *s = (unsigned char *)basPT;
+						unsigned char *d = (unsigned char *)desP1;
+						b = b << 4;
+						s = s + b;
+						for(b = 0; b < 16; b++)
+						{	for(Sint32 z = 0; z < 16; z++)
+							{	a = s[z];
+								if(a)
+								{	a = pixel;
+									d[z] = pixel;
+								}
+							}
+							s = s + offSc;
+							d = d + offDs;
+						}
+					}
+					desP1 = desP1 + 16;
+					if(color++ > 32) color = 0;
+				}
+			}
+		}
+
+	}
 	curs_print();
 	return zeRet;
 }
@@ -465,7 +517,7 @@ Sint32 print_menu::testLeMenu()
 }
 
 //------------------------------------------------------------------------------
-//
+// update strings menu (passwords, players names, difficulty, num of lifes)
 //------------------------------------------------------------------------------
 void print_menu::mis_a_jour()
 {
@@ -480,7 +532,6 @@ void print_menu::mis_a_jour()
 	for(Sint32 i = 0; i < 10; i++)
 		d[i] = s[i];
 
-	
 	//###########################################################
 	// number of players
 	//###########################################################
@@ -508,12 +559,10 @@ void print_menu::mis_a_jour()
 	//for(Uint32 i = 0; i < 1; i++) //test only
 	for(Uint32 i = 0; i < MAX_PLAYER; i++)
 	{	s = joueurData::playerlist[i]->returnName();
-		if(s[0] != '0' || s[1] != '4' ||  s[2] != '0' || 
-			s[3] != '6' ||  s[4] != '7' ||  s[5] != '0')
+		if(s[0] != '0' || s[1] != '4' || s[2] != '0' || 
+			s[3] != '6' || s[4] != '7' || s[5] != '0')
 			birth_flag = 0;
 	}		
-	
-	
 }
 
 //------------------------------------------------------------------------------
@@ -626,7 +675,7 @@ void print_menu::copyScores()
 }
 
 //------------------------------------------------------------------------------
-//
+// strings of the main menu
 //------------------------------------------------------------------------------
 char const print_menu::difficulte[] = "EASY" "HARD" "MAD " "DEAD";
 
@@ -689,7 +738,7 @@ char print_menu::menuTexte2[] =
 	"---------SOUNDS EFFECTS---------"
 	"       b LAURENT  GUYON  b      "
 	"                                "
-	"COPYRIGHT (C)1992-2004 TLK-GAMES"
+	"COPYRIGHT (C)1992-2005 TLK-GAMES"
 	"TLK-GAMES/BP 24/F81150 FLORENTIN"
 	"         LINUX.TLK.FR           "
 	"                                ";
@@ -733,7 +782,7 @@ char print_menu::menuTexte4[] =
 	" b PIXELMAN     b PIERRE DENIS  "
 	" b STEPHANE C.  b POPOLON       "
 	" b ZIBIBI       b SHAD          "
-	" b REGLIS C.    b ZE-KING       "
+	" b REGLIS       b ZE-KING       "
 	"                                "
 	"                                ";
 
