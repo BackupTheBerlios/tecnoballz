@@ -4,7 +4,7 @@
 // file		: "ecran_hard.cc"
 // created	: 2002-08-17
 // updates	: 2005-01-10
-// id		: $Id: ecran_hard.cc,v 1.4 2005/01/20 06:35:10 gurumeditation Exp $
+// id		: $Id: ecran_hard.cc,v 1.5 2005/03/04 12:53:49 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -94,7 +94,7 @@ Sint32 ecran_hard::ecran_init()
 	// allocate "tampon" surface
 	//###################################################################
 	tamSurface = SDL_CreateRGBSurface(SDL_ANYFORMAT, bufLargeur, bufHauteur, bitspixels, 0xf00, 0x0f0, 0x00f, 0x00);
-	if(!bufSurface)
+	if(!tamSurface)
 	{	fprintf(stderr, "ecran_hard::ecran_init() : SDL_CreateRGBSurface " \
 			"error: %s\n", SDL_GetError());
 		return E_SDLERROR;
