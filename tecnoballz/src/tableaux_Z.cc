@@ -1,9 +1,9 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "tableaux_Z.cc"
-// created		: ?
-// updates		: 2004-10-23
+// created	: ?
+// updates	: 2005-01-18
 // fonctions	: manage bricks levels
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -19,7 +19,6 @@
 // You should have received a copy of the GNU General Public License along with
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA 02111-1307, USA.
-//
 //*****************************************************************************
 #include "../include/tableaux_Z.h"
 #include "../include/ressources.h"
@@ -44,8 +43,8 @@ tableaux_Z::tableaux_Z()
 	BottomWall = new BOB_killer(); 
 	ptMiniMess = new zeMiniMess();
 	gereBalles = new zeNewBalls(gereEjects, briquesTab, gereBricot, tete_gugus,
-									les_atomes, tecZ_barre, BottomWall,
-									ptMiniMess, pt_magneye);
+					les_atomes, tecZ_barre, BottomWall,
+					ptMiniMess, pt_magneye);
 	ptBaDirect = new ballDirect();
 	theBumpers = new zeRaquette();
 	gere_texte = new zeMoveText();
@@ -120,7 +119,8 @@ Sint32 tableaux_Z::first_init()
 	isgameover = 0;
 	if(is_verbose)
 		fprintf(stdout,
-			"tableaux_Z::first_init() areaNumber=%i levelTecno=%i hardChoice=%i \n",
+			"tableaux_Z::first_init() areaNumber=%i "
+			"levelTecno=%i hardChoice=%i \n",
 			areaNumber, levelTecno, hardChoice);
 
 	//###################################################################
@@ -145,79 +145,65 @@ Sint32 tableaux_Z::first_init()
 	// generation of graphics shapes tables
 	//###################################################################
 
-	// generation of wall graphics shapes tables
+	//wall of bottom 
 	error_init(BottomWall->initialise(BOB_WALLBO, image_BOBs, 0));
 	if(erreur_num) return erreur_num;
 	BOBgestion->ajoute_BOB(BottomWall);
 	BottomWall->coordonnee(32 * resolution, 232 * resolution);
-
-	
-
+	//robot bumper
 	error_init(theBumpers->init_robot());
-	if(erreur_num)
-		return (erreur_num);
+	if(erreur_num) return erreur_num;
 	Sint32 build = joueurGere->getRebuild();
 	joueurGere->setRebuild(0);
 	error_init(gereBricot->initialise(build));
-	if(erreur_num)
-		return (erreur_num);
+	if(erreur_num) return erreur_num;
+	//ejectors 
 	error_init(gereEjects->initialise());
-	if(erreur_num)
-		return (erreur_num);
+	if(erreur_num)return erreur_num;
+	//all balls
 	error_init(gereBalles->init_liste());
-	if(erreur_num)
-		return (erreur_num);
-
+	if(erreur_num) return erreur_num;
+	//atoms (aka "bouisbouis")
 	error_init(les_atomes->init_liste());
 	if(erreur_num) return erreur_num;
+	//eye magneto 
 	error_init(pt_magneye->initialize());
 	if(erreur_num) return erreur_num;
-		
+	//capsules of money
 	error_init(gereCapsul->init_liste());
-	if(erreur_num)
-		return (erreur_num);
+	if(erreur_num) return erreur_num;
+	//gadgets (bonuses and maluses)
 	error_init(gereGadget->init_liste());
-	if(erreur_num)
-		return (erreur_num);
+	if(erreur_num) return erreur_num;
+	//gems stones
 	error_init(ptGemstone->init_liste());
-	if(erreur_num)
-		return (erreur_num);
+	if(erreur_num) return erreur_num;
+	//mobiles characters
 	error_init(gere_texte->init_liste());
-	if(erreur_num)
-		return (erreur_num);
+	if(erreur_num) return erreur_num;
+	//weapons's bumpers
 	error_init(theBumpers->init_fires());
-	if(erreur_num)
-		return (erreur_num);
+	if(erreur_num) return erreur_num;
+	//credits value (left-bottom)
 	error_init(ptPrntmney->init_liste());
-	if(erreur_num)
-		return (erreur_num);
+	if(erreur_num) return erreur_num;
+	//GAME OVER sprites
 	error_init(ptGameOver->init_liste());
-	if(erreur_num)
-		return (erreur_num); 
-
-	// Initialize money sprite
+	if(erreur_num) return erreur_num; 
+	//money sprite (left-bottom)
 	error_init(ptBobMoney->initialise(BOB_MONEYS, image_BOBs, 0));
-	if(erreur_num)
-		return (erreur_num);
+	if(erreur_num) return erreur_num;
 	BOBgestion->ajoute_BOB(ptBobMoney);
-
-	// Initialize reverser sprite
+	//reverser sprite (right-bottom)
 	error_init(ptBobRever->initialise(BOB_GADGET, image_BOBs, 0));
-	if(erreur_num)
-		return (erreur_num);
+	if(erreur_num) return erreur_num;
 	BOBgestion->ajoute_BOB(ptBobRever);
-	
-	// initialize
+	//bumper's viewfinder
 	error_init(ptBaDirect->init_liste());
-	if(erreur_num)
-		return (erreur_num); 
-
+	if(erreur_num) return erreur_num; 
+	//ESC menu
 	error_init(ptrEscMenu->first_init(image_BOBs, 0, 256 * resolution));
-	if(erreur_num)
-		return (erreur_num); 
-	
-		
-	
+	if(erreur_num) return erreur_num; 
 	pRessource->freeSprite();
 	ecran_gere->verouiller();
 	
@@ -246,19 +232,25 @@ Sint32 tableaux_Z::first_init()
 	if(erreur_num) return erreur_num;
 	
 	background();
-	
 	theBumpers->initBumper(tecZ_barre, ptGigaBlit, gereBalles);
 
-	// initialization balls ......................................................
+	//##############################################################
+	// balls initialization
+	//##############################################################
 	gereBalles->init_balle(theBumpers,
-		levelParam->startCount,			//time before the ball leaves the bumper (at the beginning of the game)
-		levelParam->glue_count / hardChoice,	//time before the ball leaves (glue option)
-		levelParam->speedCount / hardChoice,	//time before the ball accelerates
-		levelParam->tilt_count,			//time before "tilt" is available
-		levelParam->speedBall1);		// 
+		//time before the ball leaves bumper (at the game beginning) 
+		levelParam->startCount,
+		//time before the ball leaves (glue option)
+		levelParam->glue_count / hardChoice,
+		//time before the ball accelerates
+		levelParam->speedCount / hardChoice,
+		//time before "tilt" is available
+		levelParam->tilt_count,		
+		levelParam->speedBall1);
 
-
-	// initialization "atoms" or "bouibouis" .....................................
+	//##############################################################
+	// initialization "atoms" (aka "bouibouis") 
+	//##############################################################
 	les_atomes->initialise(levelParam->apparition / hardChoice,
 		levelParam->atom1Count / hardChoice,
 		levelParam->atom2Count / hardChoice,
@@ -266,34 +258,56 @@ Sint32 tableaux_Z::first_init()
 		levelParam->atom4Count / hardChoice,
 		levelParam->resistance * hardChoice);
 
+	//##############################################################
+	//initialize capsules of money
+	//##############################################################
+	gereCapsul->initialise(
+			levelParam->monayCount * hardChoice,
+			tecZ_barre, ptPrntmney);
 
-	gereCapsul->initialise(levelParam->monayCount * hardChoice, tecZ_barre, ptPrntmney);
-
+	//##############################################################
+	//Initialize the object which handles gadgets (bonus and malus)
+	//##############################################################
 	Sint32 *cours = joueurGere->get_course();
 	Sint32 counb = joueurGere->get_cou_nb();
 	Sint32 brCnt = briquesTab->getbrikCnt();
-
-	// Initialize the object which handles gadgets (bonus and malus) ..............
 	gereGadget->initialise(
-		levelParam->malusCount * hardChoice,	//frequency of appearance of malus 
-		counb,					//number of bonus bought in the shop
-		brCnt,					//number of bricks which it is necessary to break
-		levelParam->malusListe,			//the list of malus
-		cours,					//the list of bonus bought in the shop
-		ptMiniMess,				//the object which displays the small messages
-		theBumpers,				//the object which handles the bumpers
-		gereBalles,				//the object which handles the balls
-		tecZ_barre,				//the object which handles the display of the text in the bar of the scores.
+		//frequency of appearance of malus 
+		levelParam->malusCount * hardChoice,
+		//number of bonus bought in the shop
+		counb,
+		//number of bricks which it is necessary to break
+		brCnt,
+		//the list of malus
+		levelParam->malusListe,
+		//the list of bonus bought in the shop
+		cours,	
+		//the object which displays the small messages
+		ptMiniMess,
+		//the object which handles the bumpers
+		theBumpers,
+		//the object which handles the balls
+		gereBalles,
+		//the object which handles the text on left scores panel
+		tecZ_barre,
 		BottomWall,
 		pt_magneye);
 
-	error_init(ptGemstone->initialise(joueurGere, tecZ_barre, ptPrntmney, theBumpers));
-	if(erreur_num)
-		return (erreur_num);
+	//##############################################################
+	//initialize the gems tones
+	//##############################################################
+	error_init(ptGemstone->initialise(
+			joueurGere,
+			tecZ_barre,
+			ptPrntmney,
+			theBumpers));
+	if(erreur_num) return erreur_num;
 
-
-	// Initialise les caracteres mobiles
+	//##############################################################
+	// initialize mobiles characters ("LEVEL x COMPLETED")
+	//##############################################################
 	gere_texte->initialise(levelTecno);
+
 	ptPrntmney->initialise(joueurGere, theBumpers, ptBobMoney, ptBobRever);
 
 	
@@ -308,7 +322,7 @@ Sint32 tableaux_Z::first_init()
 	keyGestion->resetpause();
 	keyGestion->setGrab_On();
 	ptMiniMess->mesrequest(1);
-	return (erreur_num);
+	return erreur_num;
 }
 
 //-------------------------------------------------------------------------------
@@ -387,7 +401,9 @@ Sint32 tableaux_Z::zeMainLoop()
 		{	ptMiniMess->execution1();
 			tete_gugus->execution1();
 			ptGigaBlit->execution1();
-			briquesTab->lessbricks();	//handle the "less bricks" option
+			
+			//handle the "less bricks" option
+			briquesTab->lessbricks();
 			theBumpers->bp_deplace();	//move bumpers
 			if(tecZ_barre->resteBrick())
 			{	theBumpers->lacheBalle();
@@ -556,25 +572,23 @@ Sint32 tableaux_Z::zeMainLoop()
 } 
 
 //-------------------------------------------------------------------------------
-//
+// initialize background
 //-------------------------------------------------------------------------------
 Sint32 tableaux_Z::background(Sint32 nbkdg)
 {
 	if(nbkdg == -1)
-	{	//nbkdg = ((areaNumber - 1) * 10) + levelTecno - 1;
-		nbkdg = ((areaNumber - 1) * 10) + levelTecno;
+	{	nbkdg = ((areaNumber - 1) * 10) + levelTecno;
 		if(levelTecno > 5) nbkdg--;
 		if(is_verbose)
-			printf("tableaux_Z::background() : nbkdg = %i\n", nbkdg);
-			//nbkdg = bkgd_order[nbkdg];
+			printf("tableaux_Z::background() : nbkdg = %i\n",
+				nbkdg);
 	}
 
 	//###################################################################
 	// display background
  	//###################################################################
 	error_init(ecranfond4->instalFond(nbkdg));
-	if(erreur_num)
-	return erreur_num;
+	if(erreur_num) return erreur_num;
 	
  	//###################################################################
 	// initialize the mini messages
@@ -602,3 +616,4 @@ Sint32 tableaux_Z::background(Sint32 nbkdg)
 	if(erreur_num) return erreur_num;
 	return erreur_num;
 }
+

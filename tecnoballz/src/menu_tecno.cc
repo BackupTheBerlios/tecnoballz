@@ -1,10 +1,11 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "menu_tecno.cc"
-// created		: ?
-// updates		: 2004-10-27
+// created	: ?
+// updates	: 2005-01-18
 // fonction	: management of the menu principal
+// id		: $Id: menu_tecno.cc,v 1.2 2005/01/18 13:21:39 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +20,6 @@
 // You should have received a copy of the GNU General Public License along with
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA  02111-1307, USA.
-//
 //******************************************************************************
 #include "../include/menu_tecno.h"
 #include "../include/ressources.h"
@@ -107,9 +107,9 @@ Sint32 menu_tecno::zeMainLoop()
 	ecran_gere->waitVBlank();
 	ecran_gere->verouiller();
 	offset_inc();
-	moveZeLogo();					// move the TecnoballZ logo
-	BOB_defile->move_chars();		// move the characters (scroll-text)
-	defilement->scrolling1(-1);		// scrolling of the background of the screen
+	moveZeLogo();			//move the TecnoballZ logo
+	BOB_defile->move_chars();	//move the characters (scroll-text)
+	defilement->scrolling1(-1);	//scrolling of the screen background
 	objetMouse->bouge_test();
 	BOBgestion->listeBOBgo();
 
@@ -194,7 +194,12 @@ Sint32 menu_tecno::start_tecz()
 	//check area password validity
 	//###################################################################
 	Uint32 aMaxi = 4;
+#ifdef TU_TRICHES
+	//allows to jump directly to the last guards with a password 
+	aMaxi = 6;
+#else
 	if(birth_flag) aMaxi = 6;
+#endif
 	for(Uint32 areaN = 1; areaN <= aMaxi; areaN++)
 	{	for(Uint32 hardN = 1; hardN <= 4; hardN++)
 		{	Uint32 f = 1;
@@ -216,8 +221,11 @@ Sint32 menu_tecno::start_tecz()
 				}
 				hardChoice = hardN;
 				if(is_verbose)
-					printf("menu_tecno::start_tecz() %s is OK; nArea = %i;" \
-						"level = %i, hardN = %i\n", &zeAreaCode[0], nArea, level, hardN);
+					printf("menu_tecno::start_tecz() %s "
+						"is OK; nArea = %i;" \
+						"level = %i, hardN = %i\n",
+						&zeAreaCode[0], nArea, level,
+						hardN);
 				grdPt = zeguardian::level2gdpt(nArea, level);
 				goto sortie;
 			}
@@ -266,10 +274,11 @@ Sint32 menu_tecno::start_tecz()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
+/*
 unsigned char menu_tecno::colors_map[] =
 { 0, 0, 0, 0, 0, 0, 48, 80, 112, 16, 48, 80, 64, 96, 128, 112, 112, 144, 80,
   80, 112, 32, 64, 96, 144, 144, 176
-};
+};*/
 
 const char*	menu_tecno::getTheCode(Uint32 arean, Uint32 hardc)
 {	if(arean < 2)
@@ -284,6 +293,7 @@ const char*	menu_tecno::getTheCode(Uint32 arean, Uint32 hardc)
 	ZULUNATION: area 4
 	DANCEMANIA: area 5
 	RINGOFFIRE: area 5 level 12 
+	SHELLSHOCK: area 5 level 13
 */
 
 const char menu_tecno::codesarea[241] =

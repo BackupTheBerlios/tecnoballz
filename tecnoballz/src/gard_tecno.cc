@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "gard_techno.cc"
 // created	: 2003-01-09
-// updates	: 2005-01-15
+// updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.2 2005/01/15 10:18:04 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.3 2005/01/18 13:21:39 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -99,7 +99,8 @@ Sint32 gard_tecno::first_init()
 	Sint32 grdP =  joueurGere->getGuardPt();
 	//levelTecno = 6; //test only
 	if(is_verbose)
-		printf("gard_tecno::first_init() : areaNumber=%i, levelTecno=%i grdP=%i\n",
+		printf("gard_tecno::first_init() : areaNumber=%i, "
+			"levelTecno=%i grdP=%i\n",
 			areaNumber, levelTecno, grdP);
     
   	//###################################################################
@@ -154,8 +155,9 @@ Sint32 gard_tecno::first_init()
 	// initialize
 	error_init(ptBaDirect->init_liste());
 	if(erreur_num) return erreur_num; 
-
-	error_init(ptMoveText->init_liste());	//mobile characters at the end of the level
+	
+	//mobile characters at the end of the level
+	error_init(ptMoveText->init_liste());
 	if(erreur_num) return (erreur_num);
 
 	error_init(ptGameOver->init_liste());
@@ -300,12 +302,15 @@ Sint32 gard_tecno::zeMainLoop()
 		}
 		ptBaDirect->execution1();	//handle ball viewfinder
 		ptPrntmney->execution2(joueurGere->creditFric, joueurGere->superLifes);
+		ptMoveText->goMoveText();
 		BOBgestion->listeBOBgo();
 		ecran_gere->deverouill();
 		ecran_gere->bufferCTab();
 		if(keyGestion->leftButton() && isgameover > 150)
-		{	joueurGere = joueurData::nextplayer(joueurGere, &end_return, 1, ptguardian->totalObjet() + 1);
-			//end_return = 4;
+		{	joueurGere = joueurData::nextplayer(
+				joueurGere,
+				&end_return,
+				1, ptguardian->totalObjet() + 1);
 		}
 	}
 	else
