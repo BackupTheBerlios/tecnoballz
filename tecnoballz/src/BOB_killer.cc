@@ -3,8 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "BOB_killer.cc"
 // created	: ?
-// updates	: 2005-01-05
+// updates	: 2005-01-06
 // fonctions	: Sprites or shapes on the screen
+// id		: $Id: BOB_killer.cc,v 1.5 2005/01/06 13:43:37 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -831,7 +832,6 @@ void BOB_killer::afficheMSK()
 			break;
 		case METHOD_MSK:
 			MSKaffiche();
-			//printf("BOBKiller::afficheMSK / => MSKaffiche !!!\n");
 			break;
 		case METHOD_LIN:
 			afficheLin();
@@ -841,9 +841,6 @@ void BOB_killer::afficheMSK()
 			break;
 		case METHOD_CC1:
 			afficheCyc();
-			break;
-		case METHOD_CC2:
-			afficheCC2();
 			break;
 		case CYCLE_PTAB:
 			cycle_ptab();
@@ -905,32 +902,41 @@ void BOB_killer::afficheCyc()
 {
 	indexCycle &= 7;
 	Sint32 pixel = pt_cycling[indexCycle++];
-	//Sint32 cycle = 29;
-	
-	Sint32 *adres = (Sint32 *)ecran_gere->buffer_pos(position_x, position_y);
 	adresseTAM = ecran_gere->tampon_pos(position_x, position_y);
+#ifndef BYTES_COPY	
+	Sint32 *adres = (Sint32 *)ecran_gere->buffer_pos(position_x, position_y);
 	adresseECR = (char *)adres;
 	Sint32 *gfxP2 = (Sint32 *)tabAffich2;			//pixels
 	Uint16 *gfxP1 = (Uint16 *)tabAffich1;			//offset and loop counter
 	Uint32 t = (Uint32)*(gfxP1++);
 	for(Uint32 i = 0; i < t; i++)
-	{	Sint16 o = *(gfxP1++);						//offset
+	{	Sint16 o = *(gfxP1++);				//offset
 		adres = (Sint32 *)((char *)adres + o);
-		o = *(gfxP1++);								//number of pixels contigus
-		for(Sint32 k = 0 ;k< o; k++)
-		{	//Sint32 j = *(gfxP2++);
+		o = *(gfxP1++);					//number of pixels contigus
+		for(Sint32 k = 0 ; k< o; k++)
 			*(adres++) = pixel;
-		}
-		o = *(gfxP1++);								//number of pixels contigus
+		o = *(gfxP1++);					//number of pixels contigus
 		char *gfxpb = (char *)gfxP2;
 		char *adreb = (char *)adres;
-		for(Sint32 k = 0 ;k< o; k++)
-		{	//char j = *(gfxpb++);
+		for(Sint32 k = 0 ; k< o; k++)
 			*(adreb++) = pixel;
-		}
 		gfxP2 = (Sint32 *)gfxpb;
 		adres = (Sint32 *)adreb;
 	}	
+#else
+	char* adres = ecran_gere->buffer_pos(position_x, position_y);
+	adresseECR = adres;
+	Uint16 *gfxP1 = (Uint16 *)tabAffich1;			//offset and loop counter
+	Uint32 t = (Uint32)*(gfxP1++);
+	for(Uint32 i = 0; i < t; i++)
+	{	Sint16 o = *(gfxP1++);				//offset
+		adres += o;
+		gfxP1++;
+		o = *(gfxP1++);					//number of pixels contigus
+		for(Sint32 k = 0 ; k< o; k++)
+			*(adres++) = pixel;
+	}
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -941,7 +947,7 @@ void BOB_killer::afficheCC2()
 }
 
 //------------------------------------------------------------------------------
-//
+// guards weapons: display mask pixel by pixel with color cylcling
 //------------------------------------------------------------------------------
 void BOB_killer::cycle_ptab()
 {
@@ -968,7 +974,7 @@ void BOB_killer::cycle_ptab()
 }
 
 //------------------------------------------------------------------------------
-//
+//  sprite image will be repeated vertically  (guards's life level) 
 //------------------------------------------------------------------------------
 void BOB_killer::afficheRep()
 {	
@@ -977,63 +983,75 @@ void BOB_killer::afficheRep()
 	Sint32 offsy = 0;
 	for (Sint32 r = 0; r < affRepeatF; r++, offsy+=BOBhauteur)
 	{
-	
-	Sint32 *adres = (Sint32 *)ecran_gere->buffer_pos(position_x, position_y + offsy);
-	Sint32 *gfxP2 = (Sint32 *)tabAffich2;			//pixels
-	Uint16 *gfxP1 = (Uint16 *)tabAffich1;			//offset and loop counter
-	Uint32 t = (Uint32)*(gfxP1++);
-	for(Uint32 i = 0; i < t; i++)
-	{ Sint16 o = *(gfxP1++);				//offset
-		adres = (Sint32 *)((char *)adres + o);
-		o = *(gfxP1++);					//number of pixels contigus
-		for(Sint32 k = 0 ;k< o; k++)
-		{	Sint32 j = *(gfxP2++);
-			*(adres++) = j;
+		Uint16 *gfxP1 = (Uint16 *)tabAffich1;		//offsets and loop counter
+		Uint32 t = (Uint32)*(gfxP1++);
+#ifndef BYTES_COPY	
+		Sint32 *adres = (Sint32 *)ecran_gere->buffer_pos(position_x, position_y + offsy);
+		Sint32 *gfxP2 = (Sint32 *)tabAffich2;		//pixels data of the sprite
+		for(Uint32 i = 0; i < t; i++)
+		{	Sint16 o = *(gfxP1++);			//offset in bytes
+			adres = (Sint32 *)((char *)adres + o);
+			o = *(gfxP1++);				//number of longword contigus
+			for(Sint32 k = 0; k < o; k++)
+			{	Sint32 j = *(gfxP2++);
+				*(adres++) = j;
+			}
+			o = *(gfxP1++);				//number of bytes contigus
+			char *gfxpb = (char *)gfxP2;
+			char *adreb = (char *)adres;
+			for(Sint32 k = 0; k< o; k++)
+			{	char j = *(gfxpb++);
+				*(adreb++) = j;
+			}
+			gfxP2 = (Sint32 *)gfxpb;
+			adres = (Sint32 *)adreb;
 		}
-		o = *(gfxP1++);					//number of pixels contigus
-		char *gfxpb = (char *)gfxP2;
-		char *adreb = (char *)adres;
-		for(Sint32 k = 0 ;k< o; k++)
-		{	char j = *(gfxpb++);
-			*(adreb++) = j;
+#else
+		char *adres = ecran_gere->buffer_pos(position_x, position_y + offsy);
+		char *gfxP2 = tabAffich2;			//pixels data of the sprite
+		for(Uint32 i = 0; i < t; i++)
+		{	Sint16 o = *(gfxP1++);			//offset in bytes
+			adres += o;
+			gfxP1++;
+			o = *(gfxP1++);				//number of pixels contigus
+			for(Sint32 k = 0; k < o; k++)
+			{	char j = *(gfxP2++);
+				*(adres++) = j;
+			}
 		}
-		gfxP2 = (Sint32 *)gfxpb;
-		adres = (Sint32 *)adreb;
+#endif
 	}
-	}
-
-	
 }
 
 //------------------------------------------------------------------------------
-// display a sprite line by line (for the gigablitz)
+// display a sprite line by line (for the gigablitz vertical clipping)
 //------------------------------------------------------------------------------
 void BOB_killer::afficheLin()
 {
-	//printf("BOB_killer::afficheLin() affligFrst:%i affligLast:%i\n", affligFrst, affligLast);
 	bb_afligne *p = tafflignes[animOffset];
-	Sint32 *adres = (Sint32 *)ecran_gere->buffer_pos(position_x, position_y + affligFrst);
 	adresseTAM = ecran_gere->tampon_pos(position_x, position_y + affligFrst);
-	adresseECR = (char *)adres;
 	affligFrSv = affligFrst;;
 	affligLaSv = affligLast;
 	Sint32 l = affligFrst;
 	Uint32 t = (Uint32) p[l].COUNTERTAB;
 	Uint16 *gfxP1 = (Uint16 *)p[l].TABAFFICH1;
-	Sint32 *gfxP2 = (Sint32 *)p[l].TABAFFICH2;
 	Sint16 o = p[l].OFFSETLEFT;
 	gfxP1++;
+#ifndef BYTES_COPY	
+	Sint32 *adres = (Sint32 *)ecran_gere->buffer_pos(position_x, position_y + affligFrst);
+	Sint32 *gfxP2 = (Sint32 *)p[l].TABAFFICH2;
+	adresseECR = (char *)adres;
 	for(Uint32 i = 0; i < t; i++)
 	{	adres = (Sint32 *)((char *)adres + o);
 		o = *(gfxP1++);				//number of pixels contigus
-		for(Sint32 k = 0 ;k< o; k++)
+		for(Sint32 k = 0; k < o; k++)
 		{	Sint32 j = *(gfxP2++);
 			*(adres++) = j;
 		}
 		o = *(gfxP1++);				//number of pixels contigus
 		char *gfxpb = (char *)gfxP2;
 		char *adreb = (char *)adres;
-		for(Sint32 k = 0 ;k< o; k++)
+		for(Sint32 k = 0; k < o; k++)
 		{	char j = *(gfxpb++);
 			*(adreb++) = j;
 		}
@@ -1042,7 +1060,7 @@ void BOB_killer::afficheLin()
 		o = *(gfxP1++);				//offset
 	}
 	l++;
-	for (; l<affligLast; l++)
+	for (; l < affligLast; l++)
 	{	t = (Uint32) p[l].COUNTERTAB;
 		gfxP1 = (Uint16 *)p[l].TABAFFICH1;
 		gfxP2 = (Sint32 *)p[l].TABAFFICH2;
@@ -1065,6 +1083,36 @@ void BOB_killer::afficheLin()
 			adres = (Sint32 *)adreb;
 		}
 	}
+#else
+	char *adres = ecran_gere->buffer_pos(position_x, position_y + affligFrst);
+	char *gfxP2 = p[l].TABAFFICH2;
+	adresseECR = adres;
+	for(Uint32 i = 0; i < t; i++)
+	{	adres += o;
+		gfxP1++; 
+		o = *(gfxP1++);				//number of pixels contigus
+		for(Sint32 k = 0; k < o; k++)
+		{	char j = *(gfxP2++);
+			*(adres++) = j;
+		}
+	}
+	l++;
+	for (; l < affligLast; l++)
+	{	t = (Uint32) p[l].COUNTERTAB;
+		gfxP1 = (Uint16 *)p[l].TABAFFICH1;
+		gfxP2 = p[l].TABAFFICH2;
+		for(Uint32 i = 0; i < t; i++)
+		{	o = *(gfxP1++);
+			adres += o;
+			gfxP1++; 
+			o = *(gfxP1++);			//number of pixels contigus
+			for(Sint32 k = 0 ;k< o; k++)
+			{	char j = *(gfxP2++);
+				*(adres++) = j;
+			}
+		}
+	}
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -1073,25 +1121,38 @@ void BOB_killer::afficheLin()
 void BOB_killer::afficheSHA()
 {
 	if(!flag_actif || !flagShadow) return;
-	Sint32 *adres = (Sint32 *) ecran_gere->buffer_pos(position_x + ombredecax, position_y + ombredecay);
-	adresseTA2 = ecran_gere->tampon_pos(position_x + ombredecax, position_y + ombredecay);
-	adresseEC2 = (char*)adres;
 	char j = ombrepixel;
-	Sint32 q = ombrepixe4;
+	adresseTA2 = ecran_gere->tampon_pos(position_x + ombredecax, position_y + ombredecay);
 	Uint16 *gfxPT = (Uint16 *)tabAffich1;
 	Uint32 t = (Uint32)*(gfxPT++);
+#ifndef BYTES_COPY	
+	Sint32 q = ombrepixe4;
+	Sint32 *adres = (Sint32 *) ecran_gere->buffer_pos(position_x + ombredecax, position_y + ombredecay);
+	adresseEC2 = (char*)adres;
 	for(Uint32 i = 0; i < t; i++)
 	{	Sint16 o = *(gfxPT++);				//offset
 		adres = (Sint32 *)((char *)adres + o);
-		o = *(gfxPT++);					//number of pixels contigus
-		for(Sint32 k = 0 ;k< o; k++)
+		o = *(gfxPT++);					//number of longworld contigus
+		for(Sint32 k = 0; k < o; k++)
 			*(adres++) |= q;
-		o = *(gfxPT++);						//number of pixels contigus
+		o = *(gfxPT++);					//number of byte contigus
  		char *adreb = (char *)adres; 
- 		for(Sint32 k = 0 ;k< o; k++)
+ 		for(Sint32 k = 0; k < o; k++)
 			*(adreb++) |= j;
 		adres = (Sint32 *)adreb; 
 	}
+#else
+	char *adres = ecran_gere->buffer_pos(position_x + ombredecax, position_y + ombredecay);
+	adresseEC2 = adres;
+	for(Uint32 i = 0; i < t; i++)
+	{	Sint16 o = *(gfxPT++);				//offset
+		adres += o;
+		gfxPT++;
+		o = *(gfxPT++);					//number of pixels contigus
+		for(Sint32 k = 0; k < o; k++)
+			*(adres++) |= j;
+	}
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -1099,30 +1160,46 @@ void BOB_killer::afficheSHA()
 //------------------------------------------------------------------------------
 void BOB_killer::affich_MSK()
 {
-	Sint32 *adres = (Sint32 *) ecran_gere->tampon_pos(position_x, position_y);
 	adresseTAM = ecran_gere->tampon_pos(position_x, position_y);
-	adresseECR = (char *)adres;
-	Sint32 *gfxP2 = (Sint32 *) tabAffich2;	//pixels
-	Uint16 *gfxP1 = (Uint16 *)tabAffich1;	//offset and loop counter
+	Uint16 *gfxP1 = (Uint16 *)tabAffich1;		//offset and loop counter
 	Uint32 t = (Uint32)*(gfxP1++);
+#ifndef BYTES_COPY	
+	Sint32 *adres = (Sint32 *) ecran_gere->tampon_pos(position_x, position_y);
+	adresseECR = (char *)adres;
+	Sint32 *gfxP2 = (Sint32 *)tabAffich2;		//pixels
 	for(Uint32 i = 0; i < t; i++)
-	{	Sint16 o = *(gfxP1++);				//deplacement
+	{	Sint16 o = *(gfxP1++);			//offset
 		adres = (Sint32 *)((char *)adres + o);
-		o = *(gfxP1++);						//number of pixels contigus
-		for(Sint32 k = 0 ;k< o; k++)
+		o = *(gfxP1++);				//number of longwords contigus
+		for(Sint32 k = 0; k < o; k++)
 		{	Sint32 j = *(gfxP2++);
 			*(adres++) = j;
 		}
-		o = *(gfxP1++);						//number of pixels contigus
+		o = *(gfxP1++);				//number of bytes contigus
 		char *gfxpb = (char *)gfxP2;
 		char *adreb = (char *)adres;
-		for(Sint32 k = 0 ;k< o; k++)
+		for(Sint32 k = 0; k < o; k++)
 		{	char j = *(gfxpb++);
 			*(adreb++) = j;
 		}
 		gfxP2 = (Sint32 *)gfxpb;
 		adres = (Sint32 *)adreb;
 	}
+#else
+	char *adres = ecran_gere->tampon_pos(position_x, position_y);
+	adresseECR = adres;
+	char *gfxP2 = tabAffich2;			//pixels data
+	for(Uint32 i = 0; i < t; i++)
+	{	Sint16 o = *(gfxP1++);			//offset
+		adres += o;
+		gfxP1++;
+		o = *(gfxP1++);				//number of pixels contigus
+		for(Sint32 k = 0; k < o; k++)
+		{	char j = *(gfxP2++);
+			*(adres++) = j;
+		}
+	}
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -1130,27 +1207,41 @@ void BOB_killer::affich_MSK()
 //------------------------------------------------------------------------------
 void BOB_killer::affich_SHA()
 { 
-	Sint32 *adres = (Sint32 *)ecran_gere->tampon_pos(position_x + ombredecax,
-		position_y + ombredecay);
 	adresseTA2 = ecran_gere->tampon_pos(position_x + ombredecax,
 		position_y + ombredecay);
-	adresseEC2 = (char *)adres;
 	char j = ombrepixel;
-	Sint32 q = ombrepixe4;
 	Uint16 *gfxPT = (Uint16 *)tabAffich1;
 	Uint32 t = (Uint32)*(gfxPT++);
+#ifndef BYTES_COPY	
+	Sint32 *adres = (Sint32 *)ecran_gere->tampon_pos(position_x + ombredecax,
+		position_y + ombredecay);
+	adresseEC2 = (char *)adres;
+	Sint32 q = ombrepixe4;
 	for(Uint32 i = 0; i < t; i++)
 	{	Sint16 o = *(gfxPT++);			//offset
 		adres = (Sint32 *)((char *)adres + o);
-		o = *(gfxPT++);				//number of pixels contigus
-		for(Sint32 k = 0 ;k< o; k++)
+		o = *(gfxPT++);				//number of longwords contigus
+		for(Sint32 k = 0; k < o; k++)
 			*(adres++) |= q;
-		o = *(gfxPT++);					//number of pixels contigus
+		o = *(gfxPT++);				//number of bytes contigus
 		char *adreb = (char *)adres; 
-		for(Sint32 k = 0 ;k< o; k++)
+		for(Sint32 k = 0; k < o; k++)
 			*(adreb++) |= j;
 		adres = (Sint32 *)adreb; 
 	}
+#else
+	char *adres = ecran_gere->tampon_pos(position_x + ombredecax,
+		position_y + ombredecay);
+	adresseEC2 = adres;
+	for(Uint32 i = 0; i < t; i++)
+	{	Sint16 o = *(gfxPT++);			//offset
+		adres += o;
+		gfxPT++;
+		o = *(gfxPT++);				//number of pixels contigus
+		for(Sint32 k = 0; k < o; k++)
+			*(adres++) |= j;
+	}
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -1344,7 +1435,7 @@ void BOB_killer::out_horizo()
 }
 
 //-------------------------------------------------------------------------------
-// Retourne la largeur du BOB
+// get sprite's width 
 //-------------------------------------------------------------------------------
 Uint32 BOB_killer::getLargeur()
 {
@@ -1352,7 +1443,7 @@ Uint32 BOB_killer::getLargeur()
 }
 
 //-------------------------------------------------------------------------------
-// Retourne la hauteur du BOB
+// get sprite's height
 //-------------------------------------------------------------------------------
 Uint32 BOB_killer::getHauteur()
 {
@@ -1360,7 +1451,7 @@ Uint32 BOB_killer::getHauteur()
 }
 
 //-------------------------------------------------------------------------------
-// Retourne la largeur du BOB 
+// get sprite's width (collision)
 //-------------------------------------------------------------------------------
 Uint32 BOB_killer::getColLarg()
 {
@@ -1368,7 +1459,7 @@ Uint32 BOB_killer::getColLarg()
 }
 
 //-------------------------------------------------------------------------------
-// Retourne la hauteur du BOB
+// get sprite's height (collision)
 //-------------------------------------------------------------------------------
 Uint32 BOB_killer::getColHaut()
 {
