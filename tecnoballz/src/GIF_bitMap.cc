@@ -1,10 +1,11 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "GIF_bitMap.cc"
-// created		: 1996-06-29
-// updates		: 2004-10-08
+// created	: 1996-06-29
+// updates	: 2005-07-07
 // fonctions	: handle BMP images (SDL)
+// id		: $Id: GIF_bitMap.cc,v 1.2 2005/01/07 16:18:17 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
