@@ -1,9 +1,9 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "BOB_killer.cc"
 // created	: ?
-// updates	: 2004-10-27
+// updates	: 2005-01-04
 // fonctions	: Sprites or shapes on the screen
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -492,24 +492,28 @@ Sint32 BOB_killer::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sin
 			flagO = 0;
 			for(Sint32 k = 0; k < BOBlargeur; k++)
 			{	char pixel = *(gfxPT++);			//read the pixel
-				if(pixel)							//transparent?
+				if(pixel)					//transparent?
 				{	*(destP++) = (Sint16)pixel;		//no, save pixel value
 					npixe++;
 				}
 				else
-				{	if(npixe > 0)						//at least one pixel ?
+				{	if(npixe > 0)					//at least one pixel ?
 					{	if(fTableByte)
 						{	*(destW++) = (Sint16)depla;	//previous offset
 							*(destW++) = (Sint16)npixe;	//number of pixel(s)	
 						}
 						*(destV++) = (Sint16)depla;		//save the previous offset
+#ifndef BYTES_COPY
 						Sint32 n = npixe >> 2;			//number of word 32 bits
 						*(destV++) = (Sint16)n;			//number of 4x pixel(s)
-						npixe &= 0x003;					//rest 0, 1, 2 or 3 bytes
+						npixe &= 0x003;				//rest 0, 1, 2 or 3 bytes
+#else
+						*(destV++) = 0;
+#endif
 						*(destV++) = (Sint16)npixe;		//number of pixel(s)
 						npixe = 0;
 						depla = 0;
-						nbreV++;						//COUNTERTAB++
+						nbreV++;				//COUNTERTAB++
 						flagO = 1;
 					}
 					if(flagO == 0)
@@ -518,18 +522,22 @@ Sint32 BOB_killer::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sin
 				}
 			}	//width loop
 			//***
-			if(npixe>0)
+			if(npixe > 0)
 			{	if(fTableByte)
 				{	*(destW++) = (Sint16)depla;	//previous offset
 					*(destW++) = (Sint16)npixe;	//number of pixel(s)	
 				}
 				*(destV++) = (Sint16)depla;
+#ifndef BYTES_COPY
 				Sint32 n = npixe >> 2;			//number of word 32 bits
 				*(destV++) = (Sint16)n;			//number of 4x pixel(s)
-				npixe &= 0x003;					//rest 0, 1, 2 or 3 bytes
+				npixe &= 0x003;				//rest 0, 1, 2 or 3 bytes
+#else
+				*(destV++) = 0;
+#endif
 				*(destV++) = (Sint16)npixe;		//number of pixel(s)
 				npixe = 0;
-				nbreV++;						//COUNTERTAB++
+				nbreV++;				//COUNTERTAB++
 				depla = 0;
 			}
 			gfxPT += offsetSrce;
@@ -663,10 +671,10 @@ void BOB_killer::efface_MSK()
 	// special sprite, restore line by line (gigablitz)
 	//###################################################################
 	if(put_method == METHOD_LIN)
-	//if(afflignesF)
 	{	efface_lin();
 		return;
 	}
+#ifndef BYTES_COPY	
 	Sint32 *srcPT = (Sint32 *)adresseTAM;
 	Sint32 *adres = (Sint32 *)adresseECR;
 	adresseECR = (char *)NULL;
@@ -676,17 +684,33 @@ void BOB_killer::efface_MSK()
 	{	Sint16 o = *(gfxPT++);	//offset
 		adres = (Sint32 *)((char *)adres + o);
 		srcPT = (Sint32 *)((char *)srcPT + o);
-		o = *(gfxPT++);	//number of pixels contigus
-		for(Sint32 k = 0 ;k< o; k++)
+		o = *(gfxPT++);	//number of bytes contigus
+		for(Sint32 k = 0; k < o; k++)
 			*(adres++) = *(srcPT++);
-		o = *(gfxPT++);	//number of pixels contigus
+		o = *(gfxPT++);	//number of longword contigus
 		char *adreb = (char *)adres;
 		char *srcPB = (char *)srcPT;
-		for(Sint32 k = 0 ;k< o; k++)
+		for(Sint32 k = 0; k < o; k++)
 			*(adreb++) = *(srcPB++);
 		adres = (Sint32 *)adreb;
 		srcPT = (Sint32 *)srcPB;
 	}
+#else
+	char *srcPT = adresseTAM;
+	char *adres = adresseECR;
+	adresseECR = (char *)NULL;
+	Sint16 *gfxPT = tabAffich1;
+	Uint32 t = (Uint32)*(gfxPT++);
+	for(Uint32 i = 0; i < t; i++)
+	{	Sint16 o = *(gfxPT++);	//offset
+		adres += o;
+		srcPT += o;
+		gfxPT++;
+		o = *(gfxPT++);	//number of bytes contigus
+		for(Sint32 k = 0; k < o; k++)
+			*(adres++) = *(srcPT++);
+	}
+#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -819,30 +843,46 @@ void BOB_killer::afficheMSK()
 //------------------------------------------------------------------------------
 void BOB_killer::method_tab()
 {
-	Sint32 *adres = (Sint32 *)ecran_gere->buffer_pos(position_x, position_y);
 	adresseTAM = ecran_gere->tampon_pos(position_x, position_y);
+#ifndef BYTES_COPY	
+	Sint32 *adres = (Sint32 *)ecran_gere->buffer_pos(position_x, position_y);
 	adresseECR = (char *)adres;
 	Sint32 *gfxP2 = (Sint32 *)tabAffich2;			//pixels
 	Uint16 *gfxP1 = (Uint16 *)tabAffich1;			//offset and loop counter
-	Uint32 t = (Uint32)*(gfxP1++);
+	Uint32 t = (Uint32)*(gfxP1++);				//height of sprite
 	for(Uint32 i = 0; i < t; i++)
-	{	Sint16 o = *(gfxP1++);						//offset
+	{	Sint16 o = *(gfxP1++);				//offset
 		adres = (Sint32 *)((char *)adres + o);
-		o = *(gfxP1++);								//number of pixels contigus
-		for(Sint32 k = 0 ;k< o; k++)
+		o = *(gfxP1++);					//number of longword contigus
+		for(Sint32 k = 0; k < o; k++)
 		{	Sint32 j = *(gfxP2++);
 			*(adres++) = j;
 		}
-		o = *(gfxP1++);								//number of pixels contigus
+		o = *(gfxP1++);					//number of bytes contigus
 		char *gfxpb = (char *)gfxP2;
 		char *adreb = (char *)adres;
-		for(Sint32 k = 0 ;k< o; k++)
+		for(Sint32 k = 0; k < o; k++)
 		{	char j = *(gfxpb++);
 			*(adreb++) = j;
 		}
 		gfxP2 = (Sint32 *)gfxpb;
 		adres = (Sint32 *)adreb;
 	}
+#else
+	char *adres = ecran_gere->buffer_pos(position_x, position_y);
+	adresseECR = adres;
+	char *gfxP2 = tabAffich2;				//pixels (sprite data)
+	Uint16 *gfxP1 = (Uint16 *)tabAffich1;			//offset and loop counter
+	Uint32 t = (Uint32)*(gfxP1++);				//height of sprite
+	for(Uint32 i = 0; i < t; i++)
+	{	Sint16 o = *(gfxP1++);				//offset
+		adres += o;
+		gfxP1++;
+		o = *(gfxP1++);					//number of pixels contigus
+		for(Sint32 k = 0; k < o; k++)
+			*(adres++) = *(gfxP2++);
+	}
+#endif
 }
 
 //------------------------------------------------------------------------------
