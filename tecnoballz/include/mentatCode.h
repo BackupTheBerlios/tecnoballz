@@ -3,8 +3,8 @@
 //-----------------------------------------------------------------------------
 // file		: "mentatCode.h"
 // created	: 2002-08-18
-// updates	: 2005-01-23
-// ID		: $Id: mentatCode.h,v 1.7 2005/01/23 19:52:24 gurumeditation Exp $
+// updates	: 2005-01-25
+// ID		: $Id: mentatCode.h,v 1.8 2005/01/25 11:25:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -46,8 +46,8 @@
 //...............................................................................
 #ifndef __MENTATCODE__
 #define __MENTATCODE__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.90+ (2005-01-23)"
-#define TU_TRICHES		//devel only
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91 (2005-01-25)"
+//#define TU_TRICHES		//devel only
 #define BYTES_COPY		//force bytes copy (SPARC unaligned memory access)
 #ifndef SCOREFILE
 #define SCOREFILE "tecnoball"
