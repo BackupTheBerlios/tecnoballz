@@ -1,9 +1,10 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "ecran_hard.cc"
-// created		: 2002-08-17
-// updates		: 2004-10-23
+// created	: 2002-08-17
+// updates	: 2005-01-10
+// id		: $Id: ecran_hard.cc,v 1.2 2005/01/10 09:29:43 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -547,11 +548,19 @@ void ecran_hard::tamponBuff()
 //------------------------------------------------------------------------------
 void ecran_hard::tamponBuff(Sint32 pos_x, Sint32 pos_y, Sint32 large, Sint32 haute)
 {
+#ifndef BYTES_COPY	
 	Sint32 *s = (Sint32 *)(tamAdresse + (pos_y * tam_nextLn + pos_x));
 	Sint32 *d = (Sint32 *)(bufAdresse + (pos_y * buf_nextLn + pos_x));
 	Sint32 n = tam_nextLn >> 2;
 	Sint32 o = buf_nextLn >> 2;
 	Sint32 l = large >> 2;
+#else
+	char *s = tamAdresse + (pos_y * tam_nextLn + pos_x);
+	char *d = bufAdresse + (pos_y * buf_nextLn + pos_x);
+	Sint32 n = tam_nextLn;
+	Sint32 o = buf_nextLn;
+	Sint32 l = large;
+#endif
 	Sint32 h = haute;
 	for(Sint32 j = 0; j < h; j++)
 	{	for(Sint32 i = 0; i < l; i++)
