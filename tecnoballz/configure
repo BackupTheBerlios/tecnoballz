@@ -3809,9 +3809,9 @@ case `uname -m` in
 	i386)
 		CFLAGS="-O3" ;;
 	sparc64)
-		CFLAGS="" ;;
+		CFLAGS="-O3" ;;
 	*)
-		CFLAGS="" ;;
+		CFLAGS="-O3" ;;
 esac
 
 # global libs and flags
