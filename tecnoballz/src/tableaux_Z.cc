@@ -425,10 +425,13 @@ Sint32 tableaux_Z::zeMainLoop()
 		if(!tecZ_barre->resteBrick())
 		{	if(count_next > 0)
  			{	count_next++;
-				Sint32 endmu = 1;
+				Sint32 endmu = 0;
+				if(count_next > 500)
+				{	endmu = 1;
 #ifndef SOUNDISOFF	
-				endmu = ptAudiomix->winn_isend();
-#endif				
+					endmu = ptAudiomix->winn_isend();
+#endif
+				}
 				if(count_next > 20000000 ||
 					keyGestion->test_Kcode(SDLK_SPACE) || endmu)
 				{	gereBricot->sauve_etat();
@@ -452,7 +455,7 @@ Sint32 tableaux_Z::zeMainLoop()
 #ifndef SOUNDISOFF	
 				ptAudiomix->stop_sound();
 #endif
-			count_next = 1;
+				count_next = 1;
 			}
 		}
 	}
