@@ -1,10 +1,11 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "scoretable.cc"
-// created		: 2004-04-30
-// updates		: 2004-10-27
+// created	: 2004-04-30
+// updates	: 2005-01-11
 // fonction	: display score table (game over and menu)
+// id		: $Id: scoretable.cc,v 1.2 2005/01/11 05:31:38 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -31,8 +32,8 @@
 scoretable::scoretable()
 {
 	the_scores = (score_list**)NULL;
-	buffersize = (sizeof(Uint32) * 3 + 6) * NUMBSCORES * NDIFFICULT +
-					sizeof(Uint32);
+	buffersize = (sizeof(Uint32) * 3 + 8) * NUMBSCORES * NDIFFICULT +
+			sizeof(Uint32);
 }
 
 //-----------------------------------------------------------------------------
@@ -56,12 +57,13 @@ scoretable::~scoretable()
 //-----------------------------------------------------------------------------
 Sint32 scoretable::first_init()
 {
+	// allocate memory for the 4 pointers to the 4 scores tables
 	the_scores = (score_list**) memGestion->reserveMem(sizeof(score_list *) * NDIFFICULT,
 		0x53434F52);
 	error_init(memGestion->retour_err());
 	if(erreur_num) return erreur_num;
 	
-	
+	//fill score table
 	for(Uint32 i = 0; i < NDIFFICULT; i++)
 	{	the_scores[i] =
 			(score_list*) memGestion->reserveMem(sizeof(score_list) * NUMBSCORES,
@@ -80,11 +82,12 @@ Sint32 scoretable::first_init()
 			score[j].playerName[3] = ' ';
 			score[j].playerName[4] = 'K';
 			score[j].playerName[5] = ' ';
-			score[j].playerName[7] = 0;
+			score[j].playerName[6] = 0;
+			score[j].playerName[7] = 0;	//SPARC unaligned memory access
 		}
 	}
-	
-	
+
+	//save scores tables
 	if (!loadScores()) saveScores();
 	return erreur_num;
 }
@@ -103,10 +106,13 @@ Sint32 scoretable::loadScores()
 			memGestion->liberation(pData);
 			return 0;
 		}
+		Uint32 ckVal;
+		bigendianr((Uint32 *)pData, &ckVal);	
 		Uint32 *pSelf = (Uint32 *)pData;
 		Uint32 value = controlVal(pSelf + 1,
 			(buffersize - sizeof(Uint32)) / sizeof(Uint32));
-		if(value != *pSelf)
+		//if(value != *pSelf)
+		if(value != ckVal)
 		{	fprintf(stderr, "scoretable::loadScores(): bad checksum, %x instead %x\n",
 				value, *pSelf);
 			memGestion->liberation(pData);
@@ -119,11 +125,16 @@ Sint32 scoretable::loadScores()
 		{	score_list* score = the_scores[i];
 			for(Uint32 j = 0; j < NUMBSCORES; j++)
 			{	Uint32 *ptM32 = (Uint32 *)pTemp;
+				bigendianr(ptM32++, &score[j].score_area);
+				bigendianr(ptM32++, &score[j].scoreLevel);
+				bigendianr(ptM32++, &score[j].scoreValue);
+				/*	
 				score[j].score_area = *(ptM32++);
 				score[j].scoreLevel = *(ptM32++);
 				score[j].scoreValue = *(ptM32++);
+				*/
 				pTemp = (char *)ptM32;
-				for(Uint32 k = 0; k < 6; k++)
+				for(Uint32 k = 0; k < 8; k++)
 					score[j].playerName[k] = *(pTemp++);
 			}			
 		}
@@ -148,18 +159,28 @@ Sint32 scoretable::saveScores()
 	{	score_list* score = the_scores[i];
 		for(Uint32 j = 0; j < NUMBSCORES; j++)
 		{	Uint32 *ptM32 = (Uint32 *)pTemp;
+			bigendianw(&score[j].score_area, ptM32++);
+			bigendianw(&score[j].scoreLevel, ptM32++);
+			bigendianw(&score[j].scoreValue, ptM32++);
+			/*
 			*(ptM32++) = score[j].score_area;
 			*(ptM32++) = score[j].scoreLevel;
 			*(ptM32++) = score[j].scoreValue;
+			*/
 			pTemp = (char *)ptM32;
-			for(Uint32 k = 0; k < 6; k++)
+			for(Uint32 k = 0; k < 8; k++)
 				*(pTemp++) = score[j].playerName[k];
 		}			
 	}
 
 	//calculate checksum value
+	Uint32 ckVal = controlVal(pSelf + 1,
+		(buffersize - sizeof(Uint32)) / sizeof(Uint32));
+	bigendianw(&ckVal, pSelf);
+	/*	
 	*pSelf = controlVal(pSelf + 1,
 		(buffersize - sizeof(Uint32)) / sizeof(Uint32));
+	*/
 	pRessource->saveScores(pData, buffersize);
 	memGestion->liberation(pData);
 	return 0;
@@ -172,7 +193,11 @@ Uint32 scoretable::controlVal(Uint32 *pBuff, Uint32 bsize)
 {
 	Uint32 value = 0;
 	for(Uint32 i = 0; i < bsize; i++)
-		value |= *(pBuff++);
+	{	Uint32 lword; 
+		bigendianr(pBuff++, &lword);
+		value |= lword;
+		//value |= *(pBuff++);
+	}
 	return value;
 }
 
@@ -244,7 +269,7 @@ Sint32 scoretable::test_score(char *pName, Uint32 vScre, Uint32 nLevl, Uint32 nA
 }
 
 //------------------------------------------------------------------------------
-// sort scores tables
+// sort scores table
 //------------------------------------------------------------------------------
 void scoretable::sort_score(Uint32 nHard)
 {
@@ -277,8 +302,6 @@ void scoretable::sort_score(Uint32 nHard)
 			}
 		}
 	} while (fExit);
-
-	
 }
 
 //------------------------------------------------------------------------------
@@ -289,12 +312,18 @@ score_list* scoretable::getScrList()
 	return the_scores[hardChoice - 1];
 }
 
+//------------------------------------------------------------------------------
+// return the player name
+//------------------------------------------------------------------------------
 char* scoretable::bestPlayer()
 {
 	score_list* score = the_scores[hardChoice - 1];
 	return &score[0].playerName[0];
 }
 
+//------------------------------------------------------------------------------
+// return the best player score
+//------------------------------------------------------------------------------
 Uint32 scoretable::best_score()
 {
 	score_list* score = the_scores[hardChoice - 1];
