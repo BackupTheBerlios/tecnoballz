@@ -2,8 +2,8 @@
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "BOB_killer.cc"
-// created		: ?
-// updates		: 2004-10-27
+// created	: ?
+// updates	: 2004-10-27
 // fonctions	: Sprites or shapes on the screen
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -423,19 +423,19 @@ Sint32 BOB_killer::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sin
 		//###################################################################
 		//calculation size of the table
 		//###################################################################
-		Sint32 npixe = 0;								//counter of the pixels
+		Sint32 npixe = 0;				//counter of the pixels
 		char *gfxPT = image->GFXadresse(pos_x, pos_y);	//graphic address 
 		for(Sint32 j = 0; j < BOBhauteur; j++)
 		{	for(Sint32 k = 0; k < BOBlargeur; k++)
 			{	char pixel = *(gfxPT++);	//read the pixel
-				if(pixel)					//transparent?
+				if(pixel)			//transparent?
 				{	npixe++;
-					nbreP++;				//incremente the size of pixel's table 
+					nbreP++;		//incremente the size of pixel's table 
 				}
 				else
-				{	if(npixe > 0)			//at least one pixel ?
+				{	if(npixe > 0)		//at least one pixel ?
 					{	npixe = 0;
-						nbreV++;			//incremente the table size
+						nbreV++;	//incremente the table size
 					}
 				}
 			}
