@@ -1,10 +1,11 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "ressources.cc"
-// created		: 2004-04-20
-// updates		: 2004-10-17
+// created	: 2004-04-20
+// updates	: 2005-01-06
 // fonctions	: manage ressources
+// id		: $Id: ressources.cc,v 1.2 2005/01/06 16:19:22 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -23,29 +24,34 @@
 #include "../include/ressources.h"
 #include "../include/GIF_bitMap.h"
 #include "../config.h"
+
+#ifndef DATADIR
+#define DATADIR "/usr/share/games/tecnoballz"
+#endif
+
 //...............................................................................
 
 char* ressources::fnamescore = "/var/lib/games/tecnoballz.hi";
 const char* ressources::folderlist[] =
-{	".",	// Normally unused, except when running from the source directory...
-	"/usr/share/games/tecnoballz",
+{	".",		// Normally unused, except when running from the source directory...
+	DATADIR,
 	0		// Special value meaning "$(PREFIX)/share/games/tecnoballz/"
 			// Also marks end of list
 };
-const char* ressources::folderdata = "TecnoballZ/";
-const char* ressources::folder_640 = "hires/";
-const char* ressources::folder_320 = "lores/";
+const char*	ressources::folderdata = "TecnoballZ/";
+const char*	ressources::folder_640 = "hires/";
+const char*	ressources::folder_320 = "lores/";
 char 		ressources::stringtemp[512];
 char 		ressources::pathstring[512];
 
 const char* ressources::standfiles[] =
-{	"cosinus128.list",	// RESCOSLIST
-	"edmap01.data",		// RESEDMAP01
-	"edmap02.data",		// RESEDMAP02
-	"edmap03.data",		// RESEDMAP03
-	"gard_lissa.list",	// RESGCURVES
-	"tableau.data",		// RESBLEVELS: all bricks levels
-	"min60map.bmp"			//RES60BACKG
+{	"cosinus128.list",	//RESCOSLIST
+	"edmap01.data",		//RESEDMAP01
+	"edmap02.data",		//RESEDMAP02
+	"edmap03.data",		//RESEDMAP03
+	"gard_lissa.list",	//RESGCURVES
+	"tableau.data",		//RESBLEVELS: all bricks levels
+	"min60map.bmp"		//RES60BACKG
 };
 
 const char* ressources::musicfiles[] =
@@ -66,7 +72,7 @@ const char* ressources::soundfiles[] =
 	"rexplo_rak.wav",
 	"rlife_plus.wav",
 	"rmoney.wav",
-	"ralarm.wav",			//05
+	"ralarm.wav",		//05
 	"rgadget_sound.wav",
 	"rtecno.wav",
 	"rappar.wav",
@@ -88,35 +94,27 @@ const char* ressources::soundfiles[] =
 	"rbrique4.wav",
 	"rbrique5.wav"	,	//25
 	"raspire.wav",
-	"reject.wav",			//27
+	"reject.wav",		//27
 };
 
 const char* ressources::graphfiles[] =
-{	"ani_head.bmp",	//RESHEADANI
+{	"ani_head.bmp",		//RESHEADANI
 	"ba_score2.bmp",	//RESBASCORE
-	"bumper_1.bmp",	//RESBUMPER1
-	"bumper_2.bmp",	//RESBUMPER2
-	"fontgame.bmp",	//RESFONTGAM
-	"fontmenu.bmp",	//RESFONTMEN
+	"bumper_1.bmp",		//RESBUMPER1
+	"bumper_2.bmp",		//RESBUMPER2
+	"fontgame.bmp",		//RESFONTGAM
+	"fontmenu.bmp",		//RESFONTMEN
 	"font_messa.bmp",	//RESFONTMES
-	"gigablzt.bmp",	//RESGIGABLZ
-	"map_edit.bmp",	//RESMAPEDIT
+	"gigablzt.bmp",		//RESGIGABLZ
+	"map_edit.bmp",		//RESMAPEDIT
 	"money.bmp",		//RESMONEYFT
-	"new_shop.bmp",	//RESNEWSHOP
-	"pagezbob.bmp",	//RESPAGEBOB
-	"zebricks.bmp",	//RESZEBRICK
+	"new_shop.bmp",		//RESNEWSHOP
+	"pagezbob.bmp",		//RESPAGEBOB
+	"zebricks.bmp",		//RESZEBRICK
 	"font_score.bmp"	//RESFONTSCR
 };
  
 char ressources::ze_mapfile[] = "map??.bmp";
-
-/*const char *ressources::fnamescore[]=
-{	"/var/lib/games/tecnoballz-easy",
-	"/var/lib/games/tecnoballz-hard",
-	"/var/lib/games/tecnoballz-mad",
-	"/var/lib/games/tecnoballz-dead"
-};*/
-	
  
 //------------------------------------------------------------------------------
 // create the object
