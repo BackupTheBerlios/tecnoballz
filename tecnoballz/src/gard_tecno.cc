@@ -1,10 +1,11 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "gard_techno.cc"
-// created		: 2003-01-09
-// updates		: 2004-10-23
+// created	: 2003-01-09
+// updates	: 2005-01-15
 // fonction	: support the guards levels
+// id		: $Id: gard_tecno.cc,v 1.2 2005/01/15 10:18:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -32,6 +33,7 @@ gard_tecno::gard_tecno()
 	defilement = new lastScroll();
 	ptguardian = new zeguardian();
 	ptRaquette = new zeRaquette(BOB_BUMPER);
+	ptMoveText = new zeMoveText();
 	pExplosion = new zexplosion();
 	tecno_bump *pBump = ptRaquette->demandeRak(1);
 	ptMissiles = new zeMissiles(pBump, pExplosion);
@@ -71,6 +73,7 @@ gard_tecno::~gard_tecno()
 	delete ptCapsules;
 	delete ptMissiles;
 	delete pExplosion;
+	delete ptMoveText;
 	delete ptRaquette;
 	delete ptguardian;
 	delete defilement;
@@ -152,6 +155,8 @@ Sint32 gard_tecno::first_init()
 	error_init(ptBaDirect->init_liste());
 	if(erreur_num) return erreur_num; 
 
+	error_init(ptMoveText->init_liste());	//mobile characters at the end of the level
+	if(erreur_num) return (erreur_num);
 
 	error_init(ptGameOver->init_liste());
 	if(erreur_num)
@@ -164,10 +169,10 @@ Sint32 gard_tecno::first_init()
 	// intialize escape menu
 	error_init(ptrEscMenu->first_init
 	(	image_BOBs,
-		0,					//menu number
+		0,			//menu number
 		320 * resolution,	//width of screen (center)
-		0,					//don't restaure background where leaves
-		1					//initialize color table
+		0,			//don't restaure background where leaves
+		1			//initialize color table
 	));
 	if(erreur_num) return (erreur_num); 
 
@@ -227,7 +232,9 @@ Sint32 gard_tecno::first_init()
 	//###################################################################
 	ptPrntmney->init_guard(joueurGere, ptRaquette, ptBobMoney, ptBobLifes);
 
-
+	//initialize mobile characters at the end of the level
+	ptMoveText->initialise(levelTecno, 32 * resolution);
+	
 	error_init(ptBaDirect->initialize(ptRaquette, 1));
 	if(erreur_num) return (erreur_num);
 
@@ -320,6 +327,7 @@ Sint32 gard_tecno::zeMainLoop()
 			ptMissiles->bumper_col();	//collision weapons with the bumper
 			ptCapsules->bougefric2();
 			pt_gadgets->bougegads2();
+			ptMoveText->goMoveText();
 			ptPrntmney->execution2(joueurGere->creditFric, joueurGere->superLifes);
 			ptGigaBlit->execution2();	//move the Gigablitz from guards
 			pExplosion->execution1();	//explosion animations
@@ -368,7 +376,7 @@ Sint32 gard_tecno::zeMainLoop()
 			}
 		}
 		else
-		{	
+		{	ptMoveText->activeText();
 			ptGigaBlit->xDesactive();
 			ptNewBalls->xDesactive();
 			ptMissiles->xDesactive();

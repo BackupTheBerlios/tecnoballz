@@ -1,10 +1,11 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "zeMoveText.cc"
-// created		: ?
-// updates		: 2004-05-20
+// created	: ?
+// updates	: 2005-01-15
 // fonction	: manage mobiles characters ("LEVEL x COMPLETED")
+// id		: $Id: zeMoveText.cc,v 1.2 2005/01/15 10:18:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -34,6 +35,7 @@ zeMoveText::zeMoveText()
 	objetTotal = 20;
 	objetOmbre = 1;
 	BOBtypeNum = BOB_LETTRE;
+	chrOffsetX = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -47,8 +49,9 @@ zeMoveText::~zeMoveText()
 //-----------------------------------------------------------------------------
 // perform some initializations
 //-----------------------------------------------------------------------------
-void zeMoveText::initialise(Sint32 level)
+void zeMoveText::initialise(Sint32 level, Sint32 offzt)
 {
+	chrOffsetX = offzt;
 	horz_large = 256 * resolution;
 	Sint32 d = level / 10;
 	Sint32 u = level - d * 10;
@@ -111,6 +114,10 @@ Sint32 zeMoveText::startValue(Sint32 nchar, Sint32 zeRad, Sint32 index,
 	Sint32 xStop = (horz_large - (nchar * width)) / 2;
 	Sint32 xOffs = 0;		//X move offset (1, -1 or 0)
 	Sint32 xStrt = e / 2;	//start X coordinate
+
+	xStop += chrOffsetX;
+	xStrt += chrOffsetX;
+	
 	for(Sint32 i = index; i < (nchar + index); i++, xStrt += e, xStop += width)
 	{	tecno_text *chara = objetListe[i];
 		chara->coordonnee(xStrt, yStrt);
