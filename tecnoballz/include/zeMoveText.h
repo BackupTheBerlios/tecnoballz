@@ -1,10 +1,11 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "zeMoveText.h"
-// created		: ?
-// updates		: 2004-05-20
+// created	: ?
+// updates	: 2005-01-15
 // fonction	: manage mobiles characters ("LEVEL x COMPLETED")
+// id		: $Id: zeMoveText.h,v 1.2 2005/01/15 10:18:50 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,7 +20,6 @@
 // You should have received a copy of the GNU General Public License along with
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA 02111-1307, USA.
-//
 //*****************************************************************************
 #ifndef __ZEMOVETEXT__
 #define __ZEMOVETEXT__
@@ -36,12 +36,13 @@ class zeMoveText:public objet_gere < tecno_text >
 		Sint32				size_line2;
 		Sint32				size_total;
 		Sint32				horz_large;
+		Sint32				chrOffsetX;
 		static char			ze_bobText[];
 
 	public:
 							zeMoveText();
 							~zeMoveText();
-		void				initialise(Sint32 level);
+		void				initialise(Sint32 level, Sint32 offzt = 0);
 		Sint32				startValue(Sint32 n, Sint32 a, Sint32 j, Sint32 y,
 										Sint32 i3, Sint32 y3);
 		void				goMoveText();

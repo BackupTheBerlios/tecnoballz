@@ -1,10 +1,11 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "gard_techno.h"
-// created		: ?
-// updates		: 2004-10-15
+// created	: ?
+// updates	: 2005-01-11
 // fonction	: handle the the guards levels
+// id		: $Id: gard_tecno.h,v 1.2 2005/01/15 10:18:50 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -13,13 +14,12 @@
 // 
 // This program is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+// FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
 // details.
 //
 // You should have received a copy of the GNU General Public License along with
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA  02111-1307, USA.
-//
+// Place - Suite 330, Boston, MA 02111-1307, USA.
 //******************************************************************************
 #ifndef __GARD_TECNO__
 #define __GARD_TECNO__
@@ -44,10 +44,13 @@ class gard_tecno;
 #include "../include/zeGameOver.h"
 #include "../include/zeCongBall.h"
 #include "../include/escapeMenu.h"
+#include "../include/zeMoveText.h"
 
 
 class gard_tecno:public virtual runGestion
 {
+	friend class zeMoveText;
+
 	private:
 		zeGigaBlit*			ptGigaBlit;
 		lastScroll*			defilement;
@@ -67,7 +70,7 @@ class gard_tecno:public virtual runGestion
 		escapeMenu*			ptrEscMenu;
 		Sint32				areaNumber;		// number of area 1 to 5
 		Sint32				levelTecno;		// number of level 1 to 12
-		const atariLevel*	levelParam;
+		const atariLevel*		levelParam;
 		Sint32				scrollTemp;		// time before scroll start
 		Sint32				scrollType;		// type of background scrolling
 		Sint32				scrolSpeed;		// speed of the scrolling
@@ -75,16 +78,17 @@ class gard_tecno:public virtual runGestion
 		zeCongBall*			ptCongBall;
 		Sint32				isgameover;
 		Sint32				count_next;		//temporisation before next level 
-		Sint32				tecnwinner;	  	//1 = end of the game
+		Sint32				tecnwinner;	 	//1 = end of the game
+		zeMoveText*			ptMoveText;
 	
 	private:
 		void				init_level();
 		void				run_scroll();
 		void				cheat_keys();
-    
+ 
 	public:
-							gard_tecno();
-							~gard_tecno();
+						gard_tecno();
+						~gard_tecno();
 		Sint32				first_init();
 		Sint32				zeMainLoop();
 };

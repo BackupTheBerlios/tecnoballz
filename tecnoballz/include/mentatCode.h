@@ -4,7 +4,7 @@
 // file		: "mentatCode.h"
 // created	: 2002-08-18
 // updates	: 2005-01-11
-// ID		: $Id: mentatCode.h,v 1.4 2005/01/11 12:52:44 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.5 2005/01/15 10:18:50 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -44,8 +44,8 @@
 //...............................................................................
 #ifndef __MENTATCODE__
 #define __MENTATCODE__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.90+ (2005-01-11)"
-//#define TU_TRICHES		//devel only
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.90+ (2005-01-15)"
+#define TU_TRICHES		//devel only
 #define BYTES_COPY		//force bytes copy (SPARC unaligned memory access)
 #ifndef SCOREFILE
 #define SCOREFILE "tecnoball"
@@ -114,16 +114,16 @@ class mentatCode
 		static Sint32		num_erreur;		//error number
 	
 		static Sint32		super_jump;		// game phase:
-											// - 0: bricks levels
-											// - 1: shop
-											// - 2: guards levels
-											// - 3: menu
+								// - 0: bricks levels
+								// - 1: shop
+								// - 2: guards levels
+								// - 3: menu
 
 		static Sint32		hardChoice;		//difficulty
-											// -1: easy
-											// -2: hardChoice
-											// -3: mad
-											// -4: dead
+								// -1: easy
+								// -2: hardChoice
+								// -3: mad
+								// -4: dead
 
 		static Sint32		super_exit;		//1: game exit
 
