@@ -3,8 +3,8 @@
 //-----------------------------------------------------------------------------
 // file		: "mentatCode.h"
 // created	: 2002-08-18
-// updates	: 2005-01-04
-// ID		: $Id: mentatCode.h,v 1.2 2005/01/04 20:50:30 gurumeditation Exp $
+// updates	: 2005-01-05
+// ID		: $Id: mentatCode.h,v 1.3 2005/01/11 05:34:55 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -181,6 +181,8 @@ class mentatCode
 		Sint32				get_number();
 		Sint32				chaine_cmp(char *srcPT, char *desPT, Sint32 taille);
 		Sint32				littleWord(char *memPT);
+		void				bigendianw(Uint32*, Uint32*);
+		void				bigendianr(Uint32*, Uint32*);
 	
 
 };
