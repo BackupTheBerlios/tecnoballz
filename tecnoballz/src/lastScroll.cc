@@ -1,10 +1,11 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "lastScroll.cc"
-// created		: ?
-// updates		: 2004-10-27
+// created	: ?
+// updates	: 2005-01-07
 // fonction	: handle of the scrolling background (menu and gards levels)
+// id		: $Id: lastScroll.cc,v 1.2 2005/01/07 16:13:43 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -489,7 +490,7 @@ Sint32 lastScroll::ld_mapfile(Uint32 edmap)
 	//###################################################################
 	Uint16 *zfile = (Uint16 *)pRessource->getResData(edmap);
 	if(!zfile)
-	{	num_erreur = E_FILERROR;
+	{	erreur_num = E_FILERROR;
 		return erreur_num;
 	}
 
