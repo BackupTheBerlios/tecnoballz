@@ -19,6 +19,7 @@ PREREQUISITES
 
 COMPILING AND RUNNING:
 
+autoconf
 ./configure
 make
 make install
