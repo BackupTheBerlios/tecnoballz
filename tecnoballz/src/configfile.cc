@@ -3,8 +3,8 @@
 //------------------------------------------------------------------------------
 // file         : "configfile.cpp"
 // created      : 2005-01-19
-// updates      : 2005-01-20
-// id		: $Id: configfile.cc,v 1.4 2005/01/20 21:17:07 gurumeditation Exp $
+// updates      : 2005-01-21
+// id		: $Id: configfile.cc,v 1.5 2005/01/21 19:56:11 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -23,6 +23,7 @@
 #include "../include/configfile.h"
 #include "../include/ecran_hard.h"
 #include "../include/audiomixer.h"
+#include "../include/joueurData.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,6 +34,18 @@
 //------------------------------------------------------------------------------
 	configfile::configfile()
 {
+	printf("NEW\n");
+	thePlayers[0] = &thePlayer1[0];	
+	thePlayers[1] = &thePlayer2[1];	
+	thePlayers[2] = &thePlayer3[2];	
+	thePlayers[3] = &thePlayer4[3];	
+	thePlayers[4] = &thePlayer5[4];	
+	thePlayers[5] = &thePlayer6[5];	
+	for(Uint32 i = 0; i < 6; i++) 
+	{	char* p = thePlayers[i];
+		for(Uint32 j = 0; j < 8; j++)
+			p[j] = 0;
+	}
 	resetvalue();
 }
 
@@ -55,6 +68,12 @@ void	configfile::resetvalue()
 	ecran_hard::optionfull = 0;
 	hardChoice = 1;	
 	vieInitial = 8;
+	char *pUser = getenv("USER");
+	if (!pUser)
+		pUser = stringname; 
+	for(Uint32 i = 0; i < 6; i++) 
+		strncpy(thePlayers[i], pUser, 6);	
+	
 }
 
 //------------------------------------------------------------------------------
@@ -93,6 +112,8 @@ Sint32 configfile::tocheckdir()
 //------------------------------------------------------------------------------
 void configfile::loadconfig()
 {
+	printf("configfile::loadconfig()\n");
+	
 	//reset all values
 	resetvalue();
 
@@ -104,12 +125,6 @@ void configfile::loadconfig()
 	FILE *pfile = NULL;
 	sprintf(configname, "%s/%s", config_dir, CONFIG_FILE_NAME);
 	pfile = fopen_data(configname, "r");
-
-	//read config from "/etc/" directory 
-#ifdef __unix__
-	if (pfile == NULL)
-		pfile = fopen_data("/etc/"CONFIG_FILE_NAME, "r");
-#endif
 	if (pfile == NULL) return;
 	
 	lisp_stream_t stream;	
@@ -145,6 +160,8 @@ void configfile::loadconfig()
 	if(hardChoice < 1 || hardChoice > 4) hardChoice = 1;
 	
 	lisp_free(root_obj);
+	for(Uint32 i = 0; i < 6; i++) 
+		printf("nom %i: %s\n", i,thePlayers[i]);
 }
 
 //------------------------------------------------------------------------------
@@ -288,3 +305,6 @@ Sint32 configfile::scanZeArgs(Sint32 nbArg, char **ptArg)
 	}
 	return 1;
 }
+
+char	configfile::stringname[7] = "LINUX!";
+
