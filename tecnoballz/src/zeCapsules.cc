@@ -1,0 +1,162 @@
+//******************************************************************************
+// copyright (c) 1991-2004 TLK Games all rights reserved
+//-----------------------------------------------------------------------------
+// file		: "zeCapsules.cc"
+// created		: ?
+// updates		: 2004-10-15
+// fonction	: Manage the capsules of money
+//-----------------------------------------------------------------------------
+// This program is free software; you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free Software
+// Foundation; either version 2 of the License, or (at your option) any later
+// version.
+// 
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+// details.
+//
+// You should have received a copy of the GNU General Public License along with
+// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+// Place - Suite 330, Boston, MA  02111-1307, USA.
+//
+//******************************************************************************
+
+#include "../include/zeCapsules.h"
+
+//-----------------------------------------------------------------------------
+// Create the object
+//-----------------------------------------------------------------------------
+zeCapsules::zeCapsules()
+{
+	littleInit();
+	objetTotal = 6;
+	objetOmbre = 1;
+	BOBtypeNum = BOB_MONEYS;
+}
+
+//-----------------------------------------------------------------------------
+// Release the object
+//-----------------------------------------------------------------------------
+zeCapsules::~zeCapsules()
+{
+	littleDead();
+}
+
+//-----------------------------------------------------------------------------
+// bricks levels: initialize the capsules before one level
+//-----------------------------------------------------------------------------
+void zeCapsules::initialise(Sint32 frequ, barreScore *score, printmoney *money)
+{
+	frequenceX = frequ;
+	//printf("zeCapsules::initialise() frequenceX = %i\n", frequenceX);
+	ptbarreScr = score;
+	ptPrntmney = money;
+	for(Sint32 i = 0; i < objetTotal; i++)
+	{	tecno_caps *capsu = objetListe[i];
+		capsu->littleInit();
+	}
+}
+
+//-----------------------------------------------------------------------------
+// bricks levels: send a capsule of money from brick
+//-----------------------------------------------------------------------------
+void zeCapsules::envoieFric(brickClear *briPT)
+{
+	zeCompteur++;
+	if(zeCompteur > frequenceX)
+	{	zeCompteur = 0;
+		for(Sint32 i = 0; i < objetTotal; i++)
+		{	tecno_caps *capsu = objetListe[i];
+			if(capsu->disponible(briPT))
+				return;
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+// bricks levels: send a capsule of money from BouiBoui
+//-----------------------------------------------------------------------------
+void zeCapsules::send_money(technoBall *pball)
+{
+	for(Sint32 i = 0; i < objetTotal; i++)
+	{	tecno_caps *capsu = objetListe[i];
+		if(capsu->disponible(pball))
+			return;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// bricks levels: send a capsule of money from BouiBoui
+//-----------------------------------------------------------------------------
+void zeCapsules::send_money(tecno_fire *pfire)
+{
+	for(Sint32 i = 0; i < objetTotal; i++)
+	{	tecno_caps *capsu = objetListe[i];
+		if(capsu->disponible(pfire))
+			return;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// bricks levels: move capsule of money and collision with bumpers
+//-----------------------------------------------------------------------------
+void zeCapsules::bouge_fric()
+{
+	for(Sint32 i = 0; i < objetTotal; i++)
+	{	tecno_caps *capsu = objetListe[i];
+		capsu->animRepete();
+		Sint32 i = capsu->deplaceMoi();
+		if(i)
+		{	joueurGere->add_scores(20);
+			ptPrntmney->creditPlus(i);
+			//printf("zeCapsules::bouge_fric() : %i\n", i);
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+// guards levels: initialize the capsules before one level
+//-----------------------------------------------------------------------------
+void zeCapsules::initialise(Sint32 frequ, printmoney *money)
+{
+	frequenceX = frequ;
+	ptPrntmney = money;
+	for(Sint32 i = 0; i < objetTotal; i++)
+	{	tecno_caps *capsu = objetListe[i];
+		capsu->littleInit();
+	}
+}
+
+//-----------------------------------------------------------------------------
+// guards levels: send a capsule of money from guard
+//-----------------------------------------------------------------------------
+void zeCapsules::envoieFric(technoBall *pball)
+{
+	zeCompteur++;
+	if(zeCompteur > frequenceX)
+	{	zeCompteur = 0;
+		for(Sint32 i = 0; i < objetTotal; i++)
+		{	tecno_caps *capsu = objetListe[i];
+ 			if(capsu->disponible(pball))
+				return;
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+// guards levels: move capsule of money and collision with bumper
+//-----------------------------------------------------------------------------
+void zeCapsules::bougefric2()
+{
+	for(Sint32 i = 0; i < objetTotal; i++)
+	{	tecno_caps *capsu = objetListe[i];
+		capsu->animRepete();
+		Sint32 i = capsu->deplaceMe2();
+		if(i)
+		{	//printf("zeCapsules::bouge_fric2() : %i\n", i);
+			ptPrntmney->creditPlus(i);
+			joueurGere->add_scores(20);
+		}
+	}
+}

@@ -1,0 +1,25 @@
+A Brick Breaker with 50 levels of game and 11 special levels, 
+game porting from Amiga.
+
+PREREQUISITES
+
+  You need:
+  - A 386 platform or a PowerPC platform
+  - 32MB RAM and 80MB swap
+  - Linux 2.x 
+  - XFree86 3.3.x or better
+  - SDL 1.2
+  - SDL_mixer
+  - Mikmod
+  - the GCC C++ compiler
+  - GNU make
+
+COMPILING AND RUNNING:
+
+make
+./tecnoballz 
+
+LEGAL
+
+  TecnoballZ is copyright TLK Games 1991-2004 and available under the
+  terms of the GNU General Public License. See COPYING for details.

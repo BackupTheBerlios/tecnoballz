@@ -1,0 +1,144 @@
+//*****************************************************************************
+// copyright (c) 1991-2004 TLK Games all rights reserved
+//-----------------------------------------------------------------------------
+// file         : "ecran_hard.hpp"
+// created      : 2002-08-17
+// updates      : 2004-04-19
+//-----------------------------------------------------------------------------
+// This program is free software; you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free Software
+// Foundation; either version 2 of the License, or (at your option) any later
+// version.
+// 
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+// details.
+//
+// You should have received a copy of the GNU General Public License along with
+// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+// Place - Suite 330, Boston, MA  02111-1307, USA.
+//*****************************************************************************
+#ifndef __ECRAN_HARD__
+#define __ECRAN_HARD__
+//...............................................................................
+#include "../include/mentatCode.h"
+//...............................................................................
+class ecran_hard:public virtual mentatCode
+{
+	public:
+		static const Sint32		SHADOWOFFX = -4;
+		static const Sint32		SHADOWOFFY = 4;
+		static const unsigned char	SHADOW_PIX = 0x80;
+		static const Uint32		SHADOWLONG = 0x80808080;   
+		static Sint32			optionfull;	// 1 = full screen mode
+		static Sint32			optionsync;	// 1 = no synchronisation
+	
+	
+	private:
+		Uint32			keyfscreen;	// 1 = full screen mode
+		
+		static const Uint32	bitspixels = 8;
+		Sint32				offsetplus;
+    
+		SDL_Surface*		sdl_screen;	// main window
+		SDL_Surface*		bufSurface;	// surface where all is display
+		SDL_Surface*		tamSurface;	// surface from restauring
+
+		Uint32				ecranlarge;
+		Uint32				ecranhaute;
+    
+		Uint32				bufLargeur;
+		Uint32				bufHauteur;
+		char*				bufAdresse;
+		Sint32				buf_nextLn;
+		Sint32				bufProfond;
+		Sint32				tam_nextLn;
+		char*				tamAdresse;
+
+		Uint32				dateactuel;
+		Uint32				datepreced;
+
+		Sint32				framepeers;
+		Sint32				fps_totale;
+		Sint32				fpscounter;
+		//Sint32				wait_diffv;
+		Sint32				wait_count;	// number of frame since "wait_value" is used
+		Sint32				wait_value;	// wait value speed_game - x
+		Sint32				speed_game;	// 20  (1000 / 20 = 50 fps)
+		Sint32				wait_total;
+		Sint32				wait_inter;
+    
+
+
+		SDL_Color			palette_tz[256];
+		SDL_Color			ze_palette[256];
+		static char			nomfenetre[25];
+		Sint32				tiltoffset;
+
+	public:
+							ecran_hard();
+							~ecran_hard();
+			Sint32			ecran_init();
+			Sint32			init_video();
+			Sint32			screenwdth();
+			Sint32			screenhght();
+			Sint32			verouiller();
+			Sint32			deverouill();
+			Sint32			SDL_informations();
+			Sint32			synchro_CalculDifference();
+			Sint32			synchro_processusPause(Sint32 _iTemps);
+			void			fullscreen();
+			Uint32			waitVBlank();
+			//void			wait_frame();
+			Sint32			retour_temps();
+			Sint32			get_framepee();
+			void			mise_a_zero_timer();
+
+			// buffer and tampon
+			char*			buffer_adr();
+			char*			buffer_pos(Sint32 pos_x, Sint32 pos_y);
+			void			buffer_RAZ(Sint32 pixel = 0);
+			void			buffer_RAZ(Sint32 pixel, Sint32 x_pos, Sint32 y_pos, Sint32 width, Sint32 heigh);
+			Sint32			bufferNext();
+			Sint32			buffer_rel(Sint32 pos_x, Sint32 pos_y);
+			Sint32			buffer_mod(Sint32 large);
+			void			buffer_GFX(char *gfxPT, Sint32 large, Sint32 haute);
+			char*			tampon_adr();
+			char*			tampon_pos(Sint32 pos_x, Sint32 pos_y);
+			void			tampon_RAZ(Sint32 pixel);
+			void			tampon_RAZ(Sint32 pixel, Sint32 x_pos, Sint32 y_pos, Sint32 width, Sint32 heigh);
+			Sint32			tamponNext();
+			void			tamponBuff();
+			void			tamponBuff(Sint32 pos_x, Sint32 pos_y, Sint32 large, Sint32 haute);
+			Sint32			tampon_rel(Sint32 pos_x, Sint32 pos_y);
+			Sint32			tampon_mod(Uint32 large);
+			void			tampon_GFX(SDL_Surface * gfxPT, Sint32 large, Sint32 haute);
+			Sint32			bufferLarg();
+			Sint32			bufferHaut();
+			Sint32			ecran_next(Sint32 zbase, Sint32 offsx, Sint32 offsy);
+
+
+
+			// gestion des buffers & des tampons
+			void			aff_buff32(char *src, char *dest, Sint32 offs, Sint32 offd);
+			void			buf_affx32(char *srcPT, char *desPT, Sint32 width, Sint32 heigh = 32);
+			void			buf_affx64(char *srcPT, char *desPT, Sint32 width, Sint32 heigh = 64);
+			void			buf_clr64(char *desPT);
+			void			palette_go(unsigned char *adrPal);
+			void			palette_go(SDL_Color *adrPal);
+			void			paletteAff();
+			void			bufferCopy();                        // copie normale du Buffer
+			void			bufferCTab();                        // copie des 512 pixels gauche du Buffer
+			void			bufferCTab(Sint32 xpos1, Sint32 ypos1, Sint32 xpos2, Sint32 ypos2 );
+			void			buffer_640();                        // copie du Buffer optimise pour 640 pixels de large
+			SDL_Color*		paletteAdr();                        // retourne l'adresse de la palette
+			void			rectShadow(Sint32 pos_x, Sint32 pos_y, Sint32 large, Sint32 haute);
+			void			clr_shadow(Sint32 offst, Sint32 large, Sint32 haute);
+			void			clr_shadow(Sint32 _iPosX, Sint32 _iPosY, Sint32 _iLarg, Sint32 _iHaut);
+			void			set_shadow(Sint32 offst, Sint32 large, Sint32 haute);
+			void			genericGFX(char *sAdre, Sint32 sLarg, Sint32 sHaut, Sint32 sNext, char *dAdre, Sint32 dLarg, Sint32 dHaut, Sint32 dNext);
+			void			tiltscreen();
+			void			gradation1();
+};
+#endif
