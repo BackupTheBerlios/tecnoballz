@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.2 2005/01/15 20:40:29 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.3 2005/02/04 13:31:09 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -542,7 +542,7 @@ void print_menu::mis_a_jour()
 	// copy playes names
 	//###########################################################
 	d = menuTexte1 + (MENU_LARGE * 6) + 24;
-	for(Uint32 i = 0; i < MAX_PLAYER; i++)
+	for(Sint32 i = 0; i < MAX_PLAYER; i++)
 	{	s = joueurData::playerlist[i]->returnName();
 		for(Uint32 j = 0; j < 6; j++)
 			d[j] = s[j];
@@ -557,7 +557,7 @@ void print_menu::mis_a_jour()
 
 	birth_flag = 1;
 	//for(Uint32 i = 0; i < 1; i++) //test only
-	for(Uint32 i = 0; i < MAX_PLAYER; i++)
+	for(Sint32 i = 0; i < MAX_PLAYER; i++)
 	{	s = joueurData::playerlist[i]->returnName();
 		if(s[0] != '0' || s[1] != '4' || s[2] != '0' || 
 			s[3] != '6' || s[4] != '7' || s[5] != '0')

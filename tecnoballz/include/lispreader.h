@@ -1,4 +1,4 @@
-/* $Id: lispreader.h,v 1.1 2005/01/19 20:38:11 gurumeditation Exp $ */
+/* $Id: lispreader.h,v 1.2 2005/02/04 13:31:09 gurumeditation Exp $ */
 /*
  * lispreader.h
  *
@@ -25,7 +25,7 @@
 #define __LISPREADER_H__
 
 #include <stdio.h>
-#include <zlib.h>
+//#include <zlib.h>
 #include <string>
 #include <vector>
 
@@ -107,7 +107,7 @@ struct _lisp_object_t
       } v;
   };
 
-lisp_stream_t* lisp_stream_init_gzfile (lisp_stream_t *stream, gzFile file);
+//lisp_stream_t* lisp_stream_init_gzfile (lisp_stream_t *stream, gzFile file);
 lisp_stream_t* lisp_stream_init_file (lisp_stream_t *stream, FILE *file);
 lisp_stream_t* lisp_stream_init_string (lisp_stream_t *stream, char *buf);
 lisp_stream_t* lisp_stream_init_any (lisp_stream_t *stream, void *data,

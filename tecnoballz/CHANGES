@@ -1,10 +1,11 @@
-2005-01-18
+2005-02-04
 TecnoballZ 0.91
 Berlios project was created 
 Autoconf and automake was included
 Handle alignment constraint (SPARC processor)
 Important change to score file
 Add "LEVEL COMPLETED" into guards levels
+Add config file
 
 2004-10-27
 TecnoballZ 0.90

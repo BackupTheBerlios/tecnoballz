@@ -19,9 +19,9 @@ PREREQUISITES
 
 COMPILING AND RUNNING:
 
-cd src
+./configure
 make
-./tecnoballz 
+make install
 
 LEGAL
 

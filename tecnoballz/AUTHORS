@@ -3,6 +3,9 @@
   Main programmer of the game, Linux Port,
   and maintener of the project
 
+* Alexis Sukrieh <sukria at sukria dot net>
+  autoconf/automake, Debian packages and tests
+
 * Jean-Michel Martin de Santero <jm at tlk dot fr>
   Design of all sprites and backgrounds
 

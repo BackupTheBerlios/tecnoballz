@@ -3,8 +3,8 @@
 //-----------------------------------------------------------------------------
 // file		: "mentatCode.h"
 // created	: 2002-08-18
-// updates	: 2005-01-25
-// ID		: $Id: mentatCode.h,v 1.8 2005/01/25 11:25:53 gurumeditation Exp $
+// updates	: 2005-02-04
+// ID		: $Id: mentatCode.h,v 1.9 2005/02/04 13:31:09 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -46,7 +46,7 @@
 //...............................................................................
 #ifndef __MENTATCODE__
 #define __MENTATCODE__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91 (2005-01-25)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91 (2005-02-04)"
 //#define TU_TRICHES		//devel only
 #define BYTES_COPY		//force bytes copy (SPARC unaligned memory access)
 #ifndef SCOREFILE
@@ -95,7 +95,7 @@ class mentatCode
 	public:
 		static const Sint32	NB_OPTIONS = 19;	//number maximum of bonus bought
 		static const Uint32	NDIFFICULT = 4;		//4 levels of difficulty
-		static const Uint32	MAX_PLAYER = 6;	
+		static const Sint32	MAX_PLAYER = 6;	
 	
 	public:
 		static bool		is_verbose;		//1 = verbose mode

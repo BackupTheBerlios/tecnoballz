@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "menu_tecno.cc"
 // created	: ?
-// updates	: 2005-01-18
+// updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.2 2005/01/18 13:21:39 gurumeditation Exp $
+// id		: $Id: menu_tecno.cc,v 1.3 2005/02/04 13:31:09 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -187,7 +187,7 @@ Sint32 menu_tecno::start_tecz()
 	Uint32 nArea = 1;
 	Uint32 level = 1;
 	Uint32 grdPt = 0;
-	Uint32 iplay;
+	Sint32 iplay;
 	Uint32 index = 0;
 
 	//###################################################################
@@ -263,7 +263,7 @@ Sint32 menu_tecno::start_tecz()
 	//###################################################################
 	// initialize disable player(s)
 	//###################################################################
-	for(Uint32 i = iplay; i < MAX_PLAYER; i++)
+	for(Sint32 i = iplay; i < MAX_PLAYER; i++)
 		joueurData::playerlist[i]->initialise(0, 1, 1, 0, 0);
 	joueurGere = joueurData::playerlist[0];
 	Sint32 value = joueurGere->level2jump();
