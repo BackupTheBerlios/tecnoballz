@@ -2,9 +2,9 @@
 // Copyright (C) 1998-2005 TLK Games all rights reserved.
 //------------------------------------------------------------------------------
 // file         : "configfile.cpp"
-// created      : 2005-01-20
+// created      : 2005-01-19
 // updates      : 2005-01-20
-// id		: $Id: configfile.cc,v 1.2 2005/01/20 06:35:10 gurumeditation Exp $
+// id		: $Id: configfile.cc,v 1.3 2005/01/20 07:24:49 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -54,6 +54,7 @@ void	configfile::resetvalue()
 	is_verbose = 0;
 	ecran_hard::optionfull = 0;
 	hardChoice = 1;	
+	vieInitial = 8;
 }
 
 //------------------------------------------------------------------------------
@@ -125,6 +126,13 @@ void configfile::loadconfig()
 	if (!reader.read_int("resolution", &resolution))
 		resolution = 2;
 	if(resolution < 1 || resolution > 2) resolution = 2;
+	if (!reader.read_int("lifes", &vieInitial))
+		vieInitial = 8 ;
+	if(vieInitial < 1 || vieInitial > 9) vieInitial = 8;
+	
+	if (!reader.read_int("difficulty", &hardChoice))
+		hardChoice = 1 ;
+	if(hardChoice < 1 || hardChoice > 4) hardChoice = 1;
 	
 	lisp_free(root_obj);
 }
@@ -146,6 +154,8 @@ void configfile::saveconfig()
 	       	fprintf(config, "\t(resolution  %d)\n", resolution);
 		fprintf(config, "\n\t;; difficulty 1 (easy), 2 (hard), 3 (madness) or 4 (suicide)\n");
       		fprintf(config, "\t(difficulty   %d)\n", hardChoice);
+		fprintf(config, "\n\t;; number of lifes (1 to 9)\n");
+      		fprintf(config, "\t(lifes   %d)\n", vieInitial);
 		fprintf(config, ")\n");
 
 	}
