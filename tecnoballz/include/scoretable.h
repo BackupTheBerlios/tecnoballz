@@ -1,10 +1,11 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "scoretable.cx"
-// created		: 2003-04-30
-// updates		: 2003-05-09
+// created	: 2003-04-30
+// updates	: 2005-01-05
 // fonction	: display score table (game over)
+// id		: $Id: scoretable.h,v 1.2 2005/01/11 05:34:14 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -29,7 +30,7 @@ class scoretable;
 //...............................................................................
 typedef struct
 {
-	char	playerName[7];	//name of player
+	char	playerName[8];	//name of player
 	Uint32	scoreValue; 
 	Uint32	score_area; 
 	Uint32	scoreLevel; 
@@ -44,20 +45,20 @@ class scoretable:public virtual mentatCode
 		score_list**		the_scores;
 		
 	private:
-		Uint32				buffersize;
-		Sint32				test_score(char *pName, Uint32 vScre,
-										Uint32 nLevl, Uint32 nArea);
+		Uint32			buffersize;
+		Sint32			test_score(char *pName, Uint32 vScre,
+						Uint32 nLevl, Uint32 nArea);
     	void				sort_score(Uint32 nHard);
-		Sint32				loadScores();
-		Sint32				saveScores();
-		Uint32				controlVal(Uint32 *pBuff, Uint32 bsize);
+		Sint32			loadScores();
+		Sint32			saveScores();
+		Uint32			controlVal(Uint32 *pBuff, Uint32 bsize);
 	public:
-							scoretable();
-							~scoretable();
-		Sint32				first_init();
-		Sint32				test_score();
-		score_list*			getScrList();
-		char*				bestPlayer();
-		Uint32				best_score();
+					scoretable();
+					~scoretable();
+		Sint32			first_init();
+		Sint32			test_score();
+		score_list*		getScrList();
+		char*			bestPlayer();
+		Uint32			best_score();
 };
 #endif
