@@ -455,3 +455,41 @@ Sint32 mentatCode::littleWord(char *memPT)
 	i += p[0];
 	return i;
 }
+void mentatCode::bigendianw(Uint32* ptsrc, Uint32* ptdes)
+{
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	*ptdes = *ptsrc;	
+#else
+	char* s = (char *)ptsrc;
+	char* d = (char *)ptdes;
+	d[O] = s[3];
+	d[1] = s[2];
+	d[2] = s[1];
+	d[3] = s[0];
+#endif
+}
+void mentatCode::bigendianr(Uint32* ptsrc, Uint32* ptdes)
+{
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	*ptdes = *ptsrc;	
+#else
+	char* s = (char *)ptsrc;
+	char* d = (char *)ptdes;
+	d[3] = s[0];
+	d[2] = s[1];
+	d[1] = s[2];
+	d[0] = s[3];
+#endif
+}
+
+
+
+
+
+
+
+
+
+
+
+
