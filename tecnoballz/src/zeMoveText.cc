@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "zeMoveText.cc"
 // created	: ?
-// updates	: 2005-01-15
+// updates	: 2005-01-23
 // fonction	: manage mobiles characters ("LEVEL x COMPLETED")
-// id		: $Id: zeMoveText.cc,v 1.2 2005/01/15 10:18:04 gurumeditation Exp $
+// id		: $Id: zeMoveText.cc,v 1.3 2005/01/23 20:44:01 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -53,15 +53,20 @@ void zeMoveText::initialise(Sint32 level, Sint32 offzt)
 {
 	chrOffsetX = offzt;
 	horz_large = 256 * resolution;
-	Sint32 d = level / 10;
-	Sint32 u = level - d * 10;
-	ze_bobText[6] = (char)d + '\\';
-	ze_bobText[7] = (char)u + '\\';
-
+	char *monPT = ze_bobText;
+	//if(level <= 12)
+	{	Sint32 d = level / 10;
+		Sint32 u = level - d * 10;
+		ze_bobText[6] = (char)d + '\\';
+		ze_bobText[7] = (char)u + '\\';
+	}	
+	/*else
+	{	monPT = ze_endText;
+	}*/
+		
 	//###################################################################
 	// count the number of characters
 	//###################################################################
-	char *monPT = ze_bobText;
 	size_line1 = 0;
 	while (*(monPT++))
 		size_line1++;
@@ -107,12 +112,12 @@ void zeMoveText::initialise(Sint32 level, Sint32 offzt)
 //			=> yStop: stop Y coordinate
 //-----------------------------------------------------------------------------
 Sint32 zeMoveText::startValue(Sint32 nchar, Sint32 zeRad, Sint32 index,
-								Sint32 yStrt, Sint32 yOffs, Sint32 yStop)
+				Sint32 yStrt, Sint32 yOffs, Sint32 yStop)
 {
 	Sint32 width = objetListe[0]->getHauteur();
 	Sint32 e = (horz_large) / nchar;
 	Sint32 xStop = (horz_large - (nchar * width)) / 2;
-	Sint32 xOffs = 0;		//X move offset (1, -1 or 0)
+	Sint32 xOffs = 0;	//X move offset (1, -1 or 0)
 	Sint32 xStrt = e / 2;	//start X coordinate
 
 	xStop += chrOffsetX;
@@ -162,3 +167,4 @@ void zeMoveText::activeText()
 // string to display
 //-----------------------------------------------------------------------------
 char zeMoveText::ze_bobText[] = "LEVEL[//\0COMPLETED\0";
+char zeMoveText::ze_endText[] = "[[GAME[[\0FINISHED[\0";

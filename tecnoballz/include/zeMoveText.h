@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "zeMoveText.h"
 // created	: ?
-// updates	: 2005-01-15
+// updates	: 2005-01-23
 // fonction	: manage mobiles characters ("LEVEL x COMPLETED")
-// id		: $Id: zeMoveText.h,v 1.2 2005/01/15 10:18:50 gurumeditation Exp $
+// id		: $Id: zeMoveText.h,v 1.3 2005/01/23 20:44:01 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -38,6 +38,7 @@ class zeMoveText:public objet_gere < tecno_text >
 		Sint32				horz_large;
 		Sint32				chrOffsetX;
 		static char			ze_bobText[];
+		static char			ze_endText[];
 
 	public:
 							zeMoveText();

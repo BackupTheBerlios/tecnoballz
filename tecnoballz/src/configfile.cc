@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2005-01-23
-// id		: $Id: configfile.cc,v 1.6 2005/01/23 19:52:24 gurumeditation Exp $
+// id		: $Id: configfile.cc,v 1.7 2005/01/23 20:44:01 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -308,6 +308,10 @@ Sint32 configfile::scanZeArgs(Sint32 nbArg, char **ptArg)
 		
 		if(!strcmp(ptArg[_iIndex], "--320"))
 		{	resolution = 1;
+			continue;
+		}
+		if(!strcmp(ptArg[_iIndex], "--640"))
+		{	resolution = 2;
 			continue;
 		}
 
