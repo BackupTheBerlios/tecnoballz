@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "BOB_killer.cc"
 // created	: ?
-// updates	: 2005-01-06
+// updates	: 2005-01-18
 // fonctions	: Sprites or shapes on the screen
-// id		: $Id: BOB_killer.cc,v 1.5 2005/01/06 13:43:37 gurumeditation Exp $
+// id		: $Id: BOB_killer.cc,v 1.6 2005/01/18 07:08:28 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -714,16 +714,17 @@ void BOB_killer::efface_MSK()
 // -----------------------------------------------------------------------------
 void BOB_killer::efface_lin()
 { 
-	
+
+	bb_afligne *p = tafflignes[animOffset];
+	Sint32 l = affligFrSv;
+	Sint16 o = p[l].OFFSETLEFT;
+	Uint32 t = (Uint32) p[l].COUNTERTAB;
+	Uint16 *gfxPT = (Uint16 *)p[l].TABAFFICH1;
+	gfxPT++;
+#ifndef BYTES_COPY
 	Sint32 *srcPT = (Sint32 *)adresseTAM;
 	Sint32 *adres = (Sint32 *)adresseECR;
 	adresseECR = (char *)NULL;
-	Sint32 l = affligFrSv;
-	bb_afligne *p = tafflignes[animOffset];
-	Uint32 t = (Uint32) p[l].COUNTERTAB;
-	Uint16 *gfxPT = (Uint16 *)p[l].TABAFFICH1;
-	Sint16 o = p[l].OFFSETLEFT;
-	gfxPT++;
 	for(Uint32 i = 0; i < t; i++)
 	{	adres = (Sint32 *)((char *)adres + o);
 		srcPT = (Sint32 *)((char *)srcPT + o);
@@ -740,7 +741,7 @@ void BOB_killer::efface_lin()
 		o = *(gfxPT++);	//offset
 	}
 	l++;
-	for (; l<affligLaSv; l++)
+	for (; l < affligLaSv; l++)
 	{	gfxPT = (Uint16 *)p[l].TABAFFICH1;
 		t = (Uint32) p[l].COUNTERTAB;
 		for(Uint32 i = 0; i < t; i++)
@@ -759,6 +760,34 @@ void BOB_killer::efface_lin()
 			srcPT = (Sint32 *)srcPB;
 		}
 	}
+#else
+	char *srcPT = adresseTAM;
+	char *adres = adresseECR;
+	adresseECR = (char *)NULL;
+	for(Uint32 i = 0 ; i < t; i++)
+	{	adres = adres + o;
+		srcPT = srcPT + o;
+		gfxPT++;
+		o = *(gfxPT++);	//number of pixels contigus
+		for(Sint32 k = 0 ;k< o; k++)
+			*(adres++) = *(srcPT++);
+		o = *(gfxPT++);	//offset
+	}
+	l++;
+	for (; l < affligLaSv; l++)
+	{	gfxPT = (Uint16 *)p[l].TABAFFICH1;
+		t = (Uint32) p[l].COUNTERTAB;
+		for(Uint32 i = 0; i < t; i++)
+		{	o = *(gfxPT++);	//offset
+			adres = adres + o;
+			srcPT = srcPT + o;
+			gfxPT++;
+			o = *(gfxPT++);	//number of pixels contigus
+			for(Sint32 k = 0 ; k < o; k++)
+				*(adres++) = *(srcPT++);
+		}
+	}
+#endif
 }
 
 //-------------------------------------------------------------------------------
@@ -1095,6 +1124,7 @@ void BOB_killer::afficheLin()
 		{	char j = *(gfxP2++);
 			*(adres++) = j;
 		}
+		o = *(gfxP1++);				//offset
 	}
 	l++;
 	for (; l < affligLast; l++)

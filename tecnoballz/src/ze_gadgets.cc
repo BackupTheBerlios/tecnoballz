@@ -1,10 +1,11 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "ze_gadgets.cc"
-// created		: ?
-// updates		: 2004-10-23
+// created	: ?
+// updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
+// id		: $Id: ze_gadgets.cc,v 1.2 2005/01/18 07:08:28 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -35,7 +36,8 @@ ze_gadgets::ze_gadgets(Sint32 total, Sint32 vShad)
 	littleInit();
 	Sint16 *monPT;
 	monPT = courseList;
-	for(Sint32 i = 0; i < NB_OPTIONS; i++) // liste de gadgets achetes au magasin
+	// clear the list of bonuses bought in shop
+	for(Sint32 i = 0; i < NB_OPTIONS; i++)
 		*(monPT++) = 0;
 	*(monPT++) = -1;
 	anim_tempo = 0;
@@ -65,11 +67,11 @@ ze_gadgets::~ze_gadgets()
 
 //------------------------------------------------------------------------------
 // perform some initializations
-// input	=> mStep : frequence de chute des malus
-//			=> bKauf : nombre d'options achetees au magasin
-//			=> brCnt : nombre de briques a detruire
-//			=> table : pointer to the "malus" table
-//			=> cours : pointeur sur les courses
+// input	=> mStep: frequence de chute des malus
+//		=> bKauf: number of bonuses bought in shop 
+//		=> brCnt: Number of bricks to be destroyed
+//		=> table: pointer to the list of "malus"
+//		=> cours: pointer to list of bonuses bought in shop
 //------------------------------------------------------------------------------
 void ze_gadgets::initialise(Sint32 mStep, Sint32 bKauf, Sint32 brCnt, const Sint16 *table,
 	Sint32 *cours, zeMiniMess* ptMes, zeRaquette *pRaqu, zeNewBalls* pBall,
@@ -85,9 +87,9 @@ void ze_gadgets::initialise(Sint32 mStep, Sint32 bKauf, Sint32 brCnt, const Sint
 	bonusAchet = bKauf;
 	bonus_step = 0;
 	malusTable = table;
-	malus_step = 0;	// compteur chute de malus
-	brick_kass = 0;	// Nombres de briques casses
-	bonusTombe = 0;	// Nombres de bonus tombes
+	malus_step = 0;	//"malus" drop frequency 
+	brick_kass = 0;	//number of bricks current destroyed
+	bonusTombe = 0;	//number of bonuses dropped 
 	ptMiniMess = ptMes;
 	tecno_gads *bonus = objetListe[0];
 	for(Sint32 i = 0; i < objetTotal; i++)
@@ -113,12 +115,15 @@ void ze_gadgets::initialise(Sint32 mStep, Sint32 bKauf, Sint32 brCnt, const Sint
 	else
 		courseList[0] = -1;
   
-	if(bonusAchet >0)	// at least a bought bonus?
+	if(bonusAchet >0)	//at least a bought bonus?
 	{	Sint32 v = brCnt - (brCnt / 2);
 		bonus_step = v / bonusAchet;
 	}
 	else
-		bonus_step = brCnt + 1;	//no bonus bought in the shop. Initialize with the maximum value.
+	{
+		//no bonus bought in the shop. Initialize with the maximum value.
+		bonus_step = brCnt + 1;
+	}
 }
 
 //-------------------------------------------------------------------------------
@@ -135,7 +140,7 @@ void ze_gadgets::envoieGads(brickClear * briPT)
 			//###########################################################
 			malus_step++;
 			if(malus_step > malus_frek)
-			{	Sint16 j = hasard_val & 0x3F;	// valeur de 0 a 63 
+			{	Sint16 j = hasard_val & 0x3F;	//value 0 to 63 
 				j = *(malusTable + j);
 				malus_step = 0;
 				//j = GAD_MEGA00;	//test only
@@ -149,7 +154,7 @@ void ze_gadgets::envoieGads(brickClear * briPT)
 				{	if(brick_kass > bonus_step)
 					{	brick_kass = 0;
 						bonusTombe++;
-						Sint32 j = courseList[course_ptr]; //BUG
+						Sint32 j = courseList[course_ptr];
 						if(!j)
 						{	j = courseList[0];
 							course_ptr = 0;
@@ -172,7 +177,7 @@ void ze_gadgets::send_malus(technoBall *pball)
 	for(Sint32 i = 0; i < objetTotal; i++)
 	{	tecno_gads *gadg = objetListe[i];
 		if(!gadg->flag_actif)
-		{	Sint16 j = hasard_val & 0x1F;	// value 0 to 31 
+		{	Sint16 j = hasard_val & 0x1F;	//value 0 to 31 
 			j = *(malusTable + j);
 			gadg->nouveauGad(pball, j);
 			return;
@@ -187,7 +192,7 @@ void ze_gadgets::send_malus(tecno_fire *pfire)
 	for(Sint32 i = 0; i < objetTotal; i++)
 	{	tecno_gads *gadg = objetListe[i];
 		if(!gadg->flag_actif)
-		{	Sint16 j = hasard_val & 0x1F;	// value 0 to 31 
+		{	Sint16 j = hasard_val & 0x1F;	//value 0 to 31 
 			j = *(malusTable + j);
 			gadg->nouveauGad(pfire, j);
 			return;
@@ -206,7 +211,7 @@ void ze_gadgets::envoieGads(technoBall *pball)
 	for(Sint32 i = 0; i < objetTotal; i++)
 	{	tecno_gads *gadg = objetListe[i];
 		if(!gadg->flag_actif)
-		{	Sint16 j = hasard_val & 0x1F;	// value 0 to 31 
+		{	Sint16 j = hasard_val & 0x1F;	//value 0 to 31 
 			j = *(malusTable + j);
 			malus_step = 0;
 			gadg->new_gadget(pball, j);
@@ -236,11 +241,11 @@ Sint32 ze_gadgets::gadgetShop()
 		bonus->BOB_desact();
 		y += h;
 	}
-	bonus = *(liste++);							// bonus drag and drop
+	bonus = *(liste++);							//bonus drag and drop
 	bonus->coordonnee(0, 0);
 	bonus->BOB_desact();
 	bonus = *liste;
-	bonus->coordonnee(SGADGET_X2 * resolution, SGADGET_Y2 * resolution);	// bonus indicator
+	bonus->coordonnee(SGADGET_X2 * resolution, SGADGET_Y2 * resolution);	//bonus indicator
 	bonus->BOB_desact();
 	temoin_gad = bonus;
 	return (erreur_num);
