@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "ressources.cc"
 // created	: 2004-04-20
-// updates	: 2005-01-07
+// updates	: 2005-01-10
 // fonctions	: manage ressources
-// id		: $Id: ressources.cc,v 1.3 2005/01/07 16:37:21 gurumeditation Exp $
+// id		: $Id: ressources.cc,v 1.4 2005/01/10 07:26:58 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -534,6 +534,11 @@ Sint32 ressources::saveScores(char *ptScr, Uint32 fsize)
 	{	fprintf(stderr, "ressources::saveScores(): file:%s / error:%s\n", 
 		fnamescore, strerror(errno));
 		return 0;
+	}
+	else
+	{	if(is_verbose)
+			fprintf(stdout, "ressources::saveScores(): "
+				"file:%s size:%i\n", fnamescore, fsize);
 	}
 	return 1;
 }
