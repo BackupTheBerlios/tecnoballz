@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2005-01-20
-// id		: $Id: configfile.cc,v 1.3 2005/01/20 07:24:49 gurumeditation Exp $
+// id		: $Id: configfile.cc,v 1.4 2005/01/20 21:17:07 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -73,9 +73,7 @@ void configfile::configinfo()
 //------------------------------------------------------------------------------
 Sint32 configfile::tocheckdir()
 {
-	snprintf(config_dir, sizeof(config_dir) - 1, "%s/%s",
-		(getenv( "HOME" )?getenv( "HOME" ):"."), CONFIG_DIR_NAME );
-	/* test and create .lgames */
+	/* test and create .tlkgames */
 	if(!opendir(config_dir)) {
 		fprintf(stderr, "couldn't find/open config directory '%s'\n", config_dir);
 		fprintf(stderr, "attempting to create it... " );
@@ -90,18 +88,30 @@ Sint32 configfile::tocheckdir()
 	return 1;
 }
 
-
 //------------------------------------------------------------------------------
 // load config file "~/.tlkgames/powermanga.conf"
 //------------------------------------------------------------------------------
 void configfile::loadconfig()
 {
-	FILE *pfile = NULL;
+	//reset all values
 	resetvalue();
-	if (!tocheckdir()) return;
+
+	//generate user directory name
+	snprintf(config_dir, sizeof(config_dir) - 1, "%s/%s",
+		(getenv( "HOME" )?getenv( "HOME" ):"."), CONFIG_DIR_NAME );
+	
+	//read config from user directory	
+	FILE *pfile = NULL;
 	sprintf(configname, "%s/%s", config_dir, CONFIG_FILE_NAME);
 	pfile = fopen_data(configname, "r");
+
+	//read config from "/etc/" directory 
+#ifdef __unix__
+	if (pfile == NULL)
+		pfile = fopen_data("/etc/"CONFIG_FILE_NAME, "r");
+#endif
 	if (pfile == NULL) return;
+	
 	lisp_stream_t stream;	
 	lisp_object_t *root_obj = NULL;
 	lisp_stream_init_file (&stream, pfile);
@@ -142,6 +152,7 @@ void configfile::loadconfig()
 //------------------------------------------------------------------------------
 void configfile::saveconfig()
 {
+	if (!tocheckdir()) return;
 	FILE * config = fopen_data(configname, "w");
 	if(config)
 	{
