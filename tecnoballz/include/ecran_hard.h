@@ -4,7 +4,7 @@
 // file         : "ecran_hard.h"
 // created      : 2002-08-17
 // updates      : 2005-01-19
-// id		: $Id: ecran_hard.h,v 1.2 2005/01/19 20:38:11 gurumeditation Exp $
+// id		: $Id: ecran_hard.h,v 1.3 2005/07/17 16:13:38 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -37,7 +37,7 @@ class ecran_hard:public virtual mentatCode
 	
 	
 	private:
-		Uint32			keyfscreen;	// 1 = full screen mode
+		//Uint32			keyfscreen;	// 1 = full screen mode
 		
 		static const Uint32	bitspixels = 8;
 		Sint32			offsetplus;
@@ -69,7 +69,16 @@ class ecran_hard:public virtual mentatCode
 		Sint32				speed_game;	// 20  (1000 / 20 = 50 fps)
 		Sint32				wait_total;
 		Sint32				wait_inter;
-    
+
+		Uint32				VBL_switch;
+   /* 
+		float gameSpeed;
+		Sint32 gameFrame;
+		Uint32 last_time;
+		float fps;
+		float targetAdj;
+*/
+
 
 
 		SDL_Color			palette_tz[256];
@@ -78,8 +87,8 @@ class ecran_hard:public virtual mentatCode
 		Sint32				tiltoffset;
 
 	public:
-							ecran_hard();
-							~ecran_hard();
+						ecran_hard();
+						~ecran_hard();
 			Sint32			ecran_init();
 			Sint32			init_video();
 			Sint32			screenwdth();
@@ -90,8 +99,9 @@ class ecran_hard:public virtual mentatCode
 			Sint32			synchro_CalculDifference();
 			Sint32			synchro_processusPause(Sint32 _iTemps);
 			void			fullscreen();
-			Uint32			waitVBlank();
-			//void			wait_frame();
+			void			waitVBlank();
+			void			waitVBLchr();
+			void			waitVBLtec();
 			Sint32			retour_temps();
 			Sint32			get_framepee();
 			void			mise_a_zero_timer();

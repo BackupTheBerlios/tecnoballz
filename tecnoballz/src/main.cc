@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.3 2005/01/23 19:52:24 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.4 2005/07/17 16:13:38 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -32,6 +32,11 @@ configfile oConfigure;
 //------------------------------------------------------------------------------
 int main(Sint32 nbArg, char **ptArg)
 { 
+
+#ifdef __LP64__
+	printf("LP64\n");
+#endif
+
 	oConfigure.loadconfig();
 	if(!oConfigure.scanZeArgs(nbArg, ptArg))
 		return 0;

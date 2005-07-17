@@ -3,8 +3,8 @@
 //-----------------------------------------------------------------------------
 // file		: "mentatCode.h"
 // created	: 2002-08-18
-// updates	: 2005-02-04
-// ID		: $Id: mentatCode.h,v 1.9 2005/02/04 13:31:09 gurumeditation Exp $
+// updates	: 2005-07-17
+// ID		: $Id: mentatCode.h,v 1.10 2005/07/17 16:13:38 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -46,7 +46,7 @@
 //...............................................................................
 #ifndef __MENTATCODE__
 #define __MENTATCODE__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91 (2005-02-04)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.92 (2005-07-17)"
 //#define TU_TRICHES		//devel only
 #define BYTES_COPY		//force bytes copy (SPARC unaligned memory access)
 #ifndef SCOREFILE
@@ -81,8 +81,6 @@ const Sint32 E_GENRIQUE = -1;	// erreur generique
 const Sint32 E_OUT_LIST = -2;	// erreur reservation de la liste memoire
 const Sint32 E_NOMEMORY = -3;	// erreur reservation : depassement memoire
 const Sint32 E_OUT_ZONE = -4;	// erreur reservation : maxium de zones memoire 
-//const Sint32 E_NO_GIF87 = -5;	// fichier non GIF87a
-//const Sint32 E_NORESGIF = -6;	// ressource GIF asbente
 const Sint32 E_NORESOUR = -7;	// ressource non presente
 const Sint32 E_SDLERROR = -8;
 const Sint32 E_FILERROR = -9;

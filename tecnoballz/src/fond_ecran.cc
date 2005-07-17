@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "fond_ecran.cc"
 // created	: ?
-// updates	: 2005-01-11
+// updates	: 2005-07-17
 // fonctions	: display background (bricks levels)
-// Id		: $Id: fond_ecran.cc,v 1.3 2005/01/11 11:02:11 gurumeditation Exp $
+// Id		: $Id: fond_ecran.cc,v 1.4 2005/07/17 16:13:38 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -133,8 +133,13 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	// display background map 
 	//###############################################################
 	Sint32 src_X = 0;
+#if __WORDSIZE == 64
+	Sint32 h = (long)ecran;
+	Sint32 k = (long)fonds;
+#else
 	Sint32 h = (Sint32)ecran;	//use pointer address as random value
 	Sint32 k = (Sint32)fonds;	//use pointer address as random value
+#endif
 	Sint32 nline;
 	if(mVert > 0)
 		nline = mVert;

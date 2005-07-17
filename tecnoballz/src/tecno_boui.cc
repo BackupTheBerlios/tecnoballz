@@ -1,9 +1,9 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "tecno_boui.cc"
-// created		: ?
-// updates		: 2004-10-23
+// created	: ?
+// updates	: 2004-10-23
 // function	: handle BouiBoui (only bricks levels)
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -63,7 +63,11 @@ void tecno_boui::gere_atome()
 			{	if(!over_brick(position_x, position_y))
 				{	flag_actif = 1;
 					Sint32 *monPT = ghost_bobs + (hasard_val & 31);
+#if __WORDSIZE == 64
+					hasard_val += (long)this;
+#else
 					hasard_val += (Sint32)this;
+#endif
 					Sint32 k = *monPT;
 					miniOffset = k;
 					animOffset = k;
@@ -190,9 +194,11 @@ void tecno_boui::littleInit(Sint32 time0, Sint32 appar, Sint32 index, Sint32 pow
 	i *= 2;
 	i &= 31;
 	atom_traje = i;
+#if __WORDSIZE == 64
+	hasard_val += (long)this;
+#else
 	hasard_val += (Sint32)this;
-	
-	
+#endif
 	i = 4 * resolution;
 	
 	collisionT[0] = i;

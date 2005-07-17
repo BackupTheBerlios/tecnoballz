@@ -1,9 +1,9 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "ze_magneye.cc"
-// created		: 2004-09-17
-// updates		: 2004-09-20
+// created	: 2004-09-17
+// updates	: 2005-07-17
 // function	: manage eye magneto (only bricks levels)
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -69,7 +69,11 @@ Sint32  ze_magneye::initialize()
 	for(Sint32 i = 0; i < objetTotal; i++)
 	{	techno_eye *ptEye = objetListe[i];
 		ptEye->centerPosx = Xcoordinat[hval & 31]  * resolution;
+#if __WORDSIZE == 64
+		hval += (long)ptEye;
+#else
 		hval += (Sint32)ptEye;
+#endif
 		ptEye->centerPosy = Ycoordinat[hval & 31]  * resolution;
 		hval += keyGestion->sourisGetY();
 		ptEye->finishPosx = Xcoordinat[hval & 31]  * resolution;

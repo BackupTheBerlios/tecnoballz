@@ -2,8 +2,8 @@
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "RAM_killer.cc"
-// created		: 1996-07-05
-// updates		: 2004-10-23
+// created	: 1996-07-05
+// updates	: 2005-07-17
 // functions	: handler memory allocation
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -139,8 +139,13 @@ void RAM_killer::liberation(char *adres)
 	}
 	if(adres)
 	{	adrNoFound++;
-		fprintf(stderr, "RAM_killer::liberation() : %i) address %x not found\n",
+#if __WORDSIZE == 64
+		fprintf(stderr, "RAM_killer::liberation() : %i) address %lx not found\n",
+			adrNoFound, (long)adres);
+#else
+		fprintf(stderr, "RAM_killer::liberation() : %i) address %lx not found\n",
 			adrNoFound, (Sint32)adres);
+#endif
 	}
 }
 
@@ -154,10 +159,19 @@ void RAM_killer::libereTout()
 		for(Sint32 i = 0; i < mem_nombre; i++, memPT++)
 		{	char* adres = memPT->adresseMem;
 			if(adres)
-			{	fprintf(stderr,
+			{	
+				
+#if __WORDSIZE == 64
+				fprintf(stderr,
+					"RAM_killer::libereTout() : addr:%x; size:%i; id:%x\n",
+					(long)memPT->adresseMem, memPT->taille_mem,
+					(Sint32)memPT->identifier);
+#else
+				fprintf(stderr,
 					"RAM_killer::libereTout() : addr:%x; size:%i; id:%x\n",
 					(Sint32)memPT->adresseMem, memPT->taille_mem,
 					(Sint32)memPT->identifier);
+#endif
 				free(adres);	//release memory
 				octetTotal -= memPT->taille_mem;
 				memPT->adresseMem = NULL;

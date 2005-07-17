@@ -1,9 +1,9 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "clavierMac.h"
-// created		: ?
-// updates		: 2004-10-24
+// created	: ?
+// updates	: 2005-06-17
 // fonction	: handle keyboard and mouse
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -37,7 +37,8 @@ class clavierMac:public virtual mentatCode
 		static const Uint32	MUSIC_FLAG = 6;
 		static const Uint32	FULLSCFLAG = 7;
 		static const Uint32	ESCAPEMENU = 8;
-		static const Uint32	NUMOFFLAGS = 9;
+		static const Uint32	WAITVBLOFF = 9;
+		static const Uint32	NUMOFFLAGS = 10;
 
 	private:
 		static Uint32		keys_lasts[NUMOFFLAGS];
@@ -74,8 +75,8 @@ class clavierMac:public virtual mentatCode
 		
 	
 	public:
-							clavierMac();
-							~clavierMac();
+						clavierMac();
+						~clavierMac();
 		void				setGrab_On();
 		void				setGrabOff();
 		void				lit_keymap();

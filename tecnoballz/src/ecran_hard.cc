@@ -4,7 +4,7 @@
 // file		: "ecran_hard.cc"
 // created	: 2002-08-17
 // updates	: 2005-01-10
-// id		: $Id: ecran_hard.cc,v 1.5 2005/03/04 12:53:49 gurumeditation Exp $
+// id		: $Id: ecran_hard.cc,v 1.6 2005/07/17 16:13:38 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -46,6 +46,14 @@ bool	ecran_hard::optionsync = true;
 	wait_inter = 10;	// interval
 	wait_count = 0;
 	wait_total = 0;
+	VBL_switch = 0;
+
+/*
+gameSpeed = 0.5;
+last_time = 0;
+fps = 50.0;
+targetAdj = 1.0;
+*/
 }
 
 //------------------------------------------------------------------------------
@@ -267,17 +275,74 @@ void ecran_hard::fullscreen()
 		else optionfull = true;
 		ecran_gere->init_video();
 		ecran_gere->palette_go(ze_palette);
-		keyfscreen = 0;
+		//keyfscreen = 0;
 	}
 }
 
 //-------------------------------------------------------------------------------
-// Temporisation entre deux images
-// 1 millisecond => 1/1000 = 0.001 s
-// 10 millisecond => 1/100 = 0.01 s
-// 20 millisecond => 1/50  = 0.02 s
+//
 //-------------------------------------------------------------------------------
-Uint32 ecran_hard::waitVBlank()
+void ecran_hard::waitVBlank()
+{
+/*
+	if(keyGestion->specialKey(clavierMac::WAITVBLOFF))
+	{
+		VBL_switch++;
+		if(VBL_switch > 2) VBL_switch = 0;
+	}
+*/
+	waitVBLtec();
+/*
+	switch(VBL_switch)
+	{
+		case 0:
+			waitVBLchr();
+			break;
+		case 1:
+			waitVBLtec();
+			break;
+		default:
+			break;
+	}
+*/	
+}
+
+//-------------------------------------------------------------------------------
+//
+//-------------------------------------------------------------------------------
+void ecran_hard::waitVBLchr()
+{
+/*
+	keyGestion->lit_keymap();
+	fullscreen();
+#ifndef SOUNDISOFF
+	ptAudiomix->execution1();
+#endif
+	gameFrame++;
+	Uint32 delay = 32-(int)(24.0 * gameSpeed);
+	SDL_Delay(delay);
+	printf("waitVBLchr %i\n", delay);
+	if(!(gameFrame%10)) return;
+	Uint32 now_time = SDL_GetTicks();
+	if(last_time)
+		fps = (10.0/(now_time - last_time))*1000.0;
+	last_time = now_time;
+	if(gameFrame >= 400) return;
+	if(fps < 48.0 && gameSpeed < 1.0)
+		gameSpeed += 0.02;
+	else if(gameFrame > 20)
+	{	float tmp = 50.0 / fps;
+		tmp = 0.8*targetAdj + 0.2*tmp;
+		targetAdj = floor(100.0*(tmp+0.005))/100.0;
+	}
+	return;
+*/
+}
+
+//-------------------------------------------------------------------------------
+// 
+//-------------------------------------------------------------------------------
+void ecran_hard::waitVBLtec()
 {
 	Uint32 durat = 0;
 	countframe++;
@@ -294,7 +359,7 @@ Uint32 ecran_hard::waitVBlank()
 				wait_value = 1;
 		}
 		if(wait_value > 0)
-		{	//printf("wait_value %i\n", wait_value);
+		{	//fprintf(stdout, "waitVBLtec %i\n", wait_value);
 			SDL_Delay(wait_value);
 		}
 	}
@@ -311,7 +376,7 @@ Uint32 ecran_hard::waitVBlank()
 #ifndef SOUNDISOFF
 	ptAudiomix->execution1();
 #endif
-	return durat;
+	return;
 }
 
 //------------------------------------------------------------------------------

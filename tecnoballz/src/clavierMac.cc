@@ -1,9 +1,9 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "clavierMac.cc"
-// created		: ?
-// updates		: 2004-10-15
+// created	: ?
+// updates	: 2005-06-17
 // fonction	: handle keyboard and mouse
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -95,6 +95,7 @@ void clavierMac::setGrabOff()
 void clavierMac::lit_keymap()
 {
 	keys_flags[FULLSCFLAG] = 0;
+	keys_flags[WAITVBLOFF] = 0;
 	mousreleas = 0;
 	releaseRgt = 0;
 	SDL_Event event;
@@ -135,6 +136,8 @@ void clavierMac::lit_keymap()
 							keys_lasts[FULLSCFLAG] = 1;
 						if(keys[SDLK_ESCAPE] == SDL_PRESSED)
 							keys_lasts[ESCAPEMENU] = 1;
+						if(keys[SDLK_l] == SDL_PRESSED)
+							keys_lasts[WAITVBLOFF] = 1;
 					}
 					else
 					{	if( keys[SDLK_ESCAPE] == SDL_PRESSED)
@@ -232,6 +235,10 @@ void clavierMac::lit_keymap()
 					if(keys[SDLK_d] == SDL_RELEASED && keys_lasts[MUSIC_FLAG])
 					{	keys_lasts[MUSIC_FLAG] = 0;
 						keys_flags[MUSIC_FLAG] = 1;
+					}
+					if(keys[SDLK_l] == SDL_RELEASED && keys_lasts[WAITVBLOFF])
+					{	keys_lasts[WAITVBLOFF] = 0;
+						keys_flags[WAITVBLOFF] = 1;
 					}
 				}
 				

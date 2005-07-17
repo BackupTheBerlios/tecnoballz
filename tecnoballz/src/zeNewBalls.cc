@@ -1,9 +1,9 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "zeNewBalls.cc"
-// created		: ?
-// updates		: 2004-10-27
+// created	: ?
+// updates	: 2005-07-17
 // fonction	: manage the balls (move and collisions)
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -628,10 +628,9 @@ void zeNewBalls::vitus_bump()
 					j = balle->directBall;
 					//(char *)monPT += j;
 					monPT = (Sint32 *)((char *)monPT + j); 
-					printf("monPT = %x / bumpX->rebonds_GD = %x / *monPT = %i\n",
-						(Sint32)monPT, (Sint32)bumpX->rebonds_GD, *monPT);
-					
-					printf("%i %i\n", bumpX->rebonds_GD[16], bumpX->rebonds_GD[64]);
+					/*printf("monPT = %x / bumpX->rebonds_GD = %x / *monPT = %i\n",
+						(long)monPT, (long)bumpX->rebonds_GD, *monPT);
+					printf("%i %i\n", bumpX->rebonds_GD[16], bumpX->rebonds_GD[64]);*/
 					j = 60;
 				}
 				

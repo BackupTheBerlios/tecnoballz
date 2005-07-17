@@ -3,8 +3,8 @@
 //-----------------------------------------------------------------------------
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
-// updates	: 2005-01-23
-// id		: $Id: mentatCode.cc,v 1.7 2005/01/23 19:52:24 gurumeditation Exp $
+// updates	: 2005-07-07
+// id		: $Id: mentatCode.cc,v 1.8 2005/07/17 16:13:38 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -85,7 +85,11 @@ Sint32 mentatCode::first_init(configfile* pConf)
 {
 	if(is_verbose)
 		printf("mentatCode::first_init() [START]\n");
+#if __WORDSIZE == 64
+	hasard_val = (long)first_init;
+#else
 	hasard_val = (Sint32)first_init;
+#endif
 	memGestion = new RAM_killer();
 	memGestion->initialise(8000);
 	num_erreur = memGestion->retour_err();
@@ -336,16 +340,16 @@ Sint32 mentatCode::desinstall(configfile* pConf)
 		printf("==6 ptScoreTab\n");
 	delete ptScoreTab;
 	if(is_verbose)
-		printf("==7 ecran_gere %x\n", (Sint32)ecran_gere);
+		printf("==7 ecran_gere\n");
 	delete ecran_gere;
 #ifndef SOUNDISOFF
 	if(is_verbose)
-		printf("==8 audiomixer %x\n", (Sint32)ptAudiomix);
+		printf("==8 audiomixer\n");
 	delete ptAudiomix;
 #endif
 	delete pRessource;
 	if(is_verbose)
-		printf("==9 memGestion %x \n", (Sint32)memGestion);
+		printf("==9 memGestion\n");
 	delete memGestion;
 	return num_erreur;
 }
