@@ -19,10 +19,13 @@ PREREQUISITES
 
 COMPILING AND RUNNING:
 
-autoconf
+./bootstrap
 ./configure
 make
 make install
+
+The default destination will be /usr/local/games/tecnoballz for the binary and 
+/usr/local/share/tecnoballz for the data files.
 
 LEGAL
 
