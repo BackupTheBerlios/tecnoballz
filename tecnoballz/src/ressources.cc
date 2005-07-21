@@ -5,7 +5,7 @@
 // created	: 2004-04-20
 // updates	: 2005-01-15
 // fonctions	: manage ressources
-// id		: $Id: ressources.cc,v 1.5 2005/01/15 19:59:58 gurumeditation Exp $
+// id		: $Id: ressources.cc,v 1.6 2005/07/21 15:03:48 sukria Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -26,12 +26,16 @@
 #include "../config.h"
 
 #ifndef DATADIR
-#define DATADIR "/usr/share/games/tecnoballz"
+	#define DATADIR "/usr/share/games/tecnoballz"
+#endif
+
+#ifndef SCOREFILE
+	#define SCOREFILE "/var/lib/games/tecnoballz.hi"
 #endif
 
 //...............................................................................
 
-char* ressources::fnamescore = "/var/lib/games/tecnoballz.hi";
+char* ressources::fnamescore = SCOREFILE;
 const char* ressources::folderlist[] =
 {	"/",		// Normally unused, except when running from the source directory...
 	DATADIR,
