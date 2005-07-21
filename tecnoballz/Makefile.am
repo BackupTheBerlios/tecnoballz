@@ -6,7 +6,7 @@ score = tecnoballz.hi
 SUBDIRS = src 
 
 pkgdatadir = $(mandir)/man6
-dist_pkgdata_DATA = tecnoballz.6
+dist_pkgdata_DATA = man/tecnoballz.6
 
 install-data-hook:
 	-chown root:games "$(DESTDIR)/$(gamesdir)/tecnoballz"
