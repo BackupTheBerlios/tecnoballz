@@ -1,9 +1,9 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file         : "zeGigaBlit.h"
 // created      : ?
-// updates      : 2004-09-04
+// updates      : 2005-08-26
 // fonctions    : manage the Gigablitz (bumper and guards)
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -19,7 +19,6 @@
 // You should have received a copy of the GNU General Public License along with
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA  02111-1307, USA.
-//
 //*****************************************************************************
 #ifndef __ZEGIGABLIT__
 #define __ZEGIGABLIT__
@@ -36,13 +35,14 @@ class zeGigaBlit;
 #include "../include/objet_gere.h"
 #include "../include/head_anima.h"
 #include "../include/lesBriques.h"
+#include "../include/zexplosion.h"
 //...............................................................................
 class zeGigaBlit:public objet_gere < giga_blitz >
 {	friend class            giga_blitz;
  
 	private:
-		static const Uint32	NOMBREGIGA = 7;
-		static Sint32		numeroBOBs[NOMBREGIGA];  
+		static const Uint32		NOMBREGIGA = 7;
+		static Sint32			numeroBOBs[NOMBREGIGA];  
     
 		lesBriques*			brickObjet;
 		head_anima*			gugusObjet;
@@ -50,12 +50,12 @@ class zeGigaBlit:public objet_gere < giga_blitz >
 		zexplosion*			pexplosion;
 		tecno_bump*			tecBumper1;
 		tecno_bump*			tecBumper3;
-		giga_blitz*			blitzobjet;	// pointer on the current "giga_blitz" 
+		giga_blitz*			blitzobjet;	//pointer on the current "giga_blitz" 
 		Sint32				blitz_colx;
 		Sint32				blitz_posx;
 		Sint32				blitz_posy;
-		Sint32				blitz_haut;	// hauteur du gigablitz
-		Sint32				bitz_ystop;	// ordonnee maximum du "gigablitz"
+		Sint32				blitz_haut;	//gigablitz height
+		Sint32				bitz_ystop;	//"gigablitz" Y max.
 		Sint32				bitz_maxiy;	// 
 		Sint32				bitz_miniy;	// 
 		Sint32				blitz_seta;
@@ -63,10 +63,10 @@ class zeGigaBlit:public objet_gere < giga_blitz >
 		Uint32				blitz_xsin;
   
 	public:
-							zeGigaBlit();
-							~zeGigaBlit();
+						zeGigaBlit();
+						~zeGigaBlit();
 		Sint32				init_liste(zeRaquette *zeRak, head_anima *gugus, 
-								lesBriques *brick);
+							lesBriques *brick);
 		void				initDepart();
 		void				execution1();
 		void				collision1();
@@ -74,7 +74,7 @@ class zeGigaBlit:public objet_gere < giga_blitz >
 		void				execution2();
 		void 				collision2();
 		Sint32				guard_shoot(Sint32 value, Sint32 pos_x, Sint32 pos_y,
-											Sint32 large, Sint32 haute);
+								Sint32 large, Sint32 haute);
 		Sint32				isactivate();
 };
 #endif

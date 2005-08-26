@@ -3,8 +3,8 @@
 //------------------------------------------------------------------------------
 // file         : "configfile.cpp"
 // created      : 2005-01-19
-// updates      : 2005-01-23
-// id		: $Id: configfile.cc,v 1.7 2005/01/23 20:44:01 gurumeditation Exp $
+// updates      : 2005-08-26
+// id		: $Id: configfile.cc,v 1.8 2005/08/26 17:25:18 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -61,7 +61,9 @@
 //------------------------------------------------------------------------------
 void	configfile::resetvalue()
 {
+#ifndef SOUNDISOFF
 	audiomixer::audioactif = 1;
+#endif
 	resolution = 2;
 	is_verbose = 0;
 	ecran_hard::optionfull = 0;
@@ -80,10 +82,17 @@ void	configfile::resetvalue()
 //------------------------------------------------------------------------------
 void configfile::configinfo()
 {
+	bool audio;
+#ifndef SOUNDISOFF
+	audio = audiomixer::audioactif;
+#else
+	audio = false;
+#endif
 	fprintf(stdout, "  <config info>\n"
 			"- optionfull : %i\n- audioactif: %i\n- resolution:%i\n"
-		"- is_verbose: %i\n hardChoice : %i\n lang:%s\n", 
-		ecran_hard::optionfull, audiomixer::audioactif, resolution, is_verbose, hardChoice);
+		"- is_verbose: %i\n hardChoice : %i\n", 
+		ecran_hard::optionfull, audio, resolution,
+		is_verbose, hardChoice);
 }
 
 //------------------------------------------------------------------------------
@@ -141,8 +150,10 @@ void configfile::loadconfig()
 	LispReader reader(lisp_cdr(root_obj));
 	if (!reader.read_bool("fullscreen", &ecran_hard::optionfull))
 		ecran_hard::optionfull = -1;
+#ifndef SOUNDISOFF
 	if (!reader.read_bool("sound", &audiomixer::audioactif))
 		audiomixer::audioactif = 1;
+#endif
 	if (!reader.read_bool("verbose", &is_verbose))
 		is_verbose = 0;
 
@@ -205,6 +216,12 @@ void configfile::set_player(Uint32 nplay, char* pChar)
 //------------------------------------------------------------------------------
 void configfile::saveconfig()
 {
+	bool audio;
+#ifndef SOUNDISOFF
+	audio = audiomixer::audioactif;
+#else
+	audio = false;
+#endif
 	if (!tocheckdir()) return;
 	FILE * config = fopen_data(configname, "w");
 	if(config)
@@ -212,7 +229,7 @@ void configfile::saveconfig()
 		fprintf(config, "(tecnoballz-config\n");
 		fprintf(config, "\t;; the following options can be set to #t or #f:\n");
 		fprintf(config, "\t(fullscreen %s)\n", ecran_hard::optionfull ? "#t" : "#f");
-		fprintf(config, "\t(sound %s)\n", audiomixer::audioactif ? "#t" : "#f");
+		fprintf(config, "\t(sound %s)\n", audio ? "#t" : "#f");
 		fprintf(config, "\t(verbose %s)\n", is_verbose ? "#t" : "#f");
 		fprintf(config, "\n\t;; window size 1 (low-res) or 2 (high-res):\n");
 	       	fprintf(config, "\t(resolution  %d)\n", resolution);

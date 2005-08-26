@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 // file		: "zeNewBalls.cc"
 // created	: ?
-// updates	: 2005-07-17
+// updates	: 2005-08-26
 // fonction	: manage the balls (move and collisions)
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -416,7 +416,7 @@ void zeNewBalls::vitus_move()
 			{	j = balle->directBall;	//ball is moving
 				if(j > 64)
 				{	fprintf(stderr,
-						"zeNewBalls::vitus_move() balle->directBall = %ld\n",
+						"zeNewBalls::vitus_move() balle->directBall = %i\n",
 						j);
 					j = 60;
 				}
@@ -488,7 +488,7 @@ void zeNewBalls::vitusmove2()
 			{	j = balle->directBall;	//ball is moving
 				if(j > 64)
 				{	fprintf(stderr,
-						"zeNewBalls::vitus_move() balle->directBall = %ld\n",
+						"zeNewBalls::vitus_move() balle->directBall = %i\n",
 						j);
 					j = 60;
 				}

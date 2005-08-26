@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "audiomixer.h"
 // created	: 2004-03-22
-// updatesx	: 2005-01-19
+// updatesx	: 2005-08-26
 // functions	: handler music and sound
-// id		: $Id: audiomixer.h,v 1.2 2005/01/19 20:38:11 gurumeditation Exp $
+// id		: $Id: audiomixer.h,v 1.3 2005/08/26 17:25:17 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software

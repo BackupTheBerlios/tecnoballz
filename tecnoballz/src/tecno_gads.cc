@@ -1,9 +1,9 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "tecno_gads.cc"
-// created		: ?
-// updates		: 2004-10-18
+// created	: ?
+// updates	: 2005-08-26
 // fonction	: objects malus and bonus gadgets
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -19,7 +19,6 @@
 // You should have received a copy of the GNU General Public License along with
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA 02111-1307, USA.
-//
 //******************************************************************************
 #include "../include/tecno_gads.h"
 
@@ -71,7 +70,7 @@ void tecno_gads::new_gadget(Sint32 nuGad)
 	const Sint16 *p = gagdetBrik + nuGad;
 	if (*p < 0)
 	{	fprintf(stderr,
-			"tecno_gads::nouveauGad() : nuGad = %ld, no used ! \n", nuGad);
+			"tecno_gads::nouveauGad() : nuGad = %i, no used ! \n", nuGad);
 		return;
 	}
 	flag_actif = 1;
@@ -103,7 +102,7 @@ void tecno_gads::nouveauGad(brickClear *briPT, Sint32 nuGad)
 	const Sint16 *p = gagdetBrik + nuGad;
 	if (*p < 0)
 	{	fprintf(stderr,
-			"tecno_gads::nouveauGad() : nuGad = %ld, no used ! \n", nuGad);
+			"tecno_gads::nouveauGad() : nuGad = %i, no used ! \n", nuGad);
 		return;
 	}
 	flag_actif = 1;
@@ -135,7 +134,7 @@ void tecno_gads::nouveauGad(technoBall *balle, Sint32 nuGad)
 	const Sint16 *p = gagdetBrik + nuGad;
 	if (*p < 0)
 	{	fprintf(stderr,
-			"tecno_gads::nouveauGad() : nuGad = %ld, no used ! \n", nuGad);
+			"tecno_gads::nouveauGad() : nuGad = %i, no used ! \n", nuGad);
 		return;
 	}
 	flag_actif = 1;
@@ -166,7 +165,7 @@ void tecno_gads::nouveauGad(tecno_fire *pfire, Sint32 nuGad)
 	const Sint16 *p = gagdetBrik + nuGad;
 	if (*p < 0)
 	{	fprintf(stderr,
-			"tecno_gads::nouveauGad() : nuGad = %ld, no used ! \n", nuGad);
+			"tecno_gads::nouveauGad() : nuGad = %i, no used ! \n", nuGad);
 		return;
 	}
 	flag_actif = 1;
@@ -199,7 +198,7 @@ void tecno_gads::new_gadget(technoBall *balle, Sint32 nuGad)
 	const Sint16 *p = gagdetGuar + nuGad;
 	if (*p < 0)
 	{	fprintf(stderr,
-			"tecno_gads::nouveauGad() : nuGad = %ld, no used ! \n", nuGad);
+			"tecno_gads::nouveauGad() : nuGad = %i, no used ! \n", nuGad);
 		return;
 	}
 	flag_actif = 1;

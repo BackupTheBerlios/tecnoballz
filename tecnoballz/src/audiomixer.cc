@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "audiomixer.cc"
 // created	: 2004-03-22
-// updates	: 2005-01-19
+// updates	: 2005-08-26
 // functions	: handler music and sound
-// id		: $Id: audiomixer.cc,v 1.3 2005/01/19 20:38:11 gurumeditation Exp $
+// id		: $Id: audiomixer.cc,v 1.4 2005/08/26 17:25:18 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -251,7 +251,7 @@ Sint32 audiomixer::winn_music()
 	modposloop = position_1;
 	Mix_SetMusicPosition(position_1);
 	musicphase = PHASE_WINN;
-	return(E_NO_ERROR);
+	return E_NO_ERROR;
 }
 
 //------------------------------------------------------------------------------
@@ -510,7 +510,7 @@ void audiomixer::mus_handle()
 // input => narea	: number of the area (1 to 5)
 // ouput <= narea	: number of the music area (0 to 5) 
 //-----------------------------------------------------------------------------
-Uint32 audiomixer::area_music (Uint32 narea)
+Uint32 audiomixer::area_music(Uint32 narea)
 {
 	switch (narea) 
 	{
@@ -530,6 +530,7 @@ Uint32 audiomixer::area_music (Uint32 narea)
 			return MUSICAREA1;
 			break;
 	}
+	return MUSICAREA1;
 }
 
 //------------------------------------------------------------------------------

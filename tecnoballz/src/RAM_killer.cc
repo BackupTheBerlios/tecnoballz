@@ -1,9 +1,9 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "RAM_killer.cc"
 // created	: 1996-07-05
-// updates	: 2005-07-17
+// updates	: 2005-08-26
 // functions	: handler memory allocation
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -140,10 +140,10 @@ void RAM_killer::liberation(char *adres)
 	if(adres)
 	{	adrNoFound++;
 #if __WORDSIZE == 64
-		fprintf(stderr, "RAM_killer::liberation() : %i) address %lx not found\n",
+		fprintf(stderr, "RAM_killer::liberation() : %i) address %x not found\n",
 			adrNoFound, (long)adres);
 #else
-		fprintf(stderr, "RAM_killer::liberation() : %i) address %lx not found\n",
+		fprintf(stderr, "RAM_killer::liberation() : %i) address %x not found\n",
 			adrNoFound, (Sint32)adres);
 #endif
 	}
@@ -180,7 +180,7 @@ void RAM_killer::libereTout()
 			} 
 		}
 		fprintf(stderr,
-			"RAM_killer::libereTout() : remain 10 not released zones\n",
+			"RAM_killer::libereTout(): remain %i not released zones\n",
 			mem_nombre);
 	}
  	if (adrNoFound)
