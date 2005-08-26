@@ -5,7 +5,7 @@
 // created	: 2004-03-22
 // updatesx	: 2005-08-26
 // functions	: handler music and sound
-// id		: $Id: audiomixer.h,v 1.3 2005/08/26 17:25:17 gurumeditation Exp $
+// id		: $Id: audiomixer.h,v 1.4 2005/08/26 20:04:02 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -111,55 +111,55 @@ class audiomixer:public virtual mentatCode
 	public:
 				audiomixer();
 				~audiomixer();
-		void	stopModule();
-		Sint32	playModule(Uint32 modnu);
-		void	execution1();
-		Sint32 	levelmusic(Uint32, Uint32);
-		Sint32	shop_music(Uint32); 
-		Sint32	winn_music(); 
-		Sint32	lost_music(); 
-		Sint32	lostm_stop();
-		Uint32	winn_isend();
-		Uint32	get_mphase();
-		void	sound_play(Uint32);
-		void	stop_sound();
-		void	startSound();
+		void		stopModule();
+		Sint32		playModule(Uint32 modnu);
+		void		execution1();
+		Sint32 		levelmusic(Uint32, Uint32);
+		Sint32		shop_music(Uint32); 
+		Sint32		winn_music(); 
+		Sint32		lost_music(); 
+		Sint32		lostm_stop();
+		Uint32		winn_isend();
+		Uint32		get_mphase();
+		void		sound_play(Uint32);
+		void		stop_sound();
+		void		startSound();
 		
 	private:
-		void			query_spec();
-		Uint32			area_music(Uint32);
-		Sint32			initialise();
-		void			mus_handle();
-		void			snd_handle();
+		void		query_spec();
+		Uint32		area_music(Uint32);
+		Sint32		initialise();
+		void		mus_handle();
+		void		snd_handle();
 
 	// statics members
 	private:
-		static char				soundtable[S_NOMBRETT];
-		static Mix_Chunk*		sound_list[];
+		static char		soundtable[S_NOMBRETT];
+		static Mix_Chunk*	sound_list[];
 		static const musics_pos	ptMusicpos[];
 
 	private:
-		Uint32		areaNumber;		// area number (1 to 5)
-		Uint32		levelTecno;		// level number (1 to 12) 
+		Uint32		areaNumber;		//area number (1 to 5)
+		Uint32		levelTecno;		//level number (1 to 12) 
 		
 		Sint32		position_1;	
 		Sint32		modposloop;	
 		Sint32		position_2;	
-		Uint32		musicphase;		// normal / level / shop / ...
+		Uint32		musicphase;		//normal / level / shop / ...
 	
 
-		Uint32		flag_music;		// 1 = music enable
-		Uint32		flag_sound;		// 1 = sound enable
+		Uint32		flag_music;		//1 = music enable
+		Uint32		flag_sound;		//1 = sound enable
 		Uint32		lastModule;
 
-		Uint32		music_flag;		// 0 or 1 (CTRL + D / CTRL + S)
-		Uint32		sound_flag;		// 0 or 1 (CTRL + F / CTRL + S)
+		Uint32		music_flag;		//0 or 1 (CTRL + D / CTRL + S)
+		Uint32		sound_flag;		//0 or 1 (CTRL + F / CTRL + S)
 	
 		Sint32		musicVolum;		
-		Sint32		nummodule1;		// numero module charge
+		Sint32		nummodule1;		//module number was loaded
 		Mix_Music*	pMixmodule;
-		MODULE*		ptModAmiga;		// structure module
-		Uint32		waves_size;		// size fo all waves
+		MODULE*		ptModAmiga;		//structure module
+		Uint32		waves_size;		//size fo all waves
 		Sint32		lastsngpos;
 		Sint32		lastpatpos;
 	

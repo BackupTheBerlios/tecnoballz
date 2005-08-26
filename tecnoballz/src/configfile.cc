@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2005-08-26
-// id		: $Id: configfile.cc,v 1.8 2005/08/26 17:25:18 gurumeditation Exp $
+// id		: $Id: configfile.cc,v 1.9 2005/08/26 20:04:02 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -178,12 +178,13 @@ void configfile::loadconfig()
 	if(nuOfPlayer < 1 || nuOfPlayer > 6) nuOfPlayer = 1;
 
 	//read players names
-	std::string sName;
-	char cName[7];
+	std::string sName(6, ' ');
+	char cName[8] = {"......."};
 	for(Uint32 i = 0; i < 6; i++) 
-	{	sprintf(cName, "%s%d", "player", i + 1);
-		if(reader.read_string (cName, &sName))
-		{	//printf("LOAD : %s %s\n", cName, sName.c_str());
+	{	//sprintf(cName, "%s%01d", "player", i + 1);
+		sprintf(cName, "player%01d", i + 1);
+		if(reader.read_string(cName, &sName))
+		{	//printf("LOAD : <%s> => <%s> \n", cName, sName.c_str());
 			strncpy(thePlayers[i], sName.c_str(), 6);
 		}
 		
