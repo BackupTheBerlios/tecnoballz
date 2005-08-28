@@ -1,10 +1,10 @@
 
 AC_PREREQ(2.50)
 dnl AC_INIT(src/technoBall.cc)
-AC_INIT(tecnoballz, 0.91, tecnoballz@tlk.fr)
+AC_INIT(tecnoballz, 0.91-cvs20050828, tecnoballz@tlk.fr)
 AC_CONFIG_AUX_DIR(autotools)
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE(tecnoballz,0.91)
+AM_INIT_AUTOMAKE(tecnoballz,0.91-cvs20050828)
 AM_CONFIG_HEADER(config.h)
 
 dnl  Check our build tools
