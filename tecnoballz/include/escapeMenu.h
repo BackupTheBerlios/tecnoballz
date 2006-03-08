@@ -63,7 +63,7 @@ class escapeMenu:public virtual print_text, public virtual BOB_killer
 		void 		displayBOB(char *ptSrc, Sint32 pos_x, Sint32 pos_y, Sint32 NxLine, Sint32 width, Sint32 heigh);
 		void		display640();
 		void		display320();
-		static const unsigned char escapeMenu::cyclingtab[];
+		static const unsigned char cyclingtab[];
 		static const char *menu_texts[2];
 		static const char menu_text1[];
 		static const char menu_text2[];
