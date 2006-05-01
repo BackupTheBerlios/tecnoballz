@@ -7,6 +7,9 @@ AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE(tecnoballz,0.91-cvs20050828)
 AM_CONFIG_HEADER(config.h)
 
+dnl Ha Ha ! I are using teh maintainer mode!!!
+AM_MAINTAINER_MODE
+
 dnl  Check our build tools
 AC_PROG_CC
 AC_PROG_CXX
