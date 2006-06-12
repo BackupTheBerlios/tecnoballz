@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonctions	: Sprites or shapes on the screen
-// id		: $Id: BOB_killer.cc,v 1.6 2005/01/18 07:08:28 gurumeditation Exp $
+// id		: $Id: BOB_killer.cc,v 1.7 2006/06/12 13:18:08 sukria Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -270,18 +270,18 @@ Sint32 BOB_killer::reservBOBt(Sint32 anima)
 	// reserve la table de pointeur sur les tables d'affichage
 
 	// tables of offsets and counters (words and bytes)
-	BOBtableP1 = (Sint16 **)(memGestion->reserveMem(sizeof(Sint32) * animationN, 0x424F4250));
+	BOBtableP1 = (Sint16 **)(memGestion->reserveMem(sizeof(Sint16 *) * animationN, 0x424F4250));
 	error_init(memGestion->retour_err());
 	if(erreur_num) return erreur_num;
 
 	// tables of data (pixels of the sprite)
-	BOBtableP2 = (char **)(memGestion->reserveMem(sizeof(Sint32) * animationN, 0x424F4250));
+	BOBtableP2 = (char **)(memGestion->reserveMem(sizeof(char *) * animationN, 0x424F4250));
 	error_init(memGestion->retour_err());
 	if(erreur_num) return erreur_num;
 
 	// tables of offsets and counters (byte peer byte)
 	if(fTableByte) 
-	{	BOBtableP3 = (Sint16 **)(memGestion->reserveMem(sizeof(Sint32) * animationN, 0x424F4250));
+	{	BOBtableP3 = (Sint16 **)(memGestion->reserveMem(sizeof(Sint16 *) * animationN, 0x424F4250));
 		error_init(memGestion->retour_err());
 		if(erreur_num) return erreur_num;
 	}	
@@ -357,7 +357,7 @@ Sint32 BOB_killer::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sin
 	// table giving address of each BOBs into BOBs page 
 	//###################################################################
 	adresseTAB = (char **)
-		(memGestion->reserveMem(sizeof(Sint32) * animationN, 0x424F4250));
+		(memGestion->reserveMem(sizeof(char *) * animationN, 0x424F4250));
 	error_init(memGestion->retour_err());
 	if(erreur_num) return erreur_num;
 	offsetSrce = image->GFX_modulo(BOBlargeur);
