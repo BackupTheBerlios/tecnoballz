@@ -5,7 +5,7 @@
 // created	: 2004-03-22
 // updates	: 2005-08-26
 // functions	: handler music and sound
-// id		: $Id: audiomixer.cc,v 1.5 2006/06/12 13:18:08 sukria Exp $
+// id		: $Id: audiomixer.cc,v 1.6 2006/06/16 08:54:07 sukria Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -350,7 +350,8 @@ Sint32 audiomixer::playModule(Uint32 modnu)
 		return (erreur_num = E_SDLMIXER);
 	}
 	// Ugly way to access sdl-mixer's internal structures.
-	memcpy(&ptModAmiga, (Uint8 *)pMixmodule + sizeof(int), sizeof(void *));
+	union { int i; void *p; } dummy;
+	memcpy(&ptModAmiga, (Uint8 *)pMixmodule + sizeof(dummy), sizeof(void *));
 
 
 	//###################################################################
