@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2005-01-19
-// id		: $Id: configfile.h,v 1.3 2005/01/23 19:52:24 gurumeditation Exp $
+// id		: $Id: configfile.h,v 1.4 2006/06/21 13:46:04 patrice Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,8 +22,15 @@
 //*****************************************************************************
 #ifndef __CONFIGFILE__
 #define __CONFIGFILE__
+
 #include <SDL/SDL.h>
+
+#ifdef _WIN32
+#include <direct.h>
+#else
 #include <dirent.h>
+#endif
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "../include/mentatCode.h"

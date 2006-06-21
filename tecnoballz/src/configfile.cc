@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2005-08-26
-// id		: $Id: configfile.cc,v 1.9 2005/08/26 20:04:02 gurumeditation Exp $
+// id		: $Id: configfile.cc,v 1.10 2006/06/21 13:46:04 patrice Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -24,9 +24,17 @@
 #include "../include/ecran_hard.h"
 #include "../include/audiomixer.h"
 #include "../include/joueurData.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef _WIN32
+	#ifndef _S_ISDIR
+	#define _S_ISDIR(m) (((m) & _S_IFMT) == _S_IFDIR)
+	#endif
+#endif
+
 //..............................................................................
 
 //------------------------------------------------------------------------------
@@ -100,6 +108,13 @@ void configfile::configinfo()
 //------------------------------------------------------------------------------
 Sint32 configfile::tocheckdir()
 {
+#ifdef _WIN32
+
+	// opendir don't exist on windows
+	// create directory if not exist
+	MKDIR(config_dir, S_IRWXU );
+
+#else
 	/* test and create .tlkgames */
 	if(!opendir(config_dir)) {
 		fprintf(stderr, "couldn't find/open config directory '%s'\n", config_dir);
@@ -112,6 +127,7 @@ Sint32 configfile::tocheckdir()
 		else
 			fprintf(stderr, "ok\n");
 	} 
+#endif
 	return 1;
 }
 
@@ -124,8 +140,13 @@ void configfile::loadconfig()
 	resetvalue();
 
 	//generate user directory name
+#ifdef _WIN32
+	_snprintf(config_dir, sizeof(config_dir) - 1, "%s/%s",
+		(getenv( "HOME" )?getenv( "HOME" ):"."), CONFIG_DIR_NAME );
+#else
 	snprintf(config_dir, sizeof(config_dir) - 1, "%s/%s",
 		(getenv( "HOME" )?getenv( "HOME" ):"."), CONFIG_DIR_NAME );
+#endif
 	
 	//read config from user directory	
 	FILE *pfile = NULL;
