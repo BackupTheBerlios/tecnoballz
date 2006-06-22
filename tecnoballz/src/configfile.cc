@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2005-08-26
-// id		: $Id: configfile.cc,v 1.10 2006/06/21 13:46:04 patrice Exp $
+// id		: $Id: configfile.cc,v 1.11 2006/06/22 13:42:59 patrice Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -28,12 +28,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef _WIN32
-	#ifndef _S_ISDIR
-	#define _S_ISDIR(m) (((m) & _S_IFMT) == _S_IFDIR)
-	#endif
-#endif
 
 //..............................................................................
 

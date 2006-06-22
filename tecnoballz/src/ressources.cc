@@ -5,7 +5,7 @@
 // created	: 2004-04-20
 // updates	: 2005-01-15
 // fonctions	: manage ressources
-// id		: $Id: ressources.cc,v 1.6 2005/07/21 15:03:48 sukria Exp $
+// id		: $Id: ressources.cc,v 1.7 2006/06/22 13:42:59 patrice Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -31,6 +31,12 @@
 
 #ifndef SCOREFILE
 	#define SCOREFILE "/var/lib/games/tecnoballz.hi"
+#endif
+
+#ifdef _WIN32
+	#ifndef _S_ISDIR
+	#define _S_ISDIR(m) (((m) & _S_IFMT) == _S_IFDIR)
+	#endif
 #endif
 
 //...............................................................................
