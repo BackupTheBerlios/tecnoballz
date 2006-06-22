@@ -105,7 +105,7 @@ Sint32 scrolledit::first_init()
 	//Sint32	edmap = lastScroll::MAPED_GARD;
 	Sint32	edmap = lastScroll::MAPED_CONG;
 	
-	error_init(defilement->initialise(lastScroll::COLOR_MENU, edmap));
+	error_init(defilement->initialise(lastScroll::TECZ_COLOR_MENU, edmap));
 	if(erreur_num) return (erreur_num);
 	ptrGBitMap = defilement->getBitMap();
 	

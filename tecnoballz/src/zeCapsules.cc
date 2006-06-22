@@ -106,11 +106,11 @@ void zeCapsules::bouge_fric()
 	for(Sint32 i = 0; i < objetTotal; i++)
 	{	tecno_caps *capsu = objetListe[i];
 		capsu->animRepete();
-		Sint32 i = capsu->deplaceMoi();
-		if(i)
+		Sint32 j = capsu->deplaceMoi();
+		if(j)
 		{	joueurGere->add_scores(20);
-			ptPrntmney->creditPlus(i);
-			//printf("zeCapsules::bouge_fric() : %i\n", i);
+			ptPrntmney->creditPlus(j);
+			//printf("zeCapsules::bouge_fric() : %i\n", j);
 		}
 	}
 }
@@ -152,10 +152,10 @@ void zeCapsules::bougefric2()
 	for(Sint32 i = 0; i < objetTotal; i++)
 	{	tecno_caps *capsu = objetListe[i];
 		capsu->animRepete();
-		Sint32 i = capsu->deplaceMe2();
-		if(i)
-		{	//printf("zeCapsules::bouge_fric2() : %i\n", i);
-			ptPrntmney->creditPlus(i);
+		Sint32 j = capsu->deplaceMe2();
+		if(j)
+		{	//printf("zeCapsules::bouge_fric2() : %i\n", j);
+			ptPrntmney->creditPlus(j);
 			joueurGere->add_scores(20);
 		}
 	}

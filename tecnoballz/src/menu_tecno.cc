@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.3 2005/02/04 13:31:09 gurumeditation Exp $
+// id		: $Id: menu_tecno.cc,v 1.4 2006/06/22 07:02:28 patrice Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -84,7 +84,7 @@ Sint32 menu_tecno::first_init()
 	pRessource->freeSprite();
 	if(erreur_num) return (erreur_num);
 
-	error_init(defilement->initialise(lastScroll::COLOR_MENU,
+	error_init(defilement->initialise(lastScroll::TECZ_COLOR_MENU,
 		lastScroll::MAPED_MENU));
 	if(erreur_num) return (erreur_num);
 

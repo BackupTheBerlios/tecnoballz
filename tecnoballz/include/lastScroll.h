@@ -35,7 +35,7 @@ class lastScroll:public virtual mentatCode
 	
 	public:
 		static const Uint32		COLOR_GARD = 0;
-		static const Uint32		COLOR_MENU = 1;
+		static const Uint32		TECZ_COLOR_MENU = 1;
 		static const Uint32		COLOR_CONG = 2;
 		static const Uint32		MAPED_GARD = 0;
 		static const Uint32		MAPED_MENU = 1;
