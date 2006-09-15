@@ -4,7 +4,7 @@
 // file		: "ecran_hard.cc"
 // created	: 2002-08-17
 // updates	: 2005-01-10
-// id		: $Id: ecran_hard.cc,v 1.6 2005/07/17 16:13:38 gurumeditation Exp $
+// id		: $Id: ecran_hard.cc,v 1.7 2006/09/15 13:15:54 patrice Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -366,7 +366,10 @@ void ecran_hard::waitVBLtec()
 	fpscounter++;
 	fps_totale = fps_totale + durat;
 	if(fpscounter >= 100)
-	{	framepeers = 1000 * fpscounter / fps_totale;
+	{	
+		if (fps_totale != 0) {      // fix crash : divide by zero !
+			framepeers = 1000 * fpscounter / fps_totale;
+		}
 		fpscounter = 0;
 		fps_totale = 0;
 	}
