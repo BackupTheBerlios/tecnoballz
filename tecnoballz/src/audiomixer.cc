@@ -5,7 +5,7 @@
 // created	: 2004-03-22
 // updates	: 2005-08-26
 // functions	: handler music and sound
-// id		: $Id: audiomixer.cc,v 1.6 2006/06/16 08:54:07 sukria Exp $
+// id		: $Id: audiomixer.cc,v 1.7 2006/09/17 13:49:00 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -118,12 +118,14 @@ Sint32 audiomixer::initialise()
 			audioactif = 0;
 			return E_NO_ERROR;
 	}
+	//if(Mix_OpenAudio(44100, AUDIO_U8, 2, 4096))
 	if(Mix_OpenAudio(44100, AUDIO_S16, 2, 4096))
 	{	fprintf(stderr,"audiomixer::initialise(): %s\n",SDL_GetError());
 		audioactif = 0;
 		SDL_Quit();
 		return E_NO_ERROR;
 	}
+	//query_spec();
 	musicVolum = Mix_VolumeMusic(-1);
 	Mix_AllocateChannels(8);
 	
