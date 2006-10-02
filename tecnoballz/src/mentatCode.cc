@@ -1,10 +1,10 @@
 //*****************************************************************************
-// copyright (c) 1991-2005 TLK Games all rights reserved
+// copyright (c) 1991-2006 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
-// updates	: 2005-07-07
-// id		: $Id: mentatCode.cc,v 1.8 2005/07/17 16:13:38 gurumeditation Exp $
+// updates	: 2006-10-02
+// id		: $Id: mentatCode.cc,v 1.9 2006/10/02 14:03:30 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -75,6 +75,7 @@ Sint32				mentatCode::nuOfPlayer = 1;
 char				mentatCode::chainelog[100];
 const char			mentatCode::nomprefix[] = PREFIX;
 Sint32				mentatCode::resolution = 2; 
+bool				mentatCode::bob_ground = false;
 char				mentatCode::zeAreaCode[11] =
 					"          ";
 

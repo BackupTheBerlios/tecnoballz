@@ -1,10 +1,10 @@
 //******************************************************************************
-// Copyright (C) 1998-2005 TLK Games all rights reserved.
+// Copyright (C) 1998-2006 TLK Games all rights reserved.
 //------------------------------------------------------------------------------
 // file         : "configfile.cpp"
 // created      : 2005-01-19
-// updates      : 2005-08-26
-// id		: $Id: configfile.cc,v 1.11 2006/06/22 13:42:59 patrice Exp $
+// updates      : 2006-10-02
+// id		: $Id: configfile.cc,v 1.12 2006/10/02 14:03:30 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -67,6 +67,7 @@ void	configfile::resetvalue()
 	audiomixer::audioactif = 1;
 #endif
 	resolution = 2;
+	bob_ground = true;
 	is_verbose = 0;
 	ecran_hard::optionfull = 0;
 	hardChoice = 1;	
@@ -176,7 +177,10 @@ void configfile::loadconfig()
 	if (!reader.read_int("resolution", &resolution))
 		resolution = 2;
 	if(resolution < 1 || resolution > 2) resolution = 2;
-
+	if(resolution == 2)
+		bob_ground = true;
+	else
+		bob_ground = false;
 	//read number of lifes: 1 to 9
 	if (!reader.read_int("lifes", &vieInitial))
 		vieInitial = 8 ;
@@ -318,7 +322,7 @@ Sint32 configfile::scanZeArgs(Sint32 nbArg, char **ptArg)
 		if(!strcmp(ptArg[_iIndex], "--version"))
 		{	printf(TECNOBALLZ_VERSION);
 			printf("\n");
-			printf("copyright (c) 1991-2005 TLK Games\n");
+			printf("copyright (c) 1991-2006 TLK Games\n");
 			printf("website: http://linux.tlk.fr\n");
 			return 0;
 		}

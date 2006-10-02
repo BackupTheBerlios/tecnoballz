@@ -1,11 +1,11 @@
 //*****************************************************************************
-// copyright (c) 1991-2005 TLK Games all rights reserved
+// copyright (c) 1991-2006 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "tableaux_Z.cc"
 // created	: ?
-// updates	: 2005-01-19
+// updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.4 2005/01/19 20:38:11 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.5 2006/10/02 14:03:30 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software

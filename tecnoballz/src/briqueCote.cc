@@ -1,9 +1,9 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2006 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "briqueCote.cc"
-// created		: ?
-// updates		: 2004-06-13
+// created	: ?
+// updates	: 2006-10-02
 // fonction	: handle small bricks on the side (walls top, left and right)
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -33,10 +33,10 @@ briqueCote::briqueCote()
 	mentatInit();
 	bricote_hz = (BOB_killer *)NULL;	//sprite object (small horizontal bricks)
 	bricote_vt = (BOB_killer *)NULL;	//sprite object (small vertical bricks)
-	mur_duhaut = 0;						//0=wall of the top is unbreakable
-	mur_droite = 0;						//0=wall of the right is unbreakable
-	mur_gauche = 0;						//0=wall of the left is unbreakable
-	fond_sauve = (char *)NULL;			//buffer to save background under bricks
+	mur_duhaut = 0;				//0=wall of the top is unbreakable
+	mur_droite = 0;				//0=wall of the right is unbreakable
+	mur_gauche = 0;				//0=wall of the left is unbreakable
+	fond_sauve = (char *)NULL;		//buffer to save background under bricks
 	pCoteTable = (coteStruct *)NULL;
 	iCoteSauve = 0;
 	iCoteRemap = 0;
@@ -47,6 +47,11 @@ briqueCote::briqueCote()
 	map_duHaut[1] = map_droite[1] = mapgauche0[1] = 0;
 	map_duHaut[BRICOTENUM-2] = map_droite[BRICOTENUM-2] = mapgauche0[BRICOTENUM-2] = 0;
 	map_duHaut[BRICOTENUM-1] = map_droite[BRICOTENUM-1] = mapgauche0[BRICOTENUM-1] = -1;
+	for(Uint32 i = 0; i < BRICOTENUM; i++)
+	{	bobwal_top[i] = NULL;
+		bobwal_lef[i] = NULL;
+		bobwal_rgh[i] = NULL;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -67,11 +72,25 @@ briqueCote::~briqueCote()
 	{	memGestion->liberation(fond_sauve);
 		fond_sauve = NULL;
 	}
+	for(Uint32 i = 0; i < BRICOTENUM; i++)
+	{	if(bobwal_top[i] != NULL) 
+		{	delete bobwal_top[i];
+			bobwal_top[i] = NULL;
+		}
+		if(bobwal_lef[i] != NULL) 
+		{	delete bobwal_lef[i];
+			bobwal_lef[i] = NULL;
+		}
+		if(bobwal_rgh[i] != NULL) 
+		{	delete bobwal_rgh[i];
+			bobwal_rgh[i] = NULL;
+		}
+	}
 	mentatKill();
 }
 
 //-----------------------------------------------------------------------------
-//	perform some initializations
+// perform some initializations
 //-----------------------------------------------------------------------------
 Sint32 briqueCote::initialise(Sint32 build)
 {
@@ -107,9 +126,9 @@ Sint32 briqueCote::initialise(Sint32 build)
 	if(area < 5 || build > 0)
 	{	Sint32 k = -1;
 		for(Uint32 i = 0; i < BRICOTENUM; i++)
-		{		map_gauche[i] = k;
-				map_duHaut[i] = k;
-				map_droite[i] = k;
+		{	map_gauche[i] = k;
+			map_duHaut[i] = k;
+			map_droite[i] = k;
 		}
 	}
 
@@ -177,6 +196,12 @@ Sint32 briqueCote::initialise(Sint32 build)
 	error_init(memGestion->retour_err());
 	if(erreur_num)
 		return (erreur_num);
+	
+	//###################################################################
+	// initialize the sprites of the walls (bob_ground = 1)
+	//###################################################################
+	error_init(bobbg_init());
+	if(erreur_num) return (erreur_num);
 
 	//###################################################################
 	//allocate memory for the redraw bricks table
@@ -185,6 +210,47 @@ Sint32 briqueCote::initialise(Sint32 build)
 		(coteStruct *) memGestion->reserveMem(iMAXBRICOT * sizeof(coteStruct),
 			0x54425243);
 	error_init(memGestion->retour_err());
+	return erreur_num;
+}
+
+//-----------------------------------------------------------------------------
+// initialize the sprites of the walls (bob_ground = 1)
+//-----------------------------------------------------------------------------
+Sint32 briqueCote::bobbg_init()
+{
+	if(!bob_ground) return erreur_num; 
+	Sint32 x = BRICOTEHRX * resolution;
+	Sint32 yg = BRICOTEGAY * resolution;
+	Sint32 yd = BRICOTEDRY * resolution;
+	Sint32 lg = bricote_hz->getLargeur();
+	Sint32 ht = bricote_vt->getHauteur();
+	for(Uint32 i = 0; i < BRICOTENUM; i++)	//12 bricks per wall
+	{
+		bobwal_top[i] = new BOB_killer();
+		error_init(bobwal_top[i]->initialise(BOB_BRICKH, image_BOBs, 1));
+		if(erreur_num) return (erreur_num);
+		BOBgestion->ajoute_BOB(bobwal_top[i]);
+		bobwal_top[i]->coordonnee(x, BRICOTEHRY * resolution);
+		if(map_duHaut[i]) bobwal_top[i]->BOB_active();
+
+		bobwal_lef[i] = new BOB_killer();
+		error_init(bobwal_lef[i]->initialise(BOB_BRICKV, image_BOBs, 1));
+		if(erreur_num) return (erreur_num);
+		BOBgestion->ajoute_BOB(bobwal_lef[i]);
+		bobwal_lef[i]->coordonnee(BRICOTEGAX * resolution, yg);
+		if(map_gauche[i]) bobwal_lef[i]->BOB_active();
+
+		bobwal_rgh[i] = new BOB_killer();
+		error_init(bobwal_rgh[i]->initialise(BOB_BRICKV, image_BOBs, 1));
+		if(erreur_num) return (erreur_num);
+		BOBgestion->ajoute_BOB(bobwal_rgh[i]);
+		bobwal_rgh[i]->coordonnee(BRICOTEDRX * resolution, yd);
+		if(map_droite[i]) bobwal_rgh[i]->BOB_active();
+
+		x += lg;
+		yd += ht;
+		yg += ht;
+	}
 	return erreur_num;
 }
 
@@ -265,10 +331,22 @@ void briqueCote::sauveFond()
 	}
 }
 
+
+//-----------------------------------------------------------------------------
+// clear bricks
+//-----------------------------------------------------------------------------
+void briqueCote::execution1()
+{
+	if(!bob_ground) 
+		execution2();
+	else
+		execution3();
+}
+
 //-----------------------------------------------------------------------------
 // restore the background under the brick
 //-----------------------------------------------------------------------------
-void briqueCote::execution1()
+void briqueCote::execution2()
 {
 	coteStruct *_pCote = pCoteTable + iCoteRemap;
 	Sint32 _iType = _pCote->iCote_type;
@@ -368,10 +446,25 @@ void briqueCote::execution1()
 }
 
 //-----------------------------------------------------------------------------
+// disable sprites of wall 
+//-----------------------------------------------------------------------------
+void briqueCote::execution3()
+{
+	for(Uint32 i = 0; i < BRICOTENUM; i++)
+	{
+		if(bobwal_top[i]->BOBisactiv() && !map_duHaut[i]) bobwal_top[i]->BOB_desact();
+		if(bobwal_lef[i]->BOBisactiv() && !map_duHaut[i]) bobwal_lef[i]->BOB_desact();
+		if(bobwal_rgh[i]->BOBisactiv() && !map_duHaut[i]) bobwal_rgh[i]->BOB_desact();
+
+	}
+}
+
+//-----------------------------------------------------------------------------
 // display bricks shadows (before a bricks level) 
 //-----------------------------------------------------------------------------
 void briqueCote::afficheSha()
 {
+	if(bob_ground) return;
 	Sint32 x = BRICOTEHRX * resolution;
 	Sint32 yg = BRICOTEGAY * resolution;
 	Sint32 yd = BRICOTEDRY * resolution;
@@ -401,6 +494,7 @@ void briqueCote::afficheSha()
 //-----------------------------------------------------------------------------
 void briqueCote::afficheGfx()
 {
+	if(bob_ground) return;
 	Sint32 x = BRICOTEHRX * resolution;
 	Sint32 yg = BRICOTEGAY * resolution;
 	Sint32 yd = BRICOTEDRY * resolution;

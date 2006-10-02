@@ -1,9 +1,9 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2006 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "ejectBalls.cc"
-// created		: ?
-// updates		: 2004-05-21
+// created	: ?
+// updates	: 2006-10-02
 // fonction	: manage ejectors objects 
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -33,6 +33,7 @@ ejectBalls::ejectBalls()
 	ejector_02 = new BOB_killer();
 	ejector_03 = new BOB_killer();
 	ejector_04 = new BOB_killer();
+		
 }
 
 //-------------------------------------------------------------------------------
@@ -79,6 +80,19 @@ Sint32 ejectBalls::initialise()
 	eject4PosY = (EJECT_POS2 * resolution) - ejector_04->getHauteur() / 2;	
 	if(erreur_num) return erreur_num;
 	ejector_04->coordonnee(eject4PosX, eject4PosY);
+	
+	// bob_ground = 1: ejectors are managed like sprites  
+	if(bob_ground)
+	{	BOBgestion->ajoute_BOB(ejector_01);
+		BOBgestion->ajoute_BOB(ejector_02);
+		BOBgestion->ajoute_BOB(ejector_03);
+		BOBgestion->ajoute_BOB(ejector_04);
+		ejector_01->BOB_active();
+		ejector_02->BOB_active();
+		ejector_03->BOB_active();
+		ejector_04->BOB_active();
+	}
+	printf("bob_ground : %i\n", bob_ground);
 	return erreur_num;
 }
 
@@ -87,6 +101,7 @@ Sint32 ejectBalls::initialise()
 //-----------------------------------------------------------------------------
 void ejectBalls::afficheSha()
 {
+	if(bob_ground) return;
 	ejector_01->affich_SHA();
 	ejector_02->affich_SHA();
 	ejector_03->affich_SHA();
@@ -98,6 +113,7 @@ void ejectBalls::afficheSha()
 //-----------------------------------------------------------------------------
 void ejectBalls::afficheGfx()
 {
+	if(bob_ground) return;
 	ejector_01->affich_MSK();
 	ejector_02->affich_MSK();
 	ejector_03->affich_MSK();
