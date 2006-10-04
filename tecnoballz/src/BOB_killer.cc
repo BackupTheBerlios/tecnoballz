@@ -1,11 +1,11 @@
 //*****************************************************************************
-// copyright (c) 1991-2005 TLK Games all rights reserved
+// copyright (c) 1991-2006 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "BOB_killer.cc"
 // created	: ?
-// updates	: 2005-01-18
+// updates	: 2005-10-04
 // fonctions	: Sprites or shapes on the screen
-// id		: $Id: BOB_killer.cc,v 1.7 2006/06/12 13:18:08 sukria Exp $
+// id		: $Id: BOB_killer.cc,v 1.8 2006/10/04 11:14:05 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -1707,6 +1707,8 @@ bb_describ BOB_NUM014 = { 16, 16, 42, BOB_POS014 };
 // LED du magasin --------------------------------------------------------------
 bbPosition BOB_POS015[] = { {13, 0} };
 bb_describ BOB_NUM015 = { 16, 3, 1, BOB_POS015 };
+bbPosition BOB_POS057[] = { {15, 0} };
+bb_describ BOB_NUM057 = { 16, 5, 1, BOB_POS057 };
 
 // GAME OVER -------------------------------------------------------------------
 bbPosition BOB_POS016[] =
@@ -1890,7 +1892,7 @@ const bb_describ *BOB_killer::zelistBOB[] =
 	&BOB_NUM012,	// Capsule of money
 	&BOB_NUM013,	// Gadgets (bonuses or maluses)
 	&BOB_NUM014,	// Lettres (annonce)
-	&BOB_NUM015,	// LED du magasin
+	&BOB_NUM015,	// shop's led (low-res) 
 	&BOB_NUM016,	// Lettres GameOver
 	&BOB_NUM017,	// Lettres defilement menu
 	&BOB_NUM018,	// Logo TecnoballZ
@@ -1931,7 +1933,8 @@ const bb_describ *BOB_killer::zelistBOB[] =
 	&BOB_NUM053,
 	&BOB_NUM054,	//directeur
 	&BOB_NUM055,	//echape menu
-	&BOB_NUM056		//maget eye
+	&BOB_NUM056,	//maget eye
+	&BOB_NUM057,	//shop's led (high-res)
 };
 
 

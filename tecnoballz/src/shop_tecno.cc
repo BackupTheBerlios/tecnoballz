@@ -1,11 +1,11 @@
 //******************************************************************************
-// copyright (c) 1991-2005 TLK Games all rights reserved
+// copyright (c) 1991-2006 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "shop_tecno.cc"
 // created	: ?
-// updates	: 2005-01-19
+// updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.2 2005/01/19 20:38:11 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.3 2006/10/04 11:14:05 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -145,7 +145,10 @@ Sint32 shop_tecno::first_init()
 	//###################################################################
 	// Initialize LED 
 	//###################################################################
-	error_init(BOB_allume->initialise(BOB_LEDSHP, image_BOBs, 0));
+	if(resolution == 1) 
+		error_init(BOB_allume->initialise(BOB_LEDSHP, image_BOBs, 0));
+	else 
+		error_init(BOB_allume->initialise(BOB_LEDSH2, image_BOBs, 0));
 	if(erreur_num) return erreur_num;
 	BOBgestion->ajoute_BOB(BOB_allume);
 	BOB_allume->BOB_active();
@@ -340,7 +343,11 @@ Sint32 shop_tecno::testkursor(Sint32 x, Sint32 y)
 			x = 0;
 		Sint32 i = x + 6 * y;
 		curseur_x1 = (x * (48 * resolution)) + (17 * resolution);
-		curseur_y1 = (y * (44 * resolution)) + (36 * resolution);
+		
+		if(resolution == 1)
+			curseur_y1 = (y * (44 * resolution)) + (36 * resolution);
+		else
+ 			curseur_y1 = (y * (44 * resolution)) + (35 * resolution);
 		return i;
 	}
 }

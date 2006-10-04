@@ -453,8 +453,8 @@ void briqueCote::execution3()
 	for(Uint32 i = 0; i < BRICOTENUM; i++)
 	{
 		if(bobwal_top[i]->BOBisactiv() && !map_duHaut[i]) bobwal_top[i]->BOB_desact();
-		if(bobwal_lef[i]->BOBisactiv() && !map_duHaut[i]) bobwal_lef[i]->BOB_desact();
-		if(bobwal_rgh[i]->BOBisactiv() && !map_duHaut[i]) bobwal_rgh[i]->BOB_desact();
+		if(bobwal_lef[i]->BOBisactiv() && !map_gauche[i]) bobwal_lef[i]->BOB_desact();
+		if(bobwal_rgh[i]->BOBisactiv() && !map_droite[i]) bobwal_rgh[i]->BOB_desact();
 
 	}
 }

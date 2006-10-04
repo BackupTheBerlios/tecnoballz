@@ -1,9 +1,9 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2006 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "zexplosion.cc"
-// created		: 2003-03-02
-// updates		: 2004-10-23
+// created	: 2003-03-02
+// updates	: 2006-10-03
 // fonction	: handle explosions
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
