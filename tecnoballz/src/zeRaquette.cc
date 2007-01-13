@@ -1,25 +1,30 @@
-//*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file		: "zeRaquette.cc"
-// created		: ?
-// updates		: 2004-10-23
-// fonction	: manage the bumpers
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA  02111-1307, USA.
-//*****************************************************************************
+/** 
+ * @file zeRaquette.cc
+ * @brief Manage the bumpers 
+ * @date 2007-01-13
+ * @copyright 1998-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.2 $
+ */
+/* 
+ * copyright (c) 1998-2007 TLK Games all rights reserved
+ * $Id: zeRaquette.cc,v 1.2 2007/01/13 21:04:28 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
 #include "../include/zeRaquette.h"
 #include "../include/ressources.h"
 #include "../include/joueurData.h"
@@ -38,7 +43,7 @@ zeRaquette::zeRaquette()
 	tecBumper4 = NULL;
 	tec_robot0 = NULL;
 	objetTotal = 5;
-	objetOmbre = 1;
+	objects_have_shades = true;
 	BOBtypeNum = BOB_BUMPHR;
 	raket_team = 0;
 	raketLarge = 64 * resolution;
@@ -74,7 +79,7 @@ zeRaquette::zeRaquette(Sint32 nBob)
 	tecBumper4 = NULL;
 	tec_robot0 = NULL;
 	objetTotal = 1;
-	objetOmbre = 1;
+	objects_have_shades = true;
 	fTableByte = 0;
 	BOBtypeNum = BOB_BUMPER;
 	raket_team = 0;
@@ -742,7 +747,7 @@ Sint32 zeRaquette::ballePets3[14] =
 	36, 40, 44, 48, 52, 56, 60
 };
 Sint32 zeRaquette::ballePets4[14] =
-{	12, 8, 04, 0, 60, 56, 52,
+{	12, 8, 4, 0, 60, 56, 52,
 	52, 56, 60, 0, 4, 8, 12
 };
 

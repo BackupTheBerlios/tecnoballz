@@ -30,7 +30,7 @@ zeFireBump::zeFireBump()
 	littleInit();
 	countTempo = 0;
 	objetTotal = NUMBERFIRE;
-	objetOmbre = 0;
+	objects_have_shades = false;
 	BOBtypeNum = BOB_FIREBP;
 	if(resolution == 1)
 		scie_sinus = &scieSin320[0];

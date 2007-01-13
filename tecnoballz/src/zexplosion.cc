@@ -30,7 +30,7 @@ zexplosion::zexplosion()
 {
 	littleInit();
 	objetTotal = 28;
-	objetOmbre = 0;
+	objects_have_shades = false;
 	vFrequency = 0;
 	BOBtypeNum = BOB_EXPLO1;
 }

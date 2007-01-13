@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-23
 // fonction	: manage mobiles characters ("LEVEL x COMPLETED")
-// id		: $Id: zeMoveText.cc,v 1.3 2005/01/23 20:44:01 gurumeditation Exp $
+// id		: $Id: zeMoveText.cc,v 1.4 2007/01/13 21:04:28 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -33,7 +33,7 @@ zeMoveText::zeMoveText()
 	size_line2 = 0;
 	horz_large = 0;
 	objetTotal = 20;
-	objetOmbre = 1;
+	objects_have_shades = true;
 	BOBtypeNum = BOB_LETTRE;
 	chrOffsetX = 0;
 }

@@ -31,7 +31,7 @@ zeMissiles::zeMissiles(tecno_bump *pBump, zexplosion *pexpl)
 {
 	littleInit();
 	objetTotal = 48;
-	objetOmbre = 0;
+	objects_have_shades = false;
 	BOBtypeNum = BOB_MISSIL;
 	ptbumper01 = pBump;
 	pexplosion = pexpl;

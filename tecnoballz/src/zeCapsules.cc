@@ -31,7 +31,7 @@ zeCapsules::zeCapsules()
 {
 	littleInit();
 	objetTotal = 6;
-	objetOmbre = 1;
+	objects_have_shades = true;
 	BOBtypeNum = BOB_MONEYS;
 }
 

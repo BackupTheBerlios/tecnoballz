@@ -35,7 +35,7 @@ lesBriques::lesBriques()
 		objetTotal = NB_BRICKSH * NB_BRICKSV;
 	else
 		objetTotal = 0;
-	objetOmbre = 1;
+	objects_have_shades = true;
 	BOBtypeNum = BOB_BRICK1;
 	brique_pnt = (brickClear *)NULL;
 	brikTampon = (char *)NULL;

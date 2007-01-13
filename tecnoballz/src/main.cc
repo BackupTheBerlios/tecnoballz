@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.4 2005/07/17 16:13:38 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.5 2007/01/13 21:04:28 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -59,3 +59,88 @@ int main(Sint32 nbArg, char **ptArg)
 	oConfigure.saveconfig();
 	return error;
 }
+
+
+/*
+ 
+BOB_killer     => sprite_object
+
+technoBall     => sprite_ball
+techno_eye.cc  => sprite_eye
+techno_gem.cc  => sprite_gem
+tecno_boui.cc  => sprite_ship
+tecno_bump.cc  => sprite_pad
+tecno_caps.cc  => sprite_money
+tecnoDefil.cc  => sprite_fonte_menu
+tecno_fire.cc  => sprite_fire
+tecno_gads.cc  => sprite_capsules
+tecno_gard.cc  => sprite_guardian
+tecno_miss.cc  => sprite_bullet
+tecno_text.cc  => sprite_fonte_game
+ 
+
+audiomixer.cc  => audio_handler
+clavierMac.cc  => keyboard_handler
+ecran_hard.cc  => display_handler
+RAM_killer.cc  => memory_handler
+
+ballDirect.cc
+barreScore.cc
+briqueCote.cc
+configfile.cc
+ejectBalls.cc
+escapeMenu.cc
+fond_ecran.cc
+gard_tecno.cc
+GFX_bitmap.cc
+GIF_bitMap.cc
+giga_blitz.cc
+head_anima.cc
+joueurData.cc
+lastScroll.cc
+lesBriques.cc
+level_data.cc
+lispreader.cc
+liste_BOBs.cc
+main.cc
+mentatCode.cc
+menu_tecno.cc
+mousePoint.cc
+print_menu.cc
+printmoney.cc
+print_text.cc
+ressources.cc
+runGestion.cc
+score_over.cc
+scoretable.cc
+scrolledit.cc
+shop_tecno.cc
+tableaux_Z.cc
+eBouiBoui.cc
+zeCapsules.cc
+zeCongBall.cc
+zeDefilTxt.cc
+zeFireBump.cc
+ze_gadgets.cc
+zeGameOver.cc
+zeGemstone.cc
+zeGigaBlit.cc
+zeguardian.cc
+ze_magneye.cc
+zeMiniMess.cc
+zeMissiles.cc
+zeMoveText.cc
+zeNewBalls.cc
+zeRaquette.cc
+
+
+
+*/
+ 
+  
+ 
+ 
+ 
+ 
+
+

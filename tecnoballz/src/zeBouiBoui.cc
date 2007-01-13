@@ -34,7 +34,7 @@ zeBouiBoui::zeBouiBoui(zeCapsules* pCaps, ze_gadgets* ptGad, zeGemstone* ptGem,
 	pt_briques = pBrik;
 	littleInit();
 	objetTotal = 8;
-	objetOmbre = 1;
+	objects_have_shades = true;
 	BOBtypeNum = BOB_ATOMES;
 }
 

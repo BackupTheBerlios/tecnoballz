@@ -42,7 +42,8 @@ zeGigaBlit::zeGigaBlit()
 {
 	littleInit();
 	objetTotal = NOMBREGIGA;			// there are 7 different Gigablitz
-	objetOmbre = 0;						// now shadow
+  /* shadow disable */
+	objects_have_shades = false;
 	brickObjet = (lesBriques *)NULL;
 	gugusObjet = (head_anima *)NULL;
 	ptRaquette = (zeRaquette *)NULL;

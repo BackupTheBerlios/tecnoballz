@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.3 2005/01/19 20:38:11 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.4 2007/01/13 21:04:28 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -51,7 +51,7 @@ ze_gadgets::ze_gadgets(Sint32 total, Sint32 vShad)
 	bonus_step = 0;
 	course_ptr = 0;
 	objetTotal = 6;
-	objetOmbre = vShad;
+	objects_have_shades = vShad;
 	fTableByte = 1;
 	//fTableByte = 0;	//test only
 	BOBtypeNum = BOB_GADGET;

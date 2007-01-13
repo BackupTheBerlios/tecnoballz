@@ -31,7 +31,7 @@ ballDirect::ballDirect()
 {
 	littleInit();
 	objetTotal = 4;
-	objetOmbre = 0;
+	objects_have_shades = false;
 	BOBtypeNum = BOB_DIRECT;
 	numBumpers = 0;
 }

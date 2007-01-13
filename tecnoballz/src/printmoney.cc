@@ -29,7 +29,7 @@ printmoney::printmoney()
 {
 	littleInit();
 	objetTotal = 8;
-	objetOmbre = 0;
+	objects_have_shades = false;
 	y_position = YINVERSEUR * resolution;
 	BOBtypeNum = BOB_MONEY0;
 	money_posy = y_position;

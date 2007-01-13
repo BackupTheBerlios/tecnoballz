@@ -29,7 +29,7 @@ zeDefilTxt::zeDefilTxt()
 {
 	littleInit();
 	objetTotal = DEFINUMBER + 2;
-	objetOmbre = 1;
+	objects_have_shades = true;
 	BOBtypeNum = BOB_DEFILE;
 	offset_xx1 = 0;
 	offset_yy1 = 0;

@@ -58,7 +58,7 @@ zeNewBalls::zeNewBalls(ejectBalls *eject, lesBriques *brick, briqueCote *brico,
 	balle_tilt = 60;
 	balleVites = technoBall::donneSpeed(1);
 	objetTotal = 20;
-	objetOmbre = 1;
+	objects_have_shades = 1;
 	balle_ctrl = 0;
 	BOBtypeNum = BOB_BALLES;
 }
@@ -90,7 +90,7 @@ zeNewBalls::zeNewBalls(zeguardian *pGard, zeCapsules *pCaps, ze_gadgets *pGads)
 	balle_tilt = 60;
 	balleVites = technoBall::donneSpeed(1);
 	objetTotal = 20;
-	objetOmbre = 1;
+	objects_have_shades = true;
 	balle_ctrl = 0;
 	BOBtypeNum = BOB_BALLES;
 }

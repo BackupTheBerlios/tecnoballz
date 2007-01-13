@@ -35,7 +35,7 @@ zeCongBall::zeCongBall()
 {
 	littleInit();
 	objetTotal = 8;				//there are 8 letters 
-	objetOmbre = 1;				//shadow enable
+	objects_have_shades = true;				//shadow enable
 	BOBtypeNum = BOB_ARGENT;
 	speed_rad0 = 0;
 	speed_rad1 = 0;

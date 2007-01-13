@@ -31,7 +31,7 @@ zeGemstone::zeGemstone()
 {
 	littleInit();
 	objetTotal = NUMBER_GEM;
-	objetOmbre = 1;
+	objects_have_shades = true;
 	BOBtypeNum = BOB_GEMSTO;
 }
 

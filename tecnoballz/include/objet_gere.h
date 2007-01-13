@@ -35,7 +35,7 @@ template < class X > class objet_gere:public virtual mentatCode
 		X**					objetListe;
 		Sint32				objetTotal;
 		Sint32				objetNombr;
-		Sint32				objetOmbre;
+		bool 				objects_have_shades;
 		Sint32				BOBtypeNum;
 		Sint32				fTableByte;
 	
@@ -77,7 +77,7 @@ template < class X > void objet_gere < X >::littleInit()
 	objetTotal = 0;
 	objetNombr = 0;
 	objetListe = NULL;
-	objetOmbre = 0;
+	objects_have_shades = 0;
 	BOBtypeNum = 0;
 	fTableByte = 0;
 }
@@ -138,7 +138,7 @@ template < class X > Sint32 objet_gere < X >::init_liste()
 		zeBOB->setListNum(0);
 		objetListe[0] = zeBOB;
 		// one reserves only once the memory of the graphics
-		error_init(zeBOB->initialise(BOBtypeNum, image, objetOmbre, fTableByte));
+		error_init(zeBOB->initialise(BOBtypeNum, image, objects_have_shades, fTableByte));
 		if(erreur_num) return erreur_num;
 		BOBgestion->ajoute_BOB(zeBOB);
 		liste_BOBs *oDraw = BOBgestion;

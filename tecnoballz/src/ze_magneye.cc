@@ -31,7 +31,7 @@ ze_magneye::ze_magneye()
 {
 	littleInit();
 	objetTotal = 3;
-	objetOmbre = 1;
+	objects_have_shades = true;
 	BOBtypeNum = BOB_MAGEYE;
 }
 

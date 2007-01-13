@@ -33,7 +33,7 @@ zeGameOver::zeGameOver()
 {
 	littleInit();
 	objetTotal = 8;				//there are 8 letters 
-	objetOmbre = 1;				//shadow enable
+	objects_have_shades = true;				//shadow enable
 	objetTotal = 8;
 	BOBtypeNum = BOB_GAMEOV;
 	go_deplace = 0;

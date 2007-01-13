@@ -32,7 +32,7 @@ zeguardian::zeguardian()
 {
 	littleInit();
 	objetTotal = 2;
-	objetOmbre = 1;
+	objects_have_shades = true; 
 	BOBtypeNum = BOB_INTE1A;
 	offset_ptr = 0;
 	scrollTemp = 0;
