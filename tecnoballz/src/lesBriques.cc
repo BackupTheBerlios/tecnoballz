@@ -32,11 +32,11 @@ lesBriques::lesBriques()
 {
 	mentatInit();
 	if(bob_ground)
-		objetTotal = 28;
+		objetTotal = NB_BRICKSH * NB_BRICKSV;
 	else
 		objetTotal = 0;
 	objetOmbre = 1;
-	BOBtypeNum = BOB_EXPLO1;
+	BOBtypeNum = BOB_BRICK1;
 	brique_pnt = (brickClear *)NULL;
 	brikTampon = (char *)NULL;
 	mega_table = (brickInfos *)NULL;
@@ -73,7 +73,8 @@ lesBriques::~lesBriques()
 		memGestion->liberation((char *)brikTampon);
 	if(GFX_brique)
 		delete GFX_brique;
-	mentatKill();
+	littleDead();
+	//mentatKill();
 }
 
 //-------------------------------------------------------------------------------
@@ -122,10 +123,10 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 
 	if(bob_ground) 
 	{
-	
-		//objetListe = (BOB_killer **)
-		//	(memGestion->reserveMem(sizeof(BOB_killer *) * objetTotal, 0x4F424A47));
-
+		objetListe = (BOB_killer **)
+			(memGestion->reserveMem(sizeof(BOB_killer *) * objetTotal, 0x4F424A47));
+		error_init(memGestion->retour_err());
+		if(erreur_num) return (erreur_num);
 	}
 	
 	if(!GFX_brique)
@@ -247,7 +248,7 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 	//###################################################################
 	// load bricks levels (34000 bytes => 100 levels)
 	//###################################################################
-	char *tabHd  = pRessource->getResData(ressources::RESBLEVELS);
+	char *tabHd = pRessource->getResData(ressources::RESBLEVELS);
 	if(!tabHd)
 	{	error_init(E_NORESOUR);
 		return (erreur_num);
@@ -267,9 +268,11 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 	//###################################################################
 	brickInfos *megaT = mega_table;
 	megaT += (6 * NB_BRICKSH);	// 6 first lines are always empty
-	for(Sint32 j = 0; j < LEVELHEIGH; j++, megaT += 3)
+	Uint32 bobindex = 6 * NB_BRICKSH;
+	for(Sint32 j = 0; j < LEVELHEIGH; j++, megaT += 3, bobindex += 3)
 	{	megaT += 3;	// the first 3 columns are always empty 
-		for(Sint32 i = 0; i < LEVELWIDTH; i++, megaT++)
+		bobindex += 3;
+		for(Sint32 i = 0; i < LEVELWIDTH; i++, megaT++, bobindex++)
 		{	Sint32 adres = 0;
 			char pos_y = *(tabPT++);	// position y dans page brique de 0 a 8
 			char pos_x = *(tabPT++);	// position x dans page brique de 0 a 12 (step 2) 12*8*2=192
@@ -281,12 +284,26 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 				adres = GFX_brique->GFXrelatif(pos_x * 8 * resolution, pos_y * brickHeigh);
 				if(adres < brickIndus)	// it's a indestructible brick?
 					brickCount++;		// not, counter's incremented
+			
+				if(bob_ground)
+				{
+					BOB_killer *ptbob = new BOB_killer();
+					error_init(ptbob->initialise(BOB_BRICK1, GFX_brique, 1, 0));
+					if(erreur_num) return erreur_num;
+					objetListe[bobindex] = ptbob;
+					BOBgestion->ajoute_BOB(ptbob);
+					ptbob->BOB_active();
+					ptbob->change_GFX(2);
+				}
+			
+			
 			}
 			megaT->brique_rel = adres;
 			megaT->brique_aff = adres;
 			//printf("%i ", megaT->brique_rel);
 		}
 		//printf("\n");
+	
 	}
 	if(tabHd)
 		memGestion->liberation((char*)tabHd);

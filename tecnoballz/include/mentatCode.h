@@ -1,10 +1,10 @@
 //*****************************************************************************
-// copyright (c) 1991-2005 TLK Games all rights reserved
+// copyright (c) 1991-2006 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "mentatCode.h"
 // created	: 2002-08-18
-// updates	: 2005-08-26
-// ID		: $Id: mentatCode.h,v 1.11 2005/08/26 17:25:17 gurumeditation Exp $
+// updates	: 2006-10-02
+// ID		: $Id: mentatCode.h,v 1.12 2007/01/13 17:49:52 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -47,7 +47,7 @@
 #ifndef __MENTATCODE__
 #define __MENTATCODE__
 #define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2005-08-26)"
-//#define TU_TRICHES		//devel only
+#define TU_TRICHES		//devel only
 #define BYTES_COPY		//force bytes copy (SPARC unaligned memory access)
 #ifndef SCOREFILE
 #define SCOREFILE "tecnoball"
@@ -99,6 +99,7 @@ class mentatCode
 		static bool		is_verbose;		//1 = verbose mode
 		static Sint32		bg4_colors;		//1 = force 4 colors background
 		static Sint32		resolution;		//1:320*240 or 2:640*480 pixels
+		static bool		bob_ground;		//1 = background is sprites 
 		static Uint32		double_mem;		//double memory size of all allocations 
 		static Sint32		arg_jumper;
 

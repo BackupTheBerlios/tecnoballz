@@ -3,9 +3,9 @@
 //-----------------------------------------------------------------------------
 // file		: "BOB_killer.cc"
 // created	: ?
-// updates	: 2005-10-04
+// updates	: 2006-10-04
 // fonctions	: Sprites or shapes on the screen
-// id		: $Id: BOB_killer.cc,v 1.8 2006/10/04 11:14:05 gurumeditation Exp $
+// id		: $Id: BOB_killer.cc,v 1.9 2007/01/13 17:48:10 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -1876,6 +1876,49 @@ bbPosition BOB_POS056[] =
 };
 bb_describ BOB_NUM056 = {32, 29, 32, BOB_POS056};	
 
+// bricks
+bbPosition BOB_POS058[] =
+{	{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {6, 0},
+	{0, 7}, {1, 7}, {2, 7}, {3, 7}, {4, 7}, {5, 7}, {6, 7},
+	{0, 14}, {1, 14}, {2, 14}, {3, 14}, {4, 14}, {5, 14}, {6, 14},
+	{0, 21}, {1, 21}, {2, 21}, {3, 21}, {4, 21}, {5, 21}, {6, 21},
+	{0, 28}, {1, 28}, {2, 28}, {3, 28}, {4, 28}, {5, 28}, {6, 28},
+	{0, 35}, {1, 35}, {2, 35}, {3, 35}, {4, 35}, {5, 35}, {6, 35},
+	{0, 42}, {1, 42}, {2, 42}, {3, 42}, {4, 42}, {5, 42}, {6, 42},
+	{0, 49}, {1, 49}, {2, 49}, {3, 49}, {4, 49}, {5, 49}, {6, 49},
+	{0, 56}, {1, 56}, {2, 56}, {3, 56}, {4, 56}, {5, 56}, {6, 56}
+};
+bb_describ BOB_NUM058 = {16, 7, 63, BOB_POS058};
+/*
+bbPosition BOB_POS058[] =
+{	{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {6, 0}, {7, 0} };
+bb_describ BOB_NUM058 = {16, 7, 7, BOB_POS058};
+bbPosition BOB_POS059[] =
+{	{0, 7}, {1, 7}, {2, 7}, {3, 7}, {4, 7}, {5, 7}, {6, 7}, {7, 7} };
+bb_describ BOB_NUM059 = {16, 7, 7, BOB_POS059};
+bbPosition BOB_POS060[] =
+{	{0, 14}, {1, 14}, {2, 14}, {3, 14}, {4, 14}, {5, 14}, {6, 14}, {7, 14} };
+bb_describ BOB_NUM060 = {16, 7, 7, BOB_POS060};
+bbPosition BOB_POS061[] =
+{	{0, 21}, {1, 21}, {2, 21}, {3, 21}, {4, 21}, {5, 21}, {6, 21}, {7, 21} };
+bb_describ BOB_NUM061 = {16, 7, 7, BOB_POS061};
+bbPosition BOB_POS062[] =
+{	{0, 28}, {1, 28}, {2, 28}, {3, 28}, {4, 28}, {5, 28}, {6, 28}, {7, 28} };
+bb_describ BOB_NUM062 = {16, 7, 7, BOB_POS062};
+bbPosition BOB_POS063[] =
+{	{0, 35}, {1, 35}, {2, 35}, {3, 35}, {4, 35}, {5, 35}, {6, 35}, {7, 35} };
+bb_describ BOB_NUM063 = {16, 7, 7, BOB_POS063};
+bbPosition BOB_POS064[] =
+{	{0, 42}, {1, 42}, {2, 42}, {3, 42}, {4, 42}, {5, 42}, {6, 42}, {7, 42} };
+bb_describ BOB_NUM064 = {16, 7, 7, BOB_POS064};
+bbPosition BOB_POS065[] =
+{	{0, 49}, {1, 49}, {2, 49}, {3, 49}, {4, 49}, {5, 49}, {6, 49}, {7, 49} };
+bb_describ BOB_NUM065 = {16, 7, 7, BOB_POS065};
+bbPosition BOB_POS066[] =
+{	{0, 56}, {1, 56}, {2, 56}, {3, 56}, {4, 56}, {5, 56}, {6, 56}, {7, 56} };
+bb_describ BOB_NUM066 = {16, 7, 7, BOB_POS066};
+*/
+
 const bb_describ *BOB_killer::zelistBOB[] =
 {	&BOB_NUM000,	// BouisBouis
 	&BOB_NUM001,	// Ejector
@@ -1935,6 +1978,16 @@ const bb_describ *BOB_killer::zelistBOB[] =
 	&BOB_NUM055,	//echape menu
 	&BOB_NUM056,	//maget eye
 	&BOB_NUM057,	//shop's led (high-res)
+	&BOB_NUM058,	//brick 
+/*	&BOB_NUM059,	//brick 
+	&BOB_NUM060,	//brick 
+	&BOB_NUM061,	//brick 
+	&BOB_NUM062,	//brick 
+	&BOB_NUM063,	//brick 
+	&BOB_NUM064,	//brick 
+	&BOB_NUM065,	//brick 
+	&BOB_NUM066	//brick 
+*/
 };
 
 

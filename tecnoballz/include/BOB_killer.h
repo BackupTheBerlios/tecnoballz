@@ -1,10 +1,10 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2006 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "BOB_killer.h"
-// created		: ?
-// updates		: 2004-10-10
-// fonctions	: handle graphic sprite
+// created	: ?
+// updates	: 2006-10-04
+// fonctions	: handle graphic sprites
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -30,8 +30,6 @@ class BOB_killer;
 #include "../include/RAM_killer.h"
 #include "../include/mentatCode.h"
 #include "../include/print_text.h"
-
-//#include "../include/zeGameOver.h"
 //-------------------------------------------------------------------------------
 // Sprite's number
 //-------------------------------------------------------------------------------
@@ -92,6 +90,16 @@ const Sint32	BOB_WALLBO = 53;
 const Sint32	BOB_DIRECT = 54;
 const Sint32	BOB_ESCMEN = 55;
 const Sint32	BOB_MAGEYE = 56;
+const Sint32	BOB_LEDSH2 = 57;
+const Sint32	BOB_BRICK1 = 58;
+/* const Sint32	BOB_BRICK2 = 59;
+const Sint32	BOB_BRICK3 = 60;
+const Sint32	BOB_BRICK4 = 61;
+const Sint32	BOB_BRICK5 = 62;
+const Sint32	BOB_BRICK6 = 63;
+const Sint32	BOB_BRICK7 = 64;
+const Sint32	BOB_BRICK8 = 65;
+const Sint32	BOB_BRICK9 = 66; */
 //-------------------------------------------------------------------------------
 typedef struct
 {	Sint16		BB_COORDX;	// real x = BB_COORDX*16
@@ -152,16 +160,16 @@ class BOB_killer:public virtual mentatCode
 		Sint16*			tabAffich1;	// table des offsets en cours
 		char*			tabAffich2;	// table des pixels en cours
 		Sint16*			tabAffich3;	// table des offsets en cours (byte peer byte)
-		bb_afligne**	tafflignes;	// tables d'affichage pour l'affichage par lignes
+		bb_afligne**		tafflignes;	// tables d'affichage pour l'affichage par lignes
     
 		static Sint32		ombredecax;
 		static Sint32		ombredecay;
 		static Sint32		ombrepixe4;
-		static char			ombrepixel;
+		static char		ombrepixel;
 
 
 	protected:
-		char*			adresseGFX;	// adresse 
+		char*			adresseGFX;	// memory address 
 		Sint32			srceNextLn;
 		Sint32			destNextLn;
 		Sint32			flag_actif;	// 1=le BOB peut etre affiche
@@ -172,7 +180,7 @@ class BOB_killer:public virtual mentatCode
 		Sint32			BOBhauteur;	// largeur BOB en lignes
 		Sint32			init_tempo;	// initialise tempo animation
 		Sint32			anim_tempo;	// tempo animation
-		Sint32			animOffset;	// numero de l'animation
+		Sint32			animOffset;	// number of the animation
 		Sint32			maxiOffset;	// offset minimum de l'animation
 		Sint32			miniOffset;	// offset maximum animation
 		Sint32			numero_BOB;	// numero identificateur BOB
@@ -187,13 +195,13 @@ class BOB_killer:public virtual mentatCode
 		Sint32			affligLaSv;	// derniere ligne a afficher (si afflignesF=1)
 		Sint32			memoryflag;	// This object reserved some memory 
 		Sint32			BOBListNum;	// Numero du BOB dans la liste
-		Sint32			releaseGFX; //if set release adresseGFX
+		Sint32			releaseGFX; 	//if set release adresseGFX
 		Sint32			fTableByte;	//if set, generate additional table to 
-									//copy byte by byte
+							//copy byte by byte
 
 	public:
-		Sint32			colLargeur;	// largeur collsion
-		Sint32			colHauteur;	// hauteur collision
+		Sint32			colLargeur;	// collision width
+		Sint32			colHauteur;	// collision height
 		Sint32			affligFrst;	// premiere ligne a afficher (si afflignesF=1)
 		Sint32			affligLast;	// derniere ligne a afficher (si afflignesF=1)
 		Sint32			mirrorVert;	// 1=mirror sprite lines in initialise() function
@@ -202,12 +210,12 @@ class BOB_killer:public virtual mentatCode
 
 		
 		Sint32			indexCycle;
-		const Sint32*	pt_cycling;
+		const Sint32*		pt_cycling;
 		Sint32			thecounter;	// 
   
 	public:
-						BOB_killer();
-						~BOB_killer();
+					BOB_killer();
+					~BOB_killer();
 		void			setListNum(Sint32 listN);
 		void			BOBprepare();
 		void			BOBdestroy();
@@ -268,10 +276,10 @@ class BOB_killer:public virtual mentatCode
 		void			set_method(Uint32 vtype);
 		void			set_memGFX(char *pGfx, Sint32 rGfx = 0);
 
-		public:
-			static const Sint32 		cycling_01[8];
-			static const Sint32			cycling_02[8];
-			static const bb_describ*	zelistBOB[];
+	public:
+		static const Sint32 	cycling_01[8];
+		static const Sint32	cycling_02[8];
+		static const bb_describ*	zelistBOB[];
 
 };
 #endif

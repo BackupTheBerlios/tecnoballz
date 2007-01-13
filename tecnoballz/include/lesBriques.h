@@ -1,9 +1,9 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2006 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "lesBriques.h"
-// created		: 1996-11-13
-// updates		: 2004-09-02
+// created	: 1996-11-13
+// updates	: 2006-10-03
 // fonction	: manage the bricks
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -67,7 +67,7 @@ brickClear;
 #include "../include/ze_gadgets.h"
 #include "../include/tecno_boui.h"
 //...............................................................................
-class lesBriques:public virtual mentatCode
+class lesBriques:public objet_gere < BOB_killer >
 {
 	friend class zeNewBalls;
 	friend class tecno_fire;
@@ -139,8 +139,8 @@ class lesBriques:public virtual mentatCode
 		Sint32*				adr_desti2;	// adresse du tampon (ecran restitution) 
 
 	public:
-							lesBriques();
-							~lesBriques();
+						lesBriques();
+						~lesBriques();
 		Sint32				first_init(barreScore *barre, zeCapsules *capsu, ze_gadgets *gadge);
 		Sint32				initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik);
 		Sint32				brickRemap();

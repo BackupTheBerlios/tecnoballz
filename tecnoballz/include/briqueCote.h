@@ -1,9 +1,9 @@
 //******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2006 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
 // file		: "briqueCote.h"
-// created		: ?
-// updates		: 2004-04-09
+// created	: ?
+// updates	: 2006-10-02
 // fonction	: handle small bricks on the side (walls top, left and right)
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
@@ -67,6 +67,11 @@ class briqueCote:public mentatCode
 		Sint32				mapgauche0[BRICOTENUM+4];
 		Sint32				mapdroite0[BRICOTENUM+4];
 		Sint32				mapduHaut0[BRICOTENUM+4];
+		
+		// wall of sprites (bob_ground = 1)
+		BOB_killer*			bobwal_lef[BRICOTENUM+4];
+		BOB_killer*			bobwal_rgh[BRICOTENUM+4];
+		BOB_killer*			bobwal_top[BRICOTENUM+4];
  
 		Sint32*				map_gauche;
 		Sint32*				map_droite;
@@ -91,8 +96,8 @@ class briqueCote:public mentatCode
 		Sint32				iCoteRemap;
 
 	public:
-							briqueCote();
-							~briqueCote();
+						briqueCote();
+						~briqueCote();
 		Sint32				initialise(Sint32 build);
 		void				sauve_etat();
 		void				sauveFond();
@@ -105,6 +110,11 @@ class briqueCote:public mentatCode
 		Sint32				collGauche(Sint32 _iPosY);
 		Sint32				collDroite(Sint32 _iPosY);
 		Sint32				coll_haute(Sint32 _iPosX);
+	
+	private:
+		Sint32				bobbg_init();
+		void				execution2();
+		void				execution3();
 };
 
 #endif
