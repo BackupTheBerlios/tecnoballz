@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonctions	: Sprites or shapes on the screen
-// id		: $Id: BOB_killer.cc,v 1.9 2007/01/13 17:48:10 gurumeditation Exp $
+// id		: $Id: BOB_killer.cc,v 1.10 2007/01/15 20:21:46 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -306,9 +306,10 @@ Sint32 BOB_killer::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sin
 
 	if(put_method == METHOD_MSK)
 		put_method = METHOD_TAB;
-	/*
+/*
 	printf("BOB_killer::initialise() BOBnu=%i, image=%x, ombre=%i\n",
-		BOBnu, (Sint32)image, ombre);*/
+		BOBnu, (Sint32)image, ombre);
+*/
 	
 	// L'ecran dans lequel le BOB est affiche
 	ecran_hard *ecran = ecran_gere;

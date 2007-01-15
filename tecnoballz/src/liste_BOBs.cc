@@ -59,6 +59,12 @@ void liste_BOBs::clear_list()
 //-----------------------------------------------------------------------------
 void liste_BOBs::ajoute_BOB(BOB_killer * unBOB)
 {
+  if (BOB_nombre >= BOBsnombre -1)
+    {
+      fprintf (stderr, "liste_BOBs::ajoute_BOB() "
+               "max. number reached %i\n", BOB_nombre);
+      return;
+    } 
 	BOB__liste[BOB_nombre] = unBOB;
 	BOB_nombre++;
 	unBOB->impose_num(BOB_nombre);

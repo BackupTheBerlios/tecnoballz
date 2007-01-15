@@ -4,7 +4,7 @@
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// id		: $Id: mentatCode.cc,v 1.9 2006/10/02 14:03:30 gurumeditation Exp $
+// id		: $Id: mentatCode.cc,v 1.10 2007/01/15 20:21:46 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -92,7 +92,7 @@ Sint32 mentatCode::first_init(configfile* pConf)
 	hasard_val = (Sint32)first_init;
 #endif
 	memGestion = new RAM_killer();
-	memGestion->initialise(8000);
+	memGestion->initialise(17000);
 	num_erreur = memGestion->retour_err();
 	
 	pRessource = new ressources();
@@ -119,7 +119,7 @@ Sint32 mentatCode::first_init(configfile* pConf)
 	if(num_erreur) return (num_erreur);
 
 	keyGestion = new clavierMac();
-	BOBgestion = new liste_BOBs(200);
+	BOBgestion = new liste_BOBs(400);
 	
 	ptLev_data = new level_data();
 	//Sint32 Ecode = -1; 

@@ -82,13 +82,18 @@ char *RAM_killer::reserveMem(Sint32 place, Uint32 ident)
 	char *monPT;
 	Sint32 i ;
  
-	if(mem_nombre == memMaximum)
+	if(mem_nombre >= memMaximum)
 	{	erreur_num = E_OUT_ZONE;	//out of zones 
+    fprintf(stderr, "RAM_killer.cc::reserveMem() "
+           "max. number of zones reached, %i/%i\n",
+           mem_nombre, memMaximum);
 		return 0;
 	}
 	memPt = (char *) malloc((Sint32)place);
 	if(!memPt)
 	{	erreur_num = E_NOMEMORY;	//allocate error
+    fprintf(stderr, "RAM_killer.cc::reserveMem() "
+           "out of memory!\n");
 		return 0;
 	}
 	octetTotal += place;

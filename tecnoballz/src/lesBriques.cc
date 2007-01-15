@@ -199,7 +199,7 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 	{	error_init(GFXbriques->retour_err());
 		return (erreur_num);
 	}
-	delete GFXbriques;
+	delete GFXbriques; 
 
 	//###################################################################
 	// read one bricks level from the file "tableau.data"
@@ -240,6 +240,8 @@ Sint32 lesBriques::getbrikCnt()
 // -----------------------------------------------------------------------------
 Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 {
+	//if(is_verbose)
+		printf("lesBriques::tabNouveau()  areaN=%i / tablo=%i \n", areaN, tablo);
 	// un tableau fait 17 lignes sur 10 colonnes = 170 * 2 = 340 octets  
 	// a table makes 17 lines out of 10 columns 
 	brickCount = 0;	//reset the number of bricks of the level 
