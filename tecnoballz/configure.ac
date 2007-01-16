@@ -22,7 +22,9 @@ AC_PATH_X
 x_includes="/usr/X11R6/includes"
 x_libraries="/usr/X11R6/lib"
 XLIB_CFLAGS="-I${x_includes}"
-XLIB_LIBS="-L${x_libraries} -lXext -lXxf86dga -lXxf86vm"
+dnl XLIB_LIBS="-L${x_libraries} -lXext -lXxf86dga -lXxf86vm"
+dnl XLIB_LIBS="-L${x_libraries} -lXext -lXxf86dga"
+XLIB_LIBS="-L${x_libraries}"
 AC_SUBST(XLIB_CFLAGS)
 AC_SUBST(XLIB_LIBS)
 
