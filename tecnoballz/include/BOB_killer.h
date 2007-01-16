@@ -27,7 +27,7 @@ class BOB_killer;
 //-------------------------------------------------------------------------------
 #include "../include/ecran_hard.h"
 #include "../include/GIF_bitMap.h"
-#include "../include/RAM_killer.h"
+#include "../include/handler_memory.h"
 #include "../include/mentatCode.h"
 #include "../include/print_text.h"
 //-------------------------------------------------------------------------------

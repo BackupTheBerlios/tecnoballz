@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
 #include "../include/GFX_bitmap.h"
-#include "../include/RAM_killer.h"
+#include "../include/handler_memory.h"
 #include "../include/ecran_hard.h"
 
 //-----------------------------------------------------------------------------
@@ -67,7 +67,7 @@ void GFX_bitmap::GFXLiberat()
 	}
 	else
 	if(gfxAdresse)
-	{	memGestion->liberation(gfxAdresse);
+	{	memory->release(gfxAdresse);
 		gfxAdresse = (char*)NULL;
 	}
 	mentatKill();
@@ -139,8 +139,8 @@ Sint32 GFX_bitmap::GFXnouveau(Sint32 width, Sint32 heigh, Sint32 depth)
 	gfxHauteur = heigh;
 	gfx_taille = gfxHauteur * gfx_nextLn;
 	gfxProfond = depth;
-	gfxAdresse = memGestion->reserveMem(gfx_taille, 0x21474658);
-	error_init(memGestion->retour_err());
+	gfxAdresse = memory->alloc(gfx_taille, 0x21474658);
+	error_init(memory->retour_err());
 	return erreur_num;
 }
 
@@ -149,10 +149,10 @@ Sint32 GFX_bitmap::GFXnouveau(Sint32 width, Sint32 heigh, Sint32 depth)
 //-------------------------------------------------------------------------------
 char* GFX_bitmap::duplicates()
 {
-	char *ptGfx = memGestion->reserveMem(gfx_taille, 0x21474658);
+	char *ptGfx = memory->alloc(gfx_taille, 0x21474658);
 	for(Sint32 i = 0; i < gfx_taille; i++)
 		ptGfx[i] = gfxAdresse[i];
-	error_init(memGestion->retour_err());
+	error_init(memory->retour_err());
 	return ptGfx;
 }
 

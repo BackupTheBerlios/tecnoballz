@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-07
 // fonction	: handle of the scrolling background (menu and gards levels)
-// id		: $Id: lastScroll.cc,v 1.2 2005/01/07 16:13:43 gurumeditation Exp $
+// id		: $Id: lastScroll.cc,v 1.3 2007/01/16 14:37:34 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -23,7 +23,7 @@
 //******************************************************************************
 #include "../include/lastScroll.h"
 #include "../include/ressources.h"
-#include "../include/RAM_killer.h"
+#include "../include/handler_memory.h"
 
 //-----------------------------------------------------------------------------
 // create the object
@@ -46,9 +46,9 @@ lastScroll::~lastScroll()
 	if(gfx_bitMap)
 		delete gfx_bitMap;
 	if(carteFirst)
-		memGestion->liberation((char *)carteFirst);
+		memory->release((char *)carteFirst);
 	if(mapAddress)
-		memGestion->liberation((char *)mapAddress);
+		memory->release((char *)mapAddress);
 	gfx_bitMap = (GIF_bitMap*) NULL;
 	carteFirst = (Uint16 *) NULL;
 	mapAddress = (char **) NULL;
@@ -146,7 +146,7 @@ Sint32 lastScroll::returnPosy()
 Sint32 lastScroll::swapScroll(Uint32 PalNu, Uint32 edmap)
 {
 	if(carteFirst)
-		memGestion->liberation((char *)carteFirst);
+		memory->release((char *)carteFirst);
 	error_init(ld_mapfile(edmap));
 	if(erreur_num) return erreur_num;
 	palette_go (PalNu);
@@ -447,9 +447,9 @@ Sint32 lastScroll::initMapAdr()
 	Sint32 l = gfxPT->GFXlargeur();	//320 or 640 pixels width
 	Sint32 h = gfxPT->GFXhauteur();	//624 or 1248 lines height
 	dalleTotal = (l / motiflarge) * (h / motifhaute);	//780 maps
-	mapAddress = (char **)memGestion->reserveMem(dalleTotal * sizeof(char *),
+	mapAddress = (char **)memory->alloc(dalleTotal * sizeof(char *),
 													0x6D670141);
-	if(!mapAddress) return (memGestion->retour_err());
+	if(!mapAddress) return (memory->retour_err());
 
 	char **m = mapAddress;
 	Sint32 nbMap = 0;
@@ -499,10 +499,10 @@ Sint32 lastScroll::ld_mapfile(Uint32 edmap)
 	//###################################################################
 	Sint32 tsupp = (ecran_gere->screenhght() / motifhaute) * 2;
 	Sint32 msize = (tsupp + CARTEHAUTE) * CARTELARGE * sizeof(Uint16);
-	carteFirst = (Uint16 *) memGestion->reserveMem(msize, 0x54425249);
-	error_init(memGestion->retour_err());
+	carteFirst = (Uint16 *) memory->alloc(msize, 0x54425249);
+	error_init(memory->retour_err());
 	if(erreur_num)
-	{	memGestion->liberation((char *)zfile);
+	{	memory->release((char *)zfile);
 		return erreur_num;
 	}
 
@@ -520,7 +520,7 @@ Sint32 lastScroll::ld_mapfile(Uint32 edmap)
 		carteFirst[i++] = codem;
 		ptmap = ptmap + 2;
 	}
-	memGestion->liberation((char *)zfile);
+	memory->release((char *)zfile);
 
 	//###################################################################
 	// copy a height of the screen (for scrolling rotation)

@@ -30,7 +30,7 @@ class tableaux_Z;
 #include "../include/BOB_killer.h"
 #include "../include/GIF_bitMap.h"
 #include "../include/liste_BOBs.h"
-#include "../include/RAM_killer.h"
+#include "../include/handler_memory.h"
 #include "../include/objet_gere.h"
 #include "../include/runGestion.h"
 #include "../include/zeBouiBoui.h"

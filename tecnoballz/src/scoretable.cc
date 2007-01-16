@@ -5,7 +5,7 @@
 // created	: 2004-04-30
 // updates	: 2005-01-11
 // fonction	: display score table (game over and menu)
-// id		: $Id: scoretable.cc,v 1.2 2005/01/11 05:31:38 gurumeditation Exp $
+// id		: $Id: scoretable.cc,v 1.3 2007/01/16 14:37:34 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -44,11 +44,11 @@ scoretable::~scoretable()
 	if(!the_scores) return;
 	for(Uint32 i = 0; i < NDIFFICULT; i++)
 	{	if (the_scores[i])
-		{	memGestion->liberation((char *)the_scores[i]);
+		{	memory->release((char *)the_scores[i]);
 			the_scores[i] = NULL;
 		}
 	}
-	memGestion->liberation((char *)the_scores);
+	memory->release((char *)the_scores);
 	the_scores = NULL;
 }
 
@@ -58,17 +58,17 @@ scoretable::~scoretable()
 Sint32 scoretable::first_init()
 {
 	// allocate memory for the 4 pointers to the 4 scores tables
-	the_scores = (score_list**) memGestion->reserveMem(sizeof(score_list *) * NDIFFICULT,
+	the_scores = (score_list**) memory->alloc(sizeof(score_list *) * NDIFFICULT,
 		0x53434F52);
-	error_init(memGestion->retour_err());
+	error_init(memory->retour_err());
 	if(erreur_num) return erreur_num;
 	
 	//fill score table
 	for(Uint32 i = 0; i < NDIFFICULT; i++)
 	{	the_scores[i] =
-			(score_list*) memGestion->reserveMem(sizeof(score_list) * NUMBSCORES,
+			(score_list*) memory->alloc(sizeof(score_list) * NUMBSCORES,
 				0x53434F52);
-		error_init(memGestion->retour_err());
+		error_init(memory->retour_err());
 		if(erreur_num) return erreur_num;
 		
 		score_list* score = the_scores[i];
@@ -103,7 +103,7 @@ Sint32 scoretable::loadScores()
 		if(fsize != buffersize)
 		{	fprintf(stderr, "scoretable::loadScores(): bad file size, %i byte(s) instead %i bytes\n",
 				fsize, 	buffersize);
-			memGestion->liberation(pData);
+			memory->release(pData);
 			return 0;
 		}
 		Uint32 ckVal;
@@ -115,7 +115,7 @@ Sint32 scoretable::loadScores()
 		if(value != ckVal)
 		{	fprintf(stderr, "scoretable::loadScores(): bad checksum, %x instead %x\n",
 				value, *pSelf);
-			memGestion->liberation(pData);
+			memory->release(pData);
 			return 0;
 		}
 
@@ -138,7 +138,7 @@ Sint32 scoretable::loadScores()
 					score[j].playerName[k] = *(pTemp++);
 			}			
 		}
-		memGestion->liberation(pData);
+		memory->release(pData);
 		return 1;
 	}
 	return 0;
@@ -149,8 +149,8 @@ Sint32 scoretable::loadScores()
 //------------------------------------------------------------------------------
 Sint32 scoretable::saveScores()
 {
-	char *pData = memGestion->reserveMem(buffersize, 0x53434F52);
-	error_init(memGestion->retour_err());
+	char *pData = memory->alloc(buffersize, 0x53434F52);
+	error_init(memory->retour_err());
 	if(erreur_num) return erreur_num;
 	Uint32 *pSelf = (Uint32 *)pData;
 
@@ -182,7 +182,7 @@ Sint32 scoretable::saveScores()
 		(buffersize - sizeof(Uint32)) / sizeof(Uint32));
 	*/
 	pRessource->saveScores(pData, buffersize);
-	memGestion->liberation(pData);
+	memory->release(pData);
 	return 0;
 }
 

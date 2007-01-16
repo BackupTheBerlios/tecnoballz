@@ -59,7 +59,7 @@ briqueCote::briqueCote()
 //-----------------------------------------------------------------------------
 briqueCote::~briqueCote()
 {
-	memGestion->liberation((char *)pCoteTable);
+	memory->release((char *)pCoteTable);
 	if(bricote_hz)
 	{	delete bricote_hz;	// release sprite object
 		bricote_hz = (BOB_killer *)NULL;
@@ -69,7 +69,7 @@ briqueCote::~briqueCote()
 		bricote_vt = (BOB_killer *)NULL;
 	}
 	if(fond_sauve)
-	{	memGestion->liberation(fond_sauve);
+	{	memory->release(fond_sauve);
 		fond_sauve = NULL;
 	}
 	for(Uint32 i = 0; i < BRICOTENUM; i++)
@@ -192,8 +192,8 @@ Sint32 briqueCote::initialise(Sint32 build)
 	Uint32 _iS1 = iLargeurBH * iHauteurBH;	// size of horizontal bricks
 	Uint32 _iS2 = iLargeurBH * iHauteurBV;	// size of vertical bricks
 	_iS2 = (_iS1 * BRICOTENUM) + (_iS2 * BRICOTENUM) + (_iS2 * BRICOTENUM);
-	fond_sauve = memGestion->reserveMem(_iS2, 0x464F4E44);
-	error_init(memGestion->retour_err());
+	fond_sauve = memory->alloc(_iS2, 0x464F4E44);
+	error_init(memory->retour_err());
 	if(erreur_num)
 		return (erreur_num);
 	
@@ -207,9 +207,9 @@ Sint32 briqueCote::initialise(Sint32 build)
 	//allocate memory for the redraw bricks table
 	//###################################################################
 	pCoteTable =
-		(coteStruct *) memGestion->reserveMem(iMAXBRICOT * sizeof(coteStruct),
+		(coteStruct *) memory->alloc(iMAXBRICOT * sizeof(coteStruct),
 			0x54425243);
-	error_init(memGestion->retour_err());
+	error_init(memory->retour_err());
 	return erreur_num;
 }
 

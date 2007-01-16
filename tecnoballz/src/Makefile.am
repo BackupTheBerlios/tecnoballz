@@ -26,6 +26,7 @@ SOURCES_MAIN = \
 	gard_tecno.cc \
 	GFX_bitmap.cc \
 	GIF_bitMap.cc \
+	handler_memory.cc \
 	giga_blitz.cc \
 	head_anima.cc \
 	joueurData.cc \
@@ -41,7 +42,6 @@ SOURCES_MAIN = \
 	print_menu.cc \
 	printmoney.cc \
 	print_text.cc \
-	RAM_killer.cc \
 	ressources.cc \
 	runGestion.cc \
 	score_over.cc \

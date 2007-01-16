@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.5 2006/10/02 14:03:30 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.6 2007/01/16 14:37:34 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -317,7 +317,7 @@ Sint32 tableaux_Z::first_init()
 	
 	ecran_gere->tamponBuff();	// recopie le tampon dans le buffer
 	ecran_gere->deverouill();
-	Sint32 k = memGestion->placePrise();
+	Sint32 k = memory->get_total_size();
 	if(is_verbose)
 		printf("tableaux_Z::first_init(): memory size allocated : %i \n",k);
 	keyGestion->resetpause();

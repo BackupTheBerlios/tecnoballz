@@ -4,7 +4,7 @@
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// id		: $Id: mentatCode.cc,v 1.10 2007/01/15 20:21:46 gurumeditation Exp $
+// id		: $Id: mentatCode.cc,v 1.11 2007/01/16 14:37:34 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA  02111-1307, USA.
 //*****************************************************************************
 #include "../include/mentatCode.h"
-#include "../include/RAM_killer.h"
+#include "../include/handler_memory.h"
 #include "../include/ecran_hard.h"
 #include "../include/clavierMac.h"
 #include "../include/liste_BOBs.h"
@@ -47,7 +47,7 @@ Sint32				mentatCode::countframe = 0;
 scoretable*			mentatCode::ptScoreTab = NULL;	//manage best scores
 ressources*			mentatCode::pRessource = NULL;	//manage resources
 level_data*			mentatCode::ptLev_data = NULL;	//manage levels
-RAM_killer*			mentatCode::memGestion = NULL;	//manage memory allocation  
+handler_memory*			mentatCode::memory = NULL;	//manage memory allocation  
 #ifndef SOUNDISOFF
 audiomixer*			mentatCode::ptAudiomix = NULL;	//manage sound      
 #endif
@@ -91,9 +91,9 @@ Sint32 mentatCode::first_init(configfile* pConf)
 #else
 	hasard_val = (Sint32)first_init;
 #endif
-	memGestion = new RAM_killer();
-	memGestion->initialise(17000);
-	num_erreur = memGestion->retour_err();
+	memory = new handler_memory();
+	memory->init(17000);
+	num_erreur = memory->retour_err();
 	
 	pRessource = new ressources();
 	if(num_erreur) return num_erreur;
@@ -350,8 +350,8 @@ Sint32 mentatCode::desinstall(configfile* pConf)
 #endif
 	delete pRessource;
 	if(is_verbose)
-		printf("==9 memGestion\n");
-	delete memGestion;
+		printf("==9 memory\n");
+	delete memory;
 	return num_erreur;
 }
 

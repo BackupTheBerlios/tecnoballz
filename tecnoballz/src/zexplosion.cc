@@ -51,8 +51,8 @@ Sint32 zexplosion::init_liste()
 
 	// allocate table memory 
 	objetListe = (BOB_killer **)
-		(memGestion->reserveMem(sizeof(BOB_killer *) * objetTotal, 0x4F424A47));
-	error_init(memGestion->retour_err());
+		(memory->alloc(sizeof(BOB_killer *) * objetTotal, 0x4F424A47));
+	error_init(memory->retour_err());
 	if(erreur_num)
 		return (erreur_num);
 

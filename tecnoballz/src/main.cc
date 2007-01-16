@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.5 2007/01/13 21:04:28 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.6 2007/01/16 14:37:34 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -82,7 +82,7 @@ tecno_text.cc  => sprite_fonte_game
 audiomixer.cc  => audio_handler
 clavierMac.cc  => keyboard_handler
 ecran_hard.cc  => display_handler
-RAM_killer.cc  => memory_handler
+handler_memory.cc  => memory_handler
 
 ballDirect.cc
 barreScore.cc

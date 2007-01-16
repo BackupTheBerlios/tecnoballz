@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2006-10-02
-// id		: $Id: configfile.cc,v 1.12 2006/10/02 14:03:30 gurumeditation Exp $
+// id		: $Id: configfile.cc,v 1.13 2007/01/16 14:37:34 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -181,6 +181,7 @@ void configfile::loadconfig()
 		bob_ground = true;
 	else
 		bob_ground = false;
+bob_ground = false;
 	//read number of lifes: 1 to 9
 	if (!reader.read_int("lifes", &vieInitial))
 		vieInitial = 8 ;

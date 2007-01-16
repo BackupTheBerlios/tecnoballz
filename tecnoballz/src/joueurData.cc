@@ -640,7 +640,7 @@ joueurData *joueurData::joueursADD(Sint32 total)
 {
 	Sint32 t = total;
 	playerlist =
-		(joueurData **)memGestion->reserveMem(t * sizeof(joueurData *),
+		(joueurData **)memory->alloc(t * sizeof(joueurData *),
 		0x504C4159);
 	if(!playerlist) return 0;
 	for(Sint32 i = 0; i < t; i++)
@@ -657,7 +657,7 @@ void joueurData::joueursRAZ()
 	for(Sint32 i = 0; i < t; i++)
 		delete player_one;
 	if(playerlist)
-	{	memGestion->liberation((char *)playerlist);
+	{	memory->release((char *)playerlist);
 		playerlist = NULL;
 	}
 }

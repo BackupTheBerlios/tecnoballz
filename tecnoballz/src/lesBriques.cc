@@ -22,7 +22,7 @@
 //******************************************************************************
 #include "../include/lesBriques.h"
 #include "../include/ressources.h"
-#include "../include/RAM_killer.h"
+#include "../include/handler_memory.h"
 #include "../include/ecran_hard.h"
 
 //-----------------------------------------------------------------------------
@@ -66,11 +66,11 @@ lesBriques::lesBriques()
 lesBriques::~lesBriques()
 {
 	if(brique_pnt)
-		memGestion->liberation((char *)brique_pnt);
+		memory->release((char *)brique_pnt);
 	if(mega_table)
-		memGestion->liberation((char *)mega_table);
+		memory->release((char *)mega_table);
 	if(brikTampon)
-		memGestion->liberation((char *)brikTampon);
+		memory->release((char *)brikTampon);
 	if(GFX_brique)
 		delete GFX_brique;
 	littleDead();
@@ -88,25 +88,25 @@ Sint32 lesBriques::first_init(barreScore *barre, zeCapsules *capsu, ze_gadgets *
 
 	// allocate memory for the redraw bricks table
 	if(!brique_pnt)
-	{	brique_pnt = (brickClear *) memGestion->reserveMem
+	{	brique_pnt = (brickClear *) memory->alloc
 			(MAXBRIKCLR * sizeof(brickClear), 0x54425249);
-		error_init(memGestion->retour_err());
+		error_init(memory->retour_err());
 		if(erreur_num) return erreur_num;
 	}
 
 	// allocate memory to save background under bricks
 	if(!brikTampon)
-	{	brikTampon = memGestion->reserveMem
+	{	brikTampon = memory->alloc
 			(brick_size * NB_BRICKST, 0x54425249 );
-		error_init(memGestion->retour_err());
+		error_init(memory->retour_err());
 		if(erreur_num) return erreur_num;
 	}
 
 	// allocate memory for current brick level
 	if(!mega_table)
-	{	mega_table = (brickInfos *) memGestion->reserveMem
+	{	mega_table = (brickInfos *) memory->alloc
 			(sizeof(brickInfos) * NB_BRICKST, 0x4D454741);
-		error_init(memGestion->retour_err());
+		error_init(memory->retour_err());
 	}
 
 	return erreur_num;
@@ -124,8 +124,8 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 	if(bob_ground) 
 	{
 		objetListe = (BOB_killer **)
-			(memGestion->reserveMem(sizeof(BOB_killer *) * objetTotal, 0x4F424A47));
-		error_init(memGestion->retour_err());
+			(memory->alloc(sizeof(BOB_killer *) * objetTotal, 0x4F424A47));
+		error_init(memory->retour_err());
 		if(erreur_num) return (erreur_num);
 	}
 	
@@ -308,7 +308,7 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 	
 	}
 	if(tabHd)
-		memGestion->liberation((char*)tabHd);
+		memory->release((char*)tabHd);
 
 	//###################################################################
 	// Initialize the number of total bricks to destroy 

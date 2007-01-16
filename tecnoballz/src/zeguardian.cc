@@ -44,7 +44,7 @@ zeguardian::zeguardian()
 zeguardian::~zeguardian()
 {
 	if(lissaCurve)
-	{	memGestion->liberation((char *)lissaCurve);
+	{	memory->release((char *)lissaCurve);
 		lissaCurve = NULL;
 	}
 	if (pBobEnergy)
@@ -55,7 +55,7 @@ zeguardian::~zeguardian()
 				pBobEnergy[i] = NULL;
 			}
 		}
-		memGestion->liberation((char *)pBobEnergy);
+		memory->release((char *)pBobEnergy);
 		pBobEnergy = NULL;
 	}
 	littleDead();
@@ -95,8 +95,8 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	// allocate memory for the "tecno_gard" object(s)
 	//###################################################################
 	objetListe = (tecno_gard **)
-		(memGestion->reserveMem(sizeof(tecno_gard *) * objetTotal, 0x4F424A47));
-	error_init(memGestion->retour_err());
+		(memory->alloc(sizeof(tecno_gard *) * objetTotal, 0x4F424A47));
+	error_init(memory->retour_err());
 	if(erreur_num)
 		return (erreur_num);
 
@@ -118,8 +118,8 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	}
 
 	pBobEnergy = (BOB_killer **)
-		(memGestion->reserveMem(sizeof(BOB_killer *) * objetTotal, 0x4F424A47));
-	error_init(memGestion->retour_err());
+		(memory->alloc(sizeof(BOB_killer *) * objetTotal, 0x4F424A47));
+	error_init(memory->retour_err());
 	if(erreur_num)
 		return (erreur_num);
 	for(i = 0; i < objetTotal; i++)

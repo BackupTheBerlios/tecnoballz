@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonctions	: Sprites or shapes on the screen
-// id		: $Id: BOB_killer.cc,v 1.10 2007/01/15 20:21:46 gurumeditation Exp $
+// id		: $Id: BOB_killer.cc,v 1.11 2007/01/16 14:37:34 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -51,31 +51,31 @@ void BOB_killer::BOBdestroy()
 	if(memoryflag)
 	{	for(Sint32 i = 0; i < animationN; i++)
 		{	Sint16 *memPT = BOBtableP1[i];
-			memGestion->liberation((char *)memPT);
+			memory->release((char *)memPT);
 			char *memP2 = BOBtableP2[i];
-			memGestion->liberation((char *)memP2);
+			memory->release((char *)memP2);
 			if(fTableByte) 
 			{	memPT = BOBtableP3[i];
-				memGestion->liberation((char *)memPT);
+				memory->release((char *)memPT);
 			}
 		}
-		memGestion->liberation((char *)BOBtableP1);
-		memGestion->liberation((char *)BOBtableP2);
+		memory->release((char *)BOBtableP1);
+		memory->release((char *)BOBtableP2);
 		if(fTableByte)
-			memGestion->liberation((char *)BOBtableP3);
-		memGestion->liberation((char *)adresseTAB);	// Tableau des adresses dans la page BOB
+			memory->release((char *)BOBtableP3);
+		memory->release((char *)adresseTAB);	// Tableau des adresses dans la page BOB
 		if(tafflignes)
 		{	for(Sint32 i=0 ; i<animationN ; i++)
 			{	bb_afligne *p =tafflignes[i];
 				tafflignes[i] = (bb_afligne *)NULL;
-				memGestion->liberation((char *)p); 
+				memory->release((char *)p); 
 			}
-			memGestion->liberation((char *)tafflignes); 
+			memory->release((char *)tafflignes); 
 			tafflignes = (bb_afligne**)NULL;
 		}
 	}
 	if(releaseGFX && adresseGFX)
-	{	memGestion->liberation((char *)adresseGFX);
+	{	memory->release((char *)adresseGFX);
 		adresseGFX = 0,
 		adresseGFX = NULL;	
 	}
@@ -270,19 +270,19 @@ Sint32 BOB_killer::reservBOBt(Sint32 anima)
 	// reserve la table de pointeur sur les tables d'affichage
 
 	// tables of offsets and counters (words and bytes)
-	BOBtableP1 = (Sint16 **)(memGestion->reserveMem(sizeof(Sint16 *) * animationN, 0x424F4250));
-	error_init(memGestion->retour_err());
+	BOBtableP1 = (Sint16 **)(memory->alloc(sizeof(Sint16 *) * animationN, 0x424F4250));
+	error_init(memory->retour_err());
 	if(erreur_num) return erreur_num;
 
 	// tables of data (pixels of the sprite)
-	BOBtableP2 = (char **)(memGestion->reserveMem(sizeof(char *) * animationN, 0x424F4250));
-	error_init(memGestion->retour_err());
+	BOBtableP2 = (char **)(memory->alloc(sizeof(char *) * animationN, 0x424F4250));
+	error_init(memory->retour_err());
 	if(erreur_num) return erreur_num;
 
 	// tables of offsets and counters (byte peer byte)
 	if(fTableByte) 
-	{	BOBtableP3 = (Sint16 **)(memGestion->reserveMem(sizeof(Sint16 *) * animationN, 0x424F4250));
-		error_init(memGestion->retour_err());
+	{	BOBtableP3 = (Sint16 **)(memory->alloc(sizeof(Sint16 *) * animationN, 0x424F4250));
+		error_init(memory->retour_err());
 		if(erreur_num) return erreur_num;
 	}	
 
@@ -338,16 +338,16 @@ Sint32 BOB_killer::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sin
 	{	affligFrst = 0;
 		affligLast = BOBhauteur;
 		tafflignes = (bb_afligne**)
-			(memGestion->reserveMem(sizeof(bb_afligne*) *
+			(memory->alloc(sizeof(bb_afligne*) *
 				animationN, 0x42424242));
-		error_init(memGestion->retour_err());
+		error_init(memory->retour_err());
 		if(erreur_num)
 		return (erreur_num); 
 		for(Sint32 i=0 ; i<animationN ; i++)
 		{	bb_afligne *p = (bb_afligne*)
-				(memGestion->reserveMem(sizeof(bb_afligne) *
+				(memory->alloc(sizeof(bb_afligne) *
 					BOBhauteur, 0x4C4C4C4C));
-			error_init(memGestion->retour_err());
+			error_init(memory->retour_err());
 			if(erreur_num)
 				return erreur_num;
 			tafflignes[i] = p;
@@ -358,8 +358,8 @@ Sint32 BOB_killer::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sin
 	// table giving address of each BOBs into BOBs page 
 	//###################################################################
 	adresseTAB = (char **)
-		(memGestion->reserveMem(sizeof(char *) * animationN, 0x424F4250));
-	error_init(memGestion->retour_err());
+		(memory->alloc(sizeof(char *) * animationN, 0x424F4250));
+	error_init(memory->retour_err());
 	if(erreur_num) return erreur_num;
 	offsetSrce = image->GFX_modulo(BOBlargeur);
 	offsetDest = ecran->buffer_mod(BOBlargeur);
@@ -450,19 +450,19 @@ Sint32 BOB_killer::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sin
 		//###################################################################
 		// genere the sprite's table for display
 		//###################################################################
-		char *destP = (char *)memGestion->reserveMem
+		char *destP = (char *)memory->alloc
 			((nbreP) * sizeof(char), 0x40424F42);
-	 	error_init(memGestion->retour_err());
+	 	error_init(memory->retour_err());
 		if(erreur_num) return erreur_num;
-		Sint16 *destV = (Sint16 *)memGestion->reserveMem
+		Sint16 *destV = (Sint16 *)memory->alloc
 			((nbreV * 3 + 1) * sizeof(Sint16), 0x40424F42);
-			error_init(memGestion->retour_err());
+			error_init(memory->retour_err());
 			if(erreur_num) return erreur_num;
 		Sint16 *destW = NULL;
 		if(fTableByte)
-		{	destW = (Sint16 *)memGestion->reserveMem
+		{	destW = (Sint16 *)memory->alloc
 			((nbreV * 2 + 1) * sizeof(Sint16), 0x40424F42);
-			error_init(memGestion->retour_err());
+			error_init(memory->retour_err());
 			if(erreur_num) return erreur_num;
 		}
 		BOBtableP1[i] = destV;	//table of offsets and loops counters

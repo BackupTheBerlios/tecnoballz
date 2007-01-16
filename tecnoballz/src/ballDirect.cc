@@ -42,7 +42,7 @@ ballDirect::ballDirect()
 ballDirect::~ballDirect()
 {
 	if(listBumper)
-	{	memGestion->liberation((char *)listBumper);	
+	{	memory->release((char *)listBumper);	
 		listBumper = (tecno_bump**)NULL;
 	}
 	littleDead();
@@ -56,9 +56,9 @@ Sint32 ballDirect::initialize(zeRaquette* pBump, Uint32 nBump)
 	if(!nBump) return E_GENRIQUE;
 	numBumpers = nBump;
 	
-	listBumper = (tecno_bump**) memGestion->reserveMem
+	listBumper = (tecno_bump**) memory->alloc
 		(nBump * sizeof(tecno_bump**), 0x4C495354);
-	error_init(memGestion->retour_err());
+	error_init(memory->retour_err());
 	if(erreur_num)
 		return (erreur_num);
 	for(Uint32 i = 0; i < nBump; i++)

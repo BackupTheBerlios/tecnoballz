@@ -2,13 +2,13 @@
  * @file zeRaquette.cc
  * @brief Manage the bumpers 
  * @date 2007-01-13
- * @copyright 1998-2007 TLK Games
+ * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
- * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.2 2007/01/13 21:04:28 gurumeditation Exp $
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: zeRaquette.cc,v 1.3 2007/01/16 14:37:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -131,9 +131,9 @@ Sint32 zeRaquette::init_liste()
 	// allocate list of sprites memory
 	//###################################################################
 	objetListe =
-		(tecno_bump **) (memGestion->reserveMem(sizeof(tecno_bump *) * objetTotal,
+		(tecno_bump **) (memory->alloc(sizeof(tecno_bump *) * objetTotal,
 			0x4F424A47));
-	error_init(memGestion->retour_err());
+	error_init(memory->retour_err());
 	if(erreur_num) return erreur_num;
 
 	//###################################################################

@@ -27,7 +27,7 @@
 class                   liste_BOBs;
 //..............................................................................
 #include "../include/BOB_killer.h"
-#include "../include/RAM_killer.h"
+#include "../include/handler_memory.h"
 #include "../include/mentatCode.h"
 //..............................................................................
 const Sint32 BOBNumMaxi = 200;

@@ -66,10 +66,10 @@ scrolledit::~scrolledit()
 	delete objetMouse;
 	delete defilement;
 	if(pt_select1)
-		memGestion->liberation((char *)pt_select1);
+		memory->release((char *)pt_select1);
 
 	if(pBrushTile)
-		memGestion->liberation((char *)pBrushTile);
+		memory->release((char *)pBrushTile);
 	if(pBrush_bob)
 		delete pBrush_bob;
 	
@@ -82,9 +82,9 @@ scrolledit::~scrolledit()
 Sint32 scrolledit::first_init()
 {	
 	
-	pt_select1 = (selectinfo *) memGestion->reserveMem 
+	pt_select1 = (selectinfo *) memory->alloc 
 		(sizeof(selectinfo) * 2, 0x4D454741);
-	error_init(memGestion->retour_err());
+	error_init(memory->retour_err());
 	pt_select2 = &pt_select1[1];
 	pt_select0 = pt_select1;
 	
@@ -196,11 +196,11 @@ void scrolledit::maps2brush()
 	// allocate map memory
 	//###################################################################
 	if(pBrushTile)
-		memGestion->liberation((char *)pBrushTile);
-	pBrushTile = (Uint16 *) memGestion->reserveMem 
+		memory->release((char *)pBrushTile);
+	pBrushTile = (Uint16 *) memory->alloc 
 		(sizeof(Uint16) * pt_select0->box_height * pt_select0->box_widthT,
 		0x4D454741);
-	error_init(memGestion->retour_err());
+	error_init(memory->retour_err());
 	if(erreur_num) return;
 
 	//Sint32 scrlY = defilement->returnPosy();
@@ -257,11 +257,11 @@ void scrolledit::tile2brush()
 	// allocate map memory
 	//###################################################################
 	if(pBrushTile)
-		memGestion->liberation((char *)pBrushTile);
-	pBrushTile = (Uint16 *) memGestion->reserveMem 
+		memory->release((char *)pBrushTile);
+	pBrushTile = (Uint16 *) memory->alloc 
 		(sizeof(Uint16) * pt_select0->box_height * pt_select0->box_widthT,
 		0x4D454741);
-	error_init(memGestion->retour_err());
+	error_init(memory->retour_err());
 	if(erreur_num) return;
 	
 	
@@ -690,8 +690,8 @@ Sint32 scrolledit::saveTheMap()
 	Sint32 zsize = lastScroll::CARTEHAUTE * lastScroll::CARTELARGE;
 	
 	Sint32 msize = zsize * sizeof(Uint16);
-	Uint16 *carte = (Uint16 *) memGestion->reserveMem(msize, 0x54425249);
-	error_init(memGestion->retour_err());
+	Uint16 *carte = (Uint16 *) memory->alloc(msize, 0x54425249);
+	error_init(memory->retour_err());
 	if(erreur_num) return (erreur_num);
 	
 	//unsigned char* ptSrc = (unsigned char *)defilement->carteFirst;
@@ -716,17 +716,17 @@ Sint32 scrolledit::saveTheMap()
 	if(fhand == -1)
 	{	fprintf(stderr, "scrolledit::saveTheMap(): file:%s / error:%s\n", 
 					fnamescore, strerror(errno));
-		memGestion->liberation((char *)ptDes);
+		memory->release((char *)ptDes);
 		return 0;
 	}
 	write(fhand, carte, msize);
 	if(close(fhand) == -1)
 	{	fprintf(stderr, "scrolledit::saveTheMap(): file:%s / error:%s\n", 
 		fnamescore, strerror(errno));
-		memGestion->liberation((char *)ptDes);
+		memory->release((char *)ptDes);
 		return 0;
 	}
-	memGestion->liberation((char *)carte);
+	memory->release((char *)carte);
 	printf("scrolledit::saveTheMap() : %s file was saved\n", fnamescore);
 	return 	erreur_num;
 }

@@ -82,8 +82,8 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 
 	if(objetTotal)
 	{	objetListe = (giga_blitz **) 
-			(memGestion->reserveMem(sizeof(giga_blitz *) * objetTotal, 0x4F424A47));
-		error_init(memGestion->retour_err());
+			(memory->alloc(sizeof(giga_blitz *) * objetTotal, 0x4F424A47));
+		error_init(memory->retour_err());
 		if(erreur_num)
 			return (erreur_num);
 
@@ -264,8 +264,8 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
 	tecBumper1 = ptRaquette->demandeRak(1);	// top bumper
 	if(objetTotal)
 	{	objetListe = (giga_blitz **)
-			(memGestion->reserveMem(sizeof(giga_blitz *) * objetTotal, 0x4F424A47));
-		error_init(memGestion->retour_err());
+			(memory->alloc(sizeof(giga_blitz *) * objetTotal, 0x4F424A47));
+		error_init(memory->retour_err());
 		if(erreur_num)
 			return (erreur_num);
 

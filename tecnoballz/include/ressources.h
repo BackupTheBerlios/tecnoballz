@@ -23,7 +23,7 @@
 #ifndef __RESSOURCES__
 #define __RESSOURCES__
 #include "../include/mentatCode.h"
-#include "../include/RAM_killer.h"
+#include "../include/handler_memory.h"
 //...............................................................................
 class ressources:public virtual mentatCode
 {

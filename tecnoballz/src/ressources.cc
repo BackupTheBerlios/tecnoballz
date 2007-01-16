@@ -5,7 +5,7 @@
 // created	: 2004-04-20
 // updates	: 2005-01-15
 // fonctions	: manage ressources
-// id		: $Id: ressources.cc,v 1.7 2006/06/22 13:42:59 patrice Exp $
+// id		: $Id: ressources.cc,v 1.8 2007/01/16 14:37:34 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -140,7 +140,7 @@ char ressources::ze_mapfile[] = "map??.bmp";
   ressources::~ressources()
 {
 	if(table_cosL)
-	{	memGestion->liberation((char*)table_cosL);
+	{	memory->release((char*)table_cosL);
 		table_cosL = (Sint16 *)NULL;
 	}
 	freeSprite();
@@ -247,8 +247,8 @@ char* ressources::locate_res(Sint32 ident)
 char *ressources::locateFile(const char *const name)
 {
 
-	if(is_verbose)
-		fprintf(stdout, "ressources::locateFile(%s) [START]\n", name);
+	//if(is_verbose)
+	//	fprintf(stdout, "ressources::locateFile(%s) [START]\n", name);
 
 	//###################################################################
 	// clear path name string
@@ -302,8 +302,8 @@ char *ressources::locateFile(const char *const name)
 				strcat(pathname, "/");
 			strcat(pathname, name);
 		}
-		if(is_verbose)
-			fprintf(stdout, "ressources::locateFile() try %s\n", pathname);
+		//if(is_verbose)
+		//	fprintf(stdout, "ressources::locateFile() try %s\n", pathname);
 	
 #ifdef WIN32
 		struct _stat s;
@@ -313,7 +313,7 @@ char *ressources::locateFile(const char *const name)
 #else
 		struct stat s;
 		if(stat(pathname, &s) == 0 && !S_ISDIR(s.st_mode)) 
-		{	if(is_verbose) fprintf(stdout, "ressources::locateFile(%s) END\n", pathname);
+		{	//if(is_verbose) fprintf(stdout, "ressources::locateFile(%s) END\n", pathname);
 			return pathname;
 		}
 #endif
@@ -410,9 +410,9 @@ char *ressources::loadZeFile(char *fname, Uint32 *fsize)
   	//###################################################################
   	// allocate memory
   	//###################################################################
-	char *ptMem = (char *)(memGestion->reserveMem(sStat.st_size,
+	char *ptMem = (char *)(memory->alloc(sStat.st_size,
   		0x31313131));
-	num_erreur = memGestion->retour_err();
+	num_erreur = memory->retour_err();
 	 if(num_erreur)       
 	{	fprintf(stderr, "ressources::loadZeFile() %s : out of memory\n\n",
 			pname);
@@ -424,7 +424,7 @@ char *ressources::loadZeFile(char *fname, Uint32 *fsize)
 	// read the file
   	//###################################################################
 	if(read(fhand, ptMem, sStat.st_size) != sStat.st_size)
-	{	//menGestion->liberation(ptMem);
+	{	//menGestion->release(ptMem);
 		fprintf(stderr, "ressources::loadZeFile() can't read file %s (%s)\n\n",
 			pname, strerror(errno));
 		//free(pname);

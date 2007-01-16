@@ -94,7 +94,7 @@ template < class X > void objet_gere < X >::littleDead()
 				delete monPT;
 			objetListe[i] = (X *) NULL;
 		}
-		memGestion->liberation((char *)objetListe);
+		memory->release((char *)objetListe);
 		objetListe = NULL;
 	}
 	mentatKill();
@@ -129,9 +129,9 @@ template < class X > Sint32 objet_gere < X >::init_liste()
 {
 	GIF_bitMap *image = image_BOBs;
 	if(objetTotal)
-	{	objetListe = (X **) (memGestion->reserveMem(sizeof(X *) * objetTotal,
+	{	objetListe = (X **) (memory->alloc(sizeof(X *) * objetTotal,
 			0x4F424A47));
-		error_init(memGestion->retour_err());
+		error_init(memory->retour_err());
 		if(erreur_num)
 			return (erreur_num);
 		X *zeBOB = new X();
