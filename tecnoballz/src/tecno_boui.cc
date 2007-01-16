@@ -97,7 +97,7 @@ void tecno_boui::gere_atome()
 			atom_deplX = *(depla++) * resolution;
 			atom_deplY = *depla * resolution;
 			
-			if(BOBListNum > 3)
+			if(object_pos > 3)
 			{	atom_deplX = -atom_deplX;
 				atom_deplY = -atom_deplY;
 			}
@@ -187,7 +187,7 @@ void tecno_boui::littleInit(Sint32 time0, Sint32 appar, Sint32 index, Sint32 pow
 	atom_deplY = 0;					//offset Y
 	Sint32 i = hasard_val & 15;
 	i++;
-	i *= numero_BOB;
+	i *= object_pos;
 	atom_count = i;					//trajectory change counter 
 	init_tempo = 3;					//rate animation
 	anim_tempo = 1;					//rate animation counter

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.3 2006/10/04 11:14:05 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.4 2007/01/16 16:57:31 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -34,7 +34,7 @@ shop_tecno::shop_tecno()
 	initialise();
 	ecranfond4 = new fond_ecran();
 	objetMouse = new mousePoint();
-	BOB_allume = new BOB_killer();
+	BOB_allume = new sprite_object();
 	gereGadget = new ze_gadgets(NB_OPTIONS + 2, 0);
 	mega_print = new print_text();
 	ptrEscMenu = new escapeMenu();
@@ -83,7 +83,7 @@ shop_tecno::~shop_tecno()
 	delete gereGadget;
 	if(BOB_allume)
 	{	delete BOB_allume;
-		BOB_allume = (BOB_killer*)NULL;
+		BOB_allume = (sprite_object*)NULL;
 	}
 	delete objetMouse;
 	delete ecranfond4;
@@ -151,7 +151,7 @@ Sint32 shop_tecno::first_init()
 		error_init(BOB_allume->initialise(BOB_LEDSH2, image_BOBs, 0));
 	if(erreur_num) return erreur_num;
 	BOBgestion->ajoute_BOB(BOB_allume);
-	BOB_allume->BOB_active();
+	BOB_allume->enable();
 
 	//###################################################################
 	// initialize the gadgets
@@ -226,7 +226,7 @@ Sint32 shop_tecno::zeMainLoop()
 	ecran_gere->tamponBuff(290* resolution, 3 * resolution, 
 		26 * resolution, 180 * resolution);
 	
-	if(!ptrEscMenu->BOBisactiv())
+	if(!ptrEscMenu->is_enable())
 	{	pos_select();
 		Sint32 x = objetMouse->retournePX();
 		Sint32 y = objetMouse->retournePY();
@@ -360,7 +360,7 @@ Sint32 shop_tecno::testkursor(Sint32 x, Sint32 y)
 Sint32 shop_tecno::led_moving(Sint32 index)
 {
 	if(index < 0)
-	{	BOB_allume->BOB_desact();
+	{	BOB_allume->disable();
 		Sint32 i = 0;
 		gereGadget->gadgetShop(0);
 		return i;
@@ -372,7 +372,7 @@ Sint32 shop_tecno::led_moving(Sint32 index)
 		gereGadget->gadgetShop(i);
 		
 		// set LED indicator
-		BOB_allume->BOB_active();
+		BOB_allume->enable();
 		BOB_allume->coordonnee(curseur_x1, curseur_y1);
 		if(joueurGere->get_Bprice())
 			i = 1;
@@ -684,7 +684,7 @@ void shop_tecno::sh_ballade()
 {
 	if(get_object >= 0)	//pointer to the table "case_price" (-1 = no drag object)
 	{	if(keyGestion->leftButton())
-		{	bob_volant->BOB_active();
+		{	bob_volant->enable();
 			bob_volant->coordonnee(objetMouse->retournePX(), objetMouse->retournePY());
 			if(bobclignot->flag_actif)
 				bobclignot->flag_actif = 0;
@@ -695,7 +695,7 @@ void shop_tecno::sh_ballade()
 		{	
 		
 		
-			bob_volant->BOB_desact();
+			bob_volant->disable();
 			bobclignot->flag_actif = 1;
 			Sint32 i = cadre_offs;
 			if(i >= 0)
@@ -772,7 +772,7 @@ void shop_tecno::sh_ballade()
 	// get a object with the mouse
 	//###################################################################
 	else
-	{	bob_volant->BOB_desact();
+	{	bob_volant->disable();
 		pt_get_obj = -1;
 		if(keyGestion->leftButton())
 		{	Sint32 i = cadre_offs;

@@ -25,9 +25,9 @@
 //...............................................................................
 class tecno_text;
 //...............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 //...............................................................................
-class tecno_text:public BOB_killer
+class tecno_text:public sprite_object
 {
 	friend class zeMoveText;
 

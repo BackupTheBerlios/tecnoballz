@@ -25,7 +25,7 @@
 #define __TECNO_CAPS__
 class tecno_caps;
 //...............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/tecno_bump.h"
 #include "../include/barreScore.h"
 #include "../include/ecran_hard.h"
@@ -33,7 +33,7 @@ class tecno_caps;
 #include "../include/technoBall.h"
 #include "../include/tecno_fire.h"
 //...............................................................................
-class tecno_caps:public BOB_killer
+class tecno_caps:public sprite_object
 {
 	friend class zeCapsules;
 

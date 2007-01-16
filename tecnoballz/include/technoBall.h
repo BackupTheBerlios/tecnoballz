@@ -25,7 +25,7 @@
 //...............................................................................
 class technoBall;
 //...............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 //-------------------------------------------------------------------------------
 // structure of ball start coordinates (ejectors)
 //-------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ typedef struct
 #include "../include/ejectBalls.h"
 
 //...............................................................................
-class technoBall:public BOB_killer
+class technoBall:public sprite_object
 {
 	friend class zeNewBalls;
 	friend class ballDirect;

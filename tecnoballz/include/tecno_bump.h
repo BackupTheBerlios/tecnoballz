@@ -25,14 +25,14 @@
 //...............................................................................
 class tecno_bump;
 //...............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/technoBall.h"
 #include "../include/zeFireBump.h"
 #include "../include/GIF_bitMap.h"
 #include "../include/tecno_miss.h"
 #include "../include/zeGigaBlit.h"
 //...............................................................................
-class tecno_bump:public BOB_killer
+class tecno_bump:public sprite_object
 {
 	friend class zeRaquette;
 	friend class zeNewBalls;

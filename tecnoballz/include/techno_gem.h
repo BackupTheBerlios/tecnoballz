@@ -25,7 +25,7 @@
 #define __TECHNO_GEM__
 class techno_gem;
 //...............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/technoBall.h"
 #include "../include/tecno_fire.h"
 //...............................................................................
@@ -39,7 +39,7 @@ enum
 	PENTABRONZ
 };
 
-class techno_gem:public BOB_killer
+class techno_gem:public sprite_object
 {
 	friend class zeCapsules;
 	

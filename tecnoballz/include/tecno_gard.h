@@ -24,7 +24,7 @@
 #define __TECNO_GARD__
 class tecno_gard;
 //..............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/ecran_hard.h"
 #include "../include/zeguardian.h"
 #include "../include/zeMissiles.h"
@@ -32,7 +32,7 @@ class tecno_gard;
 #include "../include/zeGigaBlit.h"
 #include "../include/zexplosion.h"
 //..............................................................................
-class tecno_gard:public BOB_killer
+class tecno_gard:public sprite_object
 {
 	friend class zeguardian;
 	friend class zeMissiles;

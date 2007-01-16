@@ -95,9 +95,9 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 		// initialize the objects "giga_blitz"
 		for(Sint32 i = 0 ;i < objetTotal ;i++)
 		{	giga_blitz *g = new giga_blitz();
-			g->setListNum(i);
+			g->set_object_pos(i);
 			//g->afflignesF = 1;
-			g->set_method(BOB_killer::METHOD_LIN);	
+			g->set_method(sprite_object::METHOD_LIN);	
 			Sint32 n = numeroBOBs[i];
 			error_init(g->initialise(n, image_BOBs, 0));
 			if(erreur_num)
@@ -169,14 +169,14 @@ void zeGigaBlit::execution1()
 	Sint32 y = g->retournePY();
 	y = y - (8 * resolution);
 	if(y <= bitz_ystop)
-	{	g->BOB_desact();
+	{	g->disable();
 		blitz_haut = 0;
 	}
 	else
 	{	if(y >= bitz_maxiy)
-			g->BOB_desact();
+			g->disable();
 		else
-			g->BOB_active();
+			g->enable();
 	}
 		
 	//###################################################################
@@ -277,9 +277,9 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
 		// initialize the objects "giga_blitz"
 		for(Sint32 i=0 ; i<objetTotal ; i++)
 		{ giga_blitz *g = new giga_blitz();
-			g->setListNum(i);
+			g->set_object_pos(i);
 			g->mirrorVert = 1;
-			g->set_method(BOB_killer::METHOD_LIN);	
+			g->set_method(sprite_object::METHOD_LIN);	
 			Sint32 n = numeroBOBs[i];
 			error_init(g->initialise(n, image_BOBs, 0));
 			if(erreur_num)
@@ -332,7 +332,7 @@ void zeGigaBlit::execution2()
 
 
 		if (y >= 240 * resolution)
-		{	g->BOB_desact();
+		{	g->disable();
 			blitz_haut = 0;
 		}
 		collision2();	//collision bumper and Gigablitz
@@ -400,7 +400,7 @@ Sint32 zeGigaBlit::guard_shoot(Sint32 value, Sint32 pos_x, Sint32 pos_y,
 #ifndef SOUNDISOFF
 		ptAudiomix->sound_play(S_TIR_GARD);
 #endif
-		g->BOB_active();
+		g->enable();
 		blitz_haut = g->getHauteur();
 		blitz_posx = pos_x;
 		return 1;

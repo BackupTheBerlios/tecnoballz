@@ -25,7 +25,7 @@
 //...............................................................................
 class briqueCote;
 //...............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/mentatCode.h"
 //...............................................................................
 
@@ -52,8 +52,8 @@ class briqueCote:public mentatCode
 	
 		static const Uint32	iMAXBRICOT = 64;
 	
-		BOB_killer*			bricote_hz;	//small horizontal bricks
-		BOB_killer*			bricote_vt;	//small vertical bricks
+		sprite_object*			bricote_hz;	//small horizontal bricks
+		sprite_object*			bricote_vt;	//small vertical bricks
 		char*				fond_sauve;	//buffer to save background under bricks
 		Sint32				mur_duhaut;	//1=wall of the top is breakable
 		Sint32				mur_droite;	//1=wall of the right is breakable
@@ -69,9 +69,9 @@ class briqueCote:public mentatCode
 		Sint32				mapduHaut0[BRICOTENUM+4];
 		
 		// wall of sprites (bob_ground = 1)
-		BOB_killer*			bobwal_lef[BRICOTENUM+4];
-		BOB_killer*			bobwal_rgh[BRICOTENUM+4];
-		BOB_killer*			bobwal_top[BRICOTENUM+4];
+		sprite_object*			bobwal_lef[BRICOTENUM+4];
+		sprite_object*			bobwal_rgh[BRICOTENUM+4];
+		sprite_object*			bobwal_top[BRICOTENUM+4];
  
 		Sint32*				map_gauche;
 		Sint32*				map_droite;

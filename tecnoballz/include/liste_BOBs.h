@@ -26,7 +26,7 @@
 //..............................................................................
 class                   liste_BOBs;
 //..............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/handler_memory.h"
 #include "../include/mentatCode.h"
 //..............................................................................
@@ -37,14 +37,14 @@ class liste_BOBs:public mentatCode
 		Sint32			BOB_nombre;
 		Sint32			SHA_nombre;
 		Sint32			BOBsnombre;
-		BOB_killer*		BOB__liste[BOBNumMaxi];
-		BOB_killer*		SHA__liste[BOBNumMaxi];
+		sprite_object*		BOB__liste[BOBNumMaxi];
+		sprite_object*		SHA__liste[BOBNumMaxi];
 
 	public:
 						liste_BOBs(Sint32 nombr);
 						~liste_BOBs();
 		void			clear_list();
-		void			ajoute_BOB(BOB_killer * unBOB);
+		void			ajoute_BOB(sprite_object * unBOB);
 		void			listeBOBgo();
 		void			listeBOBrz();
 };

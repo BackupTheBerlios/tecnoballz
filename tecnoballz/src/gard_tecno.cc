@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.3 2005/01/18 13:21:39 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.4 2007/01/16 16:57:31 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -44,7 +44,7 @@ gard_tecno::gard_tecno()
 	ptPrntmney = new printmoney();
 	ptMiniMess = new zeMiniMess();
 	ptGigaBlit = new zeGigaBlit();
-	ptBobMoney = new BOB_killer();
+	ptBobMoney = new sprite_object();
 	ptBobLifes = new tecno_gads();
 	ptGameOver = new zeGameOver();
 	ptCongBall = new zeCongBall();
@@ -248,9 +248,9 @@ Sint32 gard_tecno::first_init()
 	score_over* pOver = ptGameOver->gtScorOver();
 	ptBob_name = pOver->string2bob(joueurGere->returnName());
 	BOBgestion->ajoute_BOB(ptBob_name);
-	ptBob_name->BOB_active();
+	ptBob_name->enable();
 	ptBob_name->coordonnee((ecran_gere->screenwdth() - ptBob_name->getLargeur()) / 2, resolution);
-	ptBob_name->set_method(BOB_killer::METHOD_MSK);
+	ptBob_name->set_method(sprite_object::METHOD_MSK);
 	return erreur_num;
 }
 

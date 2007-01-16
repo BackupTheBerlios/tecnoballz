@@ -25,9 +25,9 @@
 //...............................................................................
 class mousePoint;
 //...............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 //...............................................................................
-class mousePoint:public BOB_killer
+class mousePoint:public sprite_object
 {
 	public:
 							mousePoint();

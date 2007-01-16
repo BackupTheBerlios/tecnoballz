@@ -115,11 +115,11 @@ void zeGemstone::moving_gem()
 					pJoueurDat->set_bumpOn(4, 3);	// active left bumper
 					tecno_bump* pBump;
 					pBump = ptRaquette->demandeRak(2);
-					pBump->BOB_active();
+					pBump->enable();
 					pBump = ptRaquette->demandeRak(3);
-					pBump->BOB_active();
+					pBump->enable();
 					pBump = ptRaquette->demandeRak(4);
-					pBump->BOB_active();
+					pBump->enable();
 					return;
 				}
 			}

@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.3 2007/01/16 14:37:34 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.4 2007/01/16 16:57:31 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,7 +140,7 @@ Sint32 zeRaquette::init_liste()
 	// gards levels: create one simple bumper
 	//###################################################################
     if(objetTotal == 1)
-    {	tecBumper1->setListNum(0);
+    {	tecBumper1->set_object_pos(0);
 		error_init(tecBumper1->initialise(BOBtypeNum, image_BOBs, 1, 0));
 		if(erreur_num) return erreur_num;
 		BOBgestion->ajoute_BOB(tecBumper1);
@@ -152,7 +152,7 @@ Sint32 zeRaquette::init_liste()
 		tecBumper1->rebonds_Ga = midi1_left;	//ball rebounds table
 		tecBumper1->rebonds_Dr = midi1Right;	//ball rebounds table 
 		tecBumper1->bump_actif = 1;
-		tecBumper1->BOB_active();
+		tecBumper1->enable();
 		tecBumper1->direct_tab = ballePets1;	// table direction balle collee
     }
  	else
@@ -172,27 +172,27 @@ Sint32 zeRaquette::init_liste()
 		if(erreur_num) return erreur_num;
 
 		// create bottom bumper sprite
-		tecBumper1->setListNum(0);
+		tecBumper1->set_object_pos(0);
 		error_init(tecBumper1->initialise(BOB_BUMPHR, image_BOBs, 1, 0));
 		if(erreur_num) return erreur_num;
 		BOBgestion->ajoute_BOB(tecBumper1);
 		objetListe[0] = tecBumper1;
 
 		// create left bumper sprite
-		tecBumper2->setListNum(1);
+		tecBumper2->set_object_pos(1);
 		error_init(tecBumper2->initialise(BOB_BUMPVT, image_BOBs, 1, 0));
 		if(erreur_num) return erreur_num;
 		BOBgestion->ajoute_BOB(tecBumper2);
 		objetListe[1] = tecBumper2;
 
 		// create top bumper sprite
-		tecBumper3->setListNum(2);
+		tecBumper3->set_object_pos(2);
 		tecBumper1->duplicaBOB(tecBumper3);
 		BOBgestion->ajoute_BOB(tecBumper3);
 		objetListe[2] = tecBumper3;
 
 		// create right bumper sprite
-		tecBumper4->setListNum(3);
+		tecBumper4->set_object_pos(3);
 		tecBumper2->duplicaBOB(tecBumper4);
 		BOBgestion->ajoute_BOB(tecBumper4);
 		objetListe[3] = tecBumper4;
@@ -208,7 +208,7 @@ Sint32 zeRaquette::init_liste()
 //-------------------------------------------------------------------------------
 Sint32 zeRaquette::init_robot()
 {
-	tec_robot0->setListNum(4);
+	tec_robot0->set_object_pos(4);
 	error_init(tec_robot0->initialise(BOB_ROBOT0, image_BOBs, 1, 0));
 	if(erreur_num) return erreur_num;
 	BOBgestion->ajoute_BOB(tec_robot0);
@@ -222,7 +222,7 @@ Sint32 zeRaquette::init_robot()
 void zeRaquette::activrobot()
 {
 	Sint32 centre;
-	tec_robot0->BOB_active();
+	tec_robot0->enable();
 	centre = bumperMini + (bumperMaxi  - bumperMini) / 2 -
 				(tec_robot0->colLargeur / 2);
 	tec_robot0->coordonnee(centre, 232 * resolution);
@@ -234,7 +234,7 @@ void zeRaquette::activrobot()
 //-------------------------------------------------------------------------------
 void zeRaquette::deactrobot()
 {
-	tec_robot0->BOB_desact();
+	tec_robot0->disable();
 	tec_robot0->bump_actif = 0;
 }
 
@@ -722,15 +722,15 @@ Sint32 zeRaquette::get_invers()
 void zeRaquette::bumpersOff()
 {
 	if (tecBumper1)
-		tecBumper1->BOB_desact();
+		tecBumper1->disable();
 	if (tecBumper2)
-		tecBumper2->BOB_desact();
+		tecBumper2->disable();
 	if (tecBumper3)
-		tecBumper3->BOB_desact();
+		tecBumper3->disable();
 	if (tecBumper4)
-		tecBumper4->BOB_desact();
+		tecBumper4->disable();
 	if (tec_robot0)
-		tec_robot0->BOB_desact();
+		tec_robot0->disable();
 }
 
 

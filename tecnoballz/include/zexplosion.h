@@ -26,12 +26,12 @@
 class zexplosion;
 //...............................................................................
 #include "../include/liste_BOBs.h"
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/objet_gere.h"
 //...............................................................................
-class zexplosion:public objet_gere < BOB_killer >
+class zexplosion:public objet_gere < sprite_object >
 {
-	//friend class BOB_killer;
+	//friend class sprite_object;
 	public:
 							zexplosion();
 							~zexplosion();

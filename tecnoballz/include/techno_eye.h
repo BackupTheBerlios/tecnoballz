@@ -25,13 +25,13 @@
 //.......................................................................
 class techno_eye ;
 //.......................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/technoBall.h"
 #include "../include/lesBriques.h"
 #include "../include/zeNewBalls.h"
 #include "../include/ze_magneye.h"
 //.......................................................................
-class techno_eye : public BOB_killer
+class techno_eye : public sprite_object
 {	friend class zeNewBalls;
 	friend class ze_magneye;
 		

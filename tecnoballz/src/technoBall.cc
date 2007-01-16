@@ -52,7 +52,7 @@ void technoBall::littleInit(Sint32 start, Sint32 speed,
 	start_init = start;
 	speed_init = speed;
 	speedBallZ = table;
-	BOB_desact();
+	disable();
 	colleBallF = 0;
 	startCount = 0;
 	brickWidth = bwght;
@@ -64,7 +64,7 @@ void technoBall::littleInit(Sint32 start, Sint32 speed,
 //-----------------------------------------------------------------------------
 void technoBall::reStarting(tecno_bump * raket)
 {
-	BOB_active();
+	enable();
 	startCount = start_init;
 	colleBallF = raket->bumper_num();
 	razingBall(raket);
@@ -75,7 +75,7 @@ void technoBall::reStarting(tecno_bump * raket)
 //-----------------------------------------------------------------------------
 void technoBall::goSleeping(tecno_bump * raket)
 {
-	BOB_desact();
+	disable();
 	colleBallF = 0;
 	startCount = 0;
 	razingBall(raket);
@@ -126,7 +126,7 @@ void technoBall::razingBal0(tecno_bump * raket)
 //-----------------------------------------------------------------------------
 void technoBall::startBalle(Sint32 large)
 {
-	BOB_active();
+	enable();
 	tecno_bump *raket = raket_glue;
 	reStarting(raket);
 	position_x = raket->retournePX() + ((large >> 1) - ((colLargeur >> 1) + 1));

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.6 2007/01/16 14:37:34 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.7 2007/01/16 16:57:31 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -41,7 +41,7 @@ tableaux_Z::tableaux_Z()
 	tete_gugus = new head_anima();
 	les_atomes = new zeBouiBoui(gereCapsul, gereGadget, ptGemstone, briquesTab);
 	pt_magneye = new ze_magneye();
-	BottomWall = new BOB_killer(); 
+	BottomWall = new sprite_object(); 
 	ptMiniMess = new zeMiniMess();
 	gereBalles = new zeNewBalls(gereEjects, briquesTab, gereBricot, tete_gugus,
 					les_atomes, tecZ_barre, BottomWall,
@@ -53,7 +53,7 @@ tableaux_Z::tableaux_Z()
 	ptPrntmney = new printmoney();
 	ptGameOver = new zeGameOver();
 
-	ptBobMoney = new BOB_killer();
+	ptBobMoney = new sprite_object();
 	ptBobRever = new tecno_gads();
 	ptrEscMenu = new escapeMenu();
 	
@@ -73,7 +73,7 @@ tableaux_Z::~tableaux_Z()
 {
 	if (BottomWall)
 	{	BottomWall->BOBdestroy();
-		BottomWall = (BOB_killer*)NULL;
+		BottomWall = (sprite_object*)NULL;
 	}
 	delete ptrEscMenu;
 	delete ptBobRever;
@@ -423,7 +423,7 @@ Sint32 tableaux_Z::zeMainLoop()
 			ptGemstone->moving_gem();	//move gems
 			gere_texte->goMoveText();
 			if(BottomWall->thecounter < 1)
-				BottomWall->BOB_desact();
+				BottomWall->disable();
 			else
 				BottomWall->thecounter--;
 			

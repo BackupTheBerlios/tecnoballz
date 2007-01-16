@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.3 2005/02/04 13:31:09 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.4 2007/01/16 16:57:31 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -87,7 +87,7 @@ Sint32 print_menu::first_init()
 	//###################################################################
 	error_init(initialBOB(graphTexte, 0));
 	if(erreur_num) return (erreur_num);
-	BOB_active();
+	enable();
 	coordonnee(32 * resolution, 80 * resolution);
 	
 	//###################################################################

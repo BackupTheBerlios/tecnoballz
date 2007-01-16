@@ -27,9 +27,9 @@
 
 class giga_blitz;
 
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/objet_gere.h"
-class giga_blitz:public BOB_killer
+class giga_blitz:public sprite_object
 {
   private:
     

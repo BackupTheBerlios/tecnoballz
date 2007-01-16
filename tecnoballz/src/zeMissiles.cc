@@ -65,8 +65,8 @@ void zeMissiles::anim_fires()
 	xFire->animRepete();
 	Sint32 o = xFire->litAnimOff();
 	Sint32 cycle = o & 0X1;
-	if(!cycle) cycle = BOB_killer::METHOD_TAB;
-	else cycle = BOB_killer::METHOD_CC1;
+	if(!cycle) cycle = sprite_object::METHOD_TAB;
+	else cycle = sprite_object::METHOD_CC1;
 	
 	Sint32 t = objetTotal;
 	for(Sint32 i = 1; i < t; i++)

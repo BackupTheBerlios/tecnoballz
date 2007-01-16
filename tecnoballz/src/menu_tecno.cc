@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.4 2006/06/22 07:02:28 patrice Exp $
+// id		: $Id: menu_tecno.cc,v 1.5 2007/01/16 16:57:31 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -33,7 +33,7 @@ menu_tecno::menu_tecno()
 {
 	initialise();
 	defilement = new lastScroll();	// background scrolling
-	BOBtecLogo = new BOB_killer();	// big logo "TecnoballZ"
+	BOBtecLogo = new sprite_object();	// big logo "TecnoballZ"
 	BOB_defile = new zeDefilTxt();
 	menu_texte = new print_menu();
 	objetMouse = new mousePoint();
@@ -72,7 +72,7 @@ Sint32 menu_tecno::first_init()
 	error_init(BOBtecLogo->initialise(BOB_LOGOTB, image_BOBs, 1));
 	if(erreur_num) return (erreur_num);
 	BOBgestion->ajoute_BOB(BOBtecLogo);
-	BOBtecLogo->BOB_active();
+	BOBtecLogo->enable();
 	BOBtecLogo->coordonnee(64, 13);
 
 	error_init(BOB_defile->init_chars());

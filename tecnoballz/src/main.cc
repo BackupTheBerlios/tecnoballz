@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.6 2007/01/16 14:37:34 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.7 2007/01/16 16:57:31 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -63,7 +63,7 @@ int main(Sint32 nbArg, char **ptArg)
 
 /*
  
-BOB_killer     => sprite_object
+sprite_object     => sprite_object
 
 technoBall     => sprite_ball
 techno_eye.cc  => sprite_eye

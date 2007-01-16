@@ -25,11 +25,11 @@
 //...............................................................................
 class zeCongBall;
 //...............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/objet_gere.h"
 #include "../include/score_over.h"
 //...............................................................................
-class zeCongBall:public objet_gere < BOB_killer >
+class zeCongBall:public objet_gere < sprite_object >
 {	
 	private:
 			Sint32			speed_rad0;

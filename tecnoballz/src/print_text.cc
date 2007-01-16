@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-10
 // fonction	: display chars
-// id		: $Id: print_text.cc,v 1.2 2005/01/11 12:52:44 gurumeditation Exp $
+// id		: $Id: print_text.cc,v 1.3 2007/01/16 16:57:31 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -331,7 +331,7 @@ void print_text::bufferAff2(Sint32 x, Sint32 y, char *chain, Sint32 total)
 //------------------------------------------------------------------------------
 // create a BOB to display string (used into guards levels)
 //------------------------------------------------------------------------------
-BOB_killer*  print_text::string2bob(const char* ptStr)
+sprite_object*  print_text::string2bob(const char* ptStr)
 {
 	Sint32 numch = strlen(ptStr);
 	GIF_bitMap* pBmap = new GIF_bitMap();
@@ -381,7 +381,7 @@ BOB_killer*  print_text::string2bob(const char* ptStr)
 		}
 	}
 
-	BOB_killer* ptBob = new BOB_killer();
+	sprite_object* ptBob = new sprite_object();
 	ptBob->set_memGFX(pBmap->duplicates(), 1);
 	ptBob->BOBlargeur = pBmap->GFXlargeur();
 	ptBob->BOBhauteur = pBmap->GFXhauteur();

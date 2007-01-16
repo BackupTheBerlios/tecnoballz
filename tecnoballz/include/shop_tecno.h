@@ -27,7 +27,7 @@ class shop_tecno;
 //...............................................................................
 #include "../include/liste_BOBs.h"
 #include "../include/mousePoint.h"
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/ze_gadgets.h"
 #include "../include/print_text.h"
 #include "../include/joueurData.h"
@@ -41,7 +41,7 @@ class shop_tecno:public runGestion
 		static const Sint32	STEXTWIDHT = 22;	//largeur d'une ligne texte en caracteres
 		fond_ecran*			ecranfond4;
 		mousePoint*			objetMouse;
-		BOB_killer*			BOB_allume;
+		sprite_object*			BOB_allume;
 		ze_gadgets*			gereGadget;
 		print_text*			mega_print;
 		escapeMenu*			ptrEscMenu;

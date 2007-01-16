@@ -24,9 +24,9 @@
 #ifndef __TECNODEFIL__
 #define __TECNODEFIL__
 //...............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 //...............................................................................
-class tecnoDefil:public virtual BOB_killer
+class tecnoDefil:public virtual sprite_object
 {
 	friend class zeDefilTxt;
 	protected:

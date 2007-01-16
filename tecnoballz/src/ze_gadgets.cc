@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.4 2007/01/13 21:04:28 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.5 2007/01/16 16:57:31 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -75,7 +75,7 @@ ze_gadgets::~ze_gadgets()
 //------------------------------------------------------------------------------
 void ze_gadgets::initialise(Sint32 mStep, Sint32 bKauf, Sint32 brCnt, const Sint16 *table,
 	Sint32 *cours, zeMiniMess* ptMes, zeRaquette *pRaqu, zeNewBalls* pBall,
-	barreScore* pScor, BOB_killer *pWall, ze_magneye* ptEye)
+	barreScore* pScor, sprite_object *pWall, ze_magneye* ptEye)
 {
 	ptRaquette = pRaqu;
 	ptNewBalls = pBall;
@@ -238,19 +238,19 @@ Sint32 ze_gadgets::gadgetShop()
 	for(Sint32 i = 0; i < t; i++)
 	{	bonus = *(liste++);
 		bonus->coordonnee(x, y);
-		bonus->BOB_desact();
+		bonus->disable();
 		y += h;
 	}
 	
 	//initialize bonus sprite object for the drag and drop 
 	bonus = *(liste++);
 	bonus->coordonnee(0, 0);
-	bonus->BOB_desact();
+	bonus->disable();
 
 	//initialize bonus sprite object that display indicator   
 	bonus = *liste;
 	bonus->coordonnee(SGADGET_X2 * resolution, SGADGET_Y2 * resolution);
-	bonus->BOB_desact();
+	bonus->disable();
 	temoin_gad = bonus;
 	return (erreur_num);
 }
@@ -504,21 +504,21 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	case GAD_BUMP02:
 		ptMiniMess->mesrequest(26);
 		bumpSelect = oBump->demandeRak(2);
-		bumpSelect->BOB_active();
+		bumpSelect->enable();
 		break;
 
 	// top bumper[3] enable (no gadget)
 	case GAD_BUMP03:
 		ptMiniMess->mesrequest(27);
 		bumpSelect = oBump->demandeRak(3);
-		bumpSelect->BOB_active();
+		bumpSelect->enable();
 		break;
 
 	// right bumper[4] enable (no gadget)
 	case GAD_BUMP04:
 		ptMiniMess->mesrequest(28);
 		bumpSelect = oBump->demandeRak(4);
-		bumpSelect->BOB_active();
+		bumpSelect->enable();
 		break;
 
 	// ball size 2
@@ -558,17 +558,17 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 		raket->bump_fire2();
 	
 		bumpSelect = oBump->demandeRak(2);
-		bumpSelect->BOB_active();
+		bumpSelect->enable();
 		bumpSelect->bumpGoGlue();
 		bumpSelect->bump_fire2();
 	
 		bumpSelect = oBump->demandeRak(3);
-		bumpSelect->BOB_active();
+		bumpSelect->enable();
 		bumpSelect->bumpGoGlue();
 		bumpSelect->bump_fire2();
 
 		bumpSelect = oBump->demandeRak(4);
-		bumpSelect->BOB_active();
+		bumpSelect->enable();
 		bumpSelect->bumpGoGlue();
 		bumpSelect->bump_fire2();
 		break;
@@ -588,7 +588,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 #ifndef SOUNDISOFF
 		ptAudiomix->sound_play(S_GADGETGO);
 #endif
-		ptBob_wall->BOB_active();
+		ptBob_wall->enable();
 		ptBob_wall->thecounter += 500; 
 		oBump->deactrobot();
 		break;
@@ -600,7 +600,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 		ptAudiomix->sound_play(S_GADGETGO);
 #endif
 		oBump->activrobot();
-		ptBob_wall->BOB_desact();
+		ptBob_wall->disable();
 		ptBob_wall->thecounter = 0;
 		break;
 	

@@ -22,7 +22,7 @@
 //******************************************************************************
 #include "../include/ressources.h"
 #include "../include/escapeMenu.h"
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/clavierMac.h"
 
 //-----------------------------------------------------------------------------
@@ -126,7 +126,7 @@ Sint32 escapeMenu::first_init(GIF_bitMap *image, Sint32 nmenu, Sint32 large, Sin
 	// save coordinates of the sprites
 	//###################################################################
 	char* ptAdd[8];
-	const bb_describ *pDesc = BOB_killer::zelistBOB[BOB_ESCMEN];
+	const bb_describ *pDesc = sprite_object::zelistBOB[BOB_ESCMEN];
 	Sint32 heigh = pDesc->BB_HAUTEUR;		//high in pixels
 	heigh *= resolution;
 	Sint32 nanim = pDesc->BB_ANIMATE;		//number of animations

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-11
 // fonction	: handle the the guards levels
-// id		: $Id: gard_tecno.h,v 1.2 2005/01/15 10:18:50 gurumeditation Exp $
+// id		: $Id: gard_tecno.h,v 1.3 2007/01/16 16:57:15 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -64,8 +64,8 @@ class gard_tecno:public virtual runGestion
 		printmoney*			ptPrntmney;
 		zeMiniMess*			ptMiniMess;
 		zexplosion*			pExplosion;
-		BOB_killer*			ptBobMoney;
-		BOB_killer*			ptBob_name;
+		sprite_object*			ptBobMoney;
+		sprite_object*			ptBob_name;
 		tecno_gads*			ptBobLifes;
 		escapeMenu*			ptrEscMenu;
 		Sint32				areaNumber;		// number of area 1 to 5

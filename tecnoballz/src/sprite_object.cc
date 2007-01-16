@@ -1,32 +1,36 @@
-//*****************************************************************************
-// copyright (c) 1991-2006 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file		: "BOB_killer.cc"
-// created	: ?
-// updates	: 2006-10-04
-// fonctions	: Sprites or shapes on the screen
-// id		: $Id: BOB_killer.cc,v 1.11 2007/01/16 14:37:34 gurumeditation Exp $
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA 02111-1307, USA.
-//*****************************************************************************
-#include "../include/BOB_killer.h"
+/** 
+ * @file sprite_object.cc 
+ * @brief Draw sprites on the screen 
+ * @date 2007-01-16
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.1 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: sprite_object.cc,v 1.1 2007/01/16 16:57:31 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
+#include "../include/sprite_object.h"
 
 //-----------------------------------------------------------------------------
 // create the object
 //-----------------------------------------------------------------------------
-BOB_killer::BOB_killer()
+sprite_object::sprite_object()
 {
 	ombredecax = ecran_hard::SHADOWOFFX * resolution;
 	ombredecay = ecran_hard::SHADOWOFFY * resolution;
@@ -38,7 +42,7 @@ BOB_killer::BOB_killer()
 //-----------------------------------------------------------------------------
 // release the object
 //-----------------------------------------------------------------------------
-BOB_killer::~BOB_killer()
+sprite_object::~sprite_object()
 {
 	BOBdestroy();
 }
@@ -46,7 +50,7 @@ BOB_killer::~BOB_killer()
 //-----------------------------------------------------------------------------
 // free memory used
 //-----------------------------------------------------------------------------
-void BOB_killer::BOBdestroy()
+void sprite_object::BOBdestroy()
 {
 	if(memoryflag)
 	{	for(Sint32 i = 0; i < animationN; i++)
@@ -85,7 +89,7 @@ void BOB_killer::BOBdestroy()
 //-----------------------------------------------------------------------------
 // reset some values
 //-----------------------------------------------------------------------------
-void BOB_killer::BOBprepare()
+void sprite_object::BOBprepare()
 {
 	mentatInit();
 	adresseGFX = (char *)NULL;
@@ -108,7 +112,7 @@ void BOB_killer::BOBprepare()
 	init_tempo = 1;
 	position_x = 0;
 	position_y = 0;
-	numero_BOB = 0;
+	display_pos = 0;
 	maximum_X1 = 0;
 	maximum_Y1 = 0;
 	maxiOffset = 0;
@@ -128,7 +132,7 @@ void BOB_killer::BOBprepare()
 	mirrorVert = 0;	
 	tafflignes = (bb_afligne**)0x0;
 	memoryflag = 0;
-	BOBListNum = -1;
+	object_pos = -1;
  	affRepeatF = 0;
 	indexCycle = 0;
 	pt_cycling = &cycling_01[0];
@@ -137,17 +141,9 @@ void BOB_killer::BOBprepare()
 	releaseGFX = 0;
 }
 //-----------------------------------------------------------------------------
-// initialize the position in the list
-//-----------------------------------------------------------------------------
-void BOB_killer::setListNum(Sint32 listN)
-{
-	BOBListNum = listN;
-}
-
-//-----------------------------------------------------------------------------
 // copy sprite in another 
 //-----------------------------------------------------------------------------
-void BOB_killer::duplicaBOB(BOB_killer *bobPT)
+void sprite_object::duplicaBOB(sprite_object *bobPT)
 {
 	bobPT->adresseGFX = adresseGFX;
 	bobPT->adresseTAB = adresseTAB;
@@ -169,7 +165,7 @@ void BOB_killer::duplicaBOB(BOB_killer *bobPT)
 	bobPT->init_tempo = init_tempo;
 	bobPT->position_x = position_x;
 	bobPT->position_y = position_y;
-	bobPT->numero_BOB = numero_BOB;
+	bobPT->display_pos = display_pos;
 	bobPT->maximum_X1 = maximum_X1;
 	bobPT->maximum_Y1 = maximum_Y1;
 	bobPT->maxiOffset = maxiOffset;
@@ -190,36 +186,45 @@ void BOB_killer::duplicaBOB(BOB_killer *bobPT)
 	bobPT->memoryflag = 0;
 }
 
-//------------------------------------------------------------------------------
-// activate a sprite
-//------------------------------------------------------------------------------
-void BOB_killer::BOB_active()
+/**
+ * Enable the sprite
+ */
+void sprite_object::enable()
 {
 	flag_actif = 1;
 }
 
-//------------------------------------------------------------------------------
-// deactivate a sprite
-//------------------------------------------------------------------------------
-void BOB_killer::BOB_desact()
+/**
+ * Disable the sprite
+ */
+void
+sprite_object::disable()
 {
 	flag_actif = 0;
 }
 
-//------------------------------------------------------------------------------
-// sprite is active?
-//------------------------------------------------------------------------------
-Sint32 BOB_killer::BOBisactiv()
+/**
+ * Check if the sprite is enable
+ * @return true if the sprite is enable
+ */
+Sint32
+sprite_object::is_enable()
 {
 	return flag_actif;
 }
 
-//------------------------------------------------------------------------------
-// set a number sprite (normally the number of position in list)
-//------------------------------------------------------------------------------
-void BOB_killer::impose_num(Sint32 nume)
+/**
+ * Set a number sprite (normally the number of position in list)
+ */
+void
+sprite_object::set_object_pos (Sint32 num)
 {
-	numero_BOB = nume;
+	object_pos = num;
+}
+
+void sprite_object::set_display_pos(Sint32 num)
+{
+	display_pos = num;
 }
 
 //------------------------------------------------------------------------------
@@ -227,7 +232,7 @@ void BOB_killer::impose_num(Sint32 nume)
 // input	=> image: bitmap source
 // 			=> ombre: 1 = shadow
 //------------------------------------------------------------------------------
-Sint32 BOB_killer::initialBOB(GIF_bitMap *image, Sint32 ombre)
+Sint32 sprite_object::initialBOB(GIF_bitMap *image, Sint32 ombre)
 {
 	initCommun(image, ombre);
 	adresseGFX = image->GFXadresse();
@@ -239,7 +244,7 @@ Sint32 BOB_killer::initialBOB(GIF_bitMap *image, Sint32 ombre)
 // input	=> image: bitmap source
 // 			=> ombre: 1 = shadow
 //------------------------------------------------------------------------------
-void BOB_killer::initCommun(GIF_bitMap *image, Sint32 ombre)
+void sprite_object::initCommun(GIF_bitMap *image, Sint32 ombre)
 {
 	ecran_hard *ecran = ecran_gere;
 	ecranLarge = ecran->screenwdth();
@@ -263,7 +268,7 @@ void BOB_killer::initCommun(GIF_bitMap *image, Sint32 ombre)
 //------------------------------------------------------------------------------
 // Allocate memory
 //------------------------------------------------------------------------------
-Sint32 BOB_killer::reservBOBt(Sint32 anima)
+Sint32 sprite_object::reservBOBt(Sint32 anima)
 {
 	memoryflag = 1;
 	animationN = anima;
@@ -297,17 +302,17 @@ Sint32 BOB_killer::reservBOBt(Sint32 anima)
 //			=> image: graphic object (a big image)
 //			=> ombre: 1 = shadow / 0=no shadow 
 //------------------------------------------------------------------------------
-Sint32 BOB_killer::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sint32 ftpix)
+Sint32 sprite_object::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sint32 ftpix)
 {
 	
-	/*printf("BOB_killer::initialise(BOBnu=%i, image, ombre=%i, ftpix=%i)\n",
+	/*printf("sprite_object::initialise(BOBnu=%i, image, ombre=%i, ftpix=%i)\n",
 		BOBnu, ombre, ftpix);*/
 	fTableByte = ftpix;
 
 	if(put_method == METHOD_MSK)
 		put_method = METHOD_TAB;
 /*
-	printf("BOB_killer::initialise() BOBnu=%i, image=%x, ombre=%i\n",
+	printf("sprite_object::initialise() BOBnu=%i, image=%x, ombre=%i\n",
 		BOBnu, (Sint32)image, ombre);
 */
 	
@@ -389,7 +394,7 @@ Sint32 BOB_killer::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sin
 		if(pos_y > (image->GFXhauteur() - BOBhauteur) || 
 			pos_x > (image->GFXlargeur() - BOBlargeur))
 		{	fprintf(stderr,
-				"BOB_killer::initialise() BOBnu=%i x2=%i>GFXlargeur=%i " \
+				"sprite_object::initialise() BOBnu=%i x2=%i>GFXlargeur=%i " \
 				"*AND/OR* y2=%i>GFXhauteur=%i\n",
 				(Sint32)BOBnu, (Sint32)(pos_x+BOBlargeur),
 				(Sint32)image->GFXlargeur(), (Sint32)(pos_y+BOBhauteur),
@@ -558,14 +563,14 @@ Sint32 BOB_killer::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sin
 	if(fTableByte)
 		tabAffich3 = BOBtableP3[0];
 	adresseGFX = adresseTAB[0];	//adresse GFX pour routine "afficheMSK"
-	//printf("BOB_killer::initialise()\n");
+	//printf("sprite_object::initialise()\n");
 	return (erreur_num);
 }
 
 //-------------------------------------------------------------------------------
 // initialize coordinates of the sprite
 //-------------------------------------------------------------------------------
-void BOB_killer::coordonnee(Sint32 posX, Sint32 posY)
+void sprite_object::coordonnee(Sint32 posX, Sint32 posY)
 {
 	position_x = posX;
 	position_y = posY;
@@ -574,7 +579,7 @@ void BOB_killer::coordonnee(Sint32 posX, Sint32 posY)
 //-------------------------------------------------------------------------------
 // initialize abscissa 
 //-------------------------------------------------------------------------------
-void BOB_killer::changePosX(Sint32 posX)
+void sprite_object::changePosX(Sint32 posX)
 {
 	position_x = posX;
 }
@@ -582,7 +587,7 @@ void BOB_killer::changePosX(Sint32 posX)
 //-------------------------------------------------------------------------------
 // initialize ordinate 
 //-------------------------------------------------------------------------------
-void BOB_killer::changePosY(Sint32 posY)
+void sprite_object::changePosY(Sint32 posY)
 {
 	position_y = posY;
 }
@@ -590,7 +595,7 @@ void BOB_killer::changePosY(Sint32 posY)
 //-------------------------------------------------------------------------------
 // deplace le BOB horizontalement
 //-------------------------------------------------------------------------------
-void BOB_killer::deplace_pX(Sint32 offs)
+void sprite_object::deplace_pX(Sint32 offs)
 {
 	position_x += offs;
 }
@@ -598,7 +603,7 @@ void BOB_killer::deplace_pX(Sint32 offs)
 //-------------------------------------------------------------------------------
 // deplace le BOB verticalement
 //-------------------------------------------------------------------------------
-void BOB_killer::deplace_pY(Sint32 offs)
+void sprite_object::deplace_pY(Sint32 offs)
 {
 	position_y += offs;
 }
@@ -606,7 +611,7 @@ void BOB_killer::deplace_pY(Sint32 offs)
 //-------------------------------------------------------------------------------
 // test si le BOB possede une ombre 
 //-------------------------------------------------------------------------------
-Sint32 BOB_killer::shadow_BOB()
+Sint32 sprite_object::shadow_BOB()
 {
 	return flagShadow;
 }
@@ -614,7 +619,7 @@ Sint32 BOB_killer::shadow_BOB()
 //-------------------------------------------------------------------------------
 // retourne l'abscisse du BOB 
 //-------------------------------------------------------------------------------
-Sint32 BOB_killer::retournePX()
+Sint32 sprite_object::retournePX()
 {
 	return position_x;
 }
@@ -622,7 +627,7 @@ Sint32 BOB_killer::retournePX()
 //-------------------------------------------------------------------------------
 // retourne l'ordonnee du BOB
 //-------------------------------------------------------------------------------
-Sint32 BOB_killer::retournePY()
+Sint32 sprite_object::retournePY()
 {
 	return position_y;
 }
@@ -630,7 +635,7 @@ Sint32 BOB_killer::retournePY()
 //-------------------------------------------------------------------------------
 // change image of sprite
 //-------------------------------------------------------------------------------
-void BOB_killer::change_GFX()
+void sprite_object::change_GFX()
 { 
 	Sint32 index = animOffset;
 	adresseGFX = adresseTAB[index];
@@ -643,7 +648,7 @@ void BOB_killer::change_GFX()
 //-------------------------------------------------------------------------------
 // change image of sprite
 //-------------------------------------------------------------------------------
-void BOB_killer::change_GFX(Sint32 index)
+void sprite_object::change_GFX(Sint32 index)
 { 	
 	animOffset = index;
 	adresseGFX = adresseTAB[index];
@@ -656,7 +661,7 @@ void BOB_killer::change_GFX(Sint32 index)
 //-------------------------------------------------------------------------------
 // restore background under the sprite 
 //-------------------------------------------------------------------------------
-void BOB_killer::efface_MSK()
+void sprite_object::efface_MSK()
 { 
 	//###################################################################
 	// if no memory address, then sprite is not displaying
@@ -713,7 +718,7 @@ void BOB_killer::efface_MSK()
 // -----------------------------------------------------------------------------
 // efface le BOB : restaure le decor 
 // -----------------------------------------------------------------------------
-void BOB_killer::efface_lin()
+void sprite_object::efface_lin()
 { 
 
 	bb_afligne *p = tafflignes[animOffset];
@@ -794,7 +799,7 @@ void BOB_killer::efface_lin()
 //-------------------------------------------------------------------------------
 // get current animation offset
 //-------------------------------------------------------------------------------
-Sint32 BOB_killer::litAnimOff()
+Sint32 sprite_object::litAnimOff()
 {
 	return animOffset;
 }
@@ -802,7 +807,7 @@ Sint32 BOB_killer::litAnimOff()
 //-------------------------------------------------------------------------------
 // clear shadow
 //-------------------------------------------------------------------------------
-void BOB_killer::efface_SHA()
+void sprite_object::efface_SHA()
 { 
 	if(adresseEC2)
 	{	
@@ -850,7 +855,7 @@ void BOB_killer::efface_SHA()
 // The main method : display a sprite into the "buffer" 
 // La principale methode : affiche l'objet dans le "buffer
 //------------------------------------------------------------------------------
-void BOB_killer::afficheMSK()
+void sprite_object::afficheMSK()
 {
 	if(!flag_actif)
 		return;
@@ -881,7 +886,7 @@ void BOB_killer::afficheMSK()
 //------------------------------------------------------------------------------
 // display a sprite (most current metod)
 //------------------------------------------------------------------------------
-void BOB_killer::method_tab()
+void sprite_object::method_tab()
 {
 	adresseTAM = ecran_gere->tampon_pos(position_x, position_y);
 #ifndef BYTES_COPY	
@@ -928,7 +933,7 @@ void BOB_killer::method_tab()
 //------------------------------------------------------------------------------
 // display a color cycling sprite mask (bumper's fire and guards's fire)
 //------------------------------------------------------------------------------
-void BOB_killer::afficheCyc() 
+void sprite_object::afficheCyc() 
 {
 	indexCycle &= 7;
 	Sint32 pixel = pt_cycling[indexCycle++];
@@ -972,14 +977,14 @@ void BOB_killer::afficheCyc()
 //------------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------------
-void BOB_killer::afficheCC2()
+void sprite_object::afficheCC2()
 {
 }
 
 //------------------------------------------------------------------------------
 // guards weapons: display mask pixel by pixel with color cylcling
 //------------------------------------------------------------------------------
-void BOB_killer::cycle_ptab()
+void sprite_object::cycle_ptab()
 {
 	indexCycle &= 7;
 	Sint32 pixel = pt_cycling[indexCycle++];
@@ -1006,7 +1011,7 @@ void BOB_killer::cycle_ptab()
 //------------------------------------------------------------------------------
 //  sprite image will be repeated vertically  (guards's life level) 
 //------------------------------------------------------------------------------
-void BOB_killer::afficheRep()
+void sprite_object::afficheRep()
 {	
 	adresseTAM = ecran_gere->tampon_pos(position_x, position_y);
 	adresseECR = ecran_gere->buffer_pos(position_x, position_y);
@@ -1056,7 +1061,7 @@ void BOB_killer::afficheRep()
 //------------------------------------------------------------------------------
 // display a sprite line by line (for the gigablitz vertical clipping)
 //------------------------------------------------------------------------------
-void BOB_killer::afficheLin()
+void sprite_object::afficheLin()
 {
 	bb_afligne *p = tafflignes[animOffset];
 	adresseTAM = ecran_gere->tampon_pos(position_x, position_y + affligFrst);
@@ -1149,7 +1154,7 @@ void BOB_killer::afficheLin()
 //------------------------------------------------------------------------------
 // The second main method : display a shadow into the "buffer"
 //------------------------------------------------------------------------------
-void BOB_killer::afficheSHA()
+void sprite_object::afficheSHA()
 {
 	if(!flag_actif || !flagShadow) return;
 	char j = ombrepixel;
@@ -1189,7 +1194,7 @@ void BOB_killer::afficheSHA()
 //------------------------------------------------------------------------------
 // display a sprite into the "tampon" (build the background)
 //------------------------------------------------------------------------------
-void BOB_killer::affich_MSK()
+void sprite_object::affich_MSK()
 {
 	adresseTAM = ecran_gere->tampon_pos(position_x, position_y);
 	Uint16 *gfxP1 = (Uint16 *)tabAffich1;		//offset and loop counter
@@ -1236,7 +1241,7 @@ void BOB_killer::affich_MSK()
 //------------------------------------------------------------------------------
 // display a shadow into the "tampon" (build the background)
 //------------------------------------------------------------------------------
-void BOB_killer::affich_SHA()
+void sprite_object::affich_SHA()
 { 
 	adresseTA2 = ecran_gere->tampon_pos(position_x + ombredecax,
 		position_y + ombredecay);
@@ -1278,7 +1283,7 @@ void BOB_killer::affich_SHA()
 //------------------------------------------------------------------------------
 // display a sprite into the "buffer" (copy byte to byte, no table)
 //------------------------------------------------------------------------------
-void BOB_killer::MSKaffiche()
+void sprite_object::MSKaffiche()
 {
 	if(!flag_actif) return;
 	char *s = adresseGFX;
@@ -1303,7 +1308,7 @@ void BOB_killer::MSKaffiche()
 //------------------------------------------------------------------------------
 // display a sprite into the "buffer" (copy byte to byte, no table)
 //------------------------------------------------------------------------------
-void BOB_killer::MSKbitcopy()
+void sprite_object::MSKbitcopy()
 {
 	if(!flag_actif) return;
 	char *s = adresseGFX;
@@ -1325,7 +1330,7 @@ void BOB_killer::MSKbitcopy()
 //------------------------------------------------------------------------------
 // clear a sprite into the "buffer" (copy byte to byte, no table)
 //------------------------------------------------------------------------------
-void BOB_killer::MSK_bitclr()
+void sprite_object::MSK_bitclr()
 {
 	if(!adresseECR)
 		return;
@@ -1347,7 +1352,7 @@ void BOB_killer::MSK_bitclr()
 //-------------------------------------------------------------------------------
 // position sprite on the other one
 //-------------------------------------------------------------------------------
-void BOB_killer::aspire_BOB(BOB_killer * bobPT, Sint32 offsX, Sint32 offsY)
+void sprite_object::aspire_BOB(sprite_object * bobPT, Sint32 offsX, Sint32 offsY)
 {
 	position_x = (bobPT->position_x) + offsX - (colLargeur >> 1);
 	position_y = (bobPT->position_y) + offsY - (colHauteur >> 1);
@@ -1356,7 +1361,7 @@ void BOB_killer::aspire_BOB(BOB_killer * bobPT, Sint32 offsX, Sint32 offsY)
 //-------------------------------------------------------------------------------
 // position sprite on the other one
 //-------------------------------------------------------------------------------
-void BOB_killer::aspireBOB2(BOB_killer * bobPT, Sint32 offsX, Sint32 offsY)
+void sprite_object::aspireBOB2(sprite_object * bobPT, Sint32 offsX, Sint32 offsY)
 {
 	position_x = (bobPT->position_x) + offsX - ((colLargeur - bobPT->colLargeur) >> 1);
 	position_y = (bobPT->position_y) + offsY - ((colHauteur - bobPT->colHauteur) >> 1);
@@ -1366,7 +1371,7 @@ void BOB_killer::aspireBOB2(BOB_killer * bobPT, Sint32 offsX, Sint32 offsY)
 //-------------------------------------------------------------------------------
 // Test de collision entre deux BOBs
 //-------------------------------------------------------------------------------
-Sint32 BOB_killer::collision1(BOB_killer * bobPT)
+Sint32 sprite_object::collision1(sprite_object * bobPT)
 {
 	Sint32 x1 = position_x;
 	Sint32 y1 = position_y;
@@ -1380,19 +1385,19 @@ Sint32 BOB_killer::collision1(BOB_killer * bobPT)
 //-------------------------------------------------------------------------------
 // Initialise la vitesse d'animation
 //-------------------------------------------------------------------------------
-void BOB_killer::tempo_init(Sint32 tempo)
+void sprite_object::tempo_init(Sint32 tempo)
 {
 	anim_tempo = tempo;
 	init_tempo = tempo;
 }
-void BOB_killer::tempoinit2(Sint32 tempo)
+void sprite_object::tempoinit2(Sint32 tempo)
 {
 	init_tempo = tempo;
 }
 //-------------------------------------------------------------------------------
 // Animation unique avec desactivation du BOB 
 //-------------------------------------------------------------------------------
-Sint32 BOB_killer::animUnique()
+Sint32 sprite_object::animUnique()
 {
 	if(!(--anim_tempo))
 	{	anim_tempo = init_tempo;
@@ -1411,7 +1416,7 @@ Sint32 BOB_killer::animUnique()
 //-------------------------------------------------------------------------------
 // Animation repetee en boucle 
 //-------------------------------------------------------------------------------
-void BOB_killer::animRepete()
+void sprite_object::animRepete()
 {
 	if(!(--anim_tempo))
 	{	anim_tempo = init_tempo;
@@ -1429,7 +1434,7 @@ void BOB_killer::animRepete()
 //-------------------------------------------------------------------------------
 // Change l'offset du BOB
 //-------------------------------------------------------------------------------
-void BOB_killer::new_offset(Sint32 numer)
+void sprite_object::new_offset(Sint32 numer)
 {
 	animOffset = numer;
 	change_GFX(numer);
@@ -1438,7 +1443,7 @@ void BOB_killer::new_offset(Sint32 numer)
 //-------------------------------------------------------------------------------
 // check if sprite is out the screen
 //-------------------------------------------------------------------------------
-void BOB_killer::out_screen()
+void sprite_object::out_screen()
 {
 	if(position_x < 0)
 		position_x = 0;
@@ -1455,7 +1460,7 @@ void BOB_killer::out_screen()
 //-------------------------------------------------------------------------------
 // force le BOB a etre dans l'ecran horizontalement
 //-------------------------------------------------------------------------------
-void BOB_killer::out_horizo()
+void sprite_object::out_horizo()
 {
 	if(position_x < 0)
 		position_x = 0;
@@ -1468,7 +1473,7 @@ void BOB_killer::out_horizo()
 //-------------------------------------------------------------------------------
 // get sprite's width 
 //-------------------------------------------------------------------------------
-Uint32 BOB_killer::getLargeur()
+Uint32 sprite_object::getLargeur()
 {
 	return BOBlargeur;
 }
@@ -1476,7 +1481,7 @@ Uint32 BOB_killer::getLargeur()
 //-------------------------------------------------------------------------------
 // get sprite's height
 //-------------------------------------------------------------------------------
-Uint32 BOB_killer::getHauteur()
+Uint32 sprite_object::getHauteur()
 {
 	return BOBhauteur;
 }
@@ -1484,7 +1489,7 @@ Uint32 BOB_killer::getHauteur()
 //-------------------------------------------------------------------------------
 // get sprite's width (collision)
 //-------------------------------------------------------------------------------
-Uint32 BOB_killer::getColLarg()
+Uint32 sprite_object::getColLarg()
 {
 	return colLargeur;
 }
@@ -1492,7 +1497,7 @@ Uint32 BOB_killer::getColLarg()
 //-------------------------------------------------------------------------------
 // get sprite's height (collision)
 //-------------------------------------------------------------------------------
-Uint32 BOB_killer::getColHaut()
+Uint32 sprite_object::getColHaut()
 {
 	return colHauteur;
 }
@@ -1500,18 +1505,18 @@ Uint32 BOB_killer::getColHaut()
 //-------------------------------------------------------------------------------
 //
 //-------------------------------------------------------------------------------
-void BOB_killer::initRepeat(Sint32 value)
+void sprite_object::initRepeat(Sint32 value)
 {
 	affRepeatF = value;
 	put_method = METHOD_REP;
 }
 
-void BOB_killer::set_method(Uint32 vtype)
+void sprite_object::set_method(Uint32 vtype)
 {
 	put_method = vtype;
 }
 
-void BOB_killer::set_memGFX(char *pGfx, Sint32 rGfx)
+void sprite_object::set_memGFX(char *pGfx, Sint32 rGfx)
 {
 	adresseGFX = pGfx;
 	releaseGFX = rGfx;
@@ -1521,12 +1526,12 @@ void BOB_killer::set_memGFX(char *pGfx, Sint32 rGfx)
 // MEMBRES STATIQUES 
 //==============================================================================
 
-const Sint32 BOB_killer::cycling_01[] =
+const Sint32 sprite_object::cycling_01[] =
 //{	126, 126, 75, 75, 122, 122, 24, 90};
 {	0x7e7e7e7e, 0x7e7e7e7e, 0x4b4b4b4b, 0x4b4b4b4b, 
 	0x7a7a7a7a, 0x7a7a7a7a, 0x18181818, 0x5a5a5a5a};
 //{	63, 63, 23, 23, 53, 53, 24, 34};
-const Sint32 BOB_killer::cycling_02[] =
+const Sint32 sprite_object::cycling_02[] =
 	{	0x3f3f3f3f, 0x3f3f3f3f, 0x17171717, 0x17171717, 0x35353535, 
 		0x35353535, 0x18181818, 0x22222222};
 
@@ -1920,7 +1925,7 @@ bbPosition BOB_POS066[] =
 bb_describ BOB_NUM066 = {16, 7, 7, BOB_POS066};
 */
 
-const bb_describ *BOB_killer::zelistBOB[] =
+const bb_describ *sprite_object::zelistBOB[] =
 {	&BOB_NUM000,	// BouisBouis
 	&BOB_NUM001,	// Ejector
 	&BOB_NUM002,	//
@@ -1992,7 +1997,7 @@ const bb_describ *BOB_killer::zelistBOB[] =
 };
 
 
-Sint32 	BOB_killer::ombredecax = ecran_hard::SHADOWOFFX;
-Sint32	BOB_killer::ombredecay = ecran_hard::SHADOWOFFY;
-char	BOB_killer::ombrepixel = ecran_hard::SHADOW_PIX;
-Sint32	BOB_killer::ombrepixe4 = ecran_hard::SHADOWLONG;
+Sint32 	sprite_object::ombredecax = ecran_hard::SHADOWOFFX;
+Sint32	sprite_object::ombredecay = ecran_hard::SHADOWOFFY;
+char	sprite_object::ombrepixel = ecran_hard::SHADOW_PIX;
+Sint32	sprite_object::ombrepixe4 = ecran_hard::SHADOWLONG;

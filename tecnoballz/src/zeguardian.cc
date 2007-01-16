@@ -49,7 +49,7 @@ zeguardian::~zeguardian()
 	}
 	if (pBobEnergy)
 	{	for(Sint32 i = 0; i < objetTotal; i++)	
-		{	BOB_killer *ptBob = pBobEnergy[i];
+		{	sprite_object *ptBob = pBobEnergy[i];
 			if (ptBob)
 			{	delete ptBob;
 				pBobEnergy[i] = NULL;
@@ -106,32 +106,32 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	for(i = 0; i < objetTotal; i++)
 	{	Sint32 p = level_list[grdPt++];
 		tecno_gard *pgard = new tecno_gard();
-		pgard->setListNum(i);
+		pgard->set_object_pos(i);
 		error_init(pgard->initialise(guard_list[p].para_nsbob, image_BOBs, 1));
 		if(erreur_num)
 			return (erreur_num);
 		objetListe[i] = pgard;
 		BOBgestion->ajoute_BOB(pgard);
-		pgard->BOB_active();
+		pgard->enable();
 		pgard->init_guard(&guard_list[p], getLissaPt(guard_list[p].para_lissa), 
 			pMiss, ptGigaBlit, pexplosion);
 	}
 
-	pBobEnergy = (BOB_killer **)
-		(memory->alloc(sizeof(BOB_killer *) * objetTotal, 0x4F424A47));
+	pBobEnergy = (sprite_object **)
+		(memory->alloc(sizeof(sprite_object *) * objetTotal, 0x4F424A47));
 	error_init(memory->retour_err());
 	if(erreur_num)
 		return (erreur_num);
 	for(i = 0; i < objetTotal; i++)
-	{	BOB_killer *ptBob = new BOB_killer();
+	{	sprite_object *ptBob = new sprite_object();
 		pBobEnergy[i] = ptBob;
-		ptBob->setListNum(i);
+		ptBob->set_object_pos(i);
 		error_init(ptBob->initialise(BOB_GRDNRJ, image_BOBs, 0));
 		if(erreur_num)
 			return (erreur_num);
 		BOBgestion->ajoute_BOB(ptBob);
 		ptBob->coordonnee(i * 16 * resolution, 0);
-		ptBob->BOB_active();
+		ptBob->enable();
 		ptBob->initRepeat(20);
 	}
 
@@ -147,9 +147,9 @@ void zeguardian::displayNrj()
 	Sint32 baseY = 238 * resolution;
 	for(Sint32 i = 0; i < objetTotal; i++)
 	{	tecno_gard *pgard = objetListe[i];
-		BOB_killer *ptBob = pBobEnergy[i];
+		sprite_object *ptBob = pBobEnergy[i];
 		if (!pgard->gard_power)
-		{	ptBob->BOB_desact();
+		{	ptBob->disable();
 			break;
 		}
 		Sint32 h = pgard->gard_power / 4;

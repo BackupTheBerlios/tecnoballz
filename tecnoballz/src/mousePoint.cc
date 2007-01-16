@@ -58,7 +58,7 @@ Sint32 mousePoint::create_BOB(GIF_bitMap * image)
 	Sint32 y = ecran->bufferHaut() / 2;
 
 	coordonnee(x, y);
-	BOB_active();
+	enable();
 	tempo_init(3);
 	return erreur_num;
 }

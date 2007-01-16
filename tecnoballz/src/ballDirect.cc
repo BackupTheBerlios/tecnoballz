@@ -76,12 +76,12 @@ void ballDirect::execution1()
 	{	technoBall* balle = listBumper[i]->balleColle;
 		if(balle && balle->flag_actif)
 		{	objetListe[i]->aspireBOB2(balle);
-			objetListe[i]->BOB_active();
+			objetListe[i]->enable();
 			objetListe[i]->change_GFX(balle->directBall  / 4);
 		}
 		else 
 		{
-			objetListe[i]->BOB_desact();
+			objetListe[i]->disable();
 		}
 	}
 }

@@ -32,7 +32,7 @@
 // bricks levels: create the object
 //-----------------------------------------------------------------------------
 zeNewBalls::zeNewBalls(ejectBalls *eject, lesBriques *brick, briqueCote *brico, 
-	head_anima *gugus, zeBouiBoui *atoms, barreScore *score, BOB_killer *pwall,
+	head_anima *gugus, zeBouiBoui *atoms, barreScore *score, sprite_object *pwall,
 	zeMiniMess* pMess, ze_magneye* pEyes)
 {
 	littleInit();
@@ -747,10 +747,10 @@ void zeNewBalls::vitusrobot()
 //-----------------------------------------------------------------------------
 void zeNewBalls::vitusEject()
 {
-	BOB_killer *coin1 = ejectObjet->demandeBOB(1);
-	BOB_killer *coin2 = ejectObjet->demandeBOB(2);
-	BOB_killer *coin3 = ejectObjet->demandeBOB(3);
-	BOB_killer *coin4 = ejectObjet->demandeBOB(4);
+	sprite_object *coin1 = ejectObjet->demandeBOB(1);
+	sprite_object *coin2 = ejectObjet->demandeBOB(2);
+	sprite_object *coin3 = ejectObjet->demandeBOB(3);
+	sprite_object *coin4 = ejectObjet->demandeBOB(4);
 
 	for(Sint32 i = 0; i < objetTotal; i++)
 	{	technoBall *balle = objetListe[i];
@@ -859,7 +859,7 @@ void zeNewBalls::vitus_cote()
 	Sint32 murDr = bricoObjet->getCollisD();
 	Sint32 murHt = bricoObjet->getCollisH();
 	Sint32 murBa = ptBob_wall->retournePY();
-	Sint32 fwall = ptBob_wall->BOBisactiv();
+	Sint32 fwall = ptBob_wall->is_enable();
 	for(Sint32 i = 0; i < objetTotal; i++)
 	{	technoBall *balle = objetListe[i];
 		if(balle->flag_actif)

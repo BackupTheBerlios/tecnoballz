@@ -25,7 +25,7 @@
 //...............................................................................
 class ejectBalls;
 //...............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/mentatCode.h"
 #include "../include/technoBall.h"
 //...............................................................................
@@ -38,10 +38,10 @@ class ejectBalls:public virtual mentatCode
 	private:
 		static Uint32		balPosFlag;	
 	
-		BOB_killer*			ejector_01;
-		BOB_killer*			ejector_02;
-		BOB_killer*			ejector_03;
-		BOB_killer*			ejector_04;
+		sprite_object*			ejector_01;
+		sprite_object*			ejector_02;
+		sprite_object*			ejector_03;
+		sprite_object*			ejector_04;
 	
 		Sint32				eject1PosX;
 		Sint32				eject1PosY;
@@ -58,7 +58,7 @@ class ejectBalls:public virtual mentatCode
 		Sint32				initialise();
 		void				afficheSha();
 		void				afficheGfx();
-		BOB_killer*			demandeBOB(Sint32 eject);
+		sprite_object*			demandeBOB(Sint32 eject);
 		void				ballPosIni(furaxEject *table);
 };
 #endif

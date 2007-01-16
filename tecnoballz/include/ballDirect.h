@@ -29,7 +29,7 @@ class ballDirect;
 #include "../include/tecno_bump.h"
 #include "../include/zeRaquette.h"
 //...............................................................................
-class ballDirect:public objet_gere < BOB_killer >
+class ballDirect:public objet_gere < sprite_object >
 {
 	private:
 		tecno_bump**		listBumper;	//list of "tecno_bump" objets

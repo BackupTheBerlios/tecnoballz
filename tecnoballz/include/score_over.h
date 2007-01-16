@@ -26,11 +26,11 @@
 class score_over;
 //...............................................................................
 #include "../include/print_text.h"
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/GIF_bitMap.h"
 //...............................................................................
 
-class score_over:public virtual print_text, public virtual BOB_killer
+class score_over:public virtual print_text, public virtual sprite_object
 {
 
 	private:

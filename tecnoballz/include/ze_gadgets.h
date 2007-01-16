@@ -47,7 +47,7 @@ class ze_gadgets:public objet_gere < tecno_gads >
 		zeRaquette*			ptRaquette;
 		zeNewBalls*			ptNewBalls;
 		barreScore*			ptbarreScr;
-		BOB_killer*			ptBob_wall;
+		sprite_object*			ptBob_wall;
 		ze_magneye*			pt_magneye;
 		Sint32				anim_tempo;
 		Sint32				init_tempo;
@@ -77,7 +77,7 @@ class ze_gadgets:public objet_gere < tecno_gads >
 		void				initialise(Sint32 mStep, Sint32 mKauf, Sint32 bStep, 
 								const Sint16 *table, Sint32 *cours, 
 								zeMiniMess* ptMes, zeRaquette *pRaqu, 
-								zeNewBalls* pBall, barreScore* pScor, BOB_killer*,
+								zeNewBalls* pBall, barreScore* pScor, sprite_object*,
 								ze_magneye* ptEye);
 		void				envoieGads(brickClear *briPT);
 		void				send_malus(technoBall *);

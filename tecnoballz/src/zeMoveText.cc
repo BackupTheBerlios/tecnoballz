@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-23
 // fonction	: manage mobiles characters ("LEVEL x COMPLETED")
-// id		: $Id: zeMoveText.cc,v 1.4 2007/01/13 21:04:28 gurumeditation Exp $
+// id		: $Id: zeMoveText.cc,v 1.5 2007/01/16 16:57:31 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -159,7 +159,7 @@ void zeMoveText::activeText()
 {
 	for(Sint32 i = 0; i < size_total; i++)
 	{	tecno_text *chara = objetListe[i];
-		chara->BOB_active();
+		chara->enable();
 	}
 }
 

@@ -27,9 +27,9 @@ class escapeMenu;
 //...............................................................................
 #include "../include/mentatCode.h"
 #include "../include/print_text.h"
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 //...............................................................................
-class escapeMenu:public virtual print_text, public virtual BOB_killer
+class escapeMenu:public virtual print_text, public virtual sprite_object
 {
 	private:
 		static const Sint32 YCOORDNULL = -10240;

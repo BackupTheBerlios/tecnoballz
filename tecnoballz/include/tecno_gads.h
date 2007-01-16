@@ -25,7 +25,7 @@
 #define __TECNO_GADS__
 class tecno_gads;
 //..............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/tecno_bump.h"
 #include "../include/barreScore.h"
 #include "../include/ecran_hard.h"
@@ -88,7 +88,7 @@ const Sint16	XXX_ROBOT1 = 17 * XXX_IMAGES;
 const Sint16	XXX_CONTRO = 18 * XXX_IMAGES;
 const Sint16	XXX_PROTEC = 19 * XXX_IMAGES;
 //..............................................................................
-class tecno_gads:public BOB_killer
+class tecno_gads:public sprite_object
 {
 	friend class ze_gadgets;
 	friend class shop_tecno;

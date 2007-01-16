@@ -123,8 +123,8 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 
 	if(bob_ground) 
 	{
-		objetListe = (BOB_killer **)
-			(memory->alloc(sizeof(BOB_killer *) * objetTotal, 0x4F424A47));
+		objetListe = (sprite_object **)
+			(memory->alloc(sizeof(sprite_object *) * objetTotal, 0x4F424A47));
 		error_init(memory->retour_err());
 		if(erreur_num) return (erreur_num);
 	}
@@ -289,12 +289,12 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 			
 				if(bob_ground)
 				{
-					BOB_killer *ptbob = new BOB_killer();
+					sprite_object *ptbob = new sprite_object();
 					error_init(ptbob->initialise(BOB_BRICK1, GFX_brique, 1, 0));
 					if(erreur_num) return erreur_num;
 					objetListe[bobindex] = ptbob;
 					BOBgestion->ajoute_BOB(ptbob);
-					ptbob->BOB_active();
+					ptbob->enable();
 					ptbob->change_GFX(2);
 				}
 			

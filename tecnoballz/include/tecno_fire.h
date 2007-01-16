@@ -26,14 +26,14 @@
 //...............................................................................
 class tecno_fire;
 //...............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/tecno_bump.h"
 #include "../include/lesBriques.h"
 #include "../include/zeBouiBoui.h"
 #include "../include/tecno_boui.h"
 #include "../include/barreScore.h"
 //...............................................................................
-class tecno_fire:public BOB_killer
+class tecno_fire:public sprite_object
 {
 	friend class zeFireBump;
 	friend class tecno_caps;	  

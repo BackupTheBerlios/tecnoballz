@@ -93,8 +93,8 @@ void zeGameOver::initialize(Sint32 iswin)
 	Sint32 y = 200 * resolution;
 	const Sint32 *p = zeus_over1;
 	for(Sint32 i = 0; i < objetTotal; i++)
-	{	BOB_killer *zebob = objetListe[i];
-		zebob->BOB_active();
+	{	sprite_object *zebob = objetListe[i];
+		zebob->enable();
 		zebob->coordonnee(x, y);
 		zebob->change_GFX(i);
 		Sint32 x2 = *(p++);  
@@ -160,7 +160,7 @@ void zeGameOver::deplace_01()
 	Sint32 decal = 32 * resolution;
 	const Sint32 *sinus = sinus_over;
 	for(Sint32 i = 0; i < objetTotal; i++)
-	{	BOB_killer *zebob = objetListe[i];
+	{	sprite_object *zebob = objetListe[i];
 		if(++zebob->maximum_X1 >= maxi)
 			zebob->maximum_X1 = 0;
 		if(++zebob->maximum_Y1 >= maxi)
@@ -183,7 +183,7 @@ void zeGameOver::deplace_02()
 	Sint32 decal = 32 * resolution;
 	const Sint32 *sinus = sinus_over;
 	for(Sint32 i = 0; i < objetTotal; i++)
-	{	BOB_killer *zebob = objetListe[i];
+	{	sprite_object *zebob = objetListe[i];
 		if(++zebob->maximum_Y1 >= maxi)
 			zebob->maximum_Y1 = 0;
 		Sint32 y = decal + sinus[zebob->maximum_Y1] * resolution;
@@ -195,7 +195,7 @@ void zeGameOver::deplace_02()
 	Sint32 f = 0;
 	Sint32 v = 32 * resolution + chrOffsetX;
 	for(Sint32 i = 0; i < 4; i++)
-	{	BOB_killer *zebob = objetListe[i];
+	{	sprite_object *zebob = objetListe[i];
 		if(zebob->position_x > v)
 		{	zebob->position_x -= resolution;
 			f = 1;
@@ -205,7 +205,7 @@ void zeGameOver::deplace_02()
 	// move the letters "O", "V", "E", "R"
 	v = 192 * resolution + chrOffsetX;
 	for(Sint32 i = 4; i < objetTotal; i++)
-	{	BOB_killer *zebob = objetListe[i];
+	{	sprite_object *zebob = objetListe[i];
 		if(zebob->position_x < v)
 		{	zebob->position_x += resolution;
 			f = 1;
@@ -227,7 +227,7 @@ void zeGameOver::deplace_03()
 	Sint32 decal = 32 * resolution;
 	const Sint32 *sinus = sinus_over;
 	for(Sint32 i = 0; i < 4; i++)
-	{	BOB_killer *zebob = objetListe[i];
+	{	sprite_object *zebob = objetListe[i];
 		if(++zebob->maximum_Y1 >= maxi)
 			zebob->maximum_Y1 = 0;
 		if(zebob->position_y <= decal)
@@ -244,7 +244,7 @@ void zeGameOver::deplace_03()
 	// move the letters "O", "V", "E", "R"
 	Sint32 v = 191 * resolution;
 	for(Sint32 i = 4; i < objetTotal; i++)
-	{	BOB_killer *zebob = objetListe[i];
+	{	sprite_object *zebob = objetListe[i];
 		if(++zebob->maximum_Y1 >= maxi)
 			zebob->maximum_Y1 = 0;
 		if(zebob->position_y >= v)
@@ -270,7 +270,7 @@ void zeGameOver::deplace_04()
 	Sint32 offst = 2 * resolution;
 	Sint32 final = 35 * resolution + chrOffsetX;
 	for(Sint32 i = 0; i < 4; i++)
-	{	BOB_killer *zebob = objetListe[i];
+	{	sprite_object *zebob = objetListe[i];
 		Sint32 o = final - zebob->position_x;
 		if(o > offst)
 			o = offst;
@@ -286,7 +286,7 @@ void zeGameOver::deplace_04()
 	// move the letters "O", "V", "E", "R"
 	final = 32 * resolution + chrOffsetX;
 	for(Sint32 i = 4; i < objetTotal; i++)
-	{	BOB_killer *zebob = objetListe[i];
+	{	sprite_object *zebob = objetListe[i];
 		Sint32 o = final - zebob->position_x;
 		if(o > offst)
 			o = offst;

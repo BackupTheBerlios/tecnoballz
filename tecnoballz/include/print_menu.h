@@ -26,10 +26,10 @@
 class print_menu;
 //...............................................................................
 #include "../include/print_text.h"
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/GIF_bitMap.h"
 //...............................................................................
-class print_menu:public virtual print_text, public virtual BOB_killer
+class print_menu:public virtual print_text, public virtual sprite_object
 {
 	private:
 		static const unsigned char	cyclingtab[];

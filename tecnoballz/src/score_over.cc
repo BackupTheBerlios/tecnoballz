@@ -78,7 +78,7 @@ Sint32 score_over::first_init(Sint32 offzt)
 	//###################################################################
 	error_init(initialBOB(graphTexte, 0));
 	if(erreur_num) return (erreur_num);
-	BOB_active();
+	enable();
 	coordonnee(32 * resolution + offzt, 80 * resolution);
 
 	copyToText();

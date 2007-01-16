@@ -29,10 +29,10 @@
 ejectBalls::ejectBalls()
 {
 	mentatInit();
-	ejector_01 = new BOB_killer();
-	ejector_02 = new BOB_killer();
-	ejector_03 = new BOB_killer();
-	ejector_04 = new BOB_killer();
+	ejector_01 = new sprite_object();
+	ejector_02 = new sprite_object();
+	ejector_03 = new sprite_object();
+	ejector_04 = new sprite_object();
 		
 }
 
@@ -87,10 +87,10 @@ Sint32 ejectBalls::initialise()
 		BOBgestion->ajoute_BOB(ejector_02);
 		BOBgestion->ajoute_BOB(ejector_03);
 		BOBgestion->ajoute_BOB(ejector_04);
-		ejector_01->BOB_active();
-		ejector_02->BOB_active();
-		ejector_03->BOB_active();
-		ejector_04->BOB_active();
+		ejector_01->enable();
+		ejector_02->enable();
+		ejector_03->enable();
+		ejector_04->enable();
 	}
 	printf("bob_ground : %i\n", bob_ground);
 	return erreur_num;
@@ -123,7 +123,7 @@ void ejectBalls::afficheGfx()
 //-----------------------------------------------------------------------------
 // return ejector sprite pointer
 //-----------------------------------------------------------------------------
-BOB_killer *ejectBalls::demandeBOB(Sint32 eject)
+sprite_object *ejectBalls::demandeBOB(Sint32 eject)
 {
 	switch (eject)
 	{	case 1:

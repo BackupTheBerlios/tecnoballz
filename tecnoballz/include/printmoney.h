@@ -29,7 +29,7 @@ class printmoney;
 #include "../include/zeRaquette.h"
 #include "../include/tecno_gads.h"
 //...............................................................................
-class printmoney:public objet_gere < BOB_killer >
+class printmoney:public objet_gere < sprite_object >
 {
 	private:
 		static const Sint32	YINVERSEUR = 232;
@@ -37,7 +37,7 @@ class printmoney:public objet_gere < BOB_killer >
 		joueurData*			ptJoueurDa;
 		zeRaquette*			ptZraquett;
 		Sint32				money_posy;
-		BOB_killer*			ptBobMoney;
+		sprite_object*			ptBobMoney;
 		tecno_gads*			ptBobRever;
 		tecno_gads*			ptBobLifes;
 		//Sint32				flag_level;	// 0 = "bricks" / 1 = "guards"
@@ -45,9 +45,9 @@ class printmoney:public objet_gere < BOB_killer >
 	public:
 							printmoney();
 							~printmoney();
-		void				initialise(joueurData*, zeRaquette*, BOB_killer*, 
+		void				initialise(joueurData*, zeRaquette*, sprite_object*, 
 									tecno_gads*);
-		void				init_guard(joueurData*, zeRaquette*, BOB_killer*, 
+		void				init_guard(joueurData*, zeRaquette*, sprite_object*, 
 									tecno_gads*);
 		void				execution1(Sint32 value);
 		void				execution2(Sint32, Sint32);

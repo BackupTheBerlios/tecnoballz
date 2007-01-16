@@ -28,7 +28,7 @@ class print_text;
 #include "../include/ecran_hard.h"
 #include "../include/GIF_bitMap.h"
 #include "../include/mentatCode.h"
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 //...............................................................................
 class print_text:public virtual mentatCode
 {
@@ -55,6 +55,6 @@ class print_text:public virtual mentatCode
 		void				aff_texte1(char *desP1, char *chain, Sint32 total);
 		void				tamponAff2(Sint32 x, Sint32 y, char *chain, Sint32 total);
 		void				bufferAff2(Sint32 x, Sint32 y, char *chain, Sint32 total);
-		BOB_killer*			string2bob(const char* ptStr);
+		sprite_object*			string2bob(const char* ptStr);
 };
 #endif

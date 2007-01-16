@@ -70,7 +70,7 @@ class zeNewBalls:public objet_gere < technoBall >
 		zeguardian*		ptguardian;
 		zeCapsules*		ptCapsules;
 		ze_gadgets*		pt_gadgets;
-		BOB_killer*		ptBob_wall;
+		sprite_object*		ptBob_wall;
 		zeMiniMess*		ptMiniMess;
 		ze_magneye*		pt_magneye;
 		
@@ -94,7 +94,7 @@ class zeNewBalls:public objet_gere < technoBall >
 						zeNewBalls(ejectBalls *eject, lesBriques *brick, 
 									briqueCote *brico, head_anima* gugus, 
 									zeBouiBoui *atoms, barreScore* score,
-									BOB_killer *pwall, zeMiniMess*,
+									sprite_object *pwall, zeMiniMess*,
 									ze_magneye* pEyes);
 						zeNewBalls(zeguardian*, zeCapsules*, ze_gadgets*);
 						~zeNewBalls();

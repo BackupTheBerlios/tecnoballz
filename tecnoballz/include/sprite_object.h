@@ -1,30 +1,33 @@
-//*****************************************************************************
-// copyright (c) 1991-2006 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file		: "BOB_killer.h"
-// created	: ?
-// updates	: 2006-10-04
-// fonctions	: handle graphic sprites
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA  02111-1307, USA.
-//
-//*****************************************************************************
-#ifndef __BOB_KILLER__
-#define __BOB_KILLER__
-class BOB_killer;
-//-------------------------------------------------------------------------------
+/** 
+ * @file sprite_object.h
+ * @brief Draw sprites on the screen 
+ * @date 2007-01-16
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.1 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: sprite_object.h,v 1.1 2007/01/16 16:57:15 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
+#ifndef __SPRITE_OBJECT__
+#define __SPRITE_OBJECT__
+class sprite_object;
 #include "../include/ecran_hard.h"
 #include "../include/GIF_bitMap.h"
 #include "../include/handler_memory.h"
@@ -124,7 +127,7 @@ typedef struct
 }
 bb_afligne;
 //-------------------------------------------------------------------------------
-class BOB_killer:public virtual mentatCode
+class sprite_object:public virtual mentatCode
 {
 	friend class zeGameOver;
 	friend class zexplosion;
@@ -183,7 +186,7 @@ class BOB_killer:public virtual mentatCode
 		Sint32			animOffset;	// number of the animation
 		Sint32			maxiOffset;	// offset minimum de l'animation
 		Sint32			miniOffset;	// offset maximum animation
-		Sint32			numero_BOB;	// numero identificateur BOB
+		Sint32			display_pos;	// numero identificateur BOB
 		Sint32			ecranLarge;	// largeur de l'ecran en octets
 		Sint32			ecranHaute;	// hauteur de l'ecran en lignes
 		Sint32			maximum_X1;	// abscisse maximum
@@ -194,7 +197,7 @@ class BOB_killer:public virtual mentatCode
 		Sint32			affligFrSv;	// premiere ligne a afficher (si afflignesF=1)
 		Sint32			affligLaSv;	// derniere ligne a afficher (si afflignesF=1)
 		Sint32			memoryflag;	// This object reserved some memory 
-		Sint32			BOBListNum;	// Numero du BOB dans la liste
+		Sint32			object_pos;	// Numero du BOB dans la liste
 		Sint32			releaseGFX; 	//if set release adresseGFX
 		Sint32			fTableByte;	//if set, generate additional table to 
 							//copy byte by byte
@@ -214,16 +217,16 @@ class BOB_killer:public virtual mentatCode
 		Sint32			thecounter;	// 
   
 	public:
-					BOB_killer();
-					~BOB_killer();
-		void			setListNum(Sint32 listN);
+					sprite_object();
+					~sprite_object();
 		void			BOBprepare();
 		void			BOBdestroy();
-		void			impose_num(Sint32 nume);
-		void			BOB_active();
-		void			BOB_desact();
-		Sint32			BOBisactiv();
-		void			duplicaBOB(BOB_killer *);
+		void enable ();
+		void disable ();
+		Sint32 is_enable ();
+		void set_display_pos (Sint32 num);
+		void set_object_pos (Sint32 num);
+		void			duplicaBOB(sprite_object *);
 		void			coordonnee(Sint32 posX, Sint32 posY);
 		Sint32			reservBOBt(Sint32 anima);
 		Sint32			initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sint32 ftpix = 0);
@@ -255,11 +258,11 @@ class BOB_killer:public virtual mentatCode
 		void			MSKaffiche();
 		void			MSKbitcopy();
 		void			MSK_bitclr();
-		void			aspire_BOB(BOB_killer* bobPT,
+		void			aspire_BOB(sprite_object* bobPT,
 							Sint32 offsX = 0, Sint32 offsY = 0);
-		void			aspireBOB2(BOB_killer* bobPT,
+		void			aspireBOB2(sprite_object* bobPT,
 							Sint32 offsX = 0, Sint32 offsY = 0);
-		Sint32			collision1(BOB_killer* bobPT);
+		Sint32			collision1(sprite_object* bobPT);
 		void			tempo_init(Sint32 tempo);
 		void			tempoinit2(Sint32 tempo);
 		Sint32			animUnique();

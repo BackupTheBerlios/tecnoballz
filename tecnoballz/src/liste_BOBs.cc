@@ -26,80 +26,91 @@
 //-----------------------------------------------------------------------------
 // create the object
 //-----------------------------------------------------------------------------
-liste_BOBs::liste_BOBs(Sint32 nombr)
+liste_BOBs::liste_BOBs (Sint32 nombr)
 {
-	mentatInit();
-	BOBsnombre = nombr;
-	clear_list();
+  mentatInit ();
+  BOBsnombre = nombr;
+  clear_list ();
 }
 
 //-----------------------------------------------------------------------------
 // release the object
 //-----------------------------------------------------------------------------
-liste_BOBs::~liste_BOBs()
-{	mentatKill();
+liste_BOBs::~liste_BOBs ()
+{
+  mentatKill ();
 }
 
 //-----------------------------------------------------------------------------
 // clear the list
 //-----------------------------------------------------------------------------
-void liste_BOBs::clear_list()
+void
+liste_BOBs::clear_list ()
 {
-	BOB_nombre = 0;
-	SHA_nombre = 0;
-	BOB_killer *z = NULL;
-	for(Sint32 i = 0; i < BOBNumMaxi; i++)
-	{	BOB__liste[i] = z;
-		SHA__liste[i] = z;
-	}
+  BOB_nombre = 0;
+  SHA_nombre = 0;
+  sprite_object *z = NULL;
+  for (Sint32 i = 0; i < BOBNumMaxi; i++)
+    {
+      BOB__liste[i] = z;
+      SHA__liste[i] = z;
+    }
 }
 
-//-----------------------------------------------------------------------------
-// add a sprite to the list
-//-----------------------------------------------------------------------------
-void liste_BOBs::ajoute_BOB(BOB_killer * unBOB)
+/**
+ * Add a sprite to the display list to draw the sprites
+ * @param sprite pointer to a sprite object 
+ */
+void
+liste_BOBs::ajoute_BOB (sprite_object * sprite)
 {
-  if (BOB_nombre >= BOBsnombre -1)
+  if (BOB_nombre >= BOBsnombre - 1)
     {
       fprintf (stderr, "liste_BOBs::ajoute_BOB() "
                "max. number reached %i\n", BOB_nombre);
       return;
-    } 
-	BOB__liste[BOB_nombre] = unBOB;
-	BOB_nombre++;
-	unBOB->impose_num(BOB_nombre);
-	if(unBOB->shadow_BOB())
-	{	SHA__liste[SHA_nombre] = unBOB;
-		SHA_nombre++;
-	}
+    }
+  BOB__liste[BOB_nombre] = sprite;
+  BOB_nombre++;
+  sprite->set_display_pos (BOB_nombre);
+  if (sprite->shadow_BOB ())
+    {
+      SHA__liste[SHA_nombre] = sprite;
+      SHA_nombre++;
+    }
 }
 
-//-----------------------------------------------------------------------------
-// display graphic objets (sprites)
-//-----------------------------------------------------------------------------
-void liste_BOBs::listeBOBgo()
+/**
+ *  Draw all sprites into the main offscreen
+ */
+void
+liste_BOBs::listeBOBgo ()
 {
-	// display the shahows of the objects
-	for(Sint32 i = 0; i < SHA_nombre; i++)
-	{	BOB_killer *leBOB = SHA__liste[i];
-		leBOB->afficheSHA();
-	}
+  /* draw the shahows of the objects */
+  for (Sint32 i = 0; i < SHA_nombre; i++)
+    {
+      sprite_object *leBOB = SHA__liste[i];
+      leBOB->afficheSHA ();
+    }
 
-	// display the objects
-	for(Sint32 i = 0; i < BOB_nombre; i++)
-	{	BOB_killer *leBOB = BOB__liste[i];
-		leBOB->afficheMSK();
-	}
+  /* draw the objects */
+  for (Sint32 i = 0; i < BOB_nombre; i++)
+    {
+      sprite_object *leBOB = BOB__liste[i];
+      leBOB->afficheMSK ();
+    }
 }
 
 //-----------------------------------------------------------------------------
 // restaure background under the sprites
 //-----------------------------------------------------------------------------
-void liste_BOBs::listeBOBrz()
+void
+liste_BOBs::listeBOBrz ()
 {
-	for(Sint32 i = 0; i < BOB_nombre; i++)
-	{	BOB_killer *leBOB = BOB__liste[i];
-		leBOB->efface_SHA();
-		leBOB->efface_MSK();
-	}
+  for (Sint32 i = 0; i < BOB_nombre; i++)
+    {
+      sprite_object *leBOB = BOB__liste[i];
+      leBOB->efface_SHA ();
+      leBOB->efface_MSK ();
+    }
 }

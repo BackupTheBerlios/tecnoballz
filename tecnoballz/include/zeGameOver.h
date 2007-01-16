@@ -25,11 +25,11 @@
 //...............................................................................
 class zeGameOver;
 //...............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/objet_gere.h"
 #include "../include/score_over.h"
 //...............................................................................
-class zeGameOver:public objet_gere < BOB_killer >
+class zeGameOver:public objet_gere < sprite_object >
 {
 	private:
 		Sint32				go_deplace;                          // step number: 0, 1, 2 or 3

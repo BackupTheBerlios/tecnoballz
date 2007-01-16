@@ -25,11 +25,11 @@
 //...............................................................................
 class tecno_miss;
 //...............................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/tecno_gard.h"
 #include "../include/tecno_bump.h"
 //...............................................................................
-class tecno_miss:public BOB_killer
+class tecno_miss:public sprite_object
 {
 	friend class zeMissiles;
 

@@ -80,7 +80,7 @@ class zeguardian:public objet_gere < tecno_gard >
 		unsigned char*		lissaCurve;
 		zeGigaBlit*			ptGigaBlit;
 		zexplosion*			pexplosion;
-		BOB_killer**		pBobEnergy;
+		sprite_object**		pBobEnergy;
 
 	public:
 		static Sint32 		level2gdpt(Uint32 arean, Uint32 level);

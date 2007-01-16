@@ -25,7 +25,7 @@
 //.......................................................................
 class tecno_boui ;
 //.......................................................................
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/audiomixer.h"
 #include "../include/zeCapsules.h"
 #include "../include/ze_gadgets.h"
@@ -40,7 +40,7 @@ enum
 	CODE_MONEY
 };
 //.......................................................................
-class tecno_boui : public BOB_killer
+class tecno_boui : public sprite_object
 {	friend class zeBouiBoui;
 	friend class tecno_fire;
 	friend class zeNewBalls;

@@ -5,7 +5,7 @@
 // created      : ?
 // updates      : 2005-01-18
 // fonction     : management of the menu principal
-// id		: $Id: menu_tecno.h,v 1.2 2005/01/18 13:21:39 gurumeditation Exp $
+// id		: $Id: menu_tecno.h,v 1.3 2007/01/16 16:57:15 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -26,7 +26,7 @@
 #include "../include/lastScroll.h"
 #include "../include/runGestion.h"
 #include "../include/clavierMac.h"
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/liste_BOBs.h"
 #include "../include/zeDefilTxt.h"
 #include "../include/print_text.h"
@@ -38,7 +38,7 @@ class menu_tecno:public virtual runGestion
 {
 	private:
 		lastScroll*		defilement;
-		BOB_killer*		BOBtecLogo;
+		sprite_object*		BOBtecLogo;
 		zeDefilTxt*		BOB_defile;
 		print_menu*		menu_texte;
 		Sint32			offset_xx1;

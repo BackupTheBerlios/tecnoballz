@@ -31,7 +31,7 @@ tecno_gads::tecno_gads()
 	directionX = 0;
 	gadget_num = 0;
 	raquettePT = 0x0;
-	pt_cycling = &BOB_killer::cycling_01[0];
+	pt_cycling = &sprite_object::cycling_01[0];
 }
 
 //-----------------------------------------------------------------------------
@@ -52,7 +52,7 @@ void tecno_gads::littleInit()
 	minimum_Y1 = 0 * resolution;
 	init_tempo = 6;	// vitesse d'animation
 	anim_tempo = 1;	// compteur tempo animation
-	set_method(BOB_killer::CYCLE_PTAB);
+	set_method(sprite_object::CYCLE_PTAB);
 }
 
 //-----------------------------------------------------------------------------
@@ -61,9 +61,9 @@ void tecno_gads::littleInit()
 void tecno_gads::new_gadget(Sint32 nuGad)
 {
 	if(nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-		set_method(BOB_killer::CYCLE_PTAB);
+		set_method(sprite_object::CYCLE_PTAB);
 	else
-		set_method(BOB_killer::METHOD_TAB);
+		set_method(sprite_object::METHOD_TAB);
 	gadget_num = nuGad;
 	nuGad = nuGad >> 1;
 	hasard_val += nuGad;
@@ -88,9 +88,9 @@ void tecno_gads::new_gadget(Sint32 nuGad)
 void tecno_gads::nouveauGad(brickClear *briPT, Sint32 nuGad)
 {
 	if(nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-		set_method(BOB_killer::CYCLE_PTAB);
+		set_method(sprite_object::CYCLE_PTAB);
 	else
-		set_method(BOB_killer::METHOD_TAB);
+		set_method(sprite_object::METHOD_TAB);
 	gadget_num = nuGad;
 	position_x = briPT->balle_posX;
 	position_y = briPT->balle_posY;
@@ -120,9 +120,9 @@ void tecno_gads::nouveauGad(brickClear *briPT, Sint32 nuGad)
 void tecno_gads::nouveauGad(technoBall *balle, Sint32 nuGad)
 {
 	if(nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-		set_method(BOB_killer::CYCLE_PTAB);
+		set_method(sprite_object::CYCLE_PTAB);
 	else
-		set_method(BOB_killer::METHOD_TAB);
+		set_method(sprite_object::METHOD_TAB);
 	gadget_num = nuGad;
 	position_x = balle->retournePX();
 	position_y = balle->retournePY();
@@ -151,9 +151,9 @@ void tecno_gads::nouveauGad(technoBall *balle, Sint32 nuGad)
 void tecno_gads::nouveauGad(tecno_fire *pfire, Sint32 nuGad)
 {
 	if(nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-		set_method(BOB_killer::CYCLE_PTAB);
+		set_method(sprite_object::CYCLE_PTAB);
 	else
-		set_method(BOB_killer::METHOD_TAB);
+		set_method(sprite_object::METHOD_TAB);
 	gadget_num = nuGad;
 	position_x = pfire->retournePX();
 	position_y = pfire->retournePY();
@@ -184,9 +184,9 @@ void tecno_gads::nouveauGad(tecno_fire *pfire, Sint32 nuGad)
 void tecno_gads::new_gadget(technoBall *balle, Sint32 nuGad)
 {
 	if(nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-		set_method(BOB_killer::CYCLE_PTAB);
+		set_method(sprite_object::CYCLE_PTAB);
 	else
-		set_method(BOB_killer::METHOD_TAB);
+		set_method(sprite_object::METHOD_TAB);
 	gadget_num = nuGad;
 	position_x = balle->retournePX();
 	position_y = balle->retournePY();

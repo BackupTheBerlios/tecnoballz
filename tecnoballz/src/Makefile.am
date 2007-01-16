@@ -15,7 +15,6 @@ SOURCES_MAIN = \
 	audiomixer.cc \
 	ballDirect.cc \
 	barreScore.cc \
-	BOB_killer.cc \
 	briqueCote.cc \
 	clavierMac.cc \
 	configfile.cc \
@@ -48,6 +47,7 @@ SOURCES_MAIN = \
 	scoretable.cc \
 	scrolledit.cc \
 	shop_tecno.cc \
+	sprite_object.cc \
 	tableaux_Z.cc \
 	technoBall.cc \
 	techno_eye.cc \

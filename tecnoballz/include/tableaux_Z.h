@@ -27,7 +27,7 @@ class tableaux_Z;
 //-------------------------------------------------------------------------------
 #include "../include/ecran_hard.h"
 #include "../include/audiomixer.h"
-#include "../include/BOB_killer.h"
+#include "../include/sprite_object.h"
 #include "../include/GIF_bitMap.h"
 #include "../include/liste_BOBs.h"
 #include "../include/handler_memory.h"
@@ -94,8 +94,8 @@ class tableaux_Z:public virtual runGestion
 		zeMoveText*			gere_texte;
 		zeGigaBlit*			ptGigaBlit;
 		zeGameOver*			ptGameOver;
-		BOB_killer*			BottomWall;
-		BOB_killer*			ptBobMoney;
+		sprite_object*			BottomWall;
+		sprite_object*			ptBobMoney;
 		escapeMenu*			ptrEscMenu;
 		tecno_gads*			ptBobRever;
 		Sint32				areaNumber;	// number of area 1 to 5

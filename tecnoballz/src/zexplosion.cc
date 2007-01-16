@@ -50,18 +50,18 @@ Sint32 zexplosion::init_liste()
 {
 
 	// allocate table memory 
-	objetListe = (BOB_killer **)
-		(memory->alloc(sizeof(BOB_killer *) * objetTotal, 0x4F424A47));
+	objetListe = (sprite_object **)
+		(memory->alloc(sizeof(sprite_object *) * objetTotal, 0x4F424A47));
 	error_init(memory->retour_err());
 	if(erreur_num)
 		return (erreur_num);
 
-	// allocate and initialize the objects "BOB_killer"
+	// allocate and initialize the objects "sprite_object"
 	Sint32 bobn1 = BOB_EXPLO1;
 	Sint32 bobn2 = BOB_EXPLO2;
 	for(Sint32 i = 0; i < objetTotal; i++)
-	{	BOB_killer *ptbob = new BOB_killer();
-		ptbob->setListNum(i);
+	{	sprite_object *ptbob = new sprite_object();
+		ptbob->set_object_pos(i);
 		error_init(ptbob->initialise(bobn1, image_BOBs, 0));
 		if(erreur_num)
 			return erreur_num;
@@ -80,7 +80,7 @@ Sint32 zexplosion::init_liste()
 void zexplosion::add_explos(Sint32 pos_x, Sint32 pos_y)
 {
 	for(Sint32 i = 0; i < objetTotal; i++)
-	{	BOB_killer *ptbob = objetListe[i];
+	{	sprite_object *ptbob = objetListe[i];
 		if(!ptbob->flag_actif)
 		{	if(++vFrequency > 4)
 			{	vFrequency = 0;
@@ -106,7 +106,7 @@ void zexplosion::add_explos(Sint32 pos_x, Sint32 pos_y)
 void zexplosion::execution1()
 {
 	for(Sint32 i = 0; i < objetTotal; i++)
-	{	BOB_killer *ptbob = objetListe[i];
+	{	sprite_object *ptbob = objetListe[i];
 		if(ptbob->flag_actif)
 			ptbob->animUnique();
 	}

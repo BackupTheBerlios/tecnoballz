@@ -51,7 +51,7 @@ printmoney::~printmoney()
 //			=> rever:
 //-----------------------------------------------------------------------------
 void printmoney::initialise(joueurData *gamer, zeRaquette* raket,
-	BOB_killer *money, tecno_gads *rever)
+	sprite_object *money, tecno_gads *rever)
 {
 	ptJoueurDa = gamer;
 	ptZraquett = raket;
@@ -67,9 +67,9 @@ void printmoney::initialise(joueurData *gamer, zeRaquette* raket,
 	ptBobRever->coordonnee(x, money_posy);
 	ptBobRever->tempo_init(5);
 	x += ptBobRever->getLargeur();
-	BOB_killer **liste = objetListe + 6; 
+	sprite_object **liste = objetListe + 6; 
 	for (Sint32 i = 0; i < 2 ; i++)
-	{	BOB_killer *x_bob = *(liste++);
+	{	sprite_object *x_bob = *(liste++);
 		x_bob->coordonnee(x, money_posy);
 		x += 8 * resolution;
 	}
@@ -83,7 +83,7 @@ void printmoney::initialise(joueurData *gamer, zeRaquette* raket,
 //			=> lifes:
 //-----------------------------------------------------------------------------
 void printmoney::init_guard(joueurData *gamer, zeRaquette* raket,
-	BOB_killer *money, tecno_gads *lifes)
+	sprite_object *money, tecno_gads *lifes)
 {
 	ptJoueurDa = gamer;
 	ptZraquett = raket;
@@ -99,12 +99,12 @@ void printmoney::init_guard(joueurData *gamer, zeRaquette* raket,
 	ptBobLifes->coordonnee(x, money_posy);
 	ptBobLifes->tempo_init(5);
 	x += ptBobLifes->getLargeur();
-	BOB_killer **liste = objetListe + 6; 
+	sprite_object **liste = objetListe + 6; 
 	for (Sint32 i = 0; i < 2 ; i++)
-	{	BOB_killer *x_bob = *(liste++);
+	{	sprite_object *x_bob = *(liste++);
 		x_bob->coordonnee(x, money_posy);
 		x += 8 * resolution;
-		x_bob->BOB_active();
+		x_bob->enable();
 	}
 }
 
@@ -117,15 +117,15 @@ void printmoney::init_money()
 	Sint32 x = 24 * resolution;
 	ptBobMoney->coordonnee(x, money_posy);
 	ptBobMoney->tempo_init(5);
-	ptBobMoney->BOB_active();
+	ptBobMoney->enable();
 	x += ptBobMoney->getLargeur();
 	
 	// characters sprites
-	BOB_killer **liste = objetListe;
+	sprite_object **liste = objetListe;
 	for (Sint32 i=0; i < 6 ; i++)
-	{	BOB_killer *x_bob = *(liste++);
+	{	sprite_object *x_bob = *(liste++);
 		x_bob->coordonnee(x, money_posy);
-		x_bob->BOB_active();
+		x_bob->enable();
 		x += 8 * resolution;
 	}
 }
@@ -140,7 +140,7 @@ void printmoney::execution1(Sint32 value)
 	//###################################################################
 	// display "reverser malus" if enable
 	//###################################################################
-	BOB_killer **liste = objetListe + 6; 
+	sprite_object **liste = objetListe + 6; 
 	Sint32 inves = ptZraquett->get_invers();
 	if(inves > 0)
 	{	inves--;
@@ -154,19 +154,19 @@ void printmoney::execution1(Sint32 value)
 				i++;
 			}
 			baseN /= 10;
-			BOB_killer *x_bob = *(liste++);
+			sprite_object *x_bob = *(liste++);
 			x_bob->change_GFX(i);
-			x_bob->BOB_active();
+			x_bob->enable();
 		}
-		ptBobRever->BOB_active();
+		ptBobRever->enable();
 		ptBobRever->animRepete();
 	}
 	else
 	{	for (Sint32 i=0; i<2; i++)
-		{	BOB_killer *x_bob = *(liste++);
-			x_bob->BOB_desact();
+		{	sprite_object *x_bob = *(liste++);
+			x_bob->disable();
 		}
-		ptBobRever->BOB_desact();
+		ptBobRever->disable();
 	}
 }
 
@@ -177,7 +177,7 @@ void printmoney::execution2(Sint32 value, Sint32 lifes)
 {
 	exec_money(value);
 	Sint32 baseN = 10;
-	BOB_killer **liste = objetListe + 6; 
+	sprite_object **liste = objetListe + 6; 
 	while (baseN > 0)
 	{	Sint32 i = 0;
 		while (lifes >= baseN)
@@ -185,7 +185,7 @@ void printmoney::execution2(Sint32 value, Sint32 lifes)
 			i++;
 		}
 		baseN /= 10;
-		BOB_killer *x_bob = *(liste++);
+		sprite_object *x_bob = *(liste++);
 		x_bob->change_GFX(i);
 	}
 	ptBobLifes->animRepete();
@@ -197,7 +197,7 @@ void printmoney::execution2(Sint32 value, Sint32 lifes)
 void printmoney::exec_money(Sint32 value)
 {
 	Sint32 baseN = 100000;
-	BOB_killer **liste = objetListe;
+	sprite_object **liste = objetListe;
 	while (baseN > 0)
 	{	Sint32 i = 0;
 		while (value >= baseN)
@@ -205,7 +205,7 @@ void printmoney::exec_money(Sint32 value)
 			i++;
 		}
 		baseN /= 10;
-		BOB_killer *x_bob = *(liste++);
+		sprite_object *x_bob = *(liste++);
 		x_bob->changePosY(money_posy);
 		x_bob->change_GFX(i);
 	}

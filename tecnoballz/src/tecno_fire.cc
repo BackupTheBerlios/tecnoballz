@@ -53,7 +53,7 @@ void tecno_fire::firePower1()
 	animOffset = 4;
 	fire_power = 0;
 	firePowerX = 1;
-	pt_cycling = &BOB_killer::cycling_02[0];
+	pt_cycling = &sprite_object::cycling_02[0];
 }
 
 //-----------------------------------------------------------------------------
@@ -66,7 +66,7 @@ void tecno_fire::firePower2()
 	animOffset = 0;
 	fire_power = 1;
 	firePowerX = 2;
-	pt_cycling = &BOB_killer::cycling_01[0];
+	pt_cycling = &sprite_object::cycling_01[0];
 }
 
 //-----------------------------------------------------------------------------
@@ -149,8 +149,8 @@ void tecno_fire::anim_fires()
 	xFire->animRepete();
 	Sint32 o = xFire->litAnimOff();
 	Sint32 cycle = o & 0X1;
-	if(!cycle) cycle = BOB_killer::METHOD_TAB;
-	else cycle = BOB_killer::METHOD_CC1;
+	if(!cycle) cycle = sprite_object::METHOD_TAB;
+	else cycle = sprite_object::METHOD_CC1;
 	for(Sint32 i = 1; i < t; i++)
 	{	xFire = liste[i];
 		xFire->change_GFX(o);

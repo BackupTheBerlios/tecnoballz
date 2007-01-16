@@ -31,8 +31,8 @@
 briqueCote::briqueCote()
 {
 	mentatInit();
-	bricote_hz = (BOB_killer *)NULL;	//sprite object (small horizontal bricks)
-	bricote_vt = (BOB_killer *)NULL;	//sprite object (small vertical bricks)
+	bricote_hz = (sprite_object *)NULL;	//sprite object (small horizontal bricks)
+	bricote_vt = (sprite_object *)NULL;	//sprite object (small vertical bricks)
 	mur_duhaut = 0;				//0=wall of the top is unbreakable
 	mur_droite = 0;				//0=wall of the right is unbreakable
 	mur_gauche = 0;				//0=wall of the left is unbreakable
@@ -62,11 +62,11 @@ briqueCote::~briqueCote()
 	memory->release((char *)pCoteTable);
 	if(bricote_hz)
 	{	delete bricote_hz;	// release sprite object
-		bricote_hz = (BOB_killer *)NULL;
+		bricote_hz = (sprite_object *)NULL;
 	}
 	if(bricote_vt)
 	{	delete bricote_vt;	// release sprite object
-		bricote_vt = (BOB_killer *)NULL;
+		bricote_vt = (sprite_object *)NULL;
 	}
 	if(fond_sauve)
 	{	memory->release(fond_sauve);
@@ -97,7 +97,7 @@ Sint32 briqueCote::initialise(Sint32 build)
 	//###################################################################
 	// create a sprite object for small horizontal bricks 
 	//###################################################################
-	bricote_hz = new BOB_killer();
+	bricote_hz = new sprite_object();
 	error_init(bricote_hz->initialise(BOB_BRICKH, image_BOBs, 1));
 	if(erreur_num)
 		return (erreur_num);
@@ -107,7 +107,7 @@ Sint32 briqueCote::initialise(Sint32 build)
 	//###################################################################
 	// create a sprite object for small vertical bricks 
 	//###################################################################
-	bricote_vt = new BOB_killer();
+	bricote_vt = new sprite_object();
 	error_init(bricote_vt->initialise(BOB_BRICKV, image_BOBs, 1));
 	if(erreur_num)
 		return (erreur_num);
@@ -226,26 +226,26 @@ Sint32 briqueCote::bobbg_init()
 	Sint32 ht = bricote_vt->getHauteur();
 	for(Uint32 i = 0; i < BRICOTENUM; i++)	//12 bricks per wall
 	{
-		bobwal_top[i] = new BOB_killer();
+		bobwal_top[i] = new sprite_object();
 		error_init(bobwal_top[i]->initialise(BOB_BRICKH, image_BOBs, 1));
 		if(erreur_num) return (erreur_num);
 		BOBgestion->ajoute_BOB(bobwal_top[i]);
 		bobwal_top[i]->coordonnee(x, BRICOTEHRY * resolution);
-		if(map_duHaut[i]) bobwal_top[i]->BOB_active();
+		if(map_duHaut[i]) bobwal_top[i]->enable();
 
-		bobwal_lef[i] = new BOB_killer();
+		bobwal_lef[i] = new sprite_object();
 		error_init(bobwal_lef[i]->initialise(BOB_BRICKV, image_BOBs, 1));
 		if(erreur_num) return (erreur_num);
 		BOBgestion->ajoute_BOB(bobwal_lef[i]);
 		bobwal_lef[i]->coordonnee(BRICOTEGAX * resolution, yg);
-		if(map_gauche[i]) bobwal_lef[i]->BOB_active();
+		if(map_gauche[i]) bobwal_lef[i]->enable();
 
-		bobwal_rgh[i] = new BOB_killer();
+		bobwal_rgh[i] = new sprite_object();
 		error_init(bobwal_rgh[i]->initialise(BOB_BRICKV, image_BOBs, 1));
 		if(erreur_num) return (erreur_num);
 		BOBgestion->ajoute_BOB(bobwal_rgh[i]);
 		bobwal_rgh[i]->coordonnee(BRICOTEDRX * resolution, yd);
-		if(map_droite[i]) bobwal_rgh[i]->BOB_active();
+		if(map_droite[i]) bobwal_rgh[i]->enable();
 
 		x += lg;
 		yd += ht;
@@ -452,9 +452,9 @@ void briqueCote::execution3()
 {
 	for(Uint32 i = 0; i < BRICOTENUM; i++)
 	{
-		if(bobwal_top[i]->BOBisactiv() && !map_duHaut[i]) bobwal_top[i]->BOB_desact();
-		if(bobwal_lef[i]->BOBisactiv() && !map_gauche[i]) bobwal_lef[i]->BOB_desact();
-		if(bobwal_rgh[i]->BOBisactiv() && !map_droite[i]) bobwal_rgh[i]->BOB_desact();
+		if(bobwal_top[i]->is_enable() && !map_duHaut[i]) bobwal_top[i]->disable();
+		if(bobwal_lef[i]->is_enable() && !map_gauche[i]) bobwal_lef[i]->disable();
+		if(bobwal_rgh[i]->is_enable() && !map_droite[i]) bobwal_rgh[i]->disable();
 
 	}
 }
