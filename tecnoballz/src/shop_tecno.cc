@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.4 2007/01/16 16:57:31 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.5 2007/01/16 21:27:13 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -102,7 +102,7 @@ Sint32 shop_tecno::first_init()
 	ptAudiomix->shop_music (arean);
 #endif
 	ecran_hard *ecran = ecran_gere;
-	BOBgestion->clear_list();
+	sprites->reset();
 
 	//###################################################################
 	// copy name player into menu text
@@ -150,7 +150,7 @@ Sint32 shop_tecno::first_init()
 	else 
 		error_init(BOB_allume->initialise(BOB_LEDSH2, image_BOBs, 0));
 	if(erreur_num) return erreur_num;
-	BOBgestion->ajoute_BOB(BOB_allume);
+	sprites->add(BOB_allume);
 	BOB_allume->enable();
 
 	//###################################################################
@@ -218,7 +218,7 @@ Sint32 shop_tecno::zeMainLoop()
 	ecran_gere->waitVBlank();
 	ecran_gere->verouiller();
 	end_return = 0;
-	BOBgestion->listeBOBrz();
+	sprites->clear();
 	
 	//###################################################################
 	// copy the "tampon" memory in the "buffer" memory
@@ -282,7 +282,7 @@ Sint32 shop_tecno::zeMainLoop()
 	//###################################################################
 	// display all sprites
 	//###################################################################
-	BOBgestion->listeBOBgo();
+	sprites->draw();
 	aff_course();
 
 	Ecode = ptrEscMenu->execution1();

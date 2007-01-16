@@ -4,7 +4,7 @@
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// id		: $Id: mentatCode.cc,v 1.11 2007/01/16 14:37:34 gurumeditation Exp $
+// id		: $Id: mentatCode.cc,v 1.12 2007/01/16 21:27:13 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -24,7 +24,7 @@
 #include "../include/handler_memory.h"
 #include "../include/ecran_hard.h"
 #include "../include/clavierMac.h"
-#include "../include/liste_BOBs.h"
+#include "../include/list_sprites.h"
 #include "../include/joueurData.h"
 #include "../include/tableaux_Z.h"
 #include "../include/shop_tecno.h"
@@ -53,7 +53,7 @@ audiomixer*			mentatCode::ptAudiomix = NULL;	//manage sound
 #endif
 ecran_hard*			mentatCode::ecran_gere = NULL;	//manage screen
 clavierMac*			mentatCode::keyGestion = NULL;	//keyboard handle
-liste_BOBs*			mentatCode::BOBgestion = NULL;	//sprites handle
+list_sprites*			mentatCode::sprites = NULL;	//sprites handle
 joueurData*			mentatCode::joueurGere = NULL;	//players handle
 Sint16*				mentatCode::table_cosL = NULL;	//cosinus table
 Sint16*				mentatCode::table_sinL = NULL;	//sinus table
@@ -119,7 +119,11 @@ Sint32 mentatCode::first_init(configfile* pConf)
 	if(num_erreur) return (num_erreur);
 
 	keyGestion = new clavierMac();
-	BOBgestion = new liste_BOBs(400);
+	sprites = new list_sprites();
+        num_erreur = sprites->init (400);
+	if (num_erreur) return num_erreur;
+
+
 	
 	ptLev_data = new level_data();
 	//Sint32 Ecode = -1; 
@@ -332,8 +336,8 @@ Sint32 mentatCode::desinstall(configfile* pConf)
 		printf("==3 level_data \n");
 	delete ptLev_data;
 	if(is_verbose)
-		printf("==4 BOBgestion \n");
-	delete BOBgestion;
+		printf("==4 sprites \n");
+	delete sprites;
 	if(is_verbose)
 		printf("==5 keyGestion\n");
 	delete keyGestion;

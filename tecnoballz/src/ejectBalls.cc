@@ -83,10 +83,10 @@ Sint32 ejectBalls::initialise()
 	
 	// bob_ground = 1: ejectors are managed like sprites  
 	if(bob_ground)
-	{	BOBgestion->ajoute_BOB(ejector_01);
-		BOBgestion->ajoute_BOB(ejector_02);
-		BOBgestion->ajoute_BOB(ejector_03);
-		BOBgestion->ajoute_BOB(ejector_04);
+	{	sprites->add(ejector_01);
+		sprites->add(ejector_02);
+		sprites->add(ejector_03);
+		sprites->add(ejector_04);
 		ejector_01->enable();
 		ejector_02->enable();
 		ejector_03->enable();

@@ -22,7 +22,7 @@
 //******************************************************************************
 #include "../include/scrolledit.h"
 #include "../include/ressources.h"
-#include "../include/liste_BOBs.h"
+#include "../include/list_sprites.h"
 #include "../include/clavierMac.h"
 #include <errno.h>
 #include <stdio.h>
@@ -91,7 +91,7 @@ Sint32 scrolledit::first_init()
 	ecranHaute = ecran_gere->screenhght();
 	ecranLarge = ecran_gere->screenwdth();
 
-	BOBgestion->clear_list();
+	sprites->reset();
 	error_init(pRessource->loadSprite());
 	if(erreur_num) return (erreur_num);
 	error_init(objetMouse->create_BOB(image_BOBs));
@@ -139,7 +139,7 @@ Sint32 scrolledit::zeMainLoop()
 	}
 		
 	objetMouse->bouge_test();
-	BOBgestion->listeBOBgo();
+	sprites->draw();
 	
 	
 	//###################################################################

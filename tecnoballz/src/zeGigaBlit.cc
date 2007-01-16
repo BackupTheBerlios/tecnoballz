@@ -102,7 +102,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 			error_init(g->initialise(n, image_BOBs, 0));
 			if(erreur_num)
 			return (erreur_num);
-			BOBgestion->ajoute_BOB(g);
+			sprites->add(g);
 			objetListe[i] = g;
 		}
 	
@@ -284,7 +284,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
 			error_init(g->initialise(n, image_BOBs, 0));
 			if(erreur_num)
 				return (erreur_num);
-			BOBgestion->ajoute_BOB(g);
+			sprites->add(g);
 			objetListe[i] = g;
 		}
 		

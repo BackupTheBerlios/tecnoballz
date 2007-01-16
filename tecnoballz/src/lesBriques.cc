@@ -293,7 +293,7 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 					error_init(ptbob->initialise(BOB_BRICK1, GFX_brique, 1, 0));
 					if(erreur_num) return erreur_num;
 					objetListe[bobindex] = ptbob;
-					BOBgestion->ajoute_BOB(ptbob);
+					sprites->add(ptbob);
 					ptbob->enable();
 					ptbob->change_GFX(2);
 				}

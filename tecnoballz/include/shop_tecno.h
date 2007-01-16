@@ -25,7 +25,7 @@
 //...............................................................................
 class shop_tecno;
 //...............................................................................
-#include "../include/liste_BOBs.h"
+#include "../include/list_sprites.h"
 #include "../include/mousePoint.h"
 #include "../include/sprite_object.h"
 #include "../include/ze_gadgets.h"

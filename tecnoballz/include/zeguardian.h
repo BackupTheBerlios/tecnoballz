@@ -51,7 +51,7 @@ typedef struct
 gardlevel;
 //...............................................................................
 #include "../include/tecno_gard.h"
-#include "../include/liste_BOBs.h"
+#include "../include/list_sprites.h"
 #include "../include/objet_gere.h"
 #include "../include/zeMissiles.h"
 #include "../include/zeGigaBlit.h"

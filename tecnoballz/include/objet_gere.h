@@ -25,7 +25,7 @@
 #define __OBJET_GERE__
 
 template < class X > class objet_gere;
-#include "../include/liste_BOBs.h"
+#include "../include/list_sprites.h"
 #include "../include/ecran_hard.h"
 #include "../include/mentatCode.h"
 
@@ -126,39 +126,38 @@ template < class X > void objet_gere < X >::init_total (Sint32 total)
   objetTotal = total;
 }
 
-//-------------------------------------------------------------------------------
-// initialize the list of sprite object
-//-------------------------------------------------------------------------------
+/**
+ * Initialize the list of sprites objects
+ */
 template < class X > Sint32 objet_gere < X >::init_liste ()
 {
   GIF_bitMap *image = image_BOBs;
-  if (objetTotal)
+  if (objetTotal <= 0)
     {
-      objetListe = (X **) (memory->alloc (sizeof (X *) * objetTotal,
-                                          0x4F424A47));
-      error_init (memory->retour_err ());
-      if (erreur_num)
-        return (erreur_num);
-      X *zeBOB = new X ();
-      zeBOB->set_object_pos (0);
-      objetListe[0] = zeBOB;
-      // one reserves only once the memory of the graphics
-      error_init (zeBOB->
-                  initialise (BOBtypeNum, image, objects_have_shades,
-                              fTableByte));
-      if (erreur_num)
-        return erreur_num;
-      BOBgestion->ajoute_BOB (zeBOB);
-      liste_BOBs *oDraw = BOBgestion;
-      for (Sint32 i = 1; i < objetTotal; i++)
-        {
-          X *monPT = new X ();
-          zeBOB->duplicaBOB (monPT);
-          objetListe[i] = monPT;
-          oDraw->ajoute_BOB (monPT);
-          monPT->set_object_pos (i);
-          monPT->set_method (sprite_object::METHOD_TAB);
-        }
+      return erreur_num;
+    }
+  objetListe = (X **) (memory->alloc (sizeof (X *) * objetTotal));
+  error_init (memory->retour_err ());
+  if (erreur_num)
+    return (erreur_num);
+  X *zeBOB = new X ();
+  zeBOB->set_object_pos (0);
+  objetListe[0] = zeBOB;
+  /* one reserves only once the memory of the graphics */
+  error_init (zeBOB->
+      initialise (BOBtypeNum, image, objects_have_shades,
+        fTableByte));
+  if (erreur_num)
+    return erreur_num;
+  sprites->add (zeBOB);
+  for (Sint32 i = 1; i < objetTotal; i++)
+    {
+      X *sprite = new X ();
+      zeBOB->duplicaBOB (sprite);
+      objetListe[i] = sprite;
+      sprites->add (sprite);
+      sprite->set_object_pos (i);
+      sprite->set_method (sprite_object::METHOD_TAB);
     }
   return erreur_num;
 }

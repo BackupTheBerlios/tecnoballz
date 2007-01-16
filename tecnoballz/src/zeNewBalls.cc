@@ -26,7 +26,7 @@
 #include "../include/clavierMac.h"
 #include "../include/ecran_hard.h"
 #include "../include/audiomixer.h"
-#include "../include/liste_BOBs.h"
+#include "../include/list_sprites.h"
 
 //-----------------------------------------------------------------------------
 // bricks levels: create the object

@@ -25,7 +25,7 @@
 #define __ZEBOUIBOUI__
 class zeBouiBoui ;
 //...............................................................................
-#include "../include/liste_BOBs.h"
+#include "../include/list_sprites.h"
 #include "../include/tecno_boui.h"
 #include "../include/objet_gere.h"
 #include "../include/ecran_hard.h"

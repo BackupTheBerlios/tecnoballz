@@ -69,7 +69,7 @@ Sint32 zexplosion::init_liste()
 		bobn2 = bobn1;
 		bobn1 = bobnu;
 		objetListe[i] = ptbob;
-		BOBgestion->ajoute_BOB(ptbob);
+		sprites->add(ptbob);
 	}
 	return erreur_num; 
 }

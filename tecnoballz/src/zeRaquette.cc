@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.4 2007/01/16 16:57:31 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.5 2007/01/16 21:27:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -143,7 +143,7 @@ Sint32 zeRaquette::init_liste()
     {	tecBumper1->set_object_pos(0);
 		error_init(tecBumper1->initialise(BOBtypeNum, image_BOBs, 1, 0));
 		if(erreur_num) return erreur_num;
-		BOBgestion->ajoute_BOB(tecBumper1);
+		sprites->add(tecBumper1);
 		objetListe[0] = tecBumper1;
 		tecBumper1->coordonnee(keyGestion->sourisGetX(), bumperYbas);
 		tecBumper1->colLargeur = raketLarge;	// bumper's width
@@ -175,26 +175,26 @@ Sint32 zeRaquette::init_liste()
 		tecBumper1->set_object_pos(0);
 		error_init(tecBumper1->initialise(BOB_BUMPHR, image_BOBs, 1, 0));
 		if(erreur_num) return erreur_num;
-		BOBgestion->ajoute_BOB(tecBumper1);
+		sprites->add(tecBumper1);
 		objetListe[0] = tecBumper1;
 
 		// create left bumper sprite
 		tecBumper2->set_object_pos(1);
 		error_init(tecBumper2->initialise(BOB_BUMPVT, image_BOBs, 1, 0));
 		if(erreur_num) return erreur_num;
-		BOBgestion->ajoute_BOB(tecBumper2);
+		sprites->add(tecBumper2);
 		objetListe[1] = tecBumper2;
 
 		// create top bumper sprite
 		tecBumper3->set_object_pos(2);
 		tecBumper1->duplicaBOB(tecBumper3);
-		BOBgestion->ajoute_BOB(tecBumper3);
+		sprites->add(tecBumper3);
 		objetListe[2] = tecBumper3;
 
 		// create right bumper sprite
 		tecBumper4->set_object_pos(3);
 		tecBumper2->duplicaBOB(tecBumper4);
-		BOBgestion->ajoute_BOB(tecBumper4);
+		sprites->add(tecBumper4);
 		objetListe[3] = tecBumper4;
 
 		// release bumpers graphic page
@@ -211,7 +211,7 @@ Sint32 zeRaquette::init_robot()
 	tec_robot0->set_object_pos(4);
 	error_init(tec_robot0->initialise(BOB_ROBOT0, image_BOBs, 1, 0));
 	if(erreur_num) return erreur_num;
-	BOBgestion->ajoute_BOB(tec_robot0);
+	sprites->add(tec_robot0);
 	objetListe[4] = tec_robot0;
 	return erreur_num;
 }

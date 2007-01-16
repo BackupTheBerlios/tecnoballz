@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.7 2007/01/16 16:57:31 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.8 2007/01/16 21:27:13 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -106,7 +106,7 @@ tableaux_Z::~tableaux_Z()
 //-----------------------------------------------------------------------------
 Sint32 tableaux_Z::first_init()
 {
-	BOBgestion->clear_list();
+	sprites->reset();
 	areaNumber = joueurGere->getAreaNum();
 	levelTecno = joueurGere->getLevelNu();
 	//levelTecno = 5; //test only
@@ -149,7 +149,7 @@ Sint32 tableaux_Z::first_init()
 	//wall of bottom 
 	error_init(BottomWall->initialise(BOB_WALLBO, image_BOBs, 0));
 	if(erreur_num) return erreur_num;
-	BOBgestion->ajoute_BOB(BottomWall);
+	sprites->add(BottomWall);
 	BottomWall->coordonnee(32 * resolution, 232 * resolution);
 	//robot bumper
 	error_init(theBumpers->init_robot());
@@ -194,11 +194,11 @@ Sint32 tableaux_Z::first_init()
 	//money sprite (left-bottom)
 	error_init(ptBobMoney->initialise(BOB_MONEYS, image_BOBs, 0));
 	if(erreur_num) return erreur_num;
-	BOBgestion->ajoute_BOB(ptBobMoney);
+	sprites->add(ptBobMoney);
 	//reverser sprite (right-bottom)
 	error_init(ptBobRever->initialise(BOB_GADGET, image_BOBs, 0));
 	if(erreur_num) return erreur_num;
-	BOBgestion->ajoute_BOB(ptBobRever);
+	sprites->add(ptBobRever);
 	//bumper's viewfinder
 	error_init(ptBaDirect->init_liste());
 	if(erreur_num) return erreur_num; 
@@ -365,7 +365,7 @@ Sint32 tableaux_Z::zeMainLoop()
 		ecran_gere->verouiller();
 		tete_gugus->execution1();
 		ptGigaBlit->execution1();
-		BOBgestion->listeBOBrz();
+		sprites->clear();
 		if(!(hasard_val & 0x00f))
 			tete_gugus->teteparasi();
 		if(isgameover >= 2) {
@@ -377,7 +377,7 @@ Sint32 tableaux_Z::zeMainLoop()
 		gereBricot->execution1();
 		ptBaDirect->execution1();	//handle ball viewfinder
 		les_atomes->atom_depla();
-		BOBgestion->listeBOBgo();
+		sprites->draw();
 		tecZ_barre->scoreEcran();
 		tecZ_barre->barreTemoin();
 		ptPrntmney->execution1(joueurGere->creditFric);
@@ -393,7 +393,7 @@ Sint32 tableaux_Z::zeMainLoop()
 	else
 	{	ecran_gere->waitVBlank();
 		ecran_gere->verouiller();
-		BOBgestion->listeBOBrz();
+		sprites->clear();
 		briquesTab->brickRemap();	//restore bricks
 		gereBricot->execution1();	//restore bricks on side
 		changebkgd();
@@ -431,7 +431,7 @@ Sint32 tableaux_Z::zeMainLoop()
 			ptPrntmney->execution1(joueurGere->creditFric);
 		}
 
-		BOBgestion->listeBOBgo();
+		sprites->draw();
 		tecZ_barre->scoreEcran();
 		Ecode = ptrEscMenu->execution1();
 		ecran_gere->deverouill();

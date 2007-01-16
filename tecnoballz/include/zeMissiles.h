@@ -25,7 +25,7 @@
 #define __ZEMISSILES__
 class zeMissiles;
 
-#include "../include/liste_BOBs.h"
+#include "../include/list_sprites.h"
 #include "../include/tecno_miss.h"
 #include "../include/objet_gere.h"
 #include "../include/tecno_gard.h"

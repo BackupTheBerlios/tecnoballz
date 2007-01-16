@@ -24,7 +24,7 @@
 #define __ZE_MAGNEYE__
 class ze_magneye ;
 //...............................................................................
-#include "../include/liste_BOBs.h"
+#include "../include/list_sprites.h"
 #include "../include/techno_eye.h"
 #include "../include/objet_gere.h"
 //..............................................................................

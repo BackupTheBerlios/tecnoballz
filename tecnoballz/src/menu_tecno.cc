@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.5 2007/01/16 16:57:31 gurumeditation Exp $
+// id		: $Id: menu_tecno.cc,v 1.6 2007/01/16 21:27:13 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -61,7 +61,7 @@ Sint32 menu_tecno::first_init()
 	if(is_verbose)
 		fprintf (stdout,
 			"menu_tecno::first_init() : [START]\n");	
-	BOBgestion->clear_list();
+	sprites->reset();
 #ifndef SOUNDISOFF
 	ptAudiomix->playModule(MUSICINTRO);
 #endif
@@ -71,7 +71,7 @@ Sint32 menu_tecno::first_init()
 
 	error_init(BOBtecLogo->initialise(BOB_LOGOTB, image_BOBs, 1));
 	if(erreur_num) return (erreur_num);
-	BOBgestion->ajoute_BOB(BOBtecLogo);
+	sprites->add(BOBtecLogo);
 	BOBtecLogo->enable();
 	BOBtecLogo->coordonnee(64, 13);
 
@@ -111,7 +111,7 @@ Sint32 menu_tecno::zeMainLoop()
 	BOB_defile->move_chars();	//move the characters (scroll-text)
 	defilement->scrolling1(-1);	//scrolling of the screen background
 	objetMouse->bouge_test();
-	BOBgestion->listeBOBgo();
+	sprites->draw();
 
 	Sint32 zeRet = 0;
 	zeRet = menu_texte->afficheTxt();

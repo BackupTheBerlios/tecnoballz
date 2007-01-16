@@ -23,7 +23,7 @@
 #include "../include/mousePoint.h"
 #include "../include/clavierMac.h"
 #include "../include/ecran_hard.h"
-#include "../include/liste_BOBs.h"
+#include "../include/list_sprites.h"
 //-----------------------------------------------------------------------------
 // create the object
 //-----------------------------------------------------------------------------
@@ -53,7 +53,7 @@ Sint32 mousePoint::create_BOB(GIF_bitMap * image)
 	
 	error_init(initialise(b, image, 0));
 	if(erreur_num) return erreur_num;
-	BOBgestion->ajoute_BOB(this);
+	sprites->add(this);
 	Sint32 x = ecran->bufferLarg() / 2;
 	Sint32 y = ecran->bufferHaut() / 2;
 

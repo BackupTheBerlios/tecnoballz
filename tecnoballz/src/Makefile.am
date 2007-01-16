@@ -33,7 +33,7 @@ SOURCES_MAIN = \
 	lesBriques.cc \
 	level_data.cc \
 	lispreader.cc \
-	liste_BOBs.cc \
+  list_sprites.cc \
 	main.cc \
 	mentatCode.cc \
 	menu_tecno.cc \

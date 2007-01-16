@@ -111,7 +111,7 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 		if(erreur_num)
 			return (erreur_num);
 		objetListe[i] = pgard;
-		BOBgestion->ajoute_BOB(pgard);
+		sprites->add(pgard);
 		pgard->enable();
 		pgard->init_guard(&guard_list[p], getLissaPt(guard_list[p].para_lissa), 
 			pMiss, ptGigaBlit, pexplosion);
@@ -129,7 +129,7 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 		error_init(ptBob->initialise(BOB_GRDNRJ, image_BOBs, 0));
 		if(erreur_num)
 			return (erreur_num);
-		BOBgestion->ajoute_BOB(ptBob);
+		sprites->add(ptBob);
 		ptBob->coordonnee(i * 16 * resolution, 0);
 		ptBob->enable();
 		ptBob->initRepeat(20);

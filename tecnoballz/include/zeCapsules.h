@@ -26,7 +26,7 @@
 //...............................................................................
 class zeCapsules;
 //...............................................................................
-#include "../include/liste_BOBs.h"
+#include "../include/list_sprites.h"
 #include "../include/objet_gere.h"
 #include "../include/ecran_hard.h"
 #include "../include/barreScore.h"

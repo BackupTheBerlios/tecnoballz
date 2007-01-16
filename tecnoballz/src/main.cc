@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.7 2007/01/16 16:57:31 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.8 2007/01/16 21:27:13 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -101,7 +101,7 @@ lastScroll.cc
 lesBriques.cc
 level_data.cc
 lispreader.cc
-liste_BOBs.cc
+list_sprites.cc
 main.cc
 mentatCode.cc
 menu_tecno.cc

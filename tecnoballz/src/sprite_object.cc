@@ -4,11 +4,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.1 2007/01/16 16:57:31 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.2 2007/01/16 21:27:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,9 +27,9 @@
  */
 #include "../include/sprite_object.h"
 
-//-----------------------------------------------------------------------------
-// create the object
-//-----------------------------------------------------------------------------
+/**
+ * Create a sprite object
+ */
 sprite_object::sprite_object()
 {
 	ombredecax = ecran_hard::SHADOWOFFX * resolution;
@@ -39,9 +39,9 @@ sprite_object::sprite_object()
 	BOBprepare();
 }
 
-//-----------------------------------------------------------------------------
-// release the object
-//-----------------------------------------------------------------------------
+/**
+ * Release a sprite object
+ */
 sprite_object::~sprite_object()
 {
 	BOBdestroy();
@@ -562,7 +562,7 @@ Sint32 sprite_object::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, 
 	tabAffich2 = BOBtableP2[0];	//adresse table pour "afficheBOB"
 	if(fTableByte)
 		tabAffich3 = BOBtableP3[0];
-	adresseGFX = adresseTAB[0];	//adresse GFX pour routine "afficheMSK"
+	adresseGFX = adresseTAB[0];	//adresse GFX pour routine "draw()"
 	//printf("sprite_object::initialise()\n");
 	return (erreur_num);
 }
@@ -851,16 +851,16 @@ void sprite_object::efface_SHA()
 	}
 }
 
-//------------------------------------------------------------------------------
-// The main method : display a sprite into the "buffer" 
-// La principale methode : affiche l'objet dans le "buffer
-//------------------------------------------------------------------------------
-void sprite_object::afficheMSK()
+/**
+ * Draw a sprite into the offscreen
+ */
+void
+sprite_object::draw ()
 {
-	if(!flag_actif)
-		return;
-	if(animOffset >= animationN)
-		return;
+	if(!flag_actif || animOffset >= animationN)
+    {
+		  return;
+    }
 	switch(put_method)
 	{	case METHOD_TAB:
 			method_tab();

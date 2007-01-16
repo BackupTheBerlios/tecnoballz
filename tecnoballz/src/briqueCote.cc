@@ -229,21 +229,21 @@ Sint32 briqueCote::bobbg_init()
 		bobwal_top[i] = new sprite_object();
 		error_init(bobwal_top[i]->initialise(BOB_BRICKH, image_BOBs, 1));
 		if(erreur_num) return (erreur_num);
-		BOBgestion->ajoute_BOB(bobwal_top[i]);
+		sprites->add(bobwal_top[i]);
 		bobwal_top[i]->coordonnee(x, BRICOTEHRY * resolution);
 		if(map_duHaut[i]) bobwal_top[i]->enable();
 
 		bobwal_lef[i] = new sprite_object();
 		error_init(bobwal_lef[i]->initialise(BOB_BRICKV, image_BOBs, 1));
 		if(erreur_num) return (erreur_num);
-		BOBgestion->ajoute_BOB(bobwal_lef[i]);
+		sprites->add(bobwal_lef[i]);
 		bobwal_lef[i]->coordonnee(BRICOTEGAX * resolution, yg);
 		if(map_gauche[i]) bobwal_lef[i]->enable();
 
 		bobwal_rgh[i] = new sprite_object();
 		error_init(bobwal_rgh[i]->initialise(BOB_BRICKV, image_BOBs, 1));
 		if(erreur_num) return (erreur_num);
-		BOBgestion->ajoute_BOB(bobwal_rgh[i]);
+		sprites->add(bobwal_rgh[i]);
 		bobwal_rgh[i]->coordonnee(BRICOTEDRX * resolution, yd);
 		if(map_droite[i]) bobwal_rgh[i]->enable();
 

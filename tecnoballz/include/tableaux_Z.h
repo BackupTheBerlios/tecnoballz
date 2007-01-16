@@ -29,7 +29,7 @@ class tableaux_Z;
 #include "../include/audiomixer.h"
 #include "../include/sprite_object.h"
 #include "../include/GIF_bitMap.h"
-#include "../include/liste_BOBs.h"
+#include "../include/list_sprites.h"
 #include "../include/handler_memory.h"
 #include "../include/objet_gere.h"
 #include "../include/runGestion.h"

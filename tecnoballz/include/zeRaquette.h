@@ -47,7 +47,7 @@ class zeRaquette:public objet_gere < tecno_bump >
 		Sint32			bumperYbas;
 		Sint32			bumperXgau;
 		Sint32			bumperXdro;
-		liste_BOBs*		objet_draw;
+		list_sprites*		objet_draw;
 		Sint32			raket_team;		//0=1 player ; 1=2 players (no implemented)
 		Sint32			raketLarge;		//width bumper
 		Sint32			raketDepla;		//sens de deplacement 1 <- 0 -> 2

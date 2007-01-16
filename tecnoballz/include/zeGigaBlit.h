@@ -25,7 +25,7 @@
 class zeGigaBlit;
 //...............................................................................
 #include "../include/giga_blitz.h"
-#include "../include/liste_BOBs.h"
+#include "../include/list_sprites.h"
 #include "../include/barreScore.h"
 #include "../include/clavierMac.h"
 #include "../include/ballDirect.h"

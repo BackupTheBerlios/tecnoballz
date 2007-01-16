@@ -4,9 +4,9 @@
 // file		: "mentatCode.h"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.13 2007/01/16 14:37:58 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.14 2007/01/16 21:27:13 gurumeditation Exp $
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.13 2007/01/16 14:37:58 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.14 2007/01/16 21:27:13 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -69,7 +69,7 @@ class clavierMac;
 #ifndef SOUNDISOFF
 class audiomixer;
 #endif
-class liste_BOBs;
+class list_sprites;
 class joueurData;
 class tableaux_Z;
 class shop_tecno;
@@ -148,7 +148,7 @@ class mentatCode
 #endif
 		static ecran_hard*	ecran_gere;		//manage screen display
 		static clavierMac*	keyGestion;		//manage keyboard and mouse events 
-		static liste_BOBs*	BOBgestion;
+		static list_sprites*	sprites;
 		static joueurData*	joueurGere;
 
 		static Sint16*		table_cosL;
