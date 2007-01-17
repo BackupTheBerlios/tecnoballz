@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.6 2007/01/17 19:04:26 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.7 2007/01/17 20:05:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -101,7 +101,6 @@ Sint32 shop_tecno::first_init()
 	ptAudiomix->levelmusic (arean, level);
 	ptAudiomix->shop_music (arean);
 #endif
-	handler_display *ecran = ecran_gere;
 	sprites->reset();
 
 	//###################################################################
@@ -196,8 +195,8 @@ Sint32 shop_tecno::first_init()
 	gfxPT->copyTampon();
 	delete gfxPT;
 
-	ecran->tamponBuff();		//copy tampon memory into buffer memory  
-	ecran->bufferCopy();		//copy buffer memory into the screen
+	display->tamponBuff();		//copy tampon memory into buffer memory  
+	display->bufferCopy();		//copy buffer memory into the screen
 
 
 	putthetext(shoptext00);
@@ -215,15 +214,15 @@ Sint32 shop_tecno::first_init()
 Sint32 shop_tecno::zeMainLoop()
 {
 	Sint32 Ecode = -1; 
-	ecran_gere->waitVBlank();
-	ecran_gere->verouiller();
+	display->wait_frame();
+	display->verouiller();
 	end_return = 0;
 	sprites->clear();
 	
 	//###################################################################
 	// copy the "tampon" memory in the "buffer" memory
 	//###################################################################
-	ecran_gere->tamponBuff(290* resolution, 3 * resolution, 
+	display->tamponBuff(290* resolution, 3 * resolution, 
 		26 * resolution, 180 * resolution);
 	
 	if(!ptrEscMenu->is_enable())
@@ -290,8 +289,8 @@ Sint32 shop_tecno::zeMainLoop()
 	//###################################################################
 	// copy buffer surface to screen surface
 	//###################################################################
-	ecran_gere->deverouill();
-	ecran_gere->bufferCTab();
+	display->deverouill();
+	display->bufferCTab();
 
 	//###################################################################
 	// escape key to quit the game !
@@ -671,7 +670,7 @@ void shop_tecno::affichtext()
 	Sint32 x_pos = 60 * resolution;
 	Sint32 y_pos = 180 * resolution;
 	Sint32 yspac = charH + resolution;
-	ecran_gere->buffer_RAZ(0, x_pos, y_pos, 22 * 8 * resolution, 3 * yspac);
+	display->buffer_RAZ(0, x_pos, y_pos, 22 * 8 * resolution, 3 * yspac);
 	mega_print->bufferAff2(x_pos, y_pos, shop_line1, 22);
 	mega_print->bufferAff2(x_pos, y_pos + yspac, shop_line2, 22);
 	mega_print->bufferAff2(x_pos, y_pos + yspac * 2 , shop_line3, 22);
@@ -854,8 +853,8 @@ void shop_tecno::aff_select()
 
 		Sint32 tmpco = 0;
 		Sint32 color = box_colour;
-		char* pBuff = ecran_gere->buffer_pos(x, y);
-		Sint32 nextl = ecran_gere->bufferNext();
+		char* pBuff = display->buffer_pos(x, y);
+		Sint32 nextl = display->bufferNext();
 		for(Sint32 v = 0; v < h; v++)
 		{	for(Sint32 h = 0; h < l; h++)
 			{	unsigned char pixel = cyclingtab[color];

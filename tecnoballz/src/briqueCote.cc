@@ -278,12 +278,12 @@ void briqueCote::sauveFond()
 	//###################################################################
 	// wall of the top
 	//###################################################################
-	Sint32 _iModulo = ecran_gere->tampon_mod(iLargeurBH);
+	Sint32 _iModulo = display->tampon_mod(iLargeurBH);
 	Sint32 _iPosX = BRICOTEHRX * resolution;
 	char* _pBuffer = fond_sauve;
 	char* _pSource;
 	for(Uint32 _iIndex = 0; _iIndex < BRICOTENUM; _iIndex++)
-	{	_pSource = ecran_gere->tampon_pos(_iPosX, BRICOTEHRY * resolution);
+	{	_pSource = display->tampon_pos(_iPosX, BRICOTEHRY * resolution);
 		adr_duHaut[_iIndex] = _pBuffer;
 		pos_duHaut[_iIndex][0] = _iPosX;
 		pos_duHaut[_iIndex][1] = BRICOTEHRY * resolution;
@@ -298,10 +298,10 @@ void briqueCote::sauveFond()
 	//###################################################################
 	// wall of the right
 	//###################################################################
-	_iModulo = ecran_gere->tampon_mod(iLargeurBV);
+	_iModulo = display->tampon_mod(iLargeurBV);
 	Sint32 _iPosY = BRICOTEGAY * resolution;
 	for(Uint32 _iIndex = 0; _iIndex < BRICOTENUM; _iIndex++)
-	{	_pSource = ecran_gere->tampon_pos(BRICOTEGAX * resolution, _iPosY);
+	{	_pSource = display->tampon_pos(BRICOTEGAX * resolution, _iPosY);
 		adr_gauche[_iIndex] = _pBuffer;
 		pos_gauche[_iIndex][0] = BRICOTEGAX * resolution;
 		pos_gauche[_iIndex][1] = _iPosY;
@@ -318,7 +318,7 @@ void briqueCote::sauveFond()
 	//###################################################################
 	_iPosY = BRICOTEGAY * resolution;
 	for(Uint32 _iIndex = 0; _iIndex < BRICOTENUM; _iIndex++)
-	{	_pSource = ecran_gere->tampon_pos(BRICOTEDRX * resolution, _iPosY);
+	{	_pSource = display->tampon_pos(BRICOTEDRX * resolution, _iPosY);
 		adr_droite[_iIndex] = _pBuffer;
 		pos_droite[_iIndex][0] = BRICOTEDRX * resolution;
 		pos_droite[_iIndex][1] = _iPosY;
@@ -376,8 +376,8 @@ void briqueCote::execution2()
 				posx1 = pos_duHaut[_iIndex][0];
 				posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
 				_iPosY = pos_duHaut[_iIndex][1];
-				_iTmod = ecran_gere->tampon_mod(iLargeurBH);
-				_iBmod = ecran_gere->buffer_mod(iLargeurBH);
+				_iTmod = display->tampon_mod(iLargeurBH);
+				_iBmod = display->buffer_mod(iLargeurBH);
 				widt1 = iLargeurBH;
 				widt2 = iLargeurBH;
 				heig1 = iHauteurBH;
@@ -396,8 +396,8 @@ void briqueCote::execution2()
 				posx1 = pos_gauche[_iIndex][0];
 				posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
 				_iPosY = pos_gauche[_iIndex][1];
-				_iTmod = ecran_gere->tampon_mod(iLargeurBV);
-				_iBmod = ecran_gere->buffer_mod(iLargeurBV);
+				_iTmod = display->tampon_mod(iLargeurBV);
+				_iBmod = display->buffer_mod(iLargeurBV);
 				widt1 = iLargeurBV;
 				widt2 = iLargeurBV;
 				heig1 = iHauteurBV;
@@ -412,8 +412,8 @@ void briqueCote::execution2()
 				posx1 = pos_droite[_iIndex][0];
 				posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
 				_iPosY = pos_droite[_iIndex][1];
-				_iTmod = ecran_gere->tampon_mod(iLargeurBV);
-				_iBmod = ecran_gere->buffer_mod(iLargeurBV);
+				_iTmod = display->tampon_mod(iLargeurBV);
+				_iBmod = display->buffer_mod(iLargeurBV);
 				widt1 = iLargeurBV;
 				widt2 = iLargeurBV;
 				heig1 = iHauteurBV;
@@ -423,8 +423,8 @@ void briqueCote::execution2()
 				break;
 		}
  
-		char *_pBuffer = ecran_gere->tampon_pos(posx1, _iPosY);
-		char *_pTampon = ecran_gere->buffer_pos(posx1, _iPosY);
+		char *_pBuffer = display->tampon_pos(posx1, _iPosY);
+		char *_pTampon = display->buffer_pos(posx1, _iPosY);
 
 		//###############################################################
 		// clear brick
@@ -441,7 +441,7 @@ void briqueCote::execution2()
 		//###############################################################
 		// clear shadow
 		//###############################################################
-		ecran_gere->clr_shadow(posx2, _iPosY + (handler_display::SHADOWOFFY * resolution), widt2, heig2);
+		display->clr_shadow(posx2, _iPosY + (handler_display::SHADOWOFFY * resolution), widt2, heig2);
 	}
 }
 

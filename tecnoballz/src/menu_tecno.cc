@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.6 2007/01/16 21:27:13 gurumeditation Exp $
+// id		: $Id: menu_tecno.cc,v 1.7 2007/01/17 20:05:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -104,8 +104,8 @@ Sint32 menu_tecno::first_init()
 Sint32 menu_tecno::zeMainLoop()
 {
 
-	ecran_gere->waitVBlank();
-	ecran_gere->verouiller();
+	display->wait_frame();
+	display->verouiller();
 	offset_inc();
 	moveZeLogo();			//move the TecnoballZ logo
 	BOB_defile->move_chars();	//move the characters (scroll-text)
@@ -128,12 +128,12 @@ Sint32 menu_tecno::zeMainLoop()
 	menu_texte->MSKaffiche();
 	if(keyGestion->specialKey(clavierMac::TOEXITFLAG))
 		end_return = -1;
-	ecran_gere->deverouill();
+	display->deverouill();
 	
 	//###################################################################
 	// copy whole buffer surface into screen surface
 	//###################################################################
-	ecran_gere->bufferCTab();
+	display->bufferCTab();
 
 	//###################################################################
 	// go to map editor

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-07
 // fonction	: handle of the scrolling background (menu and gards levels)
-// id		: $Id: lastScroll.cc,v 1.4 2007/01/17 19:04:26 gurumeditation Exp $
+// id		: $Id: lastScroll.cc,v 1.5 2007/01/17 20:05:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -74,7 +74,6 @@ Sint32 lastScroll::initialise(Uint32 PalNu, Uint32 edmap)
 	//###################################################################
 	// load the page of graphics maps im memory
 	//###################################################################
-	handler_display *ecran = ecran_gere;
 	gfx_bitMap = new GIF_bitMap();
 	error_init(gfx_bitMap->decompacte(ressources::RESMAPEDIT));
 	if(erreur_num)
@@ -95,11 +94,11 @@ Sint32 lastScroll::initialise(Uint32 PalNu, Uint32 edmap)
 	//###################################################################
 	// calculation certain values for the display loop
 	//###################################################################
-	hauteMotif = ecran->bufferHaut() / motifhaute;
-	largeMotif = ecran->bufferLarg() / motiflarge;
-	afficheAdr = (Sint32 *)ecran->buffer_adr();
-	destinMod1 = ecran_gere->buffer_mod(0);
-	largeEcran = ecran->bufferNext();
+	hauteMotif = display->bufferHaut() / motifhaute;
+	largeMotif = display->bufferLarg() / motiflarge;
+	afficheAdr = (Sint32 *)display->buffer_adr();
+	destinMod1 = display->buffer_mod(0);
+	largeEcran = display->bufferNext();
 	afficheAdr = afficheAdr - largeEcran * motifhaute;
 	destinMod2 = (motifhaute * largeEcran) - motiflarge;
 	destinMod3 = (motifhaute * largeEcran) - (motiflarge * largeMotif);
@@ -159,7 +158,7 @@ Sint32 lastScroll::swapScroll(Uint32 PalNu, Uint32 edmap)
 //-----------------------------------------------------------------------------
 void lastScroll::palette_go(Uint32 PalNu)
 {
-	SDL_Color *palPT = ecran_gere->paletteAdr();
+	SDL_Color *palPT = display->paletteAdr();
 	SDL_Color *palP1 = palPT;
 	SDL_Color *palP2 = palP1 + 128;
 	const unsigned char *colPT = colors_map;
@@ -199,7 +198,7 @@ void lastScroll::palette_go(Uint32 PalNu)
 		palP1++;
 		palP2++;
 	}
-	ecran_gere->palette_go(palPT);
+	display->palette_go(palPT);
 }
 
 //------------------------------------------------------------------------------
@@ -497,7 +496,7 @@ Sint32 lastScroll::ld_mapfile(Uint32 edmap)
 	//###################################################################
 	// allocate memory for the map editor
 	//###################################################################
-	Sint32 tsupp = (ecran_gere->screenhght() / motifhaute) * 2;
+	Sint32 tsupp = (display->get_height() / motifhaute) * 2;
 	Sint32 msize = (tsupp + CARTEHAUTE) * CARTELARGE * sizeof(Uint16);
 	carteFirst = (Uint16 *) memory->alloc(msize, 0x54425249);
 	error_init(memory->retour_err());

@@ -5,7 +5,7 @@
 // created	: 1996-06-29
 // updates	: 2005-07-07
 // fonctions	: handle BMP images (SDL)
-// id		: $Id: GIF_bitMap.cc,v 1.3 2007/01/17 19:04:26 gurumeditation Exp $
+// id		: $Id: GIF_bitMap.cc,v 1.4 2007/01/17 20:05:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -46,7 +46,7 @@ GIF_bitMap::~GIF_bitMap()
 //-------------------------------------------------------------------------------
 void GIF_bitMap::palette_go()
 {
-	ecran_gere->palette_go(GIFpalette);
+	display->palette_go(GIFpalette);
 }
 
 //-------------------------------------------------------------------------------

@@ -44,7 +44,6 @@ mousePoint::~mousePoint()
 //-----------------------------------------------------------------------------
 Sint32 mousePoint::create_BOB(GIF_bitMap * image)
 {
-	handler_display *ecran = ecran_gere;
 	Sint32 b;
 	if(hasard_val & 1)
 		b = BOB_MOUSE1;
@@ -54,8 +53,8 @@ Sint32 mousePoint::create_BOB(GIF_bitMap * image)
 	error_init(initialise(b, image, 0));
 	if(erreur_num) return erreur_num;
 	sprites->add(this);
-	Sint32 x = ecran->bufferLarg() / 2;
-	Sint32 y = ecran->bufferHaut() / 2;
+	Sint32 x = display->bufferLarg() / 2;
+	Sint32 y = display->bufferHaut() / 2;
 
 	coordonnee(x, y);
 	enable();

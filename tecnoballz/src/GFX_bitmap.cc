@@ -171,9 +171,9 @@ void GFX_bitmap::copyTampon(Sint32 srceX, Sint32 srceY, Sint32 destX, Sint32 des
 								Sint32 large, Sint32 haute)
 {
 	Sint32 n = gfxLargeur;
-	Sint32 o = ecran_gere->tamponNext();
+	Sint32 o = display->tamponNext();
 	char *s = GFXadresse(srceX, srceY);
-	char *d = ecran_gere->tampon_pos(destX, destY);
+	char *d = display->tampon_pos(destX, destY);
 	Sint32 h = haute;
 	for(Sint32 i = 0; i < h; i++, s += n, d += o)
 	{	for(Sint32 j = 0; j < large; j++)
@@ -191,9 +191,9 @@ void GFX_bitmap::copyBuffer(Sint32 srceX, Sint32 srceY, Sint32 destX,
 	if(large == -1) large = gfxLargeur;
 	if(haute == -1) haute = gfxHauteur;
 	Sint32 n = gfxLargeur;
-	Sint32 o = ecran_gere->bufferNext();
+	Sint32 o = display->bufferNext();
 	char *s = GFXadresse(srceX, srceY);
-	char *d = ecran_gere->buffer_pos(destX, destY);
+	char *d = display->buffer_pos(destX, destY);
 	Sint32 h = haute;
 	for(Sint32 i = 0; i < h; i++, s += n, d += o)
 	{	for(Sint32 j = 0; j < large; j++)

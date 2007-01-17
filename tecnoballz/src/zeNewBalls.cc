@@ -318,7 +318,7 @@ void zeNewBalls::vitus_tilt()
 			}
 		}
 		if(ftilt)
-			ecran_gere->tiltscreen();
+			display->tiltscreen();
 	}
 }
 

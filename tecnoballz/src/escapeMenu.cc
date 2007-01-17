@@ -65,7 +65,7 @@ Sint32 escapeMenu::first_init(GIF_bitMap *image, Sint32 nmenu, Sint32 large, Sin
 	// initialize palette color chars, if necessary (shop only)
 	//###################################################################
 	if(palet)
-	{	SDL_Color *palPT = ecran_gere->paletteAdr();
+	{	SDL_Color *palPT = display->paletteAdr();
 		SDL_Color *palP1 = palPT + 239;
 		Sint32 i = hasard_val & 0x0F;
 		if(i >= 10)
@@ -83,7 +83,7 @@ Sint32 escapeMenu::first_init(GIF_bitMap *image, Sint32 nmenu, Sint32 large, Sin
 			palP1->b = vablu;
 			palP1++;
 		}
-		ecran_gere->palette_go(palPT); 
+		display->palette_go(palPT); 
 	}
 	
 	//###################################################################

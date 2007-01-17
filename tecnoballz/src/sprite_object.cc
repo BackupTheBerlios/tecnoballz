@@ -4,11 +4,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.3 2007/01/17 19:04:26 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.4 2007/01/17 20:05:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -246,11 +246,10 @@ Sint32 sprite_object::initialBOB(GIF_bitMap *image, Sint32 ombre)
 //------------------------------------------------------------------------------
 void sprite_object::initCommun(GIF_bitMap *image, Sint32 ombre)
 {
-	handler_display *ecran = ecran_gere;
-	ecranLarge = ecran->screenwdth();
-	ecranHaute = ecran->screenhght();
+	ecranLarge = display->get_width();
+	ecranHaute = display->get_height();
 	srceNextLn = image->GFX_nextLn();
-	destNextLn = ecran->bufferNext();
+	destNextLn = display->bufferNext();
 	flagShadow = ombre;
 	adresseECR = (char *)NULL;
 	adresseEC2 = (char *)NULL;
@@ -262,7 +261,7 @@ void sprite_object::initCommun(GIF_bitMap *image, Sint32 ombre)
 	maximum_X1 = ecranLarge - (Sint32)colLargeur;
 	maximum_Y1 = ecranHaute - (Sint32)colHauteur;
 	offsetSrce = image->GFX_modulo(BOBlargeur);
-	offsetDest = ecran->buffer_mod(BOBlargeur);
+	offsetDest = display->buffer_mod(BOBlargeur);
 }
 
 //------------------------------------------------------------------------------
@@ -317,7 +316,6 @@ Sint32 sprite_object::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, 
 */
 	
 	// L'ecran dans lequel le BOB est affiche
-	handler_display *ecran = ecran_gere;
 	BOBtypeNum = BOBnu;
 	initCommun(image, ombre);
 	const bb_describ *descr = zelistBOB[BOBnu];
@@ -367,7 +365,7 @@ Sint32 sprite_object::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, 
 	error_init(memory->retour_err());
 	if(erreur_num) return erreur_num;
 	offsetSrce = image->GFX_modulo(BOBlargeur);
-	offsetDest = ecran->buffer_mod(BOBlargeur);
+	offsetDest = display->buffer_mod(BOBlargeur);
 
 	//###################################################################
 	// allocate pointers list
@@ -888,9 +886,9 @@ sprite_object::draw ()
 //------------------------------------------------------------------------------
 void sprite_object::method_tab()
 {
-	adresseTAM = ecran_gere->tampon_pos(position_x, position_y);
+	adresseTAM = display->tampon_pos(position_x, position_y);
 #ifndef BYTES_COPY	
-	Sint32 *adres = (Sint32 *)ecran_gere->buffer_pos(position_x, position_y);
+	Sint32 *adres = (Sint32 *)display->buffer_pos(position_x, position_y);
 	adresseECR = (char *)adres;
 	Sint32 *gfxP2 = (Sint32 *)tabAffich2;			//pixels
 	Uint16 *gfxP1 = (Uint16 *)tabAffich1;			//offset and loop counter
@@ -914,7 +912,7 @@ void sprite_object::method_tab()
 		adres = (Sint32 *)adreb;
 	}
 #else
-	char *adres = ecran_gere->buffer_pos(position_x, position_y);
+	char *adres = display->buffer_pos(position_x, position_y);
 	adresseECR = adres;
 	char *gfxP2 = tabAffich2;				//pixels (sprite data)
 	Uint16 *gfxP1 = (Uint16 *)tabAffich1;			//offset and loop counter
@@ -937,9 +935,9 @@ void sprite_object::afficheCyc()
 {
 	indexCycle &= 7;
 	Sint32 pixel = pt_cycling[indexCycle++];
-	adresseTAM = ecran_gere->tampon_pos(position_x, position_y);
+	adresseTAM = display->tampon_pos(position_x, position_y);
 #ifndef BYTES_COPY	
-	Sint32 *adres = (Sint32 *)ecran_gere->buffer_pos(position_x, position_y);
+	Sint32 *adres = (Sint32 *)display->buffer_pos(position_x, position_y);
 	adresseECR = (char *)adres;
 	Sint32 *gfxP2 = (Sint32 *)tabAffich2;			//pixels
 	Uint16 *gfxP1 = (Uint16 *)tabAffich1;			//offset and loop counter
@@ -959,7 +957,7 @@ void sprite_object::afficheCyc()
 		adres = (Sint32 *)adreb;
 	}	
 #else
-	char* adres = ecran_gere->buffer_pos(position_x, position_y);
+	char* adres = display->buffer_pos(position_x, position_y);
 	adresseECR = adres;
 	Uint16 *gfxP1 = (Uint16 *)tabAffich1;			//offset and loop counter
 	Uint32 t = (Uint32)*(gfxP1++);
@@ -988,8 +986,8 @@ void sprite_object::cycle_ptab()
 {
 	indexCycle &= 7;
 	Sint32 pixel = pt_cycling[indexCycle++];
-	char *adres = ecran_gere->buffer_pos(position_x, position_y);
-	adresseTAM = ecran_gere->tampon_pos(position_x, position_y);
+	char *adres = display->buffer_pos(position_x, position_y);
+	adresseTAM = display->tampon_pos(position_x, position_y);
 	adresseECR = (char *)adres;
 	char *gfxP2 = tabAffich2;			//pixels
 	Uint16 *gfxP3 = (Uint16 *)tabAffich3;		//offset and loop counter
@@ -1013,15 +1011,15 @@ void sprite_object::cycle_ptab()
 //------------------------------------------------------------------------------
 void sprite_object::afficheRep()
 {	
-	adresseTAM = ecran_gere->tampon_pos(position_x, position_y);
-	adresseECR = ecran_gere->buffer_pos(position_x, position_y);
+	adresseTAM = display->tampon_pos(position_x, position_y);
+	adresseECR = display->buffer_pos(position_x, position_y);
 	Sint32 offsy = 0;
 	for (Sint32 r = 0; r < affRepeatF; r++, offsy+=BOBhauteur)
 	{
 		Uint16 *gfxP1 = (Uint16 *)tabAffich1;		//offsets and loop counter
 		Uint32 t = (Uint32)*(gfxP1++);
 #ifndef BYTES_COPY	
-		Sint32 *adres = (Sint32 *)ecran_gere->buffer_pos(position_x, position_y + offsy);
+		Sint32 *adres = (Sint32 *)display->buffer_pos(position_x, position_y + offsy);
 		Sint32 *gfxP2 = (Sint32 *)tabAffich2;		//pixels data of the sprite
 		for(Uint32 i = 0; i < t; i++)
 		{	Sint16 o = *(gfxP1++);			//offset in bytes
@@ -1042,7 +1040,7 @@ void sprite_object::afficheRep()
 			adres = (Sint32 *)adreb;
 		}
 #else
-		char *adres = ecran_gere->buffer_pos(position_x, position_y + offsy);
+		char *adres = display->buffer_pos(position_x, position_y + offsy);
 		char *gfxP2 = tabAffich2;			//pixels data of the sprite
 		for(Uint32 i = 0; i < t; i++)
 		{	Sint16 o = *(gfxP1++);			//offset in bytes
@@ -1064,7 +1062,7 @@ void sprite_object::afficheRep()
 void sprite_object::afficheLin()
 {
 	bb_afligne *p = tafflignes[animOffset];
-	adresseTAM = ecran_gere->tampon_pos(position_x, position_y + affligFrst);
+	adresseTAM = display->tampon_pos(position_x, position_y + affligFrst);
 	affligFrSv = affligFrst;;
 	affligLaSv = affligLast;
 	Sint32 l = affligFrst;
@@ -1073,7 +1071,7 @@ void sprite_object::afficheLin()
 	Sint16 o = p[l].OFFSETLEFT;
 	gfxP1++;
 #ifndef BYTES_COPY	
-	Sint32 *adres = (Sint32 *)ecran_gere->buffer_pos(position_x, position_y + affligFrst);
+	Sint32 *adres = (Sint32 *)display->buffer_pos(position_x, position_y + affligFrst);
 	Sint32 *gfxP2 = (Sint32 *)p[l].TABAFFICH2;
 	adresseECR = (char *)adres;
 	for(Uint32 i = 0; i < t; i++)
@@ -1119,7 +1117,7 @@ void sprite_object::afficheLin()
 		}
 	}
 #else
-	char *adres = ecran_gere->buffer_pos(position_x, position_y + affligFrst);
+	char *adres = display->buffer_pos(position_x, position_y + affligFrst);
 	char *gfxP2 = p[l].TABAFFICH2;
 	adresseECR = adres;
 	for(Uint32 i = 0; i < t; i++)
@@ -1158,12 +1156,12 @@ void sprite_object::afficheSHA()
 {
 	if(!flag_actif || !flagShadow) return;
 	char j = ombrepixel;
-	adresseTA2 = ecran_gere->tampon_pos(position_x + ombredecax, position_y + ombredecay);
+	adresseTA2 = display->tampon_pos(position_x + ombredecax, position_y + ombredecay);
 	Uint16 *gfxPT = (Uint16 *)tabAffich1;
 	Uint32 t = (Uint32)*(gfxPT++);
 #ifndef BYTES_COPY	
 	Sint32 q = ombrepixe4;
-	Sint32 *adres = (Sint32 *) ecran_gere->buffer_pos(position_x + ombredecax, position_y + ombredecay);
+	Sint32 *adres = (Sint32 *) display->buffer_pos(position_x + ombredecax, position_y + ombredecay);
 	adresseEC2 = (char*)adres;
 	for(Uint32 i = 0; i < t; i++)
 	{	Sint16 o = *(gfxPT++);				//offset
@@ -1178,7 +1176,7 @@ void sprite_object::afficheSHA()
 		adres = (Sint32 *)adreb; 
 	}
 #else
-	char *adres = ecran_gere->buffer_pos(position_x + ombredecax, position_y + ombredecay);
+	char *adres = display->buffer_pos(position_x + ombredecax, position_y + ombredecay);
 	adresseEC2 = adres;
 	for(Uint32 i = 0; i < t; i++)
 	{	Sint16 o = *(gfxPT++);				//offset
@@ -1196,11 +1194,11 @@ void sprite_object::afficheSHA()
 //------------------------------------------------------------------------------
 void sprite_object::affich_MSK()
 {
-	adresseTAM = ecran_gere->tampon_pos(position_x, position_y);
+	adresseTAM = display->tampon_pos(position_x, position_y);
 	Uint16 *gfxP1 = (Uint16 *)tabAffich1;		//offset and loop counter
 	Uint32 t = (Uint32)*(gfxP1++);
 #ifndef BYTES_COPY	
-	Sint32 *adres = (Sint32 *) ecran_gere->tampon_pos(position_x, position_y);
+	Sint32 *adres = (Sint32 *) display->tampon_pos(position_x, position_y);
 	adresseECR = (char *)adres;
 	Sint32 *gfxP2 = (Sint32 *)tabAffich2;		//pixels
 	for(Uint32 i = 0; i < t; i++)
@@ -1222,7 +1220,7 @@ void sprite_object::affich_MSK()
 		adres = (Sint32 *)adreb;
 	}
 #else
-	char *adres = ecran_gere->tampon_pos(position_x, position_y);
+	char *adres = display->tampon_pos(position_x, position_y);
 	adresseECR = adres;
 	char *gfxP2 = tabAffich2;			//pixels data
 	for(Uint32 i = 0; i < t; i++)
@@ -1243,13 +1241,13 @@ void sprite_object::affich_MSK()
 //------------------------------------------------------------------------------
 void sprite_object::affich_SHA()
 { 
-	adresseTA2 = ecran_gere->tampon_pos(position_x + ombredecax,
+	adresseTA2 = display->tampon_pos(position_x + ombredecax,
 		position_y + ombredecay);
 	char j = ombrepixel;
 	Uint16 *gfxPT = (Uint16 *)tabAffich1;
 	Uint32 t = (Uint32)*(gfxPT++);
 #ifndef BYTES_COPY	
-	Sint32 *adres = (Sint32 *)ecran_gere->tampon_pos(position_x + ombredecax,
+	Sint32 *adres = (Sint32 *)display->tampon_pos(position_x + ombredecax,
 		position_y + ombredecay);
 	adresseEC2 = (char *)adres;
 	Sint32 q = ombrepixe4;
@@ -1266,7 +1264,7 @@ void sprite_object::affich_SHA()
 		adres = (Sint32 *)adreb; 
 	}
 #else
-	char *adres = ecran_gere->tampon_pos(position_x + ombredecax,
+	char *adres = display->tampon_pos(position_x + ombredecax,
 		position_y + ombredecay);
 	adresseEC2 = adres;
 	for(Uint32 i = 0; i < t; i++)
@@ -1287,8 +1285,8 @@ void sprite_object::MSKaffiche()
 {
 	if(!flag_actif) return;
 	char *s = adresseGFX;
-	char *d = ecran_gere->buffer_pos(position_x, position_y);
-	adresseTAM = ecran_gere->tampon_pos(position_x, position_y);
+	char *d = display->buffer_pos(position_x, position_y);
+	adresseTAM = display->tampon_pos(position_x, position_y);
 	adresseECR = d;
 	Sint32 m = srceNextLn;
 	Sint32 n = destNextLn;
@@ -1312,8 +1310,8 @@ void sprite_object::MSKbitcopy()
 {
 	if(!flag_actif) return;
 	char *s = adresseGFX;
-	char *d = ecran_gere->buffer_pos(position_x, position_y);
-	adresseTAM = ecran_gere->tampon_pos(position_x, position_y);
+	char *d = display->buffer_pos(position_x, position_y);
+	adresseTAM = display->tampon_pos(position_x, position_y);
 	adresseECR = d;
 	Sint32 m = srceNextLn;
 	Sint32 n = destNextLn;

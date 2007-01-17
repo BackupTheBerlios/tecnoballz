@@ -61,11 +61,11 @@ Sint32 zeMiniMess::intialise1()
 		if(erreur_num)
 			return (erreur_num);
 
-		off_desti1 = ecran_gere->bufferNext();	// modulo destination
+		off_desti1 = display->bufferNext();	// modulo destination
 		off_source = minifontes->GFX_nextLn();	// modulo source
-		ptr_buffer = ecran_gere->buffer_pos(MESSAGEPOSX * resolution,
+		ptr_buffer = display->buffer_pos(MESSAGEPOSX * resolution,
 												MESSAGEPOSY * resolution);
-		ptr_tampon = ecran_gere->tampon_pos(MESSAGEPOSX * resolution,
+		ptr_tampon = display->tampon_pos(MESSAGEPOSX * resolution,
 												MESSAGEPOSY * resolution);
 		ptr_fontes = minifontes->GFXadresse(); 
 		ft_hauteur = 6 * resolution;	// 6 or 12
@@ -84,7 +84,7 @@ Sint32 zeMiniMess::intialise1()
 	//###################################################################
 	char *pfond = pt_mesfond;
 	char *ptamp = ptr_tampon;
-	Sint32 zemod = ecran_gere->tamponNext();
+	Sint32 zemod = display->tamponNext();
 	for(Sint32 y = 0; y < ft_hauteur; y++)
 	{	for(Sint32 x = 0; x < fonteslarg; x++)
 			pfond[x] = ptamp[x];
@@ -188,8 +188,8 @@ void zeMiniMess::clear_mess()
 {
 	Sint32 pos_x = MESSAGEPOSX * resolution;
 	Sint32 pos_y = (MESSAGEPOSY * resolution) + mess_pause;
-	char *pbuff = ecran_gere->buffer_pos(pos_x, pos_y);
-	char *ptamp = ecran_gere->tampon_pos(pos_x, pos_y);
+	char *pbuff = display->buffer_pos(pos_x, pos_y);
+	char *ptamp = display->tampon_pos(pos_x, pos_y);
 	char *pfond = pt_mesfond + (mess_pause * fonteslarg);
 	for(Sint32 x = 0; x < fonteslarg; x++)
 	{	char pixel = pfond[x];

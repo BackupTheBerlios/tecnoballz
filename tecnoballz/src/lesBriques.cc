@@ -159,7 +159,7 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 	{	for(Sint32 i = 0; i < NB_BRICKSH * brickWidth; i += brickWidth)
 		{	megaT->brique_rel = 0;
 			megaT->brique_aff = 0;
-			megaT->adresseAff = ecran_gere->buffer_rel(i, j);
+			megaT->adresseAff = display->buffer_rel(i, j);
 			megaT->briquePosX = 0;
 			megaT->briquePosY = 0;
 			megaT->brique_num = c++;
@@ -212,10 +212,10 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 	// read somes values for the graphic routine
 	//###################################################################
 	offsSource = GFX_brique->GFX_modulo(brickWidth);
-	offsDestin = ecran_gere->buffer_mod(brickWidth);
+	offsDestin = display->buffer_mod(brickWidth);
 	adr_source = (Sint32 *)GFX_brique->GFXadresse();
-	adr_desti1 = (Sint32 *)ecran_gere->buffer_adr();
-	adr_desti2 = (Sint32 *)ecran_gere->tampon_adr();
+	adr_desti1 = (Sint32 *)display->buffer_adr();
+	adr_desti2 = (Sint32 *)display->tampon_adr();
 
 	initpalett();
 	}
@@ -326,7 +326,7 @@ void lesBriques::bricksShad()
 	for(Sint32 j = ombre_deca; j < NB_BRICKSV * brkyoffset + ombre_deca; j += brkyoffset)
 	{	for(Sint32 i = -ombre_deca; i < NB_BRICKSH * brickWidth - ombre_deca; i += brickWidth)
 		{	if(megaT->brique_rel)
-				ecran_gere->rectShadow(i, j, brickWidth, brickHeigh);
+				display->rectShadow(i, j, brickWidth, brickHeigh);
 			megaT++;
 		}
 	}
@@ -384,7 +384,7 @@ void lesBriques::dsplybrick(char *srcPT, Sint32 adres, Sint32 colbr)
 // -----------------------------------------------------------------------------
 void lesBriques::initpalett()
 {
-	SDL_Color *palPT = ecran_gere->paletteAdr();
+	SDL_Color *palPT = display->paletteAdr();
 	SDL_Color *palP1 = palPT + 239;
 	Sint32 i = hasard_val;
 	i &= 0x0f;
@@ -404,7 +404,7 @@ void lesBriques::initpalett()
 		palP1->b = vablu;
 		palP1++;
 	}
-	ecran_gere->palette_go(palPT);
+	display->palette_go(palPT);
 }
 //------------------------------------------------------------------------------
 // save background under bricks	
@@ -413,10 +413,10 @@ void lesBriques::sauve_fond()
 {
 	Sint32 *bufPT = (Sint32 *)brikTampon;
 	brickInfos *megaT = mega_table;
-	Sint32 offs = ecran_gere->bufferNext() - brickWidth;
+	Sint32 offs = display->bufferNext() - brickWidth;
 	for(Sint32 j = 0; j < NB_BRICKSV * brkyoffset; j += brkyoffset)
 	{	for(Sint32 i = 0; i < NB_BRICKSH * brickWidth; i += brickWidth, megaT++)
-		{	Sint32 *monPT = (Sint32 *)ecran_gere->tampon_pos(i, j);
+		{	Sint32 *monPT = (Sint32 *)display->tampon_pos(i, j);
 			megaT->briqueFond = bufPT;
 			for(Sint32 k = 0; k < brickHeigh; k++, monPT = (Sint32*)((char *)monPT + offs))
 			{	for(Sint32 l = 0; l < brickWidth / 4; l++)
@@ -489,21 +489,21 @@ Sint32 lesBriques::brickRemap()
 				j = ombre_yoff;	// brique en bas (2 lignes)
 			else
 				j = ombre_deca;	// pas de brique en bas (6 lignes)
-			Sint32 decal = ecran_gere->ecran_next(adres, 0, brickHeigh);
-			ecran_gere->clr_shadow(decal, brickWidth - ombre_deca, j);
+			Sint32 decal = display->ecran_next(adres, 0, brickHeigh);
+			display->clr_shadow(decal, brickWidth - ombre_deca, j);
 
 			// 2. left-bottom
 			if((megaT + offBri_BG)->brique_aff)
 				j = ombre_yoff;
 			else
 				j = ombre_deca;
-			decal = ecran_gere->ecran_next(adres, -ombre_deca, brickHeigh);
-			ecran_gere->clr_shadow(decal, ombre_deca, j);
+			decal = display->ecran_next(adres, -ombre_deca, brickHeigh);
+			display->clr_shadow(decal, ombre_deca, j);
 
 			// 3. left		
 			if(!(megaT + offBri_GG)->brique_aff)
-			{	decal = ecran_gere->ecran_next(adres, -ombre_deca, ombre_deca);
-				ecran_gere->clr_shadow(decal, ombre_deca, ombre_left);
+			{	decal = display->ecran_next(adres, -ombre_deca, ombre_deca);
+				display->clr_shadow(decal, ombre_deca, ombre_left);
 			}
 
 			//##########################################################
@@ -512,18 +512,18 @@ Sint32 lesBriques::brickRemap()
 			
 			// 1. exist top brick ? 
 			if((megaT + offBri_HH)->brique_aff)
-				ecran_gere->set_shadow(adres, brickWidth - ombre_deca, ombre_top1);
+				display->set_shadow(adres, brickWidth - ombre_deca, ombre_top1);
 
 			// Il existe une brique en haut a droite ?
 			if((megaT + offBri_HD)->brique_aff)
-			{	decal = ecran_gere->ecran_next(adres, brickWidth - ombre_deca, 0);
-				ecran_gere->set_shadow(decal, ombre_deca, ombre_top1);
+			{	decal = display->ecran_next(adres, brickWidth - ombre_deca, 0);
+				display->set_shadow(decal, ombre_deca, ombre_top1);
 			}
 			
 			// Il existe une brique a droite ?
 			if((megaT + offBri_DD)->brique_aff)
-			{	decal = ecran_gere->ecran_next(adres, brickWidth - ombre_deca, ombre_deca);
-				ecran_gere->set_shadow(decal, ombre_deca, ombre_left);
+			{	decal = display->ecran_next(adres, brickWidth - ombre_deca, ombre_deca);
+				display->set_shadow(decal, ombre_deca, ombre_left);
 			}
 
 			// destroyed indestructible brick

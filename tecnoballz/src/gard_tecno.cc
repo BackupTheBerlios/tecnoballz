@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.5 2007/01/16 21:27:13 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.6 2007/01/17 20:05:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -186,7 +186,7 @@ Sint32 gard_tecno::first_init()
 	error_init(ptGameOver->first_init(32 * resolution));
 	if(erreur_num) return (erreur_num);
 	init_level();
-	ecran_gere->verouiller();
+	display->verouiller();
 	
   	//###################################################################
   	// initialize background vertical scrolling
@@ -240,8 +240,8 @@ Sint32 gard_tecno::first_init()
 	error_init(ptBaDirect->initialize(ptRaquette, 1));
 	if(erreur_num) return (erreur_num);
 
-	ecran_gere->deverouill();
-	ecran_gere->bufferCopy();	//copy "buffer memory" to "screen memory"
+	display->deverouill();
+	display->bufferCopy();	//copy "buffer memory" to "screen memory"
 	keyGestion->resetpause();
 	keyGestion->setGrab_On();
 	
@@ -249,7 +249,7 @@ Sint32 gard_tecno::first_init()
 	ptBob_name = pOver->string2bob(joueurGere->returnName());
 	sprites->add(ptBob_name);
 	ptBob_name->enable();
-	ptBob_name->coordonnee((ecran_gere->screenwdth() - ptBob_name->getLargeur()) / 2, resolution);
+	ptBob_name->coordonnee((display->get_width() - ptBob_name->getLargeur()) / 2, resolution);
 	ptBob_name->set_method(sprite_object::METHOD_MSK);
 	return erreur_num;
 }
@@ -285,8 +285,8 @@ Sint32 gard_tecno::zeMainLoop()
 			}
 		}
 		isgameover++;
-		ecran_gere->waitVBlank();
-		ecran_gere->verouiller();
+		display->wait_frame();
+		display->verouiller();
 
 		if (scrollTemp > 0)
 		{	scrollTemp--;
@@ -304,8 +304,8 @@ Sint32 gard_tecno::zeMainLoop()
 		ptPrntmney->execution2(joueurGere->creditFric, joueurGere->superLifes);
 		ptMoveText->goMoveText();
 		sprites->draw();
-		ecran_gere->deverouill();
-		ecran_gere->bufferCTab();
+		display->deverouill();
+		display->bufferCTab();
 		if(keyGestion->leftButton() && isgameover > 150)
 		{	joueurGere = joueurData::nextplayer(
 				joueurGere,
@@ -318,8 +318,8 @@ Sint32 gard_tecno::zeMainLoop()
 		//######################################################
 		// game running !
 		//######################################################
-		ecran_gere->waitVBlank();
-		ecran_gere->verouiller();
+		display->wait_frame();
+		display->verouiller();
 		if(!keyGestion->specialKey(clavierMac::PAUSE_FLAG))
 		{	run_scroll();
 			defilement->scrolling1(scrolSpeed);
@@ -349,8 +349,8 @@ Sint32 gard_tecno::zeMainLoop()
 		//###################################################################
 		sprites->draw();
 		Ecode = ptrEscMenu->execution1();
-		ecran_gere->deverouill();
-		ecran_gere->bufferCTab();	//copy buffer's memory in the screen
+		display->deverouill();
+		display->bufferCTab();	//copy buffer's memory in the screen
 	}
 	
 

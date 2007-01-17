@@ -53,16 +53,15 @@ head_anima::head_anima()
 //-------------------------------------------------------------------------------
 Sint32 head_anima::initialise()
 {
-	handler_display *ecran = ecran_gere;
 	GIF_bitMap *gfxPT = new GIF_bitMap();
 	headbitmap = gfxPT;
 	error_init(gfxPT->decompacte(ressources::RESHEADANI));
 	if(erreur_num)
 		return (erreur_num);
 	off_source = gfxPT->GFX_nextLn();
-	off_destin = ecran->bufferLarg();
+	off_destin = display->bufferLarg();
 	adr_source = gfxPT->GFXadresse();
-	adr_destin = ecran->buffer_pos(272 * resolution, 106 * resolution);
+	adr_destin = display->buffer_pos(272 * resolution, 106 * resolution);
 	la_hauteur = gfxPT->GFXhauteur();
 	return (erreur_num);
 }

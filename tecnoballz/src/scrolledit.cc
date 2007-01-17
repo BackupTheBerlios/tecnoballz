@@ -88,8 +88,8 @@ Sint32 scrolledit::first_init()
 	pt_select2 = &pt_select1[1];
 	pt_select0 = pt_select1;
 	
-	ecranHaute = ecran_gere->screenhght();
-	ecranLarge = ecran_gere->screenwdth();
+	ecranHaute = display->get_height();
+	ecranLarge = display->get_width();
 
 	sprites->reset();
 	error_init(pRessource->loadSprite());
@@ -113,7 +113,7 @@ Sint32 scrolledit::first_init()
 	tile_mask1 = 0xffffffff ^ (tile_width - 1);
 	tile_mask2 = ~tile_mask1;
 
-	ecran_gere->gradation1();
+	display->gradation1();
 	return erreur_num;
 }
 
@@ -123,8 +123,8 @@ Sint32 scrolledit::first_init()
 //------------------------------------------------------------------------------
 Sint32 scrolledit::zeMainLoop()
 {
-	ecran_gere->waitVBlank();
-	ecran_gere->verouiller();
+	display->wait_frame();
+	display->verouiller();
 
 	pt_select1->boxOffsetY = defilement->returnPosy();
 	pt_select2->boxOffsetY = titlesPosy;
@@ -145,8 +145,8 @@ Sint32 scrolledit::zeMainLoop()
 	//###################################################################
 	// copy whole buffer surface into screen surface
 	//###################################################################
-	ecran_gere->deverouill();
-	ecran_gere->bufferCTab();
+	display->deverouill();
+	display->bufferCTab();
 
 	//###################################################################
 	// escape key to quit the game !
@@ -477,7 +477,7 @@ void scrolledit::drawingBox()
 		Sint32 color = box_colour;
 
 		
-		//char *ptBuf = ecran_gere->buffer_pos(box_pos_x1, box_pos_y1);
+		//char *ptBuf = display->buffer_pos(box_pos_x1, box_pos_y1);
 		
 		Sint32 width = x2 - x1;
 		Sint32 heigh = y2 - y1;
@@ -489,7 +489,7 @@ void scrolledit::drawingBox()
 		// top
 		if(y1 >= 0 && y1 < ecranHaute)
 		{		
-		pBuff = ecran_gere->buffer_pos(x1, y1);
+		pBuff = display->buffer_pos(x1, y1);
 		tmpco = 0; 
 		for(Sint32 i = 0; i < width; i++)
 		{	unsigned char pixel = cyclingtab[color];
@@ -502,8 +502,8 @@ void scrolledit::drawingBox()
 		}
 		
 		// right
-		Sint32 nextl = ecran_gere->bufferNext();
-		pBuff = ecran_gere->buffer_pos(x2 - 1,  y1 + 1);
+		Sint32 nextl = display->bufferNext();
+		pBuff = display->buffer_pos(x2 - 1,  y1 + 1);
 		for(Sint32 i = 1; i < heigh; i++)
 		{	unsigned char pixel = cyclingtab[color];
 			if(y1 + i >= 0 && y1 + i < ecranHaute)
@@ -518,7 +518,7 @@ void scrolledit::drawingBox()
 		// bottom
 		if(y2 >= 0 && y2 < ecranHaute)
 		{
-		pBuff = ecran_gere->buffer_pos(x1, y2);
+		pBuff = display->buffer_pos(x1, y2);
 		for(Sint32 i = width - 1; i >= 0; i--)
 		{	unsigned char pixel = cyclingtab[color];
 			pBuff[i] = pixel;
@@ -530,7 +530,7 @@ void scrolledit::drawingBox()
 		}
 		
 		// left
-		pBuff = ecran_gere->buffer_pos(x1, y2 - 1);
+		pBuff = display->buffer_pos(x1, y2 - 1);
 		for(Sint32 i = 1; i < heigh; i++)
 		{	unsigned char pixel = cyclingtab[color];
 			if(y2 - i >= 0 && y2 - i < ecranHaute)
@@ -673,7 +673,7 @@ void scrolledit::brush_draw()
 			//###################################################################
 			table = defilement->carteFirst;
 			i = (lastScroll::CARTEHAUTE * lastScroll::CARTELARGE);
-			Sint32 tsupp = ( ecran_gere->screenhght() / defilement->motifhaute) * 2;
+			Sint32 tsupp = ( display->get_height() / defilement->motifhaute) * 2;
 			for(Sint32 j = 0; j < (tsupp * lastScroll::CARTELARGE); j++)
 				defilement->carteFirst[i++] = table[j];
 		}

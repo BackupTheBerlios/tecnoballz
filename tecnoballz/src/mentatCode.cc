@@ -4,7 +4,7 @@
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// id		: $Id: mentatCode.cc,v 1.13 2007/01/17 19:04:26 gurumeditation Exp $
+// id		: $Id: mentatCode.cc,v 1.14 2007/01/17 20:05:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -51,7 +51,7 @@ handler_memory*			mentatCode::memory = NULL;	//manage memory allocation
 #ifndef SOUNDISOFF
 audiomixer*			mentatCode::ptAudiomix = NULL;	//manage sound      
 #endif
-handler_display*			mentatCode::ecran_gere = NULL;	//manage screen
+handler_display*			mentatCode::display = NULL;	//manage screen
 clavierMac*			mentatCode::keyGestion = NULL;	//keyboard handle
 list_sprites*			mentatCode::sprites = NULL;	//sprites handle
 joueurData*			mentatCode::joueurGere = NULL;	//players handle
@@ -112,10 +112,12 @@ Sint32 mentatCode::first_init(configfile* pConf)
 	num_erreur = ptAudiomix->retour_err();
 	if(num_erreur) return (num_erreur);
 #endif	
-	if(is_verbose)
-		printf("mentatCode::first_init() [handler_display::ecran_init]\n");
-	ecran_gere = new handler_display();
-	num_erreur = ecran_gere->ecran_init();
+	if (is_verbose)
+          {
+	     printf("mentatCode::first_init() [handler_display::initialize]\n");
+          }
+	display = new handler_display();
+	num_erreur = display->initialize();
 	if(num_erreur) return (num_erreur);
 
 	keyGestion = new clavierMac();
@@ -345,8 +347,8 @@ Sint32 mentatCode::desinstall(configfile* pConf)
 		printf("==6 ptScoreTab\n");
 	delete ptScoreTab;
 	if(is_verbose)
-		printf("==7 ecran_gere\n");
-	delete ecran_gere;
+		printf("==7 display\n");
+	delete display;
 #ifndef SOUNDISOFF
 	if(is_verbose)
 		printf("==8 audiomixer\n");

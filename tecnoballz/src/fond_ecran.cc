@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-07-17
 // fonctions	: display background (bricks levels)
-// Id		: $Id: fond_ecran.cc,v 1.5 2007/01/17 19:04:26 gurumeditation Exp $
+// Id		: $Id: fond_ecran.cc,v 1.6 2007/01/17 20:05:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -53,7 +53,6 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 {
 	if(is_verbose)
 		printf("fond_ecran::instalFond() nbkdg = %i\n", nbkdg);
-	handler_display *ecran = ecran_gere;
 	GIF_bitMap *fonds = new GIF_bitMap();
 	Sint32 large = 0;
 	Sint32 haute = 0;
@@ -103,7 +102,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	}
 	if(erreur_num) return erreur_num;
 
-	Sint32 dHorz = (ecran->bufferLarg() - 64 * resolution) / large - 1;
+	Sint32 dHorz = (display->bufferLarg() - 64 * resolution) / large - 1;
 	Sint32 oSour = fonds->GFX_nextLn();
 	Sint32 dVert = (240 * resolution) / haute - 1;
 	Sint32 mVert = (240 * resolution) % haute - 1;
@@ -134,10 +133,10 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	//###############################################################
 	Sint32 src_X = 0;
 #if __WORDSIZE == 64
-	Sint32 h = (long)ecran;
+	Sint32 h = (long)display;
 	Sint32 k = (long)fonds;
 #else
-	Sint32 h = (Sint32)ecran;	//use pointer address as random value
+	Sint32 h = (Sint32)display;	//use pointer address as random value
 	Sint32 k = (Sint32)fonds;	//use pointer address as random value
 #endif
 	Sint32 nline;
@@ -149,22 +148,22 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	{	for(Sint32 det_X = dHorz; det_X > -1; det_X--)
 		{	hasard_val = hasard_val + h + k + 1 + keyGestion->sourisGetX();
 			h = h + countframe + det_Y;
-			k = k + ecran->get_framepee();
+			k = k + display->get_framepee();
 			src_X = hasard_val;
 			src_X &= 0x0f;		//table index (0 to 15)
 			src_X = t_pos[src_X];	//source position (0 to 4)
 			src_X *= large;
 			char *srcPT = fonds->GFXadresse(baseX + src_X, baseY);
-			char *detPT = ecran->tampon_pos(det_X * large, det_Y * haute);
+			char *detPT = display->tampon_pos(det_X * large, det_Y * haute);
 			switch (iFond_type)
 			{	case 0:
-					ecran->buf_affx32(srcPT, detPT, oSour, nline);
+					display->buf_affx32(srcPT, detPT, oSour, nline);
 					break;
 				case 1:
-					ecran->buf_affx64(srcPT, detPT, oSour, nline);
+					display->buf_affx64(srcPT, detPT, oSour, nline);
 					break;
 				case 2:
-					ecran->buf_affx64(srcPT, detPT, oSour, nline);
+					display->buf_affx64(srcPT, detPT, oSour, nline);
 					break;
 			}
 		}
@@ -174,11 +173,11 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	//###############################################################
 	// display top shadow
 	//###############################################################
-	dHorz = ecran->screenwdth() - (64 * resolution);
-	dVert = ecran->screenhght();
+	dHorz = display->get_width() - (64 * resolution);
+	dVert = display->get_height();
 	for(Sint32 det_Y = 0; det_Y < (handler_display::SHADOWOFFY * resolution); det_Y++)
 	{	for(Sint32 det_X = 0; det_X < dHorz; det_X++)
-		{	char *detPT = ecran->tampon_pos(det_X, det_Y);
+		{	char *detPT = display->tampon_pos(det_X, det_Y);
 			*detPT |= handler_display::SHADOW_PIX;
 		}
 	}
@@ -188,7 +187,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	//###############################################################
 	for(Sint32 det_Y = 0; det_Y < dVert; det_Y++)
 	{	for(Sint32 det_X = (252 * resolution); det_X < (256 * resolution); det_X++)
-		{	char *detPT = ecran->tampon_pos(det_X, det_Y);
+		{	char *detPT = display->tampon_pos(det_X, det_Y);
 			*detPT |= handler_display::SHADOW_PIX;
 		}
 	}
@@ -198,7 +197,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	//###############################################################
 	if (iFond_type == 2)
 	{	unsigned char* colPT = fonds->paletteADR();
-		SDL_Color *palPT = ecran->paletteAdr();
+		SDL_Color *palPT = display->paletteAdr();
 		SDL_Color *palP1 = palPT;
 		SDL_Color *palP2 = palP1 + 128;
 		unsigned char pixel;
@@ -218,7 +217,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 			palP1++;
 			palP2++;
 		}
-		ecran->palette_go(palPT); 
+		display->palette_go(palPT); 
 	}
 	else
 	{	coulDuFond();
@@ -275,10 +274,9 @@ void fond_ecran::prev_color()
 void fond_ecran::coulDuFond(Sint32 zecol)
 {
 	colorActif = zecol;
-	handler_display *ecran = ecran_gere;
 	char *color =&couleurs[0];
 	unsigned char *colPT = (unsigned char *)(color) + zecol;
-	SDL_Color *palPT = ecran->paletteAdr();
+	SDL_Color *palPT = display->paletteAdr();
 	SDL_Color *palP1 = palPT + 1;
 	SDL_Color *palP2 = palP1 + 128;
 	Sint32 j = 4;
@@ -299,7 +297,7 @@ void fond_ecran::coulDuFond(Sint32 zecol)
 		palP1++;
 		palP2++;
 	}
-	ecran->palette_go(palPT);
+	display->palette_go(palPT);
 }
 
 //------------------------------------------------------------------------------

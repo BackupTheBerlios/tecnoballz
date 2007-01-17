@@ -61,13 +61,13 @@ Sint32 barreScore::first_init(joueurData * gamer, zeGigaBlit *gblit, zeNewBalls 
 	ptNewBalls = balls;
 	if(erreur_num)
 		return (erreur_num);
-	scoreAdres = ecran_gere->buffer_pos
+	scoreAdres = display->buffer_pos
 		(POSX_SCORE * resolution, POSY_SCORE * resolution);
-	lifesAdres = ecran_gere->buffer_pos
+	lifesAdres = display->buffer_pos
 		(POSX_LIFES * resolution, POSY_LIFES * resolution);
-	brickAdres = ecran_gere->buffer_pos
+	brickAdres = display->buffer_pos
 		(POSX_BRICK * resolution, POSY_BRICK * resolution);
-	temoinAdrs = ecran_gere->buffer_pos
+	temoinAdrs = display->buffer_pos
 		(TEMOINPOSX * resolution, TEMOINPOSY * resolution);
 	return (erreur_num);
 }
@@ -114,7 +114,7 @@ void barreScore::scoreEcran()
 	affNombre1(scoreAdres, gamer->superScore, 100000);
 	affNombre1(lifesAdres, superBrick, 100);
 	affNombre1(brickAdres, gamer->superLifes, 10);
-	//Sint32 nbfps = ecran_gere->get_framepee();
+	//Sint32 nbfps = display->get_framepee();
 	//affNombre1(lifesAdres, nbfps, 100);
 }
 
@@ -198,7 +198,7 @@ void barreScore::barreTemoin()
 	}
     
 	char *d = temoinAdrs;
-	Sint32 m = ecran_gere->bufferLarg();
+	Sint32 m = display->bufferLarg();
 	char p = 0;
 	
 	

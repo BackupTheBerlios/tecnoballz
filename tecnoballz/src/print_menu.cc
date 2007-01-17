@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.4 2007/01/16 16:57:31 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.5 2007/01/17 20:05:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -93,7 +93,7 @@ Sint32 print_menu::first_init()
 	//###################################################################
 	// initialize palette color chars
 	//###################################################################
-	SDL_Color *palPT = ecran_gere->paletteAdr();
+	SDL_Color *palPT = display->paletteAdr();
 	SDL_Color *palP1 = palPT + 239;
 	Sint32 i = hasard_val & 0x0F;
 	if(i >= 10)
@@ -111,7 +111,7 @@ Sint32 print_menu::first_init()
 		palP1->b = vablu;
 		palP1++;
 	}
-	ecran_gere->palette_go(palPT); 
+	display->palette_go(palPT); 
 	return erreur_num;
 }
 

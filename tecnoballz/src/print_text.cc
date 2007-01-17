@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-10
 // fonction	: display chars
-// id		: $Id: print_text.cc,v 1.4 2007/01/17 19:04:26 gurumeditation Exp $
+// id		: $Id: print_text.cc,v 1.5 2007/01/17 20:05:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -85,14 +85,13 @@ Uint32 print_text::getCharHgt()
 //------------------------------------------------------------------------------
 Sint32 print_text::init_print(Sint32 ident)
 {
-	handler_display *ecran = ecran_gere;
 	GFX_fontes = new GIF_bitMap();
 	error_init(GFX_fontes->decompacte(ident));
 	if(erreur_num)
 		return (erreur_num);
 	fontes_adr = GFX_fontes->GFXadresse(216 * resolution, 0);	//characters '0' to '9'
 	caract_adr = GFX_fontes->GFXadresse(0, 0);					//characters 'A' to 'Z'
-	off_desti1 = ecran->bufferNext();							//modulo destination
+	off_desti1 = display->bufferNext();							//modulo destination
 	off_source = GFX_fontes->GFX_nextLn();						//modulo source
 	charHeight = GFX_fontes->GFXhauteur(); 
 	return erreur_num;
@@ -107,7 +106,7 @@ Sint32 print_text::init_print(Sint32 ident)
 // -----------------------------------------------------------------------------
 void print_text::bufferAff1(Sint32 x, Sint32 y, Sint32 value, Sint32 baseN)
 {
-	char *desP1 = ecran_gere->buffer_pos(x, y);
+	char *desP1 = display->buffer_pos(x, y);
 	affNombre1(desP1, value, baseN);
 }
 // -----------------------------------------------------------------------------
@@ -119,7 +118,7 @@ void print_text::bufferAff1(Sint32 x, Sint32 y, Sint32 value, Sint32 baseN)
 // -----------------------------------------------------------------------------
 void print_text::tamponAff1(Sint32 x, Sint32 y, Sint32 value, Sint32 baseN)
 {
-	char *desP1 = ecran_gere->tampon_pos(x, y);
+	char *desP1 = display->tampon_pos(x, y);
 	affNombre1(desP1, value, baseN);
 }
 // -----------------------------------------------------------------------------
@@ -311,7 +310,7 @@ void print_text::aff_texte1(char *desP1, char *chain, Sint32 total)
 // -----------------------------------------------------------------------------
 void print_text::tamponAff2(Sint32 x, Sint32 y, char *chain, Sint32 total)
 {
-	char *desP1 = ecran_gere->tampon_pos(x, y);
+	char *desP1 = display->tampon_pos(x, y);
 	aff_texte1(desP1, chain, total);
 }
 
@@ -324,7 +323,7 @@ void print_text::tamponAff2(Sint32 x, Sint32 y, char *chain, Sint32 total)
 //------------------------------------------------------------------------------
 void print_text::bufferAff2(Sint32 x, Sint32 y, char *chain, Sint32 total)
 {
-	char *desP1 = ecran_gere->buffer_pos(x, y);
+	char *desP1 = display->buffer_pos(x, y);
 	aff_texte1(desP1, chain, total);
 }
 
@@ -387,7 +386,7 @@ sprite_object*  print_text::string2bob(const char* ptStr)
 	ptBob->BOBhauteur = pBmap->GFXhauteur();
 	ptBob->srceNextLn = pBmap->GFX_nextLn();
 	ptBob->animationN = 1;
-	ptBob->destNextLn = ecran_gere->bufferNext();
+	ptBob->destNextLn = display->bufferNext();
 	delete pBmap;
 	return ptBob;
 }

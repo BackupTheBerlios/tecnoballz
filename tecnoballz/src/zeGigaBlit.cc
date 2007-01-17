@@ -313,7 +313,7 @@ void zeGigaBlit::execution2()
 		// determine last line of the gigablitz sprite
 		//###################################################################
 		Sint32 h =g->getHauteur();
-		Sint32 l = ecran_gere->screenhght() - y;
+		Sint32 l = display->get_height() - y;
 		if (l > h)
 			l = h;
 		if(l < 1)

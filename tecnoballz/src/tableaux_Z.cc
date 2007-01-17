@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.8 2007/01/16 21:27:13 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.9 2007/01/17 20:05:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -206,7 +206,7 @@ Sint32 tableaux_Z::first_init()
 	error_init(ptrEscMenu->first_init(image_BOBs, 0, 256 * resolution));
 	if(erreur_num) return erreur_num; 
 	pRessource->freeSprite();
-	ecran_gere->verouiller();
+	display->verouiller();
 	
 	//###################################################################
 	// initialize "Game Over"
@@ -315,8 +315,8 @@ Sint32 tableaux_Z::first_init()
 	error_init(ptBaDirect->initialize(theBumpers, 4));
 	if(erreur_num) return (erreur_num);
 	
-	ecran_gere->tamponBuff();	// recopie le tampon dans le buffer
-	ecran_gere->deverouill();
+	display->tamponBuff();	// recopie le tampon dans le buffer
+	display->deverouill();
 	Sint32 k = memory->get_total_size();
 	if(is_verbose)
 		printf("tableaux_Z::first_init(): memory size allocated : %i \n",k);
@@ -361,8 +361,8 @@ Sint32 tableaux_Z::zeMainLoop()
 			isgameover++;
 		}
 		ptMiniMess->execution1();
-		ecran_gere->waitVBlank();
-		ecran_gere->verouiller();
+		display->wait_frame();
+		display->verouiller();
 		tete_gugus->execution1();
 		ptGigaBlit->execution1();
 		sprites->clear();
@@ -381,8 +381,8 @@ Sint32 tableaux_Z::zeMainLoop()
 		tecZ_barre->scoreEcran();
 		tecZ_barre->barreTemoin();
 		ptPrntmney->execution1(joueurGere->creditFric);
-		ecran_gere->deverouill();
-		ecran_gere->bufferCTab();
+		display->deverouill();
+		display->bufferCTab();
 		if(keyGestion->leftButton() && isgameover > 60)
 			joueurGere = joueurData::nextplayer(joueurGere, &end_return, 1);
 	}
@@ -391,8 +391,8 @@ Sint32 tableaux_Z::zeMainLoop()
 	// game is running
 	//###################################################################	
 	else
-	{	ecran_gere->waitVBlank();
-		ecran_gere->verouiller();
+	{	display->wait_frame();
+		display->verouiller();
 		sprites->clear();
 		briquesTab->brickRemap();	//restore bricks
 		gereBricot->execution1();	//restore bricks on side
@@ -434,8 +434,8 @@ Sint32 tableaux_Z::zeMainLoop()
 		sprites->draw();
 		tecZ_barre->scoreEcran();
 		Ecode = ptrEscMenu->execution1();
-		ecran_gere->deverouill();
-		ecran_gere->bufferCTab();
+		display->deverouill();
+		display->bufferCTab();
 
 		//###################################################################
 		// next level or next player
@@ -525,7 +525,7 @@ Sint32 tableaux_Z::zeMainLoop()
 	if((keyGestion->test_Rcode(SDLK_w) && devel_keyw) ||
 		(keyGestion->test_Rcode(SDLK_x) && devel_keyx))
 	{
-		ecran_gere->buffer_RAZ();
+		display->buffer_RAZ();
 		if(devel_keyw)
 		{	devel_keyw = 0;
 			if(--indexbgrnd < 0) indexbgrnd = 49;
@@ -537,7 +537,7 @@ Sint32 tableaux_Z::zeMainLoop()
 		if(is_verbose)
 			printf("tableaux_Z::background() : changebkgd:%i\n", indexbgrnd);
 		background(indexbgrnd);
-		ecran_gere->tamponBuff();
+		display->tamponBuff();
 	 }
 
 	if(keyGestion->test_Kcode(SDLK_v))
