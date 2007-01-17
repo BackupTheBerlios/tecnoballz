@@ -18,13 +18,13 @@ SOURCES_MAIN = \
 	briqueCote.cc \
 	clavierMac.cc \
 	configfile.cc \
-	ecran_hard.cc \
 	ejectBalls.cc \
 	escapeMenu.cc \
 	fond_ecran.cc \
 	gard_tecno.cc \
 	GFX_bitmap.cc \
 	GIF_bitMap.cc \
+  handler_display.cc \
 	handler_memory.cc \
 	giga_blitz.cc \
 	head_anima.cc \

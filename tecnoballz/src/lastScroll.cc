@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-07
 // fonction	: handle of the scrolling background (menu and gards levels)
-// id		: $Id: lastScroll.cc,v 1.3 2007/01/16 14:37:34 gurumeditation Exp $
+// id		: $Id: lastScroll.cc,v 1.4 2007/01/17 19:04:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -74,7 +74,7 @@ Sint32 lastScroll::initialise(Uint32 PalNu, Uint32 edmap)
 	//###################################################################
 	// load the page of graphics maps im memory
 	//###################################################################
-	ecran_hard *ecran = ecran_gere;
+	handler_display *ecran = ecran_gere;
 	gfx_bitMap = new GIF_bitMap();
 	error_init(gfx_bitMap->decompacte(ressources::RESMAPEDIT));
 	if(erreur_num)

@@ -4,9 +4,9 @@
 // file		: "mentatCode.h"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.14 2007/01/16 21:27:13 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.15 2007/01/17 19:04:26 gurumeditation Exp $
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.14 2007/01/16 21:27:13 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.15 2007/01/17 19:04:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -64,7 +64,7 @@ class scoretable;
 class ressources;
 class level_data;
 class handler_memory;
-class ecran_hard;
+class handler_display;
 class clavierMac;
 #ifndef SOUNDISOFF
 class audiomixer;
@@ -146,7 +146,7 @@ class mentatCode
 #ifndef SOUNDISOFF
 		static audiomixer*	ptAudiomix;		//manage sounds and musics
 #endif
-		static ecran_hard*	ecran_gere;		//manage screen display
+		static handler_display*	ecran_gere;		//manage screen display
 		static clavierMac*	keyGestion;		//manage keyboard and mouse events 
 		static list_sprites*	sprites;
 		static joueurData*	joueurGere;

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-10
 // fonction	: display chars
-// id		: $Id: print_text.cc,v 1.3 2007/01/16 16:57:31 gurumeditation Exp $
+// id		: $Id: print_text.cc,v 1.4 2007/01/17 19:04:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -85,7 +85,7 @@ Uint32 print_text::getCharHgt()
 //------------------------------------------------------------------------------
 Sint32 print_text::init_print(Sint32 ident)
 {
-	ecran_hard *ecran = ecran_gere;
+	handler_display *ecran = ecran_gere;
 	GFX_fontes = new GIF_bitMap();
 	error_init(GFX_fontes->decompacte(ident));
 	if(erreur_num)

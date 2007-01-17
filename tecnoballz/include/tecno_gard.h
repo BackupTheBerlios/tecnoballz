@@ -25,7 +25,7 @@
 class tecno_gard;
 //..............................................................................
 #include "../include/sprite_object.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/zeguardian.h"
 #include "../include/zeMissiles.h"
 #include "../include/zeNewBalls.h"

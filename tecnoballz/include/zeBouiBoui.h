@@ -28,7 +28,7 @@ class zeBouiBoui ;
 #include "../include/list_sprites.h"
 #include "../include/tecno_boui.h"
 #include "../include/objet_gere.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/zeCapsules.h"
 #include "../include/zeGemstone.h"
 #include "../include/lesBriques.h"

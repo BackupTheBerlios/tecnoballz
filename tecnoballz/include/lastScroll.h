@@ -25,7 +25,7 @@
 //...............................................................................
 class lastScroll;
 //...............................................................................
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/GIF_bitMap.h"
 #include "../include/mentatCode.h"
 #include "../include/scrolledit.h"

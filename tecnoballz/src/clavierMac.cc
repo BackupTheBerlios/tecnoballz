@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //******************************************************************************
 #include "../include/clavierMac.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 
 //-----------------------------------------------------------------------------
 // create the object
@@ -202,9 +202,9 @@ void clavierMac::lit_keymap()
 							SDL_ShowCursor(SDL_ENABLE); 						
 
 						
-						/*if(ecran_hard::optionfull && !keys_flags[ESCAPEMENU])
+						/*if(handler_display::optionfull && !keys_flags[ESCAPEMENU])
 							SDL_ShowCursor(SDL_DISABLE);
-						if(ecran_hard::optionfull && keys_flags[ESCAPEMENU])
+						if(handler_display::optionfull && keys_flags[ESCAPEMENU])
 							SDL_ShowCursor(SDL_ENABLE); */				
 				}
 

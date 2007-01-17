@@ -26,7 +26,7 @@
 
 template < class X > class objet_gere;
 #include "../include/list_sprites.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/mentatCode.h"
 
 template < class X > class objet_gere:public virtual mentatCode

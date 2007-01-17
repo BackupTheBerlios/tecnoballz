@@ -24,7 +24,7 @@
 #include "../include/joueurData.h"
 #include "../include/handler_memory.h"
 #include "../include/clavierMac.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/audiomixer.h"
 #include "../include/list_sprites.h"
 

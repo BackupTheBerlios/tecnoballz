@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-07-17
 // fonctions	: display background (bricks levels)
-// Id		: $Id: fond_ecran.cc,v 1.4 2005/07/17 16:13:38 gurumeditation Exp $
+// Id		: $Id: fond_ecran.cc,v 1.5 2007/01/17 19:04:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
 #include "../include/GIF_bitMap.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/fond_ecran.h"
 #include "../include/clavierMac.h"
 #include "../include/ressources.h"
@@ -53,7 +53,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 {
 	if(is_verbose)
 		printf("fond_ecran::instalFond() nbkdg = %i\n", nbkdg);
-	ecran_hard *ecran = ecran_gere;
+	handler_display *ecran = ecran_gere;
 	GIF_bitMap *fonds = new GIF_bitMap();
 	Sint32 large = 0;
 	Sint32 haute = 0;
@@ -176,10 +176,10 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	//###############################################################
 	dHorz = ecran->screenwdth() - (64 * resolution);
 	dVert = ecran->screenhght();
-	for(Sint32 det_Y = 0; det_Y < (ecran_hard::SHADOWOFFY * resolution); det_Y++)
+	for(Sint32 det_Y = 0; det_Y < (handler_display::SHADOWOFFY * resolution); det_Y++)
 	{	for(Sint32 det_X = 0; det_X < dHorz; det_X++)
 		{	char *detPT = ecran->tampon_pos(det_X, det_Y);
-			*detPT |= ecran_hard::SHADOW_PIX;
+			*detPT |= handler_display::SHADOW_PIX;
 		}
 	}
 
@@ -189,7 +189,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	for(Sint32 det_Y = 0; det_Y < dVert; det_Y++)
 	{	for(Sint32 det_X = (252 * resolution); det_X < (256 * resolution); det_X++)
 		{	char *detPT = ecran->tampon_pos(det_X, det_Y);
-			*detPT |= ecran_hard::SHADOW_PIX;
+			*detPT |= handler_display::SHADOW_PIX;
 		}
 	}
 
@@ -275,7 +275,7 @@ void fond_ecran::prev_color()
 void fond_ecran::coulDuFond(Sint32 zecol)
 {
 	colorActif = zecol;
-	ecran_hard *ecran = ecran_gere;
+	handler_display *ecran = ecran_gere;
 	char *color =&couleurs[0];
 	unsigned char *colPT = (unsigned char *)(color) + zecol;
 	SDL_Color *palPT = ecran->paletteAdr();

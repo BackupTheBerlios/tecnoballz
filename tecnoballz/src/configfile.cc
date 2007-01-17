@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2006-10-02
-// id		: $Id: configfile.cc,v 1.13 2007/01/16 14:37:34 gurumeditation Exp $
+// id		: $Id: configfile.cc,v 1.14 2007/01/17 19:04:26 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA  02111-1307, USA.
 //******************************************************************************
 #include "../include/configfile.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/audiomixer.h"
 #include "../include/joueurData.h"
 
@@ -69,7 +69,7 @@ void	configfile::resetvalue()
 	resolution = 2;
 	bob_ground = true;
 	is_verbose = 0;
-	ecran_hard::optionfull = 0;
+	handler_display::optionfull = 0;
 	hardChoice = 1;	
 	vieInitial = 8;
 	nuOfPlayer = 1;
@@ -94,7 +94,7 @@ void configfile::configinfo()
 	fprintf(stdout, "  <config info>\n"
 			"- optionfull : %i\n- audioactif: %i\n- resolution:%i\n"
 		"- is_verbose: %i\n hardChoice : %i\n", 
-		ecran_hard::optionfull, audio, resolution,
+		handler_display::optionfull, audio, resolution,
 		is_verbose, hardChoice);
 }
 
@@ -164,8 +164,8 @@ void configfile::loadconfig()
 		return;
 	}
 	LispReader reader(lisp_cdr(root_obj));
-	if (!reader.read_bool("fullscreen", &ecran_hard::optionfull))
-		ecran_hard::optionfull = -1;
+	if (!reader.read_bool("fullscreen", &handler_display::optionfull))
+		handler_display::optionfull = -1;
 #ifndef SOUNDISOFF
 	if (!reader.read_bool("sound", &audiomixer::audioactif))
 		audiomixer::audioactif = 1;
@@ -249,7 +249,7 @@ void configfile::saveconfig()
 	{
 		fprintf(config, "(tecnoballz-config\n");
 		fprintf(config, "\t;; the following options can be set to #t or #f:\n");
-		fprintf(config, "\t(fullscreen %s)\n", ecran_hard::optionfull ? "#t" : "#f");
+		fprintf(config, "\t(fullscreen %s)\n", handler_display::optionfull ? "#t" : "#f");
 		fprintf(config, "\t(sound %s)\n", audio ? "#t" : "#f");
 		fprintf(config, "\t(verbose %s)\n", is_verbose ? "#t" : "#f");
 		fprintf(config, "\n\t;; window size 1 (low-res) or 2 (high-res):\n");
@@ -329,12 +329,12 @@ Sint32 configfile::scanZeArgs(Sint32 nbArg, char **ptArg)
 		}
 
 		if(!strcmp(ptArg[_iIndex], "--full"))
-		{	ecran_hard::optionfull = true;
+		{	handler_display::optionfull = true;
 			continue;
 		}
 
 		if(!strcmp(ptArg[_iIndex], "--window"))
-		{	ecran_hard::optionfull = false;
+		{	handler_display::optionfull = false;
 			continue;
 		}
 		
@@ -354,7 +354,7 @@ Sint32 configfile::scanZeArgs(Sint32 nbArg, char **ptArg)
 		}
 
 		if(!strcmp(ptArg[_iIndex], "--nosync"))
-		{	ecran_hard::optionsync = false;
+		{	handler_display::optionsync = false;
 			continue;
 		}
 #ifndef SOUNDISOFF		

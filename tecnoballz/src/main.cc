@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.8 2007/01/16 21:27:13 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.9 2007/01/17 19:04:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA  02111-1307, USA.
 //-----------------------------------------------------------------------------
 #include "../include/mentatCode.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/audiomixer.h"
 #include "../include/configfile.h"
 //..............................................................................
@@ -81,7 +81,7 @@ tecno_text.cc  => sprite_fonte_game
 
 audiomixer.cc  => audio_handler
 clavierMac.cc  => keyboard_handler
-ecran_hard.cc  => display_handler
+handler_display.cc  => display_handler
 handler_memory.cc  => memory_handler
 
 ballDirect.cc

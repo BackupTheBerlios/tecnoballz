@@ -24,7 +24,7 @@
 #define __HEAD_ANIMA__
 class head_anima;
 //.......................................................................
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/GIF_bitMap.h"
 #include "../include/mentatCode.h"
 //.......................................................................

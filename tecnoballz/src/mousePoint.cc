@@ -22,7 +22,7 @@
 //******************************************************************************
 #include "../include/mousePoint.h"
 #include "../include/clavierMac.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/list_sprites.h"
 //-----------------------------------------------------------------------------
 // create the object
@@ -44,7 +44,7 @@ mousePoint::~mousePoint()
 //-----------------------------------------------------------------------------
 Sint32 mousePoint::create_BOB(GIF_bitMap * image)
 {
-	ecran_hard *ecran = ecran_gere;
+	handler_display *ecran = ecran_gere;
 	Sint32 b;
 	if(hasard_val & 1)
 		b = BOB_MOUSE1;

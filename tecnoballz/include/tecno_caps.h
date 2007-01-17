@@ -28,7 +28,7 @@ class tecno_caps;
 #include "../include/sprite_object.h"
 #include "../include/tecno_bump.h"
 #include "../include/barreScore.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/lesBriques.h"
 #include "../include/technoBall.h"
 #include "../include/tecno_fire.h"

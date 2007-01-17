@@ -53,7 +53,7 @@ head_anima::head_anima()
 //-------------------------------------------------------------------------------
 Sint32 head_anima::initialise()
 {
-	ecran_hard *ecran = ecran_gere;
+	handler_display *ecran = ecran_gere;
 	GIF_bitMap *gfxPT = new GIF_bitMap();
 	headbitmap = gfxPT;
 	error_init(gfxPT->decompacte(ressources::RESHEADANI));

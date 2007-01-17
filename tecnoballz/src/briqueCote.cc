@@ -23,7 +23,7 @@
 //******************************************************************************
 #include "../include/briqueCote.h"
 #include "../include/joueurData.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 
 //-----------------------------------------------------------------------------
 // create the object
@@ -374,7 +374,7 @@ void briqueCote::execution2()
 			case 1:
 				_pFond = adr_duHaut[_iIndex];
 				posx1 = pos_duHaut[_iIndex][0];
-				posx2 = posx1 + (ecran_hard::SHADOWOFFX * resolution);
+				posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
 				_iPosY = pos_duHaut[_iIndex][1];
 				_iTmod = ecran_gere->tampon_mod(iLargeurBH);
 				_iBmod = ecran_gere->buffer_mod(iLargeurBH);
@@ -394,7 +394,7 @@ void briqueCote::execution2()
 			case 2:
 				_pFond = adr_gauche[_iIndex];
 				posx1 = pos_gauche[_iIndex][0];
-				posx2 = posx1 + (ecran_hard::SHADOWOFFX * resolution);
+				posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
 				_iPosY = pos_gauche[_iIndex][1];
 				_iTmod = ecran_gere->tampon_mod(iLargeurBV);
 				_iBmod = ecran_gere->buffer_mod(iLargeurBV);
@@ -410,7 +410,7 @@ void briqueCote::execution2()
 			default:
 				_pFond = adr_droite[_iIndex];
 				posx1 = pos_droite[_iIndex][0];
-				posx2 = posx1 + (ecran_hard::SHADOWOFFX * resolution);
+				posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
 				_iPosY = pos_droite[_iIndex][1];
 				_iTmod = ecran_gere->tampon_mod(iLargeurBV);
 				_iBmod = ecran_gere->buffer_mod(iLargeurBV);
@@ -441,7 +441,7 @@ void briqueCote::execution2()
 		//###############################################################
 		// clear shadow
 		//###############################################################
-		ecran_gere->clr_shadow(posx2, _iPosY + (ecran_hard::SHADOWOFFY * resolution), widt2, heig2);
+		ecran_gere->clr_shadow(posx2, _iPosY + (handler_display::SHADOWOFFY * resolution), widt2, heig2);
 	}
 }
 

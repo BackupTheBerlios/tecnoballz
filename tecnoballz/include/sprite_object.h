@@ -4,11 +4,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.2 2007/01/16 21:27:13 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.3 2007/01/17 19:04:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 #ifndef __SPRITE_OBJECT__
 #define __SPRITE_OBJECT__
 class sprite_object;
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/GIF_bitMap.h"
 #include "../include/handler_memory.h"
 #include "../include/mentatCode.h"

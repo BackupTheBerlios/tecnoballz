@@ -28,7 +28,7 @@
 class zeFireBump;
 
 #include "../include/objet_gere.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/barreScore.h"
 #include "../include/tecno_fire.h"
 #include "../include/tecno_bump.h"

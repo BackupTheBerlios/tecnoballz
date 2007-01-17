@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.5 2007/01/16 21:27:13 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.6 2007/01/17 19:04:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -101,7 +101,7 @@ Sint32 shop_tecno::first_init()
 	ptAudiomix->levelmusic (arean, level);
 	ptAudiomix->shop_music (arean);
 #endif
-	ecran_hard *ecran = ecran_gere;
+	handler_display *ecran = ecran_gere;
 	sprites->reset();
 
 	//###################################################################

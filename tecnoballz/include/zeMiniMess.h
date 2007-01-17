@@ -24,7 +24,7 @@
 #ifndef __ZEMINIMESS__
 #define __ZEMINIMESS__
 class zeMiniMess;
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/mentatCode.h"
 #include "../include/GIF_bitMap.h"
 //.............................................................................

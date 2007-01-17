@@ -4,7 +4,7 @@
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// id		: $Id: mentatCode.cc,v 1.12 2007/01/16 21:27:13 gurumeditation Exp $
+// id		: $Id: mentatCode.cc,v 1.13 2007/01/17 19:04:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 //*****************************************************************************
 #include "../include/mentatCode.h"
 #include "../include/handler_memory.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/clavierMac.h"
 #include "../include/list_sprites.h"
 #include "../include/joueurData.h"
@@ -51,7 +51,7 @@ handler_memory*			mentatCode::memory = NULL;	//manage memory allocation
 #ifndef SOUNDISOFF
 audiomixer*			mentatCode::ptAudiomix = NULL;	//manage sound      
 #endif
-ecran_hard*			mentatCode::ecran_gere = NULL;	//manage screen
+handler_display*			mentatCode::ecran_gere = NULL;	//manage screen
 clavierMac*			mentatCode::keyGestion = NULL;	//keyboard handle
 list_sprites*			mentatCode::sprites = NULL;	//sprites handle
 joueurData*			mentatCode::joueurGere = NULL;	//players handle
@@ -113,8 +113,8 @@ Sint32 mentatCode::first_init(configfile* pConf)
 	if(num_erreur) return (num_erreur);
 #endif	
 	if(is_verbose)
-		printf("mentatCode::first_init() [ecran_hard::ecran_init]\n");
-	ecran_gere = new ecran_hard();
+		printf("mentatCode::first_init() [handler_display::ecran_init]\n");
+	ecran_gere = new handler_display();
 	num_erreur = ecran_gere->ecran_init();
 	if(num_erreur) return (num_erreur);
 

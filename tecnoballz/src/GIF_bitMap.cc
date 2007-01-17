@@ -5,7 +5,7 @@
 // created	: 1996-06-29
 // updates	: 2005-07-07
 // fonctions	: handle BMP images (SDL)
-// id		: $Id: GIF_bitMap.cc,v 1.2 2005/01/07 16:18:17 gurumeditation Exp $
+// id		: $Id: GIF_bitMap.cc,v 1.3 2007/01/17 19:04:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -23,7 +23,7 @@
 //*****************************************************************************
 #include "../include/GIF_bitMap.h"
 #include "../include/ressources.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 
 //-----------------------------------------------------------------------------
 // create the object

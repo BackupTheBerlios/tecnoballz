@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.5 2007/01/16 16:57:31 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.6 2007/01/17 19:04:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //******************************************************************************
 #include "../include/ze_gadgets.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/clavierMac.h"
 #include "../include/joueurData.h"
 #include "../include/tecno_fire.h"

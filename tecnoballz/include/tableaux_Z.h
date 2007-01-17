@@ -25,7 +25,7 @@
 #define __TABLEAUX_Z__
 class tableaux_Z;
 //-------------------------------------------------------------------------------
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/audiomixer.h"
 #include "../include/sprite_object.h"
 #include "../include/GIF_bitMap.h"
@@ -40,7 +40,7 @@ class tableaux_Z;
 #include "../include/zeRaquette.h"
 #include "../include/briqueCote.h"
 #include "../include/barreScore.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/ejectBalls.h"
 #include "../include/lesBriques.h"
 #include "../include/zeNewBalls.h"

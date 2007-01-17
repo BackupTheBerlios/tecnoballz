@@ -22,7 +22,7 @@
 //*****************************************************************************
 #include "../include/GFX_bitmap.h"
 #include "../include/handler_memory.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 
 //-----------------------------------------------------------------------------
 // create the object

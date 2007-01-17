@@ -4,11 +4,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.2 2007/01/16 21:27:13 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.3 2007/01/17 19:04:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,10 +32,10 @@
  */
 sprite_object::sprite_object()
 {
-	ombredecax = ecran_hard::SHADOWOFFX * resolution;
-	ombredecay = ecran_hard::SHADOWOFFY * resolution;
-	ombrepixel = ecran_hard::SHADOW_PIX;
-	ombrepixe4 = ecran_hard::SHADOWLONG;
+	ombredecax = handler_display::SHADOWOFFX * resolution;
+	ombredecay = handler_display::SHADOWOFFY * resolution;
+	ombrepixel = handler_display::SHADOW_PIX;
+	ombrepixe4 = handler_display::SHADOWLONG;
 	BOBprepare();
 }
 
@@ -246,7 +246,7 @@ Sint32 sprite_object::initialBOB(GIF_bitMap *image, Sint32 ombre)
 //------------------------------------------------------------------------------
 void sprite_object::initCommun(GIF_bitMap *image, Sint32 ombre)
 {
-	ecran_hard *ecran = ecran_gere;
+	handler_display *ecran = ecran_gere;
 	ecranLarge = ecran->screenwdth();
 	ecranHaute = ecran->screenhght();
 	srceNextLn = image->GFX_nextLn();
@@ -317,7 +317,7 @@ Sint32 sprite_object::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, 
 */
 	
 	// L'ecran dans lequel le BOB est affiche
-	ecran_hard *ecran = ecran_gere;
+	handler_display *ecran = ecran_gere;
 	BOBtypeNum = BOBnu;
 	initCommun(image, ombre);
 	const bb_describ *descr = zelistBOB[BOBnu];
@@ -1997,7 +1997,7 @@ const bb_describ *sprite_object::zelistBOB[] =
 };
 
 
-Sint32 	sprite_object::ombredecax = ecran_hard::SHADOWOFFX;
-Sint32	sprite_object::ombredecay = ecran_hard::SHADOWOFFY;
-char	sprite_object::ombrepixel = ecran_hard::SHADOW_PIX;
-Sint32	sprite_object::ombrepixe4 = ecran_hard::SHADOWLONG;
+Sint32 	sprite_object::ombredecax = handler_display::SHADOWOFFX;
+Sint32	sprite_object::ombredecay = handler_display::SHADOWOFFY;
+char	sprite_object::ombrepixel = handler_display::SHADOW_PIX;
+Sint32	sprite_object::ombrepixe4 = handler_display::SHADOWLONG;

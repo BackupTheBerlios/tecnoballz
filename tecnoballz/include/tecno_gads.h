@@ -28,7 +28,7 @@ class tecno_gads;
 #include "../include/sprite_object.h"
 #include "../include/tecno_bump.h"
 #include "../include/barreScore.h"
-#include "../include/ecran_hard.h"
+#include "../include/handler_display.h"
 #include "../include/tecno_fire.h"
 //..............................................................................
 const Sint32	GAD_VIDE00 = 0;
