@@ -213,7 +213,7 @@ Sint32 escapeMenu::execution1()
 	//##############################################################
 	// [ESC] key: enable / disable menu box
 	//##############################################################
-	if(keyGestion->specialKey(handler_keyboard::ESCAPEMENU)) {
+	if(keyboard->command_is_pressed(handler_keyboard::ESCAPEMENU)) {
 		flag_actif = 1;
 	} else {
 		if(flag_actif && restoreBkg)
@@ -226,23 +226,23 @@ Sint32 escapeMenu::execution1()
 	// check if right or left button are pressed
 	//##############################################################
 	Sint32 mposx, pos_y, freeL, freeR;
-	Sint32 presL = keyGestion->leftButton();
-	Sint32 presR = keyGestion->righButton();
+	Sint32 presL = keyboard->is_left_button();
+	Sint32 presR = keyboard->is_right_button();
 
 	//##############################################################
 	// read y where is pressed 
 	//##############################################################
 	if(presL && yPressLeft == YCOORDNULL)
-		yPressLeft = keyGestion->sourisGetY();
+		yPressLeft = keyboard->get_mouse_y();
 	else
 	{	if(presR && yPressRigh == YCOORDNULL)
-			yPressRigh = keyGestion->sourisGetY();
+			yPressRigh = keyboard->get_mouse_y();
 	}	
 
 	freeR = 0;	
-	freeL = keyGestion->sourisRela(&mposx, &pos_y);
+	freeL = keyboard->is_left_button_up(&mposx, &pos_y);
 	if(!freeL)
-		freeR = keyGestion->isReleaseR(&mposx, &pos_y);	
+		freeR = keyboard->is_right_button_up(&mposx, &pos_y);	
 
 	if((freeL && pos_y == yPressLeft) || (freeR && pos_y == yPressRigh))
 	{	Sint32 incre = 0;
@@ -283,7 +283,7 @@ Sint32 escapeMenu::execution1()
 	{	if(flag_actif && restoreBkg)
 			MSK_bitclr();
 		flag_actif = 0;
-		keyGestion->resetpause();
+		keyboard->clear_command_keys();
 	}
 	
 	if(menuNumber == 1 && event >= GOGAMEOVER)
@@ -309,7 +309,7 @@ void escapeMenu::display640()
 
 
 	Sint32 a, b, j;
-	Sint32 y = (keyGestion->sourisGetY() - position_y) / space2next;
+	Sint32 y = (keyboard->get_mouse_y() - position_y) / space2next;
 	y--;
 	for(Sint32 k = 0; k < nb_ofLines; k++, desP1 += offD2)
 	{	
@@ -389,7 +389,7 @@ void escapeMenu::display320()
 
 
 	Sint32 a, b, j;
-	Sint32 y = (keyGestion->sourisGetY() - position_y) / space2next;
+	Sint32 y = (keyboard->get_mouse_y() - position_y) / space2next;
 	y--;
 	for(Sint32 k = 0; k < nb_ofLines; k++, desP1 += offD2)
 	{	

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.8 2007/01/18 08:42:04 gurumeditation Exp $
+// id		: $Id: menu_tecno.cc,v 1.9 2007/01/18 17:09:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -89,7 +89,7 @@ Sint32 menu_tecno::first_init()
 	if(erreur_num) return (erreur_num);
 
 	error_init(menu_texte->first_init());
-	keyGestion->setGrabOff();
+	keyboard->set_grab_input (false);
 	if(erreur_num) return (erreur_num);
 
 	if(is_verbose)
@@ -126,7 +126,7 @@ Sint32 menu_tecno::zeMainLoop()
 	}
     
 	menu_texte->MSKaffiche();
-	if(keyGestion->specialKey(handler_keyboard::TOEXITFLAG))
+	if(keyboard->command_is_pressed(handler_keyboard::TOEXITFLAG))
 		end_return = -1;
 	display->deverouill();
 	
@@ -139,7 +139,7 @@ Sint32 menu_tecno::zeMainLoop()
 	// go to map editor
 	//###################################################################
 #ifdef TU_TRICHES	
-	if(keyGestion->test_Kcode(SDLK_F5))
+	if(keyboard->key_is_pressed(SDLK_F5))
 		end_return = 5;
 #endif
 	return end_return;

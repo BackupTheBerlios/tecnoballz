@@ -4,7 +4,7 @@
 // file		: "ecran_hard.cc"
 // created	: 2002-08-17
 // updates	: 2005-01-10
-// id		: $Id: ecran_hard.cc,v 1.8 2007/01/18 08:42:04 gurumeditation Exp $
+// id		: $Id: ecran_hard.cc,v 1.9 2007/01/18 17:09:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -269,8 +269,8 @@ Sint32 ecran_hard::SDL_informations()
 //-------------------------------------------------------------------------------
 void ecran_hard::fullscreen()
 {
-	if(keyGestion->specialKey(handler_keyboard::FULLSCFLAG) &&
-		keyGestion->getCursPos() < 0)
+	if(keyboard->command_is_pressed(handler_keyboard::FULLSCFLAG) &&
+		keyboard->get_input_cursor_pos() < 0)
 	{	if(optionfull) optionfull = false;
 		else optionfull = true;
 		ecran_gere->init_video();
@@ -285,7 +285,7 @@ void ecran_hard::fullscreen()
 void ecran_hard::waitVBlank()
 {
 /*
-	if(keyGestion->specialKey(handler_keyboard::WAITVBLOFF))
+	if(keyboard->command_is_pressed(handler_keyboard::WAITVBLOFF))
 	{
 		VBL_switch++;
 		if(VBL_switch > 2) VBL_switch = 0;
@@ -313,7 +313,7 @@ void ecran_hard::waitVBlank()
 void ecran_hard::waitVBLchr()
 {
 /*
-	keyGestion->lit_keymap();
+	keyboard->read_events();
 	fullscreen();
 #ifndef SOUNDISOFF
 	ptAudiomix->execution1();
@@ -374,7 +374,7 @@ void ecran_hard::waitVBLtec()
 		fps_totale = 0;
 	}
 	datepreced = SDL_GetTicks();
-	keyGestion->lit_keymap();
+	keyboard->read_events();
 	fullscreen();
 #ifndef SOUNDISOFF
 	ptAudiomix->execution1();

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.7 2007/01/18 08:42:04 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.8 2007/01/18 17:09:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -335,22 +335,22 @@ void ze_gadgets::animations(Sint32 value)
 void ze_gadgets::gadgetKeys()
 {
 	if (!cheat_flag) return;
-	if(	keyGestion->test_Kcode(SDLK_LSHIFT) ||
-		keyGestion->test_Kcode(SDLK_LCTRL) ||
-		keyGestion->test_Kcode(SDLK_RALT) ||
+	if(	keyboard->key_is_pressed(SDLK_LSHIFT) ||
+		keyboard->key_is_pressed(SDLK_LCTRL) ||
+		keyboard->key_is_pressed(SDLK_RALT) ||
 #ifndef TU_TRICHES
-		!keyGestion->test_Kcode(SDLK_RSHIFT) ||
-		!keyGestion->test_Kcode(SDLK_RCTRL) ||
+		!keyboard->key_is_pressed(SDLK_RSHIFT) ||
+		!keyboard->key_is_pressed(SDLK_RCTRL) ||
 #else
-		keyGestion->test_Kcode(SDLK_RSHIFT) ||
-		keyGestion->test_Kcode(SDLK_RCTRL) ||
+		keyboard->key_is_pressed(SDLK_RSHIFT) ||
+		keyboard->key_is_pressed(SDLK_RCTRL) ||
 #endif
-		keyGestion->test_Kcode(SDLK_LALT))
+		keyboard->key_is_pressed(SDLK_LALT))
 		return;
 	Sint16 *liste = keysTriche;
 	while (Sint16 k = *(liste++)) 		//k = SDL key code
 	{	Sint16 g = *(liste++);		//g = gadget code (bonus or malus)
-		if(keyGestion->test_Kcode(k))	//key pressed ?
+		if(keyboard->key_is_pressed(k))	//key pressed ?
 			*(liste++) = 1;		//yes, set key state pressed
 		else
 		{	if (*liste)

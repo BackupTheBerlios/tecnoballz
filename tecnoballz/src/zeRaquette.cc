@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.6 2007/01/18 08:42:04 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.7 2007/01/18 17:09:53 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -145,7 +145,7 @@ Sint32 zeRaquette::init_liste()
 		if(erreur_num) return erreur_num;
 		sprites->add(tecBumper1);
 		objetListe[0] = tecBumper1;
-		tecBumper1->coordonnee(keyGestion->sourisGetX(), bumperYbas);
+		tecBumper1->coordonnee(keyboard->get_mouse_x(), bumperYbas);
 		tecBumper1->colLargeur = raketLarge;	// bumper's width
 		tecBumper1->bumpNumero = 1;
 		tecBumper1->bumperType = 0;
@@ -377,7 +377,7 @@ void zeRaquette::lache_tirs()
 	
 	// Mode  solo
 	if(!raket_team)
-	{	if(keyGestion->leftButton())
+	{	if(keyboard->is_left_button())
 		{	tecBumper1->lache_tirs();	//tecno_bump::lache_tirs (bumper object)
 			tecBumper2->lache_tirs();
 			tecBumper3->lache_tirs();
@@ -404,7 +404,7 @@ void zeRaquette::lacheBalle()
 	// release ball
 	//###################################################################
 	if(!raket_team)
-	{	if(keyGestion->righButton())
+	{	if(keyboard->is_right_button())
 		{	tecBumper1->lacheBalle();
 			tecBumper2->lacheBalle();
 			tecBumper3->lacheBalle();
@@ -428,7 +428,7 @@ void zeRaquette::lacheBalle()
 //------------------------------------------------------------------------------
 void zeRaquette::lacheBall2()
 {
-	if(keyGestion->righButton())
+	if(keyboard->is_right_button())
 		tecBumper1->lacheBalle();
 }
 
@@ -451,14 +451,14 @@ void zeRaquette::bp_deplace()
   Sint32 speed = 0;
   const Sint32 **tabB1, **tabB2, **tabB3, **tabB4;
   Sint32 x = tecBumper1->position_x;
-  Sint32 off_x = keyGestion->sourisoffX();
+  Sint32 off_x = keyboard->get_mouse_x_offset();
   // Mode Solo
   if(!raket_team)
   { raketDepla = 0;                                            // pas de deplacement
     rakVgauche = 0;
     rakVdroite = 0;
     
-    if(!keyGestion->buttonBlit() && !ptGigaBlit->isactivate() ) //if 2 mouse buttons are pressed or GigaBlitz runn also no test
+    if(!keyboard->is_right_left_buttons() && !ptGigaBlit->isactivate() ) //if 2 mouse buttons are pressed or GigaBlitz runn also no test
     { if(rak_invers>0)
       { off_x = -off_x;
       }
@@ -521,7 +521,7 @@ void zeRaquette::bp_deplac2()
 	Sint32 speed = 0;
 	const Sint32 **tabB1;
 	Sint32 x = tecBumper1->position_x;
-	Sint32 off_x = keyGestion->sourisoffX();
+	Sint32 off_x = keyboard->get_mouse_x_offset();
 	// mode solo
 	if(!raket_team)
 	{	raketDepla = 0;			//no move

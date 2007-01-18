@@ -295,7 +295,7 @@ void zeNewBalls::vitussort2()
 void zeNewBalls::vitus_tilt()
 {
 	Uint32 ftilt = 0;
-	if(keyGestion->buttonBlit())
+	if(keyboard->is_right_left_buttons())
 	{	Sint32 t = balle_tilt;
 		Sint32 h = hasard_val;
 		h = h & 15;
@@ -1490,7 +1490,7 @@ void zeNewBalls::time2tilt2()
 void zeNewBalls::vitus_ctrl()
 {
 	if(balle_ctrl > 0)
-	{	if(keyGestion->righButton())
+	{	if(keyboard->is_right_button())
 		{	technoBall **liste = objetListe;
 			Sint32 t = objetTotal;
 			for(Sint32 i = 0; i < t; i++)

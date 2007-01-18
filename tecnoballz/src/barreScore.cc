@@ -179,7 +179,7 @@ void barreScore::scoreBrick(Sint32 value)
 //-------------------------------------------------------------------------------
 void barreScore::barreTemoin()
 {
-	if(keyGestion->buttonBlit() && !ptGigaBlit->isactivate() && 
+	if(keyboard->is_right_left_buttons() && !ptGigaBlit->isactivate() && 
 		!ptNewBalls->least_glue())
 	{	if(--blitztempo <= 0)
 		{	if(blitzcount > 0)

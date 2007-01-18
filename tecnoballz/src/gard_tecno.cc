@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.7 2007/01/18 08:42:04 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.8 2007/01/18 17:09:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -242,8 +242,8 @@ Sint32 gard_tecno::first_init()
 
 	display->deverouill();
 	display->bufferCopy();	//copy "buffer memory" to "screen memory"
-	keyGestion->resetpause();
-	keyGestion->setGrab_On();
+	keyboard->clear_command_keys();
+	keyboard->set_grab_input (true);
 	
 	score_over* pOver = ptGameOver->gtScorOver();
 	ptBob_name = pOver->string2bob(joueurGere->returnName());
@@ -306,7 +306,7 @@ Sint32 gard_tecno::zeMainLoop()
 		sprites->draw();
 		display->deverouill();
 		display->bufferCTab();
-		if(keyGestion->leftButton() && isgameover > 150)
+		if(keyboard->is_left_button() && isgameover > 150)
 		{	joueurGere = joueurData::nextplayer(
 				joueurGere,
 				&end_return,
@@ -320,7 +320,7 @@ Sint32 gard_tecno::zeMainLoop()
 		//######################################################
 		display->wait_frame();
 		display->verouiller();
-		if(!keyGestion->specialKey(handler_keyboard::PAUSE_FLAG))
+		if(!keyboard->command_is_pressed(handler_keyboard::COMMAND_KEY_PAUSE))
 		{	run_scroll();
 			defilement->scrolling1(scrolSpeed);
 			ptRaquette->bp_deplac2();
@@ -364,7 +364,7 @@ Sint32 gard_tecno::zeMainLoop()
 			ptNewBalls->xDesactive();
 			ptMissiles->xDesactive();
 			if(count_next > 500 ||
-				keyGestion->test_Kcode(SDLK_SPACE))
+				keyboard->key_is_pressed(SDLK_SPACE))
 			{
 				tecnwinner = joueurGere->zlastlevel();
 				if(tecnwinner)
@@ -397,13 +397,13 @@ Sint32 gard_tecno::zeMainLoop()
 	//###################################################################
 	// escape key to quit the game !
 	//###################################################################
-	if(keyGestion->specialKey(handler_keyboard::TOEXITFLAG) ||
+	if(keyboard->command_is_pressed(handler_keyboard::TOEXITFLAG) ||
 		Ecode == escapeMenu::WEQUITGAME)
 		end_return = -1;
-	if(keyGestion->specialKey(handler_keyboard::TOOVERFLAG) ||
+	if(keyboard->command_is_pressed(handler_keyboard::TOOVERFLAG) ||
 		Ecode == escapeMenu::GOGAMEOVER)
 		joueurGere->lifesReset();
-	if(keyGestion->specialKey(handler_keyboard::TOMENUFLAG) ||
+	if(keyboard->command_is_pressed(handler_keyboard::TOMENUFLAG) ||
 		Ecode == escapeMenu::EXITTOMENU)
 		end_return = 4;
 
@@ -444,18 +444,18 @@ void gard_tecno::run_scroll()
 void gard_tecno::cheat_keys()
 {
 	if (!cheat_flag) return;
-	if(	!keyGestion->test_Kcode(SDLK_RSHIFT) ||
-		keyGestion->test_Kcode(SDLK_LSHIFT) ||
-		!keyGestion->test_Kcode(SDLK_RCTRL) ||
-		keyGestion->test_Kcode(SDLK_LCTRL) ||
-		keyGestion->test_Kcode(SDLK_RALT) ||
-		keyGestion->test_Kcode(SDLK_LALT))
+	if(	!keyboard->key_is_pressed(SDLK_RSHIFT) ||
+		keyboard->key_is_pressed(SDLK_LSHIFT) ||
+		!keyboard->key_is_pressed(SDLK_RCTRL) ||
+		keyboard->key_is_pressed(SDLK_LCTRL) ||
+		keyboard->key_is_pressed(SDLK_RALT) ||
+		keyboard->key_is_pressed(SDLK_LALT))
 		return;
 
-	if(keyGestion->test_Kcode(SDLK_F2))
+	if(keyboard->key_is_pressed(SDLK_F2))
 		ptguardian->killguards();
-	if(keyGestion->test_Kcode(SDLK_F3))
+	if(keyboard->key_is_pressed(SDLK_F3))
 		ptguardian->killguards(1);
-	if(keyGestion->test_Kcode(SDLK_F4))
+	if(keyboard->key_is_pressed(SDLK_F4))
 		ptguardian->killguards(2);
 }

@@ -5,7 +5,7 @@
 // created	: 2004-03-22
 // updates	: 2005-08-26
 // functions	: handler music and sound
-// id		: $Id: audiomixer.cc,v 1.8 2007/01/18 08:42:04 gurumeditation Exp $
+// id		: $Id: audiomixer.cc,v 1.9 2007/01/18 17:09:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -396,7 +396,7 @@ void audiomixer::execution1()
 	if (!audioactif) return;
 
 	// [CTRL] + [S]: enable/disable sfx - mfx
-	if(keyGestion->specKeyRaz(handler_keyboard::MFXSFXFLAG))
+	if(keyboard->command_is_pressed(handler_keyboard::MFXSFXFLAG, true))
 	{	if(!music_flag || !sound_flag)
 		{	if(!music_flag) music_flag = ~music_flag;
 			if(!sound_flag) sound_flag = ~sound_flag;
@@ -412,13 +412,13 @@ void audiomixer::execution1()
 	}
 	else
 	{	// [CTRL] + [F]: enable/disable sfx
-		if(keyGestion->specKeyRaz(handler_keyboard::SOUND_FLAG))
+		if(keyboard->command_is_pressed(handler_keyboard::SOUND_FLAG, true))
 		{	sound_flag = ~sound_flag;
 			//printf("[CTRL] + [F] : %i\n", sound_flag);
 		}
 		// [CTRL] + [D]: enable/disable mfx
 		else
-		{	if(keyGestion->specKeyRaz(handler_keyboard::MUSIC_FLAG))
+		{	if(keyboard->command_is_pressed(handler_keyboard::MUSIC_FLAG, true))
 			{	music_flag = ~music_flag;
 				//printf("[CTRL] + [D] : %i %i\n", music_flag, musicVolum);
 				if(music_flag)

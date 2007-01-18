@@ -75,9 +75,9 @@ Sint32  ze_magneye::initialize()
 		hval += (Sint32)ptEye;
 #endif
 		ptEye->centerPosy = Ycoordinat[hval & 31]  * resolution;
-		hval += keyGestion->sourisGetY();
+		hval += keyboard->get_mouse_y();
 		ptEye->finishPosx = Xcoordinat[hval & 31]  * resolution;
-		hval += keyGestion->sourisGetX();
+		hval += keyboard->get_mouse_x();
 		ptEye->finishPosy = Ycoordinat[hval & 31]  * resolution;
 		hval++;
 		ptEye->radius_360 = 0;
@@ -109,9 +109,9 @@ void ze_magneye::execution1()
 			ptEye->centerPosx < ptEye->finishPosx + j &&
 			ptEye->centerPosy > ptEye->finishPosy - j && 
 			ptEye->centerPosy < ptEye->finishPosy + j)
-		{		hval += keyGestion->sourisGetY();
+		{		hval += keyboard->get_mouse_y();
 				ptEye->finishPosx = Xcoordinat[hval & 31] * resolution;
-				hval += keyGestion->sourisGetX();
+				hval += keyboard->get_mouse_x();
 				ptEye->finishPosy = Ycoordinat[hval & 31] * resolution;
 		}
 

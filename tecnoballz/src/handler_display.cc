@@ -5,11 +5,11 @@
  * @date 2007-01-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.2 2007/01/18 08:42:04 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.3 2007/01/18 17:09:53 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -310,8 +310,8 @@ handler_display::SDL_informations ()
 void
 handler_display::fullscreen ()
 {
-  if (keyGestion->specialKey (handler_keyboard::FULLSCFLAG) &&
-      keyGestion->getCursPos () < 0)
+  if (keyboard->command_is_pressed (handler_keyboard::FULLSCFLAG) &&
+      keyboard->get_input_cursor_pos () < 0)
     {
       if (optionfull)
         {
@@ -333,7 +333,7 @@ void
 handler_display::wait_frame ()
 {
 /*
-	if(keyGestion->specialKey(handler_keyboard::WAITVBLOFF))
+	if(keyboard->command_is_pressed(handler_keyboard::WAITVBLOFF))
 	{
 		VBL_switch++;
 		if(VBL_switch > 2) VBL_switch = 0;
@@ -362,7 +362,7 @@ void
 handler_display::waitVBLchr ()
 {
 /*
-	keyGestion->lit_keymap();
+	keyboard->read_events();
 	fullscreen();
 #ifndef SOUNDISOFF
 	ptAudiomix->execution1();
@@ -426,7 +426,7 @@ handler_display::waitVBLtec ()
       fps_totale = 0;
     }
   datepreced = SDL_GetTicks ();
-  keyGestion->lit_keymap ();
+  keyboard->read_events ();
   fullscreen ();
 #ifndef SOUNDISOFF
   ptAudiomix->execution1 ();

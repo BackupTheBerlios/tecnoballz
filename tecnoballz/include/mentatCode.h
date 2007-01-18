@@ -4,9 +4,9 @@
 // file		: "mentatCode.h"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.17 2007/01/18 08:42:04 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.18 2007/01/18 17:09:53 gurumeditation Exp $
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.17 2007/01/18 08:42:04 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.18 2007/01/18 17:09:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -147,7 +147,7 @@ class mentatCode
 		static audiomixer*	ptAudiomix;		//manage sounds and musics
 #endif
 		static handler_display*	display;		//manage screen display
-		static handler_keyboard*	keyGestion;		//manage keyboard and mouse events 
+		static handler_keyboard*	keyboard;		//manage keyboard and mouse events 
 		static list_sprites*	sprites;
 		static joueurData*	joueurGere;
 

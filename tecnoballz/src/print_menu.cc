@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.6 2007/01/18 08:42:04 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.7 2007/01/18 17:09:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -122,7 +122,7 @@ Sint32 print_menu::afficheTxt()
 { 
 	clear_zone();
 	mis_a_jour();
-	Sint32 mousY = keyGestion->sourisGetY();
+	Sint32 mousY = keyboard->get_mouse_y();
 	Sint32 y = (mousY - position_y) / space2next;
 	Sint32 zeRet = testLeMenu();
 
@@ -333,27 +333,27 @@ Sint32 print_menu::testLeMenu()
 	//##############################################################
 	// check if right or left button are pressed
 	//##############################################################
-	Sint32 presL = keyGestion->leftButton();
-	Sint32 presR = keyGestion->righButton();
+	Sint32 presL = keyboard->is_left_button();
+	Sint32 presR = keyboard->is_right_button();
 	
 	//##############################################################
 	// read y where is pressed 
 	//##############################################################
 	if(presL && yPressLeft == YCOORDNULL)
-	{	yPressLeft = keyGestion->sourisGetY();
+	{	yPressLeft = keyboard->get_mouse_y();
 		//printf("yPressLeft: %i \n",yPressLeft);
 	}
 	else
 	{	if(presR && yPressRigh == YCOORDNULL)
-		{	yPressRigh = keyGestion->sourisGetY();
+		{	yPressRigh = keyboard->get_mouse_y();
 			//printf("yPressRigh: %i \n",yPressRigh);
 		}
 	}
 
 	freeR = 0;	
-	freeL = keyGestion->sourisRela(&mposx, &pos_y);
+	freeL = keyboard->is_left_button_up(&mposx, &pos_y);
 	if(!freeL)
-		freeR = keyGestion->isReleaseR(&mposx, &pos_y);	
+		freeR = keyboard->is_right_button_up(&mposx, &pos_y);	
 
 	if((freeL && pos_y == yPressLeft) || (freeR && pos_y == yPressRigh))
 	{	Sint32 incre = 0;
@@ -604,7 +604,7 @@ void print_menu::clear_zone()
 void print_menu::curs_print()
 {
 	if(!clear_addr) return;
-	Sint32 xcurs = keyGestion->getCursPos();
+	Sint32 xcurs = keyboard->get_input_cursor_pos();
 	if(xcurs < 0) return;
 	if(--curs_tempo < 1) curs_tempo = 50;
 	if(curs_tempo > 30) return;
@@ -629,7 +629,7 @@ void print_menu::input_init(Uint32 xcoor, Uint32 ycoor, Uint32 width,
 	clear_init(xcoor, ycoor, width, 1);
 	if(!strng) return;
 	curs_tempo = 50;
-	keyGestion->init_input(strng, width);
+	keyboard->set_input_string(strng, width);
 }
 
 //------------------------------------------------------------------------------
@@ -651,7 +651,7 @@ void print_menu::clear_init(Uint32 xcoor, Uint32 ycoor, Uint32 width,
 void print_menu::clear_stop()
 {
 	clear_addr = (char *)NULL;
-	keyGestion->stop_input();
+	keyboard->stop_string_input();
 }
 
 //------------------------------------------------------------------------------

@@ -151,18 +151,18 @@ Sint32 scrolledit::zeMainLoop()
 	//###################################################################
 	// escape key to quit the game !
 	//###################################################################
-	if(keyGestion->specialKey(handler_keyboard::TOEXITFLAG))
+	if(keyboard->command_is_pressed(handler_keyboard::TOEXITFLAG))
 		end_return = -1;
 
 	check_keys();
-	if(keyGestion->test_Kcode(SDLK_F10))
+	if(keyboard->key_is_pressed(SDLK_F10))
 	{	end_return = 4;
 	}
 	
-	if(keyGestion->test_Kcode(SDLK_s) && !keyS_press)
+	if(keyboard->key_is_pressed(SDLK_s) && !keyS_press)
 		keyS_press = 1;
 
-	if(keyGestion->test_Rcode(SDLK_s) && keyS_press)
+	if(keyboard->key_is_released(SDLK_s) && keyS_press)
 	{	keyS_press = 0;
 		saveTheMap();
 	}	
@@ -288,9 +288,9 @@ void scrolledit::tile2brush()
 //------------------------------------------------------------------------------
 void scrolledit::check_keys()
 {
-	if(keyGestion->test_Kcode(SDLK_SPACE))
+	if(keyboard->key_is_pressed(SDLK_SPACE))
 		flagSpaceK = 1;
-	if(keyGestion->test_Rcode(SDLK_SPACE) && flagSpaceK)
+	if(keyboard->key_is_released(SDLK_SPACE) && flagSpaceK)
 	{	switch(displayMod)
 		{	case 0:
 				displayMod = 1;
@@ -309,7 +309,7 @@ void scrolledit::check_keys()
 Sint32 scrolledit::getZeSpeed()
 {	
 	Sint32 speed = 0;
-	Sint32 mousY = keyGestion->sourisGetY();
+	Sint32 mousY = keyboard->get_mouse_y();
 	if(mousY > 0 && mousY < 8 * resolution)
 			speed = -16 * resolution;
 	if(mousY >= 8 * resolution && mousY < 16 * resolution)
@@ -333,16 +333,16 @@ void scrolledit::select_box()
 {
 	
 	
-	//Sint32 presL = keyGestion->leftButton();
-	Sint32 presR = keyGestion->righButton();
+	//Sint32 presL = keyboard->is_left_button();
+	Sint32 presR = keyboard->is_right_button();
 
 	//##############################################################
 	// read y where is pressed 
 	//##############################################################
 	if(presR && !flag_press)
 	{	flag_press = 1;
-		pt_select0->box_pos_x1 = keyGestion->sourisGetX();
-		pt_select0->box_pos_y1 = pt_select0->boxOffsetY + keyGestion->sourisGetY();
+		pt_select0->box_pos_x1 = keyboard->get_mouse_x();
+		pt_select0->box_pos_y1 = pt_select0->boxOffsetY + keyboard->get_mouse_y();
 		pt_select0->box_pos_x1 &= tile_mask1;
 		pt_select0->box_pos_y1 &= tile_mask1;
 		if(pBrush_bob)
@@ -354,8 +354,8 @@ void scrolledit::select_box()
 
 	if(flag_press)
 	{	
-		pt_select0->box_pos_x2 = keyGestion->sourisGetX();
-		pt_select0->box_pos_y2 = keyGestion->sourisGetY() + pt_select0->boxOffsetY;
+		pt_select0->box_pos_x2 = keyboard->get_mouse_x();
+		pt_select0->box_pos_y2 = keyboard->get_mouse_y() + pt_select0->boxOffsetY;
 		
 		if (pt_select0->box_pos_x2 & tile_mask2)
 			pt_select0->box_pos_x2 += tile_width;
@@ -614,8 +614,8 @@ void scrolledit::brushAlloc()
 void scrolledit::brush_draw()
 {
 	if(!pBrush_bob) return;
-	Sint32 pos_x = keyGestion->sourisGetX();
-	Sint32 pos_y = keyGestion->sourisGetY();
+	Sint32 pos_x = keyboard->get_mouse_x();
+	Sint32 pos_y = keyboard->get_mouse_y();
 	pos_x &= tile_mask1;
 	pos_y &= tile_mask1;
 	if(pos_x > ecranLarge -  pBrush_bob->GFXlargeur())
@@ -625,7 +625,7 @@ void scrolledit::brush_draw()
 	
 
 	Sint32 scrlY = defilement->returnPosy();
-	Sint32 presL = keyGestion->leftButton();
+	Sint32 presL = keyboard->is_left_button();
 	if(presL  && !flagPress2)
 	{	flagPress2 = 1;
 		brush_posx = pos_x;

@@ -67,8 +67,8 @@ Sint32 mousePoint::create_BOB(GIF_bitMap * image)
 //-----------------------------------------------------------------------------
 void mousePoint::bouge_test()
 {
-	Sint32 offsX = keyGestion->sourisGetX();
-	Sint32 offsY = keyGestion->sourisGetY();
+	Sint32 offsX = keyboard->get_mouse_x();
+	Sint32 offsY = keyboard->get_mouse_y();
 	deplace_pX(offsX);
 	deplace_pY(offsY);
 	coordonnee(offsX, offsY);

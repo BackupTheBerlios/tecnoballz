@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.10 2007/01/18 08:42:04 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.11 2007/01/18 17:09:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -320,8 +320,8 @@ Sint32 tableaux_Z::first_init()
 	Sint32 k = memory->get_total_size();
 	if(is_verbose)
 		printf("tableaux_Z::first_init(): memory size allocated : %i \n",k);
-	keyGestion->resetpause();
-	keyGestion->setGrab_On();
+	keyboard->clear_command_keys();
+	keyboard->set_grab_input (true);
 	ptMiniMess->mesrequest(1);
 	return erreur_num;
 }
@@ -383,7 +383,7 @@ Sint32 tableaux_Z::zeMainLoop()
 		ptPrntmney->execution1(joueurGere->creditFric);
 		display->deverouill();
 		display->bufferCTab();
-		if(keyGestion->leftButton() && isgameover > 60)
+		if(keyboard->is_left_button() && isgameover > 60)
 			joueurGere = joueurData::nextplayer(joueurGere, &end_return, 1);
 	}
 	
@@ -398,7 +398,7 @@ Sint32 tableaux_Z::zeMainLoop()
 		gereBricot->execution1();	//restore bricks on side
 		changebkgd();
 
-		if(!keyGestion->specialKey(handler_keyboard::PAUSE_FLAG))
+		if(!keyboard->command_is_pressed(handler_keyboard::COMMAND_KEY_PAUSE))
 		{	ptMiniMess->execution1();
 			tete_gugus->execution1();
 			ptGigaBlit->execution1();
@@ -451,7 +451,7 @@ Sint32 tableaux_Z::zeMainLoop()
 #endif
 				}
 				if(count_next > 20000000 ||
-					keyGestion->test_Kcode(SDLK_SPACE) || endmu)
+					keyboard->key_is_pressed(SDLK_SPACE) || endmu)
 				{	gereBricot->sauve_etat();
 					joueurGere = joueurData::nextplayer(joueurGere,
 						&end_return, 1);
@@ -481,13 +481,13 @@ Sint32 tableaux_Z::zeMainLoop()
 	//###################################################################
 	// escape key to quit the game !
 	//###################################################################
-	if(keyGestion->specialKey(handler_keyboard::TOEXITFLAG) ||
+	if(keyboard->command_is_pressed(handler_keyboard::TOEXITFLAG) ||
 		Ecode == escapeMenu::WEQUITGAME)
 		end_return = -1;
-	if(keyGestion->specialKey(handler_keyboard::TOOVERFLAG) ||
+	if(keyboard->command_is_pressed(handler_keyboard::TOOVERFLAG) ||
 		Ecode == escapeMenu::GOGAMEOVER)
 		joueurGere->lifesReset();
-	if(keyGestion->specialKey(handler_keyboard::TOMENUFLAG) ||
+	if(keyboard->command_is_pressed(handler_keyboard::TOMENUFLAG) ||
 		Ecode == escapeMenu::EXITTOMENU)
 		end_return = 4;
 
@@ -511,19 +511,19 @@ Sint32 tableaux_Z::zeMainLoop()
  void tableaux_Z::changebkgd()
 {
 #ifdef TU_TRICHES
-	if(	keyGestion->test_Kcode(SDLK_RSHIFT) ||
-		keyGestion->test_Kcode(SDLK_LSHIFT) ||
-		keyGestion->test_Kcode(SDLK_RCTRL) ||
-		keyGestion->test_Kcode(SDLK_LCTRL) ||
-		keyGestion->test_Kcode(SDLK_RALT) ||
-		!keyGestion->test_Kcode(SDLK_LALT))
+	if(	keyboard->key_is_pressed(SDLK_RSHIFT) ||
+		keyboard->key_is_pressed(SDLK_LSHIFT) ||
+		keyboard->key_is_pressed(SDLK_RCTRL) ||
+		keyboard->key_is_pressed(SDLK_LCTRL) ||
+		keyboard->key_is_pressed(SDLK_RALT) ||
+		!keyboard->key_is_pressed(SDLK_LALT))
 	return;
 
-	if(keyGestion->test_Kcode(SDLK_w)) devel_keyw = 1;
-	if(keyGestion->test_Kcode(SDLK_x)) devel_keyx = 1;
+	if(keyboard->key_is_pressed(SDLK_w)) devel_keyw = 1;
+	if(keyboard->key_is_pressed(SDLK_x)) devel_keyx = 1;
 		 
-	if((keyGestion->test_Rcode(SDLK_w) && devel_keyw) ||
-		(keyGestion->test_Rcode(SDLK_x) && devel_keyx))
+	if((keyboard->key_is_released(SDLK_w) && devel_keyw) ||
+		(keyboard->key_is_released(SDLK_x) && devel_keyx))
 	{
 		display->buffer_RAZ();
 		if(devel_keyw)
@@ -540,30 +540,30 @@ Sint32 tableaux_Z::zeMainLoop()
 		display->tamponBuff();
 	 }
 
-	if(keyGestion->test_Kcode(SDLK_v))
+	if(keyboard->key_is_pressed(SDLK_v))
 		tete_gugus->teterigole();
-	if(keyGestion->test_Kcode(SDLK_b))
+	if(keyboard->key_is_pressed(SDLK_b))
 		tete_gugus->tetebaille();
-	if(keyGestion->test_Kcode(SDLK_n))
+	if(keyboard->key_is_pressed(SDLK_n))
 		tete_gugus->teteparasi();
-	if(keyGestion->test_Kcode(SDLK_g))
+	if(keyboard->key_is_pressed(SDLK_g))
 		ptGigaBlit->initDepart();
 /* 
 
-	if(keyGestion->test_Kcode(SDLK_w))
+	if(keyboard->key_is_pressed(SDLK_w))
  { 
  }
 
- if(keyGestion->test_Kcode(SDLK_w))
+ if(keyboard->key_is_pressed(SDLK_w))
  { keyw = 1;
  }
 
 
- if(keyGestion->test_Rcode(SDLK_w) && keyw == 1)
+ if(keyboard->key_is_released(SDLK_w) && keyw == 1)
  { ecranfond4->prev_color();
  keyw = 0;
  }
- if(keyGestion->test_Rcode(SDLK_x) && keyx == 1)
+ if(keyboard->key_is_released(SDLK_x) && keyx == 1)
  { ecranfond4->next_color();
  keyx = 0;
  }
