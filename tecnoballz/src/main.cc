@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.10 2007/01/18 08:42:04 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.11 2007/01/18 20:04:46 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -62,9 +62,20 @@ int main(Sint32 nbArg, char **ptArg)
 
 
 /*
- 
-sprite_object     => sprite_object
 
+main.cc
+mentatCode.cc  => base_global
+list_sprites.cc
+runGestion.cc
+configfile.cc
+lispreader.cc
+GFX_bitmap.cc
+GIF_bitMap.cc
+ 
+sprite_object  => sprite_object
+
+giga_blitz.cc  => sprite_gigablitz
+mousePoint.cc  => sprite_mouse_pointer
 technoBall     => sprite_ball
 techno_eye.cc  => sprite_eye
 techno_gem.cc  => sprite_gem
@@ -78,52 +89,17 @@ tecno_gard.cc  => sprite_guardian
 tecno_miss.cc  => sprite_bullet
 tecno_text.cc  => sprite_fonte_game
  
-
-audiomixer.cc  => audio_handler
-handler_keyboard.cc  => keyboard_handler
-handler_display.cc  => display_handler
-handler_memory.cc  => memory_handler
-
-ballDirect.cc
-barreScore.cc
-briqueCote.cc
-configfile.cc
-ejectBalls.cc
-escapeMenu.cc
-fond_ecran.cc
-gard_tecno.cc
-GFX_bitmap.cc
-GIF_bitMap.cc
-giga_blitz.cc
-head_anima.cc
-joueurData.cc
-lastScroll.cc
-lesBriques.cc
-level_data.cc
-lispreader.cc
-list_sprites.cc
-main.cc
-mentatCode.cc
-menu_tecno.cc
-mousePoint.cc
-print_menu.cc
-printmoney.cc
-print_text.cc
-ressources.cc
-runGestion.cc
-score_over.cc
-scoretable.cc
-scrolledit.cc
-shop_tecno.cc
-tableaux_Z.cc
-eBouiBoui.cc
-zeCapsules.cc
-zeCongBall.cc
-zeDefilTxt.cc
-zeFireBump.cc
-ze_gadgets.cc
-zeGameOver.cc
-zeGemstone.cc
+ballDirect.cc   => controller_balls
+lesBriques.cc   => controller_bricks
+printmoney.cc   => controller_money_indicator
+zeBouiBoui.cc   => controller_ships
+zeCapsules.cc   => controller_moneys
+zeCongBall.cc   => controller_spheres
+zeDefilTxt.cc   => controller_fontes
+zeFireBump.cc   => controller_fires
+ze_gadgets.cc   => controller_
+zeGameOver.cc   =>
+zeGemstone.cc   => controller_
 zeGigaBlit.cc
 zeguardian.cc
 ze_magneye.cc
@@ -132,7 +108,34 @@ zeMissiles.cc
 zeMoveText.cc
 zeNewBalls.cc
 zeRaquette.cc
+zexplosion.cc
 
+tableaux_Z.cc supervisor_bricks_level
+gard_tecno.cc supervisor_guards_level
+shop_tecno.cc supervisor_shop
+scrolledit.cc supervisor_scrolleditor 
+menu_tecno.cc supervisor_menu
+
+
+audiomixer.cc        => audio_handler
+handler_keyboard.cc  => keyboard_handler
+handler_display.cc   => display_handler
+handler_memory.cc    => memory_handler
+
+barreScore.cc
+briqueCote.cc
+ejectBalls.cc
+escapeMenu.cc
+fond_ecran.cc
+head_anima.cc
+joueurData.cc
+lastScroll.cc
+level_data.cc
+print_menu.cc
+print_text.cc
+ressources.cc
+score_over.cc
+scoretable.cc
 
 
 */
