@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.5 2007/01/17 20:05:07 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.6 2007/01/18 08:42:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -23,7 +23,7 @@
 //*****************************************************************************
 #include "../include/print_menu.h"
 #include "../include/ressources.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 #include "../include/joueurData.h"
 #include "../include/scoretable.h"
 

@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
 #include "../include/ze_magneye.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 #include "../include/ressources.h"
 
 //-----------------------------------------------------------------------------

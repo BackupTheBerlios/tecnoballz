@@ -28,7 +28,7 @@ class barreScore;
 #include "../include/GIF_bitMap.h"
 #include "../include/print_text.h"
 #include "../include/joueurData.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 #include "../include/zeGigaBlit.h"
 #include "../include/zeNewBalls.h"
 //-------------------------------------------------------------------------------

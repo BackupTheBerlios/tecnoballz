@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //******************************************************************************
 #include "../include/mousePoint.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 #include "../include/handler_display.h"
 #include "../include/list_sprites.h"
 //-----------------------------------------------------------------------------

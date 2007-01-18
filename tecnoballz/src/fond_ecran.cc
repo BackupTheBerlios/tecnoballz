@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-07-17
 // fonctions	: display background (bricks levels)
-// Id		: $Id: fond_ecran.cc,v 1.6 2007/01/17 20:05:07 gurumeditation Exp $
+// Id		: $Id: fond_ecran.cc,v 1.7 2007/01/18 08:42:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -24,7 +24,7 @@
 #include "../include/GIF_bitMap.h"
 #include "../include/handler_display.h"
 #include "../include/fond_ecran.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 #include "../include/ressources.h"
 
 //-----------------------------------------------------------------------------

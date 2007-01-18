@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-11
 // fonction	: handle the the guards levels
-// id		: $Id: gard_tecno.h,v 1.4 2007/01/17 19:04:26 gurumeditation Exp $
+// id		: $Id: gard_tecno.h,v 1.5 2007/01/18 08:42:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -27,7 +27,7 @@ class gard_tecno;
 #include "../include/lastScroll.h"
 #include "../include/tecno_miss.h"
 #include "../include/handler_display.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 #include "../include/runGestion.h"
 #include "../include/zeguardian.h"
 #include "../include/zeMissiles.h"

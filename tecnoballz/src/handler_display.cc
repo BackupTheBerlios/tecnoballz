@@ -5,11 +5,11 @@
  * @date 2007-01-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.1 2007/01/18 08:33:57 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.2 2007/01/18 08:42:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
  * MA  02110-1301, USA.
  */
 #include "../include/handler_display.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 #include "../include/audiomixer.h"
 #include "../include/ressources.h"
 
@@ -310,7 +310,7 @@ handler_display::SDL_informations ()
 void
 handler_display::fullscreen ()
 {
-  if (keyGestion->specialKey (clavierMac::FULLSCFLAG) &&
+  if (keyGestion->specialKey (handler_keyboard::FULLSCFLAG) &&
       keyGestion->getCursPos () < 0)
     {
       if (optionfull)
@@ -333,7 +333,7 @@ void
 handler_display::wait_frame ()
 {
 /*
-	if(keyGestion->specialKey(clavierMac::WAITVBLOFF))
+	if(keyGestion->specialKey(handler_keyboard::WAITVBLOFF))
 	{
 		VBL_switch++;
 		if(VBL_switch > 2) VBL_switch = 0;

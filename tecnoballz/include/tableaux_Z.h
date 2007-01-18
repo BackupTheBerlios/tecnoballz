@@ -35,7 +35,7 @@ class tableaux_Z;
 #include "../include/runGestion.h"
 #include "../include/zeBouiBoui.h"
 #include "../include/tecno_boui.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 #include "../include/fond_ecran.h"
 #include "../include/zeRaquette.h"
 #include "../include/briqueCote.h"

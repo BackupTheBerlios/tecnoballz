@@ -4,7 +4,7 @@
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// id		: $Id: mentatCode.cc,v 1.14 2007/01/17 20:05:07 gurumeditation Exp $
+// id		: $Id: mentatCode.cc,v 1.15 2007/01/18 08:42:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -23,7 +23,7 @@
 #include "../include/mentatCode.h"
 #include "../include/handler_memory.h"
 #include "../include/handler_display.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 #include "../include/list_sprites.h"
 #include "../include/joueurData.h"
 #include "../include/tableaux_Z.h"
@@ -52,7 +52,7 @@ handler_memory*			mentatCode::memory = NULL;	//manage memory allocation
 audiomixer*			mentatCode::ptAudiomix = NULL;	//manage sound      
 #endif
 handler_display*			mentatCode::display = NULL;	//manage screen
-clavierMac*			mentatCode::keyGestion = NULL;	//keyboard handle
+handler_keyboard*			mentatCode::keyGestion = NULL;	//keyboard handle
 list_sprites*			mentatCode::sprites = NULL;	//sprites handle
 joueurData*			mentatCode::joueurGere = NULL;	//players handle
 Sint16*				mentatCode::table_cosL = NULL;	//cosinus table
@@ -120,7 +120,7 @@ Sint32 mentatCode::first_init(configfile* pConf)
 	num_erreur = display->initialize();
 	if(num_erreur) return (num_erreur);
 
-	keyGestion = new clavierMac();
+	keyGestion = new handler_keyboard();
 	sprites = new list_sprites();
         num_erreur = sprites->init (400);
 	if (num_erreur) return num_erreur;

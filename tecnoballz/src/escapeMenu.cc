@@ -23,7 +23,7 @@
 #include "../include/ressources.h"
 #include "../include/escapeMenu.h"
 #include "../include/sprite_object.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 
 //-----------------------------------------------------------------------------
 // create the object
@@ -213,7 +213,7 @@ Sint32 escapeMenu::execution1()
 	//##############################################################
 	// [ESC] key: enable / disable menu box
 	//##############################################################
-	if(keyGestion->specialKey(clavierMac::ESCAPEMENU)) {
+	if(keyGestion->specialKey(handler_keyboard::ESCAPEMENU)) {
 		flag_actif = 1;
 	} else {
 		if(flag_actif && restoreBkg)

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.9 2007/01/17 20:05:07 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.10 2007/01/18 08:42:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -398,7 +398,7 @@ Sint32 tableaux_Z::zeMainLoop()
 		gereBricot->execution1();	//restore bricks on side
 		changebkgd();
 
-		if(!keyGestion->specialKey(clavierMac::PAUSE_FLAG))
+		if(!keyGestion->specialKey(handler_keyboard::PAUSE_FLAG))
 		{	ptMiniMess->execution1();
 			tete_gugus->execution1();
 			ptGigaBlit->execution1();
@@ -481,13 +481,13 @@ Sint32 tableaux_Z::zeMainLoop()
 	//###################################################################
 	// escape key to quit the game !
 	//###################################################################
-	if(keyGestion->specialKey(clavierMac::TOEXITFLAG) ||
+	if(keyGestion->specialKey(handler_keyboard::TOEXITFLAG) ||
 		Ecode == escapeMenu::WEQUITGAME)
 		end_return = -1;
-	if(keyGestion->specialKey(clavierMac::TOOVERFLAG) ||
+	if(keyGestion->specialKey(handler_keyboard::TOOVERFLAG) ||
 		Ecode == escapeMenu::GOGAMEOVER)
 		joueurGere->lifesReset();
-	if(keyGestion->specialKey(clavierMac::TOMENUFLAG) ||
+	if(keyGestion->specialKey(handler_keyboard::TOMENUFLAG) ||
 		Ecode == escapeMenu::EXITTOMENU)
 		end_return = 4;
 

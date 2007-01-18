@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.5 2007/01/16 21:27:13 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.6 2007/01/18 08:42:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #include "../include/ressources.h"
 #include "../include/joueurData.h"
 #include "../include/zeFireBump.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 
 //-----------------------------------------------------------------------------
 // bricks levels: create the object

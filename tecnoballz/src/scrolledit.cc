@@ -23,7 +23,7 @@
 #include "../include/scrolledit.h"
 #include "../include/ressources.h"
 #include "../include/list_sprites.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 #include <errno.h>
 #include <stdio.h>
 #include <sys/stat.h>
@@ -151,7 +151,7 @@ Sint32 scrolledit::zeMainLoop()
 	//###################################################################
 	// escape key to quit the game !
 	//###################################################################
-	if(keyGestion->specialKey(clavierMac::TOEXITFLAG))
+	if(keyGestion->specialKey(handler_keyboard::TOEXITFLAG))
 		end_return = -1;
 
 	check_keys();

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.7 2007/01/17 20:05:07 gurumeditation Exp $
+// id		: $Id: menu_tecno.cc,v 1.8 2007/01/18 08:42:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -126,7 +126,7 @@ Sint32 menu_tecno::zeMainLoop()
 	}
     
 	menu_texte->MSKaffiche();
-	if(keyGestion->specialKey(clavierMac::TOEXITFLAG))
+	if(keyGestion->specialKey(handler_keyboard::TOEXITFLAG))
 		end_return = -1;
 	display->deverouill();
 	

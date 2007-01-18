@@ -16,7 +16,6 @@ SOURCES_MAIN = \
 	ballDirect.cc \
 	barreScore.cc \
 	briqueCote.cc \
-	clavierMac.cc \
 	configfile.cc \
 	ejectBalls.cc \
 	escapeMenu.cc \
@@ -25,6 +24,7 @@ SOURCES_MAIN = \
 	GFX_bitmap.cc \
 	GIF_bitMap.cc \
   handler_display.cc \
+	handler_keyboard.cc \
 	handler_memory.cc \
 	giga_blitz.cc \
 	head_anima.cc \

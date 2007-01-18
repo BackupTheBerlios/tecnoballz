@@ -5,7 +5,7 @@
 // created	: 2004-03-22
 // updates	: 2005-08-26
 // functions	: handler music and sound
-// id		: $Id: audiomixer.cc,v 1.7 2006/09/17 13:49:00 gurumeditation Exp $
+// id		: $Id: audiomixer.cc,v 1.8 2007/01/18 08:42:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -24,7 +24,7 @@
 #include "../include/audiomixer.h"
 #ifndef SOUNDISOFF
 #include "../include/ressources.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 
 
 
@@ -396,7 +396,7 @@ void audiomixer::execution1()
 	if (!audioactif) return;
 
 	// [CTRL] + [S]: enable/disable sfx - mfx
-	if(keyGestion->specKeyRaz(clavierMac::MFXSFXFLAG))
+	if(keyGestion->specKeyRaz(handler_keyboard::MFXSFXFLAG))
 	{	if(!music_flag || !sound_flag)
 		{	if(!music_flag) music_flag = ~music_flag;
 			if(!sound_flag) sound_flag = ~sound_flag;
@@ -412,13 +412,13 @@ void audiomixer::execution1()
 	}
 	else
 	{	// [CTRL] + [F]: enable/disable sfx
-		if(keyGestion->specKeyRaz(clavierMac::SOUND_FLAG))
+		if(keyGestion->specKeyRaz(handler_keyboard::SOUND_FLAG))
 		{	sound_flag = ~sound_flag;
 			//printf("[CTRL] + [F] : %i\n", sound_flag);
 		}
 		// [CTRL] + [D]: enable/disable mfx
 		else
-		{	if(keyGestion->specKeyRaz(clavierMac::MUSIC_FLAG))
+		{	if(keyGestion->specKeyRaz(handler_keyboard::MUSIC_FLAG))
 			{	music_flag = ~music_flag;
 				//printf("[CTRL] + [D] : %i %i\n", music_flag, musicVolum);
 				if(music_flag)

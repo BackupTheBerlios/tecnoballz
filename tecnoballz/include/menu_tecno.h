@@ -5,7 +5,7 @@
 // created      : ?
 // updates      : 2005-01-18
 // fonction     : management of the menu principal
-// id		: $Id: menu_tecno.h,v 1.4 2007/01/16 21:27:13 gurumeditation Exp $
+// id		: $Id: menu_tecno.h,v 1.5 2007/01/18 08:42:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -25,7 +25,7 @@
 #define __MENU_TECNO__
 #include "../include/lastScroll.h"
 #include "../include/runGestion.h"
-#include "../include/clavierMac.h"
+#include "../include/handler_keyboard.h"
 #include "../include/sprite_object.h"
 #include "../include/list_sprites.h"
 #include "../include/zeDefilTxt.h"

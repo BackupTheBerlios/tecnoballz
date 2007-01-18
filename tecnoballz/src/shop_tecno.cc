@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.7 2007/01/17 20:05:07 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.8 2007/01/18 08:42:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -295,10 +295,10 @@ Sint32 shop_tecno::zeMainLoop()
 	//###################################################################
 	// escape key to quit the game !
 	//###################################################################
-	if(keyGestion->specialKey(clavierMac::TOEXITFLAG) ||
+	if(keyGestion->specialKey(handler_keyboard::TOEXITFLAG) ||
 		Ecode == escapeMenu::WEQUITGAME)
 		end_return = -1;
-	if(keyGestion->specialKey(clavierMac::TOMENUFLAG) ||
+	if(keyGestion->specialKey(handler_keyboard::TOMENUFLAG) ||
 		Ecode == escapeMenu::EXITTOMENU)
 		end_return = 4;
 

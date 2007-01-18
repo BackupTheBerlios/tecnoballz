@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.6 2007/01/17 20:05:07 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.7 2007/01/18 08:42:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -320,7 +320,7 @@ Sint32 gard_tecno::zeMainLoop()
 		//######################################################
 		display->wait_frame();
 		display->verouiller();
-		if(!keyGestion->specialKey(clavierMac::PAUSE_FLAG))
+		if(!keyGestion->specialKey(handler_keyboard::PAUSE_FLAG))
 		{	run_scroll();
 			defilement->scrolling1(scrolSpeed);
 			ptRaquette->bp_deplac2();
@@ -397,13 +397,13 @@ Sint32 gard_tecno::zeMainLoop()
 	//###################################################################
 	// escape key to quit the game !
 	//###################################################################
-	if(keyGestion->specialKey(clavierMac::TOEXITFLAG) ||
+	if(keyGestion->specialKey(handler_keyboard::TOEXITFLAG) ||
 		Ecode == escapeMenu::WEQUITGAME)
 		end_return = -1;
-	if(keyGestion->specialKey(clavierMac::TOOVERFLAG) ||
+	if(keyGestion->specialKey(handler_keyboard::TOOVERFLAG) ||
 		Ecode == escapeMenu::GOGAMEOVER)
 		joueurGere->lifesReset();
-	if(keyGestion->specialKey(clavierMac::TOMENUFLAG) ||
+	if(keyGestion->specialKey(handler_keyboard::TOMENUFLAG) ||
 		Ecode == escapeMenu::EXITTOMENU)
 		end_return = 4;
 
