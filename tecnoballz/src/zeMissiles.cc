@@ -102,8 +102,8 @@ void zeMissiles::bumper_col()
 							{	ptbumper01->setInvncbl(100);
 								joueurGere->lifesMoins(1);
 #ifndef SOUNDISOFF
-								ptAudiomix->sound_play(S_RAKEXPLO);
-								ptAudiomix->sound_play(S_ENLEVVIE);
+								audio->play_sound(S_RAKEXPLO);
+								audio->play_sound(S_ENLEVVIE);
 #endif
 								pexplosion->add_explos
 									(bumpx + ptbumper01->rakLargeur()/2,

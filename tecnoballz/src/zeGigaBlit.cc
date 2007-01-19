@@ -149,7 +149,7 @@ void zeGigaBlit::initDepart()
 			y++;
 		blitz_brik = y;
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_TIR_GARD);
+		audio->play_sound(S_TIR_GARD);
 #endif
 		gugusObjet->teterigole();
 	}
@@ -365,8 +365,8 @@ void zeGigaBlit::collision2()
 		{
 			tecBumper1->setInvncbl(100);
 #ifndef SOUNDISOFF
-			ptAudiomix->sound_play(S_RAKEXPLO);
-			ptAudiomix->sound_play(S_ENLEVVIE);
+			audio->play_sound(S_RAKEXPLO);
+			audio->play_sound(S_ENLEVVIE);
 #endif
 			joueurGere->lifesMoins(1);
 			pexplosion->add_explos(bx + tecBumper1->rakLargeur()/2, 
@@ -398,7 +398,7 @@ Sint32 zeGigaBlit::guard_shoot(Sint32 value, Sint32 pos_x, Sint32 pos_y,
 			pos_x = 0;
 		g->coordonnee(pos_x, pos_y);
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_TIR_GARD);
+		audio->play_sound(S_TIR_GARD);
 #endif
 		g->enable();
 		blitz_haut = g->getHauteur();

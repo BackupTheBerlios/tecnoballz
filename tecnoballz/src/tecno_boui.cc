@@ -75,7 +75,7 @@ void tecno_boui::gere_atome()
 					flagShadow = 1;
 					change_GFX(k);
 #ifndef SOUNDISOFF
-					ptAudiomix->sound_play(S_ATOMAPPA);
+					audio->play_sound(S_ATOMAPPA);
 #endif
 				} 
 				else
@@ -276,7 +276,7 @@ void tecno_boui::explosion2()
 	change_GFX(animOffset);
 	anim_tempo = init_tempo;
 #ifndef SOUNDISOFF
-	ptAudiomix->sound_play(S_ATOM_EXP);
+	audio->play_sound(S_ATOM_EXP);
 #endif
 }
 

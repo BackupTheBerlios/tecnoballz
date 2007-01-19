@@ -161,7 +161,7 @@ Sint32 tecno_caps::deplaceMoi()
 				{	if(collision1(raket))
 					{	flag_actif = 0;
 #ifndef SOUNDISOFF
-						ptAudiomix->sound_play(S_MONNAIES);
+						audio->play_sound(S_MONNAIES);
 #endif
 						return (valeurFric);
 					}
@@ -179,7 +179,7 @@ Sint32 tecno_caps::deplaceMoi()
 				{	if(collision1(raket))
 					{	flag_actif = 0;
 #ifndef SOUNDISOFF
-						ptAudiomix->sound_play(S_MONNAIES);
+						audio->play_sound(S_MONNAIES);
 #endif
 						return (valeurFric);
 					}
@@ -197,7 +197,7 @@ Sint32 tecno_caps::deplaceMoi()
 				{	if(collision1(raket))
 					{	flag_actif = 0;
 #ifndef SOUNDISOFF
-						ptAudiomix->sound_play(S_MONNAIES);
+						audio->play_sound(S_MONNAIES);
 #endif
 						return (valeurFric);
 					}
@@ -215,7 +215,7 @@ Sint32 tecno_caps::deplaceMoi()
 				{	if(collision1(raket))
 					{	flag_actif = 0;
 #ifndef SOUNDISOFF
-						ptAudiomix->sound_play(S_MONNAIES);
+						audio->play_sound(S_MONNAIES);
 #endif
 						return (valeurFric);
 					}
@@ -241,7 +241,7 @@ Sint32 tecno_caps::deplaceMe2()
 		{	if(collision1(raket))
 			{	flag_actif = 0;
 #ifndef SOUNDISOFF
-				ptAudiomix->sound_play(S_MONNAIES);
+				audio->play_sound(S_MONNAIES);
 #endif
 				return valeurFric;
 			}

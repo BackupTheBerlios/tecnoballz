@@ -165,7 +165,7 @@ void tecno_gard::start_fire()
 	{	if(position_y <= (80 * resolution)) 
 		{	gard_wait1 = gard_wait2;
 #ifndef SOUNDISOFF
-			ptAudiomix->sound_play(S_TIR_GARD);
+			audio->play_sound(S_TIR_GARD);
 #endif
 			Sint32 nfire = gard_tfire[gardptfire];
 			if(nfire < 0)

@@ -22,7 +22,7 @@
 //
 //*****************************************************************************
 #include "../include/zeGameOver.h"
-#include "../include/audiomixer.h"
+#include "../include/handler_audio.h"
 #include "../include/ressources.h"
 #include "../include/scoretable.h"
 
@@ -107,12 +107,12 @@ void zeGameOver::initialize(Sint32 iswin)
 #ifndef SOUNDISOFF
 	Sint32 iscla = ptScoreTab->test_score();
 	if(iswin)
-		ptAudiomix->playModule(MUSICCONGR);
+		audio->play_music(MUSICCONGR);
 	else
 	{	if(iscla)
-			ptAudiomix->playModule(MUSICSCORE);
+			audio->play_music(MUSICSCORE);
 		else
-			ptAudiomix->playModule(MUSICGOVER);
+			audio->play_music(MUSICGOVER);
 	}
 #else
 	ptScoreTab->test_score();

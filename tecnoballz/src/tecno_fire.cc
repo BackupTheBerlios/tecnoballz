@@ -210,14 +210,14 @@ void tecno_fire::collision1()
 						else
 						{	x = 2;
 #ifndef SOUNDISOFF
-							ptAudiomix->sound_play(S_TOINDES2);
+							audio->play_sound(S_TOINDES2);
 #endif
 						}
 					}
 					else
 					{	x = 1;	//the brick is really indestructible
 #ifndef SOUNDISOFF
-						ptAudiomix->sound_play(S_TOINDES1);
+						audio->play_sound(S_TOINDES1);
 #endif
 					}
 				}

@@ -103,7 +103,7 @@ void zeFireBump::disponible()
 	countTempo = 0;
 	maRaquette->bumperFire = 3;	//fire is requested
 #ifndef SOUNDISOFF
-	ptAudiomix->sound_play(S_RAK_TIRS);
+	audio->play_sound(S_RAK_TIRS);
 #endif
 }
 

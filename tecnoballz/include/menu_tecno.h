@@ -5,7 +5,7 @@
 // created      : ?
 // updates      : 2005-01-18
 // fonction     : management of the menu principal
-// id		: $Id: menu_tecno.h,v 1.5 2007/01/18 08:42:04 gurumeditation Exp $
+// id		: $Id: menu_tecno.h,v 1.6 2007/01/19 20:35:39 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -33,7 +33,7 @@
 #include "../include/GFX_bitmap.h"
 #include "../include/print_menu.h"
 #include "../include/mousePoint.h"
-#include "../include/audiomixer.h"
+#include "../include/handler_audio.h"
 class menu_tecno:public virtual runGestion
 {
 	private:

@@ -25,7 +25,7 @@
 #include "../include/handler_memory.h"
 #include "../include/handler_keyboard.h"
 #include "../include/handler_display.h"
-#include "../include/audiomixer.h"
+#include "../include/handler_audio.h"
 #include "../include/list_sprites.h"
 
 //-----------------------------------------------------------------------------
@@ -245,8 +245,8 @@ void zeNewBalls::vitus_sort()
 					// force the explosion of all the "atoms"
 					ptBouiBoui->atomexplos();
 #ifndef SOUNDISOFF
-					ptAudiomix->lost_music ();
-					ptAudiomix->sound_play(S_ENLEVVIE);
+					audio->play_lost_music ();
+					audio->play_sound(S_ENLEVVIE);
 #endif
 					ptMiniMess->mesrequest(10);
 					ptMiniMess->mesrequest(1);
@@ -281,7 +281,7 @@ void zeNewBalls::vitussort2()
 					balle->ballPower2();
 					joueurGere->lifesMoins(1);
 #ifndef SOUNDISOFF
-					ptAudiomix->sound_play(S_ENLEVVIE);
+					audio->play_sound(S_ENLEVVIE);
 #endif
 				}
 			}
@@ -311,7 +311,7 @@ void zeNewBalls::vitus_tilt()
 					if(!ftilt)
 					{	ftilt = 1;
 #ifndef SOUNDISOFF
-						ptAudiomix->sound_play(S_TECNOBAL);
+						audio->play_sound(S_TECNOBAL);
 #endif
 					}
 				}
@@ -602,7 +602,7 @@ void zeNewBalls::vitus_bump()
 			if(bumpX)
 			{	bumpX->balleTouch = 1;
 #ifndef SOUNDISOFF
-				ptAudiomix->sound_play(S_TOUCHRAK);
+				audio->play_sound(S_TOUCHRAK);
 #endif
 				balle->raket_ball = bumpX;
 				balle->tiltCompte = 0;
@@ -684,7 +684,7 @@ void zeNewBalls::vitusbump2()
 			if(bumpX)
 			{	bumpX->balleTouch = 1;
 #ifndef SOUNDISOFF
-				ptAudiomix->sound_play(S_TOUCHRAK);
+				audio->play_sound(S_TOUCHRAK);
 #endif
 				balle->raket_ball = bumpX;
 				balle->tiltCompte = 0;
@@ -734,7 +734,7 @@ void zeNewBalls::vitusrobot()
 					monPT = (Sint32*)((char *)monPT + j);
 					balle->directBall = *monPT;
 #ifndef SOUNDISOFF
-					ptAudiomix->sound_play(S_TOUCHRAK);
+					audio->play_sound(S_TOUCHRAK);
 #endif
 				}
 			}
@@ -787,7 +787,7 @@ void zeNewBalls::vitusEject()
 					table += j;
 					balle->directBall = *table;
 #ifndef SOUNDISOFF
-					ptAudiomix->sound_play (S_COINEJEC);
+					audio->play_sound (S_COINEJEC);
 #endif
 				}
 				else
@@ -806,7 +806,7 @@ void zeNewBalls::vitusEject()
 					balle->directBall = 64;
 					ptBarreScr->scoreAjout(10);
 #ifndef SOUNDISOFF
-					ptAudiomix->sound_play (S_COINASPI);
+					audio->play_sound (S_COINASPI);
 #endif
 				}
 				else
@@ -817,7 +817,7 @@ void zeNewBalls::vitusEject()
 						balle->directBall = 64;
 						ptBarreScr->scoreAjout(10);
 #ifndef SOUNDISOFF
-						ptAudiomix->sound_play (S_COINASPI);
+						audio->play_sound (S_COINASPI);
 #endif
 					}
 					else
@@ -828,7 +828,7 @@ void zeNewBalls::vitusEject()
 							balle->directBall = 64;
 							ptBarreScr->scoreAjout(10);
 #ifndef SOUNDISOFF
-							ptAudiomix->sound_play (S_COINASPI);
+							audio->play_sound (S_COINASPI);
 #endif
 						}
 						else
@@ -839,7 +839,7 @@ void zeNewBalls::vitusEject()
 								balle->directBall = 64;
 								ptBarreScr->scoreAjout(10);
 #ifndef SOUNDISOFF
-								ptAudiomix->sound_play (S_COINASPI);
+								audio->play_sound (S_COINASPI);
 #endif
 							}
 						}
@@ -910,7 +910,7 @@ void zeNewBalls::vitus_cote()
 				monPT = (Sint32 *)((char *)monPT + balle->directBall); 
 				balle->directBall = *monPT;
 #ifndef SOUNDISOFF
-				ptAudiomix->sound_play(S_BRICOTES);
+				audio->play_sound(S_BRICOTES);
 #endif
 			}
 		}
@@ -935,7 +935,7 @@ void zeNewBalls::vituscote2()
 			{	monPT = rb5;
 				balle->position_x = murGa;
 #ifndef SOUNDISOFF
-				ptAudiomix->sound_play(S_BRICOTES);
+				audio->play_sound(S_BRICOTES);
 #endif
 				balle->colli_wall = 4;
 			}
@@ -944,7 +944,7 @@ void zeNewBalls::vituscote2()
 				{	monPT = rb1;
 					balle->position_x = murDr;
 #ifndef SOUNDISOFF
-					ptAudiomix->sound_play(S_BRICOTES);
+					audio->play_sound(S_BRICOTES);
 #endif
 					balle->colli_wall = 2;
 				}
@@ -953,7 +953,7 @@ void zeNewBalls::vituscote2()
 					{	monPT = rb3;
 						balle->position_y = murHt;
 #ifndef SOUNDISOFF
-						ptAudiomix->sound_play(S_BRICOTES);
+						audio->play_sound(S_BRICOTES);
 #endif
 						balle->colli_wall = 3;
 					}
@@ -1054,14 +1054,14 @@ void zeNewBalls::vitusBrick()
 							else
 							{	x = 2;
 #ifndef SOUNDISOFF
-								ptAudiomix->sound_play(S_TOINDES2);
+								audio->play_sound(S_TOINDES2);
 #endif
 							}
 						}
 						else
 						{	x = 1;	//brick's really indestructible
 #ifndef SOUNDISOFF
-							ptAudiomix->sound_play(S_TOINDES1);
+							audio->play_sound(S_TOINDES1);
 #endif
 						}
 					}
@@ -1205,7 +1205,7 @@ void zeNewBalls::vitusAtoms()
 						if(k < x2 && k > x1)
 						{	ptBarreScr->scoreAjout(100);
 #ifndef SOUNDISOFF
-							ptAudiomix->sound_play(S_TO_ATOMS);
+							audio->play_sound(S_TO_ATOMS);
 #endif
 							k = (balle->ballPowerX + 1) * 4;
 							atome->atom_power -= k;
@@ -1252,7 +1252,7 @@ void zeNewBalls::vitusGuard()
 								if(y > grdy1)
 								{	x = ((hasard_val + i) & 0xF) << 2;
 #ifndef SOUNDISOFF
-									ptAudiomix->sound_play(S_GARDIENT);
+									audio->play_sound(S_GARDIENT);
 #endif
 									balle->directBall = x;
 									pGard->gard_touch = 5;
@@ -1438,7 +1438,7 @@ void zeNewBalls::time_2tilt()
 				{	if(!tilt)
 					{	gugusObjet->tetebaille();
 #ifndef SOUNDISOFF
-						ptAudiomix->sound_play(S_TILTALAR);
+						audio->play_sound(S_TILTALAR);
 #endif
 						tilt = 1;
 					}
@@ -1470,7 +1470,7 @@ void zeNewBalls::time2tilt2()
 				{	if(!tilt)
 					{	tilt = 1;
 #ifndef SOUNDISOFF
-						ptAudiomix->sound_play(S_TILTALAR);
+						audio->play_sound(S_TILTALAR);
 #endif
 					}
 					balle->tiltCompte++;

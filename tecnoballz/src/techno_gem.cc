@@ -148,7 +148,7 @@ Sint32 techno_gem::deplaceMoi()
 				{	if(collision1(raket))
 					{	flag_actif = 0;
 #ifndef SOUNDISOFF					
-						ptAudiomix->sound_play(S_MONNAIES);
+						audio->play_sound(S_MONNAIES);
 #endif
 						return typeof_gem;
 					}
@@ -166,7 +166,7 @@ Sint32 techno_gem::deplaceMoi()
 				{	if(collision1(raket))
 					{	flag_actif = 0;
 #ifndef SOUNDISOFF					
-						ptAudiomix->sound_play(S_MONNAIES);
+						audio->play_sound(S_MONNAIES);
 #endif
 						return typeof_gem;
 					}
@@ -184,7 +184,7 @@ Sint32 techno_gem::deplaceMoi()
 				{	if(collision1(raket))
 					{	flag_actif = 0;
 #ifndef SOUNDISOFF					
-						ptAudiomix->sound_play(S_MONNAIES);
+						audio->play_sound(S_MONNAIES);
 #endif
 						return typeof_gem;
 					}
@@ -202,7 +202,7 @@ Sint32 techno_gem::deplaceMoi()
 				{	if(collision1(raket))
 					{	flag_actif = 0;
 #ifndef SOUNDISOFF					
-						ptAudiomix->sound_play(S_MONNAIES);
+						audio->play_sound(S_MONNAIES);
 #endif
 						return typeof_gem;
 					}

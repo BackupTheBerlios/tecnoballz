@@ -4,7 +4,7 @@
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// id		: $Id: mentatCode.cc,v 1.16 2007/01/18 17:09:53 gurumeditation Exp $
+// id		: $Id: mentatCode.cc,v 1.17 2007/01/19 20:35:40 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -31,7 +31,7 @@
 #include "../include/gard_tecno.h"
 #include "../include/menu_tecno.h"
 #include "../include/GIF_bitMap.h"
-#include "../include/audiomixer.h"
+#include "../include/handler_audio.h"
 #include "../include/level_data.h"
 #include "../include/ressources.h"
 #include "../include/scoretable.h"
@@ -49,7 +49,7 @@ ressources*			mentatCode::pRessource = NULL;	//manage resources
 level_data*			mentatCode::ptLev_data = NULL;	//manage levels
 handler_memory*			mentatCode::memory = NULL;	//manage memory allocation  
 #ifndef SOUNDISOFF
-audiomixer*			mentatCode::ptAudiomix = NULL;	//manage sound      
+handler_audio*			mentatCode::audio = NULL;	//manage sound      
 #endif
 handler_display*			mentatCode::display = NULL;	//manage screen
 handler_keyboard*			mentatCode::keyboard = NULL;	//keyboard handle
@@ -108,8 +108,8 @@ Sint32 mentatCode::first_init(configfile* pConf)
 
 	
 #ifndef SOUNDISOFF		
-	ptAudiomix = new audiomixer();
-	num_erreur = ptAudiomix->retour_err();
+	audio = handler_audio::get_instance ();
+	num_erreur = audio->retour_err();
 	if(num_erreur) return (num_erreur);
 #endif	
 	if (is_verbose)
@@ -351,8 +351,8 @@ Sint32 mentatCode::desinstall(configfile* pConf)
 	delete display;
 #ifndef SOUNDISOFF
 	if(is_verbose)
-		printf("==8 audiomixer\n");
-	delete ptAudiomix;
+		printf("==8 handler_audio\n");
+	delete audio;
 #endif
 	delete pRessource;
 	if(is_verbose)

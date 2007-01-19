@@ -438,7 +438,7 @@ void lesBriques::lessbricks()
 			less_brick--;
 			barreObjet->brickMoins(1);
 #ifndef SOUNDISOFF
-			ptAudiomix->sound_play(S_TOUBRIK1);
+			audio->play_sound(S_TOUBRIK1);
 #endif
 		}
 	}
@@ -530,7 +530,7 @@ Sint32 lesBriques::brickRemap()
 			if(briPT->balle_posX < 0) 
 			{	barreObjet->scoreAjout(100);
 #ifndef SOUNDISOFF
-				ptAudiomix->sound_play(S_CASSEIND);
+				audio->play_sound(S_CASSEIND);
 #endif
 			}
 			else
@@ -538,7 +538,7 @@ Sint32 lesBriques::brickRemap()
 				barreObjet->brickMoins(1);
 				brickDestr++;
 #ifndef SOUNDISOFF
-				ptAudiomix->sound_play(S_TOUBRIK1);
+				audio->play_sound(S_TOUBRIK1);
 #endif
 				if(briPT->balle_posX != 512)
 				{	caps_objet->envoieFric(briPT);
@@ -557,7 +557,7 @@ Sint32 lesBriques::brickRemap()
 			dsplybrick(gfxad + briPT->brique_num, adres, megaT->brickcolor);
 			barreObjet->scoreAjout(10);
 #ifndef SOUNDISOFF
-		  	ptAudiomix->sound_play(S_TOUBRIK1);
+		  	audio->play_sound(S_TOUBRIK1);
 #endif
 			caps_objet->envoieFric(briPT);
     	}

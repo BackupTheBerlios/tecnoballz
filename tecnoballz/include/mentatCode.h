@@ -4,9 +4,9 @@
 // file		: "mentatCode.h"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.18 2007/01/18 17:09:53 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.19 2007/01/19 20:35:39 gurumeditation Exp $
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.18 2007/01/18 17:09:53 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.19 2007/01/19 20:35:39 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -67,7 +67,7 @@ class handler_memory;
 class handler_display;
 class handler_keyboard;
 #ifndef SOUNDISOFF
-class audiomixer;
+class handler_audio;
 #endif
 class list_sprites;
 class joueurData;
@@ -144,7 +144,7 @@ class mentatCode
 		static level_data*	ptLev_data;		//manage levels
 		static handler_memory*	memory;		//manage memory allocation   
 #ifndef SOUNDISOFF
-		static audiomixer*	ptAudiomix;		//manage sounds and musics
+		static handler_audio*	audio;		//manage sounds and musics
 #endif
 		static handler_display*	display;		//manage screen display
 		static handler_keyboard*	keyboard;		//manage keyboard and mouse events 

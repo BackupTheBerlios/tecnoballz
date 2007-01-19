@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.9 2007/01/18 17:09:53 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.10 2007/01/19 20:35:40 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -98,8 +98,8 @@ Sint32 shop_tecno::first_init()
 	Sint32 arean = joueurGere->getAreaNum();
 	Sint32 level = joueurGere->getLevelNu();
 #ifndef SOUNDISOFF
-	ptAudiomix->levelmusic (arean, level);
-	ptAudiomix->shop_music (arean);
+	audio->play_level_music (arean, level);
+	audio->play_shop_music (arean);
 #endif
 	sprites->reset();
 

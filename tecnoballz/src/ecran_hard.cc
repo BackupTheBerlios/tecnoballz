@@ -4,7 +4,7 @@
 // file		: "ecran_hard.cc"
 // created	: 2002-08-17
 // updates	: 2005-01-10
-// id		: $Id: ecran_hard.cc,v 1.9 2007/01/18 17:09:53 gurumeditation Exp $
+// id		: $Id: ecran_hard.cc,v 1.10 2007/01/19 20:35:40 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 //*****************************************************************************
 #include "../include/ecran_hard.h"
 #include "../include/handler_keyboard.h"
-#include "../include/audiomixer.h"
+#include "../include/handler_audio.h"
 #include "../include/ressources.h"
 
 char 	ecran_hard::nomfenetre[25] = "TecnoballZ by TLK Games\0";
@@ -316,7 +316,7 @@ void ecran_hard::waitVBLchr()
 	keyboard->read_events();
 	fullscreen();
 #ifndef SOUNDISOFF
-	ptAudiomix->execution1();
+	audio->execution1();
 #endif
 	gameFrame++;
 	Uint32 delay = 32-(int)(24.0 * gameSpeed);
@@ -377,7 +377,7 @@ void ecran_hard::waitVBLtec()
 	keyboard->read_events();
 	fullscreen();
 #ifndef SOUNDISOFF
-	ptAudiomix->execution1();
+	audio->execution1();
 #endif
 	return;
 }

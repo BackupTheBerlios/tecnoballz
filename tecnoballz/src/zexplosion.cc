@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //******************************************************************************
 #include "../include/zexplosion.h"
-#include "../include/audiomixer.h"
+#include "../include/handler_audio.h"
 
 //-----------------------------------------------------------------------------
 // create the object
@@ -85,7 +85,7 @@ void zexplosion::add_explos(Sint32 pos_x, Sint32 pos_y)
 		{	if(++vFrequency > 4)
 			{	vFrequency = 0;
 #ifndef SOUNDISOFF
-				ptAudiomix->sound_play(S_BIGEXPLO);
+				audio->play_sound(S_BIGEXPLO);
 #endif
 			}
 			ptbob->flag_actif = 1;

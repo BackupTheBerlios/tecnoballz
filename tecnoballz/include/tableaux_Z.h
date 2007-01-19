@@ -26,7 +26,7 @@
 class tableaux_Z;
 //-------------------------------------------------------------------------------
 #include "../include/handler_display.h"
-#include "../include/audiomixer.h"
+#include "../include/handler_audio.h"
 #include "../include/sprite_object.h"
 #include "../include/GIF_bitMap.h"
 #include "../include/list_sprites.h"

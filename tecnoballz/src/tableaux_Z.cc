@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.11 2007/01/18 17:09:53 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.12 2007/01/19 20:35:40 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -111,8 +111,8 @@ Sint32 tableaux_Z::first_init()
 	levelTecno = joueurGere->getLevelNu();
 	//levelTecno = 5; //test only
 #ifndef SOUNDISOFF
-	ptAudiomix->levelmusic (areaNumber, levelTecno);
-	ptAudiomix->startSound();
+	audio->play_level_music (areaNumber, levelTecno);
+	audio->startSound();
 #endif
 	
 	count_next = 0;
@@ -348,8 +348,8 @@ Sint32 tableaux_Z::zeMainLoop()
 	{	if(!isgameover)
 		{	
 #ifndef SOUNDISOFF
-			ptAudiomix->stop_sound();
-			ptAudiomix->stopModule();
+			audio->stop_sound();
+			audio->stopModule();
 #endif
 			theBumpers->bumpersOff();
 			briquesTab->clr_bricks();
@@ -447,7 +447,7 @@ Sint32 tableaux_Z::zeMainLoop()
 				if(count_next > 350)
 				{	endmu = 1;
 #ifndef SOUNDISOFF	
-					endmu = ptAudiomix->winn_isend();
+					endmu = audio->winn_isend();
 #endif
 				}
 				if(count_next > 20000000 ||
@@ -456,7 +456,7 @@ Sint32 tableaux_Z::zeMainLoop()
 					joueurGere = joueurData::nextplayer(joueurGere,
 						&end_return, 1);
 #ifndef SOUNDISOFF	
-					ptAudiomix->stopModule();
+					audio->stopModule();
 #endif
 				}
 				gereBalles->xDesactive();
@@ -467,11 +467,11 @@ Sint32 tableaux_Z::zeMainLoop()
 				tecno_fire::xDesactive();
 				gereBalles->xDesactive();
 #ifndef SOUNDISOFF	
-				ptAudiomix->winn_music();
+				audio->play_win_music();
 #endif
 				ptMiniMess->mesrequest(17);
 #ifndef SOUNDISOFF	
-				ptAudiomix->stop_sound();
+				audio->stop_sound();
 #endif
 				count_next = 1;
 			}
@@ -495,9 +495,9 @@ Sint32 tableaux_Z::zeMainLoop()
  	// control position music's module
 	//###################################################################
 #ifndef SOUNDISOFF	
- 	Uint32 phase = ptAudiomix->get_mphase();
+ 	Uint32 phase = audio->get_mphase();
 	if(phase == PHASE_LOST && 
-		phase != ptAudiomix->get_mphase())
+		phase != audio->get_mphase())
 	{	ptMiniMess->mesrequest(2);
 		theBumpers->free_balls();
 	}

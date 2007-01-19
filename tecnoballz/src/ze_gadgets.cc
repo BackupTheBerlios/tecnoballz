@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.8 2007/01/18 17:09:53 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.9 2007/01/19 20:35:40 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -379,7 +379,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	// bumper glue
 	case GAD_GLUE00:
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_TRANSFOR);
+		audio->play_sound(S_TRANSFOR);
 #endif
 		ptMiniMess->mesrequest(16);
 		raket->bumpGoGlue();
@@ -394,7 +394,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	// fire power 1
 	case GAD_FIRE01:
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_TRANSFOR);
+		audio->play_sound(S_TRANSFOR);
 #endif
 		ptMiniMess->mesrequest(4);
 		raket->bump_fire1();
@@ -403,7 +403,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	// fire power 2
 	case GAD_FIRE02:
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_TRANSFOR);
+		audio->play_sound(S_TRANSFOR);
 #endif
 		ptMiniMess->mesrequest(5);
 		raket->bump_fire2();
@@ -412,7 +412,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	// shrink bumper
 	case GAD_SIZE_M:
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_TRANSFOR);
+		audio->play_sound(S_TRANSFOR);
 #endif
 		ptMiniMess->mesrequest(18);
 		oBump->decremente();
@@ -421,7 +421,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	// expand bumper
 	case GAD_SIZE_P:
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_TRANSFOR);
+		audio->play_sound(S_TRANSFOR);
 #endif
 		ptMiniMess->mesrequest(19);
 		oBump->incremente();
@@ -430,7 +430,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	// lose a life
 	case GAD_LIFE_M:
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_ENLEVVIE);
+		audio->play_sound(S_ENLEVVIE);
 #endif
 		ptMiniMess->mesrequest(10);
 		//barre->lifesMoins(1);
@@ -440,7 +440,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	// extra life
 	case GAD_LIFE_P:
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_AJOUTVIE);
+		audio->play_sound(S_AJOUTVIE);
 #endif
 		ptMiniMess->mesrequest(11);
 		//barre->lifes_plus(1);
@@ -450,7 +450,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	// extra balls
 	case GAD_BALLE2:
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_GADGETGO);
+		audio->play_sound(S_GADGETGO);
 #endif
 		ptMiniMess->mesrequest(20);
 		oBall->run_2balls();
@@ -459,7 +459,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	// multi balls
 	case GAD_BALLE3:
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_GADGETGO);
+		audio->play_sound(S_GADGETGO);
 #endif
 		ptMiniMess->mesrequest(21);
 		oBall->run_3balls();
@@ -469,7 +469,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	case GAD_POWER1:
 		ptMiniMess->mesrequest(22);
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_GADGETGO);
+		audio->play_sound(S_GADGETGO);
 #endif
 		oBall->run_power1();
 		break;
@@ -478,7 +478,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	case GAD_POWER2:
 		ptMiniMess->mesrequest(23);
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_GADGETGO);
+		audio->play_sound(S_GADGETGO);
 #endif
 		oBall->run_power2();
 		break;
@@ -525,7 +525,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	case GAD_SIZE01:
 		ptMiniMess->mesrequest(29);
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_GADGETGO);
+		audio->play_sound(S_GADGETGO);
 #endif
 		oBall->run_size01();
 		break;
@@ -534,7 +534,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	case GAD_SIZE02:
 		ptMiniMess->mesrequest(30);
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_GADGETGO);
+		audio->play_sound(S_GADGETGO);
 #endif
 		oBall->run_size02();
 		break;
@@ -547,7 +547,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	case GAD_MEGA00:
 		ptMiniMess->mesrequest(31);
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_GADGETGO);
+		audio->play_sound(S_GADGETGO);
 #endif
 		oBump->maxi_bumps();
 		oBall->run_nballs();
@@ -577,7 +577,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	case GAD_PRICE1:
 		ptMiniMess->mesrequest(15);
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_GADGETGO);
+		audio->play_sound(S_GADGETGO);
 #endif
 		joueurGere->set_Bprice(1);
 		break;
@@ -586,7 +586,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	case GAD_WALL01:
 		ptMiniMess->mesrequest(32);
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_GADGETGO);
+		audio->play_sound(S_GADGETGO);
 #endif
 		ptBob_wall->enable();
 		ptBob_wall->thecounter += 500; 
@@ -597,7 +597,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 	case GAD_ROBOT1:
 		ptMiniMess->mesrequest(33);
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_GADGETGO);
+		audio->play_sound(S_GADGETGO);
 #endif
 		oBump->activrobot();
 		ptBob_wall->disable();
@@ -609,7 +609,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 		oBall->runcontrol();
 		ptMiniMess->mesrequest(34);
 #ifndef SOUNDISOFF
-		ptAudiomix->sound_play(S_GADGETGO);
+		audio->play_sound(S_GADGETGO);
 #endif
 		break;
 
@@ -638,7 +638,7 @@ void ze_gadgets::gadgetrun2(tecno_bump *raket, Sint32 nuGad)
 		// extra life
 		case GAD_LIFE_P:
 #ifndef SOUNDISOFF
-			ptAudiomix->sound_play(S_AJOUTVIE);
+			audio->play_sound(S_AJOUTVIE);
 #endif
 			joueurGere->lifes_plus(1);
 			break;
@@ -646,7 +646,7 @@ void ze_gadgets::gadgetrun2(tecno_bump *raket, Sint32 nuGad)
 		// multi balls
 		case GAD_BALLE3:
 #ifndef SOUNDISOFF
-			ptAudiomix->sound_play(S_GADGETGO);
+			audio->play_sound(S_GADGETGO);
 #endif
 			oBall->run_3balls();
 			break;
@@ -654,7 +654,7 @@ void ze_gadgets::gadgetrun2(tecno_bump *raket, Sint32 nuGad)
 		// power ball 1 (ball size 2)
 		case GAD_POWER1:
 #ifndef SOUNDISOFF
-			ptAudiomix->sound_play(S_GADGETGO);
+			audio->play_sound(S_GADGETGO);
 #endif
 			oBall->run_size01();
 			break;
@@ -662,7 +662,7 @@ void ze_gadgets::gadgetrun2(tecno_bump *raket, Sint32 nuGad)
 		// power ball 2 (ball size 3)
 		case GAD_POWER2:
 #ifndef SOUNDISOFF
-			ptAudiomix->sound_play(S_GADGETGO);
+			audio->play_sound(S_GADGETGO);
 #endif
 			oBall->run_size02();
 			break;

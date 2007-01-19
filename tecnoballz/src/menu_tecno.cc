@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.9 2007/01/18 17:09:53 gurumeditation Exp $
+// id		: $Id: menu_tecno.cc,v 1.10 2007/01/19 20:35:40 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -63,7 +63,7 @@ Sint32 menu_tecno::first_init()
 			"menu_tecno::first_init() : [START]\n");	
 	sprites->reset();
 #ifndef SOUNDISOFF
-	ptAudiomix->playModule(MUSICINTRO);
+	audio->play_music(MUSICINTRO);
 #endif
 	
 	error_init(pRessource->loadSprite());

@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2006-10-02
-// id		: $Id: configfile.cc,v 1.14 2007/01/17 19:04:26 gurumeditation Exp $
+// id		: $Id: configfile.cc,v 1.15 2007/01/19 20:35:40 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 //******************************************************************************
 #include "../include/configfile.h"
 #include "../include/handler_display.h"
-#include "../include/audiomixer.h"
+#include "../include/handler_audio.h"
 #include "../include/joueurData.h"
 
 #include <stdio.h>
@@ -64,7 +64,7 @@
 void	configfile::resetvalue()
 {
 #ifndef SOUNDISOFF
-	audiomixer::audioactif = 1;
+	handler_audio::is_audio_enable = 1;
 #endif
 	resolution = 2;
 	bob_ground = true;
@@ -87,12 +87,12 @@ void configfile::configinfo()
 {
 	bool audio;
 #ifndef SOUNDISOFF
-	audio = audiomixer::audioactif;
+	audio = handler_audio::is_audio_enable;
 #else
 	audio = false;
 #endif
 	fprintf(stdout, "  <config info>\n"
-			"- optionfull : %i\n- audioactif: %i\n- resolution:%i\n"
+			"- optionfull : %i\n- is_audio_enable: %i\n- resolution:%i\n"
 		"- is_verbose: %i\n hardChoice : %i\n", 
 		handler_display::optionfull, audio, resolution,
 		is_verbose, hardChoice);
@@ -167,8 +167,8 @@ void configfile::loadconfig()
 	if (!reader.read_bool("fullscreen", &handler_display::optionfull))
 		handler_display::optionfull = -1;
 #ifndef SOUNDISOFF
-	if (!reader.read_bool("sound", &audiomixer::audioactif))
-		audiomixer::audioactif = 1;
+	if (!reader.read_bool("sound", &handler_audio::is_audio_enable))
+		handler_audio::is_audio_enable = 1;
 #endif
 	if (!reader.read_bool("verbose", &is_verbose))
 		is_verbose = 0;
@@ -239,7 +239,7 @@ void configfile::saveconfig()
 {
 	bool audio;
 #ifndef SOUNDISOFF
-	audio = audiomixer::audioactif;
+	audio = handler_audio::is_audio_enable;
 #else
 	audio = false;
 #endif
@@ -359,11 +359,11 @@ Sint32 configfile::scanZeArgs(Sint32 nbArg, char **ptArg)
 		}
 #ifndef SOUNDISOFF		
 		if(!strcmp(ptArg[_iIndex], "--sound"))
-		{	audiomixer::audioactif = true; 
+		{	handler_audio::is_audio_enable = true; 
 			continue;
 		}
 		if(!strcmp(ptArg[_iIndex], "--nosound"))
-		{	audiomixer::audioactif = false; 
+		{	handler_audio::is_audio_enable = false; 
 			continue;
 		}
 #endif

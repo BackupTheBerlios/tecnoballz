@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.11 2007/01/18 20:04:46 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.12 2007/01/19 20:35:40 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 //-----------------------------------------------------------------------------
 #include "../include/mentatCode.h"
 #include "../include/handler_display.h"
-#include "../include/audiomixer.h"
+#include "../include/handler_audio.h"
 #include "../include/configfile.h"
 //..............................................................................
 configfile oConfigure;
@@ -117,7 +117,7 @@ scrolledit.cc supervisor_scrolleditor
 menu_tecno.cc supervisor_menu
 
 
-audiomixer.cc        => audio_handler
+handler_audio.cc        => audio_handler
 handler_keyboard.cc  => keyboard_handler
 handler_display.cc   => display_handler
 handler_memory.cc    => memory_handler

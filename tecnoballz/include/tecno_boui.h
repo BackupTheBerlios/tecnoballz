@@ -26,7 +26,7 @@
 class tecno_boui ;
 //.......................................................................
 #include "../include/sprite_object.h"
-#include "../include/audiomixer.h"
+#include "../include/handler_audio.h"
 #include "../include/zeCapsules.h"
 #include "../include/ze_gadgets.h"
 #include "../include/zeGemstone.h"
