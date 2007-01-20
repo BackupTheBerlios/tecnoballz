@@ -117,7 +117,7 @@ void tecno_gads::nouveauGad(brickClear *briPT, Sint32 nuGad)
 //-----------------------------------------------------------------------------
 // bricks levels: drop new gadget from a BouiBoui
 //-----------------------------------------------------------------------------
-void tecno_gads::nouveauGad(technoBall *balle, Sint32 nuGad)
+void tecno_gads::nouveauGad(sprite_ball *balle, Sint32 nuGad)
 {
 	if(nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
 		set_method(sprite_object::CYCLE_PTAB);
@@ -181,7 +181,7 @@ void tecno_gads::nouveauGad(tecno_fire *pfire, Sint32 nuGad)
 //-----------------------------------------------------------------------------
 // guards levels: drop new gadget gadget from a guard
 //-----------------------------------------------------------------------------
-void tecno_gads::new_gadget(technoBall *balle, Sint32 nuGad)
+void tecno_gads::new_gadget(sprite_ball *balle, Sint32 nuGad)
 {
 	if(nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
 		set_method(sprite_object::CYCLE_PTAB);

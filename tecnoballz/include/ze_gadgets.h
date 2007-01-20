@@ -80,9 +80,9 @@ class ze_gadgets:public objet_gere < tecno_gads >
 								zeNewBalls* pBall, barreScore* pScor, sprite_object*,
 								ze_magneye* ptEye);
 		void				envoieGads(brickClear *briPT);
-		void				send_malus(technoBall *);
+		void				send_malus(sprite_ball *);
 		void				send_malus(tecno_fire *);	
-		void				envoieGads(technoBall *pball);
+		void				envoieGads(sprite_ball *pball);
 		Sint32				gadgetShop();
 		void				gadgetShop(Sint32 nuGad);
 		void				gadgetShop(joueurData * gamer);

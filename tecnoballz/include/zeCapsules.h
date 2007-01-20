@@ -34,7 +34,7 @@ class zeCapsules;
 #include "../include/barreScore.h"
 #include "../include/tableaux_Z.h"
 #include "../include/printmoney.h"
-#include "../include/technoBall.h"
+#include "../include/sprite_ball.h"
 //...............................................................................
 class zeCapsules:public objet_gere < tecno_caps >
 {
@@ -51,9 +51,9 @@ class zeCapsules:public objet_gere < tecno_caps >
   							printmoney *money);
 		void			initialise(Sint32 frequ, printmoney *money);
 		void			envoieFric(brickClear * briPT);
-		void			send_money(technoBall *pball);
+		void			send_money(sprite_ball *pball);
 		void			send_money(tecno_fire *pfire);
-		void			envoieFric(technoBall *pball);
+		void			envoieFric(sprite_ball *pball);
 		void			bouge_fric();
 		void			bougefric2();
 };

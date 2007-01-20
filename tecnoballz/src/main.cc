@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.12 2007/01/19 20:35:40 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.13 2007/01/20 16:16:06 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -64,78 +64,77 @@ int main(Sint32 nbArg, char **ptArg)
 /*
 
 main.cc
-mentatCode.cc  => base_global
-list_sprites.cc
-runGestion.cc
-configfile.cc
-lispreader.cc
-GFX_bitmap.cc
-GIF_bitMap.cc
+mentatCode.cc    => tecnoballz 
+list_sprites.cc  => 
+runGestion.cc    => supervisor.cc
+configfile.cc    => 
+lispreader.cc    =>
+GFX_bitmap.cc    => bitmap_base 
+GIF_bitMap.cc    => bitmap_format
  
 sprite_object  => sprite_object
 
-giga_blitz.cc  => sprite_gigablitz
-mousePoint.cc  => sprite_mouse_pointer
-technoBall     => sprite_ball
-techno_eye.cc  => sprite_eye
-techno_gem.cc  => sprite_gem
-tecno_boui.cc  => sprite_ship
-tecno_bump.cc  => sprite_pad
-tecno_caps.cc  => sprite_money
-tecnoDefil.cc  => sprite_fonte_menu
-tecno_fire.cc  => sprite_fire
-tecno_gads.cc  => sprite_capsules
-tecno_gard.cc  => sprite_guardian
-tecno_miss.cc  => sprite_bullet
-tecno_text.cc  => sprite_fonte_game
+giga_blitz.cc   => sprite_gigablitz
+mousePoint.cc   => sprite_mouse_pointer
+sprite_ball      => sprite_ball
+techno_eye.cc   => sprite_eye
+techno_gem.cc   => sprite_gem
+tecno_boui.cc   => sprite_ship
+tecno_bump.cc   => sprite_paddle
+tecno_caps.cc   => sprite_money
+tecnoDefil.cc   => sprite_fonte_menu
+tecno_fire.cc   => sprite_fire
+tecno_gads.cc   => sprite_capsules
+tecno_gard.cc   => sprite_guardian
+tecno_miss.cc   => sprite_bullet
+tecno_text.cc   => sprite_fonte_game
  
 ballDirect.cc   => controller_balls
 lesBriques.cc   => controller_bricks
-printmoney.cc   => controller_money_indicator
+printmoney.cc   => controller_indicators
 zeBouiBoui.cc   => controller_ships
 zeCapsules.cc   => controller_moneys
 zeCongBall.cc   => controller_spheres
-zeDefilTxt.cc   => controller_fontes
+zeDefilTxt.cc   => controller_scroll_fontes
 zeFireBump.cc   => controller_fires
-ze_gadgets.cc   => controller_
-zeGameOver.cc   =>
-zeGemstone.cc   => controller_
-zeGigaBlit.cc
-zeguardian.cc
-ze_magneye.cc
-zeMiniMess.cc
-zeMissiles.cc
-zeMoveText.cc
-zeNewBalls.cc
-zeRaquette.cc
-zexplosion.cc
+ze_gadgets.cc   => controller_capsules
+zeGameOver.cc   => controller_game_over
+zeGemstone.cc   => controller_gems
+zeGigaBlit.cc   => controller_gigablitz
+zeguardian.cc   => controller_guardians
+ze_magneye.cc   => controller_magnetic_eyes
+zeMissiles.cc   => controller_bullets
+zeMoveText.cc   => controller_level_fontes
+zeNewBalls.cc   => controller_balls
+zeRaquette.cc   => controller_paddles
+zexplosion.cc   => controller_explosions
 
-tableaux_Z.cc supervisor_bricks_level
-gard_tecno.cc supervisor_guards_level
-shop_tecno.cc supervisor_shop
-scrolledit.cc supervisor_scrolleditor 
-menu_tecno.cc supervisor_menu
+tableaux_Z.cc   => supervisor_bricks_level
+gard_tecno.cc   => supervisor_guards_level
+shop_tecno.cc   => supervisor_shop
+scrolledit.cc   => supervisor_scrolleditor 
+menu_tecno.cc   => supervisor_main_menu
 
+audiomixer.cc   => handler_audio.cc 
+clavierMac.cc   => handler_keyboard.cc
+ecran_hard.cc   => handler_display.cc 
+RAM_killer.cc   => handler_memory.cc
+ressources.cc   => handler_resources.cc 
+scoretable.cc   => handler_score_table
+joueurData.cc   => handler_players
+level_data.cc   => handler_levels 
+print_text.cc   => handler_print_text 
 
-handler_audio.cc        => audio_handler
-handler_keyboard.cc  => keyboard_handler
-handler_display.cc   => display_handler
-handler_memory.cc    => memory_handler
-
-barreScore.cc
-briqueCote.cc
-ejectBalls.cc
-escapeMenu.cc
-fond_ecran.cc
-head_anima.cc
-joueurData.cc
-lastScroll.cc
-level_data.cc
-print_menu.cc
-print_text.cc
-ressources.cc
-score_over.cc
-scoretable.cc
+zeMiniMess.cc   => item_small_messages 
+barreScore.cc   => item_score_panel
+briqueCote.cc   => items_sides_bricks
+ejectBalls.cc   => items_balls_ejectors
+escapeMenu.cc   => item_popup_menu 
+fond_ecran.cc   => item_background
+head_anima.cc   => item_head_anim
+lastScroll.cc   => item_vertical_scroll
+print_menu.cc   => item_menu_text
+score_over.cc   => item_score_table
 
 
 */

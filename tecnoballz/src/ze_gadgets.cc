@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.9 2007/01/19 20:35:40 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.10 2007/01/20 16:16:06 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -172,7 +172,7 @@ void ze_gadgets::envoieGads(brickClear * briPT)
 //-------------------------------------------------------------------------------
 // bricks levels: send a malus (from BouiBoui)
 //-------------------------------------------------------------------------------
-void ze_gadgets::send_malus(technoBall *pball)
+void ze_gadgets::send_malus(sprite_ball *pball)
 {
 	for(Sint32 i = 0; i < objetTotal; i++)
 	{	tecno_gads *gadg = objetListe[i];
@@ -204,7 +204,7 @@ void ze_gadgets::send_malus(tecno_fire *pfire)
 //-------------------------------------------------------------------------------
 // guards level : test if send a gadget (malus or bonus)
 //-------------------------------------------------------------------------------
-void ze_gadgets::envoieGads(technoBall *pball)
+void ze_gadgets::envoieGads(sprite_ball *pball)
 {
 	malus_step++;
 	if(malus_step <= malus_frek) return;

@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.9 2007/01/19 20:35:40 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.10 2007/01/20 16:16:06 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -434,7 +434,7 @@ void gard_tecno::run_scroll()
 		return;
 	} 
 	tecno_miss *weapo = ptMissiles->getWeapOne();
-	technoBall *balle = ptNewBalls->first_ball();
+	sprite_ball *balle = ptNewBalls->first_ball();
 	scrolSpeed = ptguardian->run_scroll(scrollType, scrolSpeed, balle, weapo);
 }
 

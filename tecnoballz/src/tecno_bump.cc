@@ -37,7 +37,7 @@ tecno_bump::tecno_bump(zeFireBump * fBump)
 	bump_actif = 0;
 	balleTouch = 0;
 	bumpNumero = 0;
-	balleColle = (technoBall *)NULL;
+	balleColle = (sprite_ball *)NULL;
 	bumperTirs = fBump;
 	invincible = 0;
 	flickerval = 0;
@@ -214,9 +214,9 @@ void tecno_bump::lacheBalle()
 {
 	if(bumperGlue > 1)				//is the ball glued on bumper?
 		bumperGlue = 1;				//bumper's free 
-	technoBall *balle = balleColle;
+	sprite_ball *balle = balleColle;
 	if(balle)
-	{	balleColle = (technoBall *)NULL;
+	{	balleColle = (sprite_ball *)NULL;
 		balle->glueLibere();
 	}
 }
@@ -224,9 +224,9 @@ void tecno_bump::lacheBalle()
 //------------------------------------------------------------------------------
 // bricks levels: glue a ball to the bumper
 //------------------------------------------------------------------------------
-void tecno_bump::attachBall(technoBall * xBall)
+void tecno_bump::attachBall(sprite_ball * xBall)
 {
-	technoBall *balle = balleColle;
+	sprite_ball *balle = balleColle;
 	if(balle)
 		balle->glueLibere();
 	balleColle = xBall;

@@ -240,7 +240,7 @@ void tecno_boui::explosion1(tecno_fire *pFire)
 //-----------------------------------------------------------------------------
 // explosion of a BouiBoui by a ball and send gem, money or malus
 //-----------------------------------------------------------------------------
-void tecno_boui::explosion1(technoBall *pBall)
+void tecno_boui::explosion1(sprite_ball *pBall)
 {
 	if(atom_actif > 0)
 		return;

@@ -64,7 +64,7 @@ void techno_gem::littleInit()
 //-----------------------------------------------------------------------------
 // initialize a new gem
 //-----------------------------------------------------------------------------
-Sint32 techno_gem::disponible(technoBall *pball)
+Sint32 techno_gem::disponible(sprite_ball *pball)
 {
 	if(flag_actif)
 		return 0;

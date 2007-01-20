@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.8 2007/01/19 20:35:40 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.9 2007/01/20 16:16:06 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -572,11 +572,11 @@ void zeRaquette::move_robot()
 { 
 	if(tec_robot0->bump_actif)
 	{	Sint32 t = ptNewBalls->totalObjet();
-		technoBall **aList = ptNewBalls->listeObjet();
+		sprite_ball **aList = ptNewBalls->listeObjet();
 		Sint32 pos_y = 0 ;
-		technoBall *balle = 0x0;
+		sprite_ball *balle = 0x0;
 		for(Sint32 i = 0; i < t; i++)
-		{	technoBall *b = *(aList++);
+		{	sprite_ball *b = *(aList++);
 			if(b->flag_actif)
 			{	if(b->directBall >= 36 && b->directBall <= 60)
 				{	if(b->position_y > pos_y)

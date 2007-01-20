@@ -26,7 +26,7 @@
 class tecno_bump;
 //...............................................................................
 #include "../include/sprite_object.h"
-#include "../include/technoBall.h"
+#include "../include/sprite_ball.h"
 #include "../include/zeFireBump.h"
 #include "../include/GIF_bitMap.h"
 #include "../include/tecno_miss.h"
@@ -61,7 +61,7 @@ class tecno_bump:public sprite_object
 
 		Sint32*				direct_tab;	// table direction si la balle collee
 
-		technoBall*			balleColle;	// ptr  : l'objet balle collee
+		sprite_ball*			balleColle;	// ptr  : l'objet balle collee
 		Sint32				balleTouch;	// flag : balle touche raquette
 		Sint32				invincible;	// > 0 bumper is invincible (guards phase)
 		Sint32				flickerval;	// flag flicker
@@ -97,7 +97,7 @@ class tecno_bump:public sprite_object
 		void				bump_fire1();
 		void				bump_fire2();
 		void				lacheBalle();
-		void				attachBall(technoBall * xBall);
+		void				attachBall(sprite_ball * xBall);
 		void				directBall();
 		Sint32				rakLargeur();
 		Sint32				getInvncbl();

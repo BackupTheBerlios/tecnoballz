@@ -86,7 +86,7 @@ Sint32 tecno_caps::disponible(brickClear *briPT)
 //-----------------------------------------------------------------------------
 // initialize a new capsule of money from a Bouiboui or Gards
 //-----------------------------------------------------------------------------
-Sint32 tecno_caps::disponible(technoBall *pball)
+Sint32 tecno_caps::disponible(sprite_ball *pball)
 {
 	if(flag_actif)
 		return 0;

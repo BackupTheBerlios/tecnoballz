@@ -22,7 +22,7 @@
 //
 //******************************************************************************
 #include "../include/ballDirect.h"
-#include "../include/technoBall.h"
+#include "../include/sprite_ball.h"
 
 //-----------------------------------------------------------------------------
 // create the object
@@ -73,7 +73,7 @@ Sint32 ballDirect::initialize(zeRaquette* pBump, Uint32 nBump)
 void ballDirect::execution1()
 {
 	for(Sint32 i = 0; i < numBumpers; i++)
-	{	technoBall* balle = listBumper[i]->balleColle;
+	{	sprite_ball* balle = listBumper[i]->balleColle;
 		if(balle && balle->flag_actif)
 		{	objetListe[i]->aspireBOB2(balle);
 			objetListe[i]->enable();

@@ -26,7 +26,7 @@
 class techno_eye ;
 //.......................................................................
 #include "../include/sprite_object.h"
-#include "../include/technoBall.h"
+#include "../include/sprite_ball.h"
 #include "../include/lesBriques.h"
 #include "../include/zeNewBalls.h"
 #include "../include/ze_magneye.h"

@@ -48,8 +48,8 @@ SOURCES_MAIN = \
 	scrolledit.cc \
 	shop_tecno.cc \
 	sprite_object.cc \
+	sprite_ball.cc \
 	tableaux_Z.cc \
-	technoBall.cc \
 	techno_eye.cc \
 	techno_gem.cc \
 	tecno_boui.cc \

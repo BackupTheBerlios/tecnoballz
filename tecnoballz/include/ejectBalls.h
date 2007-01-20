@@ -27,7 +27,7 @@ class ejectBalls;
 //...............................................................................
 #include "../include/sprite_object.h"
 #include "../include/mentatCode.h"
-#include "../include/technoBall.h"
+#include "../include/sprite_ball.h"
 //...............................................................................
 class ejectBalls:public virtual mentatCode
 {

@@ -25,7 +25,7 @@
 //...............................................................................
 class zeNewBalls;
 //...............................................................................
-#include "../include/technoBall.h"
+#include "../include/sprite_ball.h"
 #include "../include/objet_gere.h"
 #include "../include/tecno_bump.h"
 #include "../include/ejectBalls.h"
@@ -43,10 +43,10 @@ class zeNewBalls;
 #include "../include/techno_eye.h"
 
 //...............................................................................
-class zeNewBalls:public objet_gere < technoBall >
+class zeNewBalls:public objet_gere < sprite_ball >
 {
 	friend class ejectBalls;
- 	friend class technoBall;
+ 	friend class sprite_ball;
 
 	private:
 		Sint32			num_erreur;
@@ -102,7 +102,7 @@ class zeNewBalls:public objet_gere < technoBall >
 							Sint32 speed, Sint32 tiltC, Sint32 table);
 		void			vitusBalle();
 		void			vitusBall2();
-		technoBall*		first_ball();
+		sprite_ball*		first_ball();
 
 	private:
 		void			vitus_sort();

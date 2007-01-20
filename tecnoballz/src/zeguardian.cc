@@ -232,7 +232,7 @@ void zeguardian::killguards(Sint32 numGa)
 //-------------------------------------------------------------------------------
 // handle background scrolling (direction and speed)
 //-------------------------------------------------------------------------------
-Sint32 zeguardian::run_scroll(Uint32 ntype, Sint32 speed, technoBall *balle,
+Sint32 zeguardian::run_scroll(Uint32 ntype, Sint32 speed, sprite_ball *balle,
 	tecno_miss *weapo)
 {
 	tecno_gard *pGua1, *pGua2;

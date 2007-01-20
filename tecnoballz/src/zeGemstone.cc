@@ -64,7 +64,7 @@ Sint32	zeGemstone::initialise(joueurData* pjda, barreScore *score, printmoney *m
 //-----------------------------------------------------------------------------
 // bricks levels:  send a gem
 //-----------------------------------------------------------------------------
-void zeGemstone::sendNewGem(technoBall *pball)
+void zeGemstone::sendNewGem(sprite_ball *pball)
 {
 	for(Sint32 i = 0; i < objetTotal; i++)
 	{	techno_gem *ptGem = objetListe[i];

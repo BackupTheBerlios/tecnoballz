@@ -30,7 +30,7 @@ class tecno_caps;
 #include "../include/barreScore.h"
 #include "../include/handler_display.h"
 #include "../include/lesBriques.h"
-#include "../include/technoBall.h"
+#include "../include/sprite_ball.h"
 #include "../include/tecno_fire.h"
 //...............................................................................
 class tecno_caps:public sprite_object
@@ -49,7 +49,7 @@ class tecno_caps:public sprite_object
 						~tecno_caps();
 		void			littleInit();
 		Sint32			disponible(brickClear *briPT);
-		Sint32			disponible(technoBall *pball);
+		Sint32			disponible(sprite_ball *pball);
 		Sint32			disponible(tecno_fire *pfire);
 	
 		void			init_money(Sint32 pos_x, Sint32 pos_y, 

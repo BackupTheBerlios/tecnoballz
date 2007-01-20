@@ -73,7 +73,7 @@ class zeguardian:public objet_gere < tecno_gard >
 		void 				killguards(Sint32 numGa = 0);
 		Sint32				next_level();
 		Sint32				run_scroll(Uint32, Sint32,
-										technoBall*, tecno_miss *);
+										sprite_ball*, tecno_miss *);
 	private:
 		Sint32				scrollTemp;		//use for scroll background
 		Sint32				offset_ptr;

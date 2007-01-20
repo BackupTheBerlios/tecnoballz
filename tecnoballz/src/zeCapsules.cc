@@ -77,7 +77,7 @@ void zeCapsules::envoieFric(brickClear *briPT)
 //-----------------------------------------------------------------------------
 // bricks levels: send a capsule of money from BouiBoui
 //-----------------------------------------------------------------------------
-void zeCapsules::send_money(technoBall *pball)
+void zeCapsules::send_money(sprite_ball *pball)
 {
 	for(Sint32 i = 0; i < objetTotal; i++)
 	{	tecno_caps *capsu = objetListe[i];
@@ -131,7 +131,7 @@ void zeCapsules::initialise(Sint32 frequ, printmoney *money)
 //-----------------------------------------------------------------------------
 // guards levels: send a capsule of money from guard
 //-----------------------------------------------------------------------------
-void zeCapsules::envoieFric(technoBall *pball)
+void zeCapsules::envoieFric(sprite_ball *pball)
 {
 	zeCompteur++;
 	if(zeCompteur > frequenceX)

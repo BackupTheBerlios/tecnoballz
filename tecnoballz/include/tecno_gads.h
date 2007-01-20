@@ -106,9 +106,9 @@ class tecno_gads:public sprite_object
 		void				littleInit();
 		void				new_gadget(Sint32 nuGad);
 		void				nouveauGad(brickClear *briPT, Sint32 nuGad);
-		void				nouveauGad(technoBall *balle, Sint32 nuGad);
+		void				nouveauGad(sprite_ball *balle, Sint32 nuGad);
 		void				nouveauGad(tecno_fire *pfire, Sint32 nuGad);
-		void				new_gadget(technoBall *balle, Sint32 nuGad);
+		void				new_gadget(sprite_ball *balle, Sint32 nuGad);
 		void				nouveauGad(Sint32 nuGad);
 		void				copiegadet(tecno_gads *gadgt);
 		Sint32				get_gadget();

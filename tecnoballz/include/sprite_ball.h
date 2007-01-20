@@ -1,7 +1,7 @@
 //*****************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "technoBall.h"
+// file		: "sprite_ball.h"
 // created		: ?
 // updates		: 2004-10-10
 // fonction	: handle ball of game
@@ -23,7 +23,7 @@
 #ifndef __TECHNOBALL__
 #define __TECHNOBALL__
 //...............................................................................
-class technoBall;
+class sprite_ball;
 //...............................................................................
 #include "../include/sprite_object.h"
 //-------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ typedef struct
 #include "../include/ejectBalls.h"
 
 //...............................................................................
-class technoBall:public sprite_object
+class sprite_ball:public sprite_object
 {
 	friend class zeNewBalls;
 	friend class ballDirect;
@@ -113,8 +113,8 @@ class technoBall:public sprite_object
 		static const Sint32	tilt_table[16][16];
 
 	public:
-							technoBall();
-							~technoBall();
+							sprite_ball();
+							~sprite_ball();
 		void				littleInit(Sint32 start, Sint32 speed,
 										tecno_bump *raket, Sint16 *table,
 										Sint32 bwght);
@@ -123,7 +123,7 @@ class technoBall:public sprite_object
 		void				startBalle(Sint32 large);
 		void				razingBall(tecno_bump *raket);
 		void				razingBal0(tecno_bump *raket);
-		void				duplicate3(technoBall *balle, Sint32 angle);
+		void				duplicate3(sprite_ball *balle, Sint32 angle);
 		static short*		donneSpeed(Sint32 speed);
 		tecno_bump*			donne_bump();
 		void				ballPower1();

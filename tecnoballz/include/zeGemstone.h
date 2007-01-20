@@ -49,7 +49,7 @@ class zeGemstone:public objet_gere < techno_gem >
 							~zeGemstone();
 		Sint32				initialise(joueurData*, barreScore*, 
 								printmoney*, zeRaquette*);
-		void				sendNewGem(technoBall *pball);
+		void				sendNewGem(sprite_ball *pball);
 		void				sendNewGem(tecno_fire *pball);
 		void				moving_gem();
 };
