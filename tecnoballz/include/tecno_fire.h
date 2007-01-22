@@ -67,7 +67,7 @@ class tecno_fire:public sprite_object
 		static void		anim_fires();
 		static void		collision1();
 		static void		collision2();
-		static void		xDesactive();
+		static void		disable_sprites();
 
 };
 #endif

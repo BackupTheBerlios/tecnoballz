@@ -292,7 +292,7 @@ void tecno_fire::collision2()
 //-----------------------------------------------------------------------------
 // static method: collision of all bumper's fire with the BouiBouis
 //-----------------------------------------------------------------------------
-void tecno_fire::xDesactive()
+void tecno_fire::disable_sprites()
 {
 	tecno_fire **liste = list_fires;
 	for(Sint32 i = 0; i < total_fire; i++)

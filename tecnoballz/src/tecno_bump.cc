@@ -122,7 +122,7 @@ void tecno_bump::bumperHgfx(Sint32 large)
 	if(bumperGlue)
 		i += 14;
 	change_GFX(i);
-	bumperTirs->xDesactive();
+	bumperTirs->disable_sprites();
 }
 
 //------------------------------------------------------------------------------
@@ -139,7 +139,7 @@ void tecno_bump::bumperVgfx(Sint32 large)
 	if(bumperGlue)
 		i += 14;
 	change_GFX(i);
-	bumperTirs->xDesactive();
+	bumperTirs->disable_sprites();
 }
 
 //------------------------------------------------------------------------------

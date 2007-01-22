@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.11 2007/01/22 19:35:50 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.12 2007/01/22 21:07:18 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -225,7 +225,7 @@ void ze_gadgets::envoieGads(sprite_ball *pball)
 //-------------------------------------------------------------------------------
 Sint32 ze_gadgets::gadgetShop()
 {
-	init_total(NB_OPTIONS + 2);
+	set_max_of_sprites(NB_OPTIONS + 2);
 	error_init(init_liste());
 	if(erreur_num)
 		return (erreur_num);

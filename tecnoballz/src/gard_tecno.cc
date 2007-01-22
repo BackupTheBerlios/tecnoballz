@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.10 2007/01/20 16:16:06 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.11 2007/01/22 21:07:18 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -270,13 +270,13 @@ Sint32 gard_tecno::zeMainLoop()
 			audio->stop_sound();
 #endif
 			ptRaquette->bumpersOff();
-			pt_gadgets->xDesactive();
-			ptCapsules->xDesactive();
-			ptguardian->xDesactive();
-			pExplosion->xDesactive();
-			ptGigaBlit->xDesactive();
-			ptNewBalls->xDesactive();
-			ptMissiles->xDesactive();
+			pt_gadgets->disable_sprites();
+			ptCapsules->disable_sprites();
+			ptguardian->disable_sprites();
+			pExplosion->disable_sprites();
+			ptGigaBlit->disable_sprites();
+			ptNewBalls->disable_sprites();
+			ptMissiles->disable_sprites();
 			if(tecnwinner)
 			{	defilement->swapScroll(2, ressources::RESEDMAP02);
 				ptCongBall->initialize(); //congra
@@ -360,9 +360,9 @@ Sint32 gard_tecno::zeMainLoop()
 	if(ptguardian->next_level() && !tecnwinner)
 	{	if(count_next > 0)
  		{	count_next++;
-			ptGigaBlit->xDesactive();
-			ptNewBalls->xDesactive();
-			ptMissiles->xDesactive();
+			ptGigaBlit->disable_sprites();
+			ptNewBalls->disable_sprites();
+			ptMissiles->disable_sprites();
 			if(count_next > 500 ||
 				keyboard->key_is_pressed(SDLK_SPACE))
 			{
@@ -382,9 +382,9 @@ Sint32 gard_tecno::zeMainLoop()
 		}
 		else
 		{	ptMoveText->activeText();
-			ptGigaBlit->xDesactive();
-			ptNewBalls->xDesactive();
-			ptMissiles->xDesactive();
+			ptGigaBlit->disable_sprites();
+			ptNewBalls->disable_sprites();
+			ptMissiles->disable_sprites();
 			count_next = 1;
 		}
 	}

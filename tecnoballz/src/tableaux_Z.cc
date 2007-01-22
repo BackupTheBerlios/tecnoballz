@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.12 2007/01/19 20:35:40 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.13 2007/01/22 21:07:18 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -353,10 +353,10 @@ Sint32 tableaux_Z::zeMainLoop()
 #endif
 			theBumpers->bumpersOff();
 			briquesTab->clr_bricks();
-			gereGadget->xDesactive();
-			gereCapsul->xDesactive();
-			gereBalles->xDesactive();
-			tecno_fire::xDesactive();
+			gereGadget->disable_sprites();
+			gereCapsul->disable_sprites();
+			gereBalles->disable_sprites();
+			tecno_fire::disable_sprites();
 			ptMiniMess->erase_mess();
 			isgameover++;
 		}
@@ -459,13 +459,13 @@ Sint32 tableaux_Z::zeMainLoop()
 					audio->stopModule();
 #endif
 				}
-				gereBalles->xDesactive();
-				tecno_fire::xDesactive();
+				gereBalles->disable_sprites();
+				tecno_fire::disable_sprites();
 			}
 			else
 			{	gere_texte->activeText();
-				tecno_fire::xDesactive();
-				gereBalles->xDesactive();
+				tecno_fire::disable_sprites();
+				gereBalles->disable_sprites();
 #ifndef SOUNDISOFF	
 				audio->play_win_music();
 #endif

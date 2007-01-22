@@ -66,7 +66,7 @@ Sint32 zeDefilTxt::init_chars()
 	objectRigh = sprites_list[i];
 	objectLeft->change_GFX(42);
 	objectRigh->change_GFX(42);
-	xBOBactive();
+	enable_sprites();
 	object_ptr = &objectChar[DEFINUMBER];
 	scroll_ptr = scrollText;
 	return erreur_num;

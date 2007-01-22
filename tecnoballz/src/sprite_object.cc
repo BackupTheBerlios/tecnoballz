@@ -4,11 +4,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.4 2007/01/17 20:05:07 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.5 2007/01/22 21:07:18 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,6 +140,61 @@ void sprite_object::BOBprepare()
 	put_method = METHOD_MSK;
 	releaseGFX = 0;
 }
+
+sprite_object & sprite_object::operator= (const sprite_object &sprite)
+{
+  if (this == &sprite)
+    {
+      return *this;
+    }
+
+    printf ("sprite_object: %i = %i \n", object_pos, sprite.object_pos);
+
+    adresseGFX = sprite.adresseGFX;
+    adresseTAB = sprite.adresseTAB;
+    adresseECR = sprite.adresseECR;
+    adresseEC2 = sprite.adresseEC2;
+    anim_tempo = sprite.anim_tempo;
+    animationN = sprite.animationN;
+    animOffset = sprite.animOffset;
+    flag_actif = sprite.flag_actif;
+    BOBhauteur = sprite.BOBhauteur;
+    BOBlargeur = sprite.BOBlargeur;
+    BOBtableP1 = sprite.BOBtableP1;
+    BOBtableP2 = sprite.BOBtableP2;
+    BOBtableP3 = sprite.BOBtableP3;
+    colHauteur = sprite.colHauteur;
+    colLargeur = sprite.colLargeur;
+    ecranHaute = sprite.ecranHaute;
+    ecranLarge = sprite.ecranLarge;
+    init_tempo = sprite.init_tempo;
+    position_x = sprite.position_x;
+    position_y = sprite.position_y;
+    display_pos = sprite.display_pos;
+    maximum_X1 = sprite.maximum_X1;
+    maximum_Y1 = sprite.maximum_Y1;
+    maxiOffset = sprite.maxiOffset;
+    minimum_X1 = sprite.minimum_X1;
+    minimum_Y1 = sprite.minimum_Y1;
+    miniOffset = sprite.miniOffset;
+    offsetSrce = sprite.offsetSrce;
+    offsetDest = sprite.offsetDest;
+    tabAffich1 = sprite.tabAffich1;
+    tabAffich2 = sprite.tabAffich2;
+    tabAffich3 = sprite.tabAffich3;
+    flagShadow = sprite.flagShadow;
+    BOBtypeNum = sprite.BOBtypeNum;
+    srceNextLn = sprite.srceNextLn;
+    destNextLn = sprite.destNextLn;
+    put_method = sprite.put_method;
+    fTableByte = sprite.fTableByte;
+    memoryflag = 0;
+  return *this;
+}
+
+
+
+
 //-----------------------------------------------------------------------------
 // copy sprite in another 
 //-----------------------------------------------------------------------------
@@ -185,6 +240,7 @@ void sprite_object::duplicaBOB(sprite_object *bobPT)
 	bobPT->fTableByte = fTableByte;
 	bobPT->memoryflag = 0;
 }
+
 
 /**
  * Enable the sprite

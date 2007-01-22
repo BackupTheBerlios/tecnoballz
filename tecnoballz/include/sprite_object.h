@@ -4,11 +4,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.3 2007/01/17 19:04:26 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.4 2007/01/22 21:07:18 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -228,6 +228,7 @@ public:
   Sint32 is_enable ();
   void set_display_pos (Sint32 num);
   void set_object_pos (Sint32 num);
+  sprite_object & operator= (const sprite_object &sprite);
   void duplicaBOB (sprite_object *);
   void coordonnee (Sint32 posX, Sint32 posY);
   Sint32 reservBOBt (Sint32 anima);

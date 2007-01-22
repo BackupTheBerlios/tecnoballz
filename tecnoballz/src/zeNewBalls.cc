@@ -147,7 +147,7 @@ void zeNewBalls::init_balle(zeRaquette *raket, Sint32 start, Sint32 glueC,
 	sprite_ball *balle = sprites_list[0];
 	tecBumper1->balleColle = balle;
 	balle->startBalle(tecBumper1->colLargeur);
-	objetNombr = 1; // one ball to screen
+	num_of_sprites = 1; // one ball to screen
 	if(ejectObjet)
 		ejectObjet->ballPosIni(&sprite_ball::furaxTable[0]);
 }
@@ -225,7 +225,7 @@ void zeNewBalls::vitus_sort()
 			if(rakPT)						//one ball is out ?
 			{	if(!rakPT->flag_actif)		//bumper is actif ?
 				rakPT = raket;				//no, bumper of bottom by default
-				if((--objetNombr) > 0)
+				if((--num_of_sprites) > 0)
 					balle->goSleeping(raket);
 
 				//######################################################
@@ -234,7 +234,7 @@ void zeNewBalls::vitus_sort()
 				else
 				{	
 					// rest one ball
-					objetNombr = 1;
+					num_of_sprites = 1;
 					//raket->attachBall(balle);
 					//balle->reStarting(raket);
 					balle->raket_ball->attachBall(balle);
@@ -269,13 +269,13 @@ void zeNewBalls::vitussort2()
 		if(balle->flag_actif)
 		{	Sint32 j = balle->position_y;
 			if(j > max_y)
-			{	if((--objetNombr) > 0)
+			{	if((--num_of_sprites) > 0)
 					balle->goSleeping(raket);
 				else
 				{	//###################################################
 					// the player lost a life
 					//###################################################
-					objetNombr = 1;		//rest one ball
+					num_of_sprites = 1;		//rest one ball
 					raket->attachBall(balle);
 					balle->reStarting(raket);
 					balle->ballPower2();
@@ -1323,7 +1323,7 @@ void zeNewBalls::run_nballs(Sint32 nball)
 		if(!balle->flag_actif)
 		{	balle->ball2eject(e++, otime);
 			k++;
-			objetNombr++;
+			num_of_sprites++;
 			otime += 2;
 		}
 	}
@@ -1345,7 +1345,7 @@ void zeNewBalls::run_3balls()
 		{	j += 8;
 			j &= 60;
 			balle->duplicate3(model, j);
-			objetNombr++;
+			num_of_sprites++;
 			k++;
 		}
 		i++;
