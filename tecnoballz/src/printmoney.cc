@@ -28,7 +28,7 @@
 printmoney::printmoney()
 {
 	littleInit();
-	objetTotal = 8;
+	max_of_sprites = 8;
 	objects_have_shades = false;
 	y_position = YINVERSEUR * resolution;
 	BOBtypeNum = BOB_MONEY0;
@@ -40,7 +40,7 @@ printmoney::printmoney()
 //-----------------------------------------------------------------------------
 printmoney::~printmoney()
 {
-	littleDead();
+	release_sprites_list();
 }
 
 //-----------------------------------------------------------------------------
@@ -67,7 +67,7 @@ void printmoney::initialise(joueurData *gamer, zeRaquette* raket,
 	ptBobRever->coordonnee(x, money_posy);
 	ptBobRever->tempo_init(5);
 	x += ptBobRever->getLargeur();
-	sprite_object **liste = objetListe + 6; 
+	sprite_object **liste = sprites_list + 6; 
 	for (Sint32 i = 0; i < 2 ; i++)
 	{	sprite_object *x_bob = *(liste++);
 		x_bob->coordonnee(x, money_posy);
@@ -99,7 +99,7 @@ void printmoney::init_guard(joueurData *gamer, zeRaquette* raket,
 	ptBobLifes->coordonnee(x, money_posy);
 	ptBobLifes->tempo_init(5);
 	x += ptBobLifes->getLargeur();
-	sprite_object **liste = objetListe + 6; 
+	sprite_object **liste = sprites_list + 6; 
 	for (Sint32 i = 0; i < 2 ; i++)
 	{	sprite_object *x_bob = *(liste++);
 		x_bob->coordonnee(x, money_posy);
@@ -121,7 +121,7 @@ void printmoney::init_money()
 	x += ptBobMoney->getLargeur();
 	
 	// characters sprites
-	sprite_object **liste = objetListe;
+	sprite_object **liste = sprites_list;
 	for (Sint32 i=0; i < 6 ; i++)
 	{	sprite_object *x_bob = *(liste++);
 		x_bob->coordonnee(x, money_posy);
@@ -140,7 +140,7 @@ void printmoney::execution1(Sint32 value)
 	//###################################################################
 	// display "reverser malus" if enable
 	//###################################################################
-	sprite_object **liste = objetListe + 6; 
+	sprite_object **liste = sprites_list + 6; 
 	Sint32 inves = ptZraquett->get_invers();
 	if(inves > 0)
 	{	inves--;
@@ -177,7 +177,7 @@ void printmoney::execution2(Sint32 value, Sint32 lifes)
 {
 	exec_money(value);
 	Sint32 baseN = 10;
-	sprite_object **liste = objetListe + 6; 
+	sprite_object **liste = sprites_list + 6; 
 	while (baseN > 0)
 	{	Sint32 i = 0;
 		while (lifes >= baseN)
@@ -197,7 +197,7 @@ void printmoney::execution2(Sint32 value, Sint32 lifes)
 void printmoney::exec_money(Sint32 value)
 {
 	Sint32 baseN = 100000;
-	sprite_object **liste = objetListe;
+	sprite_object **liste = sprites_list;
 	while (baseN > 0)
 	{	Sint32 i = 0;
 		while (value >= baseN)

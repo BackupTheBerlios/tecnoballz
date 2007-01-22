@@ -23,9 +23,9 @@
 #ifndef __ZEDEFILTXT__
 #define __ZEDEFILTXT__
 
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 #include "../include/tecnoDefil.h"
-class zeDefilTxt:public objet_gere < tecnoDefil >
+class zeDefilTxt:public objects_list < tecnoDefil >
 {
 	private:
 		static const Sint32	DEFINUMBER = 14;	//numbers maximum characters

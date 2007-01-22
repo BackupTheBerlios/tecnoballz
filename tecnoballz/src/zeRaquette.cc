@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.9 2007/01/20 16:16:06 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.10 2007/01/22 19:35:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ zeRaquette::zeRaquette()
 	tecBumper3 = NULL;
 	tecBumper4 = NULL;
 	tec_robot0 = NULL;
-	objetTotal = 5;
+	max_of_sprites = 5;
 	objects_have_shades = true;
 	BOBtypeNum = BOB_BUMPHR;
 	raket_team = 0;
@@ -78,7 +78,7 @@ zeRaquette::zeRaquette(Sint32 nBob)
 	tecBumper3 = NULL;
 	tecBumper4 = NULL;
 	tec_robot0 = NULL;
-	objetTotal = 1;
+	max_of_sprites = 1;
 	objects_have_shades = true;
 	fTableByte = 0;
 	BOBtypeNum = BOB_BUMPER;
@@ -99,7 +99,7 @@ zeRaquette::zeRaquette(Sint32 nBob)
 //-----------------------------------------------------------------------------
 zeRaquette::~zeRaquette()
 {
-	littleDead();
+	release_sprites_list();
 }
 
 //------------------------------------------------------------------------------
@@ -125,13 +125,13 @@ Sint32 zeRaquette::init_fires()
 //------------------------------------------------------------------------------
 Sint32 zeRaquette::init_liste()
 {
-	if(!objetTotal) return erreur_num;
+	if(!max_of_sprites) return erreur_num;
 	
 	//###################################################################
 	// allocate list of sprites memory
 	//###################################################################
-	objetListe =
-		(tecno_bump **) (memory->alloc(sizeof(tecno_bump *) * objetTotal,
+	sprites_list =
+		(tecno_bump **) (memory->alloc(sizeof(tecno_bump *) * max_of_sprites,
 			0x4F424A47));
 	error_init(memory->retour_err());
 	if(erreur_num) return erreur_num;
@@ -139,12 +139,12 @@ Sint32 zeRaquette::init_liste()
 	//###################################################################
 	// gards levels: create one simple bumper
 	//###################################################################
-    if(objetTotal == 1)
+    if(max_of_sprites == 1)
     {	tecBumper1->set_object_pos(0);
 		error_init(tecBumper1->initialise(BOBtypeNum, image_BOBs, 1, 0));
 		if(erreur_num) return erreur_num;
 		sprites->add(tecBumper1);
-		objetListe[0] = tecBumper1;
+		sprites_list[0] = tecBumper1;
 		tecBumper1->coordonnee(keyboard->get_mouse_x(), bumperYbas);
 		tecBumper1->colLargeur = raketLarge;	// bumper's width
 		tecBumper1->bumpNumero = 1;
@@ -176,26 +176,26 @@ Sint32 zeRaquette::init_liste()
 		error_init(tecBumper1->initialise(BOB_BUMPHR, image_BOBs, 1, 0));
 		if(erreur_num) return erreur_num;
 		sprites->add(tecBumper1);
-		objetListe[0] = tecBumper1;
+		sprites_list[0] = tecBumper1;
 
 		// create left bumper sprite
 		tecBumper2->set_object_pos(1);
 		error_init(tecBumper2->initialise(BOB_BUMPVT, image_BOBs, 1, 0));
 		if(erreur_num) return erreur_num;
 		sprites->add(tecBumper2);
-		objetListe[1] = tecBumper2;
+		sprites_list[1] = tecBumper2;
 
 		// create top bumper sprite
 		tecBumper3->set_object_pos(2);
 		tecBumper1->duplicaBOB(tecBumper3);
 		sprites->add(tecBumper3);
-		objetListe[2] = tecBumper3;
+		sprites_list[2] = tecBumper3;
 
 		// create right bumper sprite
 		tecBumper4->set_object_pos(3);
 		tecBumper2->duplicaBOB(tecBumper4);
 		sprites->add(tecBumper4);
-		objetListe[3] = tecBumper4;
+		sprites_list[3] = tecBumper4;
 
 		// release bumpers graphic page
 		pRessource->freeSprite();
@@ -212,7 +212,7 @@ Sint32 zeRaquette::init_robot()
 	error_init(tec_robot0->initialise(BOB_ROBOT0, image_BOBs, 1, 0));
 	if(erreur_num) return erreur_num;
 	sprites->add(tec_robot0);
-	objetListe[4] = tec_robot0;
+	sprites_list[4] = tec_robot0;
 	return erreur_num;
 }
 

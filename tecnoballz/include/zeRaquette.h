@@ -27,12 +27,12 @@ class zeRaquette;
 //...............................................................................
 #include "../include/tecno_bump.h"
 #include "../include/barreScore.h"
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 #include "../include/zeNewBalls.h"
 #include "../include/zeGigaBlit.h"
 //...............................................................................
 
-class zeRaquette:public objet_gere < tecno_bump >
+class zeRaquette:public objects_list < tecno_bump >
 {
 	friend class tecno_bump;
 

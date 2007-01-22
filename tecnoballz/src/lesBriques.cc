@@ -32,9 +32,9 @@ lesBriques::lesBriques()
 {
 	mentatInit();
 	if(bob_ground)
-		objetTotal = NB_BRICKSH * NB_BRICKSV;
+		max_of_sprites = NB_BRICKSH * NB_BRICKSV;
 	else
-		objetTotal = 0;
+		max_of_sprites = 0;
 	objects_have_shades = true;
 	BOBtypeNum = BOB_BRICK1;
 	brique_pnt = (brickClear *)NULL;
@@ -73,7 +73,7 @@ lesBriques::~lesBriques()
 		memory->release((char *)brikTampon);
 	if(GFX_brique)
 		delete GFX_brique;
-	littleDead();
+	release_sprites_list();
 	//mentatKill();
 }
 
@@ -123,8 +123,8 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 
 	if(bob_ground) 
 	{
-		objetListe = (sprite_object **)
-			(memory->alloc(sizeof(sprite_object *) * objetTotal, 0x4F424A47));
+		sprites_list = (sprite_object **)
+			(memory->alloc(sizeof(sprite_object *) * max_of_sprites, 0x4F424A47));
 		error_init(memory->retour_err());
 		if(erreur_num) return (erreur_num);
 	}
@@ -292,7 +292,7 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 					sprite_object *ptbob = new sprite_object();
 					error_init(ptbob->initialise(BOB_BRICK1, GFX_brique, 1, 0));
 					if(erreur_num) return erreur_num;
-					objetListe[bobindex] = ptbob;
+					sprites_list[bobindex] = ptbob;
 					sprites->add(ptbob);
 					ptbob->enable();
 					ptbob->change_GFX(2);

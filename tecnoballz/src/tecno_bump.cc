@@ -56,7 +56,7 @@ tecno_bump::tecno_bump(zeFireBump * fBump)
 tecno_bump::~tecno_bump()
 {
 	if(bumperTirs)					//bumper has fires ? (robot has not fires)
-		bumperTirs->littleDead();	//release fires
+		bumperTirs->release_sprites_list();	//release fires
 }
 
 //------------------------------------------------------------------------------

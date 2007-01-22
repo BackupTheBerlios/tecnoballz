@@ -33,7 +33,7 @@ zeBouiBoui::zeBouiBoui(zeCapsules* pCaps, ze_gadgets* ptGad, zeGemstone* ptGem,
 	ptGemstone = ptGem;
 	pt_briques = pBrik;
 	littleInit();
-	objetTotal = 8;
+	max_of_sprites = 8;
 	objects_have_shades = true;
 	BOBtypeNum = BOB_ATOMES;
 }
@@ -43,7 +43,7 @@ zeBouiBoui::zeBouiBoui(zeCapsules* pCaps, ze_gadgets* ptGad, zeGemstone* ptGem,
 //-----------------------------------------------------------------------------
 zeBouiBoui::~zeBouiBoui()
 {
-	littleDead();
+	release_sprites_list();
 }
 
 //-------------------------------------------------------------------------------
@@ -66,13 +66,13 @@ void zeBouiBoui::initialise(Sint32 time0, Sint32 time1, Sint32 time2, Sint32 tim
 	apparition[2] = time3;
 	apparition[3] = time4;
 	power_init = power;
-	Sint32 x = objetListe[0]->atom_xmini;
-	Sint32 y = objetListe[0]->atom_ymini;
+	Sint32 x = sprites_list[0]->atom_xmini;
+	Sint32 y = sprites_list[0]->atom_ymini;
 	Sint32 j = 0;
 	Sint32 offs1 = 20 * tecno_boui::ATOM_ANIMA;
 	Sint32 offs2 = 21 * tecno_boui::ATOM_ANIMA;
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_boui *atome = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_boui *atome = sprites_list[i];
 		atome->littleInit
 		(	time0,						//time before activation
 			apparition[j] + i,			//time before first activation	
@@ -98,8 +98,8 @@ void zeBouiBoui::initialise(Sint32 time0, Sint32 time1, Sint32 time2, Sint32 tim
 //-------------------------------------------------------------------------------
 void zeBouiBoui::atom_depla()
 {
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_boui *atome = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_boui *atome = sprites_list[i];
 		atome->gere_atome();
 		//return; //test only
 	}
@@ -110,8 +110,8 @@ void zeBouiBoui::atom_depla()
 //-------------------------------------------------------------------------------
 void zeBouiBoui::atomexplos()
 {
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_boui *atome = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_boui *atome = sprites_list[i];
 		atome->explosion2();
 	}
 }

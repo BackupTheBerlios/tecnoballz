@@ -32,12 +32,12 @@ class zeGigaBlit;
 #include "../include/zeFireBump.h"
 #include "../include/joueurData.h"
 #include "../include/tableaux_Z.h"
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 #include "../include/head_anima.h"
 #include "../include/lesBriques.h"
 #include "../include/zexplosion.h"
 //...............................................................................
-class zeGigaBlit:public objet_gere < giga_blitz >
+class zeGigaBlit:public objects_list < giga_blitz >
 {	friend class            giga_blitz;
  
 	private:

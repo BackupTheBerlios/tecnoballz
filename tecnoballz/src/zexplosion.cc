@@ -29,7 +29,7 @@
 zexplosion::zexplosion()
 {
 	littleInit();
-	objetTotal = 28;
+	max_of_sprites = 28;
 	objects_have_shades = false;
 	vFrequency = 0;
 	BOBtypeNum = BOB_EXPLO1;
@@ -40,7 +40,7 @@ zexplosion::zexplosion()
 //-------------------------------------------------------------------------------
 zexplosion::~zexplosion()
 {
-	littleDead();
+	release_sprites_list();
 }
 
 //-------------------------------------------------------------------------------
@@ -50,8 +50,8 @@ Sint32 zexplosion::init_liste()
 {
 
 	// allocate table memory 
-	objetListe = (sprite_object **)
-		(memory->alloc(sizeof(sprite_object *) * objetTotal, 0x4F424A47));
+	sprites_list = (sprite_object **)
+		(memory->alloc(sizeof(sprite_object *) * max_of_sprites, 0x4F424A47));
 	error_init(memory->retour_err());
 	if(erreur_num)
 		return (erreur_num);
@@ -59,7 +59,7 @@ Sint32 zexplosion::init_liste()
 	// allocate and initialize the objects "sprite_object"
 	Sint32 bobn1 = BOB_EXPLO1;
 	Sint32 bobn2 = BOB_EXPLO2;
-	for(Sint32 i = 0; i < objetTotal; i++)
+	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_object *ptbob = new sprite_object();
 		ptbob->set_object_pos(i);
 		error_init(ptbob->initialise(bobn1, image_BOBs, 0));
@@ -68,7 +68,7 @@ Sint32 zexplosion::init_liste()
 		Sint32 bobnu = bobn2;
 		bobn2 = bobn1;
 		bobn1 = bobnu;
-		objetListe[i] = ptbob;
+		sprites_list[i] = ptbob;
 		sprites->add(ptbob);
 	}
 	return erreur_num; 
@@ -79,8 +79,8 @@ Sint32 zexplosion::init_liste()
 //-------------------------------------------------------------------------------
 void zexplosion::add_explos(Sint32 pos_x, Sint32 pos_y)
 {
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	sprite_object *ptbob = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	sprite_object *ptbob = sprites_list[i];
 		if(!ptbob->flag_actif)
 		{	if(++vFrequency > 4)
 			{	vFrequency = 0;
@@ -105,8 +105,8 @@ void zexplosion::add_explos(Sint32 pos_x, Sint32 pos_y)
 //-------------------------------------------------------------------------------
 void zexplosion::execution1()
 {
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	sprite_object *ptbob = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	sprite_object *ptbob = sprites_list[i];
 		if(ptbob->flag_actif)
 			ptbob->animUnique();
 	}

@@ -67,7 +67,7 @@ brickClear;
 #include "../include/ze_gadgets.h"
 #include "../include/tecno_boui.h"
 //...............................................................................
-class lesBriques:public objet_gere < sprite_object >
+class lesBriques:public objects_list < sprite_object >
 {
 	friend class zeNewBalls;
 	friend class tecno_fire;

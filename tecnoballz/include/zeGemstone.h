@@ -26,14 +26,14 @@
 //...............................................................................
 class zeGemstone;
 //...............................................................................
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 #include "../include/zeRaquette.h"
 #include "../include/techno_gem.h"
 #include "../include/joueurData.h"
 #include "../include/printmoney.h"
 //...............................................................................
 
-class zeGemstone:public objet_gere < techno_gem >
+class zeGemstone:public objects_list < techno_gem >
 {
 	public:
 		static const Sint32	NUMBER_GEM = 6;

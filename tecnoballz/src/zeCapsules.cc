@@ -30,7 +30,7 @@
 zeCapsules::zeCapsules()
 {
 	littleInit();
-	objetTotal = 6;
+	max_of_sprites = 6;
 	objects_have_shades = true;
 	BOBtypeNum = BOB_MONEYS;
 }
@@ -40,7 +40,7 @@ zeCapsules::zeCapsules()
 //-----------------------------------------------------------------------------
 zeCapsules::~zeCapsules()
 {
-	littleDead();
+	release_sprites_list();
 }
 
 //-----------------------------------------------------------------------------
@@ -52,8 +52,8 @@ void zeCapsules::initialise(Sint32 frequ, barreScore *score, printmoney *money)
 	//printf("zeCapsules::initialise() frequenceX = %i\n", frequenceX);
 	ptbarreScr = score;
 	ptPrntmney = money;
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_caps *capsu = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_caps *capsu = sprites_list[i];
 		capsu->littleInit();
 	}
 }
@@ -66,8 +66,8 @@ void zeCapsules::envoieFric(brickClear *briPT)
 	zeCompteur++;
 	if(zeCompteur > frequenceX)
 	{	zeCompteur = 0;
-		for(Sint32 i = 0; i < objetTotal; i++)
-		{	tecno_caps *capsu = objetListe[i];
+		for(Sint32 i = 0; i < max_of_sprites; i++)
+		{	tecno_caps *capsu = sprites_list[i];
 			if(capsu->disponible(briPT))
 				return;
 		}
@@ -79,8 +79,8 @@ void zeCapsules::envoieFric(brickClear *briPT)
 //-----------------------------------------------------------------------------
 void zeCapsules::send_money(sprite_ball *pball)
 {
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_caps *capsu = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_caps *capsu = sprites_list[i];
 		if(capsu->disponible(pball))
 			return;
 	}
@@ -91,8 +91,8 @@ void zeCapsules::send_money(sprite_ball *pball)
 //-----------------------------------------------------------------------------
 void zeCapsules::send_money(tecno_fire *pfire)
 {
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_caps *capsu = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_caps *capsu = sprites_list[i];
 		if(capsu->disponible(pfire))
 			return;
 	}
@@ -103,8 +103,8 @@ void zeCapsules::send_money(tecno_fire *pfire)
 //-----------------------------------------------------------------------------
 void zeCapsules::bouge_fric()
 {
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_caps *capsu = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_caps *capsu = sprites_list[i];
 		capsu->animRepete();
 		Sint32 j = capsu->deplaceMoi();
 		if(j)
@@ -122,8 +122,8 @@ void zeCapsules::initialise(Sint32 frequ, printmoney *money)
 {
 	frequenceX = frequ;
 	ptPrntmney = money;
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_caps *capsu = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_caps *capsu = sprites_list[i];
 		capsu->littleInit();
 	}
 }
@@ -136,8 +136,8 @@ void zeCapsules::envoieFric(sprite_ball *pball)
 	zeCompteur++;
 	if(zeCompteur > frequenceX)
 	{	zeCompteur = 0;
-		for(Sint32 i = 0; i < objetTotal; i++)
-		{	tecno_caps *capsu = objetListe[i];
+		for(Sint32 i = 0; i < max_of_sprites; i++)
+		{	tecno_caps *capsu = sprites_list[i];
  			if(capsu->disponible(pball))
 				return;
 		}
@@ -149,8 +149,8 @@ void zeCapsules::envoieFric(sprite_ball *pball)
 //-----------------------------------------------------------------------------
 void zeCapsules::bougefric2()
 {
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_caps *capsu = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_caps *capsu = sprites_list[i];
 		capsu->animRepete();
 		Sint32 j = capsu->deplaceMe2();
 		if(j)

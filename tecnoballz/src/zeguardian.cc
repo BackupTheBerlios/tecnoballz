@@ -31,7 +31,7 @@
 zeguardian::zeguardian()
 {
 	littleInit();
-	objetTotal = 2;
+	max_of_sprites = 2;
 	objects_have_shades = true; 
 	BOBtypeNum = BOB_INTE1A;
 	offset_ptr = 0;
@@ -48,7 +48,7 @@ zeguardian::~zeguardian()
 		lissaCurve = NULL;
 	}
 	if (pBobEnergy)
-	{	for(Sint32 i = 0; i < objetTotal; i++)	
+	{	for(Sint32 i = 0; i < max_of_sprites; i++)	
 		{	sprite_object *ptBob = pBobEnergy[i];
 			if (ptBob)
 			{	delete ptBob;
@@ -58,7 +58,7 @@ zeguardian::~zeguardian()
 		memory->release((char *)pBobEnergy);
 		pBobEnergy = NULL;
 	}
-	littleDead();
+	release_sprites_list();
 }
 
 
@@ -74,12 +74,12 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	//###################################################################
 	// count the number of guards (1 or 2)
 	//###################################################################
-	objetTotal = -1;
+	max_of_sprites = -1;
 	Sint32 i;
 	Sint32 j = grdPt;
 	do
 	{	i = level_list[j++];
-		objetTotal++;
+		max_of_sprites++;
 	} while (i >= 0);
 
 	//###################################################################
@@ -94,8 +94,8 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	//###################################################################
 	// allocate memory for the "tecno_gard" object(s)
 	//###################################################################
-	objetListe = (tecno_gard **)
-		(memory->alloc(sizeof(tecno_gard *) * objetTotal, 0x4F424A47));
+	sprites_list = (tecno_gard **)
+		(memory->alloc(sizeof(tecno_gard *) * max_of_sprites, 0x4F424A47));
 	error_init(memory->retour_err());
 	if(erreur_num)
 		return (erreur_num);
@@ -103,14 +103,14 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	//###################################################################
 	// initialize the "tecno_gard" object(s)
 	//###################################################################
-	for(i = 0; i < objetTotal; i++)
+	for(i = 0; i < max_of_sprites; i++)
 	{	Sint32 p = level_list[grdPt++];
 		tecno_gard *pgard = new tecno_gard();
 		pgard->set_object_pos(i);
 		error_init(pgard->initialise(guard_list[p].para_nsbob, image_BOBs, 1));
 		if(erreur_num)
 			return (erreur_num);
-		objetListe[i] = pgard;
+		sprites_list[i] = pgard;
 		sprites->add(pgard);
 		pgard->enable();
 		pgard->init_guard(&guard_list[p], getLissaPt(guard_list[p].para_lissa), 
@@ -118,11 +118,11 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	}
 
 	pBobEnergy = (sprite_object **)
-		(memory->alloc(sizeof(sprite_object *) * objetTotal, 0x4F424A47));
+		(memory->alloc(sizeof(sprite_object *) * max_of_sprites, 0x4F424A47));
 	error_init(memory->retour_err());
 	if(erreur_num)
 		return (erreur_num);
-	for(i = 0; i < objetTotal; i++)
+	for(i = 0; i < max_of_sprites; i++)
 	{	sprite_object *ptBob = new sprite_object();
 		pBobEnergy[i] = ptBob;
 		ptBob->set_object_pos(i);
@@ -145,8 +145,8 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 void zeguardian::displayNrj()
 {
 	Sint32 baseY = 238 * resolution;
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_gard *pgard = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_gard *pgard = sprites_list[i];
 		sprite_object *ptBob = pBobEnergy[i];
 		if (!pgard->gard_power)
 		{	ptBob->disable();
@@ -168,8 +168,8 @@ void zeguardian::execution1()
 	offset_ptr++;
 	offset_ptr = offset_ptr & 255;
 	Uint32 offzt = offzetbyte[offset_ptr];
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_gard *pgard = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_gard *pgard = sprites_list[i];
 		pgard->execution1(offzt);
 	}
 	displayNrj();
@@ -182,12 +182,12 @@ void zeguardian::execution1()
 //-------------------------------------------------------------------------------
 Sint32 zeguardian::next_level() 
 {
-	if (objetTotal <= 1)
-	{	if (!objetListe[0]->gard_power) return 1;
+	if (max_of_sprites <= 1)
+	{	if (!sprites_list[0]->gard_power) return 1;
 		else return 0;
 	}
 	else
-	{	if (!objetListe[0]->gard_power && !objetListe[1]->gard_power) return 1;
+	{	if (!sprites_list[0]->gard_power && !sprites_list[1]->gard_power) return 1;
 		else return 0;
 	}
 }
@@ -197,32 +197,32 @@ void zeguardian::killguards(Sint32 numGa)
 	switch(numGa)
 	{	
 		case 2:
-			if(objetTotal > 1)
-			{	if(objetListe[1]->gard_power)
-				{	objetListe[1]->gard_power = 0;
-					objetListe[1]->explo_time = 500;
+			if(max_of_sprites > 1)
+			{	if(sprites_list[1]->gard_power)
+				{	sprites_list[1]->gard_power = 0;
+					sprites_list[1]->explo_time = 500;
 				}
 			}
 			break;
 		
 		case 1:
-			if(objetListe[0]->gard_power)
-			{	objetListe[0]->gard_power = 0;
-				objetListe[0]->explo_time = 500;
+			if(sprites_list[0]->gard_power)
+			{	sprites_list[0]->gard_power = 0;
+				sprites_list[0]->explo_time = 500;
 			}
 			break;
 		
 		default:
-			if(objetTotal > 1)
-			{	if(objetListe[1]->gard_power)
-				{	objetListe[1]->gard_power = 0;
-					objetListe[1]->explo_time = 500;
+			if(max_of_sprites > 1)
+			{	if(sprites_list[1]->gard_power)
+				{	sprites_list[1]->gard_power = 0;
+					sprites_list[1]->explo_time = 500;
 				}
 			}
 	
-			if(objetListe[0]->gard_power)
-			{	objetListe[0]->gard_power = 0;
-				objetListe[0]->explo_time = 500;
+			if(sprites_list[0]->gard_power)
+			{	sprites_list[0]->gard_power = 0;
+				sprites_list[0]->explo_time = 500;
 			}
 			break;
 	}
@@ -236,10 +236,10 @@ Sint32 zeguardian::run_scroll(Uint32 ntype, Sint32 speed, sprite_ball *balle,
 	tecno_miss *weapo)
 {
 	tecno_gard *pGua1, *pGua2;
-	if (objetTotal < 1) return speed;
-	pGua1 = objetListe[0];
-	if (objetTotal > 1)
-		pGua2 = objetListe[1];
+	if (max_of_sprites < 1) return speed;
+	pGua1 = sprites_list[0];
+	if (max_of_sprites > 1)
+		pGua2 = sprites_list[1];
 	else
 		pGua2 = pGua1;
 	

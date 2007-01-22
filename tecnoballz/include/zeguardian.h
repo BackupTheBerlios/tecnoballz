@@ -52,12 +52,12 @@ gardlevel;
 //...............................................................................
 #include "../include/tecno_gard.h"
 #include "../include/list_sprites.h"
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 #include "../include/zeMissiles.h"
 #include "../include/zeGigaBlit.h"
 #include "../include/zexplosion.h"
 //...............................................................................
-class zeguardian:public objet_gere < tecno_gard >
+class zeguardian:public objects_list < tecno_gard >
 {
 	friend class tecno_gard;
 

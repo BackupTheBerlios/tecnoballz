@@ -24,7 +24,7 @@
 #define __ZE_GADGETS__
 class ze_gadgets; 
 //...............................................................................
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 #include "../include/tecno_gads.h"
 #include "../include/zeMiniMess.h"
 #include "../include/zeRaquette.h"
@@ -33,7 +33,7 @@ class ze_gadgets;
 #include "../include/ze_magneye.h"
 
 //...............................................................................
-class ze_gadgets:public objet_gere < tecno_gads >
+class ze_gadgets:public objects_list < tecno_gads >
 {
 	public:
 		static const Sint32		SGADGET_X1 = 146;	//abscissa of the first bonus

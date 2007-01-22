@@ -27,9 +27,9 @@ class zexplosion;
 //...............................................................................
 #include "../include/list_sprites.h"
 #include "../include/sprite_object.h"
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 //...............................................................................
-class zexplosion:public objet_gere < sprite_object >
+class zexplosion:public objects_list < sprite_object >
 {
 	//friend class sprite_object;
 	public:

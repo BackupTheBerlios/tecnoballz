@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-23
 // fonction	: manage mobiles characters ("LEVEL x COMPLETED")
-// id		: $Id: zeMoveText.h,v 1.3 2005/01/23 20:44:01 gurumeditation Exp $
+// id		: $Id: zeMoveText.h,v 1.4 2007/01/22 19:35:50 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -26,10 +26,10 @@
 //...............................................................................
 class zeMoveText;
 //...............................................................................
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 #include "../include/tecno_text.h"
 //...............................................................................
-class zeMoveText:public objet_gere < tecno_text >
+class zeMoveText:public objects_list < tecno_text >
 {
 	private:
 		Sint32				size_line1;

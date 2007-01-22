@@ -31,7 +31,7 @@ class tableaux_Z;
 #include "../include/GIF_bitMap.h"
 #include "../include/list_sprites.h"
 #include "../include/handler_memory.h"
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 #include "../include/runGestion.h"
 #include "../include/zeBouiBoui.h"
 #include "../include/tecno_boui.h"

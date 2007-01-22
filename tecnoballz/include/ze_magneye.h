@@ -26,9 +26,9 @@ class ze_magneye ;
 //...............................................................................
 #include "../include/list_sprites.h"
 #include "../include/techno_eye.h"
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 //..............................................................................
-class ze_magneye : public objet_gere < techno_eye >
+class ze_magneye : public objects_list < techno_eye >
 {	friend class techno_eye ;
 
 	private:

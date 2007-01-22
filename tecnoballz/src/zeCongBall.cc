@@ -34,7 +34,7 @@
 zeCongBall::zeCongBall()
 {
 	littleInit();
-	objetTotal = 8;				//there are 8 letters 
+	max_of_sprites = 8;				//there are 8 letters 
 	objects_have_shades = true;				//shadow enable
 	BOBtypeNum = BOB_ARGENT;
 	speed_rad0 = 0;
@@ -49,7 +49,7 @@ zeCongBall::zeCongBall()
 //-----------------------------------------------------------------------------
 zeCongBall::~zeCongBall()
 {
-	littleDead();
+	release_sprites_list();
 }
 
 //-----------------------------------------------------------------------------
@@ -57,11 +57,11 @@ zeCongBall::~zeCongBall()
 //-----------------------------------------------------------------------------
 void zeCongBall::initialize()
 {
-	Sint32 offst = 360 / objetTotal;
+	Sint32 offst = 360 / max_of_sprites;
 	Sint32 value = 0;
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	objetListe[i]->enable();
-		objetListe[i]->maximum_X1 = value;
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	sprites_list[i]->enable();
+		sprites_list[i]->maximum_X1 = value;
 		value += offst;
 	}
 }
@@ -77,8 +77,8 @@ void zeCongBall::execution1()
 	Sint32 r_max = 360;
 	Sint32 rad_x = 80 * resolution;
 	Sint32 rad_y = 80 * resolution;
-	Sint32 centx = (160 * resolution) - (objetListe[0]->BOBlargeur / 2);
-	Sint32 centy = (120 * resolution) - (objetListe[0]->BOBhauteur / 2);
+	Sint32 centx = (160 * resolution) - (sprites_list[0]->BOBlargeur / 2);
+	Sint32 centy = (120 * resolution) - (sprites_list[0]->BOBhauteur / 2);
 
 	// varie vitesse des boulles
 	speed_rad4 = speed_rad4 + (hasard_val & 3);
@@ -118,8 +118,8 @@ void zeCongBall::execution1()
 
 	
 	
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	sprite_object *zebob = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	sprite_object *zebob = sprites_list[i];
 		zebob->maximum_X1 += sball;
 		//printf("[%i]", zebob->maximum_X1);
 		if(zebob->maximum_X1  >= r_max) zebob->maximum_X1 -= r_max;

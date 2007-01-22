@@ -41,7 +41,7 @@ Sint32 zeGigaBlit::numeroBOBs[NOMBREGIGA] =
 zeGigaBlit::zeGigaBlit()
 {
 	littleInit();
-	objetTotal = NOMBREGIGA;			// there are 7 different Gigablitz
+	max_of_sprites = NOMBREGIGA;			// there are 7 different Gigablitz
   /* shadow disable */
 	objects_have_shades = false;
 	brickObjet = (lesBriques *)NULL;
@@ -65,7 +65,7 @@ zeGigaBlit::zeGigaBlit()
 //-------------------------------------------------------------------------------
 zeGigaBlit::~zeGigaBlit()
 {
-	littleDead();
+	release_sprites_list();
 }
 
 //-------------------------------------------------------------------------------
@@ -80,9 +80,9 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 	tecBumper1 = ptRaquette->demandeRak(1);	// top bumper
 	tecBumper3 = ptRaquette->demandeRak(3);	// bottom bumper
 
-	if(objetTotal)
-	{	objetListe = (giga_blitz **) 
-			(memory->alloc(sizeof(giga_blitz *) * objetTotal, 0x4F424A47));
+	if(max_of_sprites)
+	{	sprites_list = (giga_blitz **) 
+			(memory->alloc(sizeof(giga_blitz *) * max_of_sprites, 0x4F424A47));
 		error_init(memory->retour_err());
 		if(erreur_num)
 			return (erreur_num);
@@ -93,7 +93,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 			return (erreur_num);
 
 		// initialize the objects "giga_blitz"
-		for(Sint32 i = 0 ;i < objetTotal ;i++)
+		for(Sint32 i = 0 ;i < max_of_sprites ;i++)
 		{	giga_blitz *g = new giga_blitz();
 			g->set_object_pos(i);
 			//g->afflignesF = 1;
@@ -103,7 +103,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 			if(erreur_num)
 			return (erreur_num);
 			sprites->add(g);
-			objetListe[i] = g;
+			sprites_list[i] = g;
 		}
 	
 		// release the bitmap page of gigablitz
@@ -123,7 +123,7 @@ void zeGigaBlit::initDepart()
 		l -= tecBumper1->width_mini;	//smallest bumper is of 16/32 pixels width
 		l >>= tecBumper1->width_deca;	//size of bumper step by 8/16 pixels
 		l = NOMBREGIGA - l - 1;
-		giga_blitz *g = objetListe[l];
+		giga_blitz *g = sprites_list[l];
 		blitzobjet = g;
 		blitz_haut = g->getHauteur();
 		Sint32 x = tecBumper1->retournePX();
@@ -262,9 +262,9 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
 	pexplosion = pexpl;
 	ptRaquette = zeRak;
 	tecBumper1 = ptRaquette->demandeRak(1);	// top bumper
-	if(objetTotal)
-	{	objetListe = (giga_blitz **)
-			(memory->alloc(sizeof(giga_blitz *) * objetTotal, 0x4F424A47));
+	if(max_of_sprites)
+	{	sprites_list = (giga_blitz **)
+			(memory->alloc(sizeof(giga_blitz *) * max_of_sprites, 0x4F424A47));
 		error_init(memory->retour_err());
 		if(erreur_num)
 			return (erreur_num);
@@ -275,7 +275,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
 			return (erreur_num);
 
 		// initialize the objects "giga_blitz"
-		for(Sint32 i=0 ; i<objetTotal ; i++)
+		for(Sint32 i=0 ; i<max_of_sprites ; i++)
 		{ giga_blitz *g = new giga_blitz();
 			g->set_object_pos(i);
 			g->mirrorVert = 1;
@@ -285,7 +285,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
 			if(erreur_num)
 				return (erreur_num);
 			sprites->add(g);
-			objetListe[i] = g;
+			sprites_list[i] = g;
 		}
 		
 		// release the bitmap page of gigablitz
@@ -387,8 +387,8 @@ Sint32 zeGigaBlit::guard_shoot(Sint32 value, Sint32 pos_x, Sint32 pos_y,
 	Sint32 large, Sint32 haute)
 { 
 	if(!blitz_haut)
-	{	giga_blitz *g = objetListe[value];
-			//g = objetListe[0];	// test only
+	{	giga_blitz *g = sprites_list[value];
+			//g = sprites_list[0];	// test only
 		blitzobjet = g;
 		blitz_haut = g->getHauteur();
 		Sint32 bwdth= g->getLargeur();

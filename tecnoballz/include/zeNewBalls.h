@@ -26,7 +26,7 @@
 class zeNewBalls;
 //...............................................................................
 #include "../include/sprite_ball.h"
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 #include "../include/tecno_bump.h"
 #include "../include/ejectBalls.h"
 #include "../include/lesBriques.h"
@@ -43,7 +43,7 @@ class zeNewBalls;
 #include "../include/techno_eye.h"
 
 //...............................................................................
-class zeNewBalls:public objet_gere < sprite_ball >
+class zeNewBalls:public objects_list < sprite_ball >
 {
 	friend class ejectBalls;
  	friend class sprite_ball;

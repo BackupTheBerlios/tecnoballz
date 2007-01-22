@@ -27,14 +27,14 @@
 
 class zeFireBump;
 
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 #include "../include/handler_display.h"
 #include "../include/barreScore.h"
 #include "../include/tecno_fire.h"
 #include "../include/tecno_bump.h"
 
 
-class zeFireBump:public objet_gere < tecno_fire >
+class zeFireBump:public objects_list < tecno_fire >
 {
 	private:
 		static const Sint32	NUMBERFIRE = 7;

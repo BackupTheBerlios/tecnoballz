@@ -26,10 +26,10 @@
 class zeCongBall;
 //...............................................................................
 #include "../include/sprite_object.h"
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 #include "../include/score_over.h"
 //...............................................................................
-class zeCongBall:public objet_gere < sprite_object >
+class zeCongBall:public objects_list < sprite_object >
 {	
 	private:
 			Sint32			speed_rad0;

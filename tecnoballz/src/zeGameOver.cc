@@ -32,9 +32,9 @@
 zeGameOver::zeGameOver()
 {
 	littleInit();
-	objetTotal = 8;				//there are 8 letters 
+	max_of_sprites = 8;				//there are 8 letters 
 	objects_have_shades = true;				//shadow enable
-	objetTotal = 8;
+	max_of_sprites = 8;
 	BOBtypeNum = BOB_GAMEOV;
 	go_deplace = 0;
 	ptGfxFonte = (GIF_bitMap*)NULL;
@@ -50,7 +50,7 @@ zeGameOver::~zeGameOver()
 		delete ptScorOver;
 	if(ptGfxFonte)
 		delete ptGfxFonte;
-	littleDead();
+	release_sprites_list();
 }
 
 //-----------------------------------------------------------------------------
@@ -92,8 +92,8 @@ void zeGameOver::initialize(Sint32 iswin)
 	Sint32 x = 100 * resolution;
 	Sint32 y = 200 * resolution;
 	const Sint32 *p = zeus_over1;
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	sprite_object *zebob = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	sprite_object *zebob = sprites_list[i];
 		zebob->enable();
 		zebob->coordonnee(x, y);
 		zebob->change_GFX(i);
@@ -159,8 +159,8 @@ void zeGameOver::deplace_01()
 	Sint32 maxi = SIZETSINUS;
 	Sint32 decal = 32 * resolution;
 	const Sint32 *sinus = sinus_over;
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	sprite_object *zebob = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	sprite_object *zebob = sprites_list[i];
 		if(++zebob->maximum_X1 >= maxi)
 			zebob->maximum_X1 = 0;
 		if(++zebob->maximum_Y1 >= maxi)
@@ -182,8 +182,8 @@ void zeGameOver::deplace_02()
 	Sint32 maxi = SIZETSINUS;
 	Sint32 decal = 32 * resolution;
 	const Sint32 *sinus = sinus_over;
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	sprite_object *zebob = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	sprite_object *zebob = sprites_list[i];
 		if(++zebob->maximum_Y1 >= maxi)
 			zebob->maximum_Y1 = 0;
 		Sint32 y = decal + sinus[zebob->maximum_Y1] * resolution;
@@ -195,7 +195,7 @@ void zeGameOver::deplace_02()
 	Sint32 f = 0;
 	Sint32 v = 32 * resolution + chrOffsetX;
 	for(Sint32 i = 0; i < 4; i++)
-	{	sprite_object *zebob = objetListe[i];
+	{	sprite_object *zebob = sprites_list[i];
 		if(zebob->position_x > v)
 		{	zebob->position_x -= resolution;
 			f = 1;
@@ -204,8 +204,8 @@ void zeGameOver::deplace_02()
 
 	// move the letters "O", "V", "E", "R"
 	v = 192 * resolution + chrOffsetX;
-	for(Sint32 i = 4; i < objetTotal; i++)
-	{	sprite_object *zebob = objetListe[i];
+	for(Sint32 i = 4; i < max_of_sprites; i++)
+	{	sprite_object *zebob = sprites_list[i];
 		if(zebob->position_x < v)
 		{	zebob->position_x += resolution;
 			f = 1;
@@ -227,7 +227,7 @@ void zeGameOver::deplace_03()
 	Sint32 decal = 32 * resolution;
 	const Sint32 *sinus = sinus_over;
 	for(Sint32 i = 0; i < 4; i++)
-	{	sprite_object *zebob = objetListe[i];
+	{	sprite_object *zebob = sprites_list[i];
 		if(++zebob->maximum_Y1 >= maxi)
 			zebob->maximum_Y1 = 0;
 		if(zebob->position_y <= decal)
@@ -243,8 +243,8 @@ void zeGameOver::deplace_03()
 
 	// move the letters "O", "V", "E", "R"
 	Sint32 v = 191 * resolution;
-	for(Sint32 i = 4; i < objetTotal; i++)
-	{	sprite_object *zebob = objetListe[i];
+	for(Sint32 i = 4; i < max_of_sprites; i++)
+	{	sprite_object *zebob = sprites_list[i];
 		if(++zebob->maximum_Y1 >= maxi)
 			zebob->maximum_Y1 = 0;
 		if(zebob->position_y >= v)
@@ -270,7 +270,7 @@ void zeGameOver::deplace_04()
 	Sint32 offst = 2 * resolution;
 	Sint32 final = 35 * resolution + chrOffsetX;
 	for(Sint32 i = 0; i < 4; i++)
-	{	sprite_object *zebob = objetListe[i];
+	{	sprite_object *zebob = sprites_list[i];
 		Sint32 o = final - zebob->position_x;
 		if(o > offst)
 			o = offst;
@@ -285,8 +285,8 @@ void zeGameOver::deplace_04()
 
 	// move the letters "O", "V", "E", "R"
 	final = 32 * resolution + chrOffsetX;
-	for(Sint32 i = 4; i < objetTotal; i++)
-	{	sprite_object *zebob = objetListe[i];
+	for(Sint32 i = 4; i < max_of_sprites; i++)
+	{	sprite_object *zebob = sprites_list[i];
 		Sint32 o = final - zebob->position_x;
 		if(o > offst)
 			o = offst;

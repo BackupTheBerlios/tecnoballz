@@ -30,7 +30,7 @@
 ze_magneye::ze_magneye()
 {
 	littleInit();
-	objetTotal = 3;
+	max_of_sprites = 3;
 	objects_have_shades = true;
 	BOBtypeNum = BOB_MAGEYE;
 }
@@ -40,7 +40,7 @@ ze_magneye::ze_magneye()
 //-----------------------------------------------------------------------------
 ze_magneye::~ze_magneye()
 {
-	littleDead();
+	release_sprites_list();
 }
 
 
@@ -49,8 +49,8 @@ ze_magneye::~ze_magneye()
 //-----------------------------------------------------------------------------
 Sint32 ze_magneye::create_eye()
 {
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	techno_eye *ptEye = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	techno_eye *ptEye = sprites_list[i];
 		if(ptEye->flag_actif) continue;
 		ptEye->flag_actif = 1;
 		return 1;
@@ -66,8 +66,8 @@ Sint32  ze_magneye::initialize()
 	error_init(init_liste());
 	if(erreur_num) return erreur_num;
 	Sint32 hval = hasard_val;
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	techno_eye *ptEye = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	techno_eye *ptEye = sprites_list[i];
 		ptEye->centerPosx = Xcoordinat[hval & 31]  * resolution;
 #if __WORDSIZE == 64
 		hval += (long)ptEye;
@@ -83,7 +83,7 @@ Sint32  ze_magneye::initialize()
 		ptEye->radius_360 = 0;
 		
 	}
-	hypotenuse = objetListe[0]->colLargeur - resolution * 2;
+	hypotenuse = sprites_list[0]->colLargeur - resolution * 2;
 	eyeCenterX = hypotenuse / 2;
 	eyeCenterY = eyeCenterX;
 	hypotenuse = hypotenuse * hypotenuse;
@@ -96,8 +96,8 @@ Sint32  ze_magneye::initialize()
 void ze_magneye::execution1()
 {
 	Sint32 hval = hasard_val;
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	techno_eye *ptEye = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	techno_eye *ptEye = sprites_list[i];
 		//if(!ptEye->flag_actif) continue;
 		ptEye->animRepete();
 		

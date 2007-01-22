@@ -28,7 +28,7 @@
 zeDefilTxt::zeDefilTxt()
 {
 	littleInit();
-	objetTotal = DEFINUMBER + 2;
+	max_of_sprites = DEFINUMBER + 2;
 	objects_have_shades = true;
 	BOBtypeNum = BOB_DEFILE;
 	offset_xx1 = 0;
@@ -40,7 +40,7 @@ zeDefilTxt::zeDefilTxt()
 //-----------------------------------------------------------------------------
 zeDefilTxt::~zeDefilTxt()
 {
-	littleDead();
+	release_sprites_list();
 }
 
 //-----------------------------------------------------------------------------
@@ -54,7 +54,7 @@ Sint32 zeDefilTxt::init_chars()
 	objectChar[0] = 0;
 	Sint32 j = 0;
 	for(i = 0; i < DEFINUMBER; i++, j = (j + 18) & SINUS_MASK)
-	{	tecnoDefil *zeBOB = objetListe[i];
+	{	tecnoDefil *zeBOB = sprites_list[i];
 		objectChar[i + 1] = zeBOB;
 		zeBOB->zeCosValue = j;
 		zeBOB->changePosX(100);
@@ -62,8 +62,8 @@ Sint32 zeDefilTxt::init_chars()
 		zeBOB->change_GFX(26);
 	}
 	objectChar[i + 1] = 0;
-	objectLeft = objetListe[i++];
-	objectRigh = objetListe[i];
+	objectLeft = sprites_list[i++];
+	objectRigh = sprites_list[i];
 	objectLeft->change_GFX(42);
 	objectRigh->change_GFX(42);
 	xBOBactive();

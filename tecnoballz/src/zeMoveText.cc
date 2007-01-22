@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-23
 // fonction	: manage mobiles characters ("LEVEL x COMPLETED")
-// id		: $Id: zeMoveText.cc,v 1.5 2007/01/16 16:57:31 gurumeditation Exp $
+// id		: $Id: zeMoveText.cc,v 1.6 2007/01/22 19:35:50 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -32,7 +32,7 @@ zeMoveText::zeMoveText()
 	size_line1 = 0;
 	size_line2 = 0;
 	horz_large = 0;
-	objetTotal = 20;
+	max_of_sprites = 20;
 	objects_have_shades = true;
 	BOBtypeNum = BOB_LETTRE;
 	chrOffsetX = 0;
@@ -43,7 +43,7 @@ zeMoveText::zeMoveText()
 //-----------------------------------------------------------------------------
 zeMoveText::~zeMoveText()
 {
-	littleDead();
+	release_sprites_list();
 }
 
 //-----------------------------------------------------------------------------
@@ -80,7 +80,7 @@ void zeMoveText::initialise(Sint32 level, Sint32 offzt)
 	//###################################################################
 	monPT = ze_bobText;
 	for(Sint32 i = 0; i < size_total; i++)
-	{	tecno_text *chara = objetListe[i];
+	{	tecno_text *chara = sprites_list[i];
 		char c = *(monPT++);
 		if(c == '\0')
 			c = *(monPT++);
@@ -114,7 +114,7 @@ void zeMoveText::initialise(Sint32 level, Sint32 offzt)
 Sint32 zeMoveText::startValue(Sint32 nchar, Sint32 zeRad, Sint32 index,
 				Sint32 yStrt, Sint32 yOffs, Sint32 yStop)
 {
-	Sint32 width = objetListe[0]->getHauteur();
+	Sint32 width = sprites_list[0]->getHauteur();
 	Sint32 e = (horz_large) / nchar;
 	Sint32 xStop = (horz_large - (nchar * width)) / 2;
 	Sint32 xOffs = 0;	//X move offset (1, -1 or 0)
@@ -124,7 +124,7 @@ Sint32 zeMoveText::startValue(Sint32 nchar, Sint32 zeRad, Sint32 index,
 	xStrt += chrOffsetX;
 	
 	for(Sint32 i = index; i < (nchar + index); i++, xStrt += e, xStop += width)
-	{	tecno_text *chara = objetListe[i];
+	{	tecno_text *chara = sprites_list[i];
 		chara->coordonnee(xStrt, yStrt);
 		if(xStrt > xStop)
 			xOffs = -1;
@@ -147,7 +147,7 @@ Sint32 zeMoveText::startValue(Sint32 nchar, Sint32 zeRad, Sint32 index,
 void zeMoveText::goMoveText()
 {
 	for(Sint32 i = 0; i < size_total; i++)
-	{	tecno_text *chara = objetListe[i];
+	{	tecno_text *chara = sprites_list[i];
 		chara->moveCaract();
 	}
 }
@@ -158,7 +158,7 @@ void zeMoveText::goMoveText()
 void zeMoveText::activeText()
 {
 	for(Sint32 i = 0; i < size_total; i++)
-	{	tecno_text *chara = objetListe[i];
+	{	tecno_text *chara = sprites_list[i];
 		chara->enable();
 	}
 }

@@ -28,7 +28,7 @@
 class giga_blitz;
 
 #include "../include/sprite_object.h"
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 class giga_blitz:public sprite_object
 {
   private:

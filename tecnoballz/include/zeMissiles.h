@@ -27,12 +27,12 @@ class zeMissiles;
 
 #include "../include/list_sprites.h"
 #include "../include/tecno_miss.h"
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 #include "../include/tecno_gard.h"
 #include "../include/tecno_bump.h"
 #include "../include/zexplosion.h"
 
-class zeMissiles:public objet_gere < tecno_miss >
+class zeMissiles:public objects_list < tecno_miss >
 {
 	friend class zeguardian;
 		

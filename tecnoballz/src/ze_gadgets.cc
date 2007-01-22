@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.10 2007/01/20 16:16:06 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.11 2007/01/22 19:35:50 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -50,7 +50,7 @@ ze_gadgets::ze_gadgets(Sint32 total, Sint32 vShad)
 	bonusTombe = 0;
 	bonus_step = 0;
 	course_ptr = 0;
-	objetTotal = 6;
+	max_of_sprites = 6;
 	objects_have_shades = vShad;
 	fTableByte = 1;
 	//fTableByte = 0;	//test only
@@ -62,7 +62,7 @@ ze_gadgets::ze_gadgets(Sint32 total, Sint32 vShad)
 //-----------------------------------------------------------------------------
 ze_gadgets::~ze_gadgets()
 {
-	littleDead();
+	release_sprites_list();
 }
 
 //------------------------------------------------------------------------------
@@ -91,9 +91,9 @@ void ze_gadgets::initialise(Sint32 mStep, Sint32 bKauf, Sint32 brCnt, const Sint
 	brick_kass = 0;	//number of bricks current destroyed
 	bonusTombe = 0;	//number of bonuses dropped 
 	ptMiniMess = ptMes;
-	tecno_gads *bonus = objetListe[0];
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	bonus = objetListe[i];
+	tecno_gads *bonus = sprites_list[0];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	bonus = sprites_list[i];
 		bonus->littleInit();
 	}
 	init_tempo = bonus->init_tempo;
@@ -132,8 +132,8 @@ void ze_gadgets::initialise(Sint32 mStep, Sint32 bKauf, Sint32 brCnt, const Sint
 void ze_gadgets::envoieGads(brickClear * briPT)
 {
 	brick_kass++;
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_gads *gadg = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_gads *gadg = sprites_list[i];
 		if(!gadg->flag_actif)
 		{	//###########################################################
 			// handle maluses
@@ -174,8 +174,8 @@ void ze_gadgets::envoieGads(brickClear * briPT)
 //-------------------------------------------------------------------------------
 void ze_gadgets::send_malus(sprite_ball *pball)
 {
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_gads *gadg = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_gads *gadg = sprites_list[i];
 		if(!gadg->flag_actif)
 		{	Sint16 j = hasard_val & 0x1F;	//value 0 to 31 
 			j = *(malusTable + j);
@@ -189,8 +189,8 @@ void ze_gadgets::send_malus(sprite_ball *pball)
 //-------------------------------------------------------------------------------
 void ze_gadgets::send_malus(tecno_fire *pfire)
 {
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_gads *gadg = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_gads *gadg = sprites_list[i];
 		if(!gadg->flag_actif)
 		{	Sint16 j = hasard_val & 0x1F;	//value 0 to 31 
 			j = *(malusTable + j);
@@ -208,8 +208,8 @@ void ze_gadgets::envoieGads(sprite_ball *pball)
 {
 	malus_step++;
 	if(malus_step <= malus_frek) return;
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_gads *gadg = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_gads *gadg = sprites_list[i];
 		if(!gadg->flag_actif)
 		{	Sint16 j = hasard_val & 0x1F;	//value 0 to 31 
 			j = *(malusTable + j);
@@ -230,7 +230,7 @@ Sint32 ze_gadgets::gadgetShop()
 	if(erreur_num)
 		return (erreur_num);
 	Sint32 t = NB_OPTIONS;
-	tecno_gads **liste = objetListe;
+	tecno_gads **liste = sprites_list;
 	tecno_gads *bonus = *liste;
 	Sint32 h = bonus->BOBhauteur + 1;
 	Sint32 x = SGADGET_X1 * resolution;
@@ -269,7 +269,7 @@ void ze_gadgets::gadgetShop(Sint32 nuGad)
 void ze_gadgets::gadgetShop(joueurData * gamer)
 {
 	Sint32 t = NB_OPTIONS;
-	tecno_gads **liste = objetListe;
+	tecno_gads **liste = sprites_list;
 	Sint32 *cours = gamer->get_course();
 	for(Sint32 i = 0; i < t; i++)
 	{	tecno_gads *bonus = *(liste++);
@@ -283,8 +283,8 @@ void ze_gadgets::gadgetShop(joueurData * gamer)
 //-------------------------------------------------------------------------------
 void ze_gadgets::bouge_gads()
 {
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_gads *bonus = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_gads *bonus = sprites_list[i];
 		bonus->animRepete();
 		tecno_bump *raket = bonus->deplaceMoi();
 		if(raket)
@@ -299,8 +299,8 @@ void ze_gadgets::bouge_gads()
 //-------------------------------------------------------------------------------
 void ze_gadgets::bougegads2()
 {
-	for(Sint32 i = 0; i < objetTotal; i++)
-	{	tecno_gads *bonus = objetListe[i];
+	for(Sint32 i = 0; i < max_of_sprites; i++)
+	{	tecno_gads *bonus = sprites_list[i];
 		bonus->animRepete();
 		tecno_bump *raket = bonus->deplaceMoi();
 		if(raket)
@@ -321,8 +321,8 @@ void ze_gadgets::animations(Sint32 value)
 				animOffset = 0;
 	}
 	Sint32 a = animOffset;
-	tecno_gads **liste = objetListe;
-	for(Sint32 i = 0; i < objetTotal; i++)
+	tecno_gads **liste = sprites_list;
+	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_gads *bonus = *(liste++);
 		Sint32 o = bonus->miniOffset + a;
 		bonus->change_GFX(o);

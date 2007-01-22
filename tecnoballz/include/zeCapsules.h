@@ -27,7 +27,7 @@
 class zeCapsules;
 //...............................................................................
 #include "../include/list_sprites.h"
-#include "../include/objet_gere.h"
+#include "../include/objects_list.h"
 #include "../include/handler_display.h"
 #include "../include/barreScore.h"
 #include "../include/tecno_caps.h"
@@ -36,7 +36,7 @@ class zeCapsules;
 #include "../include/printmoney.h"
 #include "../include/sprite_ball.h"
 //...............................................................................
-class zeCapsules:public objet_gere < tecno_caps >
+class zeCapsules:public objects_list < tecno_caps >
 {
 	private:
 		Sint32			frequenceX;

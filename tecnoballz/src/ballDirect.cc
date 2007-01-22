@@ -30,7 +30,7 @@
 ballDirect::ballDirect()
 {
 	littleInit();
-	objetTotal = 4;
+	max_of_sprites = 4;
 	objects_have_shades = false;
 	BOBtypeNum = BOB_DIRECT;
 	numBumpers = 0;
@@ -45,7 +45,7 @@ ballDirect::~ballDirect()
 	{	memory->release((char *)listBumper);	
 		listBumper = (tecno_bump**)NULL;
 	}
-	littleDead();
+	release_sprites_list();
 }
 
 //-----------------------------------------------------------------------------
@@ -75,13 +75,13 @@ void ballDirect::execution1()
 	for(Sint32 i = 0; i < numBumpers; i++)
 	{	sprite_ball* balle = listBumper[i]->balleColle;
 		if(balle && balle->flag_actif)
-		{	objetListe[i]->aspireBOB2(balle);
-			objetListe[i]->enable();
-			objetListe[i]->change_GFX(balle->directBall  / 4);
+		{	sprites_list[i]->aspireBOB2(balle);
+			sprites_list[i]->enable();
+			sprites_list[i]->change_GFX(balle->directBall  / 4);
 		}
 		else 
 		{
-			objetListe[i]->disable();
+			sprites_list[i]->disable();
 		}
 	}
 }
