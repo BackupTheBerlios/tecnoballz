@@ -69,11 +69,11 @@ void tecno_boui::gere_atome()
 					hasard_val += (Sint32)this;
 #endif
 					Sint32 k = *monPT;
-					miniOffset = k;
-					animOffset = k;
-					maxiOffset = k + ATOM_ANIMA - 1;
+					frame_index_min = k;
+					frame_index = k;
+					frame_index_max = k + ATOM_ANIMA - 1;
 					sprite_has_shadow = 1;
-					change_GFX(k);
+					set_image(k);
 #ifndef SOUNDISOFF
 					audio->play_sound(S_ATOMAPPA);
 #endif
@@ -103,7 +103,7 @@ void tecno_boui::gere_atome()
 			}
 			
 		}
-		animRepete();
+		play_animation_loop();
 
 		
 		//###############################################################
@@ -266,14 +266,14 @@ void tecno_boui::explosion1(sprite_ball *pBall)
 void tecno_boui::explosion2()
 {
 	sprite_has_shadow = 0;	// no shadow
-	hasard_val = hasard_val + animOffset;
+	hasard_val = hasard_val + frame_index;
 	atom_explo = 1;
 	atom_power = init_power;	// strength
 	atom_actif = apparition + (hasard_val & 63); // time before activation
-	animOffset = atom_oexpl;
-	miniOffset = atom_oexpl;
-	maxiOffset = atom_oexpl + ATOM_ANIMA - 1;
-	change_GFX(animOffset);
+	frame_index = atom_oexpl;
+	frame_index_min = atom_oexpl;
+	frame_index_max = atom_oexpl + ATOM_ANIMA - 1;
+	set_image(frame_index);
 	frame_delay = frame_period;
 #ifndef SOUNDISOFF
 	audio->play_sound(S_ATOM_EXP);

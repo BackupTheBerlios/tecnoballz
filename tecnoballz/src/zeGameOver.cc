@@ -96,11 +96,11 @@ void zeGameOver::initialize(Sint32 iswin)
 	{	sprite_object *zebob = sprites_list[i];
 		zebob->enable();
 		zebob->set_coordinates(x, y);
-		zebob->change_GFX(i);
+		zebob->set_image(i);
 		Sint32 x2 = *(p++);  
 		Sint32 y2 = *(p++);  
-		zebob->maximum_X1 =x2;
-		zebob->maximum_Y1 =y2;
+		zebob->x_maximum =x2;
+		zebob->y_maximum =y2;
 	}
 	go_deplace = 1;
 	go_zetempo = 50 * 10;
@@ -148,7 +148,7 @@ void zeGameOver::execution1(Sint32 iswin)
 			break;
 	}
 	ptScorOver->displayTxt();
-	ptScorOver->MSKaffiche();
+	ptScorOver->draw_copy();
 }
 
 //-----------------------------------------------------------------------------
@@ -161,12 +161,12 @@ void zeGameOver::deplace_01()
 	const Sint32 *sinus = sinus_over;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_object *zebob = sprites_list[i];
-		if(++zebob->maximum_X1 >= maxi)
-			zebob->maximum_X1 = 0;
-		if(++zebob->maximum_Y1 >= maxi)
-			zebob->maximum_Y1 = 0;
-		Sint32 x = chrOffsetX + decal + sinus[zebob->maximum_X1] * resolution;
-		Sint32 y = decal + sinus[zebob->maximum_Y1] * resolution;
+		if(++zebob->x_maximum >= maxi)
+			zebob->x_maximum = 0;
+		if(++zebob->y_maximum >= maxi)
+			zebob->y_maximum = 0;
+		Sint32 x = chrOffsetX + decal + sinus[zebob->x_maximum] * resolution;
+		Sint32 y = decal + sinus[zebob->y_maximum] * resolution;
 		zebob->set_coordinates(x, y);
 		hasard_val += y;
 	}
@@ -184,9 +184,9 @@ void zeGameOver::deplace_02()
 	const Sint32 *sinus = sinus_over;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_object *zebob = sprites_list[i];
-		if(++zebob->maximum_Y1 >= maxi)
-			zebob->maximum_Y1 = 0;
-		Sint32 y = decal + sinus[zebob->maximum_Y1] * resolution;
+		if(++zebob->y_maximum >= maxi)
+			zebob->y_maximum = 0;
+		Sint32 y = decal + sinus[zebob->y_maximum] * resolution;
 		zebob->set_y_coord(y);
 		hasard_val += y;
 	}
@@ -228,34 +228,34 @@ void zeGameOver::deplace_03()
 	const Sint32 *sinus = sinus_over;
 	for(Sint32 i = 0; i < 4; i++)
 	{	sprite_object *zebob = sprites_list[i];
-		if(++zebob->maximum_Y1 >= maxi)
-			zebob->maximum_Y1 = 0;
+		if(++zebob->y_maximum >= maxi)
+			zebob->y_maximum = 0;
 		if(zebob->y_coord <= decal)
 		{	zebob->y_coord = decal;
 			f++;
 		}
 		else
-		{	Sint32 y = decal + sinus[zebob->maximum_Y1] * resolution;
+		{	Sint32 y = decal + sinus[zebob->y_maximum] * resolution;
 			zebob->set_y_coord(y);
 		}
-		hasard_val += zebob->maximum_Y1;
+		hasard_val += zebob->y_maximum;
 	}
 
 	// move the letters "O", "V", "E", "R"
 	Sint32 v = 191 * resolution;
 	for(Sint32 i = 4; i < max_of_sprites; i++)
 	{	sprite_object *zebob = sprites_list[i];
-		if(++zebob->maximum_Y1 >= maxi)
-			zebob->maximum_Y1 = 0;
+		if(++zebob->y_maximum >= maxi)
+			zebob->y_maximum = 0;
 		if(zebob->y_coord >= v)
 		{	zebob->y_coord = v;
 			f++;
 		}
 		else
-		{	Sint32 y = decal + sinus[zebob->maximum_Y1] * resolution;
+		{	Sint32 y = decal + sinus[zebob->y_maximum] * resolution;
 			zebob->set_y_coord(y);
 		}
-		hasard_val += zebob->maximum_Y1;
+		hasard_val += zebob->y_maximum;
 	}
 	if(f == 8)
 		go_deplace = 4;

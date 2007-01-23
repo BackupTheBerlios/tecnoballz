@@ -79,11 +79,11 @@ Sint32 tecno_gard::init_guard(gardlevel *guard, unsigned char* ptLis,
 	gard_tfire = &guard->para_tfire[0];
 	ptr_lissa1 = ptLis;
 	ptr_lissa2 = ptLis;
-	minimum_X1 = 6 * resolution;
-	minimum_Y1 = 2 * resolution;
-	maximum_X1 = screen_width - sprite_width;
-	maximum_Y1 = screen_height - sprite_height;
-	maximum_Y1 = (232 - 8 - 1 - 16) * resolution;
+	x_minimum = 6 * resolution;
+	y_minimum = 2 * resolution;
+	x_maximum = screen_width - sprite_width;
+	y_maximum = screen_height - sprite_height;
+	y_maximum = (232 - 8 - 1 - 16) * resolution;
 	ptMissiles = pMiss;
 	if(sprite_width == resolution * 32)
 		explotempo = 7;

@@ -51,7 +51,7 @@ class ze_gadgets:public objects_list < tecno_gads >
 		ze_magneye*			pt_magneye;
 		Sint32				frame_delay;
 		Sint32				frame_period;
-		Sint32				animOffset;
+		Sint32				frame_index;
 
 		// shop
 		tecno_gads*			temoin_gad;		// bonus indicator

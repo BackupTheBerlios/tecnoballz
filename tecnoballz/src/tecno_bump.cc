@@ -121,7 +121,7 @@ void tecno_bump::bumperHgfx(Sint32 large)
 		i += 7;
 	if(bumperGlue)
 		i += 14;
-	change_GFX(i);
+	set_image(i);
 	bumperTirs->disable_sprites();
 }
 
@@ -138,7 +138,7 @@ void tecno_bump::bumperVgfx(Sint32 large)
 		i += 7;
 	if(bumperGlue)
 		i += 14;
-	change_GFX(i);
+	set_image(i);
 	bumperTirs->disable_sprites();
 }
 
@@ -153,7 +153,7 @@ void tecno_bump::bumper_gfx(Sint32 large)
 		i += 7;
 	if(bumperGlue)
 		i += 14;
-	change_GFX(i);
+	set_image(i);
 }
 
 //------------------------------------------------------------------------------
@@ -166,7 +166,7 @@ void tecno_bump::bumper_gfx()
 		i += 7;
 	if(bumperGlue)
 		i += 14;
-	change_GFX(i);
+	set_image(i);
 }
 
 //------------------------------------------------------------------------------

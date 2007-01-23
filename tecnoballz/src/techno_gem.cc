@@ -50,14 +50,14 @@ techno_gem::~techno_gem()
 //-----------------------------------------------------------------------------
 void techno_gem::littleInit()
 {
-	/*maximum_X1 = screen_width - 192;
-	minimum_X1 = 3 * resolution;
-	maximum_Y1 = screen_height - 20;
-	minimum_Y1 = 10 * resolution;*/
-	maximum_X1 = screen_width - ((64 + 16) * resolution);
-	minimum_X1 = 3 * resolution;
-	maximum_Y1 = screen_height - 10  * resolution;
-	minimum_Y1 = 0 * resolution;
+	/*x_maximum = screen_width - 192;
+	x_minimum = 3 * resolution;
+	y_maximum = screen_height - 20;
+	y_minimum = 10 * resolution;*/
+	x_maximum = screen_width - ((64 + 16) * resolution);
+	x_minimum = 3 * resolution;
+	y_maximum = screen_height - 10  * resolution;
+	y_minimum = 0 * resolution;
 	
 }
 
@@ -99,7 +99,7 @@ void techno_gem::initialGem(Sint32 pos_x, Sint32 pos_y, tecno_bump *raket)
 	h = gem_random[h];
 	//h = BOBListNum;		// for tests only !
 	typeof_gem = h;
-	change_GFX(h);
+	set_image(h);
 	indicator1 = 0;
 	sprite_has_shadow = 1;
 	blinkcount = 0;
@@ -111,7 +111,7 @@ void techno_gem::initialGem(Sint32 pos_x, Sint32 pos_y, tecno_bump *raket)
 void techno_gem::gemcollect(Sint32 ztype)
 {
 	typeof_gem = ztype;
-	change_GFX(ztype);
+	set_image(ztype);
 	sprite_has_shadow = 0;
 	indicator1 = 1;
 	y_coord = screen_height - sprite_height - 2 * resolution;
@@ -144,7 +144,7 @@ Sint32 techno_gem::deplaceMoi()
 			//###########################################################
 			case 1:
 				y_coord += i;
-				if(y_coord < maximum_Y1)
+				if(y_coord < y_maximum)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF					
@@ -162,7 +162,7 @@ Sint32 techno_gem::deplaceMoi()
 			//###########################################################
 			case 2:
 				x_coord += i;
-				if(x_coord < maximum_X1)
+				if(x_coord < x_maximum)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF					
@@ -180,7 +180,7 @@ Sint32 techno_gem::deplaceMoi()
 			//###########################################################
 			case 3:
 				y_coord -= i;
-				if(y_coord > minimum_Y1)
+				if(y_coord > y_minimum)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF					
@@ -198,7 +198,7 @@ Sint32 techno_gem::deplaceMoi()
 			//###########################################################
 			case 4:
 				x_coord -= i;
-				if(x_coord > minimum_X1)
+				if(x_coord > x_minimum)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF					

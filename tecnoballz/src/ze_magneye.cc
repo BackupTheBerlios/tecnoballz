@@ -99,7 +99,7 @@ void ze_magneye::execution1()
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	techno_eye *ptEye = sprites_list[i];
 		//if(!ptEye->is_enabled) continue;
-		ptEye->animRepete();
+		ptEye->play_animation_loop();
 		
 		//###############################################################
 		// verify if coordinates of center arrived at destination.

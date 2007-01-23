@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.17 2007/01/23 17:02:05 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.18 2007/01/23 20:51:30 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -42,7 +42,7 @@ ze_gadgets::ze_gadgets(Sint32 total, Sint32 vShad)
 	*(monPT++) = -1;
 	frame_delay = 0;
 	frame_period = 5;
-	animOffset = 0;
+	frame_index = 0;
 	malus_step = 0;
 	malus_frek = 0;
 	brick_kass = 0;
@@ -285,7 +285,7 @@ void ze_gadgets::bouge_gads()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_gads *bonus = sprites_list[i];
-		bonus->animRepete();
+		bonus->play_animation_loop();
 		tecno_bump *raket = bonus->deplaceMoi();
 		if(raket)
 		{	Sint32 g = bonus->get_gadget();
@@ -301,7 +301,7 @@ void ze_gadgets::bougegads2()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_gads *bonus = sprites_list[i];
-		bonus->animRepete();
+		bonus->play_animation_loop();
 		tecno_bump *raket = bonus->deplaceMoi();
 		if(raket)
 		{	Sint32 g = bonus->get_gadget();
@@ -317,15 +317,15 @@ void ze_gadgets::animations(Sint32 value)
 {
 	if((--frame_delay) <= 0)
 	{	frame_delay = frame_period / value;
-			if(++animOffset >= XXX_IMAGES)
-				animOffset = 0;
+			if(++frame_index >= XXX_IMAGES)
+				frame_index = 0;
 	}
-	Sint32 a = animOffset;
+	Sint32 a = frame_index;
 	tecno_gads **liste = sprites_list;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_gads *bonus = *(liste++);
-		Sint32 o = bonus->miniOffset + a;
-		bonus->change_GFX(o);
+		Sint32 o = bonus->frame_index_min + a;
+		bonus->set_image(o);
 	}
 }
 

@@ -4,11 +4,11 @@
  * @date 2007-01-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.4 2007/01/23 17:02:05 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.5 2007/01/23 20:51:30 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -305,8 +305,8 @@ sprite_ball::ball2eject (Sint32 index, Sint32 otime)
 void
 sprite_ball::pointe_GFX ()
 {
-  animOffset = ball_sizeX + ballPowerX;
-  change_GFX (animOffset);
+  frame_index = ball_sizeX + ballPowerX;
+  set_image (frame_index);
 }
 
 //-------------------------------------------------------------------------------

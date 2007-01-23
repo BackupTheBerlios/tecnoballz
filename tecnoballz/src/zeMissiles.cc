@@ -62,7 +62,7 @@ void zeMissiles::execution1()
 void zeMissiles::anim_fires()
 {
 	tecno_miss *xFire = sprites_list[0];
-	xFire->animRepete();
+	xFire->play_animation_loop();
 	Sint32 o = xFire->litAnimOff();
 	Sint32 cycle = o & 0X1;
 	if(!cycle) cycle = sprite_object::METHOD_TAB;
@@ -71,7 +71,7 @@ void zeMissiles::anim_fires()
 	Sint32 t = max_of_sprites;
 	for(Sint32 i = 1; i < t; i++)
 	{	xFire = sprites_list[i];
-		xFire->change_GFX(o);
+		xFire->set_image(o);
 		//xFire->affCycling = cycle;
 		xFire->put_method = cycle;
 	}

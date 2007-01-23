@@ -73,5 +73,5 @@ void mousePoint::bouge_test()
 	move_y(offsY);
 	set_coordinates(offsX, offsY);
 	clip_coordinates();
-	animRepete();
+	play_animation_loop();
 }

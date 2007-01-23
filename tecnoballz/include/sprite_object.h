@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.11 2007/01/23 17:02:05 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.12 2007/01/23 20:51:30 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -183,26 +183,37 @@ protected:
   Sint32 is_enabled;            // 1=le BOB peut etre affiche
   /** true if the sprite has a shadow */
   bool sprite_has_shadow;
-  Sint32 x_coord;            // abscisse
-  Sint32 y_coord;            // ordonnee
-  Sint32 sprite_width;            // largeur BOB en pixels
-  Sint32 sprite_height;            // largeur BOB en lignes
-  
-  Sint32 frame_period;            // initialise tempo animation
-  Sint32 frame_delay;            // tempo animation
-  Sint32 animOffset;            // number of the animation
-  Sint32 maxiOffset;            // offset minimum de l'animation
-  Sint32 miniOffset;            // offset maximum animation
+  /** X coordinate */
+  Sint32 x_coord;
+  /** Y coordinate */
+  Sint32 y_coord;
+  /** Width of the sprite in pixels */
+  Sint32 sprite_width;
+  /** Height of the sprite in pixels */
+  Sint32 sprite_height;
+
+  /** Time delay before next image of the animation */
+  Sint32 frame_period;
+  /** Counter time delay before next image */
+  Sint32 frame_delay;
+  /** Index of the current image */
+  Sint32 frame_index;
+  Sint32 frame_index_max;
+  Sint32 frame_index_min;
   
   Sint32 display_pos;           // numero identificateur BOB
   /** Width of the game screen in pixels */
   Sint32 screen_width;
   /** Height of the game screen in pixels */
   Sint32 screen_height;
-  Sint32 maximum_X1;            // abscisse maximum
-  Sint32 minimum_X1;            // abscisse minimum
-  Sint32 maximum_Y1;            // ordonnee maximum
-  Sint32 minimum_Y1;            // ordonnee minimum
+  /** X coordinate minimum */
+  Sint32 x_minimum;
+  /** Y coordinate minimum */
+  Sint32 y_minimum;
+  /** X coordinate maximum */
+  Sint32 x_maximum;
+  /** Y coordinate maximum */
+  Sint32 y_maxium;
   /** Type ID of the sprite */
   Sint32 sprite_type_id;
   Sint32 affligFrSv;            // premiere ligne a afficher (si afflignesF=1)
@@ -254,8 +265,8 @@ public:
   bool has_shadow ();
   Sint32 get_x_coord ();
   Sint32 get_y_coord ();
-  void change_GFX ();
-  void change_GFX (Sint32 index);
+  void set_image ();
+  void set_image (Sint32 index);
   Sint32 litAnimOff ();
   void restore_background_under_sprite ();
   void efface_lin ();
@@ -270,22 +281,21 @@ public:
   void afficheRep ();
   void afficheLin ();
   void affich_SHA ();
-  void MSKaffiche ();
+  void draw_copy ();
   void MSKbitcopy ();
   void MSK_bitclr ();
   void aspire_BOB (sprite_object * bobPT, Sint32 offsX = 0, Sint32 offsY = 0);
   void aspireBOB2 (sprite_object * bobPT, Sint32 offsX = 0, Sint32 offsY = 0);
   Sint32 collision1 (sprite_object * bobPT);
   void tempo_init (Sint32 tempo);
-  void tempoinit2 (Sint32 tempo);
+  void set_frame_period (Sint32 period);
   bool play_animation_once ();
-  void animRepete ();
+  void play_animation_loop ();
   void new_offset (Sint32 nume);
   void clip_coordinates ();
   Uint32 get_sprite_width ();
   Uint32 get_sprite_height ();
-  Uint32 getColLarg ();
-  Uint32 getColHaut ();
+  Uint32 get_collision_width ();
   void initRepeat (Sint32 value);
 
   void set_method (Uint32 vtype);

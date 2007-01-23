@@ -59,13 +59,13 @@ Sint32 zeDefilTxt::init_chars()
 		zeBOB->zeCosValue = j;
 		zeBOB->set_x_coord(100);
 		zeBOB->set_y_coord(300);
-		zeBOB->change_GFX(26);
+		zeBOB->set_image(26);
 	}
 	objectChar[i + 1] = 0;
 	objectLeft = sprites_list[i++];
 	objectRigh = sprites_list[i];
-	objectLeft->change_GFX(42);
-	objectRigh->change_GFX(42);
+	objectLeft->set_image(42);
+	objectRigh->set_image(42);
 	enable_sprites();
 	object_ptr = &objectChar[DEFINUMBER];
 	scroll_ptr = scrollText;
@@ -117,7 +117,7 @@ void zeDefilTxt::move_chars()
 			b = 127;
 			c = c & b;
 			b = asciiToBob[c];
-			zeBOB->change_GFX(b);
+			zeBOB->set_image(b);
 			if(!*(object_ptr - 1))
 				object_ptr = &objectChar[DEFINUMBER + 1];
 			object_ptr--;

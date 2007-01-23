@@ -77,7 +77,7 @@ void ballDirect::execution1()
 		if(balle && balle->is_enabled)
 		{	sprites_list[i]->aspireBOB2(balle);
 			sprites_list[i]->enable();
-			sprites_list[i]->change_GFX(balle->directBall  / 4);
+			sprites_list[i]->set_image(balle->directBall  / 4);
 		}
 		else 
 		{

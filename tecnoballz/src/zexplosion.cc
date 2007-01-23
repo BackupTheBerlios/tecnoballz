@@ -91,10 +91,10 @@ void zexplosion::add_explos(Sint32 pos_x, Sint32 pos_y)
 			ptbob->is_enabled = 1;
 			ptbob->x_coord = pos_x - (ptbob->sprite_width/2) ;
 			ptbob->y_coord = pos_y - (ptbob->sprite_height/2) ;
-			ptbob->animOffset = ptbob->miniOffset;
+			ptbob->frame_index = ptbob->frame_index_min;
 			ptbob->frame_period = 4 + (hasard_val & 7);
 			ptbob->frame_delay = ptbob->frame_period;
-			ptbob->change_GFX();
+			ptbob->set_image();
 			return;
 		}
 	}

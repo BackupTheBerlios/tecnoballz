@@ -295,7 +295,7 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 					sprites_list[bobindex] = ptbob;
 					sprites->add(ptbob);
 					ptbob->enable();
-					ptbob->change_GFX(2);
+					ptbob->set_image(2);
 				}
 			
 			

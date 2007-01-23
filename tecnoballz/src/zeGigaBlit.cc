@@ -349,13 +349,13 @@ void zeGigaBlit::collision2()
 	{	Sint32 gx = blitzobjet->get_x_coord();
 		Sint32 gy = blitzobjet->get_y_coord();
 		//Sint32 gh = blitzobjet->get_sprite_height();
-		Sint32 gw = blitzobjet->getColLarg();
+		Sint32 gw = blitzobjet->get_collision_width();
 		Sint32 bx = tecBumper1->get_x_coord();
 		Sint32 by = tecBumper1->get_y_coord();
 		Sint32 bw = tecBumper1->rakLargeur();
 		Sint32 bh = tecBumper1->get_sprite_height();
-		/*printf("zeGigaBlit::collision2(): getColLarg=%i / get_sprite_width=%i / get_sprite_height=%i /  blitz_haut =%i\n",
-			blitzobjet->getColLarg(), blitzobjet->get_sprite_width(),
+		/*printf("zeGigaBlit::collision2(): get_collision_width=%i / get_sprite_width=%i / get_sprite_height=%i /  blitz_haut =%i\n",
+			blitzobjet->get_collision_width(), blitzobjet->get_sprite_width(),
 			blitzobjet->get_sprite_height(), blitz_haut);*/
 		
 		if (gy + blitz_haut >= by &&

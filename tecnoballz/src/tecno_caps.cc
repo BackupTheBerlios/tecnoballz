@@ -47,10 +47,10 @@ tecno_caps::~tecno_caps()
 //-----------------------------------------------------------------------------
 void tecno_caps::littleInit()
 {
-	maximum_X1 = screen_width - ((64 + 16) * resolution);
-	minimum_X1 = 3 * resolution;
-	maximum_Y1 = screen_height - 10  * resolution;
-	minimum_Y1 = 0 * resolution;
+	x_maximum = screen_width - ((64 + 16) * resolution);
+	x_minimum = 3 * resolution;
+	y_maximum = screen_height - 10  * resolution;
+	y_minimum = 0 * resolution;
 	frame_period = 5;			//animation delay 
 	frame_delay = 1;			//animation delay counter
 	
@@ -157,7 +157,7 @@ Sint32 tecno_caps::deplaceMoi()
 			//###########################################################
 			case 1:
 				y_coord += i;
-				if(y_coord < maximum_Y1)
+				if(y_coord < y_maximum)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF
@@ -175,7 +175,7 @@ Sint32 tecno_caps::deplaceMoi()
 			//###########################################################
 			case 2:
 				x_coord += i;
-				if(x_coord < maximum_X1)
+				if(x_coord < x_maximum)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF
@@ -193,7 +193,7 @@ Sint32 tecno_caps::deplaceMoi()
 			//###########################################################
 			case 3:
 				y_coord -= i;
-				if(y_coord > minimum_Y1)
+				if(y_coord > y_minimum)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF
@@ -211,7 +211,7 @@ Sint32 tecno_caps::deplaceMoi()
 			//###########################################################
 			case 4:
 				x_coord -= i;
-				if(x_coord > minimum_X1)
+				if(x_coord > x_minimum)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF
@@ -237,7 +237,7 @@ Sint32 tecno_caps::deplaceMe2()
 	{	Sint32 i = la_vitesse;
 		tecno_bump *raket = raquettePT;
 		y_coord += i;
-		if(y_coord < maximum_Y1)
+		if(y_coord < y_maximum)
 		{	if(collision1(raket))
 			{	is_enabled = 0;
 #ifndef SOUNDISOFF

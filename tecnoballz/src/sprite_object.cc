@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.12 2007/01/23 17:02:05 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.13 2007/01/23 20:51:30 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,7 +105,7 @@ sprite_object::clear_sprite_members ()
   adresseEC2 = (char *) NULL;
   frame_delay = 1;
   max_of_images = 0;
-  animOffset = 0;
+  frame_index = 0;
   is_enabled = 0;
   sprite_height = 0;
   sprite_width = 0;
@@ -120,12 +120,12 @@ sprite_object::clear_sprite_members ()
   x_coord = 0;
   y_coord = 0;
   display_pos = 0;
-  maximum_X1 = 0;
-  maximum_Y1 = 0;
-  maxiOffset = 0;
-  minimum_X1 = 0;
-  minimum_Y1 = 0;
-  miniOffset = 0;
+  x_maximum = 0;
+  y_maximum = 0;
+  frame_index_max = 0;
+  x_minimum = 0;
+  y_minimum = 0;
+  frame_index_min = 0;
   offsetDest = 0;
   offsetSrce = 0;
   tabAffich1 = (Sint16 *) 0x0;
@@ -163,7 +163,7 @@ sprite_object & sprite_object::operator= (const sprite_object & sprite)
   adresseEC2 = sprite.adresseEC2;
   frame_delay = sprite.frame_delay;
   max_of_images = sprite.max_of_images;
-  animOffset = sprite.animOffset;
+  frame_index = sprite.frame_index;
   is_enabled = sprite.is_enabled;
   sprite_height = sprite.sprite_height;
   sprite_width = sprite.sprite_width;
@@ -178,12 +178,12 @@ sprite_object & sprite_object::operator= (const sprite_object & sprite)
   x_coord = sprite.x_coord;
   y_coord = sprite.y_coord;
   display_pos = sprite.display_pos;
-  maximum_X1 = sprite.maximum_X1;
-  maximum_Y1 = sprite.maximum_Y1;
-  maxiOffset = sprite.maxiOffset;
-  minimum_X1 = sprite.minimum_X1;
-  minimum_Y1 = sprite.minimum_Y1;
-  miniOffset = sprite.miniOffset;
+  x_maximum = sprite.x_maximum;
+  y_maximum = sprite.y_maximum;
+  frame_index_max = sprite.frame_index_max;
+  x_minimum = sprite.x_minimum;
+  y_minimum = sprite.y_minimum;
+  frame_index_min = sprite.frame_index_min;
   offsetSrce = sprite.offsetSrce;
   offsetDest = sprite.offsetDest;
   tabAffich1 = sprite.tabAffich1;
@@ -214,7 +214,7 @@ sprite_object::duplicaBOB (sprite_object * bobPT)
   bobPT->adresseEC2 = adresseEC2;
   bobPT->frame_delay = frame_delay;
   bobPT->max_of_images = max_of_images;
-  bobPT->animOffset = animOffset;
+  bobPT->frame_index = frame_index;
   bobPT->is_enabled = is_enabled;
   bobPT->sprite_height = sprite_height;
   bobPT->sprite_width = sprite_width;
@@ -229,12 +229,12 @@ sprite_object::duplicaBOB (sprite_object * bobPT)
   bobPT->x_coord = x_coord;
   bobPT->y_coord = y_coord;
   bobPT->display_pos = display_pos;
-  bobPT->maximum_X1 = maximum_X1;
-  bobPT->maximum_Y1 = maximum_Y1;
-  bobPT->maxiOffset = maxiOffset;
-  bobPT->minimum_X1 = minimum_X1;
-  bobPT->minimum_Y1 = minimum_Y1;
-  bobPT->miniOffset = miniOffset;
+  bobPT->x_maximum = x_maximum;
+  bobPT->y_maximum = y_maximum;
+  bobPT->frame_index_max = frame_index_max;
+  bobPT->x_minimum = x_minimum;
+  bobPT->y_minimum = y_minimum;
+  bobPT->frame_index_min = frame_index_min;
   bobPT->offsetSrce = offsetSrce;
   bobPT->offsetDest = offsetDest;
   bobPT->tabAffich1 = tabAffich1;
@@ -325,8 +325,8 @@ sprite_object::initCommun (GIF_bitMap * image, Sint32 shadow)
   max_of_images = 1;
   collision_height = sprite_height;
   collision_width = sprite_width;
-  maximum_X1 = screen_width - (Sint32) collision_width;
-  maximum_Y1 = screen_height - (Sint32) collision_height;
+  x_maximum = screen_width - (Sint32) collision_width;
+  y_maximum = screen_height - (Sint32) collision_height;
   offsetSrce = image->GFX_modulo (sprite_width);
   offsetDest = display->buffer_mod (sprite_width);
 }
@@ -398,19 +398,17 @@ sprite_object::create_sprite (Sint32 BOBnu, GIF_bitMap * image, bool shadow,
   initCommun (image, shadow);
   const bb_describ *descr = zelistBOB[BOBnu];
 
-  //###################################################################
-  // read sprite caracteristics
-  //###################################################################
-  sprite_height = descr->BB_HAUTEUR;    //high in pixels
+  /* read sprite caracteristics */
+  sprite_height = descr->BB_HAUTEUR;
   sprite_height *= resolution;
-  max_of_images = descr->BB_ANIMATE;       //number of animations
-  maxiOffset = max_of_images - 1;
-  sprite_width = descr->BB_LARGEUR;     //width in pixels
+  max_of_images = descr->BB_ANIMATE;
+  frame_index_max = max_of_images - 1;
+  sprite_width = descr->BB_LARGEUR;
   sprite_width *= resolution;
   collision_height = sprite_height;
   collision_width = sprite_width;
-  maximum_X1 = screen_width - sprite_width;
-  maximum_Y1 = screen_height - sprite_height;
+  x_maximum = screen_width - sprite_width;
+  y_maximum = screen_height - sprite_height;
 
   //###################################################################
   // mode lines by lines
@@ -749,32 +747,37 @@ sprite_object::get_y_coord ()
   return y_coord;
 }
 
-//-------------------------------------------------------------------------------
-// change image of sprite
-//-------------------------------------------------------------------------------
+/**
+ * Set the image to use for this sprite
+ */
 void
-sprite_object::change_GFX ()
+sprite_object::set_image ()
 {
-  Sint32 index = animOffset;
+  Sint32 index = frame_index;
   adresseGFX = adresseTAB[index];
-  tabAffich1 = BOBtableP1[index];       // adresse table pour "afficheBOB"
-  tabAffich2 = BOBtableP2[index];       // adresse table pour "afficheBOB"
+  tabAffich1 = BOBtableP1[index];
+  tabAffich2 = BOBtableP2[index];
   if (fTableByte && BOBtableP3)
-    tabAffich3 = BOBtableP3[index];     // adresse table pour "afficheBOB"
+    {
+      tabAffich3 = BOBtableP3[index]; 
+    }
 }
 
-//-------------------------------------------------------------------------------
-// change image of sprite
-//-------------------------------------------------------------------------------
+/**
+ * Set the image to use for this sprite
+ * @param index frame index 
+ */
 void
-sprite_object::change_GFX (Sint32 index)
+sprite_object::set_image (Sint32 index)
 {
-  animOffset = index;
+  frame_index = index;
   adresseGFX = adresseTAB[index];
-  tabAffich1 = BOBtableP1[index];       // adresse table pour "afficheBOB"
-  tabAffich2 = BOBtableP2[index];       // adresse table pour "afficheBOB"
+  tabAffich1 = BOBtableP1[index];
+  tabAffich2 = BOBtableP2[index];
   if (fTableByte)
-    tabAffich3 = BOBtableP3[index];     // adresse table pour "afficheBOB"
+    {
+      tabAffich3 = BOBtableP3[index];
+    }
 }
 
 /**
@@ -789,14 +792,13 @@ sprite_object::restore_background_under_sprite ()
       return;
     }
 
-  //###################################################################
-  // special sprite, restore line by line (gigablitz)
-  //###################################################################
+  /* special sprite, restore line by line (gigablitz) */
   if (put_method == METHOD_LIN)
     {
       efface_lin ();
       return;
     }
+
 #ifndef BYTES_COPY
   Sint32 *srcPT = (Sint32 *) restore_ptr;
   Sint32 *adres = (Sint32 *) screen_ptr;
@@ -810,12 +812,16 @@ sprite_object::restore_background_under_sprite ()
       srcPT = (Sint32 *) ((char *) srcPT + o);
       o = *(gfxPT++);           //number of bytes contigus
       for (Sint32 k = 0; k < o; k++)
-        *(adres++) = *(srcPT++);
+        {
+          *(adres++) = *(srcPT++);
+        }
       o = *(gfxPT++);           //number of longword contigus
       char *adreb = (char *) adres;
       char *srcPB = (char *) srcPT;
       for (Sint32 k = 0; k < o; k++)
-        *(adreb++) = *(srcPB++);
+        {
+          *(adreb++) = *(srcPB++);
+        }
       adres = (Sint32 *) adreb;
       srcPT = (Sint32 *) srcPB;
     }
@@ -833,7 +839,9 @@ sprite_object::restore_background_under_sprite ()
       gfxPT++;
       o = *(gfxPT++);           //number of bytes contigus
       for (Sint32 k = 0; k < o; k++)
-        *(adres++) = *(srcPT++);
+        {
+          *(adres++) = *(srcPT++);
+        }
     }
 #endif
 }
@@ -845,7 +853,7 @@ void
 sprite_object::efface_lin ()
 {
 
-  bb_afligne *p = tafflignes[animOffset];
+  bb_afligne *p = tafflignes[frame_index];
   Sint32 l = affligFrSv;
   Sint16 o = p[l].OFFSETLEFT;
   Uint32 t = (Uint32) p[l].COUNTERTAB;
@@ -932,7 +940,7 @@ sprite_object::efface_lin ()
 Sint32
 sprite_object::litAnimOff ()
 {
-  return animOffset;
+  return frame_index;
 }
 
 /**
@@ -992,7 +1000,7 @@ sprite_object::restore_background_under_shadow ()
 void
 sprite_object::draw ()
 {
-  if (!is_enabled || animOffset >= max_of_images)
+  if (!is_enabled || frame_index >= max_of_images)
     {
       return;
     }
@@ -1002,7 +1010,7 @@ sprite_object::draw ()
       method_tab ();
       break;
     case METHOD_MSK:
-      MSKaffiche ();
+      draw_copy ();
       break;
     case METHOD_LIN:
       afficheLin ();
@@ -1219,7 +1227,7 @@ sprite_object::afficheRep ()
 void
 sprite_object::afficheLin ()
 {
-  bb_afligne *p = tafflignes[animOffset];
+  bb_afligne *p = tafflignes[frame_index];
   restore_ptr = display->tampon_pos (x_coord, y_coord + affligFrst);
   affligFrSv = affligFrst;;
   affligLaSv = affligLast;
@@ -1466,14 +1474,16 @@ sprite_object::affich_SHA ()
 #endif
 }
 
-//------------------------------------------------------------------------------
-// display a sprite into the "buffer" (copy byte to byte, no table)
-//------------------------------------------------------------------------------
+/**
+ * Draw a sprite into the game offscreen (copy byte to byte, no table)
+ */
 void
-sprite_object::MSKaffiche ()
+sprite_object::draw_copy ()
 {
   if (!is_enabled)
-    return;
+    {
+      return;
+    }
   char *s = adresseGFX;
   char *d = display->buffer_pos (x_coord, y_coord);
   restore_ptr = display->tampon_pos (x_coord, y_coord);
@@ -1486,9 +1496,14 @@ sprite_object::MSKaffiche ()
     {
       for (Sint32 j = 0; j < l; j++)
         {
-          char p = s[j];        //read the pixel
-          if (p)                //color 0 ?
-            d[j] = p;           //no, put the pixel
+          /* read the pixel */
+          char p = s[j];
+          /* black color? */
+          if (p != 0)
+            {
+              /* no, put the pixel */
+              d[j] = p;
+            }
         }
       s += m;
       d += n;
@@ -1594,10 +1609,14 @@ sprite_object::tempo_init (Sint32 tempo)
   frame_period = tempo;
 }
 
+/**
+ * Set the frame period, the speed of animation
+ * @param period time delay before next image
+ */
 void
-sprite_object::tempoinit2 (Sint32 tempo)
+sprite_object::set_frame_period (Sint32 period)
 {
-  frame_period = tempo;
+  frame_period = period;
 }
 
 /**
@@ -1612,15 +1631,15 @@ sprite_object::play_animation_once ()
       return is_enabled;
     }
   frame_delay = frame_period;
-  if (animOffset == maxiOffset)
+  if (frame_index == frame_index_max)
     {
-      animOffset = miniOffset;
+      frame_index = frame_index_min;
       is_enabled = 0;
     }
   else
     {
-      animOffset++;
-      change_GFX (animOffset);
+      frame_index++;
+      set_image (frame_index);
     }
   return is_enabled;
 }
@@ -1629,21 +1648,22 @@ sprite_object::play_animation_once ()
  * The animation is played in loop-mode
  */
 void
-sprite_object::animRepete ()
+sprite_object::play_animation_loop ()
 {
-  if (!(--frame_delay))
+  if (--frame_delay > 0)
     {
-      frame_delay = frame_period;
-      if (animOffset == maxiOffset)
-        {
-          animOffset = miniOffset;
-          change_GFX (animOffset);
-        }
-      else
-        {
-          animOffset++;
-          change_GFX (animOffset);
-        }
+      return;
+    }
+  frame_delay = frame_period;
+  if (frame_index == frame_index_max)
+    {
+      frame_index = frame_index_min;
+      set_image (frame_index);
+    }
+  else
+    {
+      frame_index++;
+      set_image (frame_index);
     }
 }
 
@@ -1653,8 +1673,8 @@ sprite_object::animRepete ()
 void
 sprite_object::new_offset (Sint32 numer)
 {
-  animOffset = numer;
-  change_GFX (numer);
+  frame_index = numer;
+  set_image (numer);
 }
 
 /**
@@ -1681,27 +1701,6 @@ sprite_object::clip_coordinates ()
     }
 }
 
-/**
- * Clip x coordinate of the sprite into offscreen x coordinates
- */
-/*
-void
-sprite_object::clip_x_coordinate ()
-{
-  if (x_coord < 0)
-    {
-      x_coord = 0;
-    }
-  else
-    {
-      if (x_coord > screen_width - sprite_width)
-        {
-          x_coord = screen_width - sprite_width;
-        }
-    }
-}
-*/
-
 /** 
  * get sprite's width 
  * @return the width of the sprite in pixels
@@ -1722,22 +1721,14 @@ sprite_object::get_sprite_height ()
   return sprite_height;
 }
 
-//-------------------------------------------------------------------------------
-// get sprite's width (collision)
-//-------------------------------------------------------------------------------
+/** 
+ * Get sprite's width for collision
+ * @return the width of sprite for the collisions
+ */
 Uint32
-sprite_object::getColLarg ()
+sprite_object::get_collision_width ()
 {
   return collision_width;
-}
-
-//-------------------------------------------------------------------------------
-// get sprite's height (collision)
-//-------------------------------------------------------------------------------
-Uint32
-sprite_object::getColHaut ()
-{
-  return collision_height;
 }
 
 //-------------------------------------------------------------------------------

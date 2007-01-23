@@ -61,7 +61,7 @@ void zeCongBall::initialize()
 	Sint32 value = 0;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprites_list[i]->enable();
-		sprites_list[i]->maximum_X1 = value;
+		sprites_list[i]->x_maximum = value;
 		value += offst;
 	}
 }
@@ -120,12 +120,12 @@ void zeCongBall::execution1()
 	
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_object *zebob = sprites_list[i];
-		zebob->maximum_X1 += sball;
-		//printf("[%i]", zebob->maximum_X1);
-		if(zebob->maximum_X1  >= r_max) zebob->maximum_X1 -= r_max;
-		if(zebob->maximum_X1  < 0) zebob->maximum_X1 += r_max;
-		Sint32 pos_x = 	(ressources::zesinus360[zebob->maximum_X1] * rad_x) >> 7;
-		Sint32 pos_y = 	(ressources::cosinus360[zebob->maximum_X1] * rad_y) >> 7;
+		zebob->x_maximum += sball;
+		//printf("[%i]", zebob->x_maximum);
+		if(zebob->x_maximum  >= r_max) zebob->x_maximum -= r_max;
+		if(zebob->x_maximum  < 0) zebob->x_maximum += r_max;
+		Sint32 pos_x = 	(ressources::zesinus360[zebob->x_maximum] * rad_x) >> 7;
+		Sint32 pos_y = 	(ressources::cosinus360[zebob->x_maximum] * rad_y) >> 7;
 		pos_x += centx;
 		pos_y += centy;
 		zebob->x_coord = pos_x;

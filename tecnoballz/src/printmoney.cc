@@ -155,11 +155,11 @@ void printmoney::execution1(Sint32 value)
 			}
 			baseN /= 10;
 			sprite_object *x_bob = *(liste++);
-			x_bob->change_GFX(i);
+			x_bob->set_image(i);
 			x_bob->enable();
 		}
 		ptBobRever->enable();
-		ptBobRever->animRepete();
+		ptBobRever->play_animation_loop();
 	}
 	else
 	{	for (Sint32 i=0; i<2; i++)
@@ -186,9 +186,9 @@ void printmoney::execution2(Sint32 value, Sint32 lifes)
 		}
 		baseN /= 10;
 		sprite_object *x_bob = *(liste++);
-		x_bob->change_GFX(i);
+		x_bob->set_image(i);
 	}
-	ptBobLifes->animRepete();
+	ptBobLifes->play_animation_loop();
 }
 
 //-----------------------------------------------------------------------------
@@ -207,10 +207,10 @@ void printmoney::exec_money(Sint32 value)
 		baseN /= 10;
 		sprite_object *x_bob = *(liste++);
 		x_bob->set_y_coord(money_posy);
-		x_bob->change_GFX(i);
+		x_bob->set_image(i);
 	}
 	ptBobMoney->set_y_coord(money_posy);
-	ptBobMoney->animRepete();
+	ptBobMoney->play_animation_loop();
 	if(money_posy < y_position)
 		money_posy += resolution;
 }

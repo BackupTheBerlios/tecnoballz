@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.14 2007/01/23 14:26:07 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.15 2007/01/23 20:51:30 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -874,11 +874,11 @@ void shop_tecno::aff_select()
 //-------------------------------------------------------------------------------
 void shop_tecno::tu_triches()
 {
-	objetMouse->tempoinit2(3);
+	objetMouse->set_frame_period(3);
 	if(cheat_flag) return;
 	if(!birth_flag) return;
 	if(!objetMouse->get_x_coord() && !objetMouse->get_y_coord())
-	{	objetMouse->tempoinit2(20);
+	{	objetMouse->set_frame_period(20);
 		Sint32 k = keyboard->get_key_down_code();
 		if(triche_key != k && k)
 		{	triche_key = k;

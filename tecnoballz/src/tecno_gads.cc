@@ -46,10 +46,10 @@ tecno_gads::~tecno_gads()
 //-----------------------------------------------------------------------------
 void tecno_gads::littleInit()
 {
-	maximum_X1 = screen_width - ((64 + 16) * resolution);
-	minimum_X1 = 3 * resolution;
-	maximum_Y1 = screen_height - 10  * resolution;
-	minimum_Y1 = 0 * resolution;
+	x_maximum = screen_width - ((64 + 16) * resolution);
+	x_minimum = 3 * resolution;
+	y_maximum = screen_height - 10  * resolution;
+	y_minimum = 0 * resolution;
 	frame_period = 6;	// vitesse d'animation
 	frame_delay = 1;	// compteur tempo animation
 	set_method(sprite_object::CYCLE_PTAB);
@@ -75,11 +75,11 @@ void tecno_gads::new_gadget(Sint32 nuGad)
 	}
 	is_enabled = 1;
 	nuGad = *p;
-	miniOffset = nuGad;
-	animOffset = nuGad;
+	frame_index_min = nuGad;
+	frame_index = nuGad;
 	nuGad += XXX_IMAGES - 1;
-	maxiOffset = nuGad;
-	change_GFX(animOffset);
+	frame_index_max = nuGad;
+	set_image(frame_index);
 }
 
 //-----------------------------------------------------------------------------
@@ -107,11 +107,11 @@ void tecno_gads::nouveauGad(brickClear *briPT, Sint32 nuGad)
 	}
 	is_enabled = 1;
 	nuGad = *p;
-	miniOffset = nuGad;
-	animOffset = nuGad;
+	frame_index_min = nuGad;
+	frame_index = nuGad;
 	nuGad += XXX_IMAGES - 1;
-	maxiOffset = nuGad;
-	change_GFX(animOffset);
+	frame_index_max = nuGad;
+	set_image(frame_index);
 
 }
 //-----------------------------------------------------------------------------
@@ -139,11 +139,11 @@ void tecno_gads::nouveauGad(sprite_ball *balle, Sint32 nuGad)
 	}
 	is_enabled = 1;
 	nuGad = *p;
-	miniOffset = nuGad;
-	animOffset = nuGad;
+	frame_index_min = nuGad;
+	frame_index = nuGad;
 	nuGad += XXX_IMAGES - 1;
-	maxiOffset = nuGad;
-	change_GFX(animOffset);
+	frame_index_max = nuGad;
+	set_image(frame_index);
 }
 //-----------------------------------------------------------------------------
 // bricks levels: drop new gadget from a BouiBoui
@@ -170,11 +170,11 @@ void tecno_gads::nouveauGad(tecno_fire *pfire, Sint32 nuGad)
 	}
 	is_enabled = 1;
 	nuGad = *p;
-	miniOffset = nuGad;
-	animOffset = nuGad;
+	frame_index_min = nuGad;
+	frame_index = nuGad;
 	nuGad += XXX_IMAGES - 1;
-	maxiOffset = nuGad;
-	change_GFX(animOffset);
+	frame_index_max = nuGad;
+	set_image(frame_index);
 }
 
 
@@ -203,11 +203,11 @@ void tecno_gads::new_gadget(sprite_ball *balle, Sint32 nuGad)
 	}
 	is_enabled = 1;
 	nuGad = *p;
-	miniOffset = nuGad;
-	animOffset = nuGad;
+	frame_index_min = nuGad;
+	frame_index = nuGad;
 	nuGad += XXX_IMAGES - 1;
-	maxiOffset = nuGad;
-	change_GFX(animOffset);
+	frame_index_max = nuGad;
+	set_image(frame_index);
 }
 
 //-----------------------------------------------------------------------------
@@ -224,11 +224,11 @@ void tecno_gads::nouveauGad(Sint32 nuGad)
 			is_enabled = 0;	// disable the objet
 		else
 		{	is_enabled = 1;
-			miniOffset = i;
-			animOffset = i;
+			frame_index_min = i;
+			frame_index = i;
 			i += XXX_IMAGES - 1;
-			maxiOffset = i;
-			change_GFX(animOffset);
+			frame_index_max = i;
+			set_image(frame_index);
 		}
 	}
 }
@@ -240,10 +240,10 @@ void tecno_gads::nouveauGad(Sint32 nuGad)
 void tecno_gads::copiegadet(tecno_gads *gadgt)
 {
 	gadget_num = gadgt->gadget_num;
-	miniOffset = gadgt->miniOffset;
-	animOffset = gadgt->animOffset;
-	maxiOffset = gadgt->maxiOffset;
-	change_GFX(animOffset);
+	frame_index_min = gadgt->frame_index_min;
+	frame_index = gadgt->frame_index;
+	frame_index_max = gadgt->frame_index_max;
+	set_image(frame_index);
 }
 
 //-----------------------------------------------------------------------------
@@ -266,7 +266,7 @@ tecno_bump *tecno_gads::deplaceMoi()
 			// bottom bumper
 			case 1:
 				y_coord += resolution;
-				if(y_coord < maximum_Y1)
+				if(y_coord < y_maximum)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 						joueurGere->add_scores(20);
@@ -280,7 +280,7 @@ tecno_bump *tecno_gads::deplaceMoi()
 			// right bumper
 			case 2:
 				x_coord += resolution;
-				if(x_coord < maximum_X1)
+				if(x_coord < x_maximum)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 						joueurGere->add_scores(20);
@@ -294,7 +294,7 @@ tecno_bump *tecno_gads::deplaceMoi()
 			// top bumper
 			case 3:
 				y_coord -= resolution;
-				if(y_coord > minimum_Y1)
+				if(y_coord > y_minimum)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 						joueurGere->add_scores(20);
@@ -308,7 +308,7 @@ tecno_bump *tecno_gads::deplaceMoi()
 			// left bumper
 			case 4:
 				x_coord -= resolution;
-				if(x_coord > minimum_X1)
+				if(x_coord > x_minimum)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 						joueurGere->add_scores(20);

@@ -105,7 +105,7 @@ void zeCapsules::bouge_fric()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_caps *capsu = sprites_list[i];
-		capsu->animRepete();
+		capsu->play_animation_loop();
 		Sint32 j = capsu->deplaceMoi();
 		if(j)
 		{	joueurGere->add_scores(20);
@@ -151,7 +151,7 @@ void zeCapsules::bougefric2()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_caps *capsu = sprites_list[i];
-		capsu->animRepete();
+		capsu->play_animation_loop();
 		Sint32 j = capsu->deplaceMe2();
 		if(j)
 		{	//printf("zeCapsules::bouge_fric2() : %i\n", j);
