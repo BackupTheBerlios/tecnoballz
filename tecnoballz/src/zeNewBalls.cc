@@ -206,14 +206,14 @@ void zeNewBalls::vitus_sort()
 		tecno_bump *rakPT;
 		if(balle->is_enabled)
 		{	rakPT = (tecno_bump*)NULL;
-			Sint32 j = balle->position_x;
+			Sint32 j = balle->x_coord;
 			if(j < min_x)
 				rakPT = tecBumper4;
 			else
 			{	if(j > max_x)
 					rakPT = tecBumper2;
 				else
-				{	j = balle->position_y;
+				{	j = balle->y_coord;
 					if(j < min_y)
 						rakPT = tecBumper3;
 					else
@@ -267,7 +267,7 @@ void zeNewBalls::vitussort2()
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
 		if(balle->is_enabled)
-		{	Sint32 j = balle->position_y;
+		{	Sint32 j = balle->y_coord;
 			if(j > max_y)
 			{	if((--num_of_sprites) > 0)
 					balle->goSleeping(raket);
@@ -364,34 +364,34 @@ void zeNewBalls::vitus_move()
 					{	case 1:
 							j = (raket->colLargeur >> 1) -
 								((balle->colLargeur >> 1) + 1);
-							j += raket->position_x;
-							balle->position_x = j;
-							j = (raket->position_y) - (balle->colHauteur + 1);
-							balle->position_y = j;
+							j += raket->x_coord;
+							balle->x_coord = j;
+							j = (raket->y_coord) - (balle->colHauteur + 1);
+							balle->y_coord = j;
 						break;
 
 						case 2:
-							j = (raket->position_x) - (balle->colLargeur - 1);
-							balle->position_x = j;
+							j = (raket->x_coord) - (balle->colLargeur - 1);
+							balle->x_coord = j;
 							j = (raket->colHauteur >> 1) - ((balle->colHauteur >> 1) + 1);
-							j += raket->position_y;
-							balle->position_y = j;
+							j += raket->y_coord;
+							balle->y_coord = j;
 							break;
 
 						case 3:
 							j = (raket->colLargeur >> 1) - ((balle->colLargeur >> 1) + 1);
-							j += raket->position_x;
-							balle->position_x = j;
-							j = (raket->position_y) + raket->colHauteur + 1;
-							balle->position_y = j;
+							j += raket->x_coord;
+							balle->x_coord = j;
+							j = (raket->y_coord) + raket->colHauteur + 1;
+							balle->y_coord = j;
 							break;
 
 						case 4:
-							j = (raket->position_x) + (raket->colLargeur) + 1;
-							balle->position_x = j;
+							j = (raket->x_coord) + (raket->colLargeur) + 1;
+							balle->x_coord = j;
 							j = (raket->colHauteur >> 1) - ((balle->colHauteur >> 1) + 1);
-							j += raket->position_y;
-							balle->position_y = j;
+							j += raket->y_coord;
+							balle->y_coord = j;
 							break;
 
 					}
@@ -424,9 +424,9 @@ void zeNewBalls::vitus_move()
 				table = (Sint16*)((char *)table + j);
 				Sint32 k;
 				k = *(table++);
-				balle->position_x += (k* resolution);
+				balle->x_coord += (k* resolution);
 				k = *table;
-				balle->position_y += (k * resolution);
+				balle->y_coord += (k * resolution);
 			}
 		}
 	}
@@ -461,11 +461,11 @@ void zeNewBalls::vitusmove2()
 					{	case 1:
 							j = (raket->colLargeur >> 1) -
 								((balle->colLargeur >> 1) + 1);
-							j += raket->position_x;
-							balle->position_x = j;
-							j = (raket->position_y) -
+							j += raket->x_coord;
+							balle->x_coord = j;
+							j = (raket->y_coord) -
 								(balle->colHauteur + 1);
-							balle->position_y = j;
+							balle->y_coord = j;
 							break;
 					}
 
@@ -496,9 +496,9 @@ void zeNewBalls::vitusmove2()
 				table = (Sint16*)((char *)table + j);
 				Sint32 k;
 				k = *(table++);
-				balle->position_x += (k* resolution);
+				balle->x_coord += (k* resolution);
 				k = *table;
-				balle->position_y += (k* resolution);
+				balle->y_coord += (k* resolution);
 			}
 		}
 	}
@@ -526,13 +526,13 @@ void zeNewBalls::vitus_bump()
 			raket = tecBumper1;
 			bumpX = 0;
 			if(raket->is_enabled)
-			{	x = raket->position_x;
-				y = raket->position_y;
-				if(balle->position_x + balle->colLargeur > x &&
-					balle->position_y + balle->colHauteur > y &&
-					balle->position_x < x + raket->colLargeur &&
-					balle->position_y < y + raket->colHauteur)
-				{	balle->position_y = y - balle->colHauteur;
+			{	x = raket->x_coord;
+				y = raket->y_coord;
+				if(balle->x_coord + balle->colLargeur > x &&
+					balle->y_coord + balle->colHauteur > y &&
+					balle->x_coord < x + raket->colLargeur &&
+					balle->y_coord < y + raket->colHauteur)
+				{	balle->y_coord = y - balle->colHauteur;
 					bumpX = raket;
 					ptBarreScr->resetemoin();
 				}
@@ -544,14 +544,14 @@ void zeNewBalls::vitus_bump()
 			if(!bumpX)
 			{	raket = tecBumper2;
 				if(raket->is_enabled)
-				{	x = raket->position_x;
-					y = raket->position_y;
-					if(balle->position_x + balle->colLargeur > x &&
-						balle->position_y + balle->colHauteur > y &&
-						balle->position_x < x + raket->colLargeur &&
-						balle->position_y < y + raket->colHauteur)
+				{	x = raket->x_coord;
+					y = raket->y_coord;
+					if(balle->x_coord + balle->colLargeur > x &&
+						balle->y_coord + balle->colHauteur > y &&
+						balle->x_coord < x + raket->colLargeur &&
+						balle->y_coord < y + raket->colHauteur)
 					{	
-						balle->position_x = x - balle->colLargeur;
+						balle->x_coord = x - balle->colLargeur;
 						bumpX = raket;
 					}
 				}
@@ -563,14 +563,14 @@ void zeNewBalls::vitus_bump()
 			if(!bumpX)
 			{	raket = tecBumper3;
 				if(raket->is_enabled)
-				{	x = raket->position_x;
-					y = raket->position_y;
-					if(balle->position_x + balle->colLargeur > x &&
-						balle->position_y + balle->colHauteur > y &&
-						balle->position_x < x + raket->colLargeur &&
-						balle->position_y < y + raket->colHauteur)
+				{	x = raket->x_coord;
+					y = raket->y_coord;
+					if(balle->x_coord + balle->colLargeur > x &&
+						balle->y_coord + balle->colHauteur > y &&
+						balle->x_coord < x + raket->colLargeur &&
+						balle->y_coord < y + raket->colHauteur)
 					{
-						balle->position_y = y + raket->colHauteur;
+						balle->y_coord = y + raket->colHauteur;
 						bumpX = raket;
 					}
 				}
@@ -583,14 +583,14 @@ void zeNewBalls::vitus_bump()
 			{
 				raket = tecBumper4;
 				if(raket->is_enabled)
-				{	x = raket->position_x;
-					y = raket->position_y;
-					if(balle->position_x + balle->colLargeur > x &&
-						balle->position_y + balle->colHauteur > y &&
-						balle->position_x < x + raket->colLargeur &&
-						balle->position_y < y + raket->colHauteur)
+				{	x = raket->x_coord;
+					y = raket->y_coord;
+					if(balle->x_coord + balle->colLargeur > x &&
+						balle->y_coord + balle->colHauteur > y &&
+						balle->x_coord < x + raket->colLargeur &&
+						balle->y_coord < y + raket->colHauteur)
 					{
-						balle->position_x = x + raket->colLargeur;
+						balle->x_coord = x + raket->colLargeur;
 						bumpX = raket;
 					}
 				}
@@ -666,14 +666,14 @@ void zeNewBalls::vitusbump2()
 		{	raket = tecBumper1;
 			bumpX = 0;
 			if(raket->is_enabled)
-			{	x = raket->position_x;
-				y = raket->position_y;
-				if(balle->position_x + balle->colLargeur > x &&
-					balle->position_y + balle->colHauteur > y &&
-					balle->position_x < x + raket->colLargeur &&
-					balle->position_y < y + raket->colHauteur)
+			{	x = raket->x_coord;
+				y = raket->y_coord;
+				if(balle->x_coord + balle->colLargeur > x &&
+					balle->y_coord + balle->colHauteur > y &&
+					balle->x_coord < x + raket->colLargeur &&
+					balle->y_coord < y + raket->colHauteur)
 				{
-					balle->position_y = y - balle->colHauteur;
+					balle->y_coord = y - balle->colHauteur;
 					bumpX = raket;
 				}
 			}
@@ -713,21 +713,21 @@ void zeNewBalls::vitusrobot()
 	if(tec_robot0->bump_actif)
 	{	tecno_bump *raket = tec_robot0;
 		raket->balleTouch = 0;
-		Sint32 x1 = raket->position_x;
-		Sint32 y1 = raket->position_y;
-		Sint32 x2 = raket->position_x + raket->colLargeur;
-		Sint32 y2 = raket->position_y + raket->colHauteur + 8;
+		Sint32 x1 = raket->x_coord;
+		Sint32 y1 = raket->y_coord;
+		Sint32 x2 = raket->x_coord + raket->colLargeur;
+		Sint32 y2 = raket->y_coord + raket->colHauteur + 8;
 		const Sint32 *monPT;
 		Sint32 j;
 		for(Sint32 i = 0; i < max_of_sprites; i++)
 		{	sprite_ball *balle = sprites_list[i];
 			if(balle->is_enabled)
-			{	if(balle->position_x + balle->colLargeur > x1 &&
-					balle->position_y + balle->colHauteur > y1 &&
-					balle->position_x < x2 &&
-					balle->position_y < y2)
+			{	if(balle->x_coord + balle->colLargeur > x1 &&
+					balle->y_coord + balle->colHauteur > y1 &&
+					balle->x_coord < x2 &&
+					balle->y_coord < y2)
 				{
-					balle->position_y = y1 - balle->colHauteur;
+					balle->y_coord = y1 - balle->colHauteur;
 					raket->balleTouch = 1;
 					j = balle->directBall;
 					monPT = raket->rebonds_GD;
@@ -858,13 +858,13 @@ void zeNewBalls::vitus_cote()
 	Sint32 murGa = bricoObjet->getCollisG();
 	Sint32 murDr = bricoObjet->getCollisD();
 	Sint32 murHt = bricoObjet->getCollisH();
-	Sint32 murBa = ptBob_wall->retournePY();
+	Sint32 murBa = ptBob_wall->get_y_coord();
 	Sint32 fwall = ptBob_wall->is_enable();
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
 		if(balle->is_enabled)
-		{	Sint32 x = balle->position_x;
-			Sint32 y = balle->position_y;
+		{	Sint32 x = balle->x_coord;
+			Sint32 y = balle->y_coord;
 			Sint32 *monPT = NULL;
 
 			//###########################################################
@@ -928,12 +928,12 @@ void zeNewBalls::vituscote2()
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
 		if(balle->is_enabled)
-		{	Sint32 x = balle->position_x;
-			Sint32 y = balle->position_y;
+		{	Sint32 x = balle->x_coord;
+			Sint32 y = balle->y_coord;
 			Sint32 *monPT = 0; 
 			if(x < murGa)
 			{	monPT = rb5;
-				balle->position_x = murGa;
+				balle->x_coord = murGa;
 #ifndef SOUNDISOFF
 				audio->play_sound(S_BRICOTES);
 #endif
@@ -942,7 +942,7 @@ void zeNewBalls::vituscote2()
 			else
 			{	if(x > murDr)
 				{	monPT = rb1;
-					balle->position_x = murDr;
+					balle->x_coord = murDr;
 #ifndef SOUNDISOFF
 					audio->play_sound(S_BRICOTES);
 #endif
@@ -951,7 +951,7 @@ void zeNewBalls::vituscote2()
 				else
 				{	if(y < murHt)
 					{	monPT = rb3;
-						balle->position_y = murHt;
+						balle->y_coord = murHt;
 #ifndef SOUNDISOFF
 						audio->play_sound(S_BRICOTES);
 #endif
@@ -1017,9 +1017,9 @@ void zeNewBalls::vitusBrick()
 			Sint32 incre = 1;					// incremente flag rebond
 			Sint32 rebon = 0;					// flag rebond
 			for(Sint32 j = 0; j < 4; j++)		// 4 points par balle
-			{	Sint32 x = balle->position_x;
+			{	Sint32 x = balle->x_coord;
 				x += *(colTB++);
-				Sint32 y = balle->position_y;
+				Sint32 y = balle->y_coord;
 				y += *(colTB++);
 				brickClear *briP2 = briPT + save;
 				briP2->balle_posX = x;
@@ -1121,17 +1121,17 @@ void zeNewBalls::vitus_eyes()
 		for(Sint32 j = 0; j < nbEye; j++)
 		{	techno_eye *ptEye = *(pEyes++);
 			if(!ptEye->is_enabled) continue;
-			Sint32 centX = ptEye->position_x + pt_magneye->eyeCenterX;
-			Sint32 centY = ptEye->position_y + pt_magneye->eyeCenterY;
+			Sint32 centX = ptEye->x_coord + pt_magneye->eyeCenterX;
+			Sint32 centY = ptEye->y_coord + pt_magneye->eyeCenterY;
 			
-			Sint32 deltX = balle->position_x + (balle->colLargeur / 2) - centX;
+			Sint32 deltX = balle->x_coord + (balle->colLargeur / 2) - centX;
 			deltX = deltX * deltX;
-			Sint32 deltY = balle->position_y + (balle->colLargeur / 2) - centY;
+			Sint32 deltY = balle->y_coord + (balle->colLargeur / 2) - centY;
 			deltY = deltY * deltY;
 			if(deltX + deltY >= vhypo) continue;
 				
-			deltX = balle->position_x + (balle->colLargeur / 2) - centX;
-			deltY = balle->position_y + (balle->colLargeur / 2) - centY;
+			deltX = balle->x_coord + (balle->colLargeur / 2) - centX;
+			deltY = balle->y_coord + (balle->colLargeur / 2) - centY;
 			
 			if(deltY == 0)
 			{	if(deltX < 0) balle->directBall  = 32;
@@ -1189,19 +1189,19 @@ void zeNewBalls::vitusAtoms()
 		if(balle->is_enabled && balle->ClBouiBoui == 0)
 		{	Sint32 h = balle->colLargeur;
 			h = h - 2;
-			Sint32 x1 = balle->position_x;
+			Sint32 x1 = balle->x_coord;
 			Sint32 x2 = x1 + h;
 			x1 -= 20;
-			Sint32 y1 = balle->position_y;
+			Sint32 y1 = balle->y_coord;
 			Sint32 y2 = y1 + h;
 			y1 -= 26;
 			tecno_boui **monPT = aList;
 			for(Sint32 j = 0; j < t; j++)
 			{	tecno_boui *atome = *(monPT++);
 				if(!atome->atom_actif)
-				{	Sint32 k = atome->position_y;
+				{	Sint32 k = atome->y_coord;
 					if(k < y2 && k > y1)
-					{	k = atome->position_x;
+					{	k = atome->x_coord;
 						if(k < x2 && k > x1)
 						{	ptBarreScr->scoreAjout(100);
 #ifndef SOUNDISOFF
@@ -1233,18 +1233,18 @@ void zeNewBalls::vitusGuard()
 	{	tecno_gard *pGard = aList[j];
 		sprite_ball *balok = NULL; 
 		if (pGard->is_enabled && pGard->gard_power > 0) 
-		{	Sint32 grdx1 = pGard->position_x;
+		{	Sint32 grdx1 = pGard->x_coord;
 			Sint32 grdx2 = grdx1 + pGard->gard_colx2;
 			grdx1 += pGard->gard_colx1;
-			Sint32 grdy1 = pGard->position_y;
+			Sint32 grdy1 = pGard->y_coord;
 			Sint32 grdy2 = grdy1 + pGard->gard_coly2;
 			grdy1 += pGard->gard_coly1;
 			for(Sint32 i = 0; i < u; i++)
 			{	sprite_ball *balle = liste[i];
 				if(balle->is_enabled)
-				{	Sint32 x = balle->position_x;
+				{	Sint32 x = balle->x_coord;
 					if(x <= grdx2)
-					{	Sint32 y = balle->position_y;
+					{	Sint32 y = balle->y_coord;
 						if(y <= grdy2)
 						{	x += balle->colLargeur;
 							if(x > grdx1)

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.11 2007/01/23 10:11:22 gurumeditation Exp $
+// id		: $Id: menu_tecno.cc,v 1.12 2007/01/23 12:06:00 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -165,13 +165,13 @@ void menu_tecno::moveZeLogo()
 	a = offset_xx1;
 	Sint16 *s = table_sinL + a;
 	b = ((*s * 20 * resolution) >> SINUS_DECA) + 32 * resolution;
-	BOBtecLogo->changePosX(b);
+	BOBtecLogo->set_x_coord(b);
 	if(birth_flag)
 	{	a*=4 ;
 		a &= SINUS_MASK;
 		s = table_cosL + a;
 		b = ((*s * 5 * resolution) >> SINUS_DECA) + 7 * resolution;     
-		BOBtecLogo->changePosY(b);
+		BOBtecLogo->set_y_coord(b);
 	}
 }
 

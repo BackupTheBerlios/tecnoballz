@@ -61,7 +61,7 @@ class lastScroll:public virtual mentatCode
 		Sint32					offset_aff;
 		Sint32					largeEcran;
 		Uint16*					carteFirst;	// table des codes des motifs
-		Sint32					position_y;
+		Sint32					y_coord;
 		Sint32					gfxLargeur;
 		GIF_bitMap*				gfx_bitMap;
 		Sint32					dalleTotal;	//number total of maps

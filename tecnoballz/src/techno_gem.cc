@@ -68,7 +68,7 @@ Sint32 techno_gem::disponible(sprite_ball *pball)
 {
 	if(is_enabled)
 		return 0;
-	initialGem(pball->position_x, pball->position_y, pball->raket_ball);
+	initialGem(pball->x_coord, pball->y_coord, pball->raket_ball);
 	return 1;
 }
 
@@ -79,7 +79,7 @@ Sint32 techno_gem::disponible(tecno_fire *pfire)
 {
 	if(is_enabled)
 		return 0;
-	initialGem(pfire->position_x, pfire->position_y, pfire->raquettePT);
+	initialGem(pfire->x_coord, pfire->y_coord, pfire->raquettePT);
 	return 1;
 }
 
@@ -89,8 +89,8 @@ Sint32 techno_gem::disponible(tecno_fire *pfire)
 void techno_gem::initialGem(Sint32 pos_x, Sint32 pos_y, tecno_bump *raket)
 {
 	is_enabled = 1;
-	position_x = pos_x;
-	position_y = pos_y;
+	x_coord = pos_x;
+	y_coord = pos_y;
 	raquettePT = raket;
 	directionX = raket->bumper_num();
 	la_vitesse = resolution;
@@ -101,7 +101,7 @@ void techno_gem::initialGem(Sint32 pos_x, Sint32 pos_y, tecno_bump *raket)
 	typeof_gem = h;
 	change_GFX(h);
 	indicator1 = 0;
-	flagShadow = 1;
+	sprite_has_shadow = 1;
 	blinkcount = 0;
 }
 
@@ -112,10 +112,10 @@ void techno_gem::gemcollect(Sint32 ztype)
 {
 	typeof_gem = ztype;
 	change_GFX(ztype);
-	flagShadow = 0;
+	sprite_has_shadow = 0;
 	indicator1 = 1;
-	position_y = ecranHaute - sprite_height - 2 * resolution;
-	position_x = 270 * resolution + sprite_width * ztype;
+	y_coord = ecranHaute - sprite_height - 2 * resolution;
+	x_coord = 270 * resolution + sprite_width * ztype;
 	is_enabled = 1;
 	blinkcount = 0;
 }
@@ -143,8 +143,8 @@ Sint32 techno_gem::deplaceMoi()
 			// bottom bumper
 			//###########################################################
 			case 1:
-				position_y += i;
-				if(position_y < maximum_Y1)
+				y_coord += i;
+				if(y_coord < maximum_Y1)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF					
@@ -161,8 +161,8 @@ Sint32 techno_gem::deplaceMoi()
 			// right bumper          
 			//###########################################################
 			case 2:
-				position_x += i;
-				if(position_x < maximum_X1)
+				x_coord += i;
+				if(x_coord < maximum_X1)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF					
@@ -179,8 +179,8 @@ Sint32 techno_gem::deplaceMoi()
 			// top bumper
 			//###########################################################
 			case 3:
-				position_y -= i;
-				if(position_y > minimum_Y1)
+				y_coord -= i;
+				if(y_coord > minimum_Y1)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF					
@@ -197,8 +197,8 @@ Sint32 techno_gem::deplaceMoi()
 			// left bumper
 			//###########################################################
 			case 4:
-				position_x -= i;
-				if(position_x > minimum_X1)
+				x_coord -= i;
+				if(x_coord > minimum_X1)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF					

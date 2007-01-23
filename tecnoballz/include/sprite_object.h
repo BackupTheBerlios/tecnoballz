@@ -4,11 +4,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.7 2007/01/23 11:45:34 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.8 2007/01/23 12:06:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -178,9 +178,10 @@ protected:
   Sint32 srceNextLn;
   Sint32 destNextLn;
   Sint32 is_enabled;            // 1=le BOB peut etre affiche
-  Sint32 flagShadow;            // 1=le BOB possede une ombre
-  Sint32 position_x;            // abscisse
-  Sint32 position_y;            // ordonnee
+  /** true if the sprite has a shadow */
+  bool sprite_has_shadow;
+  Sint32 x_coord;            // abscisse
+  Sint32 y_coord;            // ordonnee
   Sint32 sprite_width;            // largeur BOB en pixels
   Sint32 sprite_height;            // largeur BOB en lignes
   Sint32 init_tempo;            // initialise tempo animation
@@ -236,13 +237,13 @@ public:
                      Sint32 ftpix = 0);
   Sint32 initialBOB (GIF_bitMap * image, Sint32 ombre);
   void initCommun (GIF_bitMap * image, Sint32 ombre);
-  void changePosX (Sint32 posX);
-  void changePosY (Sint32 posY);
+  void set_x_coord (Sint32 xcoord);
+  void set_y_coord (Sint32 ycoord);
   void deplace_pX (Sint32 offs);
   void deplace_pY (Sint32 offs);
-  Sint32 shadow_BOB ();
-  Sint32 retournePX ();
-  Sint32 retournePY ();
+  bool has_shadow ();
+  Sint32 get_x_coord ();
+  Sint32 get_y_coord ();
   void change_GFX ();
   void change_GFX (Sint32 index);
   Sint32 litAnimOff ();
@@ -271,7 +272,6 @@ public:
   void animRepete ();
   void new_offset (Sint32 nume);
   void clip_coordinates ();
-  void clip_x_coordinate ();
   Uint32 get_sprite_width ();
   Uint32 get_sprite_height ();
   Uint32 getColLarg ();

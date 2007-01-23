@@ -92,8 +92,8 @@ void tecno_gads::nouveauGad(brickClear *briPT, Sint32 nuGad)
 	else
 		set_method(sprite_object::METHOD_TAB);
 	gadget_num = nuGad;
-	position_x = briPT->balle_posX;
-	position_y = briPT->balle_posY;
+	x_coord = briPT->balle_posX;
+	y_coord = briPT->balle_posY;
 	tecno_bump *raket = briPT->raquettePT;
 	raquettePT = raket;
 	directionX = raket->bumper_num();
@@ -124,8 +124,8 @@ void tecno_gads::nouveauGad(sprite_ball *balle, Sint32 nuGad)
 	else
 		set_method(sprite_object::METHOD_TAB);
 	gadget_num = nuGad;
-	position_x = balle->retournePX();
-	position_y = balle->retournePY();
+	x_coord = balle->get_x_coord();
+	y_coord = balle->get_y_coord();
 	tecno_bump *raket = balle->donne_bump();
 	raquettePT = raket;
 	directionX = raket->bumper_num();
@@ -155,8 +155,8 @@ void tecno_gads::nouveauGad(tecno_fire *pfire, Sint32 nuGad)
 	else
 		set_method(sprite_object::METHOD_TAB);
 	gadget_num = nuGad;
-	position_x = pfire->retournePX();
-	position_y = pfire->retournePY();
+	x_coord = pfire->get_x_coord();
+	y_coord = pfire->get_y_coord();
 	tecno_bump *raket = pfire->raquettePT;
 	raquettePT = raket;
 	directionX = raket->bumper_num();
@@ -188,8 +188,8 @@ void tecno_gads::new_gadget(sprite_ball *balle, Sint32 nuGad)
 	else
 		set_method(sprite_object::METHOD_TAB);
 	gadget_num = nuGad;
-	position_x = balle->retournePX();
-	position_y = balle->retournePY();
+	x_coord = balle->get_x_coord();
+	y_coord = balle->get_y_coord();
 	tecno_bump *raket = balle->donne_bump();
 	raquettePT = raket;
 	directionX = raket->bumper_num();
@@ -265,8 +265,8 @@ tecno_bump *tecno_gads::deplaceMoi()
 		{
 			// bottom bumper
 			case 1:
-				position_y += resolution;
-				if(position_y < maximum_Y1)
+				y_coord += resolution;
+				if(y_coord < maximum_Y1)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 						joueurGere->add_scores(20);
@@ -279,8 +279,8 @@ tecno_bump *tecno_gads::deplaceMoi()
 
 			// right bumper
 			case 2:
-				position_x += resolution;
-				if(position_x < maximum_X1)
+				x_coord += resolution;
+				if(x_coord < maximum_X1)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 						joueurGere->add_scores(20);
@@ -293,8 +293,8 @@ tecno_bump *tecno_gads::deplaceMoi()
 
 			// top bumper
 			case 3:
-				position_y -= resolution;
-				if(position_y > minimum_Y1)
+				y_coord -= resolution;
+				if(y_coord > minimum_Y1)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 						joueurGere->add_scores(20);
@@ -307,8 +307,8 @@ tecno_bump *tecno_gads::deplaceMoi()
 
 			// left bumper
 			case 4:
-				position_x -= resolution;
-				if(position_x > minimum_X1)
+				x_coord -= resolution;
+				if(x_coord > minimum_X1)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 						joueurGere->add_scores(20);

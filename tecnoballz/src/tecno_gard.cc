@@ -104,8 +104,8 @@ void tecno_gard::execution1(Sint32 offzt)
 		Sint32 x = (ptr_lissa1[0]);
 		x = x * (screen_width - sprite_width) / 192;
 		Sint32 y = ptr_lissa1[1] * resolution;
-		position_x = x;
-		position_y = y;
+		x_coord = x;
+		y_coord = y;
 		ptr_lissa1 = ptr_lissa1 + gard_speed;
 		Sint16 *ptest = (Sint16 *)ptr_lissa1;
 		if (ptest[0]  == -1)
@@ -128,15 +128,15 @@ void tecno_gard::execution1(Sint32 offzt)
 		if(explo_time > 0)
 		{	explo_time--;
 			if(!(explo_time & explotempo))
-			{	Sint32 pos_x = position_x;
-				Sint32 pos_y = position_y;
+			{	Sint32 pos_x = x_coord;
+				Sint32 pos_y = y_coord;
 				hasard_val += pos_x;
 				Sint32 vrand = hasard_val;
 				if(vrand < 0) vrand = -vrand;
 				Sint32 val_1 =
-					(vrand + explo_time - position_y) % sprite_width;
+					(vrand + explo_time - y_coord) % sprite_width;
 				Sint32 val_2 =
-					(hasardval2 - explo_time + position_y) % sprite_height;
+					(hasardval2 - explo_time + y_coord) % sprite_height;
 				pos_x += val_1;
 				pos_y += val_2;
 				pExplosion->add_explos(pos_x, pos_y);
@@ -162,7 +162,7 @@ void tecno_gard::execution1(Sint32 offzt)
 void tecno_gard::start_fire()
 {
 	if(gard_wait1-- <= 0)
-	{	if(position_y <= (80 * resolution)) 
+	{	if(y_coord <= (80 * resolution)) 
 		{	gard_wait1 = gard_wait2;
 #ifndef SOUNDISOFF
 			audio->play_sound(S_TIR_GARD);
@@ -191,7 +191,7 @@ void tecno_gard::startBlitz()
 		else
 			v = table_gga2[v] ;
 		//v = 0;	//test only 
-		if(ptGigaBlit->guard_shoot(v, position_x, position_y,
+		if(ptGigaBlit->guard_shoot(v, x_coord, y_coord,
 			sprite_width, sprite_height))
 			gardwaitf1 = gardwaitf2;
 	}

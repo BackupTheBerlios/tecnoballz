@@ -151,16 +151,16 @@ void zeFireBump::init_type1()
 	tecno_bump *raket = maRaquette;
 	if(raket->bumperFire == 3)
 	{	raket->bumperFire = 1;
-		Sint32 x = raket->position_x;
-		Sint32 y = raket->position_y;
+		Sint32 x = raket->x_coord;
+		Sint32 y = raket->y_coord;
 		if(raket->bumperType)	//vertical bumper ?
 			y += (raketLarge / 2) - (SIZEOFFIRE / 2);
 		else
 			x += (raketLarge / 2) - (SIZEOFFIRE / 2);
 		tecno_fire *xFire = sprites_list[0];
 		xFire->is_enabled = 1;
-		xFire->position_x = x;
-		xFire->position_y = y;
+		xFire->x_coord = x;
+		xFire->y_coord = y;
 	}
 }
 
@@ -172,8 +172,8 @@ void zeFireBump::init_type2()
 	tecno_bump *raket = maRaquette;
 	if(raket->bumperFire == 3)
 	{	raket->bumperFire = 1;
-		Sint32 x = raket->position_x;
-		Sint32 y = raket->position_y;
+		Sint32 x = raket->x_coord;
+		Sint32 y = raket->y_coord;
 		if(raket->bumperType)	//vertical bumper ?
 			y += (raketLarge / 2) - (SIZEOFFIRE / 2);
 		else
@@ -183,12 +183,12 @@ void zeFireBump::init_type2()
 		Sint32 f = 1;
 		xFire = *(liste++);
 		xFire->is_enabled = f;
-		xFire->position_x = x;
-		xFire->position_y = y;
+		xFire->x_coord = x;
+		xFire->y_coord = y;
 		xFire = *(liste++);
 		xFire->is_enabled = f;
-		xFire->position_x = x;
-		xFire->position_y = y;
+		xFire->x_coord = x;
+		xFire->y_coord = y;
 	}
 }
 
@@ -200,8 +200,8 @@ void zeFireBump::init_type3()
 	tecno_bump *raket = maRaquette;
 	if(raket->bumperFire == 3)
 	{	raket->bumperFire = 1;
-		Sint32 x = raket->position_x;
-		Sint32 y = raket->position_y;
+		Sint32 x = raket->x_coord;
+		Sint32 y = raket->y_coord;
 		if(raket->bumperType)//vertical bumper ?
 			y += (raketLarge / 2) - (SIZEOFFIRE / 2);
 		else
@@ -211,16 +211,16 @@ void zeFireBump::init_type3()
 		Sint32 f = 1;
 		xFire = *(liste++);
 		xFire->is_enabled = f;
-		xFire->position_x = x;
-		xFire->position_y = y;
+		xFire->x_coord = x;
+		xFire->y_coord = y;
 		xFire = *(liste++);
 		xFire->is_enabled = f;
-		xFire->position_x = x;
-		xFire->position_y = y;
+		xFire->x_coord = x;
+		xFire->y_coord = y;
 		xFire = *liste;
 		xFire->is_enabled = f;
-		xFire->position_x = x;
-		xFire->position_y = y;
+		xFire->x_coord = x;
+		xFire->y_coord = y;
 	}
 }
 
@@ -232,35 +232,35 @@ void zeFireBump::init_type4()
 	tecno_bump *raket = maRaquette;
 	if(raket->bumperFire == 3)
 	{	raket->bumperFire = 1;
-		Sint32 x = raket->position_x;
-		Sint32 y = raket->position_y;
+		Sint32 x = raket->x_coord;
+		Sint32 y = raket->y_coord;
 		tecno_fire **liste = sprites_list;
 		tecno_fire *xFire;
 		Sint32 f = 1;
 		xFire = *(liste++);
 		xFire->is_enabled = f;
-		xFire->position_x = x;
-		xFire->position_y = y;
+		xFire->x_coord = x;
+		xFire->y_coord = y;
 		if(raket->bumperType)		//vertical bumper ?
 			y += 18 * resolution;
 		else
 			x += 18 * resolution;
 		xFire = *(liste++);
 		xFire->is_enabled = f;
-		xFire->position_x = x;
-		xFire->position_y = y;
+		xFire->x_coord = x;
+		xFire->y_coord = y;
 		xFire = *(liste++);
 		xFire->is_enabled = f;
-		xFire->position_x = x;
-		xFire->position_y = y;
+		xFire->x_coord = x;
+		xFire->y_coord = y;
 		if(raket->bumperType)		//vertical bumper ?
-			y = raket->position_y + raket->raketLarge - 4;
+			y = raket->y_coord + raket->raketLarge - 4;
 		else
-			x = raket->position_x + raket->raketLarge - 4;
+			x = raket->x_coord + raket->raketLarge - 4;
 		xFire = *liste;
 		xFire->is_enabled = f;
-		xFire->position_x = x;
-		xFire->position_y = y;
+		xFire->x_coord = x;
+		xFire->y_coord = y;
 	}
 }
 
@@ -272,15 +272,15 @@ void zeFireBump::init_type5()
 	tecno_bump *raket = maRaquette;
 	if(raket->bumperFire == 3)
 	{	raket->bumperFire = 1;
-		Sint32 x = raket->position_x;
-		Sint32 y = raket->position_y;
+		Sint32 x = raket->x_coord;
+		Sint32 y = raket->y_coord;
 		tecno_fire **liste = sprites_list;
 		tecno_fire *xFire;
 		Sint32 f = 1;
 		xFire = *(liste++);
 		xFire->is_enabled = f;
-		xFire->position_x = x;
-		xFire->position_y = y;
+		xFire->x_coord = x;
+		xFire->y_coord = y;
 		Sint32 quart = raketLarge / 4;
 		if(raket->bumperType)	//vertical bumper ?
 		{	Sint32 i = raket->bumper_FX1;
@@ -288,26 +288,26 @@ void zeFireBump::init_type5()
 			y += quart;
 			xFire = *(liste++);
 			xFire->is_enabled = f;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 			x += i;
 			y += quart;
 			xFire = *(liste++);
 			xFire->is_enabled = f;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 			x -= i;
 			y += quart;
 			xFire = *(liste++);
 			xFire->is_enabled = f;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 			x -= i;
 			y += quart - 2 * resolution;
 			xFire = *(liste++);
 			xFire->is_enabled = f;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 		}
 		else
 		{	Sint32 i = raket->bumper_FY1;
@@ -315,26 +315,26 @@ void zeFireBump::init_type5()
 			x += quart;
 			xFire = *(liste++);
 			xFire->is_enabled = f;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 			y += i;
 			x += quart;
 			xFire = *(liste++);
 			xFire->is_enabled = f;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 			y -= i;
 			x += quart;
 			xFire = *(liste++);
 			xFire->is_enabled = f;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 			y -= i;
 			x += quart - 2 * resolution;
 			xFire = *(liste++);
 			xFire->is_enabled = f;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 		}
 	}
 }
@@ -348,8 +348,8 @@ void zeFireBump::init_type6()
 	if(raket->bumperFire == 3)
 	{	raket->bumperFire = 1;
 		tecno_fire **liste = sprites_list;
-		Sint32 x = raket->position_x;
-		Sint32 y = raket->position_y;
+		Sint32 x = raket->x_coord;
+		Sint32 y = raket->y_coord;
 		Sint32 offst = 22 * resolution; 
 
 		if(raket->bumperType)	//vertical bumper ?
@@ -357,60 +357,60 @@ void zeFireBump::init_type6()
 			Sint32 a = x + raket->bump_xdeca;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
-			xFire->position_x = a;
-			xFire->position_y = y;
+			xFire->x_coord = a;
+			xFire->y_coord = y;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 			y += offst;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 			y += offst;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
-			xFire->position_x = a;
-			xFire->position_y = y;
+			xFire->x_coord = a;
+			xFire->y_coord = y;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 		}
 		else
 		{	tecno_fire *xFire;
 			Sint32 o = y + raket->bump_ydeca;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
-			xFire->position_x = x;
-			xFire->position_y = o;
+			xFire->x_coord = x;
+			xFire->y_coord = o;
 			x += offst;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 			x += offst;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
-			xFire->position_x = x;
-			xFire->position_y = o;
+			xFire->x_coord = x;
+			xFire->y_coord = o;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
-			xFire->position_x = x;
-			xFire->position_y = y;
+			xFire->x_coord = x;
+			xFire->y_coord = y;
 		}
 	}
 }
@@ -428,8 +428,8 @@ void zeFireBump::init_type7()
 	if(raket->bumperFire == 3) //fire is requested
 	{	raket->bumperFire = 1;
 		tecno_fire **liste = sprites_list;
-		Sint32 x = raket->position_x + raket->bump_Xscie;
-		Sint32 y = raket->position_y + raket->bump_Yscie;
+		Sint32 x = raket->x_coord + raket->bump_Xscie;
+		Sint32 y = raket->y_coord + raket->bump_Yscie;
 		Sint32 j = 0;	
 		for(Sint32 i = 0; i < 7; i++, j += 8)
 		{	tecno_fire *xFire = *(liste++);
@@ -452,8 +452,8 @@ void zeFireBump::init_type7()
 				return;
 		}
 		liste = sprites_list;
-		Sint32 x = raket->position_x + raket->bump_Xscie;
-		Sint32 y = raket->position_y + raket->bump_Yscie;
+		Sint32 x = raket->x_coord + raket->bump_Xscie;
+		Sint32 y = raket->y_coord + raket->bump_Yscie;
 		Sint32 j = 0;
 		for(Sint32 i = 0; i < 7; i++, j += 8)
 		{	tecno_fire *xFire = *(liste++);
@@ -508,9 +508,9 @@ void zeFireBump::move_type1()
 	tecno_fire *xFire = sprites_list[0];
 	tecno_bump *raket = maRaquette;
 	Sint32 i = raket->bumper_FX0;
-	xFire->position_x += i;
+	xFire->x_coord += i;
 	i = raket->bumper_FY0;
-	xFire->position_y += i;
+	xFire->y_coord += i;
 }
 
 //-----------------------------------------------------------------------------
@@ -540,11 +540,11 @@ void zeFireBump::move_type2()
 	}
 	tecno_fire *xFire;
 	xFire = *(liste++);
-	xFire->position_x += a;
-	xFire->position_y += b;
+	xFire->x_coord += a;
+	xFire->y_coord += b;
 	xFire = *liste;
-	xFire->position_x += c;
-	xFire->position_y += d;
+	xFire->x_coord += c;
+	xFire->y_coord += d;
 }
 
 //-----------------------------------------------------------------------------
@@ -559,18 +559,18 @@ void zeFireBump::move_type3()
 	xFire = *(liste++);		//shot leaves to the left
 	i = raket->bumper_FX1;
 	j = raket->bumper_FY1;
-	xFire->position_x += i;
-	xFire->position_y += j;
+	xFire->x_coord += i;
+	xFire->y_coord += j;
 	xFire = *(liste++);		//shot leaves any right
 	i = raket->bumper_FX0;
 	j = raket->bumper_FY0;
-	xFire->position_x += i;
-	xFire->position_y += j;
+	xFire->x_coord += i;
+	xFire->y_coord += j;
 	xFire = *liste;			//shot leaves to the right
 	i = raket->bumper_FX2;
 	j = raket->bumper_FY2;
-	xFire->position_x += i;
-	xFire->position_y += j;
+	xFire->x_coord += i;
+	xFire->y_coord += j;
 }
 
 //-----------------------------------------------------------------------------
@@ -590,40 +590,40 @@ void zeFireBump::move_type4()
 
 	xFire = *(liste++);				//[1] linar shot
 	j = raket->bumper_FX0;
-	xFire->position_x += j;
+	xFire->x_coord += j;
 	j = raket->bumper_FY0;
-	xFire->position_y += j;
+	xFire->y_coord += j;
 
 	if(i > 10)
 	{	xFire = *(liste++);			//[2] fishtail shot
 		i = raket->bumper_FX1;
 		j = raket->bumper_FY1;
-		xFire->position_x += i;
-		xFire->position_y += j;
+		xFire->x_coord += i;
+		xFire->y_coord += j;
 		xFire = *(liste++);			//[3] fishtail shot
 		i = raket->bumper_FX2;
 		j = raket->bumper_FY2;
-		xFire->position_x += i;
-		xFire->position_y += j;
+		xFire->x_coord += i;
+		xFire->y_coord += j;
 	}
 	else
 	{	xFire = *(liste++);			//[2] fishtail shot
 		i = raket->bumper_FX2;
 		j = raket->bumper_FY2;
-		xFire->position_x += i;
-		xFire->position_y += j;
+		xFire->x_coord += i;
+		xFire->y_coord += j;
 		xFire = *(liste++);			//[3] fishtail shot
 		i = raket->bumper_FX1;
 		j = raket->bumper_FY1;
-		xFire->position_x += i;
-		xFire->position_y += j;
+		xFire->x_coord += i;
+		xFire->y_coord += j;
 	}
 
 	xFire = *liste;					//[4] linar shot
 	i = raket->bumper_FX0;
 	j = raket->bumper_FY0;
-	xFire->position_x += i;
-	xFire->position_y += j;
+	xFire->x_coord += i;
+	xFire->y_coord += j;
 }
 
 //-----------------------------------------------------------------------------
@@ -637,8 +637,8 @@ void zeFireBump::move_type5()
 	Sint32 y = raket->bumper_FY0;
 	for(Sint32 i = 0; i < 5; i++)
 	{	tecno_fire *xFire = *(liste++);
-		xFire->position_x += x;
-		xFire->position_y += y;
+		xFire->x_coord += x;
+		xFire->y_coord += y;
 	}
 }
 
@@ -661,43 +661,43 @@ void zeFireBump::move_type6()
 	j = raket->bumper_FY0;
 	tecno_fire *xFire = *(liste++);
 
-	xFire->position_x += i;
-	xFire->position_y += j;
+	xFire->x_coord += i;
+	xFire->y_coord += j;
 	xFire = *(liste++);
-	xFire->position_x += i;
-	xFire->position_y += j;
+	xFire->x_coord += i;
+	xFire->y_coord += j;
 	if(a > 10)
 	{	xFire = *(liste++);		//[3] fishtail shot
 		i = raket->bumper_FX1;
 		j = raket->bumper_FY1;
-		xFire->position_x += i;
-		xFire->position_y += j;
+		xFire->x_coord += i;
+		xFire->y_coord += j;
 		xFire = *(liste++);		//[4] fishtail shot
 		i = raket->bumper_FX2;
 		j = raket->bumper_FY2;
-		xFire->position_x += i;
-		xFire->position_y += j;
+		xFire->x_coord += i;
+		xFire->y_coord += j;
 	}
 	else
 	{	xFire = *(liste++);		//[3] fishtail shot
 		i = raket->bumper_FX2;
 		j = raket->bumper_FY2;
-		xFire->position_x += i;
-		xFire->position_y += j;
+		xFire->x_coord += i;
+		xFire->y_coord += j;
 		xFire = *(liste++);		//[4] fishtail shot
 		i = raket->bumper_FX1;
 		j = raket->bumper_FY1;
-		xFire->position_x += i;
-		xFire->position_y += j;
+		xFire->x_coord += i;
+		xFire->y_coord += j;
 	}
 	i = raket->bumper_FX0;
 	j = raket->bumper_FY0;
 	xFire = *(liste++);
-	xFire->position_x += i;
-	xFire->position_y += j;
+	xFire->x_coord += i;
+	xFire->y_coord += j;
 	xFire = *liste;
-	xFire->position_x += i;
-	xFire->position_y += j;
+	xFire->x_coord += i;
+	xFire->y_coord += j;
 }
 
 //-----------------------------------------------------------------------------
@@ -720,21 +720,21 @@ void zeFireBump::move_type7()
 			xFire->indexSinus = j;
 			if(xFire->is_enabled == 2)
 			{	Sint32 k = *(table++);
-				k += raket->position_x + raket->bump_Xscie;
-				xFire->position_x = k;
+				k += raket->x_coord + raket->bump_Xscie;
+				xFire->x_coord = k;
 				k = *table;
-				k += raket->position_y + raket->bump_Yscie;
-				xFire->position_y = k;
+				k += raket->y_coord + raket->bump_Yscie;
+				xFire->y_coord = k;
 			}
 			else
 			{	xFire->fire_Xscie += raket->bumper_FX0;
 				xFire->fire_Yscie += raket->bumper_FY0;
 				Sint32 k = *(table++);
 				k += xFire->fire_Xscie;
-				xFire->position_x = k;
+				xFire->x_coord = k;
 				k = *table;
 				k += xFire->fire_Yscie;
-				xFire->position_y = k;
+				xFire->y_coord = k;
 			}
 		}
 	}

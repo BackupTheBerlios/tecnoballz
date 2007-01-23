@@ -57,8 +57,8 @@ Sint32 zeDefilTxt::init_chars()
 	{	tecnoDefil *zeBOB = sprites_list[i];
 		objectChar[i + 1] = zeBOB;
 		zeBOB->zeCosValue = j;
-		zeBOB->changePosX(100);
-		zeBOB->changePosY(300);
+		zeBOB->set_x_coord(100);
+		zeBOB->set_y_coord(300);
 		zeBOB->change_GFX(26);
 	}
 	objectChar[i + 1] = 0;
@@ -126,7 +126,7 @@ void zeDefilTxt::move_chars()
 		zeBOB->zeCosValue = a;
 		table = cosPT + a;
 		a = ((*table * large) >> SINUS_DECA) + 152 * resolution;
-		zeBOB->changePosX(a);
+		zeBOB->set_x_coord(a);
 	}
 
 	//###################################################################
@@ -146,26 +146,26 @@ void zeDefilTxt::move_chars()
 		a = (a + depla) & SINUS_MASK;
 		table = sinPT + a;
 		b = ((*table * zerad) >> SINUS_DECA) + zeoff;
-		zeBOB->changePosY(b);
+		zeBOB->set_y_coord(b);
 	}
 
 	// move the left mask
 	zeBOB = objectRigh;
 	table = cosPT;
 	a = ((*table * large) >> SINUS_DECA) + 152 * resolution;
-	zeBOB->changePosX(a);
+	zeBOB->set_x_coord(a);
 	zzBOB = *(++BOBpt);
-	a = zzBOB->retournePY();
-	zeBOB->changePosY(a);
+	a = zzBOB->get_y_coord();
+	zeBOB->set_y_coord(a);
 
 	// move the right mask
 	zeBOB = objectLeft;
 	table = cosPT + 255;
 	a = ((*table * large) >> SINUS_DECA) + 152 * resolution;
-	zeBOB->changePosX(a);
+	zeBOB->set_x_coord(a);
 	zzBOB = *object_ptr;
-	a = zzBOB->retournePY();
-	zeBOB->changePosY(a);
+	a = zzBOB->get_y_coord();
+	zeBOB->set_y_coord(a);
 }
 
 

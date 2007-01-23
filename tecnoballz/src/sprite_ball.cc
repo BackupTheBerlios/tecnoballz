@@ -4,11 +4,11 @@
  * @date 2007-01-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.2 2007/01/23 10:11:22 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.3 2007/01/23 12:06:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,9 +140,9 @@ sprite_ball::startBalle (Sint32 large)
   enable ();
   tecno_bump *raket = raket_glue;
   reStarting (raket);
-  position_x =
-    raket->retournePX () + ((large >> 1) - ((colLargeur >> 1) + 1));
-  position_y = raket->retournePY () - colHauteur - 1;
+  x_coord =
+    raket->get_x_coord () + ((large >> 1) - ((colLargeur >> 1) + 1));
+  y_coord = raket->get_y_coord () - colHauteur - 1;
 }
 
 //-------------------------------------------------------------------------------
@@ -191,8 +191,8 @@ void
 sprite_ball::duplicate3 (sprite_ball * balle, Sint32 angle)
 {
   is_enabled = 1;
-  position_x = balle->position_x;
-  position_y = balle->position_y;
+  x_coord = balle->x_coord;
+  y_coord = balle->y_coord;
   directBall = angle;
   colleBallF = 0;
   tiltCompte = 0;
@@ -294,8 +294,8 @@ sprite_ball::ball2eject (Sint32 index, Sint32 otime)
     eject_ball[3] = otime;
   else
     eject_ball[3] = 0;
-  position_x = monPT->position_x;
-  position_y = monPT->position_y;
+  x_coord = monPT->x_coord;
+  y_coord = monPT->y_coord;
   directBall = 64;              //the ball's motionless 
 }
 

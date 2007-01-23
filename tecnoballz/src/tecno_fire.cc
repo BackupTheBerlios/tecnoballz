@@ -127,11 +127,11 @@ void tecno_fire::hors_ecran()
 	Sint32 x2 = 228 * resolution;
 	for(Sint32 i = 0; i < t; i++)
 	{	tecno_fire *xFire = *(liste++);
-		Sint32 a = xFire->position_y;
+		Sint32 a = xFire->y_coord;
 		if(a < y1 || a > y2)
 			xFire->is_enabled = 0;
 		else
- 		{	a = xFire->position_x;
+ 		{	a = xFire->x_coord;
 			if(a < x1 || a > x2)
 				xFire->is_enabled = 0;
 		}
@@ -175,8 +175,8 @@ void tecno_fire::collision1()
 	for(Sint32 i = 0; i < t; i++)
 	{	tecno_fire *xFire = *(liste++);
 		if(xFire->is_enabled)
-		{	Sint32 x = xFire->position_x + 2;
-			Sint32 y = xFire->position_y + 2;
+		{	Sint32 x = xFire->x_coord + 2;
+			Sint32 y = xFire->y_coord + 2;
 			brickClear *briP2 = briPT + save;
 			briP2->balle_posX = x;
 			briP2->balle_posY = y;
@@ -261,18 +261,18 @@ void tecno_fire::collision2()
 	{	tecno_fire *xFire = *(liste++);
 		if(xFire->is_enabled)
 		{	tecno_boui **monPT = aList;
-			Sint32 y1 = xFire->position_y;
+			Sint32 y1 = xFire->y_coord;
 			Sint32 y2 = y1 + 3;
 			y1 -= 26;
-			Sint32 x1 = xFire->position_x;
+			Sint32 x1 = xFire->x_coord;
 			Sint32 x2 = x1 + 3;
 			x1 -= 20;
 			for(Sint32 j = 0; j < t; j++)
 			{	tecno_boui *atome = *(monPT++);
 				if(!atome->atom_actif)
-				{	Sint32 k = atome->position_y;
+				{	Sint32 k = atome->y_coord;
 					if(k < y2 && k > y1)
-					{	k = atome->position_x;
+					{	k = atome->x_coord;
 						if(k < x2 && k > x1)
 						{	if(xFire->is_enabled == 1)
 							xFire->is_enabled = 0;

@@ -163,12 +163,12 @@ void ze_magneye::execution1()
 			ptEye->radius_360 -= 360;
 		Sint32 x = (ressources::zesinus360[ptEye->radius_360] * 10 * resolution) >> 7;
 		Sint32 y = (ressources::cosinus360[ptEye->radius_360] * 10 * resolution) >> 7;
-		ptEye->position_x = ptEye->centerPosx + x + (15 * resolution);
-		ptEye->position_y = ptEye->centerPosy + y + (15 * resolution);
+		ptEye->x_coord = ptEye->centerPosx + x + (15 * resolution);
+		ptEye->y_coord = ptEye->centerPosy + y + (15 * resolution);
 		
 		/*
-		ptEye->position_x = ptEye->centerPosx;
-		ptEye->position_y = ptEye->centerPosy;*/
+		ptEye->x_coord = ptEye->centerPosx;
+		ptEye->y_coord = ptEye->centerPosy;*/
 		
 		hval += 4;
 	}

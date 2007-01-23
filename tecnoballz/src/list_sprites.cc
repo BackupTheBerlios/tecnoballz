@@ -3,11 +3,11 @@
  * @brief Call the drawing methods of all sprites
  * @date 2007-01-16
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: list_sprites.cc,v 1.1 2007/01/16 21:27:13 gurumeditation Exp $
+ * $Id: list_sprites.cc,v 1.2 2007/01/23 12:06:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -118,7 +118,7 @@ list_sprites::add (sprite_object * sprite)
   shapes[num_of_shapes] = sprite;
   num_of_shapes++;
   sprite->set_display_pos (num_of_shapes);
-  if (sprite->shadow_BOB ())
+  if (sprite->has_shadow ())
     {
       shadows[num_of_shadows] = sprite;
       num_of_shadows++;

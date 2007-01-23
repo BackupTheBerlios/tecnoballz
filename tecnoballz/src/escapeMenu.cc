@@ -254,9 +254,9 @@ Sint32 escapeMenu::execution1()
 		{	incre = -1;
 			yPressRigh = YCOORDNULL;
 		}
-		event = (pos_y - position_y) / space2next;
-		/*printf("escapeMenu::execution1() pos_y:%i / position_y:%i / space2next:%i / event:%i\n",
-			pos_y, position_y, space2next, event);*/
+		event = (pos_y - y_coord) / space2next;
+		/*printf("escapeMenu::execution1() pos_y:%i / y_coord:%i / space2next:%i / event:%i\n",
+			pos_y, y_coord, space2next, event);*/
 	}
 	if(!presL)
 		yPressLeft = YCOORDNULL;
@@ -309,7 +309,7 @@ void escapeMenu::display640()
 
 
 	Sint32 a, b, j;
-	Sint32 y = (keyboard->get_mouse_y() - position_y) / space2next;
+	Sint32 y = (keyboard->get_mouse_y() - y_coord) / space2next;
 	y--;
 	for(Sint32 k = 0; k < nb_ofLines; k++, desP1 += offD2)
 	{	
@@ -389,7 +389,7 @@ void escapeMenu::display320()
 
 
 	Sint32 a, b, j;
-	Sint32 y = (keyboard->get_mouse_y() - position_y) / space2next;
+	Sint32 y = (keyboard->get_mouse_y() - y_coord) / space2next;
 	y--;
 	for(Sint32 k = 0; k < nb_ofLines; k++, desP1 += offD2)
 	{	

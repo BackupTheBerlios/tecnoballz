@@ -90,7 +90,7 @@ Sint32 tecno_caps::disponible(sprite_ball *pball)
 {
 	if(is_enabled)
 		return 0;
-	init_money(pball->position_x, pball->position_y, pball->raket_ball);
+	init_money(pball->x_coord, pball->y_coord, pball->raket_ball);
 	return 1;
 }
 
@@ -101,7 +101,7 @@ Sint32 tecno_caps::disponible(tecno_fire *pfire)
 {
 	if(is_enabled)
 		return 0;
-	init_money(pfire->position_x, pfire->position_y, pfire->raquettePT);
+	init_money(pfire->x_coord, pfire->y_coord, pfire->raquettePT);
 	return 1;
 }
 
@@ -111,8 +111,8 @@ Sint32 tecno_caps::disponible(tecno_fire *pfire)
 void tecno_caps::init_money(Sint32 pos_x, Sint32 pos_y, tecno_bump *raket)
 {
 	is_enabled = 1;
-	position_x = pos_x;
-	position_y = pos_y;
+	x_coord = pos_x;
+	y_coord = pos_y;
 	raquettePT = raket;
 	Sint32 i = hasard_val;
 	i = i & 0x003;
@@ -156,8 +156,8 @@ Sint32 tecno_caps::deplaceMoi()
 			// bottom bumper
 			//###########################################################
 			case 1:
-				position_y += i;
-				if(position_y < maximum_Y1)
+				y_coord += i;
+				if(y_coord < maximum_Y1)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF
@@ -174,8 +174,8 @@ Sint32 tecno_caps::deplaceMoi()
 			// right bumper          
 			//###########################################################
 			case 2:
-				position_x += i;
-				if(position_x < maximum_X1)
+				x_coord += i;
+				if(x_coord < maximum_X1)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF
@@ -192,8 +192,8 @@ Sint32 tecno_caps::deplaceMoi()
 			// top bumper
 			//###########################################################
 			case 3:
-				position_y -= i;
-				if(position_y > minimum_Y1)
+				y_coord -= i;
+				if(y_coord > minimum_Y1)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF
@@ -210,8 +210,8 @@ Sint32 tecno_caps::deplaceMoi()
 			// left bumper
 			//###########################################################
 			case 4:
-				position_x -= i;
-				if(position_x > minimum_X1)
+				x_coord -= i;
+				if(x_coord > minimum_X1)
 				{	if(collision1(raket))
 					{	is_enabled = 0;
 #ifndef SOUNDISOFF
@@ -236,8 +236,8 @@ Sint32 tecno_caps::deplaceMe2()
 	if(is_enabled)
 	{	Sint32 i = la_vitesse;
 		tecno_bump *raket = raquettePT;
-		position_y += i;
-		if(position_y < maximum_Y1)
+		y_coord += i;
+		if(y_coord < maximum_Y1)
 		{	if(collision1(raket))
 			{	is_enabled = 0;
 #ifndef SOUNDISOFF

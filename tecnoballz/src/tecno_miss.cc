@@ -101,13 +101,13 @@ void tecno_miss::execution1()
 //------------------------------------------------------------------------------
 void tecno_miss::dmissile01()
 { 
-	position_y = position_y + (4 * resolution);
+	y_coord = y_coord + (4 * resolution);
 	Sint32 v = tablesinus[++flagDepla1];
 	if(v == 99)
 	{	flagDepla1 = 0;
 		v = 32;
 	}
-	position_x = flagDepla2 + (v * resolution);
+	x_coord = flagDepla2 + (v * resolution);
 	screenOver(tir_minixy);
 }
 
@@ -120,8 +120,8 @@ void tecno_miss::dmissile02()
 	if(tablesinus[flagDepla3] == 99)	//end of the table?
 		flagDepla3 = 0;
 	flagDepla2 = flagDepla2 + (4 * resolution);	//new position y 
-	position_y = flagDepla2 + (tablesinus[flagDepla3+1] * resolution);
-	position_x = flagDepla1 + (tablesinus[flagDepla3] * resolution);
+	y_coord = flagDepla2 + (tablesinus[flagDepla3+1] * resolution);
+	x_coord = flagDepla1 + (tablesinus[flagDepla3] * resolution);
 	screenOver(tir_minixy);
 }
 
@@ -130,7 +130,7 @@ void tecno_miss::dmissile02()
 //------------------------------------------------------------------------------
 void tecno_miss::dmissile03()
 {
-	position_y = position_y + (4 * resolution);
+	y_coord = y_coord + (4 * resolution);
 	screenOver(tir_minixy);
 }
 
@@ -146,13 +146,13 @@ void tecno_miss::dmissile04()
 			flagDepla3 = flagDepla3 + 2;
 			if(tablesinus[flagDepla3] == 99)	//end of the table?
 				flagDepla3 = 0;
-			position_y = flagDepla2 + (tablesinus[flagDepla3+1] * resolution);
-			position_x = flagDepla1 + (tablesinus[flagDepla3] * resolution);
+			y_coord = flagDepla2 + (tablesinus[flagDepla3+1] * resolution);
+			x_coord = flagDepla1 + (tablesinus[flagDepla3] * resolution);
 		}
 	}
 	else
-	{	position_x -= flagDepla6;
-		position_y += flagDepla7;
+	{	x_coord -= flagDepla6;
+		y_coord += flagDepla7;
 	}
 	screenOver(tir_minixy);
 }
@@ -164,11 +164,11 @@ void tecno_miss::dmissile05()
 {
 	if(flagDepla1)
 	{	flagDepla1--;
-		position_y += resolution;
+		y_coord += resolution;
 	}
 	else
-	{	position_x -= flagDepla2;
-		position_y += flagDepla3;
+	{	x_coord -= flagDepla2;
+		y_coord += flagDepla3;
 	}
 	screenOver(tir_minixy);
 }
@@ -182,13 +182,13 @@ void tecno_miss::dmissile06()
 	if(tablesinus[flagDepla3] == 99)	//end of the table?
 	flagDepla3 = 0;
 	flagDepla2 = flagDepla2 + (3 * resolution);	//new position y 
-	position_y = flagDepla2 + (tablesinus[flagDepla3+1] * resolution);
+	y_coord = flagDepla2 + (tablesinus[flagDepla3+1] * resolution);
 	if(flagDepla2 < (150 * resolution))
 	{	flagDepla1 = flagDepla1 + 2 * resolution;
-		if(ptbumper01->position_x < flagDepla1)
+		if(ptbumper01->x_coord < flagDepla1)
 			flagDepla1 = flagDepla1 - 4 * resolution;
 	}
-	position_x = flagDepla1 + (tablesinus[flagDepla3] * resolution);
+	x_coord = flagDepla1 + (tablesinus[flagDepla3] * resolution);
 	screenOver(tir_minixy);
 }
 
@@ -197,11 +197,11 @@ void tecno_miss::dmissile06()
 //------------------------------------------------------------------------------
 void tecno_miss::dmissile07()
 {
-	position_y = position_y + (3 * resolution);	//new position y 
-	if(position_y < (150 * resolution))
-	{	position_x = position_x + 2 * resolution;
-		if(ptbumper01->position_x < position_x)
-			position_x = position_x - 4 * resolution;
+	y_coord = y_coord + (3 * resolution);	//new position y 
+	if(y_coord < (150 * resolution))
+	{	x_coord = x_coord + 2 * resolution;
+		if(ptbumper01->x_coord < x_coord)
+			x_coord = x_coord - 4 * resolution;
 	}
 	screenOver(tir_minixy);
 }
@@ -218,8 +218,8 @@ void tecno_miss::dmissile08()
 	Sint32 y = tablecosin[flagDepla3] * flagDepla4;
 	x = x >> 7;
 	y = y >> 7;
-	position_x = ptguardian->position_x + ptguardian->gard_xcent + x;
-	position_y = ptguardian->position_y + ptguardian->gard_ycent + y;
+	x_coord = ptguardian->x_coord + ptguardian->gard_xcent + x;
+	y_coord = ptguardian->y_coord + ptguardian->gard_ycent + y;
 	flagDepla4 += resolution;
 	screenOver(tir_minixy);
 }
@@ -238,8 +238,8 @@ void tecno_miss::dmissile09()
 	Sint32 y = tablecosin[flagDepla3] * r;
 	x = x >> 7;
 	y = y >> 7;
-	position_x = flagDepla1 + x;
-	position_y = flagDepla2 + y;
+	x_coord = flagDepla1 + x;
+	y_coord = flagDepla2 + y;
 	flagDepla2 += resolution;
 	if(flagDepla4 > 0)
 	{	flagDepla1 += (5 * resolution);
@@ -272,8 +272,8 @@ void tecno_miss::dmissile10()
 	Sint32 y = tablecosin[flagDepla3] * ray_y;
 	x = x >> 7;
 	y = y >> 7;
-	position_x = flagDepla1 + x;
-	position_y = flagDepla2 + y;
+	x_coord = flagDepla1 + x;
+	y_coord = flagDepla2 + y;
 	flagDepla2 += 3 * resolution;
 	screenOver(tir_minixy);
 }
@@ -291,8 +291,8 @@ void tecno_miss::dmissile11()
 	Sint32 y = tablecosin[flagDepla3] * r;
 	x = x >> 7;
 	y = y >> 7;
-	position_x = flagDepla1 + x;
-	position_y = flagDepla2 + y;
+	x_coord = flagDepla1 + x;
+	y_coord = flagDepla2 + y;
 	flagDepla2 += (resolution*3);
 	screenOver(tir_minixy);
 }
@@ -310,8 +310,8 @@ void tecno_miss::dmissile12()
 	Sint32 y = tablecosin[flagDepla3] * r;
 	x = x >> 7;
 	y = y >> 7;
-	position_x = flagDepla1 + x;
-	position_y = flagDepla2 + y;
+	x_coord = flagDepla1 + x;
+	y_coord = flagDepla2 + y;
 	flagDepla1 += flagDepla4;
 	flagDepla2 += flagDepla5;
 	screenOver(tir_minixy);
@@ -322,8 +322,8 @@ void tecno_miss::dmissile12()
 //------------------------------------------------------------------------------
 void tecno_miss::screenOver(Sint32 vmini)
 {
-	if(position_x > tir_maxi_x || position_x < vmini || 
-		position_y < vmini || position_y > tir_maxi_y )
+	if(x_coord > tir_maxi_x || x_coord < vmini || 
+		y_coord < vmini || y_coord > tir_maxi_y )
 		is_enabled = 0;
 }
 
@@ -332,16 +332,16 @@ void tecno_miss::screenOver(Sint32 vmini)
 //------------------------------------------------------------------------------
 void tecno_miss::screenStop(Sint32 vmini)
 {	
-	if(position_y>tir_maxi_y)
+	if(y_coord>tir_maxi_y)
 		is_enabled = 0;
 	else
-	{	if(position_y < vmini)
-			position_y = vmini;
-		if(position_x > tir_maxi_x)
-			position_x = tir_maxi_x;
+	{	if(y_coord < vmini)
+			y_coord = vmini;
+		if(x_coord > tir_maxi_x)
+			x_coord = tir_maxi_x;
 		else
-		{	if(position_x < vmini)
-			position_x = vmini;
+		{	if(x_coord < vmini)
+			x_coord = vmini;
 		}
 	}
 }

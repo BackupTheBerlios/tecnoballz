@@ -156,7 +156,7 @@ void zeguardian::displayNrj()
 		ptBob->initRepeat(h);
 		if (!h) h = 1;
 		Sint32 y = baseY - h * ptBob->get_sprite_height();
-		ptBob->changePosY(y);
+		ptBob->set_y_coord(y);
 	}
 }
 
@@ -264,14 +264,14 @@ Sint32 zeguardian::run_scroll(Uint32 ntype, Sint32 speed, sprite_ball *balle,
 		//###############################################################
 		case 2:
 			if (pGua1->gard_power)
-			{	Sint32	gposy = pGua1->position_y;
+			{	Sint32	gposy = pGua1->y_coord;
 				if (scrollTemp)
 				{	gposy = scrollTemp - gposy;
 					gposy = gposy >> 1;
 					if (gposy)
 						speed = gposy;
 				}
-				scrollTemp = pGua1->position_y;
+				scrollTemp = pGua1->y_coord;
 			}
 			break;
 				
@@ -297,14 +297,14 @@ Sint32 zeguardian::run_scroll(Uint32 ntype, Sint32 speed, sprite_ball *balle,
 					scrollTemp = 0;
 				}
 				else
-				{	Sint32	gposy = balle->position_y;
+				{	Sint32	gposy = balle->y_coord;
 					if (scrollTemp)
 					{	gposy = scrollTemp - gposy;
 						gposy = gposy >> 1;
 						if (gposy)
 							speed = gposy;
 					}
-					scrollTemp = balle->position_y;
+					scrollTemp = balle->y_coord;
 				}
 			}
 			break;
@@ -330,13 +330,13 @@ Sint32 zeguardian::run_scroll(Uint32 ntype, Sint32 speed, sprite_ball *balle,
 		//###############################################################
 		case 6:
 			if (pGua1->gard_power)
-			{	Sint32	gposy = pGua1->position_y;
+			{	Sint32	gposy = pGua1->y_coord;
 				if (scrollTemp)
 				{	gposy = gposy - scrollTemp;
 					if(gposy)
 						speed = gposy * 2;
 				}
-				scrollTemp = pGua1->position_y;
+				scrollTemp = pGua1->y_coord;
 			}
 			break;
 
@@ -346,7 +346,7 @@ Sint32 zeguardian::run_scroll(Uint32 ntype, Sint32 speed, sprite_ball *balle,
 		case 7:
 			if (weapo->is_enabled)
 			{	if (scrollTemp)
-				{	Sint32	gposy = weapo->position_y;
+				{	Sint32	gposy = weapo->y_coord;
 					gposy = gposy - scrollTemp;
 					speed += gposy;
 					if (speed > 15 * resolution)
@@ -354,7 +354,7 @@ Sint32 zeguardian::run_scroll(Uint32 ntype, Sint32 speed, sprite_ball *balle,
 					if (speed < (-15 * resolution))
 						speed = -15 * resolution;
 				}
-				scrollTemp = weapo->position_y;
+				scrollTemp = weapo->y_coord;
 			}
 			else
 				scrollTemp = 0;				
@@ -366,7 +366,7 @@ Sint32 zeguardian::run_scroll(Uint32 ntype, Sint32 speed, sprite_ball *balle,
 		case 8:
 			if (weapo->is_enabled)
 			{	if (scrollTemp)
-				{	Sint32	gposy = weapo->position_y;
+				{	Sint32	gposy = weapo->y_coord;
 					gposy = scrollTemp - gposy;
 					speed += gposy;
 					if (speed > 15 * resolution)
@@ -374,7 +374,7 @@ Sint32 zeguardian::run_scroll(Uint32 ntype, Sint32 speed, sprite_ball *balle,
 					if (speed < (-15 * resolution))
 						speed = -15 * resolution;
 				}
-				scrollTemp = weapo->position_y;
+				scrollTemp = weapo->y_coord;
 			}
 			else
 				scrollTemp = 0;				

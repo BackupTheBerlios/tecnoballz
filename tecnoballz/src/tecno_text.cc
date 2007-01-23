@@ -75,11 +75,11 @@ void tecno_text::moveCaract()
 		a *= 10 * resolution;
 		a >>= SINUS_DECA;
 		a = a + d;
-		position_y = a;
+		y_coord = a;
 
 		//absciss moving
-		if(position_x != posiX_stop)
-			position_x += xIncrement;
+		if(x_coord != posiX_stop)
+			x_coord += xIncrement;
 	}
 	clip_coordinates();
 }

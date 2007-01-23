@@ -82,16 +82,16 @@ void zeMissiles::anim_fires()
 //-----------------------------------------------------------------------------
 void zeMissiles::bumper_col()
 { 
-	Sint32 bumpy = ptbumper01->retournePY();
-	Sint32 bumpx = ptbumper01->retournePX();
+	Sint32 bumpy = ptbumper01->get_y_coord();
+	Sint32 bumpx = ptbumper01->get_x_coord();
 	Sint32 bmpx2 = bumpx + ptbumper01->rakLargeur();
 	Sint32 bmpy2 = bumpy + ptbumper01->get_sprite_height();
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_miss *xFire = sprites_list[i];
 		if(xFire->is_enabled)
-		{	Sint32 weapy = xFire->position_y;
+		{	Sint32 weapy = xFire->y_coord;
 			if (weapy < bmpy2)
-			{	Sint32 weapx = xFire->position_x;      
+			{	Sint32 weapx = xFire->x_coord;      
 				if(weapx < bmpx2)
 				{	weapy += xFire->sprite_height;
 					if(weapy > bumpy)
@@ -172,24 +172,24 @@ void zeMissiles::newMissile(Sint32 nfire, tecno_gard *pgard)
 void zeMissiles::tir01_init(tecno_gard *pgard)
 {
   Sint32 t = max_of_sprites - 1;
-  Sint32 gardx = pgard->position_x + pgard->gard_xcent - (16 * resolution);
-  Sint32 gardy = pgard->position_y;
+  Sint32 gardx = pgard->x_coord + pgard->gard_xcent - (16 * resolution);
+  Sint32 gardy = pgard->y_coord;
   Sint32 n = 12;                                                 //12 objets pour ce tir
   Sint32 s = 0;                                                  //pointeur sur la table sinus
   do
   { tecno_miss *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { xFire->is_enabled = 1;
-      xFire->position_x = tir01_posi[s] * resolution + gardx;
+      xFire->x_coord = tir01_posi[s] * resolution + gardx;
       xFire->tablesinus = tir01_posi;
       xFire->flagDepla1 = s;                                   //pointeur table sinus x
       xFire->flagDepla2 = gardx;                               //sauve position x
-      xFire->position_y = gardy;                               // position y du tir
+      xFire->y_coord = gardy;                               // position y du tir
       gardy = gardy + 5 * resolution;
-      //printf("zeMissiles::tir01_init() n=%ld, t=%ld, x=%ld, y=%ld \n", n, t, xFire->position_x, xFire->position_y);
+      //printf("zeMissiles::tir01_init() n=%ld, t=%ld, x=%ld, y=%ld \n", n, t, xFire->x_coord, xFire->y_coord);
       s = s + 5;
       if(n-- == 7)
-        gardy = pgard->position_y;
+        gardy = pgard->y_coord;
     }
   } while ( n > 0 && --t >= 0 );
 }
@@ -197,8 +197,8 @@ void zeMissiles::tir01_init(tecno_gard *pgard)
 void zeMissiles::tir02_init(tecno_gard *pgard)
 {
   Sint32 t = max_of_sprites - 1;
-  Sint32 gardx = pgard->position_x + pgard->gard_xcent;
-  Sint32 gardy = pgard->position_y + pgard->gard_ycent;
+  Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
+  Sint32 gardy = pgard->y_coord + pgard->gard_ycent;
   Sint32 s = 0;
   Sint32 n = 10;                                                 //10 objets pour ce tir
   do
@@ -217,8 +217,8 @@ void zeMissiles::tir02_init(tecno_gard *pgard)
       }
       else
       { xFire->is_enabled = 3;
-        xFire->position_x = gardx;
-        xFire->position_y = gardy;
+        xFire->x_coord = gardx;
+        xFire->y_coord = gardy;
         gardx = gardx + 10 * resolution;
         n--;
       }
@@ -231,8 +231,8 @@ void zeMissiles::tir02_init(tecno_gard *pgard)
 void zeMissiles::tir03_init(tecno_gard *pgard)
 {
   Sint32 t = max_of_sprites - 1;
-  Sint32 gardx = pgard->position_x + pgard->gard_xcent;
-  Sint32 gardy = pgard->position_y + pgard->gard_ycent;
+  Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
+  Sint32 gardy = pgard->y_coord + pgard->gard_ycent;
   Sint32 n = 5;                                                 //5 objets pour ce tir
   do
   { tecno_miss *xFire = sprites_list[t];
@@ -240,8 +240,8 @@ void zeMissiles::tir03_init(tecno_gard *pgard)
     { xFire->ptbumper01 = ptbumper01;
       if(n == 1)
       { xFire->is_enabled = 7;
-        xFire->position_x = gardx;
-        xFire->position_y = gardy;
+        xFire->x_coord = gardx;
+        xFire->y_coord = gardy;
       }
       else
       { xFire->is_enabled = 6;
@@ -276,8 +276,8 @@ void zeMissiles::tir03_init(tecno_gard *pgard)
 void zeMissiles::tir04_init(tecno_gard *pgard)
 {
   Sint32 t = max_of_sprites - 1;
-  Sint32 gardx = pgard->position_x + pgard->gard_xcent;
-  Sint32 gardy = pgard->position_y + pgard->gard_ycent;
+  Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
+  Sint32 gardy = pgard->y_coord + pgard->gard_ycent;
   Sint32 s = 0;
   Sint32 n = 7;                                                  //7 objets pour ce tir
   const Sint16* ptir = tir04_posi;
@@ -303,8 +303,8 @@ void zeMissiles::tir04_init(tecno_gard *pgard)
 void zeMissiles::tir05_init(tecno_gard *pgard)
 {
   Sint32 t = max_of_sprites - 1;
-  Sint32 gardx = pgard->position_x + pgard->gard_xcent;
-  Sint32 gardy = pgard->position_y + pgard->gard_ycent;
+  Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
+  Sint32 gardy = pgard->y_coord + pgard->gard_ycent;
   Sint32 tempo = 10;
   Sint32 incrx = -5 * resolution;
   Sint32 n = 9;                                                  //9 objets pour ce tir
@@ -312,8 +312,8 @@ void zeMissiles::tir05_init(tecno_gard *pgard)
   { tecno_miss *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { xFire->is_enabled = 5;
-      xFire->position_x = gardx;
-      xFire->position_y = gardy;
+      xFire->x_coord = gardx;
+      xFire->y_coord = gardy;
       xFire->flagDepla1 = tempo;
       tempo += 15;
       xFire->flagDepla2 = incrx;
@@ -351,8 +351,8 @@ void zeMissiles::tir06_init(tecno_gard *pgard)
 void zeMissiles::tir07_init(tecno_gard *pgard)
 {
   Sint32 t = max_of_sprites - 1;
-  Sint32 gardx = pgard->position_x + pgard->gard_xcent;
-  Sint32 gardy = pgard->position_y + pgard->gard_ycent;
+  Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
+  Sint32 gardy = pgard->y_coord + pgard->gard_ycent;
   Sint32 s = 0;
   Sint32 n = 10;                                                  //10 objets pour ce tir
   do
@@ -376,8 +376,8 @@ void zeMissiles::tir07_init(tecno_gard *pgard)
 void zeMissiles::tir08_init(tecno_gard *pgard)
 {
   Sint32 t = max_of_sprites - 1;
-  Sint32 gardx = pgard->position_x + pgard->gard_xcent;
-  Sint32 gardy = pgard->position_y + pgard->gard_ycent;
+  Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
+  Sint32 gardy = pgard->y_coord + pgard->gard_ycent;
   Sint32 s = 0;
   Sint32 n = 10;                                                  //10 objets pour ce tir
   Sint32 tempo = 20;
@@ -406,8 +406,8 @@ void zeMissiles::tir08_init(tecno_gard *pgard)
 void zeMissiles::tir09_init(tecno_gard *pgard)
 {
   Sint32 t = max_of_sprites - 1;
-  Sint32 gardx = pgard->position_x + pgard->gard_xcent;
-  Sint32 gardy = pgard->position_y + pgard->gard_ycent;
+  Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
+  Sint32 gardy = pgard->y_coord + pgard->gard_ycent;
   Sint32 s = 0;
   Sint32 n = 9;                                                  //10 objets pour ce tir
   do
@@ -440,16 +440,16 @@ void zeMissiles::tir09_init(tecno_gard *pgard)
 void zeMissiles::tir10_init(tecno_gard *pgard)
 {
   Sint32 t = max_of_sprites - 1;
-  Sint32 gardx = pgard->position_x + pgard->gard_xcent - (17 * resolution) ;
-  Sint32 gardy = pgard->position_y + pgard->gard_ycent - (10 * resolution);
+  Sint32 gardx = pgard->x_coord + pgard->gard_xcent - (17 * resolution) ;
+  Sint32 gardy = pgard->y_coord + pgard->gard_ycent - (10 * resolution);
   const Sint16 * ptir = tir10_posi;
   Sint32 n = 6;	//6 objets pour ce tir
   do
   { tecno_miss *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { xFire->is_enabled = 3;
-      xFire->position_x = gardx + (*(ptir++) * xFire->sprite_width);
-      xFire->position_y = gardy + (*(ptir++) * xFire->sprite_height);
+      xFire->x_coord = gardx + (*(ptir++) * xFire->sprite_width);
+      xFire->y_coord = gardy + (*(ptir++) * xFire->sprite_height);
       n--;
     }
   } while ( n > 0 && --t >= 0 );
@@ -459,8 +459,8 @@ void zeMissiles::tir10_init(tecno_gard *pgard)
 void zeMissiles::tir11_init(tecno_gard *pgard)
 {
 	Sint32 t = max_of_sprites - 1;
-	Sint32 gardx = pgard->position_x + pgard->gard_xcent;
-	Sint32 gardy = pgard->position_y + pgard->gard_ycent;
+	Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
+	Sint32 gardy = pgard->y_coord + pgard->gard_ycent;
 	Sint32 n = 15;	//15 objets pour ce tir
 	Sint32 inc_x = 0;
 	Sint32 inc_y = 5 * resolution;

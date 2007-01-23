@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.12 2007/01/23 11:00:04 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.13 2007/01/23 12:06:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -450,7 +450,7 @@ void zeRaquette::bp_deplace()
 {
   Sint32 speed = 0;
   const Sint32 **tabB1, **tabB2, **tabB3, **tabB4;
-  Sint32 x = tecBumper1->position_x;
+  Sint32 x = tecBumper1->x_coord;
   Sint32 off_x = keyboard->get_mouse_x_offset();
   // Mode Solo
   if(!raket_team)
@@ -498,10 +498,10 @@ void zeRaquette::bp_deplace()
       tecBumper4->rebonds_GD = *(tabB4 + speed);
 
       // Change position des raquettes
-      tecBumper1->changePosX(x);                                 // raquette du bas
-      tecBumper2->changePosY(x - 16);                            // raquette de droite
-      tecBumper3->changePosX(x);                                 // raquette du haut
-      tecBumper4->changePosY(x - 16);                            // raquette de gauche
+      tecBumper1->set_x_coord(x);                                 // raquette du bas
+      tecBumper2->set_y_coord(x - 16);                            // raquette de droite
+      tecBumper3->set_x_coord(x);                                 // raquette du haut
+      tecBumper4->set_y_coord(x - 16);                            // raquette de gauche
     }
 
   }
@@ -520,7 +520,7 @@ void zeRaquette::bp_deplac2()
 {
 	Sint32 speed = 0;
 	const Sint32 **tabB1;
-	Sint32 x = tecBumper1->position_x;
+	Sint32 x = tecBumper1->x_coord;
 	Sint32 off_x = keyboard->get_mouse_x_offset();
 	// mode solo
 	if(!raket_team)
@@ -554,7 +554,7 @@ void zeRaquette::bp_deplac2()
 		tecBumper1->rebonds_GD = *(tabB1 + speed);
 
 		//change position of bumpers
-		tecBumper1->changePosX(x);	//bottom bumper
+		tecBumper1->set_x_coord(x);	//bottom bumper
 		tecBumper1->flickerRun();	//flick the bumper
 	}
 
@@ -579,8 +579,8 @@ void zeRaquette::move_robot()
 		{	sprite_ball *b = *(aList++);
 			if(b->is_enabled)
 			{	if(b->directBall >= 36 && b->directBall <= 60)
-				{	if(b->position_y > pos_y)
-					{	pos_y = b->position_y;
+				{	if(b->y_coord > pos_y)
+					{	pos_y = b->y_coord;
 						balle = b;
 					}
 				}
@@ -588,8 +588,8 @@ void zeRaquette::move_robot()
 		}
 
 		if(pos_y > 0)
-		{	Sint32 bumpx = tec_robot0->position_x;
-			Sint32 ballx = balle->position_x - 64;
+		{	Sint32 bumpx = tec_robot0->x_coord;
+			Sint32 ballx = balle->x_coord - 64;
 			Sint32 offsx = bumpx - ballx;
 			if(offsx > 10)
 				offsx = 10;
@@ -602,8 +602,8 @@ void zeRaquette::move_robot()
 			if(bumpx > 320)
 				bumpx = 320;
 	
-			offsx = tec_robot0->position_x;
-			tec_robot0->position_x = bumpx;
+			offsx = tec_robot0->x_coord;
+			tec_robot0->x_coord = bumpx;
 			offsx = bumpx - offsx;   
 			const Sint32 **tabB1;
 			if(offsx < 0)
@@ -644,14 +644,14 @@ void zeRaquette::maxi_bumps()
 {
 	if(raketLarge >= 64 * resolution) return;
 	raketLarge = 64 * resolution;
-	Sint32 x = tecBumper1->retournePX();
+	Sint32 x = tecBumper1->get_x_coord();
 	Sint32 i = bumperMaxi - raketLarge;
 	if(x >= i)
 	{	x = i;
-		tecBumper1->changePosX(x);
-		tecBumper2->changePosY(x);
-		tecBumper3->changePosX(x);
-		tecBumper4->changePosY(x);
+		tecBumper1->set_x_coord(x);
+		tecBumper2->set_y_coord(x);
+		tecBumper3->set_x_coord(x);
+		tecBumper4->set_y_coord(x);
 	}
 	tecBumper1->bumperHgfx(raketLarge);
 	tecBumper2->bumperVgfx(raketLarge);
@@ -668,14 +668,14 @@ void zeRaquette::incremente()
 {
 	if(raketLarge < (64 * resolution))
 	{	raketLarge += (8 * resolution);
-		Sint32 x = tecBumper1->retournePX();
+		Sint32 x = tecBumper1->get_x_coord();
 		Sint32 i = bumperMaxi - raketLarge;
 		if(x >= i)
 		{	x = i;
-			tecBumper1->changePosX(x);
-			tecBumper2->changePosY(x);
-			tecBumper3->changePosX(x);
-			tecBumper4->changePosY(x);
+			tecBumper1->set_x_coord(x);
+			tecBumper2->set_y_coord(x);
+			tecBumper3->set_x_coord(x);
+			tecBumper4->set_y_coord(x);
 		}
 		tecBumper1->bumperHgfx(raketLarge);
 		tecBumper2->bumperVgfx(raketLarge);

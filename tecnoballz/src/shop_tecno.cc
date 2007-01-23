@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.11 2007/01/23 10:11:22 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.12 2007/01/23 12:06:00 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -227,8 +227,8 @@ Sint32 shop_tecno::zeMainLoop()
 	
 	if(!ptrEscMenu->is_enable())
 	{	pos_select();
-		Sint32 x = objetMouse->retournePX();
-		Sint32 y = objetMouse->retournePY();
+		Sint32 x = objetMouse->get_x_coord();
+		Sint32 y = objetMouse->get_y_coord();
 		if (get_object == -1)	//-1 = not a drag object
 		{	Sint32 x2, y2;
 			bool mousreleas = keyboard->is_left_button_up(&x2, &y2);
@@ -684,7 +684,7 @@ void shop_tecno::sh_ballade()
 	if(get_object >= 0)	//pointer to the table "case_price" (-1 = no drag object)
 	{	if(keyboard->is_left_button())
 		{	bob_volant->enable();
-			bob_volant->coordonnee(objetMouse->retournePX(), objetMouse->retournePY());
+			bob_volant->coordonnee(objetMouse->get_x_coord(), objetMouse->get_y_coord());
 			if(bobclignot->is_enabled)
 				bobclignot->is_enabled = 0;
 			else
@@ -793,7 +793,7 @@ void shop_tecno::sh_ballade()
 //-------------------------------------------------------------------------------
 void shop_tecno::pos_select()
 { 
-	Sint32 y = objetMouse->retournePY() - cadre_ymin;
+	Sint32 y = objetMouse->get_y_coord() - cadre_ymin;
 	Sint32 o = (y / cadre_haut);			//y / 9 (height of cursor)
 	y = o * cadre_haut + cadre_ymin;
 	if(y < cadre_ymin)
@@ -802,8 +802,8 @@ void shop_tecno::pos_select()
 		y = cadre_ymax;
 	cadre_posy = y ;				//cursor y coordinate
 	
-	Sint32 x = objetMouse->retournePX();
-	y = objetMouse->retournePY();
+	Sint32 x = objetMouse->get_x_coord();
+	y = objetMouse->get_y_coord();
 	cadre_flag = 0;					//don't display cursor (by default)
 	cadre_offs = -1;
 
@@ -877,7 +877,7 @@ void shop_tecno::tu_triches()
 	objetMouse->tempoinit2(3);
 	if(cheat_flag) return;
 	if(!birth_flag) return;
-	if(!objetMouse->retournePX() && !objetMouse->retournePY())
+	if(!objetMouse->get_x_coord() && !objetMouse->get_y_coord())
 	{	objetMouse->tempoinit2(20);
 		Sint32 k = keyboard->get_key_down_code();
 		if(triche_key != k && k)

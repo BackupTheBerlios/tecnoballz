@@ -147,19 +147,19 @@ void ejectBalls::ballPosIni(furaxEject *table)
 	if(balPosFlag) return;
 	balPosFlag = 1;
 	furaxEject *eject = table;
-	eject->position_x = (eject->position_x * resolution) + eject1PosX;
-	eject->position_y = (eject->position_y * resolution) + eject1PosY;
+	eject->x_coord = (eject->x_coord * resolution) + eject1PosX;
+	eject->y_coord = (eject->y_coord * resolution) + eject1PosY;
 
 	eject = table + 1;
-	eject->position_x = (eject->position_x * resolution) + eject3PosX;
-	eject->position_y = (eject->position_y * resolution) + eject3PosY;
+	eject->x_coord = (eject->x_coord * resolution) + eject3PosX;
+	eject->y_coord = (eject->y_coord * resolution) + eject3PosY;
 
 	eject = table + 2;
-	eject->position_x = (eject->position_x * resolution) + eject4PosX;
-	eject->position_y = (eject->position_y * resolution) + eject4PosY;
+	eject->x_coord = (eject->x_coord * resolution) + eject4PosX;
+	eject->y_coord = (eject->y_coord * resolution) + eject4PosY;
 
 	eject = table + 3;
-	eject->position_x = (eject->position_x * resolution) + eject2PosX;
-	eject->position_y = (eject->position_y * resolution) + eject2PosY;
+	eject->x_coord = (eject->x_coord * resolution) + eject2PosX;
+	eject->y_coord = (eject->y_coord * resolution) + eject2PosY;
 	
 }

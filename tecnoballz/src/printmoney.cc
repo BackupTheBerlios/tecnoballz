@@ -206,10 +206,10 @@ void printmoney::exec_money(Sint32 value)
 		}
 		baseN /= 10;
 		sprite_object *x_bob = *(liste++);
-		x_bob->changePosY(money_posy);
+		x_bob->set_y_coord(money_posy);
 		x_bob->change_GFX(i);
 	}
-	ptBobMoney->changePosY(money_posy);
+	ptBobMoney->set_y_coord(money_posy);
 	ptBobMoney->animRepete();
 	if(money_posy < y_position)
 		money_posy += resolution;

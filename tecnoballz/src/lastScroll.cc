@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-07
 // fonction	: handle of the scrolling background (menu and gards levels)
-// id		: $Id: lastScroll.cc,v 1.5 2007/01/17 20:05:07 gurumeditation Exp $
+// id		: $Id: lastScroll.cc,v 1.6 2007/01/23 12:06:00 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -104,7 +104,7 @@ Sint32 lastScroll::initialise(Uint32 PalNu, Uint32 edmap)
 	destinMod3 = (motifhaute * largeEcran) - (motiflarge * largeMotif);
 	source_mod = gfx_bitMap->GFX_nextLn();
 	gfxLargeur = gfx_bitMap->GFXlargeur();
-	position_y = 0;
+	y_coord = 0;
 
 	//###################################################################
 	// display all maps
@@ -135,7 +135,7 @@ Sint32 lastScroll::tile_width()
 //-----------------------------------------------------------------------------
 Sint32 lastScroll::returnPosy()
 {
-	return position_y;
+	return y_coord;
 }
 
 
@@ -149,7 +149,7 @@ Sint32 lastScroll::swapScroll(Uint32 PalNu, Uint32 edmap)
 	error_init(ld_mapfile(edmap));
 	if(erreur_num) return erreur_num;
 	palette_go (PalNu);
-	position_y = 0;
+	y_coord = 0;
 	return erreur_num;
 }
 
@@ -229,13 +229,13 @@ const unsigned char lastScroll::colors_map[48] =
 //------------------------------------------------------------------------------
 void lastScroll::scrolling1(Sint32 index)
 {
-	Sint32 i = position_y + index;
+	Sint32 i = y_coord + index;
 	Sint32 j = CARTEHAUTE * motifhaute;	// 273 * 32 = 8736
 	if(i < 0)
 		i += j;
 	if(i > j)
 		i -= j;
-	position_y = i;
+	y_coord = i;
 	if(resolution == 1)
 		j = i & 15;
 	else

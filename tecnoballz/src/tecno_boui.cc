@@ -60,7 +60,7 @@ void tecno_boui::gere_atome()
 		//###############################################################
 		if(atom_actif)// atom_actif > 0 BouiBoui's not active
 		{ if(!(--atom_actif))
-			{	if(!over_brick(position_x, position_y))
+			{	if(!over_brick(x_coord, y_coord))
 				{	is_enabled = 1;
 					Sint32 *monPT = ghost_bobs + (hasard_val & 31);
 #if __WORDSIZE == 64
@@ -72,7 +72,7 @@ void tecno_boui::gere_atome()
 					miniOffset = k;
 					animOffset = k;
 					maxiOffset = k + ATOM_ANIMA - 1;
-					flagShadow = 1;
+					sprite_has_shadow = 1;
 					change_GFX(k);
 #ifndef SOUNDISOFF
 					audio->play_sound(S_ATOMAPPA);
@@ -109,21 +109,21 @@ void tecno_boui::gere_atome()
 		//###############################################################
 		// initialize position of the Bouiboui
 		//###############################################################
-		Sint32 x = position_x + atom_deplX;
+		Sint32 x = x_coord + atom_deplX;
 		if(x < atom_xmini)
 			x = atom_xmini;
 		else
 			if(x > atom_xmaxi)
 				x = atom_xmaxi;
-		Sint32 y = position_y + atom_deplY;
+		Sint32 y = y_coord + atom_deplY;
 		if(y < atom_ymini)
 			y = atom_ymini;
 		else
 			if(y > atom_ymaxi)
 				y = atom_ymaxi;
 		if(!over_brick(x, y) || atom_actif)
-		{	position_x = x;
-			position_y = y;
+		{	x_coord = x;
+			y_coord = y;
 		}
 	}
 }
@@ -178,8 +178,8 @@ void tecno_boui::littleInit(Sint32 time0, Sint32 appar, Sint32 index, Sint32 pow
 	tableGhost = ghost_wait[index];	//table of the 16 standby values 
 	atom_power = power;				//strength
 	init_power = power;				//strength
-	position_x = pos_x;
-	position_y = pos_y;
+	x_coord = pos_x;
+	y_coord = pos_y;
 	atom_oexpl = offst;				//number of the image's explosion
 	atom_explo = 0;
 	atom_ghost = 0;					//pointer on "tableGhost"
@@ -265,7 +265,7 @@ void tecno_boui::explosion1(sprite_ball *pBall)
 //-----------------------------------------------------------------------------
 void tecno_boui::explosion2()
 {
-	flagShadow = 0;	// no shadow
+	sprite_has_shadow = 0;	// no shadow
 	hasard_val = hasard_val + animOffset;
 	atom_explo = 1;
 	atom_power = init_power;	// strength

@@ -34,8 +34,8 @@ typedef struct
  	Sint32	ejectBall2;
 	Sint32	ejectBall3;
 	Sint32	ejectBall4;
-	Sint32	position_x;
-	Sint32	position_y;
+	Sint32	x_coord;
+	Sint32	y_coord;
 } furaxEject;
 
 

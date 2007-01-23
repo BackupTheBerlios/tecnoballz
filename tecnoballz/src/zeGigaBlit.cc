@@ -126,15 +126,15 @@ void zeGigaBlit::initDepart()
 		giga_blitz *g = sprites_list[l];
 		blitzobjet = g;
 		blitz_haut = g->get_sprite_height();
-		Sint32 x = tecBumper1->retournePX();
-		Sint32 y = tecBumper1->retournePY();
+		Sint32 x = tecBumper1->get_x_coord();
+		Sint32 y = tecBumper1->get_y_coord();
 		blitz_posx = x;
 		blitz_colx = x;	//special collision
 		g->coordonnee(x, y);
-		//bitz_ystop = tecBumper3->retournePY() - blitz_haut;
+		//bitz_ystop = tecBumper3->get_y_coord() - blitz_haut;
 		bitz_ystop = 8 * resolution - blitz_haut;
-		bitz_maxiy = tecBumper1->retournePY();
-		//bitz_miniy = tecBumper3->retournePY();
+		bitz_maxiy = tecBumper1->get_y_coord();
+		//bitz_miniy = tecBumper3->get_y_coord();
 		bitz_miniy = 8 * resolution;
 		y = large;
 		if(resolution == 1)
@@ -166,7 +166,7 @@ void zeGigaBlit::execution1()
 	//###################################################################
 	// vertical moving
 	//###################################################################
-	Sint32 y = g->retournePY();
+	Sint32 y = g->get_y_coord();
 	y = y - (8 * resolution);
 	if(y <= bitz_ystop)
 	{	g->disable();
@@ -218,9 +218,9 @@ void zeGigaBlit::collision1()
 	Sint32 byoff = brickObjet->getYOffset();	//y-offset between 2 bricks
 	Sint32 indus = brickObjet->getBkIndus();	//first indestructible brick	
 	if(blitz_brik > 0)
-	{	//Sint32 x = blitzobjet->retournePX();
+	{	//Sint32 x = blitzobjet->get_x_coord();
 		Sint32 x = blitz_colx;
-		Sint32 y = blitzobjet->retournePY();
+		Sint32 y = blitzobjet->get_y_coord();
 		x /= bwght;		// x = x / 32 (width of a brick)
 		y /= byoff;		// y = y / 16 (space between two bricks in height)
 		y *= lesBriques::NB_BRICKSH;		// y = y * 16 (number of bricks on the same line)
@@ -301,7 +301,7 @@ void zeGigaBlit::execution2()
 {
 	if(blitz_haut)
 	{	giga_blitz *g = blitzobjet;
-		Sint32 y = g->retournePY();
+		Sint32 y = g->get_y_coord();
 		y = y + (6 * resolution);
 		blitz_xsin = (blitz_xsin + 50) & SINUS_MASK;
 		Sint32 x = (table_cosL[blitz_xsin] * 5 * resolution) >> SINUS_DECA;
@@ -346,12 +346,12 @@ void zeGigaBlit::execution2()
 void zeGigaBlit::collision2()
 {
 	if(blitz_haut && !tecBumper1->getInvncbl())
-	{	Sint32 gx = blitzobjet->retournePX();
-		Sint32 gy = blitzobjet->retournePY();
+	{	Sint32 gx = blitzobjet->get_x_coord();
+		Sint32 gy = blitzobjet->get_y_coord();
 		//Sint32 gh = blitzobjet->get_sprite_height();
 		Sint32 gw = blitzobjet->getColLarg();
-		Sint32 bx = tecBumper1->retournePX();
-		Sint32 by = tecBumper1->retournePY();
+		Sint32 bx = tecBumper1->get_x_coord();
+		Sint32 by = tecBumper1->get_y_coord();
 		Sint32 bw = tecBumper1->rakLargeur();
 		Sint32 bh = tecBumper1->get_sprite_height();
 		/*printf("zeGigaBlit::collision2(): getColLarg=%i / get_sprite_width=%i / get_sprite_height=%i /  blitz_haut =%i\n",

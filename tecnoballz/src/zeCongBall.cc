@@ -128,8 +128,8 @@ void zeCongBall::execution1()
 		Sint32 pos_y = 	(ressources::cosinus360[zebob->maximum_X1] * rad_y) >> 7;
 		pos_x += centx;
 		pos_y += centy;
-		zebob->position_x = pos_x;
-		zebob->position_y = pos_y;
+		zebob->x_coord = pos_x;
+		zebob->y_coord = pos_y;
 		//printf("=> %i %i \n", pos_x , pos_y);
 	}
 }

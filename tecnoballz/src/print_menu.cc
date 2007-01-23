@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.8 2007/01/23 11:00:04 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.9 2007/01/23 12:06:00 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -123,7 +123,7 @@ Sint32 print_menu::afficheTxt()
 	clear_zone();
 	mis_a_jour();
 	Sint32 mousY = keyboard->get_mouse_y();
-	Sint32 y = (mousY - position_y) / space2next;
+	Sint32 y = (mousY - y_coord) / space2next;
 	Sint32 zeRet = testLeMenu();
 
 	//###################################################################
@@ -367,7 +367,7 @@ Sint32 print_menu::testLeMenu()
 		}
 		
 		//printf("pos_y: %i \n", pos_y);
-		pos_y = (pos_y - position_y) / space2next;
+		pos_y = (pos_y - y_coord) / space2next;
 		switch (numeroMenu)
 		{
 			
