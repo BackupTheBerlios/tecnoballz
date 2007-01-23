@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.16 2007/01/23 14:26:07 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.17 2007/01/23 17:02:05 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -40,8 +40,8 @@ ze_gadgets::ze_gadgets(Sint32 total, Sint32 vShad)
 	for(Sint32 i = 0; i < NB_OPTIONS; i++)
 		*(monPT++) = 0;
 	*(monPT++) = -1;
-	anim_tempo = 0;
-	init_tempo = 5;
+	frame_delay = 0;
+	frame_period = 5;
 	animOffset = 0;
 	malus_step = 0;
 	malus_frek = 0;
@@ -96,7 +96,7 @@ void ze_gadgets::initialise(Sint32 mStep, Sint32 bKauf, Sint32 brCnt, const Sint
 	{	bonus = sprites_list[i];
 		bonus->littleInit();
 	}
-	init_tempo = bonus->init_tempo;
+	frame_period = bonus->frame_period;
   
 	//###################################################################
 	// reset list of bonuses bought in the shop
@@ -315,8 +315,8 @@ void ze_gadgets::bougegads2()
 //-------------------------------------------------------------------------------
 void ze_gadgets::animations(Sint32 value)
 {
-	if((--anim_tempo) <= 0)
-	{	anim_tempo = init_tempo / value;
+	if((--frame_delay) <= 0)
+	{	frame_delay = frame_period / value;
 			if(++animOffset >= XXX_IMAGES)
 				animOffset = 0;
 	}

@@ -26,7 +26,7 @@
 // Create the object   <><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 giga_blitz::giga_blitz()
 {
-	BOBprepare();
+	clear_sprite_members();
 }
 
 // Release the object  <><><><><><><><><><><><><><><><><><><><><><><><><><><><><>

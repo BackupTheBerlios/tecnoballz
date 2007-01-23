@@ -49,8 +49,8 @@ class ze_gadgets:public objects_list < tecno_gads >
 		barreScore*			ptbarreScr;
 		sprite_object*			ptBob_wall;
 		ze_magneye*			pt_magneye;
-		Sint32				anim_tempo;
-		Sint32				init_tempo;
+		Sint32				frame_delay;
+		Sint32				frame_period;
 		Sint32				animOffset;
 
 		// shop

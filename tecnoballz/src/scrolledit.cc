@@ -88,7 +88,7 @@ Sint32 scrolledit::first_init()
 	pt_select2 = &pt_select1[1];
 	pt_select0 = pt_select1;
 	
-	ecranHaute = display->get_height();
+	screen_height = display->get_height();
 	screen_width = display->get_width();
 
 	sprites->reset();
@@ -227,7 +227,7 @@ void scrolledit::view_tiles()
 {
 	pt_select0 = pt_select2;
 	Sint32 speed = getZeSpeed();
-	Sint32 y_max = ptrGBitMap->GFXhauteur() - ecranHaute;
+	Sint32 y_max = ptrGBitMap->GFXhauteur() - screen_height;
 	
 	titlesPosy = titlesPosy + speed;
 	if(titlesPosy < 0)
@@ -236,7 +236,7 @@ void scrolledit::view_tiles()
 			titlesPosy = y_max;
 	
 	//printf("y_max :%i / titlesPosy: %i\n", y_max, titlesPosy);
-	ptrGBitMap->copyBuffer(0, titlesPosy, 0, 0, screen_width, ecranHaute);
+	ptrGBitMap->copyBuffer(0, titlesPosy, 0, 0, screen_width, screen_height);
 	select_box();
 	drawingBox();
 }
@@ -316,11 +316,11 @@ Sint32 scrolledit::getZeSpeed()
 			speed = -8 * resolution;
 	if(mousY >= 16 * resolution && mousY < 24 * resolution)
 			speed = -4 * resolution;
-	if(mousY <= ecranHaute - 16 * resolution && mousY > ecranHaute - 24 * resolution)
+	if(mousY <= screen_height - 16 * resolution && mousY > screen_height - 24 * resolution)
 			speed = 4 * resolution;
-	if(mousY <= ecranHaute - 8 * resolution && mousY > ecranHaute - 16 * resolution)
+	if(mousY <= screen_height - 8 * resolution && mousY > screen_height - 16 * resolution)
 			speed = 8 * resolution;
-	if(mousY < ecranHaute && mousY > ecranHaute - 8 * resolution)
+	if(mousY < screen_height && mousY > screen_height - 8 * resolution)
 			speed = 16 * resolution;
 	return speed;
 }
@@ -383,12 +383,12 @@ void scrolledit::select_box()
 
 
 			if(pt_select0->box_pos_y1 < pt_select0->box_pos_y2
-				&& pt_select0->box_pos_y2 - pt_select0->box_pos_y1 > (ecranHaute / 2))
-				pt_select0->box_pos_y2 = pt_select0->box_pos_y1 + (ecranHaute / 2);
+				&& pt_select0->box_pos_y2 - pt_select0->box_pos_y1 > (screen_height / 2))
+				pt_select0->box_pos_y2 = pt_select0->box_pos_y1 + (screen_height / 2);
 
 			if(pt_select0->box_pos_y1 > pt_select0->box_pos_y2
-				&& pt_select0->box_pos_y1 - pt_select0->box_pos_y2 > (ecranHaute / 2))
-				pt_select0->box_pos_y2 = pt_select0->box_pos_y1 - (ecranHaute / 2);
+				&& pt_select0->box_pos_y1 - pt_select0->box_pos_y2 > (screen_height / 2))
+				pt_select0->box_pos_y2 = pt_select0->box_pos_y1 - (screen_height / 2);
 		
 		
 	}
@@ -487,7 +487,7 @@ void scrolledit::drawingBox()
 
 	
 		// top
-		if(y1 >= 0 && y1 < ecranHaute)
+		if(y1 >= 0 && y1 < screen_height)
 		{		
 		pBuff = display->buffer_pos(x1, y1);
 		tmpco = 0; 
@@ -506,7 +506,7 @@ void scrolledit::drawingBox()
 		pBuff = display->buffer_pos(x2 - 1,  y1 + 1);
 		for(Sint32 i = 1; i < heigh; i++)
 		{	unsigned char pixel = cyclingtab[color];
-			if(y1 + i >= 0 && y1 + i < ecranHaute)
+			if(y1 + i >= 0 && y1 + i < screen_height)
 				*pBuff = pixel;
 			if(++tmpco == 5)
 			{	tmpco = 0;
@@ -516,7 +516,7 @@ void scrolledit::drawingBox()
 		}
 		
 		// bottom
-		if(y2 >= 0 && y2 < ecranHaute)
+		if(y2 >= 0 && y2 < screen_height)
 		{
 		pBuff = display->buffer_pos(x1, y2);
 		for(Sint32 i = width - 1; i >= 0; i--)
@@ -533,7 +533,7 @@ void scrolledit::drawingBox()
 		pBuff = display->buffer_pos(x1, y2 - 1);
 		for(Sint32 i = 1; i < heigh; i++)
 		{	unsigned char pixel = cyclingtab[color];
-			if(y2 - i >= 0 && y2 - i < ecranHaute)
+			if(y2 - i >= 0 && y2 - i < screen_height)
 				*pBuff = pixel;
 			if(++tmpco == 5)
 			{	tmpco = 0;
@@ -620,8 +620,8 @@ void scrolledit::brush_draw()
 	pos_y &= tile_mask1;
 	if(pos_x > screen_width -  pBrush_bob->GFXlargeur())
 		pos_x = screen_width -  pBrush_bob->GFXlargeur();
-	if(pos_y > ecranHaute -  pBrush_bob->GFXhauteur())
-		pos_y = ecranHaute -  pBrush_bob->GFXhauteur();
+	if(pos_y > screen_height -  pBrush_bob->GFXhauteur())
+		pos_y = screen_height -  pBrush_bob->GFXhauteur();
 	
 
 	Sint32 scrlY = defilement->returnPosy();

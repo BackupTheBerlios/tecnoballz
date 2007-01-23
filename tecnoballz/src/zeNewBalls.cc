@@ -146,7 +146,7 @@ void zeNewBalls::init_balle(zeRaquette *raket, Sint32 start, Sint32 glueC,
 	// first ball special initialization
 	sprite_ball *balle = sprites_list[0];
 	tecBumper1->balleColle = balle;
-	balle->startBalle(tecBumper1->colLargeur);
+	balle->startBalle(tecBumper1->collision_width);
 	num_of_sprites = 1; // one ball to screen
 	if(ejectObjet)
 		ejectObjet->ballPosIni(&sprite_ball::furaxTable[0]);
@@ -362,34 +362,34 @@ void zeNewBalls::vitus_move()
 				else
 				{	switch (balle->colleBallF)
 					{	case 1:
-							j = (raket->colLargeur >> 1) -
-								((balle->colLargeur >> 1) + 1);
+							j = (raket->collision_width >> 1) -
+								((balle->collision_width >> 1) + 1);
 							j += raket->x_coord;
 							balle->x_coord = j;
-							j = (raket->y_coord) - (balle->colHauteur + 1);
+							j = (raket->y_coord) - (balle->collision_height + 1);
 							balle->y_coord = j;
 						break;
 
 						case 2:
-							j = (raket->x_coord) - (balle->colLargeur - 1);
+							j = (raket->x_coord) - (balle->collision_width - 1);
 							balle->x_coord = j;
-							j = (raket->colHauteur >> 1) - ((balle->colHauteur >> 1) + 1);
+							j = (raket->collision_height >> 1) - ((balle->collision_height >> 1) + 1);
 							j += raket->y_coord;
 							balle->y_coord = j;
 							break;
 
 						case 3:
-							j = (raket->colLargeur >> 1) - ((balle->colLargeur >> 1) + 1);
+							j = (raket->collision_width >> 1) - ((balle->collision_width >> 1) + 1);
 							j += raket->x_coord;
 							balle->x_coord = j;
-							j = (raket->y_coord) + raket->colHauteur + 1;
+							j = (raket->y_coord) + raket->collision_height + 1;
 							balle->y_coord = j;
 							break;
 
 						case 4:
-							j = (raket->x_coord) + (raket->colLargeur) + 1;
+							j = (raket->x_coord) + (raket->collision_width) + 1;
 							balle->x_coord = j;
-							j = (raket->colHauteur >> 1) - ((balle->colHauteur >> 1) + 1);
+							j = (raket->collision_height >> 1) - ((balle->collision_height >> 1) + 1);
 							j += raket->y_coord;
 							balle->y_coord = j;
 							break;
@@ -459,12 +459,12 @@ void zeNewBalls::vitusmove2()
 				else
 				{	switch (balle->colleBallF)
 					{	case 1:
-							j = (raket->colLargeur >> 1) -
-								((balle->colLargeur >> 1) + 1);
+							j = (raket->collision_width >> 1) -
+								((balle->collision_width >> 1) + 1);
 							j += raket->x_coord;
 							balle->x_coord = j;
 							j = (raket->y_coord) -
-								(balle->colHauteur + 1);
+								(balle->collision_height + 1);
 							balle->y_coord = j;
 							break;
 					}
@@ -528,11 +528,11 @@ void zeNewBalls::vitus_bump()
 			if(raket->is_enabled)
 			{	x = raket->x_coord;
 				y = raket->y_coord;
-				if(balle->x_coord + balle->colLargeur > x &&
-					balle->y_coord + balle->colHauteur > y &&
-					balle->x_coord < x + raket->colLargeur &&
-					balle->y_coord < y + raket->colHauteur)
-				{	balle->y_coord = y - balle->colHauteur;
+				if(balle->x_coord + balle->collision_width > x &&
+					balle->y_coord + balle->collision_height > y &&
+					balle->x_coord < x + raket->collision_width &&
+					balle->y_coord < y + raket->collision_height)
+				{	balle->y_coord = y - balle->collision_height;
 					bumpX = raket;
 					ptBarreScr->resetemoin();
 				}
@@ -546,12 +546,12 @@ void zeNewBalls::vitus_bump()
 				if(raket->is_enabled)
 				{	x = raket->x_coord;
 					y = raket->y_coord;
-					if(balle->x_coord + balle->colLargeur > x &&
-						balle->y_coord + balle->colHauteur > y &&
-						balle->x_coord < x + raket->colLargeur &&
-						balle->y_coord < y + raket->colHauteur)
+					if(balle->x_coord + balle->collision_width > x &&
+						balle->y_coord + balle->collision_height > y &&
+						balle->x_coord < x + raket->collision_width &&
+						balle->y_coord < y + raket->collision_height)
 					{	
-						balle->x_coord = x - balle->colLargeur;
+						balle->x_coord = x - balle->collision_width;
 						bumpX = raket;
 					}
 				}
@@ -565,12 +565,12 @@ void zeNewBalls::vitus_bump()
 				if(raket->is_enabled)
 				{	x = raket->x_coord;
 					y = raket->y_coord;
-					if(balle->x_coord + balle->colLargeur > x &&
-						balle->y_coord + balle->colHauteur > y &&
-						balle->x_coord < x + raket->colLargeur &&
-						balle->y_coord < y + raket->colHauteur)
+					if(balle->x_coord + balle->collision_width > x &&
+						balle->y_coord + balle->collision_height > y &&
+						balle->x_coord < x + raket->collision_width &&
+						balle->y_coord < y + raket->collision_height)
 					{
-						balle->y_coord = y + raket->colHauteur;
+						balle->y_coord = y + raket->collision_height;
 						bumpX = raket;
 					}
 				}
@@ -585,12 +585,12 @@ void zeNewBalls::vitus_bump()
 				if(raket->is_enabled)
 				{	x = raket->x_coord;
 					y = raket->y_coord;
-					if(balle->x_coord + balle->colLargeur > x &&
-						balle->y_coord + balle->colHauteur > y &&
-						balle->x_coord < x + raket->colLargeur &&
-						balle->y_coord < y + raket->colHauteur)
+					if(balle->x_coord + balle->collision_width > x &&
+						balle->y_coord + balle->collision_height > y &&
+						balle->x_coord < x + raket->collision_width &&
+						balle->y_coord < y + raket->collision_height)
 					{
-						balle->x_coord = x + raket->colLargeur;
+						balle->x_coord = x + raket->collision_width;
 						bumpX = raket;
 					}
 				}
@@ -668,12 +668,12 @@ void zeNewBalls::vitusbump2()
 			if(raket->is_enabled)
 			{	x = raket->x_coord;
 				y = raket->y_coord;
-				if(balle->x_coord + balle->colLargeur > x &&
-					balle->y_coord + balle->colHauteur > y &&
-					balle->x_coord < x + raket->colLargeur &&
-					balle->y_coord < y + raket->colHauteur)
+				if(balle->x_coord + balle->collision_width > x &&
+					balle->y_coord + balle->collision_height > y &&
+					balle->x_coord < x + raket->collision_width &&
+					balle->y_coord < y + raket->collision_height)
 				{
-					balle->y_coord = y - balle->colHauteur;
+					balle->y_coord = y - balle->collision_height;
 					bumpX = raket;
 				}
 			}
@@ -715,19 +715,19 @@ void zeNewBalls::vitusrobot()
 		raket->balleTouch = 0;
 		Sint32 x1 = raket->x_coord;
 		Sint32 y1 = raket->y_coord;
-		Sint32 x2 = raket->x_coord + raket->colLargeur;
-		Sint32 y2 = raket->y_coord + raket->colHauteur + 8;
+		Sint32 x2 = raket->x_coord + raket->collision_width;
+		Sint32 y2 = raket->y_coord + raket->collision_height + 8;
 		const Sint32 *monPT;
 		Sint32 j;
 		for(Sint32 i = 0; i < max_of_sprites; i++)
 		{	sprite_ball *balle = sprites_list[i];
 			if(balle->is_enabled)
-			{	if(balle->x_coord + balle->colLargeur > x1 &&
-					balle->y_coord + balle->colHauteur > y1 &&
+			{	if(balle->x_coord + balle->collision_width > x1 &&
+					balle->y_coord + balle->collision_height > y1 &&
 					balle->x_coord < x2 &&
 					balle->y_coord < y2)
 				{
-					balle->y_coord = y1 - balle->colHauteur;
+					balle->y_coord = y1 - balle->collision_height;
 					raket->balleTouch = 1;
 					j = balle->directBall;
 					monPT = raket->rebonds_GD;
@@ -870,7 +870,7 @@ void zeNewBalls::vitus_cote()
 			//###########################################################
 			// collision with the bottom wall (if it's enable)
 			//###########################################################
-			if (fwall && y > (murBa - balle->colHauteur))
+			if (fwall && y > (murBa - balle->collision_height))
 			{	monPT = rb7;
 			}				
 			else
@@ -885,7 +885,7 @@ void zeNewBalls::vitus_cote()
 				{	//####################################################
 					// collision with the right wall
 					//####################################################
-					x += balle->colLargeur;
+					x += balle->collision_width;
 					if(x > murDr)
 					{	if(bricoObjet->collDroite(y) != 0)
 						monPT = rb1;
@@ -1124,14 +1124,14 @@ void zeNewBalls::vitus_eyes()
 			Sint32 centX = ptEye->x_coord + pt_magneye->eyeCenterX;
 			Sint32 centY = ptEye->y_coord + pt_magneye->eyeCenterY;
 			
-			Sint32 deltX = balle->x_coord + (balle->colLargeur / 2) - centX;
+			Sint32 deltX = balle->x_coord + (balle->collision_width / 2) - centX;
 			deltX = deltX * deltX;
-			Sint32 deltY = balle->y_coord + (balle->colLargeur / 2) - centY;
+			Sint32 deltY = balle->y_coord + (balle->collision_width / 2) - centY;
 			deltY = deltY * deltY;
 			if(deltX + deltY >= vhypo) continue;
 				
-			deltX = balle->x_coord + (balle->colLargeur / 2) - centX;
-			deltY = balle->y_coord + (balle->colLargeur / 2) - centY;
+			deltX = balle->x_coord + (balle->collision_width / 2) - centX;
+			deltY = balle->y_coord + (balle->collision_width / 2) - centY;
 			
 			if(deltY == 0)
 			{	if(deltX < 0) balle->directBall  = 32;
@@ -1187,7 +1187,7 @@ void zeNewBalls::vitusAtoms()
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = *(liste++);
 		if(balle->is_enabled && balle->ClBouiBoui == 0)
-		{	Sint32 h = balle->colLargeur;
+		{	Sint32 h = balle->collision_width;
 			h = h - 2;
 			Sint32 x1 = balle->x_coord;
 			Sint32 x2 = x1 + h;
@@ -1246,9 +1246,9 @@ void zeNewBalls::vitusGuard()
 					if(x <= grdx2)
 					{	Sint32 y = balle->y_coord;
 						if(y <= grdy2)
-						{	x += balle->colLargeur;
+						{	x += balle->collision_width;
 							if(x > grdx1)
-							{	y += balle->colLargeur;
+							{	y += balle->collision_width;
 								if(y > grdy1)
 								{	x = ((hasard_val + i) & 0xF) << 2;
 #ifndef SOUNDISOFF

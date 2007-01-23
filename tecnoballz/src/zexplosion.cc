@@ -92,8 +92,8 @@ void zexplosion::add_explos(Sint32 pos_x, Sint32 pos_y)
 			ptbob->x_coord = pos_x - (ptbob->sprite_width/2) ;
 			ptbob->y_coord = pos_y - (ptbob->sprite_height/2) ;
 			ptbob->animOffset = ptbob->miniOffset;
-			ptbob->init_tempo = 4 + (hasard_val & 7);
-			ptbob->anim_tempo = ptbob->init_tempo;
+			ptbob->frame_period = 4 + (hasard_val & 7);
+			ptbob->frame_delay = ptbob->frame_period;
 			ptbob->change_GFX();
 			return;
 		}
@@ -108,6 +108,6 @@ void zexplosion::execution1()
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_object *ptbob = sprites_list[i];
 		if(ptbob->is_enabled)
-			ptbob->animUnique();
+			ptbob->play_animation_once();
 	}
 }

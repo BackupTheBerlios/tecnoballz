@@ -28,7 +28,7 @@
 //-----------------------------------------------------------------------------
 techno_gem::techno_gem()
 {
-	BOBprepare();
+	clear_sprite_members();
 	directionX = 0;
 	la_vitesse = 0;
 	indicator1 = 0;
@@ -52,11 +52,11 @@ void techno_gem::littleInit()
 {
 	/*maximum_X1 = screen_width - 192;
 	minimum_X1 = 3 * resolution;
-	maximum_Y1 = ecranHaute - 20;
+	maximum_Y1 = screen_height - 20;
 	minimum_Y1 = 10 * resolution;*/
 	maximum_X1 = screen_width - ((64 + 16) * resolution);
 	minimum_X1 = 3 * resolution;
-	maximum_Y1 = ecranHaute - 10  * resolution;
+	maximum_Y1 = screen_height - 10  * resolution;
 	minimum_Y1 = 0 * resolution;
 	
 }
@@ -114,7 +114,7 @@ void techno_gem::gemcollect(Sint32 ztype)
 	change_GFX(ztype);
 	sprite_has_shadow = 0;
 	indicator1 = 1;
-	y_coord = ecranHaute - sprite_height - 2 * resolution;
+	y_coord = screen_height - sprite_height - 2 * resolution;
 	x_coord = 270 * resolution + sprite_width * ztype;
 	is_enabled = 1;
 	blinkcount = 0;

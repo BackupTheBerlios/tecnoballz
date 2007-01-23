@@ -27,7 +27,7 @@
 //-----------------------------------------------------------------------------
 tecno_text::tecno_text()
 {
-	BOBprepare();
+	clear_sprite_members();
 	littleInit(0, 0, 0, 0, 0, 0);
 }
 

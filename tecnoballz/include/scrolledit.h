@@ -51,7 +51,7 @@ class scrolledit:public virtual runGestion
 		static const Sint32 YCOORDNULL = -10240;
 		lastScroll*			defilement;
 		mousePoint*			objetMouse;
-		Sint32				ecranHaute;	//height of the main window
+		Sint32				screen_height;	//height of the main window
 		Sint32				screen_width;	//weight of the main window
 		Sint32				displayMod;	//0=show map / 1=show tiles
 		Sint32				flagSpaceK;

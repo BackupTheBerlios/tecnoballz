@@ -27,7 +27,7 @@
 //-----------------------------------------------------------------------------
 tecno_miss::tecno_miss()
 {
-	BOBprepare();
+	clear_sprite_members();
 	type_depla = 0;
 	flagDepla1 = 0;
 	flagDepla2 = 0;

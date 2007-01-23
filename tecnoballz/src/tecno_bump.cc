@@ -27,7 +27,7 @@
 //-----------------------------------------------------------------------------
 tecno_bump::tecno_bump(zeFireBump * fBump)
 {
-	BOBprepare();
+	clear_sprite_members();
 	raketLarge = 32 * resolution;
 	bumperType = 0;
 	bumperNorm = 2;
@@ -115,7 +115,7 @@ void tecno_bump::bumpActive(Sint32 rTeam, Sint32 large, Sint32 actif)
 void tecno_bump::bumperHgfx(Sint32 large)
 {
 	raketLarge = large;
-	colLargeur = large;
+	collision_width = large;
 	Sint32 i = (large >> width_deca) - 2;
 	if(bumperFire)
 		i += 7;
@@ -132,7 +132,7 @@ void tecno_bump::bumperHgfx(Sint32 large)
 void tecno_bump::bumperVgfx(Sint32 large)
 {
 	raketLarge = large;
-	colHauteur = large;
+	collision_height = large;
 	Sint32 i = (large >> width_deca) - 2;
 	if(bumperFire)
 		i += 7;

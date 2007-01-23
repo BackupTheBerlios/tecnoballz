@@ -146,7 +146,7 @@ Sint32 escapeMenu::first_init(GIF_bitMap *image, Sint32 nmenu, Sint32 large, Sin
 	//###################################################################
 	// initialize sprite object
 	//###################################################################
-	error_init(initialBOB(graphTexte, 0));
+	error_init(make_sprite(graphTexte, 0));
 	if(erreur_num) return (erreur_num);
 	Sint32 y = (240 * resolution -  nblin * space2next) / 2;
 	y = (y / space2next) * space2next;

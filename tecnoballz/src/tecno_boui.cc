@@ -31,7 +31,7 @@ tecno_boui::tecno_boui()
 	atom_xmaxi = ATOM_XMAXI * resolution;
 	atom_ymini = ATOM_YMINI * resolution;
 	atom_ymaxi = ATOM_YMAXI * resolution;	
-	BOBprepare();
+	clear_sprite_members();
 	littleInit(0, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL);
 }
 
@@ -51,7 +51,7 @@ void tecno_boui::gere_atome()
 	// explosion of the BouiBoui
 	//###################################################################
 	if(atom_explo)
-		atom_explo = animUnique();
+		atom_explo = play_animation_once();
 
 	else
 	{
@@ -189,8 +189,8 @@ void tecno_boui::littleInit(Sint32 time0, Sint32 appar, Sint32 index, Sint32 pow
 	i++;
 	i *= object_pos;
 	atom_count = i;					//trajectory change counter 
-	init_tempo = 3;					//rate animation
-	anim_tempo = 1;					//rate animation counter
+	frame_period = 3;					//rate animation
+	frame_delay = 1;					//rate animation counter
 	i *= 2;
 	i &= 31;
 	atom_traje = i;
@@ -204,14 +204,14 @@ void tecno_boui::littleInit(Sint32 time0, Sint32 appar, Sint32 index, Sint32 pow
 	collisionT[0] = i;
 	collisionT[1] = i;
 
-	collisionT[2] = colLargeur - i;
+	collisionT[2] = collision_width - i;
 	collisionT[3] = i;
 
-	collisionT[4] = colLargeur - i;
-	collisionT[5] = colHauteur - i;
+	collisionT[4] = collision_width - i;
+	collisionT[5] = collision_height - i;
 	
 	collisionT[6] = i;
-	collisionT[7] = colHauteur - i;
+	collisionT[7] = collision_height - i;
 	
 }
 
@@ -274,7 +274,7 @@ void tecno_boui::explosion2()
 	miniOffset = atom_oexpl;
 	maxiOffset = atom_oexpl + ATOM_ANIMA - 1;
 	change_GFX(animOffset);
-	anim_tempo = init_tempo;
+	frame_delay = frame_period;
 #ifndef SOUNDISOFF
 	audio->play_sound(S_ATOM_EXP);
 #endif

@@ -81,8 +81,8 @@ void tecno_fire::littleInit(tecno_bump * raket)
 	animOffset = 0;
 	maxiOffset = 3;
 	miniOffset = 0;
-	anim_tempo = 10;
-	init_tempo = 10;
+	frame_delay = 10;
+	frame_period = 10;
 	fire_power = 0;
 	firePowerX = 0;
 }

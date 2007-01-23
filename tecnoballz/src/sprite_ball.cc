@@ -4,11 +4,11 @@
  * @date 2007-01-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.3 2007/01/23 12:06:00 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.4 2007/01/23 17:02:05 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
  */
 sprite_ball::sprite_ball ()
 {
-  BOBprepare ();
+  clear_sprite_members ();
   littleInit (0, 0, (tecno_bump *) NULL, ballSpeed1, 0);
 }
 
@@ -106,8 +106,8 @@ void
 sprite_ball::razingBal0 (tecno_bump * raket)
 {
   speedCount = speed_init;
-  colLargeur = BALLWIDTH1 * resolution;
-  colHauteur = BALLWIDTH1 * resolution;
+  collision_width = BALLWIDTH1 * resolution;
+  collision_height = BALLWIDTH1 * resolution;
   directBall = 0;
   save_Dball = 0;
   countDball = 0;
@@ -141,8 +141,8 @@ sprite_ball::startBalle (Sint32 large)
   tecno_bump *raket = raket_glue;
   reStarting (raket);
   x_coord =
-    raket->get_x_coord () + ((large >> 1) - ((colLargeur >> 1) + 1));
-  y_coord = raket->get_y_coord () - colHauteur - 1;
+    raket->get_x_coord () + ((large >> 1) - ((collision_width >> 1) + 1));
+  y_coord = raket->get_y_coord () - collision_height - 1;
 }
 
 //-------------------------------------------------------------------------------
@@ -198,8 +198,8 @@ sprite_ball::duplicate3 (sprite_ball * balle, Sint32 angle)
   tiltCompte = 0;
   ball_sizeX = balle->ball_sizeX;
   ballPowerX = balle->ballPowerX;
-  colLargeur = balle->colLargeur;
-  colHauteur = balle->colHauteur;
+  collision_width = balle->collision_width;
+  collision_height = balle->collision_height;
   raket_ball = balle->raket_ball;
   raket_glue = balle->raket_glue;
   speedBallT = balle->speedBallT;
@@ -238,8 +238,8 @@ sprite_ball::ball_size2 ()
 {
   powerBall1 = 2;
   powerBall2 = brickWidth * 2;
-  colLargeur = BALLWIDTH2 * resolution;
-  colHauteur = BALLWIDTH2 * resolution;
+  collision_width = BALLWIDTH2 * resolution;
+  collision_height = BALLWIDTH2 * resolution;
   ball_sizeX = BALL_SIZE2;
   collisionT = brikPoint2;
   pointe_GFX ();
@@ -253,8 +253,8 @@ sprite_ball::ball_size3 ()
 {
   powerBall1 = 3;
   powerBall2 = brickWidth * 3;
-  colLargeur = BALLWIDTH3 * resolution;
-  colHauteur = BALLWIDTH3 * resolution;
+  collision_width = BALLWIDTH3 * resolution;
+  collision_height = BALLWIDTH3 * resolution;
   ball_sizeX = BALL_SIZE3;
   collisionT = brikPoint3;
   pointe_GFX ();

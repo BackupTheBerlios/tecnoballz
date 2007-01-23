@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.h
  * @brief Draw sprites on the screen 
- * @date 2007-01-16
+ * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.10 2007/01/23 14:26:07 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.11 2007/01/23 17:02:05 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -149,10 +149,13 @@ public:
   static const Uint32 CYCLE_PTAB = 6;
 
 private:
-    Sint32 animationN;          // nombre d'animation(s)
+  /** Maximum number of images in the animation */
+  Sint32 max_of_images;
   char **adresseTAB;            // table adresse des graphismes
-  char *adresseECR;             // adresse ecran
-  char *adresseTAM;             // adresse tampon
+  /** Pointer to sprite in game offscreen */
+  char *screen_ptr;
+  /** Pointer to the background in restore offscreen */
+  char *restore_ptr;
   char *adresseEC2;             // adresse ecran ombre
   char *adresseTA2;             // adresse tampon ombre
   Sint32 offsetSrce;            // offset source
@@ -184,14 +187,18 @@ protected:
   Sint32 y_coord;            // ordonnee
   Sint32 sprite_width;            // largeur BOB en pixels
   Sint32 sprite_height;            // largeur BOB en lignes
-  Sint32 init_tempo;            // initialise tempo animation
-  Sint32 anim_tempo;            // tempo animation
+  
+  Sint32 frame_period;            // initialise tempo animation
+  Sint32 frame_delay;            // tempo animation
   Sint32 animOffset;            // number of the animation
   Sint32 maxiOffset;            // offset minimum de l'animation
   Sint32 miniOffset;            // offset maximum animation
+  
   Sint32 display_pos;           // numero identificateur BOB
-  Sint32 screen_width;            // largeur de l'ecran en octets
-  Sint32 ecranHaute;            // hauteur de l'ecran en lignes
+  /** Width of the game screen in pixels */
+  Sint32 screen_width;
+  /** Height of the game screen in pixels */
+  Sint32 screen_height;
   Sint32 maximum_X1;            // abscisse maximum
   Sint32 minimum_X1;            // abscisse minimum
   Sint32 maximum_Y1;            // ordonnee maximum
@@ -207,8 +214,10 @@ protected:
   //copy byte by byte
 
 public:
-    Sint32 colLargeur;          // collision width
-  Sint32 colHauteur;            // collision height
+  /** Width used for the collisions */
+  Sint32 collision_width;
+  /** Height used for the collisions */
+  Sint32 collision_height;
   Sint32 affligFrst;            // premiere ligne a afficher (si afflignesF=1)
   Sint32 affligLast;            // derniere ligne a afficher (si afflignesF=1)
   Sint32 mirrorVert;            // 1=mirror sprite lines in initialise() function
@@ -223,7 +232,7 @@ public:
 public:
     sprite_object ();
    ~sprite_object ();
-  void BOBprepare ();
+  void clear_sprite_members ();
   void release_sprite ();
   void enable ();
   void disable ();
@@ -236,7 +245,7 @@ public:
   Sint32 reservBOBt (Sint32 anima);
   Sint32 create_sprite (Sint32 BOBnu, GIF_bitMap * image, bool shadow,
                      Sint32 ftpix = 0);
-  Sint32 initialBOB (GIF_bitMap * image, Sint32 ombre);
+  Sint32 make_sprite (GIF_bitMap * image, Sint32 ombre);
   void initCommun (GIF_bitMap * image, Sint32 ombre);
   void set_x_coord (Sint32 xcoord);
   void set_y_coord (Sint32 ycoord);
@@ -269,7 +278,7 @@ public:
   Sint32 collision1 (sprite_object * bobPT);
   void tempo_init (Sint32 tempo);
   void tempoinit2 (Sint32 tempo);
-  Sint32 animUnique ();
+  bool play_animation_once ();
   void animRepete ();
   void new_offset (Sint32 nume);
   void clip_coordinates ();

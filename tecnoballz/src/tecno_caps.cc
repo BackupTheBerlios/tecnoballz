@@ -28,7 +28,7 @@
 //-----------------------------------------------------------------------------
 tecno_caps::tecno_caps()
 {
-	BOBprepare();
+	clear_sprite_members();
 	directionX = 0;
 	valeurFric = 0;
 	la_vitesse = 0;
@@ -49,10 +49,10 @@ void tecno_caps::littleInit()
 {
 	maximum_X1 = screen_width - ((64 + 16) * resolution);
 	minimum_X1 = 3 * resolution;
-	maximum_Y1 = ecranHaute - 10  * resolution;
+	maximum_Y1 = screen_height - 10  * resolution;
 	minimum_Y1 = 0 * resolution;
-	init_tempo = 5;			//animation delay 
-	anim_tempo = 1;			//animation delay counter
+	frame_period = 5;			//animation delay 
+	frame_delay = 1;			//animation delay counter
 	
 	//###################################################################
 	//initialize multiplier of the value of the capsules of money 

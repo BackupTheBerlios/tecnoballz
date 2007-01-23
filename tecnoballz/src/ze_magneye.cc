@@ -83,7 +83,7 @@ Sint32  ze_magneye::initialize()
 		ptEye->radius_360 = 0;
 		
 	}
-	hypotenuse = sprites_list[0]->colLargeur - resolution * 2;
+	hypotenuse = sprites_list[0]->collision_width - resolution * 2;
 	eyeCenterX = hypotenuse / 2;
 	eyeCenterY = eyeCenterX;
 	hypotenuse = hypotenuse * hypotenuse;

@@ -31,7 +31,7 @@
 //-----------------------------------------------------------------------------	
 score_over::score_over()
 {
-	BOBprepare();
+	clear_sprite_members();
 	graphTexte = (GIF_bitMap*)NULL;
 	width_font = 8 * resolution;
 	heightfont = 8 * resolution;
@@ -76,7 +76,7 @@ Sint32 score_over::first_init(Sint32 offzt)
 	//###################################################################
 	// initialize sprite object
 	//###################################################################
-	error_init(initialBOB(graphTexte, 0));
+	error_init(make_sprite(graphTexte, 0));
 	if(erreur_num) return (erreur_num);
 	enable();
 	set_coordinates(32 * resolution + offzt, 80 * resolution);

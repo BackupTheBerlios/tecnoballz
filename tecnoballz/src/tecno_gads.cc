@@ -27,7 +27,7 @@
 //-----------------------------------------------------------------------------
 tecno_gads::tecno_gads()
 {
-	BOBprepare();
+	clear_sprite_members();
 	directionX = 0;
 	gadget_num = 0;
 	raquettePT = 0x0;
@@ -48,10 +48,10 @@ void tecno_gads::littleInit()
 {
 	maximum_X1 = screen_width - ((64 + 16) * resolution);
 	minimum_X1 = 3 * resolution;
-	maximum_Y1 = ecranHaute - 10  * resolution;
+	maximum_Y1 = screen_height - 10  * resolution;
 	minimum_Y1 = 0 * resolution;
-	init_tempo = 6;	// vitesse d'animation
-	anim_tempo = 1;	// compteur tempo animation
+	frame_period = 6;	// vitesse d'animation
+	frame_delay = 1;	// compteur tempo animation
 	set_method(sprite_object::CYCLE_PTAB);
 }
 
