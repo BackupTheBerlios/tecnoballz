@@ -50,7 +50,7 @@ Sint32 mousePoint::create_BOB(GIF_bitMap * image)
 	else
 		b = BOB_MOUSE2;
 	
-	error_init(initialise(b, image, 0));
+	error_init(create_sprite(b, image, 0));
 	if(erreur_num) return erreur_num;
 	sprites->add(this);
 	Sint32 x = display->bufferLarg() / 2;

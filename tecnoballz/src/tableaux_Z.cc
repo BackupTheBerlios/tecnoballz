@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.13 2007/01/22 21:07:18 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.14 2007/01/23 10:11:22 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -147,7 +147,7 @@ Sint32 tableaux_Z::first_init()
 	//###################################################################
 
 	//wall of bottom 
-	error_init(BottomWall->initialise(BOB_WALLBO, image_BOBs, 0));
+	error_init(BottomWall->create_sprite(BOB_WALLBO, image_BOBs, 0));
 	if(erreur_num) return erreur_num;
 	sprites->add(BottomWall);
 	BottomWall->coordonnee(32 * resolution, 232 * resolution);
@@ -192,11 +192,11 @@ Sint32 tableaux_Z::first_init()
 	error_init(ptGameOver->init_liste());
 	if(erreur_num) return erreur_num; 
 	//money sprite (left-bottom)
-	error_init(ptBobMoney->initialise(BOB_MONEYS, image_BOBs, 0));
+	error_init(ptBobMoney->create_sprite(BOB_MONEYS, image_BOBs, 0));
 	if(erreur_num) return erreur_num;
 	sprites->add(ptBobMoney);
 	//reverser sprite (right-bottom)
-	error_init(ptBobRever->initialise(BOB_GADGET, image_BOBs, 0));
+	error_init(ptBobRever->create_sprite(BOB_GADGET, image_BOBs, 0));
 	if(erreur_num) return erreur_num;
 	sprites->add(ptBobRever);
 	//bumper's viewfinder

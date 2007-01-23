@@ -4,11 +4,11 @@
  * @date 2007-01-22
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.1 2007/01/22 21:07:18 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.2 2007/01/23 10:11:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -159,7 +159,7 @@ template < class X > Sint32 objects_list < X >::init_liste ()
   /* reserves only once the memory required for the
    * graphic data of the sprite */
   error_init (sprite_template->
-              initialise (BOBtypeNum, image, objects_have_shades,
+              create_sprite (BOBtypeNum, image, objects_have_shades,
                           fTableByte));
   if (erreur_num)
     {

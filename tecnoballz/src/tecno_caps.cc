@@ -76,7 +76,7 @@ void tecno_caps::littleInit()
 //-----------------------------------------------------------------------------
 Sint32 tecno_caps::disponible(brickClear *briPT)
 {
-	if(flag_actif)
+	if(is_enabled)
 		return 0;
 	init_money(briPT->balle_posX, briPT->balle_posY, briPT->raquettePT);
 	return 1;
@@ -88,7 +88,7 @@ Sint32 tecno_caps::disponible(brickClear *briPT)
 //-----------------------------------------------------------------------------
 Sint32 tecno_caps::disponible(sprite_ball *pball)
 {
-	if(flag_actif)
+	if(is_enabled)
 		return 0;
 	init_money(pball->position_x, pball->position_y, pball->raket_ball);
 	return 1;
@@ -99,7 +99,7 @@ Sint32 tecno_caps::disponible(sprite_ball *pball)
 //-----------------------------------------------------------------------------
 Sint32 tecno_caps::disponible(tecno_fire *pfire)
 {
-	if(flag_actif)
+	if(is_enabled)
 		return 0;
 	init_money(pfire->position_x, pfire->position_y, pfire->raquettePT);
 	return 1;
@@ -110,7 +110,7 @@ Sint32 tecno_caps::disponible(tecno_fire *pfire)
 //-----------------------------------------------------------------------------
 void tecno_caps::init_money(Sint32 pos_x, Sint32 pos_y, tecno_bump *raket)
 {
-	flag_actif = 1;
+	is_enabled = 1;
 	position_x = pos_x;
 	position_y = pos_y;
 	raquettePT = raket;
@@ -147,7 +147,7 @@ void tecno_caps::init_money(Sint32 pos_x, Sint32 pos_y, tecno_bump *raket)
 //-----------------------------------------------------------------------------
 Sint32 tecno_caps::deplaceMoi()
 {
-	if(flag_actif)
+	if(is_enabled)
 	{	Sint32 i = la_vitesse;
 		tecno_bump *raket = raquettePT;
 		switch (directionX)
@@ -159,7 +159,7 @@ Sint32 tecno_caps::deplaceMoi()
 				position_y += i;
 				if(position_y < maximum_Y1)
 				{	if(collision1(raket))
-					{	flag_actif = 0;
+					{	is_enabled = 0;
 #ifndef SOUNDISOFF
 						audio->play_sound(S_MONNAIES);
 #endif
@@ -167,7 +167,7 @@ Sint32 tecno_caps::deplaceMoi()
 					}
 				}
 				else
-					flag_actif = 0;
+					is_enabled = 0;
 				break;
 
 			//###########################################################
@@ -177,7 +177,7 @@ Sint32 tecno_caps::deplaceMoi()
 				position_x += i;
 				if(position_x < maximum_X1)
 				{	if(collision1(raket))
-					{	flag_actif = 0;
+					{	is_enabled = 0;
 #ifndef SOUNDISOFF
 						audio->play_sound(S_MONNAIES);
 #endif
@@ -185,7 +185,7 @@ Sint32 tecno_caps::deplaceMoi()
 					}
 				}
 				else
-					flag_actif = 0;
+					is_enabled = 0;
 				break;
 
 			//###########################################################
@@ -195,7 +195,7 @@ Sint32 tecno_caps::deplaceMoi()
 				position_y -= i;
 				if(position_y > minimum_Y1)
 				{	if(collision1(raket))
-					{	flag_actif = 0;
+					{	is_enabled = 0;
 #ifndef SOUNDISOFF
 						audio->play_sound(S_MONNAIES);
 #endif
@@ -203,7 +203,7 @@ Sint32 tecno_caps::deplaceMoi()
 					}
 				}
 				else
-					flag_actif = 0;
+					is_enabled = 0;
 				break;
 
 			//###########################################################
@@ -213,7 +213,7 @@ Sint32 tecno_caps::deplaceMoi()
 				position_x -= i;
 				if(position_x > minimum_X1)
 				{	if(collision1(raket))
-					{	flag_actif = 0;
+					{	is_enabled = 0;
 #ifndef SOUNDISOFF
 						audio->play_sound(S_MONNAIES);
 #endif
@@ -221,7 +221,7 @@ Sint32 tecno_caps::deplaceMoi()
 					}
 				}
 				else
-					flag_actif = 0;
+					is_enabled = 0;
 				break;
 		}
 	}
@@ -233,13 +233,13 @@ Sint32 tecno_caps::deplaceMoi()
 //-----------------------------------------------------------------------------
 Sint32 tecno_caps::deplaceMe2()
 {
-	if(flag_actif)
+	if(is_enabled)
 	{	Sint32 i = la_vitesse;
 		tecno_bump *raket = raquettePT;
 		position_y += i;
 		if(position_y < maximum_Y1)
 		{	if(collision1(raket))
-			{	flag_actif = 0;
+			{	is_enabled = 0;
 #ifndef SOUNDISOFF
 				audio->play_sound(S_MONNAIES);
 #endif
@@ -247,7 +247,7 @@ Sint32 tecno_caps::deplaceMe2()
 			}
 		}
 		else
-			flag_actif = 0;
+			is_enabled = 0;
 	}
 	return 0;
 }

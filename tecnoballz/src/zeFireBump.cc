@@ -85,7 +85,7 @@ void zeFireBump::disponible()
 	{	Sint32 j = 1;
 		for(Sint32 i = 0; i < t; i++)
 		{	tecno_fire *xFire = *(liste++);
-			if(xFire->flag_actif == j)
+			if(xFire->is_enabled == j)
 				return;
 		}
 	}
@@ -96,7 +96,7 @@ void zeFireBump::disponible()
 	else
 	{	for(Sint32 i = 0; i < t; i++)
 		{ tecno_fire *xFire = *(liste++);
-			if(xFire->flag_actif)
+			if(xFire->is_enabled)
 				return;
 		}
 	}
@@ -158,7 +158,7 @@ void zeFireBump::init_type1()
 		else
 			x += (raketLarge / 2) - (SIZEOFFIRE / 2);
 		tecno_fire *xFire = sprites_list[0];
-		xFire->flag_actif = 1;
+		xFire->is_enabled = 1;
 		xFire->position_x = x;
 		xFire->position_y = y;
 	}
@@ -182,11 +182,11 @@ void zeFireBump::init_type2()
 		tecno_fire *xFire;
 		Sint32 f = 1;
 		xFire = *(liste++);
-		xFire->flag_actif = f;
+		xFire->is_enabled = f;
 		xFire->position_x = x;
 		xFire->position_y = y;
 		xFire = *(liste++);
-		xFire->flag_actif = f;
+		xFire->is_enabled = f;
 		xFire->position_x = x;
 		xFire->position_y = y;
 	}
@@ -210,15 +210,15 @@ void zeFireBump::init_type3()
 		tecno_fire *xFire;
 		Sint32 f = 1;
 		xFire = *(liste++);
-		xFire->flag_actif = f;
+		xFire->is_enabled = f;
 		xFire->position_x = x;
 		xFire->position_y = y;
 		xFire = *(liste++);
-		xFire->flag_actif = f;
+		xFire->is_enabled = f;
 		xFire->position_x = x;
 		xFire->position_y = y;
 		xFire = *liste;
-		xFire->flag_actif = f;
+		xFire->is_enabled = f;
 		xFire->position_x = x;
 		xFire->position_y = y;
 	}
@@ -238,7 +238,7 @@ void zeFireBump::init_type4()
 		tecno_fire *xFire;
 		Sint32 f = 1;
 		xFire = *(liste++);
-		xFire->flag_actif = f;
+		xFire->is_enabled = f;
 		xFire->position_x = x;
 		xFire->position_y = y;
 		if(raket->bumperType)		//vertical bumper ?
@@ -246,11 +246,11 @@ void zeFireBump::init_type4()
 		else
 			x += 18 * resolution;
 		xFire = *(liste++);
-		xFire->flag_actif = f;
+		xFire->is_enabled = f;
 		xFire->position_x = x;
 		xFire->position_y = y;
 		xFire = *(liste++);
-		xFire->flag_actif = f;
+		xFire->is_enabled = f;
 		xFire->position_x = x;
 		xFire->position_y = y;
 		if(raket->bumperType)		//vertical bumper ?
@@ -258,7 +258,7 @@ void zeFireBump::init_type4()
 		else
 			x = raket->position_x + raket->raketLarge - 4;
 		xFire = *liste;
-		xFire->flag_actif = f;
+		xFire->is_enabled = f;
 		xFire->position_x = x;
 		xFire->position_y = y;
 	}
@@ -278,7 +278,7 @@ void zeFireBump::init_type5()
 		tecno_fire *xFire;
 		Sint32 f = 1;
 		xFire = *(liste++);
-		xFire->flag_actif = f;
+		xFire->is_enabled = f;
 		xFire->position_x = x;
 		xFire->position_y = y;
 		Sint32 quart = raketLarge / 4;
@@ -287,25 +287,25 @@ void zeFireBump::init_type5()
 			x += i;
 			y += quart;
 			xFire = *(liste++);
-			xFire->flag_actif = f;
+			xFire->is_enabled = f;
 			xFire->position_x = x;
 			xFire->position_y = y;
 			x += i;
 			y += quart;
 			xFire = *(liste++);
-			xFire->flag_actif = f;
+			xFire->is_enabled = f;
 			xFire->position_x = x;
 			xFire->position_y = y;
 			x -= i;
 			y += quart;
 			xFire = *(liste++);
-			xFire->flag_actif = f;
+			xFire->is_enabled = f;
 			xFire->position_x = x;
 			xFire->position_y = y;
 			x -= i;
 			y += quart - 2 * resolution;
 			xFire = *(liste++);
-			xFire->flag_actif = f;
+			xFire->is_enabled = f;
 			xFire->position_x = x;
 			xFire->position_y = y;
 		}
@@ -314,25 +314,25 @@ void zeFireBump::init_type5()
 			y += i;
 			x += quart;
 			xFire = *(liste++);
-			xFire->flag_actif = f;
+			xFire->is_enabled = f;
 			xFire->position_x = x;
 			xFire->position_y = y;
 			y += i;
 			x += quart;
 			xFire = *(liste++);
-			xFire->flag_actif = f;
+			xFire->is_enabled = f;
 			xFire->position_x = x;
 			xFire->position_y = y;
 			y -= i;
 			x += quart;
 			xFire = *(liste++);
-			xFire->flag_actif = f;
+			xFire->is_enabled = f;
 			xFire->position_x = x;
 			xFire->position_y = y;
 			y -= i;
 			x += quart - 2 * resolution;
 			xFire = *(liste++);
-			xFire->flag_actif = f;
+			xFire->is_enabled = f;
 			xFire->position_x = x;
 			xFire->position_y = y;
 		}
@@ -356,29 +356,29 @@ void zeFireBump::init_type6()
 		{	tecno_fire *xFire;
 			Sint32 a = x + raket->bump_xdeca;
 			xFire = *(liste++);
-			xFire->flag_actif = 1;
+			xFire->is_enabled = 1;
 			xFire->position_x = a;
 			xFire->position_y = y;
 			xFire = *(liste++);
-			xFire->flag_actif = 1;
+			xFire->is_enabled = 1;
 			xFire->position_x = x;
 			xFire->position_y = y;
 			y += offst;
 			xFire = *(liste++);
-			xFire->flag_actif = 1;
+			xFire->is_enabled = 1;
 			xFire->position_x = x;
 			xFire->position_y = y;
 			xFire = *(liste++);
-			xFire->flag_actif = 1;
+			xFire->is_enabled = 1;
 			xFire->position_x = x;
 			xFire->position_y = y;
 			y += offst;
 			xFire = *(liste++);
-			xFire->flag_actif = 1;
+			xFire->is_enabled = 1;
 			xFire->position_x = a;
 			xFire->position_y = y;
 			xFire = *(liste++);
-			xFire->flag_actif = 1;
+			xFire->is_enabled = 1;
 			xFire->position_x = x;
 			xFire->position_y = y;
 		}
@@ -386,29 +386,29 @@ void zeFireBump::init_type6()
 		{	tecno_fire *xFire;
 			Sint32 o = y + raket->bump_ydeca;
 			xFire = *(liste++);
-			xFire->flag_actif = 1;
+			xFire->is_enabled = 1;
 			xFire->position_x = x;
 			xFire->position_y = y;
 			xFire = *(liste++);
-			xFire->flag_actif = 1;
+			xFire->is_enabled = 1;
 			xFire->position_x = x;
 			xFire->position_y = o;
 			x += offst;
 			xFire = *(liste++);
-			xFire->flag_actif = 1;
+			xFire->is_enabled = 1;
 			xFire->position_x = x;
 			xFire->position_y = y;
 			xFire = *(liste++);
-			xFire->flag_actif = 1;
+			xFire->is_enabled = 1;
 			xFire->position_x = x;
 			xFire->position_y = y;
 			x += offst;
 			xFire = *(liste++);
-			xFire->flag_actif = 1;
+			xFire->is_enabled = 1;
 			xFire->position_x = x;
 			xFire->position_y = o;
 			xFire = *(liste++);
-			xFire->flag_actif = 1;
+			xFire->is_enabled = 1;
 			xFire->position_x = x;
 			xFire->position_y = y;
 		}
@@ -433,7 +433,7 @@ void zeFireBump::init_type7()
 		Sint32 j = 0;	
 		for(Sint32 i = 0; i < 7; i++, j += 8)
 		{	tecno_fire *xFire = *(liste++);
-			xFire->flag_actif = 1;
+			xFire->is_enabled = 1;
 			xFire->fire_Xscie = x;
 			xFire->fire_Yscie = y;
 			xFire->indexSinus = j;
@@ -448,7 +448,7 @@ void zeFireBump::init_type7()
 		raket->bumperFire = 1;
 		for(Sint32 i = 0; i < 7; i++)
 		{	tecno_fire *xFire = *(liste++);
-			if(xFire->flag_actif)
+			if(xFire->is_enabled)
 				return;
 		}
 		liste = sprites_list;
@@ -457,7 +457,7 @@ void zeFireBump::init_type7()
 		Sint32 j = 0;
 		for(Sint32 i = 0; i < 7; i++, j += 8)
 		{	tecno_fire *xFire = *(liste++);
-			xFire->flag_actif = 2;
+			xFire->is_enabled = 2;
 			xFire->fire_Xscie = x;
 			xFire->fire_Yscie = y;
 			xFire->indexSinus = j;
@@ -709,7 +709,7 @@ void zeFireBump::move_type7()
 	tecno_bump *raket = maRaquette;
 	for(Sint32 i = 0; i < 7; i++)
 	{	tecno_fire *xFire = *(liste++);
-		if(xFire->flag_actif)
+		if(xFire->is_enabled)
 		{	Sint32 j = xFire->indexSinus;
 			j += 2;
 			const Sint16 *table = scie_sinus + j;
@@ -718,7 +718,7 @@ void zeFireBump::move_type7()
 				table = scie_sinus;
 			}
 			xFire->indexSinus = j;
-			if(xFire->flag_actif == 2)
+			if(xFire->is_enabled == 2)
 			{	Sint32 k = *(table++);
 				k += raket->position_x + raket->bump_Xscie;
 				xFire->position_x = k;

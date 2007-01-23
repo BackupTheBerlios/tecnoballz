@@ -53,9 +53,9 @@ tecno_miss::~tecno_miss()
 //------------------------------------------------------------------------------
 void tecno_miss::execution1()
 {
-	if(flag_actif)
+	if(is_enabled)
 	{ 
-		switch(flag_actif)
+		switch(is_enabled)
 		{	case 1:
 				dmissile01();
 				break;
@@ -324,7 +324,7 @@ void tecno_miss::screenOver(Sint32 vmini)
 {
 	if(position_x > tir_maxi_x || position_x < vmini || 
 		position_y < vmini || position_y > tir_maxi_y )
-		flag_actif = 0;
+		is_enabled = 0;
 }
 
 //------------------------------------------------------------------------------
@@ -333,7 +333,7 @@ void tecno_miss::screenOver(Sint32 vmini)
 void tecno_miss::screenStop(Sint32 vmini)
 {	
 	if(position_y>tir_maxi_y)
-		flag_actif = 0;
+		is_enabled = 0;
 	else
 	{	if(position_y < vmini)
 			position_y = vmini;

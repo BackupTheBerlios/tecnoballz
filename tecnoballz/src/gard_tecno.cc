@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.11 2007/01/22 21:07:18 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.12 2007/01/23 10:11:22 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -141,13 +141,13 @@ Sint32 gard_tecno::first_init()
 		return (erreur_num);
 
 	// Initialize money sprite
-	error_init(ptBobMoney->initialise(BOB_MONEYS, image_BOBs, 0));
+	error_init(ptBobMoney->create_sprite(BOB_MONEYS, image_BOBs, 0));
 	if(erreur_num)
 		return (erreur_num);
 	sprites->add(ptBobMoney);
 	
 	// Initialize extra life sprite
-	error_init(ptBobLifes->initialise(BOB_GADGET, image_BOBs, 0));
+	error_init(ptBobLifes->create_sprite(BOB_GADGET, image_BOBs, 0));
 	if(erreur_num)
 		return (erreur_num);
 	sprites->add(ptBobLifes);

@@ -129,11 +129,11 @@ void tecno_fire::hors_ecran()
 	{	tecno_fire *xFire = *(liste++);
 		Sint32 a = xFire->position_y;
 		if(a < y1 || a > y2)
-			xFire->flag_actif = 0;
+			xFire->is_enabled = 0;
 		else
  		{	a = xFire->position_x;
 			if(a < x1 || a > x2)
-				xFire->flag_actif = 0;
+				xFire->is_enabled = 0;
 		}
 	}
 }
@@ -174,7 +174,7 @@ void tecno_fire::collision1()
 	Sint32 save = brickObjet->briqueSave;
 	for(Sint32 i = 0; i < t; i++)
 	{	tecno_fire *xFire = *(liste++);
-		if(xFire->flag_actif)
+		if(xFire->is_enabled)
 		{	Sint32 x = xFire->position_x + 2;
 			Sint32 y = xFire->position_y + 2;
 			brickClear *briP2 = briPT + save;
@@ -187,8 +187,8 @@ void tecno_fire::collision1()
 			brickInfos *megaT = (tMega + x);
 			x = megaT->brique_rel;
 			if(x)
-			{	if(xFire->flag_actif == 1)
-					xFire->flag_actif = 0;
+			{	if(xFire->is_enabled == 1)
+					xFire->is_enabled = 0;
 				briP2->raquettePT = xFire->raquettePT;
 				if((x -= indus) >= 0)
 				{	//###################################################
@@ -259,7 +259,7 @@ void tecno_fire::collision2()
 	tecno_boui **aList = atomsObjet->listeObjet();
 	for(Sint32 i = 0; i < total_fire; i++)
 	{	tecno_fire *xFire = *(liste++);
-		if(xFire->flag_actif)
+		if(xFire->is_enabled)
 		{	tecno_boui **monPT = aList;
 			Sint32 y1 = xFire->position_y;
 			Sint32 y2 = y1 + 3;
@@ -274,8 +274,8 @@ void tecno_fire::collision2()
 					if(k < y2 && k > y1)
 					{	k = atome->position_x;
 						if(k < x2 && k > x1)
-						{	if(xFire->flag_actif == 1)
-							xFire->flag_actif = 0;
+						{	if(xFire->is_enabled == 1)
+							xFire->is_enabled = 0;
 							scoreObjet->scoreAjout(100);
 							k = xFire->firePowerX;
 							atome->atom_power -= k;
@@ -297,7 +297,7 @@ void tecno_fire::disable_sprites()
 	tecno_fire **liste = list_fires;
 	for(Sint32 i = 0; i < total_fire; i++)
 	{	tecno_fire *xFire = *(liste++);
-		xFire->flag_actif = 0;
+		xFire->is_enabled = 0;
 	}		
 }
 

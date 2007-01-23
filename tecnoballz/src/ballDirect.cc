@@ -74,7 +74,7 @@ void ballDirect::execution1()
 {
 	for(Sint32 i = 0; i < numBumpers; i++)
 	{	sprite_ball* balle = listBumper[i]->balleColle;
-		if(balle && balle->flag_actif)
+		if(balle && balle->is_enabled)
 		{	sprites_list[i]->aspireBOB2(balle);
 			sprites_list[i]->enable();
 			sprites_list[i]->change_GFX(balle->directBall  / 4);

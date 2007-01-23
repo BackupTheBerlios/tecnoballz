@@ -62,7 +62,7 @@ Sint32 zexplosion::init_liste()
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_object *ptbob = new sprite_object();
 		ptbob->set_object_pos(i);
-		error_init(ptbob->initialise(bobn1, image_BOBs, 0));
+		error_init(ptbob->create_sprite(bobn1, image_BOBs, 0));
 		if(erreur_num)
 			return erreur_num;
 		Sint32 bobnu = bobn2;
@@ -81,14 +81,14 @@ void zexplosion::add_explos(Sint32 pos_x, Sint32 pos_y)
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_object *ptbob = sprites_list[i];
-		if(!ptbob->flag_actif)
+		if(!ptbob->is_enabled)
 		{	if(++vFrequency > 4)
 			{	vFrequency = 0;
 #ifndef SOUNDISOFF
 				audio->play_sound(S_BIGEXPLO);
 #endif
 			}
-			ptbob->flag_actif = 1;
+			ptbob->is_enabled = 1;
 			ptbob->position_x = pos_x - (ptbob->BOBlargeur/2) ;
 			ptbob->position_y = pos_y - (ptbob->BOBhauteur/2) ;
 			ptbob->animOffset = ptbob->miniOffset;
@@ -107,7 +107,7 @@ void zexplosion::execution1()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_object *ptbob = sprites_list[i];
-		if(ptbob->flag_actif)
+		if(ptbob->is_enabled)
 			ptbob->animUnique();
 	}
 }

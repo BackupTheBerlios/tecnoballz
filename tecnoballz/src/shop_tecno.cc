@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.10 2007/01/19 20:35:40 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.11 2007/01/23 10:11:22 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -145,9 +145,9 @@ Sint32 shop_tecno::first_init()
 	// Initialize LED 
 	//###################################################################
 	if(resolution == 1) 
-		error_init(BOB_allume->initialise(BOB_LEDSHP, image_BOBs, 0));
+		error_init(BOB_allume->create_sprite(BOB_LEDSHP, image_BOBs, 0));
 	else 
-		error_init(BOB_allume->initialise(BOB_LEDSH2, image_BOBs, 0));
+		error_init(BOB_allume->create_sprite(BOB_LEDSH2, image_BOBs, 0));
 	if(erreur_num) return erreur_num;
 	sprites->add(BOB_allume);
 	BOB_allume->enable();
@@ -685,17 +685,17 @@ void shop_tecno::sh_ballade()
 	{	if(keyboard->is_left_button())
 		{	bob_volant->enable();
 			bob_volant->coordonnee(objetMouse->retournePX(), objetMouse->retournePY());
-			if(bobclignot->flag_actif)
-				bobclignot->flag_actif = 0;
+			if(bobclignot->is_enabled)
+				bobclignot->is_enabled = 0;
 			else
-				bobclignot->flag_actif = 1;
+				bobclignot->is_enabled = 1;
 		}
 		else
 		{	
 		
 		
 			bob_volant->disable();
-			bobclignot->flag_actif = 1;
+			bobclignot->is_enabled = 1;
 			Sint32 i = cadre_offs;
 			if(i >= 0)
 			{	if(i >= bonusachat)
@@ -782,7 +782,7 @@ void shop_tecno::sh_ballade()
 				bobclignot = *(liste + i);
 				get_object = *(sh_tablept + i);
 				bob_volant->copiegadet(bobclignot);
-				bobclignot->flag_actif = 1;
+				bobclignot->is_enabled = 1;
 			}
 		}
 	}

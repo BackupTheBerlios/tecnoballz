@@ -73,7 +73,7 @@ void tecno_gads::new_gadget(Sint32 nuGad)
 			"tecno_gads::nouveauGad() : nuGad = %i, no used ! \n", nuGad);
 		return;
 	}
-	flag_actif = 1;
+	is_enabled = 1;
 	nuGad = *p;
 	miniOffset = nuGad;
 	animOffset = nuGad;
@@ -105,7 +105,7 @@ void tecno_gads::nouveauGad(brickClear *briPT, Sint32 nuGad)
 			"tecno_gads::nouveauGad() : nuGad = %i, no used ! \n", nuGad);
 		return;
 	}
-	flag_actif = 1;
+	is_enabled = 1;
 	nuGad = *p;
 	miniOffset = nuGad;
 	animOffset = nuGad;
@@ -137,7 +137,7 @@ void tecno_gads::nouveauGad(sprite_ball *balle, Sint32 nuGad)
 			"tecno_gads::nouveauGad() : nuGad = %i, no used ! \n", nuGad);
 		return;
 	}
-	flag_actif = 1;
+	is_enabled = 1;
 	nuGad = *p;
 	miniOffset = nuGad;
 	animOffset = nuGad;
@@ -168,7 +168,7 @@ void tecno_gads::nouveauGad(tecno_fire *pfire, Sint32 nuGad)
 			"tecno_gads::nouveauGad() : nuGad = %i, no used ! \n", nuGad);
 		return;
 	}
-	flag_actif = 1;
+	is_enabled = 1;
 	nuGad = *p;
 	miniOffset = nuGad;
 	animOffset = nuGad;
@@ -201,7 +201,7 @@ void tecno_gads::new_gadget(sprite_ball *balle, Sint32 nuGad)
 			"tecno_gads::nouveauGad() : nuGad = %i, no used ! \n", nuGad);
 		return;
 	}
-	flag_actif = 1;
+	is_enabled = 1;
 	nuGad = *p;
 	miniOffset = nuGad;
 	animOffset = nuGad;
@@ -221,9 +221,9 @@ void tecno_gads::nouveauGad(Sint32 nuGad)
 		hasard_val += nuGad;
 		Sint32 i = gagdetBrik[nuGad];
 		if(i == XXX_VIDE00)	// empty code, no gaget code ?
-			flag_actif = 0;	// disable the objet
+			is_enabled = 0;	// disable the objet
 		else
-		{	flag_actif = 1;
+		{	is_enabled = 1;
 			miniOffset = i;
 			animOffset = i;
 			i += XXX_IMAGES - 1;
@@ -259,7 +259,7 @@ Sint32 tecno_gads::get_gadget()
 //-----------------------------------------------------------------------------
 tecno_bump *tecno_gads::deplaceMoi()
 {
-	if(flag_actif)
+	if(is_enabled)
 	{	tecno_bump *raket = raquettePT;
 		switch (directionX)
 		{
@@ -268,13 +268,13 @@ tecno_bump *tecno_gads::deplaceMoi()
 				position_y += resolution;
 				if(position_y < maximum_Y1)
 				{	if(collision1(raket))
-					{	flag_actif = 0;
+					{	is_enabled = 0;
 						joueurGere->add_scores(20);
 						return raket;
 					}
 				}
 				else
-					flag_actif = 0;
+					is_enabled = 0;
 				break;
 
 			// right bumper
@@ -282,13 +282,13 @@ tecno_bump *tecno_gads::deplaceMoi()
 				position_x += resolution;
 				if(position_x < maximum_X1)
 				{	if(collision1(raket))
-					{	flag_actif = 0;
+					{	is_enabled = 0;
 						joueurGere->add_scores(20);
 						return raket;
 					}
 				}
 				else
-					flag_actif = 0;
+					is_enabled = 0;
 				break;
 
 			// top bumper
@@ -296,13 +296,13 @@ tecno_bump *tecno_gads::deplaceMoi()
 				position_y -= resolution;
 				if(position_y > minimum_Y1)
 				{	if(collision1(raket))
-					{	flag_actif = 0;
+					{	is_enabled = 0;
 						joueurGere->add_scores(20);
 						return raket;
 					}
 				}
 				else
-					flag_actif = 0;
+					is_enabled = 0;
 				break;
 
 			// left bumper
@@ -310,13 +310,13 @@ tecno_bump *tecno_gads::deplaceMoi()
 				position_x -= resolution;
 				if(position_x > minimum_X1)
 				{	if(collision1(raket))
-					{	flag_actif = 0;
+					{	is_enabled = 0;
 						joueurGere->add_scores(20);
 						return raket;
 					}
 				}
 				else
-					flag_actif = 0;
+					is_enabled = 0;
 				break;
 		}
 	}

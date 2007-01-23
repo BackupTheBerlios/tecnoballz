@@ -99,7 +99,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 			//g->afflignesF = 1;
 			g->set_method(sprite_object::METHOD_LIN);	
 			Sint32 n = numeroBOBs[i];
-			error_init(g->initialise(n, image_BOBs, 0));
+			error_init(g->create_sprite(n, image_BOBs, 0));
 			if(erreur_num)
 			return (erreur_num);
 			sprites->add(g);
@@ -281,7 +281,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
 			g->mirrorVert = 1;
 			g->set_method(sprite_object::METHOD_LIN);	
 			Sint32 n = numeroBOBs[i];
-			error_init(g->initialise(n, image_BOBs, 0));
+			error_init(g->create_sprite(n, image_BOBs, 0));
 			if(erreur_num)
 				return (erreur_num);
 			sprites->add(g);

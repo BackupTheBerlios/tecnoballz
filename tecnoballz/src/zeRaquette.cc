@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.10 2007/01/22 19:35:50 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.11 2007/01/23 10:11:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ Sint32 zeRaquette::init_liste()
 	//###################################################################
     if(max_of_sprites == 1)
     {	tecBumper1->set_object_pos(0);
-		error_init(tecBumper1->initialise(BOBtypeNum, image_BOBs, 1, 0));
+		error_init(tecBumper1->create_sprite(BOBtypeNum, image_BOBs, 1, 0));
 		if(erreur_num) return erreur_num;
 		sprites->add(tecBumper1);
 		sprites_list[0] = tecBumper1;
@@ -173,14 +173,14 @@ Sint32 zeRaquette::init_liste()
 
 		// create bottom bumper sprite
 		tecBumper1->set_object_pos(0);
-		error_init(tecBumper1->initialise(BOB_BUMPHR, image_BOBs, 1, 0));
+		error_init(tecBumper1->create_sprite(BOB_BUMPHR, image_BOBs, 1, 0));
 		if(erreur_num) return erreur_num;
 		sprites->add(tecBumper1);
 		sprites_list[0] = tecBumper1;
 
 		// create left bumper sprite
 		tecBumper2->set_object_pos(1);
-		error_init(tecBumper2->initialise(BOB_BUMPVT, image_BOBs, 1, 0));
+		error_init(tecBumper2->create_sprite(BOB_BUMPVT, image_BOBs, 1, 0));
 		if(erreur_num) return erreur_num;
 		sprites->add(tecBumper2);
 		sprites_list[1] = tecBumper2;
@@ -209,7 +209,7 @@ Sint32 zeRaquette::init_liste()
 Sint32 zeRaquette::init_robot()
 {
 	tec_robot0->set_object_pos(4);
-	error_init(tec_robot0->initialise(BOB_ROBOT0, image_BOBs, 1, 0));
+	error_init(tec_robot0->create_sprite(BOB_ROBOT0, image_BOBs, 1, 0));
 	if(erreur_num) return erreur_num;
 	sprites->add(tec_robot0);
 	sprites_list[4] = tec_robot0;
@@ -577,7 +577,7 @@ void zeRaquette::move_robot()
 		sprite_ball *balle = 0x0;
 		for(Sint32 i = 0; i < t; i++)
 		{	sprite_ball *b = *(aList++);
-			if(b->flag_actif)
+			if(b->is_enabled)
 			{	if(b->directBall >= 36 && b->directBall <= 60)
 				{	if(b->position_y > pos_y)
 					{	pos_y = b->position_y;

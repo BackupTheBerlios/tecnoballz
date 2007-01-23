@@ -204,7 +204,7 @@ void zeNewBalls::vitus_sort()
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
 		tecno_bump *rakPT;
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 		{	rakPT = (tecno_bump*)NULL;
 			Sint32 j = balle->position_x;
 			if(j < min_x)
@@ -223,7 +223,7 @@ void zeNewBalls::vitus_sort()
 			}
  
 			if(rakPT)						//one ball is out ?
-			{	if(!rakPT->flag_actif)		//bumper is actif ?
+			{	if(!rakPT->is_enabled)		//bumper is actif ?
 				rakPT = raket;				//no, bumper of bottom by default
 				if((--num_of_sprites) > 0)
 					balle->goSleeping(raket);
@@ -266,7 +266,7 @@ void zeNewBalls::vitussort2()
 	tecno_bump *raket = tecBumper1;	 //pointer to the object "bumper of bottom"
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 		{	Sint32 j = balle->position_y;
 			if(j > max_y)
 			{	if((--num_of_sprites) > 0)
@@ -301,7 +301,7 @@ void zeNewBalls::vitus_tilt()
 		h = h & 15;
 		for(Sint32 i = 0; i < max_of_sprites; i++)
 		{	sprite_ball *balle = sprites_list[i];
-			if(balle->flag_actif)
+			if(balle->is_enabled)
 			{	if(balle->tiltCompte >= t)
 				{	if(balle->directBall < 64)
 					{	Sint32 d = (balle->directBall >> 2) & 0xf;
@@ -329,7 +329,7 @@ void zeNewBalls::accelerate()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 			balle->accelerate();
 	}
 }
@@ -345,7 +345,7 @@ void zeNewBalls::vitus_move()
 	tecno_bump *raket;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 		{	
 			
 			//###########################################################
@@ -442,7 +442,7 @@ void zeNewBalls::vitusmove2()
 	tecno_bump *raket;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 		{	
 			
 			//###########################################################
@@ -518,14 +518,14 @@ void zeNewBalls::vitus_bump()
 	tecBumper4->balleTouch = 0;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
-		if(balle->flag_actif && !balle->colleBallF && balle->directBall < 64)
+		if(balle->is_enabled && !balle->colleBallF && balle->directBall < 64)
 		{
 			//###########################################################
 			// bottom bumper
 			//###########################################################
 			raket = tecBumper1;
 			bumpX = 0;
-			if(raket->flag_actif)
+			if(raket->is_enabled)
 			{	x = raket->position_x;
 				y = raket->position_y;
 				if(balle->position_x + balle->colLargeur > x &&
@@ -543,7 +543,7 @@ void zeNewBalls::vitus_bump()
 			//###########################################################
 			if(!bumpX)
 			{	raket = tecBumper2;
-				if(raket->flag_actif)
+				if(raket->is_enabled)
 				{	x = raket->position_x;
 					y = raket->position_y;
 					if(balle->position_x + balle->colLargeur > x &&
@@ -562,7 +562,7 @@ void zeNewBalls::vitus_bump()
 			//###########################################################
 			if(!bumpX)
 			{	raket = tecBumper3;
-				if(raket->flag_actif)
+				if(raket->is_enabled)
 				{	x = raket->position_x;
 					y = raket->position_y;
 					if(balle->position_x + balle->colLargeur > x &&
@@ -582,7 +582,7 @@ void zeNewBalls::vitus_bump()
 			if(!bumpX)
 			{
 				raket = tecBumper4;
-				if(raket->flag_actif)
+				if(raket->is_enabled)
 				{	x = raket->position_x;
 					y = raket->position_y;
 					if(balle->position_x + balle->colLargeur > x &&
@@ -662,10 +662,10 @@ void zeNewBalls::vitusbump2()
 	tecBumper1->balleTouch = 0;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 		{	raket = tecBumper1;
 			bumpX = 0;
-			if(raket->flag_actif)
+			if(raket->is_enabled)
 			{	x = raket->position_x;
 				y = raket->position_y;
 				if(balle->position_x + balle->colLargeur > x &&
@@ -721,7 +721,7 @@ void zeNewBalls::vitusrobot()
 		Sint32 j;
 		for(Sint32 i = 0; i < max_of_sprites; i++)
 		{	sprite_ball *balle = sprites_list[i];
-			if(balle->flag_actif)
+			if(balle->is_enabled)
 			{	if(balle->position_x + balle->colLargeur > x1 &&
 					balle->position_y + balle->colHauteur > y1 &&
 					balle->position_x < x2 &&
@@ -754,7 +754,7 @@ void zeNewBalls::vitusEject()
 
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
- 		if(balle->flag_actif)
+ 		if(balle->is_enabled)
 		{
 
 			//###############################################################
@@ -862,7 +862,7 @@ void zeNewBalls::vitus_cote()
 	Sint32 fwall = ptBob_wall->is_enable();
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 		{	Sint32 x = balle->position_x;
 			Sint32 y = balle->position_y;
 			Sint32 *monPT = NULL;
@@ -927,7 +927,7 @@ void zeNewBalls::vituscote2()
 	Sint32 murHt = 8 * resolution;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 		{	Sint32 x = balle->position_x;
 			Sint32 y = balle->position_y;
 			Sint32 *monPT = 0; 
@@ -977,7 +977,7 @@ void zeNewBalls::vitusbound()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
-		if(!balle->flag_actif) continue;
+		if(!balle->is_enabled) continue;
 		Sint32 dball = balle->directBall;
 		if(dball >= 32) dball -= 32;		
 		if(dball == balle->save_Dball) 
@@ -1011,7 +1011,7 @@ void zeNewBalls::vitusBrick()
 	brickClear *briPT = brickObjet->brique_pnt;	// pointer to structure "brickClear" (display and clear the bricks)
 	for(Sint32 i = 0; i < t; i++)
 	{	sprite_ball *balle = *(liste++);
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 		{	Sint32 indes = 0;					// flag brique indestructible touchee
 			Sint32 *colTB = balle->collisionT;	// table des 4 points de collision 
 			Sint32 incre = 1;					// incremente flag rebond
@@ -1116,11 +1116,11 @@ void zeNewBalls::vitus_eyes()
 	Sint32 nbEye = pt_magneye->totalObjet();
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = *(liste++);
-		if(!balle->flag_actif) continue;
+		if(!balle->is_enabled) continue;
 		techno_eye **pEyes = pt_magneye->listeObjet();
 		for(Sint32 j = 0; j < nbEye; j++)
 		{	techno_eye *ptEye = *(pEyes++);
-			if(!ptEye->flag_actif) continue;
+			if(!ptEye->is_enabled) continue;
 			Sint32 centX = ptEye->position_x + pt_magneye->eyeCenterX;
 			Sint32 centY = ptEye->position_y + pt_magneye->eyeCenterY;
 			
@@ -1186,7 +1186,7 @@ void zeNewBalls::vitusAtoms()
 	Sint32 nouve = (hasard_val & 0xF) << 2;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = *(liste++);
-		if(balle->flag_actif && balle->ClBouiBoui == 0)
+		if(balle->is_enabled && balle->ClBouiBoui == 0)
 		{	Sint32 h = balle->colLargeur;
 			h = h - 2;
 			Sint32 x1 = balle->position_x;
@@ -1232,7 +1232,7 @@ void zeNewBalls::vitusGuard()
 	for(Sint32 j = 0; j < t; j++)
 	{	tecno_gard *pGard = aList[j];
 		sprite_ball *balok = NULL; 
-		if (pGard->flag_actif && pGard->gard_power > 0) 
+		if (pGard->is_enabled && pGard->gard_power > 0) 
 		{	Sint32 grdx1 = pGard->position_x;
 			Sint32 grdx2 = grdx1 + pGard->gard_colx2;
 			grdx1 += pGard->gard_colx1;
@@ -1241,7 +1241,7 @@ void zeNewBalls::vitusGuard()
 			grdy1 += pGard->gard_coly1;
 			for(Sint32 i = 0; i < u; i++)
 			{	sprite_ball *balle = liste[i];
-				if(balle->flag_actif)
+				if(balle->is_enabled)
 				{	Sint32 x = balle->position_x;
 					if(x <= grdx2)
 					{	Sint32 y = balle->position_y;
@@ -1285,7 +1285,7 @@ sprite_ball *zeNewBalls::first_ball()
 	Sint32 t = max_of_sprites;
 	for(Sint32 i = 0; i < t; i++)
 	{	sprite_ball *balle = *(liste++);
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 			return (balle);
 	}
 	return (sprites_list[0]);
@@ -1320,7 +1320,7 @@ void zeNewBalls::run_nballs(Sint32 nball)
 	Sint32 otime = 1;
 	for(Sint32 i = 0; i < t && k < nball; i++)
 	{	sprite_ball *balle = *(liste++);
-		if(!balle->flag_actif)
+		if(!balle->is_enabled)
 		{	balle->ball2eject(e++, otime);
 			k++;
 			num_of_sprites++;
@@ -1341,7 +1341,7 @@ void zeNewBalls::run_3balls()
 	sprite_ball **liste = sprites_list;
 	while (i < max_of_sprites && k < 3)
 	{	sprite_ball *balle = *(liste++);
-		if(!balle->flag_actif)
+		if(!balle->is_enabled)
 		{	j += 8;
 			j &= 60;
 			balle->duplicate3(model, j);
@@ -1360,7 +1360,7 @@ void zeNewBalls::run_power1()
 	sprite_ball **liste = sprites_list;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = *(liste++);
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 			balle->ballPower1();
 	}
 }
@@ -1374,7 +1374,7 @@ void zeNewBalls::run_power2()
 	Sint32 t = max_of_sprites;
 	for(Sint32 i = 0; i < t; i++)
 	{	sprite_ball *balle = *(liste++);
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 			balle->ballPower2();
 	}
 }
@@ -1388,7 +1388,7 @@ void zeNewBalls::run_size01()
 	Sint32 t = max_of_sprites;
 	for(Sint32 i = 0; i < t; i++)
 	{	sprite_ball *balle = *(liste++);
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 			balle->ball_size2();
 	}
 }
@@ -1402,7 +1402,7 @@ void zeNewBalls::run_size02()
 	Sint32 t = max_of_sprites;
 	for(Sint32 i = 0; i < t; i++)
 	{	sprite_ball *balle = *(liste++);
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 			balle->ball_size3();
 	}
 }
@@ -1416,7 +1416,7 @@ void zeNewBalls::maxi_speed()
 	Sint32 t = max_of_sprites;
 	for(Sint32 i = 0; i < t; i++)
 	{	sprite_ball *balle = *(liste++);
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 			balle->very_speed();
 	}
 }
@@ -1432,7 +1432,7 @@ void zeNewBalls::time_2tilt()
 	Sint32 v = balle_tilt;
 	for(Sint32 i = 0; i < t; i++)
 	{	sprite_ball *balle = *(liste++);
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 		{	if(!balle->colleBallF)
 			{	if(balle->tiltCompte == v)
 				{	if(!tilt)
@@ -1464,7 +1464,7 @@ void zeNewBalls::time2tilt2()
 	Sint32 v = balle_tilt;
 	for(Sint32 i = 0; i < t; i++)
 	{	sprite_ball *balle = *(liste++);
-		if(balle->flag_actif)
+		if(balle->is_enabled)
 		{	if(!balle->colleBallF)
 			{	if(balle->tiltCompte == v)
 				{	if(!tilt)
@@ -1495,7 +1495,7 @@ void zeNewBalls::vitus_ctrl()
 			Sint32 t = max_of_sprites;
 			for(Sint32 i = 0; i < t; i++)
 			{	sprite_ball *balle = *(liste++);
-				if(balle->flag_actif)
+				if(balle->is_enabled)
 				{	Sint32 dball = balle->directBall;
 					if(dball < 64)
 					{	dball = dball +4;

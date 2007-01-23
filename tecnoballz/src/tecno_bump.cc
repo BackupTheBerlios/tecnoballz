@@ -95,15 +95,15 @@ void tecno_bump::deplaceTir()
 void tecno_bump::bumpActive(Sint32 rTeam, Sint32 large, Sint32 actif)
 {
 	raketLarge = large;
-	flag_actif = 0;
+	is_enabled = 0;
 	bump_actif = actif;
 	if(bump_actif > 0)
 	{	bump_actif--;
-		flag_actif = 1;
+		is_enabled = 1;
 	}
 	if(bumpNumero == 1 || (bumpNumero == 4 && rTeam == 1))
 	{	bump_actif = 1;
-		flag_actif = 1;
+		is_enabled = 1;
 	}
 	bumper_gfx(large);
 }
@@ -267,14 +267,14 @@ void tecno_bump::flickerRun()
 	if(invincible > 0)
 	{	invincible--;
 		if(flickerval > 0)
-		{	flag_actif = 0;
+		{	is_enabled = 0;
 			flickerval = 0;
 		}
 		else
-		{	flag_actif = 1;
+		{	is_enabled = 1;
 			flickerval = 1;
 		}
 	}
 	else
-		flag_actif = 1;
+		is_enabled = 1;
 }

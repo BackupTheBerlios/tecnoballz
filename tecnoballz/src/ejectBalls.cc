@@ -54,28 +54,28 @@ ejectBalls::~ejectBalls()
 Sint32 ejectBalls::initialise()
 {
 	// top-left (1)
-	error_init(ejector_01->initialise(BOB_EJECT1, image_BOBs, 1));
+	error_init(ejector_01->create_sprite(BOB_EJECT1, image_BOBs, 1));
 	if(erreur_num) return erreur_num;
 	eject1PosX = EJECT_POS1 * resolution;
 	eject1PosY = (EJECT_POS1 * resolution) - ejector_01->getHauteur() / 2;
 	ejector_01->coordonnee(eject1PosX, eject1PosY);
 
 	// top-right (2)
-	error_init(ejector_02->initialise(BOB_EJECT4, image_BOBs, 1));
+	error_init(ejector_02->create_sprite(BOB_EJECT4, image_BOBs, 1));
 	if(erreur_num) return erreur_num;
 	eject2PosX = EJECT_POS2 * resolution;
 	eject2PosY = (EJECT_POS1 * resolution) - ejector_02->getHauteur() / 2;
 	ejector_02->coordonnee(eject2PosX, eject2PosY);
 
 	// bottom-left (3)
-	error_init(ejector_03->initialise(BOB_EJECT2, image_BOBs, 1));
+	error_init(ejector_03->create_sprite(BOB_EJECT2, image_BOBs, 1));
 	if(erreur_num) return erreur_num;
 	eject3PosX = EJECT_POS1 * resolution;
 	eject3PosY = (EJECT_POS2 * resolution) - ejector_03->getHauteur() / 2;
 	ejector_03->coordonnee(eject3PosX, eject3PosY);
 
 	// bottom-right(4)
-	error_init(ejector_04->initialise(BOB_EJECT3, image_BOBs, 1));
+	error_init(ejector_04->create_sprite(BOB_EJECT3, image_BOBs, 1));
 	eject4PosX = EJECT_POS2 * resolution;
 	eject4PosY = (EJECT_POS2 * resolution) - ejector_04->getHauteur() / 2;	
 	if(erreur_num) return erreur_num;

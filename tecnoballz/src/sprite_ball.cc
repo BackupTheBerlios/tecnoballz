@@ -4,11 +4,11 @@
  * @date 2007-01-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.1 2007/01/20 16:16:06 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.2 2007/01/23 10:11:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -190,7 +190,7 @@ sprite_ball::donne_bump ()
 void
 sprite_ball::duplicate3 (sprite_ball * balle, Sint32 angle)
 {
-  flag_actif = 1;
+  is_enabled = 1;
   position_x = balle->position_x;
   position_y = balle->position_y;
   directBall = angle;
@@ -275,7 +275,7 @@ sprite_ball::very_speed ()
 void
 sprite_ball::ball2eject (Sint32 index, Sint32 otime)
 {
-  flag_actif = 1;
+  is_enabled = 1;
   index &= 3;
   furaxEject *monPT = furaxTable + index;
   if (monPT->ejectBall1)

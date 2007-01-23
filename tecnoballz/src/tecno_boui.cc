@@ -61,7 +61,7 @@ void tecno_boui::gere_atome()
 		if(atom_actif)// atom_actif > 0 BouiBoui's not active
 		{ if(!(--atom_actif))
 			{	if(!over_brick(position_x, position_y))
-				{	flag_actif = 1;
+				{	is_enabled = 1;
 					Sint32 *monPT = ghost_bobs + (hasard_val & 31);
 #if __WORDSIZE == 64
 					hasard_val += (long)this;

@@ -51,8 +51,8 @@ Sint32 ze_magneye::create_eye()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	techno_eye *ptEye = sprites_list[i];
-		if(ptEye->flag_actif) continue;
-		ptEye->flag_actif = 1;
+		if(ptEye->is_enabled) continue;
+		ptEye->is_enabled = 1;
 		return 1;
 	}
 	return 0;
@@ -98,7 +98,7 @@ void ze_magneye::execution1()
 	Sint32 hval = hasard_val;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	techno_eye *ptEye = sprites_list[i];
-		//if(!ptEye->flag_actif) continue;
+		//if(!ptEye->is_enabled) continue;
 		ptEye->animRepete();
 		
 		//###############################################################

@@ -4,11 +4,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.4 2007/01/22 21:07:18 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.5 2007/01/23 10:11:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -177,7 +177,7 @@ protected:
   char *adresseGFX;             // memory address 
   Sint32 srceNextLn;
   Sint32 destNextLn;
-  Sint32 flag_actif;            // 1=le BOB peut etre affiche
+  Sint32 is_enabled;            // 1=le BOB peut etre affiche
   Sint32 flagShadow;            // 1=le BOB possede une ombre
   Sint32 position_x;            // abscisse
   Sint32 position_y;            // ordonnee
@@ -232,7 +232,7 @@ public:
   void duplicaBOB (sprite_object *);
   void coordonnee (Sint32 posX, Sint32 posY);
   Sint32 reservBOBt (Sint32 anima);
-  Sint32 initialise (Sint32 BOBnu, GIF_bitMap * image, Sint32 ombre,
+  Sint32 create_sprite (Sint32 BOBnu, GIF_bitMap * image, bool shadow,
                      Sint32 ftpix = 0);
   Sint32 initialBOB (GIF_bitMap * image, Sint32 ombre);
   void initCommun (GIF_bitMap * image, Sint32 ombre);

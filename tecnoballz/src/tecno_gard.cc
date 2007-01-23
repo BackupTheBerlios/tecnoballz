@@ -112,11 +112,11 @@ void tecno_gard::execution1(Sint32 offzt)
 			ptr_lissa1 = ptr_lissa2;
 		gard_clign = !gard_clign;
 		if(gard_touch > 0 && gard_clign > 0)
-		{	flag_actif = 0;
+		{	is_enabled = 0;
 			gard_touch--;
 		}
 		else
-			flag_actif = 1;
+			is_enabled = 1;
 		start_fire();
 		startBlitz();
 	}
@@ -144,15 +144,15 @@ void tecno_gard::execution1(Sint32 offzt)
 			}
 			gard_clign = !gard_clign;
 			if(gard_clign > 0)
-				flag_actif = 0;
+				is_enabled = 0;
 			else 
-				flag_actif = 1;
+				is_enabled = 1;
 		}
 		//###############################################################
 		// the guard is dead 
 		//###############################################################
 		else
-			flag_actif = 0;
+			is_enabled = 0;
 	}
 }
 

@@ -88,7 +88,7 @@ void zeMissiles::bumper_col()
 	Sint32 bmpy2 = bumpy + ptbumper01->getHauteur();
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_miss *xFire = sprites_list[i];
-		if(xFire->flag_actif)
+		if(xFire->is_enabled)
 		{	Sint32 weapy = xFire->position_y;
 			if (weapy < bmpy2)
 			{	Sint32 weapx = xFire->position_x;      
@@ -97,7 +97,7 @@ void zeMissiles::bumper_col()
 					if(weapy > bumpy)
 					{	weapx += xFire->BOBlargeur;
 						if(weapx > bumpx)
-						{	xFire->flag_actif = 0;
+						{	xFire->is_enabled = 0;
 							if (ptbumper01->getInvncbl() <= 0)
 							{	ptbumper01->setInvncbl(100);
 								joueurGere->lifesMoins(1);
@@ -178,8 +178,8 @@ void zeMissiles::tir01_init(tecno_gard *pgard)
   Sint32 s = 0;                                                  //pointeur sur la table sinus
   do
   { tecno_miss *xFire = sprites_list[t];
-    if(!xFire->flag_actif)
-    { xFire->flag_actif = 1;
+    if(!xFire->is_enabled)
+    { xFire->is_enabled = 1;
       xFire->position_x = tir01_posi[s] * resolution + gardx;
       xFire->tablesinus = tir01_posi;
       xFire->flagDepla1 = s;                                   //pointeur table sinus x
@@ -203,9 +203,9 @@ void zeMissiles::tir02_init(tecno_gard *pgard)
   Sint32 n = 10;                                                 //10 objets pour ce tir
   do
   { tecno_miss *xFire = sprites_list[t];
-    if(!xFire->flag_actif)
+    if(!xFire->is_enabled)
     { if(n > 3)
-      { xFire->flag_actif = 2;
+      { xFire->is_enabled = 2;
         xFire->flagDepla3 = s;
         s = s + 2;
         xFire->flagDepla1 = gardx;
@@ -216,7 +216,7 @@ void zeMissiles::tir02_init(tecno_gard *pgard)
             gardx = gardx - 10 * resolution;
       }
       else
-      { xFire->flag_actif = 3;
+      { xFire->is_enabled = 3;
         xFire->position_x = gardx;
         xFire->position_y = gardy;
         gardx = gardx + 10 * resolution;
@@ -236,15 +236,15 @@ void zeMissiles::tir03_init(tecno_gard *pgard)
   Sint32 n = 5;                                                 //5 objets pour ce tir
   do
   { tecno_miss *xFire = sprites_list[t];
-    if(!xFire->flag_actif)
+    if(!xFire->is_enabled)
     { xFire->ptbumper01 = ptbumper01;
       if(n == 1)
-      { xFire->flag_actif = 7;
+      { xFire->is_enabled = 7;
         xFire->position_x = gardx;
         xFire->position_y = gardy;
       }
       else
-      { xFire->flag_actif = 6;
+      { xFire->is_enabled = 6;
         xFire->flagDepla1 = gardx;
         xFire->flagDepla2 = gardy;
         switch (n)
@@ -266,7 +266,7 @@ void zeMissiles::tir03_init(tecno_gard *pgard)
             break;
         }
       }
-      //printf("zeMissiles::tir02_init() %ld, %ld %ld %ld %ld \n", n, xFire->flag_actif, xFire->flagDepla1, xFire->flagDepla2, xFire->flagDepla3);
+      //printf("zeMissiles::tir02_init() %ld, %ld %ld %ld %ld \n", n, xFire->is_enabled, xFire->flagDepla1, xFire->flagDepla2, xFire->flagDepla3);
       n--;
     }
   } while ( n > 0 && --t >= 0 );
@@ -283,8 +283,8 @@ void zeMissiles::tir04_init(tecno_gard *pgard)
   const Sint16* ptir = tir04_posi;
   do
   { tecno_miss *xFire = sprites_list[t];
-    if(!xFire->flag_actif)
-    { xFire->flag_actif = 4;
+    if(!xFire->is_enabled)
+    { xFire->is_enabled = 4;
       xFire->flagDepla1 = gardx;
       xFire->flagDepla2 = gardy;
       xFire->flagDepla3 = s;
@@ -310,8 +310,8 @@ void zeMissiles::tir05_init(tecno_gard *pgard)
   Sint32 n = 9;                                                  //9 objets pour ce tir
   do
   { tecno_miss *xFire = sprites_list[t];
-    if(!xFire->flag_actif)
-    { xFire->flag_actif = 5;
+    if(!xFire->is_enabled)
+    { xFire->is_enabled = 5;
       xFire->position_x = gardx;
       xFire->position_y = gardy;
       xFire->flagDepla1 = tempo;
@@ -333,8 +333,8 @@ void zeMissiles::tir06_init(tecno_gard *pgard)
   Sint32 n = 30;                                                  //30 objets pour ce tir
   do
   { tecno_miss *xFire = sprites_list[t];
-    if(!xFire->flag_actif)
-    { xFire->flag_actif = 8;
+    if(!xFire->is_enabled)
+    { xFire->is_enabled = 8;
       xFire->ptguardian = pgard;
       xFire->flagDepla3 = s;
       xFire->flagDepla4 = 2 * resolution;
@@ -357,8 +357,8 @@ void zeMissiles::tir07_init(tecno_gard *pgard)
   Sint32 n = 10;                                                  //10 objets pour ce tir
   do
   { tecno_miss *xFire = sprites_list[t];
-    if(!xFire->flag_actif)
-    { xFire->flag_actif = 9;
+    if(!xFire->is_enabled)
+    { xFire->is_enabled = 9;
       xFire->flagDepla1 = gardx;
       xFire->flagDepla2 = gardy;
       xFire->flagDepla3 = s;
@@ -383,8 +383,8 @@ void zeMissiles::tir08_init(tecno_gard *pgard)
   Sint32 tempo = 20;
   do
   { tecno_miss *xFire = sprites_list[t];
-    if(!xFire->flag_actif)
-    { xFire->flag_actif = 10;
+    if(!xFire->is_enabled)
+    { xFire->is_enabled = 10;
       xFire->flagDepla1 = gardx;
       xFire->flagDepla2 = gardy;
       xFire->flagDepla3 = s;
@@ -412,8 +412,8 @@ void zeMissiles::tir09_init(tecno_gard *pgard)
   Sint32 n = 9;                                                  //10 objets pour ce tir
   do
   { tecno_miss *xFire = sprites_list[t];
-    if(!xFire->flag_actif)
-    { xFire->flag_actif = 11;
+    if(!xFire->is_enabled)
+    { xFire->is_enabled = 11;
       xFire->flagDepla1 = gardx;
       xFire->flagDepla2 = gardy;
       xFire->tablesinus = ressources::cosinus360;
@@ -446,8 +446,8 @@ void zeMissiles::tir10_init(tecno_gard *pgard)
   Sint32 n = 6;	//6 objets pour ce tir
   do
   { tecno_miss *xFire = sprites_list[t];
-    if(!xFire->flag_actif)
-    { xFire->flag_actif = 3;
+    if(!xFire->is_enabled)
+    { xFire->is_enabled = 3;
       xFire->position_x = gardx + (*(ptir++) * xFire->BOBlargeur);
       xFire->position_y = gardy + (*(ptir++) * xFire->BOBhauteur);
       n--;
@@ -467,8 +467,8 @@ void zeMissiles::tir11_init(tecno_gard *pgard)
 	Sint32 s = 0;
 	do
 	{	tecno_miss *xFire = sprites_list[t];
-		if(!xFire->flag_actif)
-		{	xFire->flag_actif = 12;
+		if(!xFire->is_enabled)
+		{	xFire->is_enabled = 12;
 			xFire->flagDepla1 = gardx;
 			xFire->flagDepla2 = gardy;
 			xFire->flagDepla3 = s;

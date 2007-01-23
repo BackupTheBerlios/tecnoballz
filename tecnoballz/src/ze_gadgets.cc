@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.12 2007/01/22 21:07:18 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.13 2007/01/23 10:11:22 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -134,7 +134,7 @@ void ze_gadgets::envoieGads(brickClear * briPT)
 	brick_kass++;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_gads *gadg = sprites_list[i];
-		if(!gadg->flag_actif)
+		if(!gadg->is_enabled)
 		{	//###########################################################
 			// handle maluses
 			//###########################################################
@@ -176,7 +176,7 @@ void ze_gadgets::send_malus(sprite_ball *pball)
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_gads *gadg = sprites_list[i];
-		if(!gadg->flag_actif)
+		if(!gadg->is_enabled)
 		{	Sint16 j = hasard_val & 0x1F;	//value 0 to 31 
 			j = *(malusTable + j);
 			gadg->nouveauGad(pball, j);
@@ -191,7 +191,7 @@ void ze_gadgets::send_malus(tecno_fire *pfire)
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_gads *gadg = sprites_list[i];
-		if(!gadg->flag_actif)
+		if(!gadg->is_enabled)
 		{	Sint16 j = hasard_val & 0x1F;	//value 0 to 31 
 			j = *(malusTable + j);
 			gadg->nouveauGad(pfire, j);
@@ -210,7 +210,7 @@ void ze_gadgets::envoieGads(sprite_ball *pball)
 	if(malus_step <= malus_frek) return;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_gads *gadg = sprites_list[i];
-		if(!gadg->flag_actif)
+		if(!gadg->is_enabled)
 		{	Sint16 j = hasard_val & 0x1F;	//value 0 to 31 
 			j = *(malusTable + j);
 			malus_step = 0;

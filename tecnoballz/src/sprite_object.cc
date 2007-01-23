@@ -4,11 +4,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.5 2007/01/22 21:07:18 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.6 2007/01/23 10:11:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,7 +99,7 @@ void sprite_object::BOBprepare()
 	anim_tempo = 1;
 	animationN = 0;
 	animOffset = 0;
-	flag_actif = 0;
+	is_enabled = 0;
 	BOBhauteur = 0;
 	BOBlargeur = 0;
 	BOBtableP1 = (Sint16 **)NULL;
@@ -157,7 +157,7 @@ sprite_object & sprite_object::operator= (const sprite_object &sprite)
     anim_tempo = sprite.anim_tempo;
     animationN = sprite.animationN;
     animOffset = sprite.animOffset;
-    flag_actif = sprite.flag_actif;
+    is_enabled = sprite.is_enabled;
     BOBhauteur = sprite.BOBhauteur;
     BOBlargeur = sprite.BOBlargeur;
     BOBtableP1 = sprite.BOBtableP1;
@@ -207,7 +207,7 @@ void sprite_object::duplicaBOB(sprite_object *bobPT)
 	bobPT->anim_tempo = anim_tempo;
 	bobPT->animationN = animationN;
 	bobPT->animOffset = animOffset;
-	bobPT->flag_actif = flag_actif;
+	bobPT->is_enabled = is_enabled;
 	bobPT->BOBhauteur = BOBhauteur;
 	bobPT->BOBlargeur = BOBlargeur;
 	bobPT->BOBtableP1 = BOBtableP1;
@@ -247,7 +247,7 @@ void sprite_object::duplicaBOB(sprite_object *bobPT)
  */
 void sprite_object::enable()
 {
-	flag_actif = 1;
+	is_enabled = 1;
 }
 
 /**
@@ -256,7 +256,7 @@ void sprite_object::enable()
 void
 sprite_object::disable()
 {
-	flag_actif = 0;
+	is_enabled = 0;
 }
 
 /**
@@ -266,7 +266,7 @@ sprite_object::disable()
 Sint32
 sprite_object::is_enable()
 {
-	return flag_actif;
+	return is_enabled;
 }
 
 /**
@@ -351,29 +351,32 @@ Sint32 sprite_object::reservBOBt(Sint32 anima)
 
 
 
-//------------------------------------------------------------------------------
-// Initialize a bitmap graphic shape (BOB = Blitter Object from Amiga)
-//	input	=> BOBnu: shape number 1 to n
-//			=> image: graphic object (a big image)
-//			=> ombre: 1 = shadow / 0=no shadow 
-//------------------------------------------------------------------------------
-Sint32 sprite_object::initialise(Sint32 BOBnu, GIF_bitMap *image, Sint32 ombre, Sint32 ftpix)
+/**
+ * Initialize a bitmap graphic shape 
+ * @param BOBnu shape number 1 to n
+ * @praam image graphic object (a big image)
+ * @param shadow true if it sprite has a shadow, false otherwise 
+ * @ftpix 
+ */
+Sint32 sprite_object::create_sprite(Sint32 BOBnu, GIF_bitMap *image, bool shadow, Sint32 ftpix)
 {
 	
-	/*printf("sprite_object::initialise(BOBnu=%i, image, ombre=%i, ftpix=%i)\n",
-		BOBnu, ombre, ftpix);*/
+	/*printf("sprite_object::initialise(BOBnu=%i, image, shadow=%i, ftpix=%i)\n",
+		BOBnu, shadow, ftpix);*/
 	fTableByte = ftpix;
 
 	if(put_method == METHOD_MSK)
-		put_method = METHOD_TAB;
+    {
+		  put_method = METHOD_TAB;
+    }
 /*
-	printf("sprite_object::initialise() BOBnu=%i, image=%x, ombre=%i\n",
-		BOBnu, (Sint32)image, ombre);
+	printf("sprite_object::initialise() BOBnu=%i, image=%x, shadow=%i\n",
+		BOBnu, (Sint32)image, shadow);
 */
 	
 	// L'ecran dans lequel le BOB est affiche
 	BOBtypeNum = BOBnu;
-	initCommun(image, ombre);
+	initCommun(image, shadow);
 	const bb_describ *descr = zelistBOB[BOBnu];
 
 	//###################################################################
@@ -911,7 +914,7 @@ void sprite_object::efface_SHA()
 void
 sprite_object::draw ()
 {
-	if(!flag_actif || animOffset >= animationN)
+	if(!is_enabled || animOffset >= animationN)
     {
 		  return;
     }
@@ -1210,7 +1213,7 @@ void sprite_object::afficheLin()
 //------------------------------------------------------------------------------
 void sprite_object::afficheSHA()
 {
-	if(!flag_actif || !flagShadow) return;
+	if(!is_enabled || !flagShadow) return;
 	char j = ombrepixel;
 	adresseTA2 = display->tampon_pos(position_x + ombredecax, position_y + ombredecay);
 	Uint16 *gfxPT = (Uint16 *)tabAffich1;
@@ -1339,7 +1342,7 @@ void sprite_object::affich_SHA()
 //------------------------------------------------------------------------------
 void sprite_object::MSKaffiche()
 {
-	if(!flag_actif) return;
+	if(!is_enabled) return;
 	char *s = adresseGFX;
 	char *d = display->buffer_pos(position_x, position_y);
 	adresseTAM = display->tampon_pos(position_x, position_y);
@@ -1364,7 +1367,7 @@ void sprite_object::MSKaffiche()
 //------------------------------------------------------------------------------
 void sprite_object::MSKbitcopy()
 {
-	if(!flag_actif) return;
+	if(!is_enabled) return;
 	char *s = adresseGFX;
 	char *d = display->buffer_pos(position_x, position_y);
 	adresseTAM = display->tampon_pos(position_x, position_y);
@@ -1457,14 +1460,14 @@ Sint32 sprite_object::animUnique()
 	{	anim_tempo = init_tempo;
 		if(animOffset == maxiOffset)
 		{	animOffset = miniOffset;
-			flag_actif = 0;
+			is_enabled = 0;
 		}
 		else
 		{	animOffset++;
 			change_GFX(animOffset);
 		}
 	}
-	return flag_actif;
+	return is_enabled;
 }
 
 //-------------------------------------------------------------------------------

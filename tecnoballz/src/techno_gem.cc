@@ -66,7 +66,7 @@ void techno_gem::littleInit()
 //-----------------------------------------------------------------------------
 Sint32 techno_gem::disponible(sprite_ball *pball)
 {
-	if(flag_actif)
+	if(is_enabled)
 		return 0;
 	initialGem(pball->position_x, pball->position_y, pball->raket_ball);
 	return 1;
@@ -77,7 +77,7 @@ Sint32 techno_gem::disponible(sprite_ball *pball)
 //-----------------------------------------------------------------------------
 Sint32 techno_gem::disponible(tecno_fire *pfire)
 {
-	if(flag_actif)
+	if(is_enabled)
 		return 0;
 	initialGem(pfire->position_x, pfire->position_y, pfire->raquettePT);
 	return 1;
@@ -88,7 +88,7 @@ Sint32 techno_gem::disponible(tecno_fire *pfire)
 //-----------------------------------------------------------------------------
 void techno_gem::initialGem(Sint32 pos_x, Sint32 pos_y, tecno_bump *raket)
 {
-	flag_actif = 1;
+	is_enabled = 1;
 	position_x = pos_x;
 	position_y = pos_y;
 	raquettePT = raket;
@@ -116,7 +116,7 @@ void techno_gem::gemcollect(Sint32 ztype)
 	indicator1 = 1;
 	position_y = ecranHaute - BOBhauteur - 2 * resolution;
 	position_x = 270 * resolution + BOBlargeur * ztype;
-	flag_actif = 1;
+	is_enabled = 1;
 	blinkcount = 0;
 }
 
@@ -125,7 +125,7 @@ void techno_gem::gemcollect(Sint32 ztype)
 //-----------------------------------------------------------------------------
 void techno_gem::activBlink()
 {
-	if(flag_actif && indicator1)
+	if(is_enabled && indicator1)
 		blinkcount = 30;
 }
 
@@ -134,7 +134,7 @@ void techno_gem::activBlink()
 //-----------------------------------------------------------------------------
 Sint32 techno_gem::deplaceMoi()
 {
-	if(flag_actif && !indicator1)
+	if(is_enabled && !indicator1)
 	{	Sint32 i = la_vitesse;
 		tecno_bump *raket = raquettePT;
 		switch (directionX)
@@ -146,7 +146,7 @@ Sint32 techno_gem::deplaceMoi()
 				position_y += i;
 				if(position_y < maximum_Y1)
 				{	if(collision1(raket))
-					{	flag_actif = 0;
+					{	is_enabled = 0;
 #ifndef SOUNDISOFF					
 						audio->play_sound(S_MONNAIES);
 #endif
@@ -154,7 +154,7 @@ Sint32 techno_gem::deplaceMoi()
 					}
 				}
 				else
-					flag_actif = 0;
+					is_enabled = 0;
 				break;
 
 			//###########################################################
@@ -164,7 +164,7 @@ Sint32 techno_gem::deplaceMoi()
 				position_x += i;
 				if(position_x < maximum_X1)
 				{	if(collision1(raket))
-					{	flag_actif = 0;
+					{	is_enabled = 0;
 #ifndef SOUNDISOFF					
 						audio->play_sound(S_MONNAIES);
 #endif
@@ -172,7 +172,7 @@ Sint32 techno_gem::deplaceMoi()
 					}
 				}
 				else
-					flag_actif = 0;
+					is_enabled = 0;
 				break;
 
 			//###########################################################
@@ -182,7 +182,7 @@ Sint32 techno_gem::deplaceMoi()
 				position_y -= i;
 				if(position_y > minimum_Y1)
 				{	if(collision1(raket))
-					{	flag_actif = 0;
+					{	is_enabled = 0;
 #ifndef SOUNDISOFF					
 						audio->play_sound(S_MONNAIES);
 #endif
@@ -190,7 +190,7 @@ Sint32 techno_gem::deplaceMoi()
 					}
 				}
 				else
-					flag_actif = 0;
+					is_enabled = 0;
 				break;
 
 			//###########################################################
@@ -200,7 +200,7 @@ Sint32 techno_gem::deplaceMoi()
 				position_x -= i;
 				if(position_x > minimum_X1)
 				{	if(collision1(raket))
-					{	flag_actif = 0;
+					{	is_enabled = 0;
 #ifndef SOUNDISOFF					
 						audio->play_sound(S_MONNAIES);
 #endif
@@ -208,7 +208,7 @@ Sint32 techno_gem::deplaceMoi()
 					}
 				}
 				else
-					flag_actif = 0;
+					is_enabled = 0;
 				break;
 		}
 	}
@@ -219,9 +219,9 @@ Sint32 techno_gem::deplaceMoi()
 	//###########################################################
 	{	if (blinkcount > 0 && indicator1)
 		{	if (blinkcount > 20)
-				flag_actif = 0;
+				is_enabled = 0;
 			else
-				flag_actif = 1;
+				is_enabled = 1;
 			if (-- blinkcount <= 0)
 				blinkcount = 30;
 		

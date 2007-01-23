@@ -107,7 +107,7 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	{	Sint32 p = level_list[grdPt++];
 		tecno_gard *pgard = new tecno_gard();
 		pgard->set_object_pos(i);
-		error_init(pgard->initialise(guard_list[p].para_nsbob, image_BOBs, 1));
+		error_init(pgard->create_sprite(guard_list[p].para_nsbob, image_BOBs, 1));
 		if(erreur_num)
 			return (erreur_num);
 		sprites_list[i] = pgard;
@@ -126,7 +126,7 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	{	sprite_object *ptBob = new sprite_object();
 		pBobEnergy[i] = ptBob;
 		ptBob->set_object_pos(i);
-		error_init(ptBob->initialise(BOB_GRDNRJ, image_BOBs, 0));
+		error_init(ptBob->create_sprite(BOB_GRDNRJ, image_BOBs, 0));
 		if(erreur_num)
 			return (erreur_num);
 		sprites->add(ptBob);
@@ -292,7 +292,7 @@ Sint32 zeguardian::run_scroll(Uint32 ntype, Sint32 speed, sprite_ball *balle,
 		//###############################################################
 		case 4:
 			if (pGua1->gard_power)
-			{	if (balle->colleBallF || !balle->flag_actif)
+			{	if (balle->colleBallF || !balle->is_enabled)
 				{	speed = -1;
 					scrollTemp = 0;
 				}
@@ -344,7 +344,7 @@ Sint32 zeguardian::run_scroll(Uint32 ntype, Sint32 speed, sprite_ball *balle,
 		// medium area 4 (SCROLL FIRE 1)
 		//###############################################################
 		case 7:
-			if (weapo->flag_actif)
+			if (weapo->is_enabled)
 			{	if (scrollTemp)
 				{	Sint32	gposy = weapo->position_y;
 					gposy = gposy - scrollTemp;
@@ -364,7 +364,7 @@ Sint32 zeguardian::run_scroll(Uint32 ntype, Sint32 speed, sprite_ball *balle,
 		// final area 4 (SCROLL FIRE 2)
 		//###############################################################
 		case 8:
-			if (weapo->flag_actif)
+			if (weapo->is_enabled)
 			{	if (scrollTemp)
 				{	Sint32	gposy = weapo->position_y;
 					gposy = scrollTemp - gposy;

@@ -214,11 +214,11 @@ Sint32 escapeMenu::execution1()
 	// [ESC] key: enable / disable menu box
 	//##############################################################
 	if(keyboard->command_is_pressed(handler_keyboard::ESCAPEMENU)) {
-		flag_actif = 1;
+		is_enabled = 1;
 	} else {
-		if(flag_actif && restoreBkg)
+		if(is_enabled && restoreBkg)
 			MSK_bitclr();
-		flag_actif = 0;
+		is_enabled = 0;
 		return event;	
 	}
 	
@@ -280,9 +280,9 @@ Sint32 escapeMenu::execution1()
 	MSKbitcopy();
 
 	if(event >= WECONTINUE && event <= WEQUITGAME)
-	{	if(flag_actif && restoreBkg)
+	{	if(is_enabled && restoreBkg)
 			MSK_bitclr();
-		flag_actif = 0;
+		is_enabled = 0;
 		keyboard->clear_command_keys();
 	}
 	

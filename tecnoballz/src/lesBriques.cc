@@ -290,7 +290,7 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 				if(bob_ground)
 				{
 					sprite_object *ptbob = new sprite_object();
-					error_init(ptbob->initialise(BOB_BRICK1, GFX_brique, 1, 0));
+					error_init(ptbob->create_sprite(BOB_BRICK1, GFX_brique, 1, 0));
 					if(erreur_num) return erreur_num;
 					sprites_list[bobindex] = ptbob;
 					sprites->add(ptbob);

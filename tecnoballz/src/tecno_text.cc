@@ -57,7 +57,7 @@ void tecno_text::littleInit(Sint32 zeRad, Sint32 xStop, Sint32 yStrt, Sint32 xOf
 //-----------------------------------------------------------------------------
 void tecno_text::moveCaract()
 {
-	if(flag_actif)
+	if(is_enabled)
 	{	
 		// ordinate linear moving
 		Sint32 d = posiYStart;
