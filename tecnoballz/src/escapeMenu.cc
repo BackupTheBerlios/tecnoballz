@@ -150,7 +150,7 @@ Sint32 escapeMenu::first_init(GIF_bitMap *image, Sint32 nmenu, Sint32 large, Sin
 	if(erreur_num) return (erreur_num);
 	Sint32 y = (240 * resolution -  nblin * space2next) / 2;
 	y = (y / space2next) * space2next;
-	coordonnee((large - BOBlargeur) / 2, y);	
+	coordonnee((large - sprite_width) / 2, y);	
 
 	//###################################################################
 	// build the frame of menu box (with sprites)

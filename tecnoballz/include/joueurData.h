@@ -87,7 +87,7 @@ class joueurData:public virtual mentatCode
 		Sint32				getAreaNum();
 		Sint32				getLevelNu();
 		Sint32				getLifeNum();
-		Sint32				getLargeur();
+		Sint32				get_paddle_width ();
 		void				setLargeur(Sint32 largeur);
 		Sint32				get_credit();
 		Sint32				sub_credit(Sint32 value);

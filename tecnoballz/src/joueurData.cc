@@ -197,7 +197,7 @@ Sint32 joueurData::getLifeNum()
 //-----------------------------------------------------------------------------
 // return bumper width
 //-----------------------------------------------------------------------------
-Sint32 joueurData::getLargeur()
+Sint32 joueurData::get_paddle_width()
 {
 	return raketLarge;
 }

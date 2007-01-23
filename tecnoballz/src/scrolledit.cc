@@ -89,7 +89,7 @@ Sint32 scrolledit::first_init()
 	pt_select0 = pt_select1;
 	
 	ecranHaute = display->get_height();
-	ecranLarge = display->get_width();
+	screen_width = display->get_width();
 
 	sprites->reset();
 	error_init(pRessource->loadSprite());
@@ -236,7 +236,7 @@ void scrolledit::view_tiles()
 			titlesPosy = y_max;
 	
 	//printf("y_max :%i / titlesPosy: %i\n", y_max, titlesPosy);
-	ptrGBitMap->copyBuffer(0, titlesPosy, 0, 0, ecranLarge, ecranHaute);
+	ptrGBitMap->copyBuffer(0, titlesPosy, 0, 0, screen_width, ecranHaute);
 	select_box();
 	drawingBox();
 }
@@ -618,8 +618,8 @@ void scrolledit::brush_draw()
 	Sint32 pos_y = keyboard->get_mouse_y();
 	pos_x &= tile_mask1;
 	pos_y &= tile_mask1;
-	if(pos_x > ecranLarge -  pBrush_bob->GFXlargeur())
-		pos_x = ecranLarge -  pBrush_bob->GFXlargeur();
+	if(pos_x > screen_width -  pBrush_bob->GFXlargeur())
+		pos_x = screen_width -  pBrush_bob->GFXlargeur();
 	if(pos_y > ecranHaute -  pBrush_bob->GFXhauteur())
 		pos_y = ecranHaute -  pBrush_bob->GFXhauteur();
 	

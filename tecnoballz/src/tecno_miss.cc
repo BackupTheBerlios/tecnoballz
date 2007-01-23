@@ -305,7 +305,7 @@ void tecno_miss::dmissile12()
 	flagDepla3 = flagDepla3 + 4;
 	if(flagDepla3 >= 360)
 		flagDepla3 -= 360;
-	Sint32 r = (BOBlargeur * resolution);
+	Sint32 r = (sprite_width * resolution);
 	Sint32 x = tablesinus[flagDepla3] * r;
 	Sint32 y = tablecosin[flagDepla3] * r;
 	x = x >> 7;

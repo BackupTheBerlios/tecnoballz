@@ -50,11 +50,11 @@ techno_gem::~techno_gem()
 //-----------------------------------------------------------------------------
 void techno_gem::littleInit()
 {
-	/*maximum_X1 = ecranLarge - 192;
+	/*maximum_X1 = screen_width - 192;
 	minimum_X1 = 3 * resolution;
 	maximum_Y1 = ecranHaute - 20;
 	minimum_Y1 = 10 * resolution;*/
-	maximum_X1 = ecranLarge - ((64 + 16) * resolution);
+	maximum_X1 = screen_width - ((64 + 16) * resolution);
 	minimum_X1 = 3 * resolution;
 	maximum_Y1 = ecranHaute - 10  * resolution;
 	minimum_Y1 = 0 * resolution;
@@ -114,8 +114,8 @@ void techno_gem::gemcollect(Sint32 ztype)
 	change_GFX(ztype);
 	flagShadow = 0;
 	indicator1 = 1;
-	position_y = ecranHaute - BOBhauteur - 2 * resolution;
-	position_x = 270 * resolution + BOBlargeur * ztype;
+	position_y = ecranHaute - sprite_height - 2 * resolution;
+	position_x = 270 * resolution + sprite_width * ztype;
 	is_enabled = 1;
 	blinkcount = 0;
 }

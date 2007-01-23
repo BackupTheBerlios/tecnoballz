@@ -125,7 +125,7 @@ void zeGigaBlit::initDepart()
 		l = NOMBREGIGA - l - 1;
 		giga_blitz *g = sprites_list[l];
 		blitzobjet = g;
-		blitz_haut = g->getHauteur();
+		blitz_haut = g->get_sprite_height();
 		Sint32 x = tecBumper1->retournePX();
 		Sint32 y = tecBumper1->retournePY();
 		blitz_posx = x;
@@ -182,7 +182,7 @@ void zeGigaBlit::execution1()
 	//###################################################################
 	// determine last line of the gigablitz sprite
 	//###################################################################
-	Sint32 h =g->getHauteur();
+	Sint32 h =g->get_sprite_height();
 	Sint32 l = bitz_maxiy - y;
 	if (l > h)
 		l = h;
@@ -312,7 +312,7 @@ void zeGigaBlit::execution2()
 		//###################################################################
 		// determine last line of the gigablitz sprite
 		//###################################################################
-		Sint32 h =g->getHauteur();
+		Sint32 h =g->get_sprite_height();
 		Sint32 l = display->get_height() - y;
 		if (l > h)
 			l = h;
@@ -348,15 +348,15 @@ void zeGigaBlit::collision2()
 	if(blitz_haut && !tecBumper1->getInvncbl())
 	{	Sint32 gx = blitzobjet->retournePX();
 		Sint32 gy = blitzobjet->retournePY();
-		//Sint32 gh = blitzobjet->getHauteur();
+		//Sint32 gh = blitzobjet->get_sprite_height();
 		Sint32 gw = blitzobjet->getColLarg();
 		Sint32 bx = tecBumper1->retournePX();
 		Sint32 by = tecBumper1->retournePY();
 		Sint32 bw = tecBumper1->rakLargeur();
-		Sint32 bh = tecBumper1->getHauteur();
-		/*printf("zeGigaBlit::collision2(): getColLarg=%i / getLargeur=%i / getHauteur=%i /  blitz_haut =%i\n",
-			blitzobjet->getColLarg(), blitzobjet->getLargeur(),
-			blitzobjet->getHauteur(), blitz_haut);*/
+		Sint32 bh = tecBumper1->get_sprite_height();
+		/*printf("zeGigaBlit::collision2(): getColLarg=%i / get_sprite_width=%i / get_sprite_height=%i /  blitz_haut =%i\n",
+			blitzobjet->getColLarg(), blitzobjet->get_sprite_width(),
+			blitzobjet->get_sprite_height(), blitz_haut);*/
 		
 		if (gy + blitz_haut >= by &&
 			gx + gw >= bx &&
@@ -370,7 +370,7 @@ void zeGigaBlit::collision2()
 #endif
 			joueurGere->lifesMoins(1);
 			pexplosion->add_explos(bx + tecBumper1->rakLargeur()/2, 
-				by + tecBumper1->getHauteur()/2);
+				by + tecBumper1->get_sprite_height()/2);
 		}
 	}
 }
@@ -390,8 +390,8 @@ Sint32 zeGigaBlit::guard_shoot(Sint32 value, Sint32 pos_x, Sint32 pos_y,
 	{	giga_blitz *g = sprites_list[value];
 			//g = sprites_list[0];	// test only
 		blitzobjet = g;
-		blitz_haut = g->getHauteur();
-		Sint32 bwdth= g->getLargeur();
+		blitz_haut = g->get_sprite_height();
+		Sint32 bwdth= g->get_sprite_width();
 		g->coordonnee(pos_x, pos_y);
 		pos_x = pos_x + ((large - bwdth) / 2);
 		if(pos_x < 0) 
@@ -401,7 +401,7 @@ Sint32 zeGigaBlit::guard_shoot(Sint32 value, Sint32 pos_x, Sint32 pos_y,
 		audio->play_sound(S_TIR_GARD);
 #endif
 		g->enable();
-		blitz_haut = g->getHauteur();
+		blitz_haut = g->get_sprite_height();
 		blitz_posx = pos_x;
 		return 1;
 	}

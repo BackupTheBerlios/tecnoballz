@@ -155,7 +155,7 @@ void zeguardian::displayNrj()
 		Sint32 h = pgard->gard_power / 4;
 		ptBob->initRepeat(h);
 		if (!h) h = 1;
-		Sint32 y = baseY - h * ptBob->getHauteur();
+		Sint32 y = baseY - h * ptBob->get_sprite_height();
 		ptBob->changePosY(y);
 	}
 }

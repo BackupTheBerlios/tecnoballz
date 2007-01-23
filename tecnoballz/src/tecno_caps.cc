@@ -47,7 +47,7 @@ tecno_caps::~tecno_caps()
 //-----------------------------------------------------------------------------
 void tecno_caps::littleInit()
 {
-	maximum_X1 = ecranLarge - ((64 + 16) * resolution);
+	maximum_X1 = screen_width - ((64 + 16) * resolution);
 	minimum_X1 = 3 * resolution;
 	maximum_Y1 = ecranHaute - 10  * resolution;
 	minimum_Y1 = 0 * resolution;

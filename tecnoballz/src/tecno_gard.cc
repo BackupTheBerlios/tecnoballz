@@ -81,11 +81,11 @@ Sint32 tecno_gard::init_guard(gardlevel *guard, unsigned char* ptLis,
 	ptr_lissa2 = ptLis;
 	minimum_X1 = 6 * resolution;
 	minimum_Y1 = 2 * resolution;
-	maximum_X1 = ecranLarge - BOBlargeur;
-	maximum_Y1 = ecranHaute - BOBhauteur;
+	maximum_X1 = screen_width - sprite_width;
+	maximum_Y1 = ecranHaute - sprite_height;
 	maximum_Y1 = (232 - 8 - 1 - 16) * resolution;
 	ptMissiles = pMiss;
-	if(BOBlargeur == resolution * 32)
+	if(sprite_width == resolution * 32)
 		explotempo = 7;
 	else
 		explotempo = 3;
@@ -102,7 +102,7 @@ void tecno_gard::execution1(Sint32 offzt)
 	if (gard_power > 0)
 	{	
 		Sint32 x = (ptr_lissa1[0]);
-		x = x * (ecranLarge - BOBlargeur) / 192;
+		x = x * (screen_width - sprite_width) / 192;
 		Sint32 y = ptr_lissa1[1] * resolution;
 		position_x = x;
 		position_y = y;
@@ -134,9 +134,9 @@ void tecno_gard::execution1(Sint32 offzt)
 				Sint32 vrand = hasard_val;
 				if(vrand < 0) vrand = -vrand;
 				Sint32 val_1 =
-					(vrand + explo_time - position_y) % BOBlargeur;
+					(vrand + explo_time - position_y) % sprite_width;
 				Sint32 val_2 =
-					(hasardval2 - explo_time + position_y) % BOBhauteur;
+					(hasardval2 - explo_time + position_y) % sprite_height;
 				pos_x += val_1;
 				pos_y += val_2;
 				pExplosion->add_explos(pos_x, pos_y);
@@ -186,13 +186,13 @@ void tecno_gard::startBlitz()
 	if(gardwaitf1-- <= 0)
 	{	Sint32 v = hasard_val & 7;
 		//v = 7;	//test only
-		if(BOBlargeur > (32 * resolution))
+		if(sprite_width > (32 * resolution))
 			v = table_gga1[v] ;
 		else
 			v = table_gga2[v] ;
 		//v = 0;	//test only 
 		if(ptGigaBlit->guard_shoot(v, position_x, position_y,
-			BOBlargeur, BOBhauteur))
+			sprite_width, sprite_height))
 			gardwaitf1 = gardwaitf2;
 	}
 }

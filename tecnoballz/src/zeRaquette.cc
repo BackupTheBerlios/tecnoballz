@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.11 2007/01/23 10:11:22 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.12 2007/01/23 11:00:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -248,7 +248,7 @@ void zeRaquette::initBumper(barreScore *score, zeGigaBlit *blitz, zeNewBalls *ba
 	ptGigaBlit = blitz;
 	ptNewBalls = balls;
 	
-	raketLarge = joueurGere->getLargeur();
+	raketLarge = joueurGere->get_paddle_width ();
 	Sint32 centre = (bumperMaxi - bumperMini) / 2 - (raketLarge / 2);
 
 	// bottom bumper

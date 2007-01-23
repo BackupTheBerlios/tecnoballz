@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-23
 // fonction	: manage mobiles characters ("LEVEL x COMPLETED")
-// id		: $Id: zeMoveText.cc,v 1.6 2007/01/22 19:35:50 gurumeditation Exp $
+// id		: $Id: zeMoveText.cc,v 1.7 2007/01/23 11:00:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -114,7 +114,7 @@ void zeMoveText::initialise(Sint32 level, Sint32 offzt)
 Sint32 zeMoveText::startValue(Sint32 nchar, Sint32 zeRad, Sint32 index,
 				Sint32 yStrt, Sint32 yOffs, Sint32 yStop)
 {
-	Sint32 width = sprites_list[0]->getHauteur();
+	Sint32 width = sprites_list[0]->get_sprite_height();
 	Sint32 e = (horz_large) / nchar;
 	Sint32 xStop = (horz_large - (nchar * width)) / 2;
 	Sint32 xOffs = 0;	//X move offset (1, -1 or 0)

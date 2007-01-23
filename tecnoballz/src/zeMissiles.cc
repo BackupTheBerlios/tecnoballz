@@ -85,7 +85,7 @@ void zeMissiles::bumper_col()
 	Sint32 bumpy = ptbumper01->retournePY();
 	Sint32 bumpx = ptbumper01->retournePX();
 	Sint32 bmpx2 = bumpx + ptbumper01->rakLargeur();
-	Sint32 bmpy2 = bumpy + ptbumper01->getHauteur();
+	Sint32 bmpy2 = bumpy + ptbumper01->get_sprite_height();
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_miss *xFire = sprites_list[i];
 		if(xFire->is_enabled)
@@ -93,9 +93,9 @@ void zeMissiles::bumper_col()
 			if (weapy < bmpy2)
 			{	Sint32 weapx = xFire->position_x;      
 				if(weapx < bmpx2)
-				{	weapy += xFire->BOBhauteur;
+				{	weapy += xFire->sprite_height;
 					if(weapy > bumpy)
-					{	weapx += xFire->BOBlargeur;
+					{	weapx += xFire->sprite_width;
 						if(weapx > bumpx)
 						{	xFire->is_enabled = 0;
 							if (ptbumper01->getInvncbl() <= 0)
@@ -107,7 +107,7 @@ void zeMissiles::bumper_col()
 #endif
 								pexplosion->add_explos
 									(bumpx + ptbumper01->rakLargeur()/2,
-									bumpy + ptbumper01->getHauteur()/2);
+									bumpy + ptbumper01->get_sprite_height()/2);
 							}
 						}
 					}
@@ -448,8 +448,8 @@ void zeMissiles::tir10_init(tecno_gard *pgard)
   { tecno_miss *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { xFire->is_enabled = 3;
-      xFire->position_x = gardx + (*(ptir++) * xFire->BOBlargeur);
-      xFire->position_y = gardy + (*(ptir++) * xFire->BOBhauteur);
+      xFire->position_x = gardx + (*(ptir++) * xFire->sprite_width);
+      xFire->position_y = gardy + (*(ptir++) * xFire->sprite_height);
       n--;
     }
   } while ( n > 0 && --t >= 0 );

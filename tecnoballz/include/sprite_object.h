@@ -4,11 +4,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.5 2007/01/23 10:11:22 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.6 2007/01/23 11:00:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -181,15 +181,15 @@ protected:
   Sint32 flagShadow;            // 1=le BOB possede une ombre
   Sint32 position_x;            // abscisse
   Sint32 position_y;            // ordonnee
-  Sint32 BOBlargeur;            // largeur BOB en pixels
-  Sint32 BOBhauteur;            // largeur BOB en lignes
+  Sint32 sprite_width;            // largeur BOB en pixels
+  Sint32 sprite_height;            // largeur BOB en lignes
   Sint32 init_tempo;            // initialise tempo animation
   Sint32 anim_tempo;            // tempo animation
   Sint32 animOffset;            // number of the animation
   Sint32 maxiOffset;            // offset minimum de l'animation
   Sint32 miniOffset;            // offset maximum animation
   Sint32 display_pos;           // numero identificateur BOB
-  Sint32 ecranLarge;            // largeur de l'ecran en octets
+  Sint32 screen_width;            // largeur de l'ecran en octets
   Sint32 ecranHaute;            // hauteur de l'ecran en lignes
   Sint32 maximum_X1;            // abscisse maximum
   Sint32 minimum_X1;            // abscisse minimum
@@ -271,9 +271,9 @@ public:
   void animRepete ();
   void new_offset (Sint32 nume);
   void out_screen ();
-  void out_horizo ();
-  Uint32 getLargeur ();
-  Uint32 getHauteur ();
+  void clip_x_coordinate ();
+  Uint32 get_sprite_width ();
+  Uint32 get_sprite_height ();
   Uint32 getColLarg ();
   Uint32 getColHaut ();
   void initRepeat (Sint32 value);

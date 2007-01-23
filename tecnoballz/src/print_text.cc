@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-10
 // fonction	: display chars
-// id		: $Id: print_text.cc,v 1.5 2007/01/17 20:05:07 gurumeditation Exp $
+// id		: $Id: print_text.cc,v 1.6 2007/01/23 11:00:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -382,8 +382,8 @@ sprite_object*  print_text::string2bob(const char* ptStr)
 
 	sprite_object* ptBob = new sprite_object();
 	ptBob->set_memGFX(pBmap->duplicates(), 1);
-	ptBob->BOBlargeur = pBmap->GFXlargeur();
-	ptBob->BOBhauteur = pBmap->GFXhauteur();
+	ptBob->sprite_width = pBmap->GFXlargeur();
+	ptBob->sprite_height = pBmap->GFXhauteur();
 	ptBob->srceNextLn = pBmap->GFX_nextLn();
 	ptBob->animationN = 1;
 	ptBob->destNextLn = display->bufferNext();

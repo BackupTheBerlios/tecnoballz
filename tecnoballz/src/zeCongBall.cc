@@ -77,8 +77,8 @@ void zeCongBall::execution1()
 	Sint32 r_max = 360;
 	Sint32 rad_x = 80 * resolution;
 	Sint32 rad_y = 80 * resolution;
-	Sint32 centx = (160 * resolution) - (sprites_list[0]->BOBlargeur / 2);
-	Sint32 centy = (120 * resolution) - (sprites_list[0]->BOBhauteur / 2);
+	Sint32 centx = (160 * resolution) - (sprites_list[0]->sprite_width / 2);
+	Sint32 centy = (120 * resolution) - (sprites_list[0]->sprite_height / 2);
 
 	// varie vitesse des boulles
 	speed_rad4 = speed_rad4 + (hasard_val & 3);

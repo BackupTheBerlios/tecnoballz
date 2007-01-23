@@ -66,7 +66,7 @@ void printmoney::initialise(joueurData *gamer, zeRaquette* raket,
 	ptBobRever->new_gadget(GAD_INVERS);
 	ptBobRever->coordonnee(x, money_posy);
 	ptBobRever->tempo_init(5);
-	x += ptBobRever->getLargeur();
+	x += ptBobRever->get_sprite_width();
 	sprite_object **liste = sprites_list + 6; 
 	for (Sint32 i = 0; i < 2 ; i++)
 	{	sprite_object *x_bob = *(liste++);
@@ -98,7 +98,7 @@ void printmoney::init_guard(joueurData *gamer, zeRaquette* raket,
 	ptBobLifes->new_gadget(GAD_LIFE_P);
 	ptBobLifes->coordonnee(x, money_posy);
 	ptBobLifes->tempo_init(5);
-	x += ptBobLifes->getLargeur();
+	x += ptBobLifes->get_sprite_width();
 	sprite_object **liste = sprites_list + 6; 
 	for (Sint32 i = 0; i < 2 ; i++)
 	{	sprite_object *x_bob = *(liste++);
@@ -118,7 +118,7 @@ void printmoney::init_money()
 	ptBobMoney->coordonnee(x, money_posy);
 	ptBobMoney->tempo_init(5);
 	ptBobMoney->enable();
-	x += ptBobMoney->getLargeur();
+	x += ptBobMoney->get_sprite_width();
 	
 	// characters sprites
 	sprite_object **liste = sprites_list;

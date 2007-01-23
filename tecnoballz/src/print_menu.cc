@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.7 2007/01/18 17:09:53 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.8 2007/01/23 11:00:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -573,7 +573,7 @@ void print_menu::efface_BOB()
 	Sint32 *d = (Sint32 *)adresseGFX;
 	Sint32 p = 0;
 	Sint32 n = srceNextLn / 4;
-	Sint32 h = BOBhauteur;
+	Sint32 h = sprite_height;
 	Sint32 l = srceNextLn / 4;
 	for(Sint32 i = 0; i < h; i++)
 	{	for(Sint32 j = 0; j < l; j++)

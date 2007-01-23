@@ -101,8 +101,8 @@ Sint32 briqueCote::initialise(Sint32 build)
 	error_init(bricote_hz->create_sprite(BOB_BRICKH, image_BOBs, 1));
 	if(erreur_num)
 		return (erreur_num);
-	iLargeurBH = bricote_hz->getLargeur();
-	iHauteurBH = bricote_hz->getHauteur();
+	iLargeurBH = bricote_hz->get_sprite_width();
+	iHauteurBH = bricote_hz->get_sprite_height();
 
 	//###################################################################
 	// create a sprite object for small vertical bricks 
@@ -111,8 +111,8 @@ Sint32 briqueCote::initialise(Sint32 build)
 	error_init(bricote_vt->create_sprite(BOB_BRICKV, image_BOBs, 1));
 	if(erreur_num)
 		return (erreur_num);
-	iLargeurBV = bricote_vt->getLargeur();
-	iHauteurBV = bricote_vt->getHauteur();
+	iLargeurBV = bricote_vt->get_sprite_width();
+	iHauteurBV = bricote_vt->get_sprite_height();
 
 	collisionG = (BRICOTEGAX * resolution) + iLargeurBV;
 	collisionD = BRICOTEDRX * resolution;
@@ -222,8 +222,8 @@ Sint32 briqueCote::bobbg_init()
 	Sint32 x = BRICOTEHRX * resolution;
 	Sint32 yg = BRICOTEGAY * resolution;
 	Sint32 yd = BRICOTEDRY * resolution;
-	Sint32 lg = bricote_hz->getLargeur();
-	Sint32 ht = bricote_vt->getHauteur();
+	Sint32 lg = bricote_hz->get_sprite_width();
+	Sint32 ht = bricote_vt->get_sprite_height();
 	for(Uint32 i = 0; i < BRICOTENUM; i++)	//12 bricks per wall
 	{
 		bobwal_top[i] = new sprite_object();
@@ -468,8 +468,8 @@ void briqueCote::afficheSha()
 	Sint32 x = BRICOTEHRX * resolution;
 	Sint32 yg = BRICOTEGAY * resolution;
 	Sint32 yd = BRICOTEDRY * resolution;
-	Sint32 lg = bricote_hz->getLargeur();
-	Sint32 ht = bricote_vt->getHauteur();
+	Sint32 lg = bricote_hz->get_sprite_width();
+	Sint32 ht = bricote_vt->get_sprite_height();
 	for(Uint32 i = 0; i < BRICOTENUM; i++)	//12 bricks per wall
 	{	if(map_duHaut[i])
 		{	bricote_hz->coordonnee(x, BRICOTEHRY * resolution);
@@ -498,8 +498,8 @@ void briqueCote::afficheGfx()
 	Sint32 x = BRICOTEHRX * resolution;
 	Sint32 yg = BRICOTEGAY * resolution;
 	Sint32 yd = BRICOTEDRY * resolution;
-	Sint32 lg = bricote_hz->getLargeur();
-	Sint32 ht = bricote_vt->getHauteur();
+	Sint32 lg = bricote_hz->get_sprite_width();
+	Sint32 ht = bricote_vt->get_sprite_height();
 	for(Uint32 i = 0; i < BRICOTENUM; i++)	// 12 bricks aside
 	{	if(map_duHaut[i])
 		{	bricote_hz->coordonnee(x, BRICOTEHRY * resolution);

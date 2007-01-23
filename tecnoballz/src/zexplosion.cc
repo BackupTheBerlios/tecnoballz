@@ -89,8 +89,8 @@ void zexplosion::add_explos(Sint32 pos_x, Sint32 pos_y)
 #endif
 			}
 			ptbob->is_enabled = 1;
-			ptbob->position_x = pos_x - (ptbob->BOBlargeur/2) ;
-			ptbob->position_y = pos_y - (ptbob->BOBhauteur/2) ;
+			ptbob->position_x = pos_x - (ptbob->sprite_width/2) ;
+			ptbob->position_y = pos_y - (ptbob->sprite_height/2) ;
 			ptbob->animOffset = ptbob->miniOffset;
 			ptbob->init_tempo = 4 + (hasard_val & 7);
 			ptbob->anim_tempo = ptbob->init_tempo;

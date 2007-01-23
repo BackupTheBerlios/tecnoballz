@@ -52,7 +52,7 @@ class scrolledit:public virtual runGestion
 		lastScroll*			defilement;
 		mousePoint*			objetMouse;
 		Sint32				ecranHaute;	//height of the main window
-		Sint32				ecranLarge;	//weight of the main window
+		Sint32				screen_width;	//weight of the main window
 		Sint32				displayMod;	//0=show map / 1=show tiles
 		Sint32				flagSpaceK;
 		Sint32				titlesPosy;

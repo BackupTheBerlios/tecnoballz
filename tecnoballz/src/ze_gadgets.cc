@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.13 2007/01/23 10:11:22 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.14 2007/01/23 11:00:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -232,7 +232,7 @@ Sint32 ze_gadgets::gadgetShop()
 	Sint32 t = NB_OPTIONS;
 	tecno_gads **liste = sprites_list;
 	tecno_gads *bonus = *liste;
-	Sint32 h = bonus->BOBhauteur + 1;
+	Sint32 h = bonus->sprite_height + 1;
 	Sint32 x = SGADGET_X1 * resolution;
 	Sint32 y = SGADGET_Y1 * resolution;
 	for(Sint32 i = 0; i < t; i++)
