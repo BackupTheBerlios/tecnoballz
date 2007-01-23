@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.12 2007/01/23 20:51:30 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.13 2007/01/23 20:55:38 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -213,7 +213,7 @@ protected:
   /** X coordinate maximum */
   Sint32 x_maximum;
   /** Y coordinate maximum */
-  Sint32 y_maxium;
+  Sint32 y_maximum;
   /** Type ID of the sprite */
   Sint32 sprite_type_id;
   Sint32 affligFrSv;            // premiere ligne a afficher (si afflignesF=1)
