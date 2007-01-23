@@ -4,11 +4,11 @@
  * @date 2007-01-22
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.2 2007/01/23 10:11:22 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.3 2007/01/23 14:26:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ protected:
   Sint32 max_of_sprites;
   Sint32 num_of_sprites;
   bool objects_have_shades;
-  Sint32 BOBtypeNum;
+  Sint32 sprite_type_id;
   Sint32 fTableByte;
 
 public:
@@ -51,11 +51,11 @@ public:
   Sint32 init_liste ();
   void disable_sprites ();
   void enable_sprites ();
-  X **listeObjet ();
-  Sint32 totalObjet ();
+  X **get_sprites_list ();
+  Sint32 get_max_of_sprites ();
   void set_max_of_sprites (Sint32 total);
-  void xAnimation ();
-  X *get_sprite_object (Uint32 index);
+  //void xAnimation ();
+  //X *get_sprite_object (Uint32 index);
 };
 
 /**
@@ -82,7 +82,7 @@ template < class X > void objects_list < X >::littleInit ()
   num_of_sprites = 0;
   sprites_list = NULL;
   objects_have_shades = 0;
-  BOBtypeNum = 0;
+  sprite_type_id = 0;
   fTableByte = 0;
 }
 
@@ -113,7 +113,7 @@ template < class X > void objects_list < X >::release_sprites_list ()
  * Return list of the sprites objects
  * @return pointer to the list of sprites objects
  */
-template < class X > X ** objects_list < X >::listeObjet ()
+template < class X > X ** objects_list < X >::get_sprites_list ()
 {
   return sprites_list;
 }
@@ -122,7 +122,7 @@ template < class X > X ** objects_list < X >::listeObjet ()
  * Return the maxium number of sprites objects
  * @return the maxium number of sprites objects
  */
-template < class X > Sint32 objects_list < X >::totalObjet ()
+template < class X > Sint32 objects_list < X >::get_max_of_sprites ()
 {
   return max_of_sprites;
 }
@@ -159,7 +159,7 @@ template < class X > Sint32 objects_list < X >::init_liste ()
   /* reserves only once the memory required for the
    * graphic data of the sprite */
   error_init (sprite_template->
-              create_sprite (BOBtypeNum, image, objects_have_shades,
+              create_sprite (sprite_type_id, image, objects_have_shades,
                           fTableByte));
   if (erreur_num)
     {
@@ -207,6 +207,7 @@ template < class X > void objects_list < X >::disable_sprites ()
 //-------------------------------------------------------------------------------
 // once time animation for all sprites 
 //-------------------------------------------------------------------------------
+/*
 template < class X > void objects_list < X >::xAnimation ()
 {
   X *sprite = sprites_list[0];
@@ -218,12 +219,14 @@ template < class X > void objects_list < X >::xAnimation ()
       sprite->change_GFX (anim_num);
     }
 }
+*/
 
 /** 
  * Return an pointer to a sprite object
  * @param index index of the object on the list 0 to max_of_sprites - 1
  * @return pointer to the sprite object 
  */
+/*
 template < class X > X * objects_list < X >::get_sprite_object (Uint32 index)
 {
   if (index >= max_of_sprites)
@@ -235,5 +238,6 @@ template < class X > X * objects_list < X >::get_sprite_object (Uint32 index)
       return sprites_list[index];
     } 
 }
+*/
 
 #endif

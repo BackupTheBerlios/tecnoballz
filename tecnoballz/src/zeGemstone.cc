@@ -32,7 +32,7 @@ zeGemstone::zeGemstone()
 	littleInit();
 	max_of_sprites = NUMBER_GEM;
 	objects_have_shades = true;
-	BOBtypeNum = BOB_GEMSTO;
+	sprite_type_id = BOB_GEMSTO;
 }
 
 //-----------------------------------------------------------------------------

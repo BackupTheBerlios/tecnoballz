@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.15 2007/01/23 14:08:52 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.16 2007/01/23 14:26:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -72,7 +72,7 @@ tableaux_Z::tableaux_Z()
 tableaux_Z::~tableaux_Z()
 {
 	if (BottomWall)
-	{	BottomWall->BOBdestroy();
+	{	BottomWall->release_sprite ();
 		BottomWall = (sprite_object*)NULL;
 	}
 	delete ptrEscMenu;

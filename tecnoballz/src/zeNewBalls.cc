@@ -60,7 +60,7 @@ zeNewBalls::zeNewBalls(ejectBalls *eject, lesBriques *brick, briqueCote *brico,
 	max_of_sprites = 20;
 	objects_have_shades = 1;
 	balle_ctrl = 0;
-	BOBtypeNum = BOB_BALLES;
+	sprite_type_id = BOB_BALLES;
 }
 
 //-----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ zeNewBalls::zeNewBalls(zeguardian *pGard, zeCapsules *pCaps, ze_gadgets *pGads)
 	max_of_sprites = 20;
 	objects_have_shades = true;
 	balle_ctrl = 0;
-	BOBtypeNum = BOB_BALLES;
+	sprite_type_id = BOB_BALLES;
 }
 
 //-----------------------------------------------------------------------------
@@ -1113,11 +1113,11 @@ void zeNewBalls::vitus_eyes()
 {
 	Sint32 vhypo = pt_magneye->hypotenuse;
 	sprite_ball **liste = sprites_list;
-	Sint32 nbEye = pt_magneye->totalObjet();
+	Sint32 nbEye = pt_magneye->get_max_of_sprites();
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = *(liste++);
 		if(!balle->is_enabled) continue;
-		techno_eye **pEyes = pt_magneye->listeObjet();
+		techno_eye **pEyes = pt_magneye->get_sprites_list();
 		for(Sint32 j = 0; j < nbEye; j++)
 		{	techno_eye *ptEye = *(pEyes++);
 			if(!ptEye->is_enabled) continue;
@@ -1181,8 +1181,8 @@ void zeNewBalls::vitus_eyes()
 void zeNewBalls::vitusAtoms()
 {
 	sprite_ball **liste = sprites_list;
-	Sint32 t = ptBouiBoui->totalObjet();
-	tecno_boui **aList = ptBouiBoui->listeObjet();
+	Sint32 t = ptBouiBoui->get_max_of_sprites();
+	tecno_boui **aList = ptBouiBoui->get_sprites_list();
 	Sint32 nouve = (hasard_val & 0xF) << 2;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = *(liste++);
@@ -1227,8 +1227,8 @@ void zeNewBalls::vitusGuard()
 {
 	Sint32 u = max_of_sprites;					// number of balls (1 to n)
 	sprite_ball **liste = sprites_list;
-	Sint32 t = ptguardian->totalObjet();	// number of guards (1 or 2)
-	tecno_gard **aList = ptguardian->listeObjet();
+	Sint32 t = ptguardian->get_max_of_sprites();	// number of guards (1 or 2)
+	tecno_gard **aList = ptguardian->get_sprites_list();
 	for(Sint32 j = 0; j < t; j++)
 	{	tecno_gard *pGard = aList[j];
 		sprite_ball *balok = NULL; 

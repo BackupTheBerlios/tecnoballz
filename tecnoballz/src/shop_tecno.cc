@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.13 2007/01/23 14:08:51 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.14 2007/01/23 14:26:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -161,7 +161,7 @@ Sint32 shop_tecno::first_init()
 	Sint32* tp = coursetemp;
 	for(Sint32 i = 0; i < NB_OPTIONS; i++)
 		*(tp++) = 0;
-	tecno_gads **liste = gereGadget->listeObjet();
+	tecno_gads **liste = gereGadget->get_sprites_list();
 	bob_volant = liste[(NB_OPTIONS + 2) - 1 - 1];
 
 	//###################################################################
@@ -313,7 +313,7 @@ Sint32 shop_tecno::zeMainLoop()
 void shop_tecno::aff_course()
 {	
 	Sint32 *p = joueurGere->get_course();
- 	tecno_gads **liste = gereGadget->listeObjet();
+ 	tecno_gads **liste = gereGadget->get_sprites_list();
  	Sint32 pos_y = 4 * resolution;
  	for(Sint32 i = 0; i < NB_OPTIONS; i++)
 	{	tecno_gads *gadgt = *(liste++);
@@ -631,7 +631,7 @@ void shop_tecno::achete_gad(Sint32 gadnb)
 	Sint32 *p = joueurGere->get_course();
 	p[bonusachat] = gadnb;
 	sh_tablept[bonusachat] = shop_point;
-	tecno_gads **liste = gereGadget->listeObjet();
+	tecno_gads **liste = gereGadget->get_sprites_list();
 	tecno_gads *gadgt = liste[bonusachat++];
 	gadgt->nouveauGad(gadnb);
 	message_ok();
@@ -777,7 +777,7 @@ void shop_tecno::sh_ballade()
 		{	Sint32 i = cadre_offs;
 			if(i >=0) 
 			{	Sint32 *p = joueurGere->get_course();
-				tecno_gads **liste = gereGadget->listeObjet();
+				tecno_gads **liste = gereGadget->get_sprites_list();
 				courseList = p + i;
 				bobclignot = *(liste + i);
 				get_object = *(sh_tablept + i);

@@ -32,7 +32,7 @@ ze_magneye::ze_magneye()
 	littleInit();
 	max_of_sprites = 3;
 	objects_have_shades = true;
-	BOBtypeNum = BOB_MAGEYE;
+	sprite_type_id = BOB_MAGEYE;
 }
 
 //-----------------------------------------------------------------------------

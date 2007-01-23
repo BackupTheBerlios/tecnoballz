@@ -32,7 +32,7 @@ zexplosion::zexplosion()
 	max_of_sprites = 28;
 	objects_have_shades = false;
 	vFrequency = 0;
-	BOBtypeNum = BOB_EXPLO1;
+	sprite_type_id = BOB_EXPLO1;
 }
 
 //-------------------------------------------------------------------------------

@@ -33,7 +33,7 @@ zeguardian::zeguardian()
 	littleInit();
 	max_of_sprites = 2;
 	objects_have_shades = true; 
-	BOBtypeNum = BOB_INTE1A;
+	sprite_type_id = BOB_INTE1A;
 	offset_ptr = 0;
 	scrollTemp = 0;
 }

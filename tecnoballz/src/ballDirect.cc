@@ -32,7 +32,7 @@ ballDirect::ballDirect()
 	littleInit();
 	max_of_sprites = 4;
 	objects_have_shades = false;
-	BOBtypeNum = BOB_DIRECT;
+	sprite_type_id = BOB_DIRECT;
 	numBumpers = 0;
 }
 

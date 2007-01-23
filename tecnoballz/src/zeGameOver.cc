@@ -35,7 +35,7 @@ zeGameOver::zeGameOver()
 	max_of_sprites = 8;				//there are 8 letters 
 	objects_have_shades = true;				//shadow enable
 	max_of_sprites = 8;
-	BOBtypeNum = BOB_GAMEOV;
+	sprite_type_id = BOB_GAMEOV;
 	go_deplace = 0;
 	ptGfxFonte = (GIF_bitMap*)NULL;
 	ptScorOver = (score_over*)NULL;

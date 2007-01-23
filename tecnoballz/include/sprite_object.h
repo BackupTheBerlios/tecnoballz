@@ -4,11 +4,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.9 2007/01/23 14:08:51 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.10 2007/01/23 14:26:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -196,7 +196,8 @@ protected:
   Sint32 minimum_X1;            // abscisse minimum
   Sint32 maximum_Y1;            // ordonnee maximum
   Sint32 minimum_Y1;            // ordonnee minimum
-  Sint32 BOBtypeNum;            // numero type du BOB 
+  /** Type ID of the sprite */
+  Sint32 sprite_type_id;
   Sint32 affligFrSv;            // premiere ligne a afficher (si afflignesF=1)
   Sint32 affligLaSv;            // derniere ligne a afficher (si afflignesF=1)
   Sint32 memoryflag;            // This object reserved some memory 
@@ -223,7 +224,7 @@ public:
     sprite_object ();
    ~sprite_object ();
   void BOBprepare ();
-  void BOBdestroy ();
+  void release_sprite ();
   void enable ();
   void disable ();
   Sint32 is_enable ();

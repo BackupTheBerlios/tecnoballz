@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.14 2007/01/23 14:08:51 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.15 2007/01/23 14:26:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -310,7 +310,7 @@ Sint32 gard_tecno::zeMainLoop()
 		{	joueurGere = joueurData::nextplayer(
 				joueurGere,
 				&end_return,
-				1, ptguardian->totalObjet() + 1);
+				1, ptguardian->get_max_of_sprites() + 1);
 		}
 	}
 	else
@@ -376,7 +376,7 @@ Sint32 gard_tecno::zeMainLoop()
 					(	joueurGere, 
 						&end_return,
 						1,
-						ptguardian->totalObjet() + 1);
+						ptguardian->get_max_of_sprites() + 1);
 				}
 			}
 		}

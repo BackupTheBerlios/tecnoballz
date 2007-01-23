@@ -31,7 +31,7 @@ printmoney::printmoney()
 	max_of_sprites = 8;
 	objects_have_shades = false;
 	y_position = YINVERSEUR * resolution;
-	BOBtypeNum = BOB_MONEY0;
+	sprite_type_id = BOB_MONEY0;
 	money_posy = y_position;
 }
 

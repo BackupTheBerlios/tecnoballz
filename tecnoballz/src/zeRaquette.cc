@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.14 2007/01/23 14:08:52 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.15 2007/01/23 14:26:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ zeRaquette::zeRaquette()
 	tec_robot0 = NULL;
 	max_of_sprites = 5;
 	objects_have_shades = true;
-	BOBtypeNum = BOB_BUMPHR;
+	sprite_type_id = BOB_BUMPHR;
 	raket_team = 0;
 	raketLarge = 64 * resolution;
 	rak_invers = 0;
@@ -81,7 +81,7 @@ zeRaquette::zeRaquette(Sint32 nBob)
 	max_of_sprites = 1;
 	objects_have_shades = true;
 	fTableByte = 0;
-	BOBtypeNum = BOB_BUMPER;
+	sprite_type_id = BOB_BUMPER;
 	raket_team = 0;
 	raketLarge = 32* resolution;
 	rak_invers = 0;
@@ -141,7 +141,7 @@ Sint32 zeRaquette::init_liste()
 	//###################################################################
     if(max_of_sprites == 1)
     {	tecBumper1->set_object_pos(0);
-		error_init(tecBumper1->create_sprite(BOBtypeNum, image_BOBs, 1, 0));
+		error_init(tecBumper1->create_sprite(sprite_type_id, image_BOBs, 1, 0));
 		if(erreur_num) return erreur_num;
 		sprites->add(tecBumper1);
 		sprites_list[0] = tecBumper1;
@@ -571,8 +571,8 @@ void zeRaquette::bp_deplac2()
 void zeRaquette::move_robot()
 { 
 	if(tec_robot0->bump_actif)
-	{	Sint32 t = ptNewBalls->totalObjet();
-		sprite_ball **aList = ptNewBalls->listeObjet();
+	{	Sint32 t = ptNewBalls->get_max_of_sprites();
+		sprite_ball **aList = ptNewBalls->get_sprites_list();
 		Sint32 pos_y = 0 ;
 		sprite_ball *balle = 0x0;
 		for(Sint32 i = 0; i < t; i++)

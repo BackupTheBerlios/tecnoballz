@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.10 2007/01/23 14:08:51 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.11 2007/01/23 14:26:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,14 +44,14 @@ sprite_object::sprite_object ()
  */
 sprite_object::~sprite_object ()
 {
-  BOBdestroy ();
+  release_sprite ();
 }
 
 //-----------------------------------------------------------------------------
 // free memory used
 //-----------------------------------------------------------------------------
 void
-sprite_object::BOBdestroy ()
+sprite_object::release_sprite ()
 {
   if (memoryflag)
     {
@@ -132,7 +132,7 @@ sprite_object::BOBprepare ()
   tabAffich2 = (char *) 0x0;
   tabAffich3 = NULL;
   sprite_has_shadow = 0;
-  BOBtypeNum = 0;
+  sprite_type_id = 0;
   srceNextLn = 0;
   affligFrst = 0;
   affligLast = 1;
@@ -190,7 +190,7 @@ sprite_object & sprite_object::operator= (const sprite_object & sprite)
   tabAffich2 = sprite.tabAffich2;
   tabAffich3 = sprite.tabAffich3;
   sprite_has_shadow = sprite.sprite_has_shadow;
-  BOBtypeNum = sprite.BOBtypeNum;
+  sprite_type_id = sprite.sprite_type_id;
   srceNextLn = sprite.srceNextLn;
   destNextLn = sprite.destNextLn;
   put_method = sprite.put_method;
@@ -241,7 +241,7 @@ sprite_object::duplicaBOB (sprite_object * bobPT)
   bobPT->tabAffich2 = tabAffich2;
   bobPT->tabAffich3 = tabAffich3;
   bobPT->sprite_has_shadow = sprite_has_shadow;
-  bobPT->BOBtypeNum = BOBtypeNum;
+  bobPT->sprite_type_id = sprite_type_id;
   bobPT->srceNextLn = srceNextLn;
   bobPT->destNextLn = destNextLn;
   bobPT->put_method = put_method;
@@ -397,7 +397,7 @@ sprite_object::create_sprite (Sint32 BOBnu, GIF_bitMap * image, bool shadow,
 */
 
   // L'ecran dans lequel le BOB est affiche
-  BOBtypeNum = BOBnu;
+  sprite_type_id = BOBnu;
   initCommun (image, shadow);
   const bb_describ *descr = zelistBOB[BOBnu];
 

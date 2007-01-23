@@ -255,8 +255,8 @@ void tecno_fire::collision1()
 void tecno_fire::collision2()
 {
 	tecno_fire **liste = list_fires;
-	Sint32 t = atomsObjet->totalObjet();
-	tecno_boui **aList = atomsObjet->listeObjet();
+	Sint32 t = atomsObjet->get_max_of_sprites();
+	tecno_boui **aList = atomsObjet->get_sprites_list();
 	for(Sint32 i = 0; i < total_fire; i++)
 	{	tecno_fire *xFire = *(liste++);
 		if(xFire->is_enabled)

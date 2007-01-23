@@ -35,7 +35,7 @@ zeBouiBoui::zeBouiBoui(zeCapsules* pCaps, ze_gadgets* ptGad, zeGemstone* ptGem,
 	littleInit();
 	max_of_sprites = 8;
 	objects_have_shades = true;
-	BOBtypeNum = BOB_ATOMES;
+	sprite_type_id = BOB_ATOMES;
 }
 
 //-----------------------------------------------------------------------------

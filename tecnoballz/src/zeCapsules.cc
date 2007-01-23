@@ -32,7 +32,7 @@ zeCapsules::zeCapsules()
 	littleInit();
 	max_of_sprites = 6;
 	objects_have_shades = true;
-	BOBtypeNum = BOB_MONEYS;
+	sprite_type_id = BOB_MONEYS;
 }
 
 //-----------------------------------------------------------------------------
