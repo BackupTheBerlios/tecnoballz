@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.13 2007/01/23 12:06:00 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.14 2007/01/23 14:08:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -145,7 +145,7 @@ Sint32 zeRaquette::init_liste()
 		if(erreur_num) return erreur_num;
 		sprites->add(tecBumper1);
 		sprites_list[0] = tecBumper1;
-		tecBumper1->coordonnee(keyboard->get_mouse_x(), bumperYbas);
+		tecBumper1->set_coordinates(keyboard->get_mouse_x(), bumperYbas);
 		tecBumper1->colLargeur = raketLarge;	// bumper's width
 		tecBumper1->bumpNumero = 1;
 		tecBumper1->bumperType = 0;
@@ -225,7 +225,7 @@ void zeRaquette::activrobot()
 	tec_robot0->enable();
 	centre = bumperMini + (bumperMaxi  - bumperMini) / 2 -
 				(tec_robot0->colLargeur / 2);
-	tec_robot0->coordonnee(centre, 232 * resolution);
+	tec_robot0->set_coordinates(centre, 232 * resolution);
 	tec_robot0->bump_actif = 1;
 }
 
@@ -252,7 +252,7 @@ void zeRaquette::initBumper(barreScore *score, zeGigaBlit *blitz, zeNewBalls *ba
 	Sint32 centre = (bumperMaxi - bumperMini) / 2 - (raketLarge / 2);
 
 	// bottom bumper
-	tecBumper1->coordonnee(centre, bumperYbas);
+	tecBumper1->set_coordinates(centre, bumperYbas);
 	tecBumper1->colLargeur = raketLarge;	// bumper's width : 8,16,24,32,40,48,56 or 64
 	tecBumper1->bumpNumero = 1;
 	tecBumper1->bumperType = 0;
@@ -275,7 +275,7 @@ void zeRaquette::initBumper(barreScore *score, zeGigaBlit *blitz, zeNewBalls *ba
 	tecBumper1->width_maxi = width_maxi;
 
 	// right bumper
-	tecBumper2->coordonnee(bumperXdro, centre);
+	tecBumper2->set_coordinates(bumperXdro, centre);
 	tecBumper2->colHauteur = raketLarge;
 	tecBumper2->bumpNumero = 2;
 	tecBumper2->bumperType = 1;
@@ -299,7 +299,7 @@ void zeRaquette::initBumper(barreScore *score, zeGigaBlit *blitz, zeNewBalls *ba
 	joueurGere->set_bumpOn(2, tecBumper2->bump_actif);
 
 	// top bumper
-	tecBumper3->coordonnee(centre, bumperYhau);
+	tecBumper3->set_coordinates(centre, bumperYhau);
 	tecBumper3->colLargeur = raketLarge;
 	tecBumper3->bumpNumero = 3;
 	tecBumper3->bumperType = 0;
@@ -324,7 +324,7 @@ void zeRaquette::initBumper(barreScore *score, zeGigaBlit *blitz, zeNewBalls *ba
 
 
 	// Bumper de gauche
-	tecBumper4->coordonnee(bumperXgau, centre);
+	tecBumper4->set_coordinates(bumperXgau, centre);
 	tecBumper4->colHauteur = raketLarge;
 	tecBumper4->bumpNumero = 4;
 	tecBumper4->bumperType = 1;
@@ -349,7 +349,7 @@ void zeRaquette::initBumper(barreScore *score, zeGigaBlit *blitz, zeNewBalls *ba
 
 
 	// Bumper robot du bas
-	tec_robot0->coordonnee(centre, bumperYbas);
+	tec_robot0->set_coordinates(centre, bumperYbas);
 	tec_robot0->colLargeur = width_maxi;	// bumper's width always 128 pixels
 	tec_robot0->bumpNumero = 5;				// bumper robot
 	tec_robot0->bumperType = 0;

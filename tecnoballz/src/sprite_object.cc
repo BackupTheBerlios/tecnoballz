@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.9 2007/01/23 12:06:00 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.10 2007/01/23 14:08:51 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -676,7 +676,7 @@ sprite_object::create_sprite (Sint32 BOBnu, GIF_bitMap * image, bool shadow,
  * @param ycoord the y coordinate in pixels
  */
 void
-sprite_object::coordonnee (Sint32 xcoord, Sint32 ycoord)
+sprite_object::set_coordinates (Sint32 xcoord, Sint32 ycoord)
 {
   x_coord = xcoord;
   y_coord = ycoord;
@@ -702,22 +702,24 @@ sprite_object::set_y_coord (Sint32 ycoord)
   y_coord = ycoord;
 }
 
-//-------------------------------------------------------------------------------
-// deplace le BOB horizontalement
-//-------------------------------------------------------------------------------
+/**
+ * Moving the sprite horizontally 
+ * @param xoffset the horizontal offset of displacement
+ */
 void
-sprite_object::deplace_pX (Sint32 offs)
+sprite_object::move_x (Sint32 xoffset)
 {
-  x_coord += offs;
+  x_coord += xoffset;
 }
 
-//-------------------------------------------------------------------------------
-// deplace le BOB verticalement
-//-------------------------------------------------------------------------------
+/**
+ * Moving the sprite vertically 
+ * @param yoffset the vertical offset of displacement
+ */
 void
-sprite_object::deplace_pY (Sint32 offs)
+sprite_object::move_y (Sint32 yoffset)
 {
-  y_coord += offs;
+  y_coord += yoffset;
 }
 
 /**
@@ -778,17 +780,17 @@ sprite_object::change_GFX (Sint32 index)
     tabAffich3 = BOBtableP3[index];     // adresse table pour "afficheBOB"
 }
 
-//-------------------------------------------------------------------------------
-// restore background under the sprite 
-//-------------------------------------------------------------------------------
+/**
+ * Restore background where sprite was displayed
+ */
 void
-sprite_object::efface_MSK ()
+sprite_object::restore_background_under_sprite ()
 {
-  //###################################################################
-  // if no memory address, then sprite is not displaying
-  //###################################################################
-  if (!adresseECR)
-    return;
+  /* if memory address is null, then sprite is not displaying */
+  if (NULL == adresseECR)
+    {
+      return;
+    }
 
   //###################################################################
   // special sprite, restore line by line (gigablitz)
@@ -936,14 +938,16 @@ sprite_object::litAnimOff ()
   return animOffset;
 }
 
-//-------------------------------------------------------------------------------
-// clear shadow
-//-------------------------------------------------------------------------------
+/**
+ * Restore background where sprite's shadow was displayed
+ */
 void
-sprite_object::efface_SHA ()
+sprite_object::restore_background_under_shadow ()
 {
-  if (adresseEC2)
+  if (NULL == adresseEC2)
     {
+      return;
+    }
 #ifndef BYTES_COPY
       Sint32 *srcPT = (Sint32 *) adresseTA2;
       Sint32 *adres = (Sint32 *) adresseEC2;
@@ -983,7 +987,6 @@ sprite_object::efface_SHA ()
             *(adres++) = *(srcPT++);
         }
 #endif
-    }
 }
 
 /**

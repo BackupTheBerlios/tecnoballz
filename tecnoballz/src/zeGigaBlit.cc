@@ -130,7 +130,7 @@ void zeGigaBlit::initDepart()
 		Sint32 y = tecBumper1->get_y_coord();
 		blitz_posx = x;
 		blitz_colx = x;	//special collision
-		g->coordonnee(x, y);
+		g->set_coordinates(x, y);
 		//bitz_ystop = tecBumper3->get_y_coord() - blitz_haut;
 		bitz_ystop = 8 * resolution - blitz_haut;
 		bitz_maxiy = tecBumper1->get_y_coord();
@@ -203,7 +203,7 @@ void zeGigaBlit::execution1()
 	Sint32 x = (table_cosL[blitz_xsin] * 5 * resolution) >> SINUS_DECA;
 	x = blitz_posx + x;
 	
-	blitzobjet->coordonnee(x, y);
+	blitzobjet->set_coordinates(x, y);
 	if(y >= 0)
 		collision1();
 }
@@ -306,7 +306,7 @@ void zeGigaBlit::execution2()
 		blitz_xsin = (blitz_xsin + 50) & SINUS_MASK;
 		Sint32 x = (table_cosL[blitz_xsin] * 5 * resolution) >> SINUS_DECA;
 		x = blitz_posx + x;
-		blitzobjet->coordonnee(x, y);
+		blitzobjet->set_coordinates(x, y);
 
 
 		//###################################################################
@@ -392,11 +392,11 @@ Sint32 zeGigaBlit::guard_shoot(Sint32 value, Sint32 pos_x, Sint32 pos_y,
 		blitzobjet = g;
 		blitz_haut = g->get_sprite_height();
 		Sint32 bwdth= g->get_sprite_width();
-		g->coordonnee(pos_x, pos_y);
+		g->set_coordinates(pos_x, pos_y);
 		pos_x = pos_x + ((large - bwdth) / 2);
 		if(pos_x < 0) 
 			pos_x = 0;
-		g->coordonnee(pos_x, pos_y);
+		g->set_coordinates(pos_x, pos_y);
 #ifndef SOUNDISOFF
 		audio->play_sound(S_TIR_GARD);
 #endif

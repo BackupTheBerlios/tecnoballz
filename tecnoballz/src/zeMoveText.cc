@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-23
 // fonction	: manage mobiles characters ("LEVEL x COMPLETED")
-// id		: $Id: zeMoveText.cc,v 1.7 2007/01/23 11:00:04 gurumeditation Exp $
+// id		: $Id: zeMoveText.cc,v 1.8 2007/01/23 14:08:52 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -125,7 +125,7 @@ Sint32 zeMoveText::startValue(Sint32 nchar, Sint32 zeRad, Sint32 index,
 	
 	for(Sint32 i = index; i < (nchar + index); i++, xStrt += e, xStop += width)
 	{	tecno_text *chara = sprites_list[i];
-		chara->coordonnee(xStrt, yStrt);
+		chara->set_coordinates(xStrt, yStrt);
 		if(xStrt > xStop)
 			xOffs = -1;
 		else

@@ -230,21 +230,21 @@ Sint32 briqueCote::bobbg_init()
 		error_init(bobwal_top[i]->create_sprite(BOB_BRICKH, image_BOBs, 1));
 		if(erreur_num) return (erreur_num);
 		sprites->add(bobwal_top[i]);
-		bobwal_top[i]->coordonnee(x, BRICOTEHRY * resolution);
+		bobwal_top[i]->set_coordinates(x, BRICOTEHRY * resolution);
 		if(map_duHaut[i]) bobwal_top[i]->enable();
 
 		bobwal_lef[i] = new sprite_object();
 		error_init(bobwal_lef[i]->create_sprite(BOB_BRICKV, image_BOBs, 1));
 		if(erreur_num) return (erreur_num);
 		sprites->add(bobwal_lef[i]);
-		bobwal_lef[i]->coordonnee(BRICOTEGAX * resolution, yg);
+		bobwal_lef[i]->set_coordinates(BRICOTEGAX * resolution, yg);
 		if(map_gauche[i]) bobwal_lef[i]->enable();
 
 		bobwal_rgh[i] = new sprite_object();
 		error_init(bobwal_rgh[i]->create_sprite(BOB_BRICKV, image_BOBs, 1));
 		if(erreur_num) return (erreur_num);
 		sprites->add(bobwal_rgh[i]);
-		bobwal_rgh[i]->coordonnee(BRICOTEDRX * resolution, yd);
+		bobwal_rgh[i]->set_coordinates(BRICOTEDRX * resolution, yd);
 		if(map_droite[i]) bobwal_rgh[i]->enable();
 
 		x += lg;
@@ -472,15 +472,15 @@ void briqueCote::afficheSha()
 	Sint32 ht = bricote_vt->get_sprite_height();
 	for(Uint32 i = 0; i < BRICOTENUM; i++)	//12 bricks per wall
 	{	if(map_duHaut[i])
-		{	bricote_hz->coordonnee(x, BRICOTEHRY * resolution);
+		{	bricote_hz->set_coordinates(x, BRICOTEHRY * resolution);
 			bricote_hz->affich_SHA();
 		}
 		if(map_gauche[i])
-		{	bricote_vt->coordonnee(BRICOTEGAX * resolution, yg);
+		{	bricote_vt->set_coordinates(BRICOTEGAX * resolution, yg);
 			bricote_vt->affich_SHA();
 		}
 		if(map_droite[i])
-		{	bricote_vt->coordonnee(BRICOTEDRX * resolution, yd);
+		{	bricote_vt->set_coordinates(BRICOTEDRX * resolution, yd);
 			bricote_vt->affich_SHA();
 		}
 		x += lg;
@@ -502,15 +502,15 @@ void briqueCote::afficheGfx()
 	Sint32 ht = bricote_vt->get_sprite_height();
 	for(Uint32 i = 0; i < BRICOTENUM; i++)	// 12 bricks aside
 	{	if(map_duHaut[i])
-		{	bricote_hz->coordonnee(x, BRICOTEHRY * resolution);
+		{	bricote_hz->set_coordinates(x, BRICOTEHRY * resolution);
 			bricote_hz->affich_MSK();
 		}
 		if(map_gauche[i])
-		{	bricote_vt->coordonnee(BRICOTEGAX * resolution, yg);
+		{	bricote_vt->set_coordinates(BRICOTEGAX * resolution, yg);
 			bricote_vt->affich_MSK();
 		}
 		if(map_droite[i])
-		{	bricote_vt->coordonnee(BRICOTEDRX * resolution, yd);
+		{	bricote_vt->set_coordinates(BRICOTEDRX * resolution, yd);
 			bricote_vt->affich_MSK();
 		}
 		x += lg;

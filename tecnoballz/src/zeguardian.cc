@@ -130,7 +130,7 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 		if(erreur_num)
 			return (erreur_num);
 		sprites->add(ptBob);
-		ptBob->coordonnee(i * 16 * resolution, 0);
+		ptBob->set_coordinates(i * 16 * resolution, 0);
 		ptBob->enable();
 		ptBob->initRepeat(20);
 	}

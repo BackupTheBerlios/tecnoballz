@@ -4,11 +4,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.8 2007/01/23 12:06:00 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.9 2007/01/23 14:08:51 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -231,7 +231,7 @@ public:
   void set_object_pos (Sint32 num);
   sprite_object & operator= (const sprite_object &sprite);
   void duplicaBOB (sprite_object *);
-  void coordonnee (Sint32 posX, Sint32 posY);
+  void set_coordinates (Sint32 xcoord, Sint32 ycoord);
   Sint32 reservBOBt (Sint32 anima);
   Sint32 create_sprite (Sint32 BOBnu, GIF_bitMap * image, bool shadow,
                      Sint32 ftpix = 0);
@@ -239,19 +239,19 @@ public:
   void initCommun (GIF_bitMap * image, Sint32 ombre);
   void set_x_coord (Sint32 xcoord);
   void set_y_coord (Sint32 ycoord);
-  void deplace_pX (Sint32 offs);
-  void deplace_pY (Sint32 offs);
+  void move_x (Sint32 x_offset);
+  void move_y (Sint32 y_offset);
   bool has_shadow ();
   Sint32 get_x_coord ();
   Sint32 get_y_coord ();
   void change_GFX ();
   void change_GFX (Sint32 index);
   Sint32 litAnimOff ();
-  void efface_MSK ();
+  void restore_background_under_sprite ();
   void efface_lin ();
   void draw ();
   void method_tab ();
-  void efface_SHA ();
+  void restore_background_under_shadow ();
   void afficheSHA ();
   void affich_MSK ();
   void afficheCyc ();

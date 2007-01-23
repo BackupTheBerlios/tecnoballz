@@ -64,13 +64,13 @@ void printmoney::initialise(joueurData *gamer, zeRaquette* raket,
 	// initialize "reverser malus" sprites
 	Sint32 x = 215 * resolution;
 	ptBobRever->new_gadget(GAD_INVERS);
-	ptBobRever->coordonnee(x, money_posy);
+	ptBobRever->set_coordinates(x, money_posy);
 	ptBobRever->tempo_init(5);
 	x += ptBobRever->get_sprite_width();
 	sprite_object **liste = sprites_list + 6; 
 	for (Sint32 i = 0; i < 2 ; i++)
 	{	sprite_object *x_bob = *(liste++);
-		x_bob->coordonnee(x, money_posy);
+		x_bob->set_coordinates(x, money_posy);
 		x += 8 * resolution;
 	}
 }
@@ -96,13 +96,13 @@ void printmoney::init_guard(joueurData *gamer, zeRaquette* raket,
 	// extra life sprites
 	Sint32 x = 264 * resolution;
 	ptBobLifes->new_gadget(GAD_LIFE_P);
-	ptBobLifes->coordonnee(x, money_posy);
+	ptBobLifes->set_coordinates(x, money_posy);
 	ptBobLifes->tempo_init(5);
 	x += ptBobLifes->get_sprite_width();
 	sprite_object **liste = sprites_list + 6; 
 	for (Sint32 i = 0; i < 2 ; i++)
 	{	sprite_object *x_bob = *(liste++);
-		x_bob->coordonnee(x, money_posy);
+		x_bob->set_coordinates(x, money_posy);
 		x += 8 * resolution;
 		x_bob->enable();
 	}
@@ -115,7 +115,7 @@ void printmoney::init_money()
 {
 	// gadget sprite
 	Sint32 x = 24 * resolution;
-	ptBobMoney->coordonnee(x, money_posy);
+	ptBobMoney->set_coordinates(x, money_posy);
 	ptBobMoney->tempo_init(5);
 	ptBobMoney->enable();
 	x += ptBobMoney->get_sprite_width();
@@ -124,7 +124,7 @@ void printmoney::init_money()
 	sprite_object **liste = sprites_list;
 	for (Sint32 i=0; i < 6 ; i++)
 	{	sprite_object *x_bob = *(liste++);
-		x_bob->coordonnee(x, money_posy);
+		x_bob->set_coordinates(x, money_posy);
 		x_bob->enable();
 		x += 8 * resolution;
 	}

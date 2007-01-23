@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.14 2007/01/23 11:00:04 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.15 2007/01/23 14:08:52 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -237,19 +237,19 @@ Sint32 ze_gadgets::gadgetShop()
 	Sint32 y = SGADGET_Y1 * resolution;
 	for(Sint32 i = 0; i < t; i++)
 	{	bonus = *(liste++);
-		bonus->coordonnee(x, y);
+		bonus->set_coordinates(x, y);
 		bonus->disable();
 		y += h;
 	}
 	
 	//initialize bonus sprite object for the drag and drop 
 	bonus = *(liste++);
-	bonus->coordonnee(0, 0);
+	bonus->set_coordinates(0, 0);
 	bonus->disable();
 
 	//initialize bonus sprite object that display indicator   
 	bonus = *liste;
-	bonus->coordonnee(SGADGET_X2 * resolution, SGADGET_Y2 * resolution);
+	bonus->set_coordinates(SGADGET_X2 * resolution, SGADGET_Y2 * resolution);
 	bonus->disable();
 	temoin_gad = bonus;
 	return (erreur_num);

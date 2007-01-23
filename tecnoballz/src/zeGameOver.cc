@@ -95,7 +95,7 @@ void zeGameOver::initialize(Sint32 iswin)
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_object *zebob = sprites_list[i];
 		zebob->enable();
-		zebob->coordonnee(x, y);
+		zebob->set_coordinates(x, y);
 		zebob->change_GFX(i);
 		Sint32 x2 = *(p++);  
 		Sint32 y2 = *(p++);  
@@ -167,7 +167,7 @@ void zeGameOver::deplace_01()
 			zebob->maximum_Y1 = 0;
 		Sint32 x = chrOffsetX + decal + sinus[zebob->maximum_X1] * resolution;
 		Sint32 y = decal + sinus[zebob->maximum_Y1] * resolution;
-		zebob->coordonnee(x, y);
+		zebob->set_coordinates(x, y);
 		hasard_val += y;
 	}
 	if(--go_zetempo <= 0)

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.14 2007/01/23 10:11:22 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.15 2007/01/23 14:08:52 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -150,7 +150,7 @@ Sint32 tableaux_Z::first_init()
 	error_init(BottomWall->create_sprite(BOB_WALLBO, image_BOBs, 0));
 	if(erreur_num) return erreur_num;
 	sprites->add(BottomWall);
-	BottomWall->coordonnee(32 * resolution, 232 * resolution);
+	BottomWall->set_coordinates(32 * resolution, 232 * resolution);
 	//robot bumper
 	error_init(theBumpers->init_robot());
 	if(erreur_num) return erreur_num;

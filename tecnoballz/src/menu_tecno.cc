@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.12 2007/01/23 12:06:00 gurumeditation Exp $
+// id		: $Id: menu_tecno.cc,v 1.13 2007/01/23 14:08:51 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -73,7 +73,7 @@ Sint32 menu_tecno::first_init()
 	if(erreur_num) return (erreur_num);
 	sprites->add(BOBtecLogo);
 	BOBtecLogo->enable();
-	BOBtecLogo->coordonnee(64, 13);
+	BOBtecLogo->set_coordinates(64, 13);
 
 	error_init(BOB_defile->init_chars());
 	if(erreur_num) return (erreur_num);

@@ -58,28 +58,28 @@ Sint32 ejectBalls::initialise()
 	if(erreur_num) return erreur_num;
 	eject1PosX = EJECT_POS1 * resolution;
 	eject1PosY = (EJECT_POS1 * resolution) - ejector_01->get_sprite_height() / 2;
-	ejector_01->coordonnee(eject1PosX, eject1PosY);
+	ejector_01->set_coordinates(eject1PosX, eject1PosY);
 
 	// top-right (2)
 	error_init(ejector_02->create_sprite(BOB_EJECT4, image_BOBs, 1));
 	if(erreur_num) return erreur_num;
 	eject2PosX = EJECT_POS2 * resolution;
 	eject2PosY = (EJECT_POS1 * resolution) - ejector_02->get_sprite_height() / 2;
-	ejector_02->coordonnee(eject2PosX, eject2PosY);
+	ejector_02->set_coordinates(eject2PosX, eject2PosY);
 
 	// bottom-left (3)
 	error_init(ejector_03->create_sprite(BOB_EJECT2, image_BOBs, 1));
 	if(erreur_num) return erreur_num;
 	eject3PosX = EJECT_POS1 * resolution;
 	eject3PosY = (EJECT_POS2 * resolution) - ejector_03->get_sprite_height() / 2;
-	ejector_03->coordonnee(eject3PosX, eject3PosY);
+	ejector_03->set_coordinates(eject3PosX, eject3PosY);
 
 	// bottom-right(4)
 	error_init(ejector_04->create_sprite(BOB_EJECT3, image_BOBs, 1));
 	eject4PosX = EJECT_POS2 * resolution;
 	eject4PosY = (EJECT_POS2 * resolution) - ejector_04->get_sprite_height() / 2;	
 	if(erreur_num) return erreur_num;
-	ejector_04->coordonnee(eject4PosX, eject4PosY);
+	ejector_04->set_coordinates(eject4PosX, eject4PosY);
 	
 	// bob_ground = 1: ejectors are managed like sprites  
 	if(bob_ground)

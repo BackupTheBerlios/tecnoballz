@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.12 2007/01/23 12:06:00 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.13 2007/01/23 14:08:51 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -317,7 +317,7 @@ void shop_tecno::aff_course()
  	Sint32 pos_y = 4 * resolution;
  	for(Sint32 i = 0; i < NB_OPTIONS; i++)
 	{	tecno_gads *gadgt = *(liste++);
-		gadgt->coordonnee(294 * resolution, pos_y); 
+		gadgt->set_coordinates(294 * resolution, pos_y); 
 		pos_y = pos_y + 9 * resolution;
 		Sint32 o = *(p++);
 		gadgt->nouveauGad(o);
@@ -372,7 +372,7 @@ Sint32 shop_tecno::led_moving(Sint32 index)
 		
 		// set LED indicator
 		BOB_allume->enable();
-		BOB_allume->coordonnee(curseur_x1, curseur_y1);
+		BOB_allume->set_coordinates(curseur_x1, curseur_y1);
 		if(joueurGere->get_Bprice())
 			i = 1;
 		else
@@ -684,7 +684,7 @@ void shop_tecno::sh_ballade()
 	if(get_object >= 0)	//pointer to the table "case_price" (-1 = no drag object)
 	{	if(keyboard->is_left_button())
 		{	bob_volant->enable();
-			bob_volant->coordonnee(objetMouse->get_x_coord(), objetMouse->get_y_coord());
+			bob_volant->set_coordinates(objetMouse->get_x_coord(), objetMouse->get_y_coord());
 			if(bobclignot->is_enabled)
 				bobclignot->is_enabled = 0;
 			else

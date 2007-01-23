@@ -3,11 +3,11 @@
  * @brief Call the drawing methods of all sprites
  * @date 2007-01-16
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: list_sprites.cc,v 1.2 2007/01/23 12:06:00 gurumeditation Exp $
+ * $Id: list_sprites.cc,v 1.3 2007/01/23 14:08:51 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -155,8 +155,8 @@ list_sprites::clear ()
   for (Sint32 i = 0; i < num_of_shapes; i++)
     {
       sprite_object *sprite = shapes[i];
-      sprite->efface_SHA ();
-      sprite->efface_MSK ();
+      sprite->restore_background_under_shadow ();
+      sprite->restore_background_under_sprite ();
     }
 }
 
