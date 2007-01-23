@@ -72,6 +72,6 @@ void mousePoint::bouge_test()
 	deplace_pX(offsX);
 	deplace_pY(offsY);
 	coordonnee(offsX, offsY);
-	out_screen();
+	clip_coordinates();
 	animRepete();
 }

@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.7 2007/01/23 11:00:04 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.8 2007/01/23 11:45:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -725,9 +725,10 @@ sprite_object::shadow_BOB ()
   return flagShadow;
 }
 
-//-------------------------------------------------------------------------------
-// retourne l'abscisse du BOB 
-//-------------------------------------------------------------------------------
+/**
+ * Get x coordinate
+ * @return x coordinate of the sprite
+ */
 Sint32
 sprite_object::retournePX ()
 {
@@ -1646,24 +1647,32 @@ sprite_object::new_offset (Sint32 numer)
   change_GFX (numer);
 }
 
-//-------------------------------------------------------------------------------
-// check if sprite is out the screen
-//-------------------------------------------------------------------------------
+/**
+ * Clip coordinates of the sprite into offscreen coordinates
+ */
 void
-sprite_object::out_screen ()
+sprite_object::clip_coordinates ()
 {
   if (position_x < 0)
-    position_x = 0;
+    {
+      position_x = 0;
+    }
   else if (position_x > screen_width - sprite_width)
-    position_x = screen_width - sprite_width;
+    {
+      position_x = screen_width - sprite_width;
+    }
   if (position_y < 0)
-    position_y = 0;
+    {
+      position_y = 0;
+    }
   else if (position_y > ecranHaute - sprite_height)
-    position_y = ecranHaute - sprite_height;
+    {
+      position_y = ecranHaute - sprite_height;
+    }
 }
 
 /**
- * Clip x coordinate of the sprite to the offscreen
+ * Clip x coordinate of the sprite into offscreen x coordinates
  */
 void
 sprite_object::clip_x_coordinate ()

@@ -4,11 +4,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.6 2007/01/23 11:00:04 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.7 2007/01/23 11:45:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -270,7 +270,7 @@ public:
   Sint32 animUnique ();
   void animRepete ();
   void new_offset (Sint32 nume);
-  void out_screen ();
+  void clip_coordinates ();
   void clip_x_coordinate ();
   Uint32 get_sprite_width ();
   Uint32 get_sprite_height ();

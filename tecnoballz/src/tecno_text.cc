@@ -81,5 +81,5 @@ void tecno_text::moveCaract()
 		if(position_x != posiX_stop)
 			position_x += xIncrement;
 	}
-	out_screen();
+	clip_coordinates();
 }
