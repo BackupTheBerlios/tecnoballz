@@ -5,7 +5,7 @@
 // created	: 2004-04-20
 // updates	: 2005-01-15
 // fonctions	: manage ressources
-// id		: $Id: ressources.cc,v 1.8 2007/01/16 14:37:34 gurumeditation Exp $
+// id		: $Id: ressources.cc,v 1.9 2007/01/24 11:52:25 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
 #include "../include/ressources.h"
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 #include "../config.h"
 
 #ifndef DATADIR
@@ -329,7 +329,7 @@ char *ressources::locateFile(const char *const name)
 Sint32 ressources::loadSprite(Sint32 ident)
 {
 	freeSprite();
-	image_BOBs = new GIF_bitMap();
+	image_BOBs = new bitmap_data();
 	Sint32 error = image_BOBs->decompacte(ident);
 	if(error) return error;
 	image_BOBs->palette_go();
@@ -343,7 +343,7 @@ void ressources::freeSprite()
 {
 	if(image_BOBs)
 		delete image_BOBs;
-	image_BOBs = (GIF_bitMap*)NULL;
+	image_BOBs = (bitmap_data*)NULL;
 }
 
 

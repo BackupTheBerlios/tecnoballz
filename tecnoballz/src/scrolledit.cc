@@ -46,7 +46,7 @@ scrolledit::scrolledit()
 	box_colour = 0;
 	
 	pBrushTile = (Uint16*) NULL;
-	pBrush_bob = (GIF_bitMap*) NULL;
+	pBrush_bob = (bitmap_data*) NULL;
 	
 	flag_press = 0;
 	flagPress2 = 0;
@@ -347,7 +347,7 @@ void scrolledit::select_box()
 		pt_select0->box_pos_y1 &= tile_mask1;
 		if(pBrush_bob)
 		{	delete pBrush_bob;
-			pBrush_bob = (GIF_bitMap*) NULL;
+			pBrush_bob = (bitmap_data*) NULL;
 		}
 	}
 
@@ -550,7 +550,7 @@ void scrolledit::brushAlloc()
 {
 	if(pBrush_bob)
 		delete pBrush_bob;
-	pBrush_bob = new GIF_bitMap();
+	pBrush_bob = new bitmap_data();
 	pBrush_bob->GFXnouveau(pt_select0->box_widthT * tile_width,
 		pt_select0->box_height * tile_width, 1);
 

@@ -26,7 +26,7 @@
 class print_text;
 //...............................................................................
 #include "../include/handler_display.h"
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 #include "../include/mentatCode.h"
 #include "../include/sprite_object.h"
 //...............................................................................
@@ -36,7 +36,7 @@ class print_text:public virtual mentatCode
 		static char			ascii2code[128];
 		Sint32				off_desti1;	// modulo destination affichage ecran
 		Sint32				off_source;	// modulo source page graphique
-		GIF_bitMap*			GFX_fontes;
+		bitmap_data*			GFX_fontes;
 		char*				fontes_adr;
 		char*				caract_adr;
 		Uint32				charHeight;	//height of chars in pixels

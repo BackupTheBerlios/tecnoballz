@@ -27,7 +27,7 @@ class score_over;
 //...............................................................................
 #include "../include/print_text.h"
 #include "../include/sprite_object.h"
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 //...............................................................................
 
 class score_over:public virtual print_text, public virtual sprite_object
@@ -41,7 +41,7 @@ class score_over:public virtual print_text, public virtual sprite_object
 		Sint32				width_font;			//fonte's width font 8 or 16
 		Sint32				heightfont;			//fonte's height
 		Sint32				space2next;			//number of lines to next fonte 9 or 18
-		GIF_bitMap*			graphTexte;
+		bitmap_data*			graphTexte;
 		Sint32				run_offset;
 		Sint32				max_offset;
 	

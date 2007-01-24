@@ -26,7 +26,7 @@
 class lastScroll;
 //...............................................................................
 #include "../include/handler_display.h"
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 #include "../include/mentatCode.h"
 #include "../include/scrolledit.h"
 //...............................................................................
@@ -62,8 +62,7 @@ class lastScroll:public virtual mentatCode
 		Sint32					largeEcran;
 		Uint16*					carteFirst;	// table des codes des motifs
 		Sint32					y_coord;
-		Sint32					gfxLargeur;
-		GIF_bitMap*				gfx_bitMap;
+		bitmap_data*				gfx_bitMap;
 		Sint32					dalleTotal;	//number total of maps
 		char*					bitmap_adr;
 		
@@ -72,7 +71,7 @@ class lastScroll:public virtual mentatCode
 	public:
 							lastScroll();
 							~lastScroll();
-		GIF_bitMap*			getBitMap();
+		bitmap_data*			getBitMap();
 		Sint32				initialise(Uint32 PalNu = 0, Uint32 edmap = 0);
 		Sint32				tile_width();
 		Sint32				returnPosy();

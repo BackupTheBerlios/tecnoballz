@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.11 2007/01/23 17:02:05 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.12 2007/01/24 11:52:25 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -34,7 +34,7 @@ print_menu::print_menu()
 {
 	clear_sprite_members();
 	numeroMenu = 0;
-	graphTexte = (GIF_bitMap*)NULL;
+	graphTexte = (bitmap_data*)NULL;
 	yPressLeft = -10240;
 	yPressRigh = -10240;
 	width_font = 8 * resolution;
@@ -61,8 +61,8 @@ print_menu::~print_menu()
 		delete graphTexte;
 	if(GFX_fontes)
 		delete GFX_fontes;
-	GFX_fontes = (GIF_bitMap *)NULL;
-	graphTexte = (GIF_bitMap *)NULL;
+	GFX_fontes = (bitmap_data *)NULL;
+	graphTexte = (bitmap_data *)NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -77,7 +77,7 @@ Sint32 print_menu::first_init()
 	//###################################################################
 	// allocate 512 * 323 pixels buffer for text menu 
 	//###################################################################
-	graphTexte = new GIF_bitMap();
+	graphTexte = new bitmap_data();
 	error_init(graphTexte->GFXnouveau(MENU_LARGE * width_font,
 		MENU_HAUTE * space2next , 1));
 	if(erreur_num) return (erreur_num);

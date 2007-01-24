@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.15 2007/01/23 20:51:30 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.16 2007/01/24 11:52:25 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -189,7 +189,7 @@ Sint32 shop_tecno::first_init()
 	//###################################################################
 	// load bitmap background of the shop
 	//###################################################################
-	GIF_bitMap *gfxPT = new GIF_bitMap();
+	bitmap_data *gfxPT = new bitmap_data();
 	error_init(gfxPT->decompacte(ressources::RESNEWSHOP));
 	if(erreur_num) return erreur_num;
 	gfxPT->copyTampon();

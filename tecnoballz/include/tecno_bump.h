@@ -28,7 +28,7 @@ class tecno_bump;
 #include "../include/sprite_object.h"
 #include "../include/sprite_ball.h"
 #include "../include/zeFireBump.h"
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 #include "../include/tecno_miss.h"
 #include "../include/zeGigaBlit.h"
 //...............................................................................

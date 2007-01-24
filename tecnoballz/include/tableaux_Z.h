@@ -28,7 +28,7 @@ class tableaux_Z;
 #include "../include/handler_display.h"
 #include "../include/handler_audio.h"
 #include "../include/sprite_object.h"
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 #include "../include/list_sprites.h"
 #include "../include/handler_memory.h"
 #include "../include/objects_list.h"

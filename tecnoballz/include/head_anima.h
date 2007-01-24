@@ -25,7 +25,7 @@
 class head_anima;
 //.......................................................................
 #include "../include/handler_display.h"
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 #include "../include/mentatCode.h"
 //.......................................................................
 class head_anima:public virtual mentatCode
@@ -36,7 +36,7 @@ class head_anima:public virtual mentatCode
 		char*				adr_source;	//graphic page memory address
 		char*				adr_destin;	//buffer memory address
 		Sint32				la_hauteur;	//height of the graphic page 
-		GIF_bitMap*			headbitmap;
+		bitmap_data*			headbitmap;
 		Sint32				head_count;	//temporization counter
 		Sint32				head_reque;	//animation requested 
 		Sint32				head_runni;	//current animation 

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-10
 // fonction	: display chars
-// id		: $Id: print_text.cc,v 1.7 2007/01/23 17:02:05 gurumeditation Exp $
+// id		: $Id: print_text.cc,v 1.8 2007/01/24 11:52:25 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -47,7 +47,7 @@
 void print_text::initial_me()
 {
 	mentatInit();
-	GFX_fontes = (GIF_bitMap *) NULL;
+	GFX_fontes = (bitmap_data *) NULL;
 	off_source = 0;
 	off_desti1 = 0;
 }
@@ -59,7 +59,7 @@ void print_text::destroy_me()
 {
 	if(GFX_fontes)
 		delete GFX_fontes;
-	GFX_fontes = (GIF_bitMap *) NULL;
+	GFX_fontes = (bitmap_data *) NULL;
 	mentatKill();
 }
 
@@ -85,7 +85,7 @@ Uint32 print_text::getCharHgt()
 //------------------------------------------------------------------------------
 Sint32 print_text::init_print(Sint32 ident)
 {
-	GFX_fontes = new GIF_bitMap();
+	GFX_fontes = new bitmap_data();
 	error_init(GFX_fontes->decompacte(ident));
 	if(erreur_num)
 		return (erreur_num);
@@ -333,7 +333,7 @@ void print_text::bufferAff2(Sint32 x, Sint32 y, char *chain, Sint32 total)
 sprite_object*  print_text::string2bob(const char* ptStr)
 {
 	Sint32 numch = strlen(ptStr);
-	GIF_bitMap* pBmap = new GIF_bitMap();
+	bitmap_data* pBmap = new bitmap_data();
 	error_init(pBmap->GFXnouveau(numch * charHeight, charHeight, 1));
 	if(erreur_num) return NULL;
 	Sint32 *basPT = (Sint32 *)caract_adr;

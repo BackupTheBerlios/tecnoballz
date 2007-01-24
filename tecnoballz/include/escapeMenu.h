@@ -35,7 +35,7 @@ class escapeMenu:public virtual print_text, public virtual sprite_object
 		static const Sint32 YCOORDNULL = -10240;
 	
 	private:
-		GIF_bitMap*			graphTexte;
+		bitmap_data*			graphTexte;
 		Sint32				nb_columns;
 		Sint32				nb_ofLines;
 		Sint32				space2next;
@@ -55,7 +55,7 @@ class escapeMenu:public virtual print_text, public virtual sprite_object
 					escapeMenu();
 					~escapeMenu();
 	
-		Sint32		first_init(GIF_bitMap *image, Sint32 nmenu, Sint32 large,
+		Sint32		first_init(bitmap_data *image, Sint32 nmenu, Sint32 large,
 							Sint32 resto = 1, Sint32 palet = 0);
 		Sint32		execution1();
 	

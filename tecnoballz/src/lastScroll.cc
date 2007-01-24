@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-07
 // fonction	: handle of the scrolling background (menu and gards levels)
-// id		: $Id: lastScroll.cc,v 1.6 2007/01/23 12:06:00 gurumeditation Exp $
+// id		: $Id: lastScroll.cc,v 1.7 2007/01/24 11:52:25 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -32,7 +32,7 @@ lastScroll::lastScroll()
 {
 	mentatInit();
 	carteFirst = (Uint16 *) NULL;
-	gfx_bitMap = (GIF_bitMap *) NULL;
+	gfx_bitMap = (bitmap_data *) NULL;
 	mapAddress = (char **) NULL;
 	motiflarge = 16 * resolution;
 	motifhaute = 16 * resolution;
@@ -49,7 +49,7 @@ lastScroll::~lastScroll()
 		memory->release((char *)carteFirst);
 	if(mapAddress)
 		memory->release((char *)mapAddress);
-	gfx_bitMap = (GIF_bitMap*) NULL;
+	gfx_bitMap = (bitmap_data*) NULL;
 	carteFirst = (Uint16 *) NULL;
 	mapAddress = (char **) NULL;
 	mentatKill();
@@ -58,7 +58,7 @@ lastScroll::~lastScroll()
 //-----------------------------------------------------------------------------
 // return bitmap object
 //-----------------------------------------------------------------------------
-GIF_bitMap*	lastScroll::getBitMap()
+bitmap_data*	lastScroll::getBitMap()
 {	return gfx_bitMap;
 }
 
@@ -74,7 +74,7 @@ Sint32 lastScroll::initialise(Uint32 PalNu, Uint32 edmap)
 	//###################################################################
 	// load the page of graphics maps im memory
 	//###################################################################
-	gfx_bitMap = new GIF_bitMap();
+	gfx_bitMap = new bitmap_data();
 	error_init(gfx_bitMap->decompacte(ressources::RESMAPEDIT));
 	if(erreur_num)
 		return (erreur_num);
@@ -103,7 +103,6 @@ Sint32 lastScroll::initialise(Uint32 PalNu, Uint32 edmap)
 	destinMod2 = (motifhaute * largeEcran) - motiflarge;
 	destinMod3 = (motifhaute * largeEcran) - (motiflarge * largeMotif);
 	source_mod = gfx_bitMap->GFX_nextLn();
-	gfxLargeur = gfx_bitMap->GFXlargeur();
 	y_coord = 0;
 
 	//###################################################################
@@ -442,7 +441,7 @@ void lastScroll::display640()
 Sint32 lastScroll::initMapAdr()
 {
 	Sint32 error = 0;
-	GIF_bitMap *gfxPT = gfx_bitMap;
+	bitmap_data *gfxPT = gfx_bitMap;
 	Sint32 l = gfxPT->GFXlargeur();	//320 or 640 pixels width
 	Sint32 h = gfxPT->GFXhauteur();	//624 or 1248 lines height
 	dalleTotal = (l / motiflarge) * (h / motifhaute);	//780 maps

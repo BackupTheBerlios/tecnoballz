@@ -28,8 +28,8 @@
 //------------------------------------------------------------------------------
 zeMiniMess::zeMiniMess()
 {
-	minifontes = (GIF_bitMap *)NULL;
-	messa_fond = (GIF_bitMap *)NULL;
+	minifontes = (bitmap_data *)NULL;
+	messa_fond = (bitmap_data *)NULL;
 	mess_pause = 0;
 	mentatInit();
 }
@@ -41,11 +41,11 @@ zeMiniMess::~zeMiniMess()
 {
 	if(minifontes)
 	{	delete minifontes;
-		minifontes = (GIF_bitMap *)NULL;
+		minifontes = (bitmap_data *)NULL;
 	}
 	if(messa_fond)
 	{	delete messa_fond;
-		messa_fond = (GIF_bitMap *)NULL;
+		messa_fond = (bitmap_data *)NULL;
 	}
 	mentatKill();
 }
@@ -56,7 +56,7 @@ zeMiniMess::~zeMiniMess()
 Sint32 zeMiniMess::intialise1()
 {
 	if(!minifontes)
-	{	minifontes = new GIF_bitMap();
+	{	minifontes = new bitmap_data();
 		error_init(minifontes->decompacte(ressources::RESFONTMES));
 		if(erreur_num)
 			return (erreur_num);
@@ -74,7 +74,7 @@ Sint32 zeMiniMess::intialise1()
 	}
 
 	if(!messa_fond)
-	{	messa_fond = new GIF_bitMap();
+	{	messa_fond = new bitmap_data();
 		messa_fond->GFXnouveau(fonteslarg, ft_hauteur, 1);
 		pt_mesfond = messa_fond->GFXadresse();
 	}

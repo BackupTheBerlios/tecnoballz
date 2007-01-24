@@ -26,13 +26,13 @@
 class zeMiniMess;
 #include "../include/handler_display.h"
 #include "../include/mentatCode.h"
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 //.............................................................................
 class zeMiniMess:public virtual mentatCode
 {
 	private:
-		GIF_bitMap*			minifontes;
-		GIF_bitMap*			messa_fond;
+		bitmap_data*			minifontes;
+		bitmap_data*			messa_fond;
 		static const Sint32	MESSAGENUMB = 35;
 		static const Sint32	MESSAGEPOSX = 96;
 		static const Sint32	MESSAGEPOSY = 37;

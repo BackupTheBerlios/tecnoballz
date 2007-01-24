@@ -32,7 +32,7 @@
 score_over::score_over()
 {
 	clear_sprite_members();
-	graphTexte = (GIF_bitMap*)NULL;
+	graphTexte = (bitmap_data*)NULL;
 	width_font = 8 * resolution;
 	heightfont = 8 * resolution;
 	if(resolution == 2)
@@ -52,8 +52,8 @@ score_over::~score_over()
 		delete graphTexte;
 	if(GFX_fontes)
 		delete GFX_fontes;
-	GFX_fontes = (GIF_bitMap *)NULL;
-	graphTexte = (GIF_bitMap *)NULL;
+	GFX_fontes = (bitmap_data *)NULL;
+	graphTexte = (bitmap_data *)NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -68,7 +68,7 @@ Sint32 score_over::first_init(Sint32 offzt)
 	//###################################################################
 	// allocate 512 * 323 pixels buffer for text menu 
 	//###################################################################
-	graphTexte = new GIF_bitMap();
+	graphTexte = new bitmap_data();
 	error_init(graphTexte->GFXnouveau(TEXT_LARGE * width_font,
 		TEXT_HAUTE * space2next , 1));
 	if(erreur_num) return (erreur_num);

@@ -61,7 +61,7 @@ typedef struct
 brickClear;
 //...............................................................................
 #include "../include/tecno_bump.h"
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 #include "../include/barreScore.h"
 #include "../include/zeCapsules.h"
 #include "../include/ze_gadgets.h"
@@ -103,8 +103,8 @@ class lesBriques:public objects_list < sprite_object >
 		static const Sint32	BRKYOFFSET = 8;			//y-offset between 2 bricks 
 		
 	private:
-		GIF_bitMap*			GFXbriques;	// les 10 jeux de briques decompactes
-		GIF_bitMap*			GFX_brique;	//set of current bricks
+		bitmap_data*			GFXbriques;	// les 10 jeux de briques decompactes
+		bitmap_data*			GFX_brique;	//set of current bricks
 		barreScore*			barreObjet;
 		zeCapsules*			caps_objet;
 		ze_gadgets*			gads_objet;

@@ -30,7 +30,7 @@
 //-----------------------------------------------------------------------------
 barreScore::barreScore()
 { 
-	GFX_Sbarre = (GIF_bitMap*)NULL;
+	GFX_Sbarre = (bitmap_data*)NULL;
 	initial_me();
 	temoinhaut = TEMOINHAUT * resolution;
 	blitzcount = temoinhaut;
@@ -45,7 +45,7 @@ barreScore::~barreScore()
 { 
 	if(GFX_Sbarre)
 	{	delete GFX_Sbarre;
-		GFX_Sbarre = (GIF_bitMap*)NULL;
+		GFX_Sbarre = (bitmap_data*)NULL;
 	}
 	destroy_me();
 }
@@ -76,7 +76,7 @@ Sint32 barreScore::first_init(joueurData * gamer, zeGigaBlit *gblit, zeNewBalls 
 //-------------------------------------------------------------------------------
 Sint32 barreScore::affiche_me()
 {
-	GFX_Sbarre = new GIF_bitMap();
+	GFX_Sbarre = new bitmap_data();
 	error_init(GFX_Sbarre->decompacte(ressources::RESBASCORE));
 	if(erreur_num)
 		return (erreur_num);
@@ -101,7 +101,7 @@ Sint32 barreScore::affiche_me()
 	
 	barreTemoin();
 	delete GFX_Sbarre;
-	GFX_Sbarre = (GIF_bitMap*)NULL;
+	GFX_Sbarre = (bitmap_data*)NULL;
 	return erreur_num;
 }
 

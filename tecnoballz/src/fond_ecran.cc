@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-07-17
 // fonctions	: display background (bricks levels)
-// Id		: $Id: fond_ecran.cc,v 1.8 2007/01/18 17:09:53 gurumeditation Exp $
+// Id		: $Id: fond_ecran.cc,v 1.9 2007/01/24 11:52:25 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -21,7 +21,7 @@
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 #include "../include/handler_display.h"
 #include "../include/fond_ecran.h"
 #include "../include/handler_keyboard.h"
@@ -53,7 +53,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 {
 	if(is_verbose)
 		printf("fond_ecran::instalFond() nbkdg = %i\n", nbkdg);
-	GIF_bitMap *fonds = new GIF_bitMap();
+	bitmap_data *fonds = new bitmap_data();
 	Sint32 large = 0;
 	Sint32 haute = 0;
 	Sint32 *t_pos;

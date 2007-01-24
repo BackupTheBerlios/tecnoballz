@@ -4,11 +4,11 @@
  * @date 2007-01-22
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.3 2007/01/23 14:26:07 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.4 2007/01/24 11:52:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ template < class X > void objects_list < X >::set_max_of_sprites (Sint32 maxof)
  */
 template < class X > Sint32 objects_list < X >::init_liste ()
 {
-  GIF_bitMap *image = image_BOBs;
+  bitmap_data *image = image_BOBs;
   if (max_of_sprites <= 0)
     {
       return erreur_num;

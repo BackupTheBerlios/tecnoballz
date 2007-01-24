@@ -4,7 +4,7 @@
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// id		: $Id: mentatCode.cc,v 1.17 2007/01/19 20:35:40 gurumeditation Exp $
+// id		: $Id: mentatCode.cc,v 1.18 2007/01/24 11:52:25 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -30,7 +30,7 @@
 #include "../include/shop_tecno.h"
 #include "../include/gard_tecno.h"
 #include "../include/menu_tecno.h"
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 #include "../include/handler_audio.h"
 #include "../include/level_data.h"
 #include "../include/ressources.h"
@@ -65,7 +65,7 @@ menu_tecno*			mentatCode::menGestion = NULL;	//menu handle
 // 1:bricks level / 2:shop / 3:guards level / 4:main menu / 5:scrolling editor
 Sint32				mentatCode::super_jump = 1;
 Sint32				mentatCode::super_exit = 0;
-GIF_bitMap*			mentatCode::image_BOBs = 0;
+bitmap_data*			mentatCode::image_BOBs = 0;
 Uint32				mentatCode::cheat_flag = 0;
 Uint32				mentatCode::birth_flag = 0;	//all name are "040670"
 Uint32				mentatCode::double_mem = 1;	//2=double all allocations

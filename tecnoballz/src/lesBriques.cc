@@ -40,7 +40,7 @@ lesBriques::lesBriques()
 	brique_pnt = (brickClear *)NULL;
 	brikTampon = (char *)NULL;
 	mega_table = (brickInfos *)NULL;
-	GFX_brique = (GIF_bitMap *)NULL;
+	GFX_brique = (bitmap_data *)NULL;
 	briqueSave = 0;
 	brique_clr = 0;
 	less_brick = 0;
@@ -173,7 +173,7 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 	//###################################################################
 	// select one of 10 sets of bricks
 	//###################################################################
-	GFXbriques = new GIF_bitMap();
+	GFXbriques = new bitmap_data();
 	error_init(GFXbriques->decompacte(ressources::RESZEBRICK));
 	if(erreur_num)
 		return (erreur_num);

@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.13 2007/01/23 20:55:38 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.14 2007/01/24 11:52:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #define __SPRITE_OBJECT__
 class sprite_object;
 #include "../include/handler_display.h"
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 #include "../include/handler_memory.h"
 #include "../include/mentatCode.h"
 #include "../include/print_text.h"
@@ -254,10 +254,10 @@ public:
   void duplicaBOB (sprite_object *);
   void set_coordinates (Sint32 xcoord, Sint32 ycoord);
   Sint32 reservBOBt (Sint32 anima);
-  Sint32 create_sprite (Sint32 BOBnu, GIF_bitMap * image, bool shadow,
+  Sint32 create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
                      Sint32 ftpix = 0);
-  Sint32 make_sprite (GIF_bitMap * image, Sint32 ombre);
-  void initCommun (GIF_bitMap * image, Sint32 ombre);
+  Sint32 make_sprite (bitmap_data * image, Sint32 ombre);
+  void initCommun (bitmap_data * image, Sint32 ombre);
   void set_x_coord (Sint32 xcoord);
   void set_y_coord (Sint32 ycoord);
   void move_x (Sint32 x_offset);

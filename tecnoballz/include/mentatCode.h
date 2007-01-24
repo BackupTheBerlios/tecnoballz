@@ -4,9 +4,9 @@
 // file		: "mentatCode.h"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.19 2007/01/19 20:35:39 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.20 2007/01/24 11:52:25 gurumeditation Exp $
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.19 2007/01/19 20:35:39 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.20 2007/01/24 11:52:25 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -76,7 +76,7 @@ class shop_tecno;
 class gard_tecno;
 class menu_tecno;
 class scrolledit;
-class GIF_bitMap;
+class bitmap_data;
 //..............................................................................
 const Sint32 E_NO_ERROR = 0;
 const Sint32 E_GENRIQUE = -1;	// erreur generique
@@ -158,7 +158,7 @@ class mentatCode
 		static gard_tecno*	garGestion;
 		static menu_tecno*	menGestion;
 		static scrolledit*	ptScrollEd;  
-		static GIF_bitMap*	image_BOBs;
+		static bitmap_data*	image_BOBs;
 		static char		zeAreaCode[11];
 
 	public:

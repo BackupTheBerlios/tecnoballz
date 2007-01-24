@@ -37,7 +37,7 @@ zeGameOver::zeGameOver()
 	max_of_sprites = 8;
 	sprite_type_id = BOB_GAMEOV;
 	go_deplace = 0;
-	ptGfxFonte = (GIF_bitMap*)NULL;
+	ptGfxFonte = (bitmap_data*)NULL;
 	ptScorOver = (score_over*)NULL;
 }
 
@@ -71,7 +71,7 @@ Sint32 zeGameOver::first_init(Sint32 offzt)
 	//###################################################################
 	// load the bitmap fontes
 	//###################################################################
-	ptGfxFonte = new GIF_bitMap();
+	ptGfxFonte = new bitmap_data();
 	error_init(ptGfxFonte->decompacte(ressources::RESFONTSCR));
 	if(erreur_num) return erreur_num;
 	

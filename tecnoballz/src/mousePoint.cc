@@ -42,7 +42,7 @@ mousePoint::~mousePoint()
 //-----------------------------------------------------------------------------
 // perform some initializations
 //-----------------------------------------------------------------------------
-Sint32 mousePoint::create_BOB(GIF_bitMap * image)
+Sint32 mousePoint::create_BOB(bitmap_data * image)
 {
 	Sint32 b;
 	if(hasard_val & 1)

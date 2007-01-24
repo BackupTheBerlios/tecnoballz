@@ -25,7 +25,7 @@
 #include "../include/runGestion.h"
 #include "../include/lastScroll.h"
 #include "../include/mousePoint.h"
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 
 
 //-----------------------------------------------------------------------------
@@ -56,7 +56,7 @@ class scrolledit:public virtual runGestion
 		Sint32				displayMod;	//0=show map / 1=show tiles
 		Sint32				flagSpaceK;
 		Sint32				titlesPosy;
-		GIF_bitMap*			ptrGBitMap;
+		bitmap_data*			ptrGBitMap;
 		Sint32				flag_press;
 	
 		// brush handle
@@ -66,7 +66,7 @@ class scrolledit:public virtual runGestion
 		Sint32				brushWidth;
 		Sint32				brushHeigh;
 		Uint16*				pBrushTile;
-		GIF_bitMap*			pBrush_bob;
+		bitmap_data*			pBrush_bob;
 	
 		Sint32				box_colour;
 		selectinfo*			pt_select0;		

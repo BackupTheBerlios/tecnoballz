@@ -45,14 +45,14 @@ escapeMenu::~escapeMenu()
 		delete graphTexte;
 	if(GFX_fontes)
 		delete GFX_fontes;
-	GFX_fontes = (GIF_bitMap *)NULL;
-	graphTexte = (GIF_bitMap *)NULL;
+	GFX_fontes = (bitmap_data *)NULL;
+	graphTexte = (bitmap_data *)NULL;
 }
 
 //-----------------------------------------------------------------------------
 // perform some initializations
 //-----------------------------------------------------------------------------
-Sint32 escapeMenu::first_init(GIF_bitMap *image, Sint32 nmenu, Sint32 large, Sint32 resto,
+Sint32 escapeMenu::first_init(bitmap_data *image, Sint32 nmenu, Sint32 large, Sint32 resto,
 	Sint32 palet)
 {
 	
@@ -115,7 +115,7 @@ Sint32 escapeMenu::first_init(GIF_bitMap *image, Sint32 nmenu, Sint32 large, Sin
 	//###################################################################
 	// allocate graphic buffer of menu box  
 	//###################################################################
-	graphTexte = new GIF_bitMap();
+	graphTexte = new bitmap_data();
 	error_init(graphTexte->GFXnouveau(nbcol * charHeight,
 		nblin * space2next , 1));
 	if(erreur_num) return (erreur_num);

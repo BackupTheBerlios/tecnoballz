@@ -25,7 +25,7 @@
 #define __BARRESCORE__
 class barreScore;
 //-------------------------------------------------------------------------------
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 #include "../include/print_text.h"
 #include "../include/joueurData.h"
 #include "../include/handler_keyboard.h"
@@ -61,7 +61,7 @@ class barreScore:public print_text
 		static const Sint32 	POSY_BRICK = 152/2;
 		Sint32					superBrick;		// number of bricks which remain
 		Sint32					flip_white;
-		GIF_bitMap*				GFX_Sbarre;		// score panel image bitmap 
+		bitmap_data*				GFX_Sbarre;		// score panel image bitmap 
 		joueurData*				objetGamer;
 		zeGigaBlit*				ptGigaBlit;
 		zeNewBalls*				ptNewBalls;

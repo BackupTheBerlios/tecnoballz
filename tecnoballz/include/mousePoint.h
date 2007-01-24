@@ -32,7 +32,7 @@ class mousePoint:public sprite_object
 	public:
 							mousePoint();
 							~mousePoint();
-		Sint32				create_BOB(GIF_bitMap * image);
+		Sint32				create_BOB(bitmap_data * image);
 		void				bouge_test();
 
 };

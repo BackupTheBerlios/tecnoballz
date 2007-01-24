@@ -5,7 +5,7 @@
 // created      : ?
 // updates      : 2005-01-18
 // fonction     : management of the menu principal
-// id		: $Id: menu_tecno.h,v 1.6 2007/01/19 20:35:39 gurumeditation Exp $
+// id		: $Id: menu_tecno.h,v 1.7 2007/01/24 11:52:25 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -30,7 +30,6 @@
 #include "../include/list_sprites.h"
 #include "../include/zeDefilTxt.h"
 #include "../include/print_text.h"
-#include "../include/GFX_bitmap.h"
 #include "../include/print_menu.h"
 #include "../include/mousePoint.h"
 #include "../include/handler_audio.h"

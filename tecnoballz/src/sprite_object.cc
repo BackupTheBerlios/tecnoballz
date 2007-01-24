@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.13 2007/01/23 20:51:30 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.14 2007/01/24 11:52:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -298,7 +298,7 @@ sprite_object::set_display_pos (Sint32 num)
  * @param shadow
  */
 Sint32
-sprite_object::make_sprite (GIF_bitMap * image, Sint32 shadow)
+sprite_object::make_sprite (bitmap_data * image, Sint32 shadow)
 {
   initCommun (image, shadow);
   adresseGFX = image->GFXadresse ();
@@ -311,7 +311,7 @@ sprite_object::make_sprite (GIF_bitMap * image, Sint32 shadow)
 //                      => ombre: 1 = shadow
 //------------------------------------------------------------------------------
 void
-sprite_object::initCommun (GIF_bitMap * image, Sint32 shadow)
+sprite_object::initCommun (bitmap_data * image, Sint32 shadow)
 {
   screen_width = display->get_width ();
   screen_height = display->get_height ();
@@ -376,7 +376,7 @@ sprite_object::reservBOBt (Sint32 anima)
  * @ftpix 
  */
 Sint32
-sprite_object::create_sprite (Sint32 BOBnu, GIF_bitMap * image, bool shadow,
+sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
                               Sint32 ftpix)
 {
 

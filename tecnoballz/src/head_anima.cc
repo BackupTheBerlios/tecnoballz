@@ -29,7 +29,7 @@
 head_anima::head_anima()
 {
 	mentatInit();
-	headbitmap = (GIF_bitMap*)NULL;
+	headbitmap = (bitmap_data*)NULL;
 	head_count = 0;
 	head_reque = 0;	//animation requested 
 	head_runni = 0;	//current animation
@@ -44,7 +44,7 @@ head_anima::head_anima()
 	mentatKill();
 	if(headbitmap)
 	{	delete headbitmap;
-		headbitmap = (GIF_bitMap*)NULL;
+		headbitmap = (bitmap_data*)NULL;
 	}
 }
 
@@ -53,7 +53,7 @@ head_anima::head_anima()
 //-------------------------------------------------------------------------------
 Sint32 head_anima::initialise()
 {
-	GIF_bitMap *gfxPT = new GIF_bitMap();
+	bitmap_data *gfxPT = new bitmap_data();
 	headbitmap = gfxPT;
 	error_init(gfxPT->decompacte(ressources::RESHEADANI));
 	if(erreur_num)

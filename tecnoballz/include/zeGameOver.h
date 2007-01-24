@@ -34,7 +34,7 @@ class zeGameOver:public objects_list < sprite_object >
 	private:
 		Sint32				go_deplace;                          // step number: 0, 1, 2 or 3
 		Sint32				go_zetempo;                          // tempo before next step
-		GIF_bitMap*			ptGfxFonte;
+		bitmap_data*			ptGfxFonte;
 		score_over*			ptScorOver;
 		Sint32				chrOffsetX;
 	

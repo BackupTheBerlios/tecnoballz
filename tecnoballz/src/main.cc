@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.13 2007/01/20 16:16:06 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.14 2007/01/24 11:52:25 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -70,7 +70,7 @@ runGestion.cc    => supervisor.cc
 configfile.cc    => 
 lispreader.cc    =>
 GFX_bitmap.cc    => bitmap_base 
-GIF_bitMap.cc    => bitmap_format
+bitmap_data.cc    => bitmap_format
  
 sprite_object  => sprite_object
 

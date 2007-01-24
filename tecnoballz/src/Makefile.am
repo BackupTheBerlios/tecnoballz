@@ -14,14 +14,13 @@ tecnoballz_LDADD = @XLIB_LIBS@ @SDL_LIBS@ @MM_LIBS@ @MIKMOD_LIBS@ -L.
 SOURCES_MAIN = \
 	ballDirect.cc \
 	barreScore.cc \
+	bitmap_data.cc \
 	briqueCote.cc \
 	configfile.cc \
 	ejectBalls.cc \
 	escapeMenu.cc \
 	fond_ecran.cc \
 	gard_tecno.cc \
-	GFX_bitmap.cc \
-	GIF_bitMap.cc \
   handler_audio.cc \
   handler_display.cc \
 	handler_keyboard.cc \

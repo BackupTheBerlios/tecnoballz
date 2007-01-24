@@ -27,7 +27,7 @@ class print_menu;
 //...............................................................................
 #include "../include/print_text.h"
 #include "../include/sprite_object.h"
-#include "../include/GIF_bitMap.h"
+#include "../include/bitmap_data.h"
 //...............................................................................
 class print_menu:public virtual print_text, public virtual sprite_object
 {
@@ -67,7 +67,7 @@ class print_menu:public virtual print_text, public virtual sprite_object
 		Sint32				menu_colww;
 		Sint32				yPressLeft;
 		Sint32				yPressRigh;
-		GIF_bitMap*			graphTexte;
+		bitmap_data*			graphTexte;
 		
 		char*				clear_addr;
 		Uint32				clearHeigh;
