@@ -48,7 +48,7 @@ class techno_gem:public sprite_object
 		Sint32				la_vitesse;
 		Sint32				indicator1;
 		Sint32				typeof_gem;
-		tecno_bump*			raquettePT;
+		sprite_paddle*			raquettePT;
 		Sint32				blinkcount;
 		Sint32				rand_count;
 	
@@ -59,7 +59,7 @@ class techno_gem:public sprite_object
 		Sint32				disponible(sprite_ball *pball);
 		Sint32				disponible(tecno_fire *pfire);
 		void				initialGem(Sint32 pos_x, Sint32 pos_y, 
-								tecno_bump *raket);
+								sprite_paddle *raket);
 		void				gemcollect(Sint32 ztype);
 		void				activBlink();
 		Sint32				deplaceMoi();

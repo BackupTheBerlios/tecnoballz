@@ -27,7 +27,7 @@
 //-----------------------------------------------------------------------------
 // create the object
 //-----------------------------------------------------------------------------
-zeMissiles::zeMissiles(tecno_bump *pBump, zexplosion *pexpl)
+zeMissiles::zeMissiles(sprite_paddle *pBump, zexplosion *pexpl)
 {
 	littleInit();
 	max_of_sprites = 48;
@@ -84,7 +84,7 @@ void zeMissiles::bumper_col()
 { 
 	Sint32 bumpy = ptbumper01->get_y_coord();
 	Sint32 bumpx = ptbumper01->get_x_coord();
-	Sint32 bmpx2 = bumpx + ptbumper01->rakLargeur();
+	Sint32 bmpx2 = bumpx + ptbumper01->get_length();
 	Sint32 bmpy2 = bumpy + ptbumper01->get_sprite_height();
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_miss *xFire = sprites_list[i];
@@ -98,15 +98,15 @@ void zeMissiles::bumper_col()
 					{	weapx += xFire->sprite_width;
 						if(weapx > bumpx)
 						{	xFire->is_enabled = 0;
-							if (ptbumper01->getInvncbl() <= 0)
-							{	ptbumper01->setInvncbl(100);
+							if (!ptbumper01->is_invincible())
+							{	ptbumper01->set_invincibility(100);
 								joueurGere->lifesMoins(1);
 #ifndef SOUNDISOFF
 								audio->play_sound(S_RAKEXPLO);
 								audio->play_sound(S_ENLEVVIE);
 #endif
 								pexplosion->add_explos
-									(bumpx + ptbumper01->rakLargeur()/2,
+									(bumpx + ptbumper01->get_length()/2,
 									bumpy + ptbumper01->get_sprite_height()/2);
 							}
 						}

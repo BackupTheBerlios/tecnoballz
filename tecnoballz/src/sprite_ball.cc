@@ -4,11 +4,11 @@
  * @date 2007-01-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.5 2007/01/23 20:51:30 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.6 2007/01/24 20:48:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 sprite_ball::sprite_ball ()
 {
   clear_sprite_members ();
-  littleInit (0, 0, (tecno_bump *) NULL, ballSpeed1, 0);
+  littleInit (0, 0, (sprite_paddle *) NULL, ballSpeed1, 0);
 }
 
 /**
@@ -53,7 +53,7 @@ sprite_ball::~sprite_ball ()
 */
 void
 sprite_ball::littleInit (Sint32 start, Sint32 speed,
-                         tecno_bump * raket, Sint16 * table, Sint32 bwght)
+                         sprite_paddle * raket, Sint16 * table, Sint32 bwght)
 {
   start_init = start;
   speed_init = speed;
@@ -69,7 +69,7 @@ sprite_ball::littleInit (Sint32 start, Sint32 speed,
 // initialize again
 //-----------------------------------------------------------------------------
 void
-sprite_ball::reStarting (tecno_bump * raket)
+sprite_ball::reStarting (sprite_paddle * raket)
 {
   enable ();
   startCount = start_init;
@@ -81,7 +81,7 @@ sprite_ball::reStarting (tecno_bump * raket)
 // disable the ball
 //-----------------------------------------------------------------------------
 void
-sprite_ball::goSleeping (tecno_bump * raket)
+sprite_ball::goSleeping (sprite_paddle * raket)
 {
   disable ();
   colleBallF = 0;
@@ -93,7 +93,7 @@ sprite_ball::goSleeping (tecno_bump * raket)
 // reset some members
 //-----------------------------------------------------------------------------
 void
-sprite_ball::razingBall (tecno_bump * raket)
+sprite_ball::razingBall (sprite_paddle * raket)
 {
   razingBal0 (raket);
   pointe_GFX ();
@@ -103,7 +103,7 @@ sprite_ball::razingBall (tecno_bump * raket)
 // reset some members
 //-----------------------------------------------------------------------------
 void
-sprite_ball::razingBal0 (tecno_bump * raket)
+sprite_ball::razingBal0 (sprite_paddle * raket)
 {
   speedCount = speed_init;
   collision_width = BALLWIDTH1 * resolution;
@@ -138,7 +138,7 @@ void
 sprite_ball::startBalle (Sint32 large)
 {
   enable ();
-  tecno_bump *raket = raket_glue;
+  sprite_paddle *raket = raket_glue;
   reStarting (raket);
   x_coord =
     raket->get_x_coord () + ((large >> 1) - ((collision_width >> 1) + 1));
@@ -178,7 +178,7 @@ sprite_ball::donneSpeed (Sint32 speed)
 //-------------------------------------------------------------------------------
 // return the last touched bumper
 //-------------------------------------------------------------------------------
-tecno_bump *
+sprite_paddle *
 sprite_ball::donne_bump ()
 {
   return (raket_ball);

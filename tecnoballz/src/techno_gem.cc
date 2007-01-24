@@ -35,7 +35,7 @@ techno_gem::techno_gem()
 	blinkcount = 0;
 	rand_count = 0;
 	typeof_gem = GREYSQUARE;
-	raquettePT = (tecno_bump *) NULL;
+	raquettePT = (sprite_paddle *) NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -86,7 +86,7 @@ Sint32 techno_gem::disponible(tecno_fire *pfire)
 //-----------------------------------------------------------------------------
 // initialize a new gem
 //-----------------------------------------------------------------------------
-void techno_gem::initialGem(Sint32 pos_x, Sint32 pos_y, tecno_bump *raket)
+void techno_gem::initialGem(Sint32 pos_x, Sint32 pos_y, sprite_paddle *raket)
 {
 	is_enabled = 1;
 	x_coord = pos_x;
@@ -136,7 +136,7 @@ Sint32 techno_gem::deplaceMoi()
 {
 	if(is_enabled && !indicator1)
 	{	Sint32 i = la_vitesse;
-		tecno_bump *raket = raquettePT;
+		sprite_paddle *raket = raquettePT;
 		switch (directionX)
 		{
 			//###########################################################

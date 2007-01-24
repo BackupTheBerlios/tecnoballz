@@ -26,7 +26,7 @@
 class tecno_caps;
 //...............................................................................
 #include "../include/sprite_object.h"
-#include "../include/tecno_bump.h"
+#include "../include/sprite_paddle.h"
 #include "../include/barreScore.h"
 #include "../include/handler_display.h"
 #include "../include/lesBriques.h"
@@ -41,7 +41,7 @@ class tecno_caps:public sprite_object
 		Sint32			directionX;
 		Sint32			valeurFric;
 		Sint32			la_vitesse;
-		tecno_bump*		raquettePT;
+		sprite_paddle*		raquettePT;
 		Sint32			area_multi;
     
 	public:
@@ -53,7 +53,7 @@ class tecno_caps:public sprite_object
 		Sint32			disponible(tecno_fire *pfire);
 	
 		void			init_money(Sint32 pos_x, Sint32 pos_y, 
-							tecno_bump *raket);
+							sprite_paddle *raket);
   
 		Sint32			deplaceMoi();
 		Sint32			deplaceMe2();

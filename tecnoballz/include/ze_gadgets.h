@@ -42,7 +42,7 @@ class ze_gadgets:public objects_list < tecno_gads >
 		static const Sint32		SGADGET_Y2 = 204;	//ordinate of the bonus indicator
 
 	private:
-		tecno_bump*			bumpSelect;		//bump select (cheat mode)
+		sprite_paddle*			bumpSelect;		//bump select (cheat mode)
 		zeMiniMess*			ptMiniMess;		//use for display minis messages
 		zeRaquette*			ptRaquette;
 		zeNewBalls*			ptNewBalls;
@@ -93,8 +93,8 @@ class ze_gadgets:public objects_list < tecno_gads >
 
  
 	private:
-		void				gadget_run(tecno_bump *raket, Sint32 nuGad);
-		void				gadgetrun2(tecno_bump *raket, Sint32 nuGad);
+		void				gadget_run(sprite_paddle *raket, Sint32 nuGad);
+		void				gadgetrun2(sprite_paddle *raket, Sint32 nuGad);
 
 };
 #endif

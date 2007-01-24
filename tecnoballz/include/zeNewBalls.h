@@ -27,7 +27,7 @@ class zeNewBalls;
 //...............................................................................
 #include "../include/sprite_ball.h"
 #include "../include/objects_list.h"
-#include "../include/tecno_bump.h"
+#include "../include/sprite_paddle.h"
 #include "../include/ejectBalls.h"
 #include "../include/lesBriques.h"
 #include "../include/briqueCote.h"
@@ -56,11 +56,11 @@ class zeNewBalls:public objects_list < sprite_ball >
 		Sint32			startCount;		// Temps avant que la balle ne parte
 		Sint32			balle_tilt;		// Temps avant que le tilt soit possible
 		Sint32			balle_ctrl;		//1 = control ball (left mouse button)
-		tecno_bump*		tecBumper1;		//bottom bumper
-		tecno_bump*		tecBumper2;		//right bumper
-		tecno_bump*		tecBumper3;		//top bumper
-		tecno_bump*		tecBumper4;		//left bumper
-		tecno_bump*		tec_robot0;		//robot bumper
+		sprite_paddle*		tecBumper1;		//bottom bumper
+		sprite_paddle*		tecBumper2;		//right bumper
+		sprite_paddle*		tecBumper3;		//top bumper
+		sprite_paddle*		tecBumper4;		//left bumper
+		sprite_paddle*		tec_robot0;		//robot bumper
 		ejectBalls*		ejectObjet;
 		lesBriques*		brickObjet;
 		briqueCote*		bricoObjet;

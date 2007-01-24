@@ -142,7 +142,7 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 	for(Sint32 j = 0; j < MAXBRIKCLR; j++, briPT++)
 	{	briPT->balle_posX = 0;
  		briPT->balle_posY = 0;
-		briPT->raquettePT = (tecno_bump *) 0x0;
+		briPT->raquettePT = (sprite_paddle *) 0x0;
 		briPT->brique_num = 0;
 		briPT->briqueFlag = 0;
 		briPT->adresseAff = 0;

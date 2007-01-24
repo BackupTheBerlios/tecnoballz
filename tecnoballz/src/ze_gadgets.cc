@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.18 2007/01/23 20:51:30 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.19 2007/01/24 20:48:22 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -286,7 +286,7 @@ void ze_gadgets::bouge_gads()
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_gads *bonus = sprites_list[i];
 		bonus->play_animation_loop();
-		tecno_bump *raket = bonus->deplaceMoi();
+		sprite_paddle *raket = bonus->deplaceMoi();
 		if(raket)
 		{	Sint32 g = bonus->get_gadget();
 			gadget_run(raket, g);
@@ -302,7 +302,7 @@ void ze_gadgets::bougegads2()
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_gads *bonus = sprites_list[i];
 		bonus->play_animation_loop();
-		tecno_bump *raket = bonus->deplaceMoi();
+		sprite_paddle *raket = bonus->deplaceMoi();
 		if(raket)
 		{	Sint32 g = bonus->get_gadget();
 			gadgetrun2(raket, g);
@@ -363,7 +363,7 @@ void ze_gadgets::gadgetKeys()
 //-------------------------------------------------------------------------------
 // bricks levels: active a gadget (bonus or malus)
 //-------------------------------------------------------------------------------
-void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
+void ze_gadgets::gadget_run(sprite_paddle * raket, Sint32 nuGad)
 {
 	bumpSelect = raket;
 	barreScore *barre = ptbarreScr;
@@ -622,7 +622,7 @@ void ze_gadgets::gadget_run(tecno_bump * raket, Sint32 nuGad)
 //-------------------------------------------------------------------------------
 // guards levels: active a gadget (bonus)
 //-------------------------------------------------------------------------------
-void ze_gadgets::gadgetrun2(tecno_bump *raket, Sint32 nuGad)
+void ze_gadgets::gadgetrun2(sprite_paddle *raket, Sint32 nuGad)
 {
 	bumpSelect = raket;
 	zeNewBalls *oBall = ptNewBalls;
@@ -632,7 +632,7 @@ void ze_gadgets::gadgetrun2(tecno_bump *raket, Sint32 nuGad)
 		// bumper protect
 		case GAD_PROTEC:
 			//ptbumper01 = PtRaquette->demandeRak(1);
-			raket->setInvncbl(200);
+			raket->set_invincibility(200);
 			break;
 
 		// extra life

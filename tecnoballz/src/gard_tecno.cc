@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.15 2007/01/23 14:26:07 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.16 2007/01/24 20:48:22 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -35,7 +35,7 @@ gard_tecno::gard_tecno()
 	ptRaquette = new zeRaquette(BOB_BUMPER);
 	ptMoveText = new zeMoveText();
 	pExplosion = new zexplosion();
-	tecno_bump *pBump = ptRaquette->demandeRak(1);
+	sprite_paddle *pBump = ptRaquette->demandeRak(1);
 	ptMissiles = new zeMissiles(pBump, pExplosion);
 	ptCapsules = new zeCapsules();
 	pt_gadgets = new ze_gadgets(6);

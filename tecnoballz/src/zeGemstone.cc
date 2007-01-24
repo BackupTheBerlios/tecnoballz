@@ -113,7 +113,7 @@ void zeGemstone::moving_gem()
 					pJoueurDat->set_bumpOn(2, 3);	// active right bumper
 					pJoueurDat->set_bumpOn(3, 3);	// active top bumper
 					pJoueurDat->set_bumpOn(4, 3);	// active left bumper
-					tecno_bump* pBump;
+					sprite_paddle* pBump;
 					pBump = ptRaquette->demandeRak(2);
 					pBump->enable();
 					pBump = ptRaquette->demandeRak(3);

@@ -47,8 +47,8 @@ zeGigaBlit::zeGigaBlit()
 	brickObjet = (lesBriques *)NULL;
 	gugusObjet = (head_anima *)NULL;
 	ptRaquette = (zeRaquette *)NULL;
-	tecBumper1 = (tecno_bump *)NULL;
-	tecBumper3 = (tecno_bump *)NULL;
+	tecBumper1 = (sprite_paddle *)NULL;
+	tecBumper3 = (sprite_paddle *)NULL;
 	blitz_posy = 0;
 	blitz_haut = 0;
 	bitz_ystop = 0;
@@ -118,7 +118,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 void zeGigaBlit::initDepart()
 {
 	if(!blitz_haut)
-	{	Sint32 large = tecBumper1->rakLargeur();
+	{	Sint32 large = tecBumper1->get_length();
 		Sint32 l = large;
 		l -= tecBumper1->width_mini;	//smallest bumper is of 16/32 pixels width
 		l >>= tecBumper1->width_deca;	//size of bumper step by 8/16 pixels
@@ -345,14 +345,14 @@ void zeGigaBlit::execution2()
 // ------------------------------------------------------------------------------
 void zeGigaBlit::collision2()
 {
-	if(blitz_haut && !tecBumper1->getInvncbl())
+	if(blitz_haut && !tecBumper1->is_invincible())
 	{	Sint32 gx = blitzobjet->get_x_coord();
 		Sint32 gy = blitzobjet->get_y_coord();
 		//Sint32 gh = blitzobjet->get_sprite_height();
 		Sint32 gw = blitzobjet->get_collision_width();
 		Sint32 bx = tecBumper1->get_x_coord();
 		Sint32 by = tecBumper1->get_y_coord();
-		Sint32 bw = tecBumper1->rakLargeur();
+		Sint32 bw = tecBumper1->get_length();
 		Sint32 bh = tecBumper1->get_sprite_height();
 		/*printf("zeGigaBlit::collision2(): get_collision_width=%i / get_sprite_width=%i / get_sprite_height=%i /  blitz_haut =%i\n",
 			blitzobjet->get_collision_width(), blitzobjet->get_sprite_width(),
@@ -363,13 +363,13 @@ void zeGigaBlit::collision2()
 			gx <= bx + bw && 
 			gy <= by + bh)
 		{
-			tecBumper1->setInvncbl(100);
+			tecBumper1->set_invincibility(100);
 #ifndef SOUNDISOFF
 			audio->play_sound(S_RAKEXPLO);
 			audio->play_sound(S_ENLEVVIE);
 #endif
 			joueurGere->lifesMoins(1);
-			pexplosion->add_explos(bx + tecBumper1->rakLargeur()/2, 
+			pexplosion->add_explos(bx + tecBumper1->get_length()/2, 
 				by + tecBumper1->get_sprite_height()/2);
 		}
 	}

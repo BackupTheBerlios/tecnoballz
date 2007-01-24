@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.15 2007/01/24 14:31:27 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.16 2007/01/24 20:48:22 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -79,14 +79,14 @@ list_sprites.cc  =>
 runGestion.cc    => supervisor.cc
 configfile.cc    => 
 lispreader.cc    =>
-GFX_bitmap.cc    => bitmap_base 
-bitmap_data.cc    => bitmap_format
+GFX_bitmap.cc 
+GIF_bitMap.cc    => bitmap_data
  
 sprite_object  => sprite_object
 
 giga_blitz.cc   => sprite_gigablitz
 mousePoint.cc   => sprite_mouse_pointer
-sprite_ball      => sprite_ball
+technoBall.cc   => sprite_ball
 techno_eye.cc   => sprite_eye
 techno_gem.cc   => sprite_gem
 tecno_boui.cc   => sprite_ship

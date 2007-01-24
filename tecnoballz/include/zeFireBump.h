@@ -31,7 +31,7 @@ class zeFireBump;
 #include "../include/handler_display.h"
 #include "../include/barreScore.h"
 #include "../include/tecno_fire.h"
-#include "../include/tecno_bump.h"
+#include "../include/sprite_paddle.h"
 
 
 class zeFireBump:public objects_list < tecno_fire >
@@ -44,7 +44,7 @@ class zeFireBump:public objects_list < tecno_fire >
 		static const Sint16	scieSin320[];
 
 	private:
-		tecno_bump*			maRaquette;
+		sprite_paddle*			maRaquette;
 		Sint32				countTempo;
 		Sint32				raketLarge;
 		const Sint16*		scie_sinus;
@@ -52,7 +52,7 @@ class zeFireBump:public objects_list < tecno_fire >
 	public:
 							zeFireBump();
 							~zeFireBump();
-		Sint32				installBOB(tecno_bump *raket);
+		Sint32				installBOB(sprite_paddle *raket);
 		void				disponible();
 		void				nouveauTir();
 		void				init_type1();

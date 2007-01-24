@@ -70,7 +70,7 @@ class tableaux_Z:public virtual runGestion
 	friend class            ze_gadgets;
 	friend class            zeMoveText;
 	friend class            zeBouiBoui;
-	friend class            tecno_bump;
+	friend class            sprite_paddle;
 
 	private:
 		//static const Uint32	bkgd_order[50];	

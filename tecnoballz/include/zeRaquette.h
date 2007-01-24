@@ -25,16 +25,16 @@
 //...............................................................................
 class zeRaquette;
 //...............................................................................
-#include "../include/tecno_bump.h"
+#include "../include/sprite_paddle.h"
 #include "../include/barreScore.h"
 #include "../include/objects_list.h"
 #include "../include/zeNewBalls.h"
 #include "../include/zeGigaBlit.h"
 //...............................................................................
 
-class zeRaquette:public objects_list < tecno_bump >
+class zeRaquette:public objects_list < sprite_paddle >
 {
-	friend class tecno_bump;
+	friend class sprite_paddle;
 
 	private:
 		Sint32			width_mini;	//bumper mini width (32 or 64)
@@ -55,11 +55,11 @@ class zeRaquette:public objects_list < tecno_bump >
 		Sint32			rakVdroite;		//vitesse droite
 		Sint32			balle_glue;		//temps de la colle
 		Sint32			rak_invers;		//if > 0 reverse bumpers
-		tecno_bump*		tecBumper1;
-		tecno_bump*		tecBumper2;
-		tecno_bump*		tecBumper3;
-		tecno_bump*		tecBumper4;
-		tecno_bump*		tec_robot0;
+		sprite_paddle*		tecBumper1;
+		sprite_paddle*		tecBumper2;
+		sprite_paddle*		tecBumper3;
+		sprite_paddle*		tecBumper4;
+		sprite_paddle*		tec_robot0;
 		barreScore*		ptBarreScr;
 		zeGigaBlit*		ptGigaBlit;
 		zeNewBalls*		ptNewBalls;
@@ -141,7 +141,7 @@ class zeRaquette:public objects_list < tecno_bump >
 		void				activrobot();
 		void				deactrobot();
 		void				move_robot();
-		tecno_bump*			demandeRak(Sint32);
+		sprite_paddle*			demandeRak(Sint32);
 		void				maxi_bumps();
 		void				incremente();
 		void				decremente();

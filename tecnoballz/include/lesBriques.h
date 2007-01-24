@@ -24,7 +24,7 @@
 #define __LESBRIQUES__
 //...............................................................................
 class lesBriques;
-class tecno_bump;
+class sprite_paddle;
 //...............................................................................
 //#include <SDL/SDL.h>
 #include "../include/mentatCode.h"
@@ -52,7 +52,7 @@ typedef struct
 {
 	Sint32		balle_posX;	// ball screen X-coordinate 
 	Sint32		balle_posY;	// ball screen Y-coordinate 
-	tecno_bump*	raquettePT;	// pointeur sur la raquette qui a touche cette balle en dernier
+	sprite_paddle*	raquettePT;	// pointeur sur la raquette qui a touche cette balle en dernier
 	Sint32		brique_num;	// numero de la brique touchee
 	Sint32		briqueFlag;	// 1=affiche le decor du fond ou 0=affiche la brique
 	Sint32		adresseAff;	// offset d'affichage ecran de la brique
@@ -60,7 +60,7 @@ typedef struct
 }
 brickClear;
 //...............................................................................
-#include "../include/tecno_bump.h"
+#include "../include/sprite_paddle.h"
 #include "../include/bitmap_data.h"
 #include "../include/barreScore.h"
 #include "../include/zeCapsules.h"
@@ -273,7 +273,7 @@ typedef struct
 {
   Sint32                    balle_posX;                          // abcsisse ecran de la balle
   Sint32                    balle_posY;                          // ordonnee ecran de la balle
-  tecno_bump             *raquettePT;                          // pointeur sur la raquette qui a touche cette balle en dernier
+  sprite_paddle             *raquettePT;                          // pointeur sur la raquette qui a touche cette balle en dernier
   Sint32                    brique_num;                          // numero de la brique touchee
   Sint32                    briqueFlag;                          // 1=affiche le decor du fond ou 0=affiche la brique
   Sint32                    adresseAff;                          // offset d'affichage ecran de la brique

@@ -43,7 +43,7 @@ ballDirect::~ballDirect()
 {
 	if(listBumper)
 	{	memory->release((char *)listBumper);	
-		listBumper = (tecno_bump**)NULL;
+		listBumper = (sprite_paddle**)NULL;
 	}
 	release_sprites_list();
 }
@@ -56,8 +56,8 @@ Sint32 ballDirect::initialize(zeRaquette* pBump, Uint32 nBump)
 	if(!nBump) return E_GENRIQUE;
 	numBumpers = nBump;
 	
-	listBumper = (tecno_bump**) memory->alloc
-		(nBump * sizeof(tecno_bump**), 0x4C495354);
+	listBumper = (sprite_paddle**) memory->alloc
+		(nBump * sizeof(sprite_paddle**), 0x4C495354);
 	error_init(memory->retour_err());
 	if(erreur_num)
 		return (erreur_num);
@@ -73,7 +73,7 @@ Sint32 ballDirect::initialize(zeRaquette* pBump, Uint32 nBump)
 void ballDirect::execution1()
 {
 	for(Sint32 i = 0; i < numBumpers; i++)
-	{	sprite_ball* balle = listBumper[i]->balleColle;
+	{	sprite_ball* balle = listBumper[i]->ball_glued;
 		if(balle && balle->is_enabled)
 		{	sprites_list[i]->aspireBOB2(balle);
 			sprites_list[i]->enable();

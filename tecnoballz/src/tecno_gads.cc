@@ -94,7 +94,7 @@ void tecno_gads::nouveauGad(brickClear *briPT, Sint32 nuGad)
 	gadget_num = nuGad;
 	x_coord = briPT->balle_posX;
 	y_coord = briPT->balle_posY;
-	tecno_bump *raket = briPT->raquettePT;
+	sprite_paddle *raket = briPT->raquettePT;
 	raquettePT = raket;
 	directionX = raket->bumper_num();
 	nuGad = nuGad >> 1;
@@ -126,7 +126,7 @@ void tecno_gads::nouveauGad(sprite_ball *balle, Sint32 nuGad)
 	gadget_num = nuGad;
 	x_coord = balle->get_x_coord();
 	y_coord = balle->get_y_coord();
-	tecno_bump *raket = balle->donne_bump();
+	sprite_paddle *raket = balle->donne_bump();
 	raquettePT = raket;
 	directionX = raket->bumper_num();
 	nuGad = nuGad >> 1;
@@ -157,7 +157,7 @@ void tecno_gads::nouveauGad(tecno_fire *pfire, Sint32 nuGad)
 	gadget_num = nuGad;
 	x_coord = pfire->get_x_coord();
 	y_coord = pfire->get_y_coord();
-	tecno_bump *raket = pfire->raquettePT;
+	sprite_paddle *raket = pfire->raquettePT;
 	raquettePT = raket;
 	directionX = raket->bumper_num();
 	nuGad = nuGad >> 1;
@@ -190,7 +190,7 @@ void tecno_gads::new_gadget(sprite_ball *balle, Sint32 nuGad)
 	gadget_num = nuGad;
 	x_coord = balle->get_x_coord();
 	y_coord = balle->get_y_coord();
-	tecno_bump *raket = balle->donne_bump();
+	sprite_paddle *raket = balle->donne_bump();
 	raquettePT = raket;
 	directionX = raket->bumper_num();
 	nuGad = nuGad >> 1;
@@ -257,10 +257,10 @@ Sint32 tecno_gads::get_gadget()
 //-----------------------------------------------------------------------------
 // displacement and collision of the gadget
 //-----------------------------------------------------------------------------
-tecno_bump *tecno_gads::deplaceMoi()
+sprite_paddle *tecno_gads::deplaceMoi()
 {
 	if(is_enabled)
-	{	tecno_bump *raket = raquettePT;
+	{	sprite_paddle *raket = raquettePT;
 		switch (directionX)
 		{
 			// bottom bumper

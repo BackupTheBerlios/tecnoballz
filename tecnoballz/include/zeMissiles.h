@@ -29,7 +29,7 @@ class zeMissiles;
 #include "../include/tecno_miss.h"
 #include "../include/objects_list.h"
 #include "../include/tecno_gard.h"
-#include "../include/tecno_bump.h"
+#include "../include/sprite_paddle.h"
 #include "../include/zexplosion.h"
 
 class zeMissiles:public objects_list < tecno_miss >
@@ -42,11 +42,11 @@ class zeMissiles:public objects_list < tecno_miss >
 		static const Sint16		tir04_posi[14];
 		static const Sint16		tir10_posi[12];
 		static const Sint16		fire_sinus[60];
-		tecno_bump*				ptbumper01;
+		sprite_paddle*				ptbumper01;
 		zexplosion*				pexplosion;
 	
 	public:
-								zeMissiles(tecno_bump *pBump, 
+								zeMissiles(sprite_paddle *pBump, 
 									zexplosion *pexpl);
 								~zeMissiles();
 		void					execution1();

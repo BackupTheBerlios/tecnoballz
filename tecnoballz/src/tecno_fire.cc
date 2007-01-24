@@ -72,7 +72,7 @@ void tecno_fire::firePower2()
 //-----------------------------------------------------------------------------
 // intialize a simple bumper's fire
 //-----------------------------------------------------------------------------
-void tecno_fire::littleInit(tecno_bump * raket)
+void tecno_fire::littleInit(sprite_paddle * raket)
 {
 	raquettePT = raket;
 	indexSinus = 0;

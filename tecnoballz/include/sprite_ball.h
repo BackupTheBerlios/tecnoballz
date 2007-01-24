@@ -39,7 +39,7 @@ typedef struct
 } furaxEject;
 
 
-#include "../include/tecno_bump.h"
+#include "../include/sprite_paddle.h"
 #include "../include/lesBriques.h"
 #include "../include/ballDirect.h"
 #include "../include/ejectBalls.h"
@@ -79,8 +79,8 @@ class sprite_ball:public sprite_object
 		Sint32				directBall;		//ball direction (0 to 56 step 4)
 		Sint32				save_Dball;		//last directBall (0 to 56 step 4)
 		Sint32				countDball;		//counter before rebound forcing
-		tecno_bump*			raket_ball;		//pointer to the bumper touched
-		tecno_bump*			raket_glue;		//pointer to the bumper sticked
+		sprite_paddle*			raket_ball;		//pointer to the bumper touched
+		sprite_paddle*			raket_glue;		//pointer to the bumper sticked
 		Sint16*				speedBallT;		//pt/speed table
 		Sint16*				speedBallZ;		//pt/speed table
 		Sint32*				collisionT;		//pt/bricks collisions table
@@ -116,16 +116,16 @@ class sprite_ball:public sprite_object
 							sprite_ball();
 							~sprite_ball();
 		void				littleInit(Sint32 start, Sint32 speed,
-										tecno_bump *raket, Sint16 *table,
+										sprite_paddle *raket, Sint16 *table,
 										Sint32 bwght);
-		void				reStarting(tecno_bump *raket);
-		void				goSleeping(tecno_bump *raket);
+		void				reStarting(sprite_paddle *raket);
+		void				goSleeping(sprite_paddle *raket);
 		void				startBalle(Sint32 large);
-		void				razingBall(tecno_bump *raket);
-		void				razingBal0(tecno_bump *raket);
+		void				razingBall(sprite_paddle *raket);
+		void				razingBal0(sprite_paddle *raket);
 		void				duplicate3(sprite_ball *balle, Sint32 angle);
 		static short*		donneSpeed(Sint32 speed);
-		tecno_bump*			donne_bump();
+		sprite_paddle*			donne_bump();
 		void				ballPower1();
 		void				ballPower2();
 		void				ball_size2();

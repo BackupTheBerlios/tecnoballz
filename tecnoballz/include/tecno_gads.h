@@ -26,7 +26,7 @@
 class tecno_gads;
 //..............................................................................
 #include "../include/sprite_object.h"
-#include "../include/tecno_bump.h"
+#include "../include/sprite_paddle.h"
 #include "../include/barreScore.h"
 #include "../include/handler_display.h"
 #include "../include/tecno_fire.h"
@@ -96,7 +96,7 @@ class tecno_gads:public sprite_object
 	private:
 		Sint32				directionX;
 		Sint32				gadget_num;
-		tecno_bump*			raquettePT;
+		sprite_paddle*			raquettePT;
 		static const Sint16	gagdetBrik[];
 		static const Sint16	gagdetGuar[];
 
@@ -112,7 +112,7 @@ class tecno_gads:public sprite_object
 		void				nouveauGad(Sint32 nuGad);
 		void				copiegadet(tecno_gads *gadgt);
 		Sint32				get_gadget();
-		tecno_bump*			deplaceMoi();
+		sprite_paddle*			deplaceMoi();
 		void				gagdet_run(Sint32 nuGad);
 };
 #endif

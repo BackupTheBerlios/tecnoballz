@@ -26,13 +26,13 @@
 class ballDirect;
 //...............................................................................
 #include "../include/objects_list.h"
-#include "../include/tecno_bump.h"
+#include "../include/sprite_paddle.h"
 #include "../include/zeRaquette.h"
 //...............................................................................
 class ballDirect:public objects_list < sprite_object >
 {
 	private:
-		tecno_bump**		listBumper;	//list of "tecno_bump" objets
+		sprite_paddle**		listBumper;	//list of "sprite_paddle" objets
 		Sint32				numBumpers;	//number of bumper(s) 4 or 1 
 			
 	public:

@@ -48,11 +48,11 @@ SOURCES_MAIN = \
 	shop_tecno.cc \
 	sprite_object.cc \
 	sprite_ball.cc \
+  sprite_paddle.cc \
 	tableaux_Z.cc \
 	techno_eye.cc \
 	techno_gem.cc \
 	tecno_boui.cc \
-	tecno_bump.cc \
 	tecno_caps.cc \
 	tecnoDefil.cc \
 	tecno_fire.cc \

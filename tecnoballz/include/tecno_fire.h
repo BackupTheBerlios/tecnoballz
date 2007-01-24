@@ -27,7 +27,7 @@
 class tecno_fire;
 //...............................................................................
 #include "../include/sprite_object.h"
-#include "../include/tecno_bump.h"
+#include "../include/sprite_paddle.h"
 #include "../include/lesBriques.h"
 #include "../include/zeBouiBoui.h"
 #include "../include/tecno_boui.h"
@@ -50,14 +50,14 @@ class tecno_fire:public sprite_object
 		Sint32				indexSinus;
 		Sint32				fire_Xscie;
 		Sint32				fire_Yscie;                          
-		tecno_bump*			raquettePT;
+		sprite_paddle*			raquettePT;
 		Sint32				fire_power;		// 1 = fire destroys the indestructible-destructibles bricks 
 		Sint32				firePowerX;		// fire power 1 or 2
 
 	public:
 						tecno_fire();
 						~tecno_fire();
-		void			littleInit(tecno_bump * raket);
+		void			littleInit(sprite_paddle * raket);
 		void			firePower1();
 		void			firePower2();
 		static void		start_list (lesBriques * brick, zeBouiBoui * atoms,

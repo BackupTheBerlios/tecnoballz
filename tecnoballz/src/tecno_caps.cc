@@ -32,7 +32,7 @@ tecno_caps::tecno_caps()
 	directionX = 0;
 	valeurFric = 0;
 	la_vitesse = 0;
-	raquettePT = (tecno_bump *) NULL;
+	raquettePT = (sprite_paddle *) NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -108,7 +108,7 @@ Sint32 tecno_caps::disponible(tecno_fire *pfire)
 //-----------------------------------------------------------------------------
 // initialize a new capsule of money
 //-----------------------------------------------------------------------------
-void tecno_caps::init_money(Sint32 pos_x, Sint32 pos_y, tecno_bump *raket)
+void tecno_caps::init_money(Sint32 pos_x, Sint32 pos_y, sprite_paddle *raket)
 {
 	is_enabled = 1;
 	x_coord = pos_x;
@@ -149,7 +149,7 @@ Sint32 tecno_caps::deplaceMoi()
 {
 	if(is_enabled)
 	{	Sint32 i = la_vitesse;
-		tecno_bump *raket = raquettePT;
+		sprite_paddle *raket = raquettePT;
 		switch (directionX)
 		{
 			//###########################################################
@@ -235,7 +235,7 @@ Sint32 tecno_caps::deplaceMe2()
 {
 	if(is_enabled)
 	{	Sint32 i = la_vitesse;
-		tecno_bump *raket = raquettePT;
+		sprite_paddle *raket = raquettePT;
 		y_coord += i;
 		if(y_coord < y_maximum)
 		{	if(collision1(raket))

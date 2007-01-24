@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.16 2007/01/23 17:02:05 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.17 2007/01/24 20:48:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,14 +49,14 @@ zeRaquette::zeRaquette()
 	raketLarge = 64 * resolution;
 	rak_invers = 0;
 	zeFireBump *fBump = new zeFireBump();
-	tecBumper1 = new tecno_bump(fBump);
+	tecBumper1 = new sprite_paddle(fBump);
 	fBump = new zeFireBump();
-	tecBumper2 = new tecno_bump(fBump);
+	tecBumper2 = new sprite_paddle(fBump);
 	fBump = new zeFireBump();
-	tecBumper3 = new tecno_bump(fBump);
+	tecBumper3 = new sprite_paddle(fBump);
 	fBump = new zeFireBump();
-	tecBumper4 = new tecno_bump(fBump);
-	tec_robot0 = new tecno_bump(NULL);      
+	tecBumper4 = new sprite_paddle(fBump);
+	tec_robot0 = new sprite_paddle(NULL);      
 	bumperMini = 32 * resolution;
 	bumperMaxi = 224 * resolution;
 	bumperYhau = (20 - 8) * resolution;
@@ -85,7 +85,7 @@ zeRaquette::zeRaquette(Sint32 nBob)
 	raket_team = 0;
 	raketLarge = 32* resolution;
 	rak_invers = 0;
-	tecBumper1 = new tecno_bump(NULL);
+	tecBumper1 = new sprite_paddle(NULL);
 	width_maxi = 32 * resolution;
 	width_mini = 32 * resolution;
 	bumperYbas = (232 - 8) * resolution; 
@@ -131,7 +131,7 @@ Sint32 zeRaquette::init_liste()
 	// allocate list of sprites memory
 	//###################################################################
 	sprites_list =
-		(tecno_bump **) (memory->alloc(sizeof(tecno_bump *) * max_of_sprites,
+		(sprite_paddle **) (memory->alloc(sizeof(sprite_paddle *) * max_of_sprites,
 			0x4F424A47));
 	error_init(memory->retour_err());
 	if(erreur_num) return erreur_num;
@@ -378,7 +378,7 @@ void zeRaquette::lache_tirs()
 	// Mode  solo
 	if(!raket_team)
 	{	if(keyboard->is_left_button())
-		{	tecBumper1->lache_tirs();	//tecno_bump::lache_tirs (bumper object)
+		{	tecBumper1->lache_tirs();	//sprite_paddle::lache_tirs (bumper object)
 			tecBumper2->lache_tirs();
 			tecBumper3->lache_tirs();
 			tecBumper4->lache_tirs();
@@ -620,7 +620,7 @@ void zeRaquette::move_robot()
 //------------------------------------------------------------------------------
 // return bumper object pointer
 //------------------------------------------------------------------------------
-tecno_bump *zeRaquette::demandeRak(Sint32 numer)
+sprite_paddle *zeRaquette::demandeRak(Sint32 numer)
 {
 	switch (numer)
 	{	case 1:
@@ -634,7 +634,7 @@ tecno_bump *zeRaquette::demandeRak(Sint32 numer)
 		case 5:
 			return tec_robot0;
 	}
-	return ((tecno_bump *) NULL);
+	return ((sprite_paddle *) NULL);
 }
 
 //------------------------------------------------------------------------------

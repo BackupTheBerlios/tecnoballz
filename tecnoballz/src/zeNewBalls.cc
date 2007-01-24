@@ -145,7 +145,7 @@ void zeNewBalls::init_balle(zeRaquette *raket, Sint32 start, Sint32 glueC,
 
 	// first ball special initialization
 	sprite_ball *balle = sprites_list[0];
-	tecBumper1->balleColle = balle;
+	tecBumper1->ball_glued = balle;
 	balle->startBalle(tecBumper1->collision_width);
 	num_of_sprites = 1; // one ball to screen
 	if(ejectObjet)
@@ -195,7 +195,7 @@ void zeNewBalls::vitusBall2()
 void zeNewBalls::vitus_sort()
 {
 	// pointer to the object "bumper of bottom"
-	tecno_bump *raket = tecBumper1;
+	sprite_paddle *raket = tecBumper1;
 	Sint32 min_x = sprite_ball::MINIMUM_PX * resolution;
 	Sint32 max_x = sprite_ball::MAXIMUM_PX * resolution;
 	Sint32 min_y = sprite_ball::MINIMUM_PY * resolution;
@@ -203,9 +203,9 @@ void zeNewBalls::vitus_sort()
 	
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
-		tecno_bump *rakPT;
+		sprite_paddle *rakPT;
 		if(balle->is_enabled)
-		{	rakPT = (tecno_bump*)NULL;
+		{	rakPT = (sprite_paddle*)NULL;
 			Sint32 j = balle->x_coord;
 			if(j < min_x)
 				rakPT = tecBumper4;
@@ -263,7 +263,7 @@ void zeNewBalls::vitus_sort()
 void zeNewBalls::vitussort2()
 {
 	Sint32 max_y = sprite_ball::MAXIMUM_PY * resolution;
-	tecno_bump *raket = tecBumper1;	 //pointer to the object "bumper of bottom"
+	sprite_paddle *raket = tecBumper1;	 //pointer to the object "bumper of bottom"
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
 		if(balle->is_enabled)
@@ -342,7 +342,7 @@ void zeNewBalls::vitus_move()
 
 	Sint32 j;
 	Sint32 *monPT;
-	tecno_bump *raket;
+	sprite_paddle *raket;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
 		if(balle->is_enabled)
@@ -355,9 +355,9 @@ void zeNewBalls::vitus_move()
 			{	raket = balle->raket_ball;
 				if(!(--balle->startCount))
 				{	balle->colleBallF = 0;
-					if(raket->bumperGlue == 2)
-						raket->bumperGlue = 1;
-					raket->balleColle = (sprite_ball *)NULL;
+					if(raket->is_glue == 2)
+						raket->is_glue = 1;
+					raket->ball_glued = (sprite_ball *)NULL;
 				}
 				else
 				{	switch (balle->colleBallF)
@@ -439,7 +439,7 @@ void zeNewBalls::vitusmove2()
 {
 	Sint32 j;
 	Sint32 *monPT;
-	tecno_bump *raket;
+	sprite_paddle *raket;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
 		if(balle->is_enabled)
@@ -452,9 +452,9 @@ void zeNewBalls::vitusmove2()
 			{	raket = balle->raket_ball;
 				if(!(--balle->startCount))
 				{	balle->colleBallF = 0;
-					if(raket->bumperGlue == 2)
-						raket->bumperGlue = 1;
-					raket->balleColle = (sprite_ball *)NULL;
+					if(raket->is_glue == 2)
+						raket->is_glue = 1;
+					raket->ball_glued = (sprite_ball *)NULL;
 				}
 				else
 				{	switch (balle->colleBallF)
@@ -511,7 +511,7 @@ void zeNewBalls::vitus_bump()
 {
 	Sint32 j, x, y;
 	const Sint32 *monPT;
-	tecno_bump *raket, *bumpX;
+	sprite_paddle *raket, *bumpX;
 	tecBumper1->balleTouch = 0;
 	tecBumper2->balleTouch = 0;
 	tecBumper3->balleTouch = 0;
@@ -637,9 +637,9 @@ void zeNewBalls::vitus_bump()
 
 				//balle->directBall = *monPT;
 				balle->directBall = j;
-				if(bumpX->bumperGlue == 1 && !bumpX->balleColle)
-				{	bumpX->bumperGlue = 2;	//ball glued to the bumper 
-					bumpX->balleColle = (sprite_ball *) balle;
+				if(bumpX->is_glue == 1 && !bumpX->ball_glued)
+				{	bumpX->is_glue = 2;	//ball glued to the bumper 
+					bumpX->ball_glued = (sprite_ball *) balle;
 					balle->raket_glue = bumpX;
 					balle->startCount = balle_glue;	//time of the glue 
 					balle->colleBallF = raket->bumpNumero;
@@ -658,7 +658,7 @@ void zeNewBalls::vitusbump2()
 {
 	Sint32 j, x, y;
 	const Sint32 *monPT;
-	tecno_bump *raket, *bumpX;
+	sprite_paddle *raket, *bumpX;
 	tecBumper1->balleTouch = 0;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
@@ -693,9 +693,9 @@ void zeNewBalls::vitusbump2()
 				//(char *)monPT += j;
 				monPT = (Sint32 *)((char *)monPT + j); 
 				balle->directBall = *monPT;
-				if(bumpX->bumperGlue == 1)
-				{	bumpX->bumperGlue = 2;	//ball glued to the bumper 
-					bumpX->balleColle = (sprite_ball *) balle;
+				if(bumpX->is_glue == 1)
+				{	bumpX->is_glue = 2;	//ball glued to the bumper 
+					bumpX->ball_glued = (sprite_ball *) balle;
 					balle->raket_glue = bumpX;
 					balle->startCount = balle_glue;	//time of the glue 
 					balle->colleBallF = raket->bumpNumero;
@@ -711,7 +711,7 @@ void zeNewBalls::vitusbump2()
 void zeNewBalls::vitusrobot()
 {
 	if(tec_robot0->bump_actif)
-	{	tecno_bump *raket = tec_robot0;
+	{	sprite_paddle *raket = tec_robot0;
 		raket->balleTouch = 0;
 		Sint32 x1 = raket->x_coord;
 		Sint32 y1 = raket->y_coord;
