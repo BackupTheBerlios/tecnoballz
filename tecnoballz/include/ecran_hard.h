@@ -4,7 +4,7 @@
 // file         : "ecran_hard.h"
 // created      : 2002-08-17
 // updates      : 2005-01-19
-// id		: $Id: ecran_hard.h,v 1.3 2005/07/17 16:13:38 gurumeditation Exp $
+// id		: $Id: ecran_hard.h,v 1.4 2007/01/24 17:10:41 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -136,8 +136,8 @@ class ecran_hard:public virtual mentatCode
 			void			buf_affx32(char *srcPT, char *desPT, Sint32 width, Sint32 heigh = 32);
 			void			buf_affx64(char *srcPT, char *desPT, Sint32 width, Sint32 heigh = 64);
 			void			buf_clr64(char *desPT);
-			void			palette_go(unsigned char *adrPal);
-			void			palette_go(SDL_Color *adrPal);
+			void			enable_palette(unsigned char *adrPal);
+			void			enable_palette(SDL_Color *adrPal);
 			void			paletteAff();
 			void			bufferCopy();                        // copie normale du Buffer
 			void			bufferCTab();                        // copie des 512 pixels gauche du Buffer

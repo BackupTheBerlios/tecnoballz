@@ -5,11 +5,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.3 2007/01/24 14:31:27 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.4 2007/01/24 17:10:41 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,7 +76,6 @@ bitmap_data::release ()
     }
   else if (pixel_buffer != NULL)
     {
-      //memory->release (pixel_buffer);
       delete[]pixel_buffer;
       pixel_buffer = (char *) NULL;
     }
@@ -114,7 +113,7 @@ Sint32 bitmap_data::get_height ()
  * Return bitmap memory address from the corresponding coordinates
  * @param xcoord x coordinate in the bitmap
  * @param xcoord y coordinate in the bitmap
- * @return a pointer to the buffer data
+ * @return a pointer to the pixel data
  */
 char *
 bitmap_data::get_pixel_data (Sint32 xcoord, Sint32 ycoord)
@@ -142,10 +141,13 @@ Sint32 bitmap_data::get_line_modulo (Sint32 w)
   return (row_size - (w * depth));
 }
 
-//-----------------------------------------------------------------------------
-// return bitmap memory offset from the corresponding coordinate
-//-----------------------------------------------------------------------------
-Sint32 bitmap_data::GFXrelatif (Sint32 posX, Sint32 posY)
+/**
+ * Return bitmap memory offset from the corresponding coordinate
+ * @param xcoord x coordinate in the bitmap
+ * @param xcoord y coordinate in the bitmap
+ * @return offset to the pixel data
+ */
+Sint32 bitmap_data::get_offset (Sint32 posX, Sint32 posY)
 {
   return (posY * row_size + posX * depth);
 }
@@ -160,10 +162,10 @@ void
 bitmap_data::create (Sint32 w, Sint32 h, Sint32 d)
 {
   width = w;
-  row_size = (Sint32) (width * d);
   height = h;
-  bytes_size = height * row_size;
   depth = d;
+  row_size = (Sint32) (width * depth);
+  bytes_size = height * row_size;
   try
     {
       pixel_buffer = new char[bytes_size];
@@ -175,19 +177,34 @@ bitmap_data::create (Sint32 w, Sint32 h, Sint32 d)
         bytes_size << " bytes " << std::endl;
       throw;
     }
+  clear ();
 }
 
-//-------------------------------------------------------------------------------
-// duplicate buffer and return pointer
-//-------------------------------------------------------------------------------
+/**
+ * Allocate and return a copy of the current pixel data
+ * @return pointer to the new pixel data
+ */
 char *
-bitmap_data::duplicates ()
+bitmap_data::duplicate_pixel_data ()
 {
-  char *ptGfx = memory->alloc (bytes_size);
+  char *pixel;
+  try
+    {
+      pixel = new char[bytes_size];
+    }
+  catch (std::bad_alloc &)
+    {
+      std::
+        cerr << "bitmap_data::duplicate_pixel_data() " <<
+            "not enough memory to allocate " <<
+            bytes_size << " bytes " << std::endl;
+      throw;
+    }
   for (Sint32 i = 0; i < bytes_size; i++)
-    ptGfx[i] = pixel_buffer[i];
-  error_init (memory->retour_err ());
-  return ptGfx;
+    {
+      pixel[i] = pixel_buffer[i];
+    } 
+  return pixel;
 }
 
 //-------------------------------------------------------------------------------
@@ -242,51 +259,44 @@ bitmap_data::copyBuffer (Sint32 srceX, Sint32 srceY, Sint32 destX,
     }
 }
 
-//-------------------------------------------------------------------------------
-// clear image buffer memory
-//-------------------------------------------------------------------------------
+/**
+ * Clear image buffer memory
+ * @param pixel value of the pixel (0 by default)
+ */
 void
 bitmap_data::clear (Sint32 pixel)
 {
-  Sint32 large = width;
+  Sint32 w = width;
   Sint32 h = height;
   Sint32 p = pixel;
   char *d = pixel_buffer;
   Sint32 n = width;
   for (Sint32 i = 0; i < h; i++, d += n)
     {
-      for (Sint32 j = 0; j < large; j++)
-        d[j] = p;
+      for (Sint32 j = 0; j < w; j++)
+        {
+          d[j] = p;
+        }
     }
 }
 
-
-//-------------------------------------------------------------------------------
-// set palette corresponding with image 
-//-------------------------------------------------------------------------------
+/**
+ * Enable palette of the bitmap 
+ */
 void
-bitmap_data::palette_go ()
+bitmap_data::enable_palette ()
 {
-  display->palette_go (GIFpalette);
+  display->enable_palette (palette);
 }
 
-//-------------------------------------------------------------------------------
-// recopy the first 128 colors of the palette in the 128 last
-//-------------------------------------------------------------------------------
-void
-bitmap_data::paletteDup ()
-{
-  for (Sint32 i = 0; i < 16 * 3; i++)
-    GIFpalette[i + (128 * 3)] = GIFpalette[i];
-}
-
-//-------------------------------------------------------------------------------
-// return pointer to the palette
-//-------------------------------------------------------------------------------
+/**
+ * Return palette of colors
+ * @return pointer to the palette
+ */
 unsigned char *
-bitmap_data::paletteADR ()
+bitmap_data::get_palette ()
 {
-  return GIFpalette;
+  return palette;
 }
 
 /** 
@@ -359,15 +369,13 @@ void bitmap_data::sdl_load_bmp (char *fpath)
   height = surface->h;
   bytes_size = height * width;
   depth = 1;
-  SDL_Color *
-    couleurs = surface->format->palette->colors;
-  Sint32
-    k = 0;
+  SDL_Color * couleurs = surface->format->palette->colors;
+  Sint32 k = 0;
   for (Sint32 j = 0; j < surface->format->palette->ncolors; j++)
     {
-      GIFpalette[k++] = couleurs->r;
-      GIFpalette[k++] = couleurs->g;
-      GIFpalette[k++] = couleurs->b;
+      palette[k++] = couleurs->r;
+      palette[k++] = couleurs->g;
+      palette[k++] = couleurs->b;
       couleurs++;
     }
 }

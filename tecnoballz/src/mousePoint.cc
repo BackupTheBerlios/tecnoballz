@@ -58,7 +58,7 @@ Sint32 mousePoint::create_BOB(bitmap_data * image)
 
 	set_coordinates(x, y);
 	enable();
-	tempo_init(3);
+	set_frame_delay(3);
 	return erreur_num;
 }
 

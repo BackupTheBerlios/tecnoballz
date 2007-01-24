@@ -147,7 +147,7 @@ void tecno_fire::anim_fires()
 	Sint32 t = total_fire;
 	tecno_fire *xFire = liste[0];
 	xFire->play_animation_loop();
-	Sint32 o = xFire->litAnimOff();
+	Sint32 o = xFire->get_frame_index();
 	Sint32 cycle = o & 0X1;
 	if(!cycle) cycle = sprite_object::METHOD_TAB;
 	else cycle = sprite_object::METHOD_CC1;

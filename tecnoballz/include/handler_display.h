@@ -5,11 +5,11 @@
  * @date 2007-01-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.h,v 1.1 2007/01/18 08:33:57 gurumeditation Exp $
+ * $Id: handler_display.h,v 1.2 2007/01/24 17:10:41 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,8 +140,8 @@ class handler_display:public virtual mentatCode
 			void			buf_affx32(char *srcPT, char *desPT, Sint32 width, Sint32 heigh = 32);
 			void			buf_affx64(char *srcPT, char *desPT, Sint32 width, Sint32 heigh = 64);
 			void			buf_clr64(char *desPT);
-			void			palette_go(unsigned char *adrPal);
-			void			palette_go(SDL_Color *adrPal);
+			void			enable_palette(unsigned char *adrPal);
+			void			enable_palette(SDL_Color *adrPal);
 			void			paletteAff();
 			void			bufferCopy();                        // copie normale du Buffer
 			void			bufferCTab();                        // copie des 512 pixels gauche du Buffer

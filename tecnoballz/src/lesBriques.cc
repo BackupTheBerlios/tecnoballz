@@ -281,7 +281,7 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 				//pos_y = 1;	// test only
 				megaT->briquePosX = pos_x;	// save X-coordinate into mega_table
 				megaT->briquePosY = pos_y;	// save Y-coordinate into mega_table
-				adres = GFX_brique->GFXrelatif(pos_x * 8 * resolution, pos_y * brickHeigh);
+				adres = GFX_brique->get_offset(pos_x * 8 * resolution, pos_y * brickHeigh);
 				if(adres < brickIndus)	// it's a indestructible brick?
 					brickCount++;		// not, counter's incremented
 			
@@ -402,7 +402,7 @@ void lesBriques::initpalett()
 		palP1->b = vablu;
 		palP1++;
 	}
-	display->palette_go(palPT);
+	display->enable_palette(palPT);
 }
 //------------------------------------------------------------------------------
 // save background under bricks	

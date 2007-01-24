@@ -5,11 +5,11 @@
  * @date 2007-01-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.4 2007/01/19 20:35:40 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.5 2007/01/24 17:10:41 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -322,7 +322,7 @@ handler_display::fullscreen ()
           optionfull = true;
         }
       display->set_video_mode ();
-      display->palette_go (ze_palette);
+      display->enable_palette (ze_palette);
     }
 }
 
@@ -756,7 +756,7 @@ handler_display::ecran_next (Sint32 zbase, Sint32 offsx, Sint32 offsy)
 // initialize color palette for the current screen
 //-------------------------------------------------------------------------------
 void
-handler_display::palette_go (unsigned char *palPT)
+handler_display::enable_palette (unsigned char *palPT)
 {
   unsigned char *p = palPT;
   SDL_Color *color = &ze_palette[0];
@@ -776,7 +776,7 @@ handler_display::palette_go (unsigned char *palPT)
 //
 //------------------------------------------------------------------------------
 void
-handler_display::palette_go (SDL_Color * palPT)
+handler_display::enable_palette (SDL_Color * palPT)
 {
   SDL_SetPalette (bufSurface, SDL_LOGPAL | SDL_PHYSPAL, palPT, 0, 256);
   SDL_SetPalette (sdl_screen, SDL_LOGPAL | SDL_PHYSPAL, palPT, 0, 256);
@@ -1079,5 +1079,5 @@ handler_display::gradation1 ()
       palP1->b = vablu;
       palP1++;
     }
-  display->palette_go (palPT);
+  display->enable_palette (palPT);
 }

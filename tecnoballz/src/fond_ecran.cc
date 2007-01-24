@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-07-17
 // fonctions	: display background (bricks levels)
-// Id		: $Id: fond_ecran.cc,v 1.11 2007/01/24 14:31:27 gurumeditation Exp $
+// Id		: $Id: fond_ecran.cc,v 1.12 2007/01/24 17:10:41 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -194,7 +194,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	// initialize color palette
 	//###############################################################
 	if (iFond_type == 2)
-	{	unsigned char* colPT = fonds->paletteADR();
+	{	unsigned char* colPT = fonds->get_palette();
 		SDL_Color *palPT = display->paletteAdr();
 		SDL_Color *palP1 = palPT;
 		SDL_Color *palP2 = palP1 + 128;
@@ -215,7 +215,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 			palP1++;
 			palP2++;
 		}
-		display->palette_go(palPT); 
+		display->enable_palette(palPT); 
 	}
 	else
 	{	coulDuFond();
@@ -295,7 +295,7 @@ void fond_ecran::coulDuFond(Sint32 zecol)
 		palP1++;
 		palP2++;
 	}
-	display->palette_go(palPT);
+	display->enable_palette(palPT);
 }
 
 //------------------------------------------------------------------------------

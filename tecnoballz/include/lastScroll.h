@@ -75,7 +75,7 @@ class lastScroll:public virtual mentatCode
 		Sint32				initialise(Uint32 PalNu = 0, Uint32 edmap = 0);
 		Sint32				tile_width();
 		Sint32				returnPosy();
-		void				palette_go(Uint32 PalNu = 0);
+		void				enable_palette(Uint32 PalNu = 0);
 		Sint32				swapScroll(Uint32 PalNu, Uint32 edmap);
 		void				scrolling1(Sint32 index = 0);
 		void				afficheAll();

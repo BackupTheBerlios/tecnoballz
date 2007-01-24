@@ -92,7 +92,7 @@ Sint32 score_over::displayTxt()
 	//###################################################################
 	// display menu text	
 	//###################################################################
-	char *desP1 = adresseGFX;
+	char *desP1 = pixel_data;
 	Sint32 offSc = off_source;
 	Sint32 offDs = srceNextLn;
 	Sint32 offD2 = srceNextLn * (space2next - 1);

@@ -83,7 +83,7 @@ Sint32 escapeMenu::first_init(bitmap_data *image, Sint32 nmenu, Sint32 large, Si
 			palP1->b = vablu;
 			palP1++;
 		}
-		display->palette_go(palPT); 
+		display->enable_palette(palPT); 
 	}
 	
 	//###################################################################
@@ -296,7 +296,7 @@ Sint32 escapeMenu::execution1()
 void escapeMenu::display640() 
 {
 	Sint32 color = menu_color;
-	char *desP1 = adresseGFX + charHeight + srceNextLn * space2next;
+	char *desP1 = pixel_data + charHeight + srceNextLn * space2next;
 	Sint32 offSc = off_source;
 	Sint32 offDs = srceNextLn;
 	Sint32 offD2 = srceNextLn * (space2next - 1) + (charHeight * 2);
@@ -376,7 +376,7 @@ void escapeMenu::display640()
 void escapeMenu::display320() 
 {
 	Sint32 color = menu_color;
-	char *desP1 = adresseGFX + charHeight + srceNextLn * space2next;
+	char *desP1 = pixel_data + charHeight + srceNextLn * space2next;
 	Sint32 offSc = off_source;
 	Sint32 offDs = srceNextLn;
 	Sint32 offD2 = srceNextLn * (space2next - 1) + (charHeight * 2);

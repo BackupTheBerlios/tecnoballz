@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.16 2007/01/24 14:31:28 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.17 2007/01/24 17:10:41 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,10 +84,11 @@ sprite_object::release_sprite ()
           tafflignes = (bb_afligne **) NULL;
         }
     }
-  if (releaseGFX && adresseGFX)
+  if (is_release_pixel_data && pixel_data != NULL)
     {
-      memory->release ((char *) adresseGFX);
-      adresseGFX = 0, adresseGFX = NULL;
+      delete[]pixel_data;
+      is_release_pixel_data = false;
+      pixel_data = NULL;
     }
   mentatKill ();
 }
@@ -99,7 +100,7 @@ void
 sprite_object::clear_sprite_members ()
 {
   mentatInit ();
-  adresseGFX = (char *) NULL;
+  pixel_data = (char *) NULL;
   adresseTAB = (char **) NULL;
   screen_ptr = (char *) NULL;
   adresseEC2 = (char *) NULL;
@@ -145,7 +146,7 @@ sprite_object::clear_sprite_members ()
   pt_cycling = &cycling_01[0];
   thecounter = 0;
   put_method = METHOD_MSK;
-  releaseGFX = 0;
+  is_release_pixel_data = false;
 }
 
 sprite_object & sprite_object::operator= (const sprite_object & sprite)
@@ -157,7 +158,7 @@ sprite_object & sprite_object::operator= (const sprite_object & sprite)
 
   printf ("sprite_object: %i = %i \n", object_pos, sprite.object_pos);
 
-  adresseGFX = sprite.adresseGFX;
+  pixel_data = sprite.pixel_data;
   adresseTAB = sprite.adresseTAB;
   screen_ptr = sprite.screen_ptr;
   adresseEC2 = sprite.adresseEC2;
@@ -208,7 +209,7 @@ sprite_object & sprite_object::operator= (const sprite_object & sprite)
 void
 sprite_object::duplicaBOB (sprite_object * bobPT)
 {
-  bobPT->adresseGFX = adresseGFX;
+  bobPT->pixel_data = pixel_data;
   bobPT->adresseTAB = adresseTAB;
   bobPT->screen_ptr = screen_ptr;
   bobPT->adresseEC2 = adresseEC2;
@@ -301,7 +302,7 @@ Sint32
 sprite_object::make_sprite (bitmap_data * image, Sint32 shadow)
 {
   initCommun (image, shadow);
-  adresseGFX = image->get_pixel_data ();
+  pixel_data = image->get_pixel_data ();
   return erreur_num;
 }
 
@@ -418,14 +419,14 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
       affligFrst = 0;
       affligLast = sprite_height;
       tafflignes = (bb_afligne **)
-        (memory->alloc (sizeof (bb_afligne *) * max_of_images, 0x42424242));
+        (memory->alloc (sizeof (bb_afligne *) * max_of_images));
       error_init (memory->retour_err ());
       if (erreur_num)
         return (erreur_num);
       for (Sint32 i = 0; i < max_of_images; i++)
         {
           bb_afligne *p = (bb_afligne *)
-            (memory->alloc (sizeof (bb_afligne) * sprite_height, 0x4C4C4C4C));
+            (memory->alloc (sizeof (bb_afligne) * sprite_height));
           error_init (memory->retour_err ());
           if (erreur_num)
             return erreur_num;
@@ -436,8 +437,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
   //###################################################################
   // table giving address of each BOBs into BOBs page 
   //###################################################################
-  adresseTAB = (char **)
-    (memory->alloc (sizeof (char *) * max_of_images, 0x424F4250));
+  adresseTAB = (char **) (memory->alloc (sizeof (char *) * max_of_images));
   error_init (memory->retour_err ());
   if (erreur_num)
     return erreur_num;
@@ -540,21 +540,18 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
       //###################################################################
       // genere the sprite's table for display
       //###################################################################
-      char *destP = (char *) memory->alloc
-        ((nbreP) * sizeof (char), 0x40424F42);
+      char *destP = (char *) memory->alloc ((nbreP) * sizeof (char));
       error_init (memory->retour_err ());
       if (erreur_num)
         return erreur_num;
-      Sint16 *destV = (Sint16 *) memory->alloc
-        ((nbreV * 3 + 1) * sizeof (Sint16), 0x40424F42);
+      Sint16 *destV = (Sint16 *) memory->alloc ((nbreV * 3 + 1) * sizeof (Sint16));
       error_init (memory->retour_err ());
       if (erreur_num)
         return erreur_num;
       Sint16 *destW = NULL;
       if (fTableByte)
         {
-          destW = (Sint16 *) memory->alloc
-            ((nbreV * 2 + 1) * sizeof (Sint16), 0x40424F42);
+          destW = (Sint16 *) memory->alloc ((nbreV * 2 + 1) * sizeof (Sint16));
           error_init (memory->retour_err ());
           if (erreur_num)
             return erreur_num;
@@ -660,7 +657,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
   tabAffich2 = BOBtableP2[0];   //adresse table pour "afficheBOB"
   if (fTableByte)
     tabAffich3 = BOBtableP3[0];
-  adresseGFX = adresseTAB[0];   //adresse GFX pour routine "draw()"
+  pixel_data = adresseTAB[0];   //adresse GFX pour routine "draw()"
   //printf("sprite_object::initialise()\n");
   return (erreur_num);
 }
@@ -754,7 +751,7 @@ void
 sprite_object::set_image ()
 {
   Sint32 index = frame_index;
-  adresseGFX = adresseTAB[index];
+  pixel_data = adresseTAB[index];
   tabAffich1 = BOBtableP1[index];
   tabAffich2 = BOBtableP2[index];
   if (fTableByte && BOBtableP3)
@@ -771,7 +768,7 @@ void
 sprite_object::set_image (Sint32 index)
 {
   frame_index = index;
-  adresseGFX = adresseTAB[index];
+  pixel_data = adresseTAB[index];
   tabAffich1 = BOBtableP1[index];
   tabAffich2 = BOBtableP2[index];
   if (fTableByte)
@@ -934,11 +931,12 @@ sprite_object::efface_lin ()
 #endif
 }
 
-//-------------------------------------------------------------------------------
-// get current animation offset
-//-------------------------------------------------------------------------------
+/**
+ * Return current animation offset
+ * @return the current frame index
+ */
 Sint32
-sprite_object::litAnimOff ()
+sprite_object::get_frame_index ()
 {
   return frame_index;
 }
@@ -1484,7 +1482,7 @@ sprite_object::draw_copy ()
     {
       return;
     }
-  char *s = adresseGFX;
+  char *s = pixel_data;
   char *d = display->buffer_pos (x_coord, y_coord);
   restore_ptr = display->tampon_pos (x_coord, y_coord);
   screen_ptr = d;
@@ -1518,7 +1516,7 @@ sprite_object::MSKbitcopy ()
 {
   if (!is_enabled)
     return;
-  char *s = adresseGFX;
+  char *s = pixel_data;
   char *d = display->buffer_pos (x_coord, y_coord);
   restore_ptr = display->tampon_pos (x_coord, y_coord);
   screen_ptr = d;
@@ -1599,14 +1597,15 @@ sprite_object::collision1 (sprite_object * bobPT)
           y2 + bobPT->collision_height > y1 && y2 - collision_height < y1);
 }
 
-//-------------------------------------------------------------------------------
-// Initialise la vitesse d'animation
-//-------------------------------------------------------------------------------
+/**
+ * Set the frame delay and period, the speed of animation
+ * @param delay time delay before next image
+ */
 void
-sprite_object::tempo_init (Sint32 tempo)
+sprite_object::set_frame_delay (Sint32 delay)
 {
-  frame_delay = tempo;
-  frame_period = tempo;
+  frame_delay = delay;
+  frame_period = delay;
 }
 
 /**
@@ -1747,11 +1746,17 @@ sprite_object::set_method (Uint32 vtype)
   put_method = vtype;
 }
 
+/**
+ * Set pixel data of the sprite
+ * @param pixel pointer to the pixel data
+ * @param is_release true if the object must release the
+ *        pixel data memory at its destruction 
+ */
 void
-sprite_object::set_memGFX (char *pGfx, Sint32 rGfx)
+sprite_object::set_pixel_data (char *pixel, bool is_release)
 {
-  adresseGFX = pGfx;
-  releaseGFX = rGfx;
+  pixel_data = pixel;
+  is_release_pixel_data = is_release;
 }
 
 //==============================================================================

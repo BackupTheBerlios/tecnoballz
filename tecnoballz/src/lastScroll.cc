@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-07
 // fonction	: handle of the scrolling background (menu and gards levels)
-// id		: $Id: lastScroll.cc,v 1.9 2007/01/24 14:31:27 gurumeditation Exp $
+// id		: $Id: lastScroll.cc,v 1.10 2007/01/24 17:10:41 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -111,7 +111,7 @@ Sint32 lastScroll::initialise(Uint32 PalNu, Uint32 edmap)
 	//###################################################################
 	// initialize color palette
 	//###################################################################
-	palette_go (PalNu);
+	enable_palette (PalNu);
 
 	if(is_verbose)
 		fprintf (stdout,
@@ -145,7 +145,7 @@ Sint32 lastScroll::swapScroll(Uint32 PalNu, Uint32 edmap)
 		memory->release((char *)carteFirst);
 	error_init(ld_mapfile(edmap));
 	if(erreur_num) return erreur_num;
-	palette_go (PalNu);
+	enable_palette (PalNu);
 	y_coord = 0;
 	return erreur_num;
 }
@@ -153,7 +153,7 @@ Sint32 lastScroll::swapScroll(Uint32 PalNu, Uint32 edmap)
 //-----------------------------------------------------------------------------
 // initialize color palette
 //-----------------------------------------------------------------------------
-void lastScroll::palette_go(Uint32 PalNu)
+void lastScroll::enable_palette(Uint32 PalNu)
 {
 	SDL_Color *palPT = display->paletteAdr();
 	SDL_Color *palP1 = palPT;
@@ -195,7 +195,7 @@ void lastScroll::palette_go(Uint32 PalNu)
 		palP1++;
 		palP2++;
 	}
-	display->palette_go(palPT);
+	display->enable_palette(palPT);
 }
 
 //------------------------------------------------------------------------------

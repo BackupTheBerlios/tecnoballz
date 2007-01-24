@@ -5,7 +5,7 @@
 // created	: 2004-04-20
 // updates	: 2005-01-15
 // fonctions	: manage ressources
-// id		: $Id: ressources.cc,v 1.11 2007/01/24 14:31:28 gurumeditation Exp $
+// id		: $Id: ressources.cc,v 1.12 2007/01/24 17:10:41 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -109,7 +109,7 @@ const char* ressources::soundfiles[] =
 };
 
 const char* ressources::graphfiles[] =
-{	"qani_head.bmp",		//RESHEADANI
+{	"ani_head.bmp",		//RESHEADANI
 	"ba_score2.bmp",	//RESBASCORE
 	"bumper_1.bmp",		//RESBUMPER1
 	"bumper_2.bmp",		//RESBUMPER2
@@ -331,7 +331,7 @@ Sint32 ressources::loadSprite(Sint32 ident)
 	freeSprite();
 	image_BOBs = new bitmap_data();
 	image_BOBs->load(ident);
-	image_BOBs->palette_go();
+	image_BOBs->enable_palette();
 	return 0;
 }
 

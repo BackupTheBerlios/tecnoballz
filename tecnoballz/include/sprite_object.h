@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.14 2007/01/24 11:52:25 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.15 2007/01/24 17:10:41 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -177,7 +177,8 @@ private:
 
 
 protected:
-  char *adresseGFX;             // memory address 
+  /** The pixel data of the sprite */
+  char *pixel_data;
   Sint32 srceNextLn;
   Sint32 destNextLn;
   Sint32 is_enabled;            // 1=le BOB peut etre affiche
@@ -220,7 +221,9 @@ protected:
   Sint32 affligLaSv;            // derniere ligne a afficher (si afflignesF=1)
   Sint32 memoryflag;            // This object reserved some memory 
   Sint32 object_pos;            // Numero du BOB dans la liste
-  Sint32 releaseGFX;            //if set release adresseGFX
+ /** true if the object must release
+  * the pixel data memory at its destruction */
+  bool is_release_pixel_data;
   Sint32 fTableByte;            //if set, generate additional table to 
   //copy byte by byte
 
@@ -267,7 +270,7 @@ public:
   Sint32 get_y_coord ();
   void set_image ();
   void set_image (Sint32 index);
-  Sint32 litAnimOff ();
+  Sint32 get_frame_index ();
   void restore_background_under_sprite ();
   void efface_lin ();
   void draw ();
@@ -287,7 +290,7 @@ public:
   void aspire_BOB (sprite_object * bobPT, Sint32 offsX = 0, Sint32 offsY = 0);
   void aspireBOB2 (sprite_object * bobPT, Sint32 offsX = 0, Sint32 offsY = 0);
   Sint32 collision1 (sprite_object * bobPT);
-  void tempo_init (Sint32 tempo);
+  void set_frame_delay (Sint32 delay);
   void set_frame_period (Sint32 period);
   bool play_animation_once ();
   void play_animation_loop ();
@@ -299,7 +302,7 @@ public:
   void initRepeat (Sint32 value);
 
   void set_method (Uint32 vtype);
-  void set_memGFX (char *pGfx, Sint32 rGfx = 0);
+  void set_pixel_data (char *pixel, bool is_release = false);
 
 public:
   static const Sint32 cycling_01[8];

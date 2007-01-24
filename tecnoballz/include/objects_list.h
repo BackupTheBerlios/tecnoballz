@@ -1,14 +1,14 @@
 /** 
  * @file objects_list.h 
  * @brief Template of management of objects list 
- * @date 2007-01-22
+ * @date 2007-01-24
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.4 2007/01/24 11:52:25 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.5 2007/01/24 17:10:41 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,8 +54,6 @@ public:
   X **get_sprites_list ();
   Sint32 get_max_of_sprites ();
   void set_max_of_sprites (Sint32 total);
-  //void xAnimation ();
-  //X *get_sprite_object (Uint32 index);
 };
 
 /**
@@ -72,9 +70,9 @@ template < class X > objects_list < X >::~objects_list ()
 {
 }
 
-//-------------------------------------------------------------------------------
-// Reset some members
-//-------------------------------------------------------------------------------
+/**
+ * Clear some members
+ */
 template < class X > void objects_list < X >::littleInit ()
 {
   mentatInit ();
@@ -203,41 +201,5 @@ template < class X > void objects_list < X >::disable_sprites ()
       sprite->disable ();
     }
 }
-
-//-------------------------------------------------------------------------------
-// once time animation for all sprites 
-//-------------------------------------------------------------------------------
-/*
-template < class X > void objects_list < X >::xAnimation ()
-{
-  X *sprite = sprites_list[0];
-  sprite->animRepete ();
-  Sint32 anim_num = sprite->litAnimOff ();
-  for (Sint32 i = 1; i < max_of_sprites; i++)
-    {
-      sprite = sprites_list[i];
-      sprite->change_GFX (anim_num);
-    }
-}
-*/
-
-/** 
- * Return an pointer to a sprite object
- * @param index index of the object on the list 0 to max_of_sprites - 1
- * @return pointer to the sprite object 
- */
-/*
-template < class X > X * objects_list < X >::get_sprite_object (Uint32 index)
-{
-  if (index >= max_of_sprites)
-    {
-      return NULL;
-    }
-  else 
-    {
-      return sprites_list[index];
-    } 
-}
-*/
 
 #endif

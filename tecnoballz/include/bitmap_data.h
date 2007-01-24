@@ -5,11 +5,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.h,v 1.3 2007/01/24 14:31:27 gurumeditation Exp $
+ * $Id: bitmap_data.h,v 1.4 2007/01/24 17:10:41 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ class bitmap_data:public virtual mentatCode
   /** Size of the bitmap in bytes */
   Sint32 bytes_size;
   /** Palette of 256 colors */
-  unsigned char GIFpalette[768];
+  unsigned char palette[768];
 
   public:
   bitmap_data ();
@@ -61,10 +61,10 @@ class bitmap_data:public virtual mentatCode
   Sint32 get_height ();
   char *get_pixel_data (Sint32 xcoord, Sint32 ycoord);
   char *get_pixel_data ();
-  Sint32 GFXrelatif (Sint32 posX, Sint32 posY);
+  Sint32 get_offset (Sint32 xcoord, Sint32 ycoord);
   Sint32 get_line_modulo (Sint32 w);
   void create (Sint32 w, Sint32 h, Sint32 d);
-  char *duplicates ();
+  char *duplicate_pixel_data ();
   void copyTampon ();
   void copyTampon (Sint32 srceX, Sint32 srceY, Sint32 destX,
                    Sint32 destY, Sint32 large, Sint32 haute);
@@ -72,10 +72,9 @@ class bitmap_data:public virtual mentatCode
                    Sint32 destY, Sint32 large, Sint32 haute);
   void clear (Sint32 pixel = 0);
 
-  void palette_go ();
-  void paletteDup ();           //copy first 128 colors in 128 last
+  void enable_palette ();
   void speciaFond ();           //special 4 colors background
-  unsigned char *paletteADR (); //return palette address 
+  unsigned char *get_palette (); //return palette address 
 
   void load (char *filename);
   void load (Sint32 id);

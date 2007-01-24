@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.14 2007/01/24 14:31:27 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.15 2007/01/24 17:10:41 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -109,7 +109,7 @@ Sint32 print_menu::first_init()
 		palP1->b = vablu;
 		palP1++;
 	}
-	display->palette_go(palPT); 
+	display->enable_palette(palPT); 
 	return erreur_num;
 }
 
@@ -134,7 +134,7 @@ Sint32 print_menu::afficheTxt()
 	//###################################################################
 	// display menu text	
 	//###################################################################
-	char *desP1 = adresseGFX;
+	char *desP1 = pixel_data;
 	Sint32 offSc = off_source;
 	Sint32 offDs = srceNextLn;
 	Sint32 offD2 = srceNextLn * (space2next - 1);
@@ -568,7 +568,7 @@ void print_menu::mis_a_jour()
 //------------------------------------------------------------------------------
 void print_menu::efface_BOB()
 {
-	Sint32 *d = (Sint32 *)adresseGFX;
+	Sint32 *d = (Sint32 *)pixel_data;
 	Sint32 p = 0;
 	Sint32 n = srceNextLn / 4;
 	Sint32 h = sprite_height;
@@ -637,7 +637,7 @@ void print_menu::clear_init(Uint32 xcoor, Uint32 ycoor, Uint32 width,
 								Uint32 lines)
 {
 	clear_stop();
-	clear_addr = adresseGFX + (ycoor * space2next * srceNextLn) +
+	clear_addr = pixel_data + (ycoor * space2next * srceNextLn) +
 					(xcoor * width_font);
 	clearWidth = (width * width_font) / 4;
 	clearHeigh = lines * heightfont;

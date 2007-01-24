@@ -65,7 +65,7 @@ void printmoney::initialise(joueurData *gamer, zeRaquette* raket,
 	Sint32 x = 215 * resolution;
 	ptBobRever->new_gadget(GAD_INVERS);
 	ptBobRever->set_coordinates(x, money_posy);
-	ptBobRever->tempo_init(5);
+	ptBobRever->set_frame_delay(5);
 	x += ptBobRever->get_sprite_width();
 	sprite_object **liste = sprites_list + 6; 
 	for (Sint32 i = 0; i < 2 ; i++)
@@ -97,7 +97,7 @@ void printmoney::init_guard(joueurData *gamer, zeRaquette* raket,
 	Sint32 x = 264 * resolution;
 	ptBobLifes->new_gadget(GAD_LIFE_P);
 	ptBobLifes->set_coordinates(x, money_posy);
-	ptBobLifes->tempo_init(5);
+	ptBobLifes->set_frame_delay(5);
 	x += ptBobLifes->get_sprite_width();
 	sprite_object **liste = sprites_list + 6; 
 	for (Sint32 i = 0; i < 2 ; i++)
@@ -116,7 +116,7 @@ void printmoney::init_money()
 	// gadget sprite
 	Sint32 x = 24 * resolution;
 	ptBobMoney->set_coordinates(x, money_posy);
-	ptBobMoney->tempo_init(5);
+	ptBobMoney->set_frame_delay(5);
 	ptBobMoney->enable();
 	x += ptBobMoney->get_sprite_width();
 	
