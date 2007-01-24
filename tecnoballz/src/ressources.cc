@@ -5,7 +5,7 @@
 // created	: 2004-04-20
 // updates	: 2005-01-15
 // fonctions	: manage ressources
-// id		: $Id: ressources.cc,v 1.9 2007/01/24 11:52:25 gurumeditation Exp $
+// id		: $Id: ressources.cc,v 1.10 2007/01/24 12:32:30 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -330,7 +330,7 @@ Sint32 ressources::loadSprite(Sint32 ident)
 {
 	freeSprite();
 	image_BOBs = new bitmap_data();
-	Sint32 error = image_BOBs->decompacte(ident);
+	Sint32 error = image_BOBs->load(ident);
 	if(error) return error;
 	image_BOBs->palette_go();
 	return error;

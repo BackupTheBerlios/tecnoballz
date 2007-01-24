@@ -55,14 +55,14 @@ Sint32 head_anima::initialise()
 {
 	bitmap_data *gfxPT = new bitmap_data();
 	headbitmap = gfxPT;
-	error_init(gfxPT->decompacte(ressources::RESHEADANI));
+	error_init(gfxPT->load(ressources::RESHEADANI));
 	if(erreur_num)
 		return (erreur_num);
-	off_source = gfxPT->GFX_nextLn();
+	off_source = gfxPT->get_row_size();
 	off_destin = display->bufferLarg();
-	adr_source = gfxPT->GFXadresse();
+	adr_source = gfxPT->get_pixel_data();
 	adr_destin = display->buffer_pos(272 * resolution, 106 * resolution);
-	la_hauteur = gfxPT->GFXhauteur();
+	la_hauteur = gfxPT->get_height();
 	return (erreur_num);
 }
 

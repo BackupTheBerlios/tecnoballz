@@ -5,11 +5,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.1 2007/01/24 11:52:25 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.2 2007/01/24 12:32:30 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
  */
 bitmap_data::bitmap_data()
 {
-	GFXInitial();
+	clear_members();
 }
 
 /**
@@ -43,38 +43,38 @@ bitmap_data::bitmap_data()
  */
 bitmap_data::~bitmap_data()
 {
-	GFXLiberat();
+	release();
 }
 
-//-----------------------------------------------------------------------------
-// perform some initializations
-//-----------------------------------------------------------------------------
-void bitmap_data::GFXInitial()
+/**
+ * Clear some members of the object
+ */
+void bitmap_data::clear_members()
 {
 	mentatInit();
-	gfxSurface = (SDL_Surface*)NULL;
-	gfxAdresse = (char*)NULL;	// Adresse memoire du tampon
-	gfxHauteur = 0;				// height in lines
-	width = 0;				// width in pixels
-	gfx_nextLn = 0;				// size of line in bytes
-	gfxProfond = 0;				// number of bytes peer pixel
-	gfx_taille = 0;				// size of bitmap in btyes
+	surface = (SDL_Surface*)NULL;
+	pixel_buffer = (char*)NULL;
+	height = 0;
+	width = 0;
+	row_size = 0;
+	depth = 0;
+	bytes_size = 0;
 }
 
-//-----------------------------------------------------------------------------
-// release bitmap
-//-----------------------------------------------------------------------------
-void bitmap_data::GFXLiberat()
+/**
+ * Release bitmap surface or bitmap buffer
+ */
+void bitmap_data::release()
 {
-	if(gfxSurface)
-	{	SDL_FreeSurface(gfxSurface);
-		gfxSurface = (SDL_Surface*)NULL;
-		gfxAdresse = (char*)NULL;
+	if(surface != NULL)
+	{	SDL_FreeSurface(surface);
+		surface = (SDL_Surface*)NULL;
+		pixel_buffer = (char*)NULL;
 	}
 	else
-	if(gfxAdresse)
-	{	memory->release(gfxAdresse);
-		gfxAdresse = (char*)NULL;
+	if(pixel_buffer != NULL)
+	{	memory->release(pixel_buffer);
+		pixel_buffer = (char*)NULL;
 	}
 	mentatKill();
 }
@@ -82,7 +82,7 @@ void bitmap_data::GFXLiberat()
 //-----------------------------------------------------------------------------
 // return size of line in pixels
 //-----------------------------------------------------------------------------
-Sint32 bitmap_data::GFXlargeur()
+Sint32 bitmap_data::get_width()
 {
 	return width;
 }
@@ -90,33 +90,36 @@ Sint32 bitmap_data::GFXlargeur()
 //-----------------------------------------------------------------------------
 // return size of line in bytes
 //-----------------------------------------------------------------------------
-Sint32 bitmap_data::GFX_nextLn()
+Sint32 bitmap_data::get_row_size()
 {
-	return (gfx_nextLn);
+	return row_size;
 }
 
-//-----------------------------------------------------------------------------
-// return bitmap height in lines
-//-----------------------------------------------------------------------------
-Sint32 bitmap_data::GFXhauteur()
+/**
+ * Return bitmap height
+ * @return the height of the bitmap in pixels
+ */ 
+Sint32 bitmap_data::get_height()
 {
-	return gfxHauteur;
+	return height;
 }
 
-//-----------------------------------------------------------------------------
-// return bitmap memory address from the corresponding coordinate
-//-----------------------------------------------------------------------------
-char *bitmap_data::GFXadresse(Sint32 posX, Sint32 posY)
+/**
+ * Return bitmap memory address from the corresponding coordinate
+ * @return a pointer to the buffer data
+ */
+char *bitmap_data::get_pixel_data(Sint32 posX, Sint32 posY)
 {
-	return (gfxAdresse + posY * gfx_nextLn + (posX * gfxProfond));
+	return (pixel_buffer + posY * row_size + (posX * depth));
 }
 
-//-----------------------------------------------------------------------------
-// return bitmap memory address
-//-----------------------------------------------------------------------------
-char *bitmap_data::GFXadresse()
+/** 
+ * Return bitmap memory address
+ * @return a pointer to the buffer data
+ */
+char *bitmap_data::get_pixel_data()
 {
-	return gfxAdresse;
+	return pixel_buffer;
 }
 
 //-----------------------------------------------------------------------------
@@ -124,7 +127,7 @@ char *bitmap_data::GFXadresse()
 //-----------------------------------------------------------------------------
 Sint32 bitmap_data::GFX_modulo(Sint32 w)
 {
-	return (gfx_nextLn - (w * gfxProfond));
+	return (row_size - (w * depth));
 }
 
 //-----------------------------------------------------------------------------
@@ -132,20 +135,23 @@ Sint32 bitmap_data::GFX_modulo(Sint32 w)
 //-----------------------------------------------------------------------------
 Sint32 bitmap_data::GFXrelatif(Sint32 posX, Sint32 posY)
 {
-	return (posY * gfx_nextLn + posX * gfxProfond);
+	return (posY * row_size + posX * depth);
 }
 
-//-----------------------------------------------------------------------------
-// allocate new bitmap
-//-----------------------------------------------------------------------------
-Sint32 bitmap_data::GFXnouveau(Sint32 w, Sint32 heigh, Sint32 depth)
+/** 
+ * Allocate a new bitmap
+ * @param w width of the bitmap in pixels
+ * @param h height of the bitmap in pixels
+ * @param d depth of the bitmap 
+ */
+Sint32 bitmap_data::create(Sint32 w, Sint32 h, Sint32 d)
 {
 	width = w;
-	gfx_nextLn = (Sint32)(width * depth);
-	gfxHauteur = heigh;
-	gfx_taille = gfxHauteur * gfx_nextLn;
-	gfxProfond = depth;
-	gfxAdresse = memory->alloc(gfx_taille);
+	row_size = (Sint32)(width * d);
+	height = h;
+	bytes_size = height * row_size;
+	depth = d;
+	pixel_buffer = memory->alloc(bytes_size);
 	error_init(memory->retour_err());
 	return erreur_num;
 }
@@ -155,9 +161,9 @@ Sint32 bitmap_data::GFXnouveau(Sint32 w, Sint32 heigh, Sint32 depth)
 //-------------------------------------------------------------------------------
 char* bitmap_data::duplicates()
 {
-	char *ptGfx = memory->alloc(gfx_taille);
-	for(Sint32 i = 0; i < gfx_taille; i++)
-		ptGfx[i] = gfxAdresse[i];
+	char *ptGfx = memory->alloc(bytes_size);
+	for(Sint32 i = 0; i < bytes_size; i++)
+		ptGfx[i] = pixel_buffer[i];
 	error_init(memory->retour_err());
 	return ptGfx;
 }
@@ -167,7 +173,7 @@ char* bitmap_data::duplicates()
 //-------------------------------------------------------------------------------
 void bitmap_data::copyTampon()
 {
-	copyTampon(0, 0, 0, 0, width, gfxHauteur);
+	copyTampon(0, 0, 0, 0, width, height);
 }
 
 //-------------------------------------------------------------------------------
@@ -178,7 +184,7 @@ void bitmap_data::copyTampon(Sint32 srceX, Sint32 srceY, Sint32 destX, Sint32 de
 {
 	Sint32 n = width;
 	Sint32 o = display->tamponNext();
-	char *s = GFXadresse(srceX, srceY);
+	char *s = get_pixel_data(srceX, srceY);
 	char *d = display->tampon_pos(destX, destY);
 	Sint32 h = haute;
 	for(Sint32 i = 0; i < h; i++, s += n, d += o)
@@ -195,10 +201,10 @@ void bitmap_data::copyBuffer(Sint32 srceX, Sint32 srceY, Sint32 destX,
 {
 	
 	if(large == -1) large = width;
-	if(haute == -1) haute = gfxHauteur;
+	if(haute == -1) haute = height;
 	Sint32 n = width;
 	Sint32 o = display->bufferNext();
-	char *s = GFXadresse(srceX, srceY);
+	char *s = get_pixel_data(srceX, srceY);
 	char *d = display->buffer_pos(destX, destY);
 	Sint32 h = haute;
 	for(Sint32 i = 0; i < h; i++, s += n, d += o)
@@ -210,12 +216,12 @@ void bitmap_data::copyBuffer(Sint32 srceX, Sint32 srceY, Sint32 destX,
 //-------------------------------------------------------------------------------
 // clear image buffer memory
 //-------------------------------------------------------------------------------
-void bitmap_data::buffer_clr(Sint32 pixel)
+void bitmap_data::clear(Sint32 pixel)
 {
 	Sint32 large = width;
-	Sint32 h = gfxHauteur;
+	Sint32 h = height;
 	Sint32 p = pixel;
-	char *d = gfxAdresse;
+	char *d = pixel_buffer;
 	Sint32 n = width;
 	for(Sint32 i = 0; i < h; i++, d += n)
 	{	for(Sint32 j = 0; j < large; j++)
@@ -272,10 +278,10 @@ unsigned char *bitmap_data::paletteADR()
 bitmap_data *bitmap_data::coupe_page(Sint32 pos_X, Sint32 pos_Y, Sint32 large, Sint32 haute)
 { 
 	bitmap_data *image = new bitmap_data();
-	erreur_num = image->GFXnouveau(large, haute, 1);
+	erreur_num = image->create(large, haute, 1);
 	if(!erreur_num)
-	{	char *detPT = image->GFXadresse(0, 0);
-		char *srcPT = GFXadresse(pos_X, pos_Y);
+	{	char *detPT = image->get_pixel_data(0, 0);
+		char *srcPT = get_pixel_data(pos_X, pos_Y);
 		Sint32 srcOf = width;
 		for(Sint32 i = 0; i < haute; i++, srcPT += srcOf)
 		{	char *monPT = srcPT;
@@ -289,44 +295,45 @@ bitmap_data *bitmap_data::coupe_page(Sint32 pos_X, Sint32 pos_Y, Sint32 large, S
 //-------------------------------------------------------------------------------
 // load a bitmap file
 //-------------------------------------------------------------------------------
-Sint32 bitmap_data::decompacte(char* fname)
+Sint32 bitmap_data::load(char* fname)
 {
 	char *fpath = pRessource->locateFile(fname);
-	return SDLLoadBMP(fpath);
+	return sdl_load_bmp(fpath);
 }
 
 //-------------------------------------------------------------------------------
 // load a bitmap file
 //-------------------------------------------------------------------------------
-Sint32 bitmap_data::decompacte(Sint32 ident)
+Sint32 bitmap_data::load(Sint32 ident)
 {
 	char *fpath = pRessource->locate_res(ident);
-	return SDLLoadBMP(fpath);
+	return sdl_load_bmp(fpath);
 }
 
-//-------------------------------------------------------------------------------
-// load a bitmap file
-//-------------------------------------------------------------------------------
-Sint32 bitmap_data::SDLLoadBMP(char* fpath)
+/** 
+ * Load a bitmap file
+ * @param fpath filename specified by path
+ */
+Sint32 bitmap_data::sdl_load_bmp(char* fpath)
 {
-	GFXLiberat();
-	gfxSurface = SDL_LoadBMP(fpath);
-	if(!gfxSurface)
+	release();
+	surface = SDL_LoadBMP(fpath);
+	if(NULL == surface)
 	{	fprintf(stderr,
-			"bitmap_data::decompacte(): Impossible to create a surface: %s\n",
+			"bitmap_data::sdl_load_bmp(): Impossible to create a surface: %s\n",
 			SDL_GetError());
 		erreur_num = E_SDLERROR;
 		return erreur_num;
 	}
-	gfxAdresse = (char*)gfxSurface->pixels;
-	width = gfxSurface->w;
-	gfx_nextLn = width;
-	gfxHauteur = gfxSurface->h;
-	gfx_taille = gfxHauteur * width;
-	gfxProfond = 1;
-	SDL_Color *couleurs = gfxSurface->format->palette->colors;
+	pixel_buffer = (char*)surface->pixels;
+	width = surface->w;
+	row_size = width;
+	height = surface->h;
+	bytes_size = height * width;
+	depth = 1;
+	SDL_Color *couleurs = surface->format->palette->colors;
 	Sint32 k=0;
-	for (Sint32 j = 0 ; j<gfxSurface->format->palette->ncolors ; j++)
+	for (Sint32 j = 0 ; j<surface->format->palette->ncolors ; j++)
 	{	GIFpalette[k++] = couleurs->r; 
 		GIFpalette[k++] = couleurs->g;
 		GIFpalette[k++] = couleurs->b;

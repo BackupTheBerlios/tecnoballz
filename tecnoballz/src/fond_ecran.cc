@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-07-17
 // fonctions	: display background (bricks levels)
-// Id		: $Id: fond_ecran.cc,v 1.9 2007/01/24 11:52:25 gurumeditation Exp $
+// Id		: $Id: fond_ecran.cc,v 1.10 2007/01/24 12:32:30 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -66,7 +66,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 			// load all 60 backgrounds differents 
 			if(is_verbose)
 				printf("fond_ecran::instalFond TecnoballZ/min60map.bmp\n");
-			error_init(fonds->decompacte(ressources::RES60BACKG)); 
+			error_init(fonds->load(ressources::RES60BACKG)); 
 			if(erreur_num) return erreur_num;
 			large = FONDLARGE1;
 			haute = FONDHAUTE1;
@@ -90,12 +90,12 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 			if(is_verbose)
 				 printf("fond_ecran::instalFond() : try to initialize %s\n", 
 					pathname);
-			error_init(fonds->decompacte(pathname));
+			error_init(fonds->load(pathname));
 			if(erreur_num) return erreur_num;
 			large = FONDLARGE2;
 			haute = FONDHAUTE2;
 			t_pos = table_pos1;
-			if(fonds->GFXlargeur()/FONDLARGE2 > 5)
+			if(fonds->get_width()/FONDLARGE2 > 5)
 			t_pos = table_pos2;
 		}
 		break;
@@ -103,7 +103,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	if(erreur_num) return erreur_num;
 
 	Sint32 dHorz = (display->bufferLarg() - 64 * resolution) / large - 1;
-	Sint32 oSour = fonds->GFX_nextLn();
+	Sint32 oSour = fonds->get_row_size();
 	Sint32 dVert = (240 * resolution) / haute - 1;
 	Sint32 mVert = (240 * resolution) % haute - 1;
 	if(mVert > 0) dVert++;
@@ -116,7 +116,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 		if(baseY >= 60)
 			baseY -= 60;
 		if(baseY & 0x1)
-			baseX = fonds->GFXlargeur() / 2;	//second part
+			baseX = fonds->get_width() / 2;	//second part
 		else
 			baseX = 0;
 		baseY >>= 1;
@@ -153,7 +153,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 			src_X &= 0x0f;		//table index (0 to 15)
 			src_X = t_pos[src_X];	//source position (0 to 4)
 			src_X *= large;
-			char *srcPT = fonds->GFXadresse(baseX + src_X, baseY);
+			char *srcPT = fonds->get_pixel_data(baseX + src_X, baseY);
 			char *detPT = display->tampon_pos(det_X * large, det_Y * haute);
 			switch (iFond_type)
 			{	case 0:

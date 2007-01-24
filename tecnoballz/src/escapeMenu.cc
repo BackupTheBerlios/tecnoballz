@@ -116,10 +116,10 @@ Sint32 escapeMenu::first_init(bitmap_data *image, Sint32 nmenu, Sint32 large, Si
 	// allocate graphic buffer of menu box  
 	//###################################################################
 	graphTexte = new bitmap_data();
-	error_init(graphTexte->GFXnouveau(nbcol * charHeight,
+	error_init(graphTexte->create(nbcol * charHeight,
 		nblin * space2next , 1));
 	if(erreur_num) return (erreur_num);
-	graphTexte->buffer_clr();
+	graphTexte->clear();
 	
 	
 	//###################################################################
@@ -139,9 +139,9 @@ Sint32 escapeMenu::first_init(bitmap_data *image, Sint32 nmenu, Sint32 large, Si
 		pos_x *= 16;
 		Sint32 pos_y = (Sint32)coord[i].BB_COORDY;
 		pos_y *= resolution;
-		ptAdd[i] = image->GFXadresse(pos_x, pos_y);
+		ptAdd[i] = image->get_pixel_data(pos_x, pos_y);
 	}
-	Sint32 NxLine = image->GFX_nextLn();
+	Sint32 NxLine = image->get_row_size();
 		
 	//###################################################################
 	// initialize sprite object
@@ -155,9 +155,9 @@ Sint32 escapeMenu::first_init(bitmap_data *image, Sint32 nmenu, Sint32 large, Si
 	//###################################################################
 	// build the frame of menu box (with sprites)
 	//###################################################################
-	Sint32 m = graphTexte->GFXlargeur() / width - 2;
+	Sint32 m = graphTexte->get_width() / width - 2;
 	Sint32 x = width;
-	y = graphTexte->GFXhauteur() - heigh;
+	y = graphTexte->get_height() - heigh;
 	displayBOB(ptAdd[0], 0, 0, NxLine, width, heigh);
 	displayBOB(ptAdd[3], 0, y, NxLine, width, heigh);
 	for(Sint32 i = 0; i <  m; i++, x+= width)
@@ -167,11 +167,11 @@ Sint32 escapeMenu::first_init(bitmap_data *image, Sint32 nmenu, Sint32 large, Si
 	displayBOB(ptAdd[1], x, 0, NxLine, width, heigh);
 	displayBOB(ptAdd[2], x, y, NxLine, width, heigh);
 
-	m = graphTexte->GFXhauteur() / heigh - 2;
-	if (graphTexte->GFXhauteur() % heigh)
+	m = graphTexte->get_height() / heigh - 2;
+	if (graphTexte->get_height() % heigh)
 		m++;
 	
-	x = graphTexte->GFXlargeur() - width;
+	x = graphTexte->get_width() - width;
 	y = heigh;
 	for(Sint32 i = 0; i <  m; i++, y+= heigh)
 	{	displayBOB(ptAdd[5], 0, y, NxLine, width, heigh);
@@ -187,9 +187,9 @@ void escapeMenu::displayBOB(char *ptSrc, Sint32 pos_x, Sint32 pos_y,
 	Sint32 NxLine, Sint32 width, Sint32 heigh)
 {
 	char *s = ptSrc;
-	char *d = graphTexte->GFXadresse(pos_x, pos_y);
+	char *d = graphTexte->get_pixel_data(pos_x, pos_y);
 	Sint32 m = NxLine;
-	Sint32 n = graphTexte->GFX_nextLn();
+	Sint32 n = graphTexte->get_row_size();
 	Sint32 h = width;
 	Sint32 l = heigh;
 	for(Sint32 i = 0; i < h; i++)

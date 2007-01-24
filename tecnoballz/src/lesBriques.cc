@@ -174,7 +174,7 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 	// select one of 10 sets of bricks
 	//###################################################################
 	GFXbriques = new bitmap_data();
-	error_init(GFXbriques->decompacte(ressources::RESZEBRICK));
+	error_init(GFXbriques->load(ressources::RESZEBRICK));
 	if(erreur_num)
 		return (erreur_num);
 	Sint32 i = hasard_val & 0x0F;
@@ -213,7 +213,7 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 	//###################################################################
 	offsSource = GFX_brique->GFX_modulo(brickWidth);
 	offsDestin = display->buffer_mod(brickWidth);
-	adr_source = (Sint32 *)GFX_brique->GFXadresse();
+	adr_source = (Sint32 *)GFX_brique->get_pixel_data();
 	adr_desti1 = (Sint32 *)display->buffer_adr();
 	adr_desti2 = (Sint32 *)display->tampon_adr();
 
@@ -345,7 +345,7 @@ void lesBriques::bricks_aff()
 			if(pos_x || pos_y)
 			{	pos_x *= 8 * resolution;				// planar -> chunky
 				pos_y *= brickHeigh;
-				char *srcPT = GFX_brique->GFXadresse(pos_x, pos_y);
+				char *srcPT = GFX_brique->get_pixel_data(pos_x, pos_y);
 				dsplybrick(srcPT, megaT->adresseAff, megaT->brickcolor);
 			}
 		}
@@ -552,7 +552,7 @@ Sint32 lesBriques::brickRemap()
     	// redraw a new brick
 		//###############################################################
     	else
-		{	char *gfxad = GFX_brique->GFXadresse();
+		{	char *gfxad = GFX_brique->get_pixel_data();
 			brickInfos *megaT = briPT->adresseTab;
 			dsplybrick(gfxad + briPT->brique_num, adres, megaT->brickcolor);
 			barreObjet->scoreAjout(10);

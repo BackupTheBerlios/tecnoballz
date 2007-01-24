@@ -5,11 +5,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.h,v 1.1 2007/01/24 11:52:25 gurumeditation Exp $
+ * $Id: bitmap_data.h,v 1.2 2007/01/24 12:32:30 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,20 +30,23 @@
 #define __BITMAP_DATA__
 class bitmap_data ;
 #include "../include/mentatCode.h"
-//...............................................................................
+
 class bitmap_data : public virtual mentatCode
 {
 	private :	
-		SDL_Surface*		gfxSurface;
-		char*				gfxAdresse;	//page memory address
-		Sint32				gfxHauteur;	//height in lines
+		SDL_Surface*		surface;
+    /** The actual pixel data */
+		char*				pixel_buffer;
+    /** Height in linges */
+		Sint32				height;
     /** Width in pixels */
 		Sint32				width;
-		Sint32				gfx_nextLn;	//wight in bytes
-		Sint32				gfxProfond;	//bytes peer pixel (always 1)
-		Sint32				gfx_taille;	//page size in bytes
-
-
+    /** Real row length in bytes */
+		Sint32				row_size;
+    /** Bytes peer pixel 1 = 256 colors */
+		Sint32				depth;
+    /** Size of the bitmap in bytes */
+		Sint32				bytes_size;
 
 unsigned char		GIFpalette[768];	//palette of 256 colours
 												//(256*3=768 octets)
@@ -51,23 +54,23 @@ unsigned char		GIFpalette[768];	//palette of 256 colours
 							bitmap_data();
 							~bitmap_data();
 
-	void				GFXInitial();
-		void				GFXLiberat();
-		Sint32				GFXlargeur();
-		Sint32				GFX_nextLn();
-		Sint32				GFXhauteur();
-		char*				GFXadresse(Sint32 posX, Sint32 posY);
-		char*				GFXadresse();
+	void				clear_members();
+		void			release();
+		Sint32				get_width();
+		Sint32				get_row_size();
+		Sint32				get_height();
+		char*				get_pixel_data(Sint32 xcoord, Sint32 ycoord);
+		char*				get_pixel_data();
 		Sint32				GFXrelatif(Sint32 posX, Sint32 posY);
-		Sint32				GFX_modulo(Sint32 large);
-		Sint32				GFXnouveau(Sint32 large, Sint32 haute, Sint32 depth);
+		Sint32				GFX_modulo(Sint32 w);
+		Sint32				create(Sint32 w, Sint32 h, Sint32 d);
 		char*				duplicates();
 		void				copyTampon();
 		void				copyTampon(Sint32 srceX, Sint32 srceY, Sint32 destX,
 										Sint32 destY, Sint32 large, Sint32 haute);
 		void				copyBuffer(Sint32 srceX, Sint32 srceY, Sint32 destX,
 										Sint32 destY, Sint32 large, Sint32 haute);
-		void				buffer_clr(Sint32 pixel = 0);
+		void				clear(Sint32 pixel = 0);
 
 
 
@@ -80,12 +83,12 @@ unsigned char		GIFpalette[768];	//palette of 256 colours
 		void				speciaFond();	//special 4 colors background
 		unsigned char*		paletteADR();	//return palette address 
 		
-		Sint32				decompacte(char* nomfichier);
-		Sint32				decompacte(Sint32);
+		Sint32	load(char* nomfichier);
+		Sint32	load(Sint32);
 		bitmap_data*			coupe_page(Sint32 pos_X, Sint32 pos_Y, Sint32 large, Sint32 haute);
 		
 
 	private :
-		Sint32				SDLLoadBMP(char* nomfichier);
+		Sint32				sdl_load_bmp(char* filename);
 };
 #endif

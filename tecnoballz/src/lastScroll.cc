@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-07
 // fonction	: handle of the scrolling background (menu and gards levels)
-// id		: $Id: lastScroll.cc,v 1.7 2007/01/24 11:52:25 gurumeditation Exp $
+// id		: $Id: lastScroll.cc,v 1.8 2007/01/24 12:32:30 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -75,7 +75,7 @@ Sint32 lastScroll::initialise(Uint32 PalNu, Uint32 edmap)
 	// load the page of graphics maps im memory
 	//###################################################################
 	gfx_bitMap = new bitmap_data();
-	error_init(gfx_bitMap->decompacte(ressources::RESMAPEDIT));
+	error_init(gfx_bitMap->load(ressources::RESMAPEDIT));
 	if(erreur_num)
 		return (erreur_num);
 
@@ -102,7 +102,7 @@ Sint32 lastScroll::initialise(Uint32 PalNu, Uint32 edmap)
 	afficheAdr = afficheAdr - largeEcran * motifhaute;
 	destinMod2 = (motifhaute * largeEcran) - motiflarge;
 	destinMod3 = (motifhaute * largeEcran) - (motiflarge * largeMotif);
-	source_mod = gfx_bitMap->GFX_nextLn();
+	source_mod = gfx_bitMap->get_row_size();
 	y_coord = 0;
 
 	//###################################################################
@@ -442,8 +442,8 @@ Sint32 lastScroll::initMapAdr()
 {
 	Sint32 error = 0;
 	bitmap_data *gfxPT = gfx_bitMap;
-	Sint32 l = gfxPT->GFXlargeur();	//320 or 640 pixels width
-	Sint32 h = gfxPT->GFXhauteur();	//624 or 1248 lines height
+	Sint32 l = gfxPT->get_width();	//320 or 640 pixels width
+	Sint32 h = gfxPT->get_height();	//624 or 1248 lines height
 	dalleTotal = (l / motiflarge) * (h / motifhaute);	//780 maps
 	mapAddress = (char **)memory->alloc(dalleTotal * sizeof(char *),
 													0x6D670141);
@@ -453,7 +453,7 @@ Sint32 lastScroll::initMapAdr()
 	Sint32 nbMap = 0;
 	for(Sint32 y = 0; y < h; y += motifhaute)
 	{	for(Sint32 x = 0; x < l; x += motiflarge)
-		{	char *p = gfxPT->GFXadresse(x, y);
+		{	char *p = gfxPT->get_pixel_data(x, y);
 			*(m++) = p;
 			nbMap++;
 		}

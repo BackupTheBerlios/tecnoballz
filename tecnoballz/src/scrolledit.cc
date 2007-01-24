@@ -227,7 +227,7 @@ void scrolledit::view_tiles()
 {
 	pt_select0 = pt_select2;
 	Sint32 speed = getZeSpeed();
-	Sint32 y_max = ptrGBitMap->GFXhauteur() - screen_height;
+	Sint32 y_max = ptrGBitMap->get_height() - screen_height;
 	
 	titlesPosy = titlesPosy + speed;
 	if(titlesPosy < 0)
@@ -551,20 +551,20 @@ void scrolledit::brushAlloc()
 	if(pBrush_bob)
 		delete pBrush_bob;
 	pBrush_bob = new bitmap_data();
-	pBrush_bob->GFXnouveau(pt_select0->box_widthT * tile_width,
+	pBrush_bob->create(pt_select0->box_widthT * tile_width,
 		pt_select0->box_height * tile_width, 1);
 
 	brushWidth = pt_select0->box_widthT;
 	brushHeigh = pt_select0->box_height;
 	
 	Sint32 m1 = pBrush_bob->GFX_modulo(0);
-	Sint32 m2 = (defilement->motifhaute * pBrush_bob->GFX_nextLn()) - defilement->motiflarge;
-	Sint32 m3 = ((defilement->motifhaute - 1) * pBrush_bob->GFX_nextLn());
+	Sint32 m2 = (defilement->motifhaute * pBrush_bob->get_row_size()) - defilement->motiflarge;
+	Sint32 m3 = ((defilement->motifhaute - 1) * pBrush_bob->get_row_size());
 
 	Sint32 n1 = defilement->source_mod;
 	char **mapPT = defilement->mapAddress;	// pointer of each map of the page maps
 	Uint16 *carte = pBrushTile;	
-	Sint32 *dt = (Sint32 *)pBrush_bob->GFXadresse();
+	Sint32 *dt = (Sint32 *)pBrush_bob->get_pixel_data();
 
 	if(resolution == 1)
 	{	for(Sint32 y = 0; y < pt_select0->box_height; y++)
@@ -618,10 +618,10 @@ void scrolledit::brush_draw()
 	Sint32 pos_y = keyboard->get_mouse_y();
 	pos_x &= tile_mask1;
 	pos_y &= tile_mask1;
-	if(pos_x > screen_width -  pBrush_bob->GFXlargeur())
-		pos_x = screen_width -  pBrush_bob->GFXlargeur();
-	if(pos_y > screen_height -  pBrush_bob->GFXhauteur())
-		pos_y = screen_height -  pBrush_bob->GFXhauteur();
+	if(pos_x > screen_width -  pBrush_bob->get_width())
+		pos_x = screen_width -  pBrush_bob->get_width();
+	if(pos_y > screen_height -  pBrush_bob->get_height())
+		pos_y = screen_height -  pBrush_bob->get_height();
 	
 
 	Sint32 scrlY = defilement->returnPosy();

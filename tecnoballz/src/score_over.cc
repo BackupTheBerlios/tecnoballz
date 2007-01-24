@@ -69,7 +69,7 @@ Sint32 score_over::first_init(Sint32 offzt)
 	// allocate 512 * 323 pixels buffer for text menu 
 	//###################################################################
 	graphTexte = new bitmap_data();
-	error_init(graphTexte->GFXnouveau(TEXT_LARGE * width_font,
+	error_init(graphTexte->create(TEXT_LARGE * width_font,
 		TEXT_HAUTE * space2next , 1));
 	if(erreur_num) return (erreur_num);
 

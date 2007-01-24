@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-10
 // fonction	: display chars
-// id		: $Id: print_text.cc,v 1.8 2007/01/24 11:52:25 gurumeditation Exp $
+// id		: $Id: print_text.cc,v 1.9 2007/01/24 12:32:30 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -86,14 +86,14 @@ Uint32 print_text::getCharHgt()
 Sint32 print_text::init_print(Sint32 ident)
 {
 	GFX_fontes = new bitmap_data();
-	error_init(GFX_fontes->decompacte(ident));
+	error_init(GFX_fontes->load(ident));
 	if(erreur_num)
 		return (erreur_num);
-	fontes_adr = GFX_fontes->GFXadresse(216 * resolution, 0);	//characters '0' to '9'
-	caract_adr = GFX_fontes->GFXadresse(0, 0);					//characters 'A' to 'Z'
+	fontes_adr = GFX_fontes->get_pixel_data(216 * resolution, 0);	//characters '0' to '9'
+	caract_adr = GFX_fontes->get_pixel_data(0, 0);					//characters 'A' to 'Z'
 	off_desti1 = display->bufferNext();							//modulo destination
-	off_source = GFX_fontes->GFX_nextLn();						//modulo source
-	charHeight = GFX_fontes->GFXhauteur(); 
+	off_source = GFX_fontes->get_row_size();						//modulo source
+	charHeight = GFX_fontes->get_height(); 
 	return erreur_num;
 }
 
@@ -334,12 +334,12 @@ sprite_object*  print_text::string2bob(const char* ptStr)
 {
 	Sint32 numch = strlen(ptStr);
 	bitmap_data* pBmap = new bitmap_data();
-	error_init(pBmap->GFXnouveau(numch * charHeight, charHeight, 1));
+	error_init(pBmap->create(numch * charHeight, charHeight, 1));
 	if(erreur_num) return NULL;
 	Sint32 *basPT = (Sint32 *)caract_adr;
-	char *desP1 = pBmap->GFXadresse();
+	char *desP1 = pBmap->get_pixel_data();
 	Sint32 offSc = off_source;
-	Sint32 offDs = pBmap->GFX_nextLn();
+	Sint32 offDs = pBmap->get_row_size();
 	char *c = ascii2code;
 	Sint32 a, b, h;
 	if(resolution == 1)
@@ -382,9 +382,9 @@ sprite_object*  print_text::string2bob(const char* ptStr)
 
 	sprite_object* ptBob = new sprite_object();
 	ptBob->set_memGFX(pBmap->duplicates(), 1);
-	ptBob->sprite_width = pBmap->GFXlargeur();
-	ptBob->sprite_height = pBmap->GFXhauteur();
-	ptBob->srceNextLn = pBmap->GFX_nextLn();
+	ptBob->sprite_width = pBmap->get_width();
+	ptBob->sprite_height = pBmap->get_height();
+	ptBob->srceNextLn = pBmap->get_row_size();
 	ptBob->max_of_images = 1;
 	ptBob->destNextLn = display->bufferNext();
 	delete pBmap;

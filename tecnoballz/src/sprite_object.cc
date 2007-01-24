@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.14 2007/01/24 11:52:25 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.15 2007/01/24 12:32:30 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -301,7 +301,7 @@ Sint32
 sprite_object::make_sprite (bitmap_data * image, Sint32 shadow)
 {
   initCommun (image, shadow);
-  adresseGFX = image->GFXadresse ();
+  adresseGFX = image->get_pixel_data ();
   return erreur_num;
 }
 
@@ -315,13 +315,13 @@ sprite_object::initCommun (bitmap_data * image, Sint32 shadow)
 {
   screen_width = display->get_width ();
   screen_height = display->get_height ();
-  srceNextLn = image->GFX_nextLn ();
+  srceNextLn = image->get_row_size ();
   destNextLn = display->bufferNext ();
   sprite_has_shadow = shadow;
   screen_ptr = (char *) NULL;
   adresseEC2 = (char *) NULL;
-  sprite_width = image->GFXlargeur ();
-  sprite_height = image->GFXhauteur ();
+  sprite_width = image->get_width ();
+  sprite_height = image->get_height ();
   max_of_images = 1;
   collision_height = sprite_height;
   collision_width = sprite_width;
@@ -468,16 +468,16 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
       //###############################################################
       //verify page overflow 
       //###############################################################
-      if (pos_y > (image->GFXhauteur () - sprite_height) ||
-          pos_x > (image->GFXlargeur () - sprite_width))
+      if (pos_y > (image->get_height () - sprite_height) ||
+          pos_x > (image->get_width () - sprite_width))
         {
           fprintf (stderr,
-                   "sprite_object::initialise() BOBnu=%i x2=%i>GFXlargeur=%i "
-                   "*AND/OR* y2=%i>GFXhauteur=%i\n",
+                   "sprite_object::initialise() BOBnu=%i x2=%i>get_width=%i "
+                   "*AND/OR* y2=%i>get_height=%i\n",
                    (Sint32) BOBnu, (Sint32) (pos_x + sprite_width),
-                   (Sint32) image->GFXlargeur (),
+                   (Sint32) image->get_width (),
                    (Sint32) (pos_y + sprite_height),
-                   (Sint32) image->GFXhauteur ());
+                   (Sint32) image->get_height ());
           fprintf (stderr,
                    "- pos_x: %i, pos_y:%i, max_of_images:%i " "resolution=%i\n",
                    coord[i].BB_COORDX, coord[i].BB_COORDY, i, resolution);
@@ -489,9 +489,9 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
       //###############################################################
       if (mirrorVert)
         {
-          char *gfxHa = image->GFXadresse (pos_x, pos_y);
-          char *gfxBa = image->GFXadresse (pos_x, pos_y + sprite_height - 1);
-          Sint32 iOffs = image->GFX_nextLn ();
+          char *gfxHa = image->get_pixel_data (pos_x, pos_y);
+          char *gfxBa = image->get_pixel_data (pos_x, pos_y + sprite_height - 1);
+          Sint32 iOffs = image->get_row_size ();
           for (Sint32 j = 0; j < sprite_height / 2; j++)
             {
               for (Sint32 k = 0; k < sprite_width; k++)
@@ -509,7 +509,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
       //calculation size of the table
       //###################################################################
       Sint32 npixe = 0;         //counter of the pixels
-      char *gfxPT = image->GFXadresse (pos_x, pos_y);   //graphic address 
+      char *gfxPT = image->get_pixel_data (pos_x, pos_y);   //graphic address 
       for (Sint32 j = 0; j < sprite_height; j++)
         {
           for (Sint32 k = 0; k < sprite_width; k++)
@@ -567,7 +567,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
       // genere the sprite's table for display ...................................
       Sint32 depla = 0;         // offset
       npixe = 0;                // counter of the pixels
-      gfxPT = image->GFXadresse (pos_x, pos_y); // graphic address 
+      gfxPT = image->get_pixel_data (pos_x, pos_y); // graphic address 
       adresseTAB[i] = gfxPT;
       *(destV++) = (Sint16) nbreV;      // Nombre d'occurences
       if (fTableByte)

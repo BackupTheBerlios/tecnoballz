@@ -57,17 +57,17 @@ Sint32 zeMiniMess::intialise1()
 {
 	if(!minifontes)
 	{	minifontes = new bitmap_data();
-		error_init(minifontes->decompacte(ressources::RESFONTMES));
+		error_init(minifontes->load(ressources::RESFONTMES));
 		if(erreur_num)
 			return (erreur_num);
 
 		off_desti1 = display->bufferNext();	// modulo destination
-		off_source = minifontes->GFX_nextLn();	// modulo source
+		off_source = minifontes->get_row_size();	// modulo source
 		ptr_buffer = display->buffer_pos(MESSAGEPOSX * resolution,
 												MESSAGEPOSY * resolution);
 		ptr_tampon = display->tampon_pos(MESSAGEPOSX * resolution,
 												MESSAGEPOSY * resolution);
-		ptr_fontes = minifontes->GFXadresse(); 
+		ptr_fontes = minifontes->get_pixel_data(); 
 		ft_hauteur = 6 * resolution;	// 6 or 12
 		ft_largeur = 4 * resolution;	// 4 or 8
 		fonteslarg = ft_largeur * MESSAGE_MAX;	// 16*4=64 or 16*8=128 
@@ -75,8 +75,8 @@ Sint32 zeMiniMess::intialise1()
 
 	if(!messa_fond)
 	{	messa_fond = new bitmap_data();
-		messa_fond->GFXnouveau(fonteslarg, ft_hauteur, 1);
-		pt_mesfond = messa_fond->GFXadresse();
+		messa_fond->create(fonteslarg, ft_hauteur, 1);
+		pt_mesfond = messa_fond->get_pixel_data();
 	}
 
 	//###################################################################
