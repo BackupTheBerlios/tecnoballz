@@ -72,9 +72,8 @@ Sint32 zeGameOver::first_init(Sint32 offzt)
 	// load the bitmap fontes
 	//###################################################################
 	ptGfxFonte = new bitmap_data();
-	error_init(ptGfxFonte->load(ressources::RESFONTSCR));
-	if(erreur_num) return erreur_num;
-	
+	ptGfxFonte->load(ressources::RESFONTSCR);
+
 	//###################################################################
 	//initialize score table 
 	//###################################################################

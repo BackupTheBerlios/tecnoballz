@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-10
 // fonction	: display chars
-// id		: $Id: print_text.cc,v 1.9 2007/01/24 12:32:30 gurumeditation Exp $
+// id		: $Id: print_text.cc,v 1.10 2007/01/24 14:31:27 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -86,9 +86,7 @@ Uint32 print_text::getCharHgt()
 Sint32 print_text::init_print(Sint32 ident)
 {
 	GFX_fontes = new bitmap_data();
-	error_init(GFX_fontes->load(ident));
-	if(erreur_num)
-		return (erreur_num);
+	GFX_fontes->load(ident);
 	fontes_adr = GFX_fontes->get_pixel_data(216 * resolution, 0);	//characters '0' to '9'
 	caract_adr = GFX_fontes->get_pixel_data(0, 0);					//characters 'A' to 'Z'
 	off_desti1 = display->bufferNext();							//modulo destination
@@ -334,8 +332,7 @@ sprite_object*  print_text::string2bob(const char* ptStr)
 {
 	Sint32 numch = strlen(ptStr);
 	bitmap_data* pBmap = new bitmap_data();
-	error_init(pBmap->create(numch * charHeight, charHeight, 1));
-	if(erreur_num) return NULL;
+	pBmap->create(numch * charHeight, charHeight, 1);
 	Sint32 *basPT = (Sint32 *)caract_adr;
 	char *desP1 = pBmap->get_pixel_data();
 	Sint32 offSc = off_source;

@@ -94,10 +94,9 @@ Sint32 scrolledit::first_init()
 	sprites->reset();
 	error_init(pRessource->loadSprite());
 	if(erreur_num) return (erreur_num);
-	error_init(objetMouse->create_BOB(image_BOBs));
-	if(erreur_num) return (erreur_num);
+	objetMouse->create_BOB(image_BOBs);
 	pRessource->freeSprite();
-	
+
 	//initialize scrolling
 	if(erreur_num) return (erreur_num);
 	
@@ -557,7 +556,7 @@ void scrolledit::brushAlloc()
 	brushWidth = pt_select0->box_widthT;
 	brushHeigh = pt_select0->box_height;
 	
-	Sint32 m1 = pBrush_bob->GFX_modulo(0);
+	Sint32 m1 = pBrush_bob->get_line_modulo(0);
 	Sint32 m2 = (defilement->motifhaute * pBrush_bob->get_row_size()) - defilement->motiflarge;
 	Sint32 m3 = ((defilement->motifhaute - 1) * pBrush_bob->get_row_size());
 

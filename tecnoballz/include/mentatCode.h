@@ -4,9 +4,9 @@
 // file		: "mentatCode.h"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.20 2007/01/24 11:52:25 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.21 2007/01/24 14:31:27 gurumeditation Exp $
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.20 2007/01/24 11:52:25 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.21 2007/01/24 14:31:27 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -24,7 +24,9 @@
 //*****************************************************************************
 #include <errno.h>
 #include <fcntl.h>
+#include <iostream>
 #include <math.h>
+#include <stdexcept>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

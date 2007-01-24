@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.14 2007/01/24 11:52:25 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.15 2007/01/24 14:31:27 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -46,11 +46,21 @@ int main(Sint32 nbArg, char **ptArg)
 		printf("===========================================================\n");
 	}
 	Sint32 error = 0;
-	error = mentatCode::first_init(&oConfigure);
-	if(error) return error;
-	error = mentatCode::game_begin();
-	if(error) return error;
-	if(mentatCode::is_verbose) 
+  try
+    {
+	    error = mentatCode::first_init(&oConfigure);
+     	if(error) return error;
+	    error = mentatCode::game_begin();
+	    if(error) return error;
+    }
+    catch (...)
+    {
+      mentatCode::desinstall(&oConfigure);
+      std::cerr << "fatal error" << std::endl;
+      throw;
+    }
+
+if(mentatCode::is_verbose) 
 		printf("===========================================================\n");
 	error = mentatCode::desinstall(&oConfigure);
 	if(error) return error;

@@ -174,9 +174,7 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 	// select one of 10 sets of bricks
 	//###################################################################
 	GFXbriques = new bitmap_data();
-	error_init(GFXbriques->load(ressources::RESZEBRICK));
-	if(erreur_num)
-		return (erreur_num);
+	GFXbriques->load(ressources::RESZEBRICK);
 	Sint32 i = hasard_val & 0x0F;
 	//i = 7;
 	if(i >= 10)
@@ -194,7 +192,7 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 	
 	if(is_verbose)
 		printf("lesBriques::initialise()  bposx=%i / bposy=%i \n", bposx, bposy);
-	GFX_brique = GFXbriques->coupe_page(bposx, bposy, pageBrickH, pageBrickV);
+	GFX_brique = GFXbriques->cut(bposx, bposy, pageBrickH, pageBrickV);
 	if(!GFX_brique)
 	{	error_init(GFXbriques->retour_err());
 		return (erreur_num);
@@ -211,7 +209,7 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 	//###################################################################
 	// read somes values for the graphic routine
 	//###################################################################
-	offsSource = GFX_brique->GFX_modulo(brickWidth);
+	offsSource = GFX_brique->get_line_modulo(brickWidth);
 	offsDestin = display->buffer_mod(brickWidth);
 	adr_source = (Sint32 *)GFX_brique->get_pixel_data();
 	adr_desti1 = (Sint32 *)display->buffer_adr();

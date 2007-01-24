@@ -77,9 +77,7 @@ Sint32 barreScore::first_init(joueurData * gamer, zeGigaBlit *gblit, zeNewBalls 
 Sint32 barreScore::affiche_me()
 {
 	GFX_Sbarre = new bitmap_data();
-	error_init(GFX_Sbarre->load(ressources::RESBASCORE));
-	if(erreur_num)
-		return (erreur_num);
+	GFX_Sbarre->load(ressources::RESBASCORE);
 	GFX_Sbarre->copyTampon(0, 0, 256 * resolution, 0, 64 * resolution, 240 * resolution);
 	joueurData *gamer = objetGamer;
 	tamponAff1(POSX_AREAN * resolution, POSY_AREAN * resolution,

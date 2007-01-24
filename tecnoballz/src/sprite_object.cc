@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.15 2007/01/24 12:32:30 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.16 2007/01/24 14:31:28 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -327,7 +327,7 @@ sprite_object::initCommun (bitmap_data * image, Sint32 shadow)
   collision_width = sprite_width;
   x_maximum = screen_width - (Sint32) collision_width;
   y_maximum = screen_height - (Sint32) collision_height;
-  offsetSrce = image->GFX_modulo (sprite_width);
+  offsetSrce = image->get_line_modulo (sprite_width);
   offsetDest = display->buffer_mod (sprite_width);
 }
 
@@ -441,7 +441,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
   error_init (memory->retour_err ());
   if (erreur_num)
     return erreur_num;
-  offsetSrce = image->GFX_modulo (sprite_width);
+  offsetSrce = image->get_line_modulo (sprite_width);
   offsetDest = display->buffer_mod (sprite_width);
 
   //###################################################################

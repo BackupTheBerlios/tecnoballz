@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.13 2007/01/24 12:32:30 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.14 2007/01/24 14:31:27 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -78,9 +78,7 @@ Sint32 print_menu::first_init()
 	// allocate 512 * 323 pixels buffer for text menu 
 	//###################################################################
 	graphTexte = new bitmap_data();
-	error_init(graphTexte->create(MENU_LARGE * width_font,
-		MENU_HAUTE * space2next , 1));
-	if(erreur_num) return (erreur_num);
+	graphTexte->create(MENU_LARGE * width_font, MENU_HAUTE * space2next , 1);
 
 	//###################################################################
 	// initialize sprite object

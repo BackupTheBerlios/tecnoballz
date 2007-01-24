@@ -116,12 +116,9 @@ Sint32 escapeMenu::first_init(bitmap_data *image, Sint32 nmenu, Sint32 large, Si
 	// allocate graphic buffer of menu box  
 	//###################################################################
 	graphTexte = new bitmap_data();
-	error_init(graphTexte->create(nbcol * charHeight,
-		nblin * space2next , 1));
-	if(erreur_num) return (erreur_num);
+	graphTexte->create(nbcol * charHeight, nblin * space2next , 1);
 	graphTexte->clear();
-	
-	
+
 	//###################################################################
 	// save coordinates of the sprites
 	//###################################################################
