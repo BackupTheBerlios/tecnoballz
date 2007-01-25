@@ -4,11 +4,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.1 2007/01/24 20:48:22 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.2 2007/01/25 06:19:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,10 +89,10 @@ public:
   void lache_tirs ();
   void deplaceTir ();
   void bumpActive (Sint32 rTeam, Sint32 large, Sint32 actif);
-  void bumperHgfx (Sint32 large);
-  void bumperVgfx (Sint32 large);
-  void bumper_gfx (Sint32 large);
-  void bumper_gfx ();
+  void set_width (Sint32 w);
+  void set_height (Sint32 h);
+  void select_image (Sint32 l);
+  void select_image ();
   Sint32 bumper_num ();
   void bumpGoGlue ();
   void bump_fire1 ();

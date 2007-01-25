@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.17 2007/01/24 20:48:22 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.18 2007/01/25 06:19:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -653,10 +653,10 @@ void zeRaquette::maxi_bumps()
 		tecBumper3->set_x_coord(x);
 		tecBumper4->set_y_coord(x);
 	}
-	tecBumper1->bumperHgfx(raketLarge);
-	tecBumper2->bumperVgfx(raketLarge);
-	tecBumper3->bumperHgfx(raketLarge);
-	tecBumper4->bumperVgfx(raketLarge);
+	tecBumper1->set_width(raketLarge);
+	tecBumper2->set_height(raketLarge);
+	tecBumper3->set_width(raketLarge);
+	tecBumper4->set_height(raketLarge);
 	joueurGere->setLargeur(raketLarge);
 	
 }
@@ -677,10 +677,10 @@ void zeRaquette::incremente()
 			tecBumper3->set_x_coord(x);
 			tecBumper4->set_y_coord(x);
 		}
-		tecBumper1->bumperHgfx(raketLarge);
-		tecBumper2->bumperVgfx(raketLarge);
-		tecBumper3->bumperHgfx(raketLarge);
-		tecBumper4->bumperVgfx(raketLarge);
+		tecBumper1->set_width(raketLarge);
+		tecBumper2->set_height(raketLarge);
+		tecBumper3->set_width(raketLarge);
+		tecBumper4->set_height(raketLarge);
 		joueurGere->setLargeur(raketLarge);
 	}
 }
@@ -692,10 +692,10 @@ void zeRaquette::decremente()
 {	
 	if(raketLarge > (16 * resolution))
 	{	raketLarge -= (8 * resolution);
-		tecBumper1->bumperHgfx(raketLarge);
-		tecBumper2->bumperVgfx(raketLarge);
-		tecBumper3->bumperHgfx(raketLarge);
-		tecBumper4->bumperVgfx(raketLarge);
+		tecBumper1->set_width(raketLarge);
+		tecBumper2->set_height(raketLarge);
+		tecBumper3->set_width(raketLarge);
+		tecBumper4->set_height(raketLarge);
 		joueurGere->setLargeur(raketLarge);
 	}
 }

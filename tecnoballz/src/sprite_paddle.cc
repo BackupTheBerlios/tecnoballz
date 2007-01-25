@@ -4,11 +4,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.1 2007/01/24 20:48:22 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.2 2007/01/25 06:19:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,72 +116,61 @@ sprite_paddle::bumpActive (Sint32 rTeam, Sint32 large, Sint32 actif)
       bump_actif = 1;
       is_enabled = 1;
     }
-  bumper_gfx (large);
+  select_image (large);
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: select the sprite image of a horizontal bumper 
-// input        => large: bumper's width 
-//------------------------------------------------------------------------------
+/**
+ * Set the width and image of a horizontal paddle
+ * @param w width of the paddle in pixels
+ */
 void
-sprite_paddle::bumperHgfx (Sint32 large)
+sprite_paddle::set_width (Sint32 w)
 {
-  length = large;
-  collision_width = large;
-  Sint32 i = (large >> width_deca) - 2;
-  if (bumperFire)
-    i += 7;
-  if (is_glue)
-    i += 14;
-  set_image (i);
+  length = w;
+  collision_width = length;
+  select_image (length);
   bumperTirs->disable_sprites ();
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: select the sprite image of a vertical bumper 
-// input        => large: bumper's width 
-//------------------------------------------------------------------------------
+/**
+ * Set the height and image of a vertical paddle
+ * @param h height of the paddle in pixels
+ */
 void
-sprite_paddle::bumperVgfx (Sint32 large)
+sprite_paddle::set_height (Sint32 h)
 {
-  length = large;
-  collision_height = large;
-  Sint32 i = (large >> width_deca) - 2;
-  if (bumperFire)
-    i += 7;
-  if (is_glue)
-    i += 14;
-  set_image (i);
+  length = h;
+  collision_height = length;
+  select_image (length);
   bumperTirs->disable_sprites ();
 }
 
-//------------------------------------------------------------------------------
-// select the sprite image of a bumper
-// input        => large: bumper's width 
-//------------------------------------------------------------------------------
+/**
+ * select the sprite image of the paddle
+ * @param l length of the paddle
+ */
 void
-sprite_paddle::bumper_gfx (Sint32 large)
+sprite_paddle::select_image (Sint32 l)
 {
-  Sint32 i = (large >> width_deca) - 2;
+  Sint32 i = (l >> width_deca) - 2;
   if (bumperFire)
-    i += 7;
+    {
+      i += 7;
+    }
   if (is_glue)
-    i += 14;
+    {
+      i += 14;
+    }
   set_image (i);
 }
 
-//------------------------------------------------------------------------------
-// select the sprite image of a bumper
-//------------------------------------------------------------------------------
+/**
+ * select the sprite image of the paddle
+ */
 void
-sprite_paddle::bumper_gfx ()
+sprite_paddle::select_image ()
 {
-  Sint32 i = (length >> width_deca) - 2;
-  if (bumperFire)
-    i += 7;
-  if (is_glue)
-    i += 14;
-  set_image (i);
+  select_image (length);
 }
 
 //------------------------------------------------------------------------------
@@ -201,7 +190,7 @@ void
 sprite_paddle::bumpGoGlue ()
 {
   is_glue = 1;
-  bumper_gfx ();
+  select_image ();
 }
 
 //------------------------------------------------------------------------------
@@ -211,7 +200,7 @@ void
 sprite_paddle::bump_fire1 ()
 {
   bumperFire = 1;
-  bumper_gfx ();
+  select_image ();
   bumperTirs->fire1RunOn ();
 }
 
@@ -222,7 +211,7 @@ void
 sprite_paddle::bump_fire2 ()
 {
   bumperFire = 1;
-  bumper_gfx ();
+  select_image ();
   bumperTirs->fire2RunOn ();
 }
 
