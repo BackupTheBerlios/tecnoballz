@@ -70,7 +70,7 @@ brickClear;
 class lesBriques:public objects_list < sprite_object >
 {
 	friend class zeNewBalls;
-	friend class tecno_fire;
+	friend class sprite_projectile;
 	friend class zeGigaBlit;
 	friend class tecno_boui;
 

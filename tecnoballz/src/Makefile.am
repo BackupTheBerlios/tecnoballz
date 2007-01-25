@@ -48,6 +48,7 @@ SOURCES_MAIN = \
 	shop_tecno.cc \
 	sprite_object.cc \
 	sprite_ball.cc \
+  sprite_projectile.cc \
   sprite_paddle.cc \
 	tableaux_Z.cc \
 	techno_eye.cc \
@@ -55,7 +56,6 @@ SOURCES_MAIN = \
 	tecno_boui.cc \
 	tecno_caps.cc \
 	tecnoDefil.cc \
-	tecno_fire.cc \
 	tecno_gads.cc \
 	tecno_gard.cc \
 	tecno_miss.cc \

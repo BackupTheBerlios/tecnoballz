@@ -97,7 +97,7 @@ Sint32 tecno_caps::disponible(sprite_ball *pball)
 //-----------------------------------------------------------------------------
 // initialize a new capsule of money from a Bouiboui 
 //-----------------------------------------------------------------------------
-Sint32 tecno_caps::disponible(tecno_fire *pfire)
+Sint32 tecno_caps::disponible(sprite_projectile *pfire)
 {
 	if(is_enabled)
 		return 0;

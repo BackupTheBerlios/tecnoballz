@@ -29,7 +29,7 @@ class tecno_gads;
 #include "../include/sprite_paddle.h"
 #include "../include/barreScore.h"
 #include "../include/handler_display.h"
-#include "../include/tecno_fire.h"
+#include "../include/sprite_projectile.h"
 //..............................................................................
 const Sint32	GAD_VIDE00 = 0;
 const Sint32	GAD_GLUE00 = 2;		// glue (only briks levels)
@@ -107,7 +107,7 @@ class tecno_gads:public sprite_object
 		void				new_gadget(Sint32 nuGad);
 		void				nouveauGad(brickClear *briPT, Sint32 nuGad);
 		void				nouveauGad(sprite_ball *balle, Sint32 nuGad);
-		void				nouveauGad(tecno_fire *pfire, Sint32 nuGad);
+		void				nouveauGad(sprite_projectile *pfire, Sint32 nuGad);
 		void				new_gadget(sprite_ball *balle, Sint32 nuGad);
 		void				nouveauGad(Sint32 nuGad);
 		void				copiegadet(tecno_gads *gadgt);

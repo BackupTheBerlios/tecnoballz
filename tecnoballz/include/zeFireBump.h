@@ -30,11 +30,11 @@ class zeFireBump;
 #include "../include/objects_list.h"
 #include "../include/handler_display.h"
 #include "../include/barreScore.h"
-#include "../include/tecno_fire.h"
+#include "../include/sprite_projectile.h"
 #include "../include/sprite_paddle.h"
 
 
-class zeFireBump:public objects_list < tecno_fire >
+class zeFireBump:public objects_list < sprite_projectile >
 {
 	private:
 		static const Sint32	NUMBERFIRE = 7;

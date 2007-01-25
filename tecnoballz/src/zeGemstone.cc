@@ -76,7 +76,7 @@ void zeGemstone::sendNewGem(sprite_ball *pball)
 //-----------------------------------------------------------------------------
 // bricks levels: send a gem
 //-----------------------------------------------------------------------------
-void zeGemstone::sendNewGem(tecno_fire *pfire)
+void zeGemstone::sendNewGem(sprite_projectile *pfire)
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	techno_gem *ptGem = sprites_list[i];

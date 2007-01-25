@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.19 2007/01/24 20:48:22 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.20 2007/01/25 20:33:51 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -25,7 +25,7 @@
 #include "../include/handler_display.h"
 #include "../include/handler_keyboard.h"
 #include "../include/joueurData.h"
-#include "../include/tecno_fire.h"
+#include "../include/sprite_projectile.h"
 #include "../include/joueurData.h"
 
 //-----------------------------------------------------------------------------
@@ -187,7 +187,7 @@ void ze_gadgets::send_malus(sprite_ball *pball)
 //-------------------------------------------------------------------------------
 // bricks levels: send a malus (from BouiBoui)
 //-------------------------------------------------------------------------------
-void ze_gadgets::send_malus(tecno_fire *pfire)
+void ze_gadgets::send_malus(sprite_projectile *pfire)
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_gads *gadg = sprites_list[i];

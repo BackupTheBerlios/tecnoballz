@@ -53,10 +53,10 @@ Sint32 zeFireBump::installBOB(sprite_paddle * raket)
 {
 	Sint32 error = init_liste();
 	maRaquette = raket;
-	tecno_fire **liste = sprites_list;
+	sprite_projectile **liste = sprites_list;
 	Sint32 t = max_of_sprites;
 	for(Sint32 i = 0; i < t; i++)
-	{	tecno_fire *xFire = *(liste++);
+	{	sprite_projectile *xFire = *(liste++);
 		xFire->littleInit(raket);
 	}
 	fire1RunOn();
@@ -76,7 +76,7 @@ void zeFireBump::disponible()
 		return;
 	
 	Sint32 t = max_of_sprites;
-	tecno_fire **liste = sprites_list;
+	sprite_projectile **liste = sprites_list;
 
 	//###################################################################
 	// special fire 7 (circular fire)
@@ -84,7 +84,7 @@ void zeFireBump::disponible()
 	if(maRaquette->length == maRaquette->width_maxi)
 	{	Sint32 j = 1;
 		for(Sint32 i = 0; i < t; i++)
-		{	tecno_fire *xFire = *(liste++);
+		{	sprite_projectile *xFire = *(liste++);
 			if(xFire->is_enabled == j)
 				return;
 		}
@@ -95,7 +95,7 @@ void zeFireBump::disponible()
 	//###################################################################
 	else
 	{	for(Sint32 i = 0; i < t; i++)
-		{ tecno_fire *xFire = *(liste++);
+		{ sprite_projectile *xFire = *(liste++);
 			if(xFire->is_enabled)
 				return;
 		}
@@ -157,7 +157,7 @@ void zeFireBump::init_type1()
 			y += (raketLarge / 2) - (SIZEOFFIRE / 2);
 		else
 			x += (raketLarge / 2) - (SIZEOFFIRE / 2);
-		tecno_fire *xFire = sprites_list[0];
+		sprite_projectile *xFire = sprites_list[0];
 		xFire->is_enabled = 1;
 		xFire->x_coord = x;
 		xFire->y_coord = y;
@@ -178,8 +178,8 @@ void zeFireBump::init_type2()
 			y += (raketLarge / 2) - (SIZEOFFIRE / 2);
 		else
 			x += (raketLarge / 2) - (SIZEOFFIRE / 2);
-		tecno_fire **liste = sprites_list;
-		tecno_fire *xFire;
+		sprite_projectile **liste = sprites_list;
+		sprite_projectile *xFire;
 		Sint32 f = 1;
 		xFire = *(liste++);
 		xFire->is_enabled = f;
@@ -206,8 +206,8 @@ void zeFireBump::init_type3()
 			y += (raketLarge / 2) - (SIZEOFFIRE / 2);
 		else
 			x += (raketLarge / 2) - (SIZEOFFIRE / 2);
-		tecno_fire **liste = sprites_list;
-		tecno_fire *xFire;
+		sprite_projectile **liste = sprites_list;
+		sprite_projectile *xFire;
 		Sint32 f = 1;
 		xFire = *(liste++);
 		xFire->is_enabled = f;
@@ -234,8 +234,8 @@ void zeFireBump::init_type4()
 	{	raket->bumperFire = 1;
 		Sint32 x = raket->x_coord;
 		Sint32 y = raket->y_coord;
-		tecno_fire **liste = sprites_list;
-		tecno_fire *xFire;
+		sprite_projectile **liste = sprites_list;
+		sprite_projectile *xFire;
 		Sint32 f = 1;
 		xFire = *(liste++);
 		xFire->is_enabled = f;
@@ -274,8 +274,8 @@ void zeFireBump::init_type5()
 	{	raket->bumperFire = 1;
 		Sint32 x = raket->x_coord;
 		Sint32 y = raket->y_coord;
-		tecno_fire **liste = sprites_list;
-		tecno_fire *xFire;
+		sprite_projectile **liste = sprites_list;
+		sprite_projectile *xFire;
 		Sint32 f = 1;
 		xFire = *(liste++);
 		xFire->is_enabled = f;
@@ -347,13 +347,13 @@ void zeFireBump::init_type6()
 	sprite_paddle *raket = maRaquette;
 	if(raket->bumperFire == 3)
 	{	raket->bumperFire = 1;
-		tecno_fire **liste = sprites_list;
+		sprite_projectile **liste = sprites_list;
 		Sint32 x = raket->x_coord;
 		Sint32 y = raket->y_coord;
 		Sint32 offst = 22 * resolution; 
 
 		if(raket->bumperType)	//vertical bumper ?
-		{	tecno_fire *xFire;
+		{	sprite_projectile *xFire;
 			Sint32 a = x + raket->bump_xdeca;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
@@ -383,7 +383,7 @@ void zeFireBump::init_type6()
 			xFire->y_coord = y;
 		}
 		else
-		{	tecno_fire *xFire;
+		{	sprite_projectile *xFire;
 			Sint32 o = y + raket->bump_ydeca;
 			xFire = *(liste++);
 			xFire->is_enabled = 1;
@@ -427,12 +427,12 @@ void zeFireBump::init_type7()
 	//###################################################################
 	if(raket->bumperFire == 3) //fire is requested
 	{	raket->bumperFire = 1;
-		tecno_fire **liste = sprites_list;
+		sprite_projectile **liste = sprites_list;
 		Sint32 x = raket->x_coord + raket->bump_Xscie;
 		Sint32 y = raket->y_coord + raket->bump_Yscie;
 		Sint32 j = 0;	
 		for(Sint32 i = 0; i < 7; i++, j += 8)
-		{	tecno_fire *xFire = *(liste++);
+		{	sprite_projectile *xFire = *(liste++);
 			xFire->is_enabled = 1;
 			xFire->fire_Xscie = x;
 			xFire->fire_Yscie = y;
@@ -444,10 +444,10 @@ void zeFireBump::init_type7()
 	// fire on the bumper
 	//###################################################################
 	else
-	{	tecno_fire **liste = sprites_list;
+	{	sprite_projectile **liste = sprites_list;
 		raket->bumperFire = 1;
 		for(Sint32 i = 0; i < 7; i++)
-		{	tecno_fire *xFire = *(liste++);
+		{	sprite_projectile *xFire = *(liste++);
 			if(xFire->is_enabled)
 				return;
 		}
@@ -456,7 +456,7 @@ void zeFireBump::init_type7()
 		Sint32 y = raket->y_coord + raket->bump_Yscie;
 		Sint32 j = 0;
 		for(Sint32 i = 0; i < 7; i++, j += 8)
-		{	tecno_fire *xFire = *(liste++);
+		{	sprite_projectile *xFire = *(liste++);
 			xFire->is_enabled = 2;
 			xFire->fire_Xscie = x;
 			xFire->fire_Yscie = y;
@@ -505,7 +505,7 @@ void zeFireBump::deplaceTir()
 //-----------------------------------------------------------------------------
 void zeFireBump::move_type1()
 {
-	tecno_fire *xFire = sprites_list[0];
+	sprite_projectile *xFire = sprites_list[0];
 	sprite_paddle *raket = maRaquette;
 	Sint32 i = raket->bumper_FX0;
 	xFire->x_coord += i;
@@ -518,7 +518,7 @@ void zeFireBump::move_type1()
 //-----------------------------------------------------------------------------
 void zeFireBump::move_type2()
 {
-	tecno_fire **liste = sprites_list;
+	sprite_projectile **liste = sprites_list;
 	sprite_paddle *raket = maRaquette;
 	Sint32 a = countTempo;
 	Sint32 b, c, d;
@@ -538,7 +538,7 @@ void zeFireBump::move_type2()
 		c = raket->bumper_FX1;
 		d = raket->bumper_FY1;
 	}
-	tecno_fire *xFire;
+	sprite_projectile *xFire;
 	xFire = *(liste++);
 	xFire->x_coord += a;
 	xFire->y_coord += b;
@@ -552,10 +552,10 @@ void zeFireBump::move_type2()
 //-----------------------------------------------------------------------------
 void zeFireBump::move_type3()
 {
-	tecno_fire **liste = sprites_list;
+	sprite_projectile **liste = sprites_list;
 	sprite_paddle *raket = maRaquette;
 	Sint32 i, j;
-	tecno_fire *xFire;
+	sprite_projectile *xFire;
 	xFire = *(liste++);		//shot leaves to the left
 	i = raket->bumper_FX1;
 	j = raket->bumper_FY1;
@@ -584,9 +584,9 @@ void zeFireBump::move_type4()
 	if(i > 20)
 		i = 0;
 	countTempo = i;
-	tecno_fire **liste = sprites_list;
+	sprite_projectile **liste = sprites_list;
 	sprite_paddle *raket = maRaquette;
-	tecno_fire *xFire;
+	sprite_projectile *xFire;
 
 	xFire = *(liste++);				//[1] linar shot
 	j = raket->bumper_FX0;
@@ -631,12 +631,12 @@ void zeFireBump::move_type4()
 //-----------------------------------------------------------------------------
 void zeFireBump::move_type5()
 {
-	tecno_fire **liste = sprites_list;
+	sprite_projectile **liste = sprites_list;
 	sprite_paddle *raket = maRaquette;
 	Sint32 x = raket->bumper_FX0;
 	Sint32 y = raket->bumper_FY0;
 	for(Sint32 i = 0; i < 5; i++)
-	{	tecno_fire *xFire = *(liste++);
+	{	sprite_projectile *xFire = *(liste++);
 		xFire->x_coord += x;
 		xFire->y_coord += y;
 	}
@@ -654,12 +654,12 @@ void zeFireBump::move_type6()
 	if(a > 20)
 		a = 0;
 	countTempo = a;
-	tecno_fire **liste = sprites_list;
+	sprite_projectile **liste = sprites_list;
 	sprite_paddle *raket = maRaquette;
 
 	i = raket->bumper_FX0;
 	j = raket->bumper_FY0;
-	tecno_fire *xFire = *(liste++);
+	sprite_projectile *xFire = *(liste++);
 
 	xFire->x_coord += i;
 	xFire->y_coord += j;
@@ -705,10 +705,10 @@ void zeFireBump::move_type6()
 //-----------------------------------------------------------------------------
 void zeFireBump::move_type7()
 {
-	tecno_fire **liste = sprites_list;
+	sprite_projectile **liste = sprites_list;
 	sprite_paddle *raket = maRaquette;
 	for(Sint32 i = 0; i < 7; i++)
-	{	tecno_fire *xFire = *(liste++);
+	{	sprite_projectile *xFire = *(liste++);
 		if(xFire->is_enabled)
 		{	Sint32 j = xFire->indexSinus;
 			j += 2;
@@ -745,10 +745,10 @@ void zeFireBump::move_type7()
 //-----------------------------------------------------------------------------
 void zeFireBump::fire1RunOn()
 {
-	tecno_fire **liste = sprites_list;
+	sprite_projectile **liste = sprites_list;
 	Sint32 t = max_of_sprites;
 	for(Sint32 i = 0; i < t; i++)
-	{	tecno_fire *xFire = *(liste++);
+	{	sprite_projectile *xFire = *(liste++);
 		xFire->firePower1();
 	}
 }
@@ -758,10 +758,10 @@ void zeFireBump::fire1RunOn()
 //-----------------------------------------------------------------------------
 void zeFireBump::fire2RunOn()
 {
-	tecno_fire **liste = sprites_list;
+	sprite_projectile **liste = sprites_list;
 	Sint32 t = max_of_sprites;
 	for(Sint32 i = 0; i < t; i++)
-	{	tecno_fire *xFire = *(liste++);
+	{	sprite_projectile *xFire = *(liste++);
 		xFire->firePower2();
 	}
 }

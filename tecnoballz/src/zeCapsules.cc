@@ -89,7 +89,7 @@ void zeCapsules::send_money(sprite_ball *pball)
 //-----------------------------------------------------------------------------
 // bricks levels: send a capsule of money from BouiBoui
 //-----------------------------------------------------------------------------
-void zeCapsules::send_money(tecno_fire *pfire)
+void zeCapsules::send_money(sprite_projectile *pfire)
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	tecno_caps *capsu = sprites_list[i];

@@ -30,7 +30,7 @@ class tecno_boui ;
 #include "../include/zeCapsules.h"
 #include "../include/ze_gadgets.h"
 #include "../include/zeGemstone.h"
-#include "../include/tecno_fire.h"
+#include "../include/sprite_projectile.h"
 #include "../include/sprite_ball.h"
 #include "../include/lesBriques.h"
 //.......................................................................
@@ -42,7 +42,7 @@ enum
 //.......................................................................
 class tecno_boui : public sprite_object
 {	friend class zeBouiBoui;
-	friend class tecno_fire;
+	friend class sprite_projectile;
 	friend class zeNewBalls;
 	
 	private:
@@ -92,7 +92,7 @@ class tecno_boui : public sprite_object
 		void			littleInit(Sint32 time0, Sint32 appar, Sint32 index, 
 							Sint32 power, Sint32 pos_x, Sint32 pos_y, Sint32 offst, 
 							zeCapsules*, ze_gadgets*, zeGemstone *, lesBriques*) ;
-		void			explosion1(tecno_fire *);
+		void			explosion1(sprite_projectile *);
 		void			explosion1(sprite_ball *);
 		void			explosion2() ;
 };

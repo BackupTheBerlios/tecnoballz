@@ -81,7 +81,7 @@ class ze_gadgets:public objects_list < tecno_gads >
 								ze_magneye* ptEye);
 		void				envoieGads(brickClear *briPT);
 		void				send_malus(sprite_ball *);
-		void				send_malus(tecno_fire *);	
+		void				send_malus(sprite_projectile *);	
 		void				envoieGads(sprite_ball *pball);
 		Sint32				gadgetShop();
 		void				gadgetShop(Sint32 nuGad);

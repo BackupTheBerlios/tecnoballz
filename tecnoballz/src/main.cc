@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.16 2007/01/24 20:48:22 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.17 2007/01/25 20:33:51 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -93,7 +93,7 @@ tecno_boui.cc   => sprite_ship
 tecno_bump.cc   => sprite_paddle
 tecno_caps.cc   => sprite_money
 tecnoDefil.cc   => sprite_fonte_menu
-tecno_fire.cc   => sprite_fire
+sprite_projectile.cc   => sprite_projectile
 tecno_gads.cc   => sprite_capsules
 tecno_gard.cc   => sprite_guardian
 tecno_miss.cc   => sprite_bullet

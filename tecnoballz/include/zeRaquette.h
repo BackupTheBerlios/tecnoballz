@@ -129,7 +129,7 @@ class zeRaquette:public objects_list < sprite_paddle >
 							~zeRaquette();
 		Sint32				init_fires();
 		Sint32				init_liste();
-		void				lache_tirs();
+		void				fire_projectiles ();
 		void				lacheBalle();
 		void				lacheBall2();
 		void				free_balls();

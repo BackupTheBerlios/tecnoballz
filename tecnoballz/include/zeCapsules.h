@@ -52,7 +52,7 @@ class zeCapsules:public objects_list < tecno_caps >
 		void			initialise(Sint32 frequ, printmoney *money);
 		void			envoieFric(brickClear * briPT);
 		void			send_money(sprite_ball *pball);
-		void			send_money(tecno_fire *pfire);
+		void			send_money(sprite_projectile *pfire);
 		void			envoieFric(sprite_ball *pball);
 		void			bouge_fric();
 		void			bougefric2();

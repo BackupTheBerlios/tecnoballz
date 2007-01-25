@@ -75,7 +75,7 @@ Sint32 techno_gem::disponible(sprite_ball *pball)
 //-----------------------------------------------------------------------------
 // initialize a new gem
 //-----------------------------------------------------------------------------
-Sint32 techno_gem::disponible(tecno_fire *pfire)
+Sint32 techno_gem::disponible(sprite_projectile *pfire)
 {
 	if(is_enabled)
 		return 0;

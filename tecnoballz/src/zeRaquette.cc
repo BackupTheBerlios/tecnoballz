@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.18 2007/01/25 06:19:04 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.19 2007/01/25 20:33:51 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -372,16 +372,16 @@ void zeRaquette::initBumper(barreScore *score, zeGigaBlit *blitz, zeNewBalls *ba
 //------------------------------------------------------------------------------
 // drop fires from bumpze
 //------------------------------------------------------------------------------
-void zeRaquette::lache_tirs()
+void zeRaquette::fire_projectiles()
 {
 	
 	// Mode  solo
 	if(!raket_team)
 	{	if(keyboard->is_left_button())
-		{	tecBumper1->lache_tirs();	//sprite_paddle::lache_tirs (bumper object)
-			tecBumper2->lache_tirs();
-			tecBumper3->lache_tirs();
-			tecBumper4->lache_tirs();
+		{	tecBumper1->fire_projectiles();	//sprite_paddle::fire_projectiles (bumper object)
+			tecBumper2->fire_projectiles();
+			tecBumper3->fire_projectiles();
+			tecBumper4->fire_projectiles();
 		}
 	}
 	else

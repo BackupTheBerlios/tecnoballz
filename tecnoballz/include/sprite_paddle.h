@@ -4,11 +4,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.2 2007/01/25 06:19:04 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.3 2007/01/25 20:33:51 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,7 +86,7 @@ public:
     sprite_paddle (zeFireBump * fBump);
    ~sprite_paddle ();
   Sint32 init_fires ();
-  void lache_tirs ();
+  void fire_projectiles ();
   void deplaceTir ();
   void bumpActive (Sint32 rTeam, Sint32 large, Sint32 actif);
   void set_width (Sint32 w);

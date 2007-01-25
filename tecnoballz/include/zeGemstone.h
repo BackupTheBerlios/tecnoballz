@@ -50,7 +50,7 @@ class zeGemstone:public objects_list < techno_gem >
 		Sint32				initialise(joueurData*, barreScore*, 
 								printmoney*, zeRaquette*);
 		void				sendNewGem(sprite_ball *pball);
-		void				sendNewGem(tecno_fire *pball);
+		void				sendNewGem(sprite_projectile *pball);
 		void				moving_gem();
 };
 #endif

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.16 2007/01/23 14:26:07 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.17 2007/01/25 20:33:51 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -57,7 +57,7 @@ tableaux_Z::tableaux_Z()
 	ptBobRever = new tecno_gads();
 	ptrEscMenu = new escapeMenu();
 	
-	tecno_fire::start_list(briquesTab, les_atomes, tecZ_barre);
+	sprite_projectile::start_list(briquesTab, les_atomes, tecZ_barre);
 	levelTecno = 1;
 	areaNumber = 1;
 	next_level = 0;
@@ -356,7 +356,7 @@ Sint32 tableaux_Z::zeMainLoop()
 			gereGadget->disable_sprites();
 			gereCapsul->disable_sprites();
 			gereBalles->disable_sprites();
-			tecno_fire::disable_sprites();
+			sprite_projectile::disable_sprites();
 			ptMiniMess->erase_mess();
 			isgameover++;
 		}
@@ -409,12 +409,12 @@ Sint32 tableaux_Z::zeMainLoop()
 			theBumpers->bp_deplace();	//move bumpers
 			if(tecZ_barre->resteBrick())
 			{	theBumpers->lacheBalle();
-				theBumpers->lache_tirs();
+				theBumpers->fire_projectiles();
 			}
 			theBumpers->move_robot();
 			gereBalles->vitusBalle();	//move balls
 			ptBaDirect->execution1();	//handle ball viewfinder
-			tecno_fire::gestionTir();
+			sprite_projectile::gestionTir();
 			les_atomes->atom_depla();
 			pt_magneye->execution1();
 			gereCapsul->bouge_fric();	//move capsules of money
@@ -460,11 +460,11 @@ Sint32 tableaux_Z::zeMainLoop()
 #endif
 				}
 				gereBalles->disable_sprites();
-				tecno_fire::disable_sprites();
+				sprite_projectile::disable_sprites();
 			}
 			else
 			{	gere_texte->activeText();
-				tecno_fire::disable_sprites();
+				sprite_projectile::disable_sprites();
 				gereBalles->disable_sprites();
 #ifndef SOUNDISOFF	
 				audio->play_win_music();

@@ -4,11 +4,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.2 2007/01/25 06:19:04 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.3 2007/01/25 20:33:51 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,14 +74,16 @@ sprite_paddle::init_fires ()
   return (error);
 }
 
-//------------------------------------------------------------------------------
-// start new bumper's fires
-//------------------------------------------------------------------------------
+/**
+ * Paddle fires projectiles
+ */
 void
-sprite_paddle::lache_tirs ()
+sprite_paddle::fire_projectiles ()
 {
-  if (bumperFire)
-    bumperTirs->disponible ();  //zeFireBump::disponible();
+  if (bumperFire != 0)
+    {
+      bumperTirs->disponible ();  //zeFireBump::disponible();
+    }
 }
 
 //------------------------------------------------------------------------------

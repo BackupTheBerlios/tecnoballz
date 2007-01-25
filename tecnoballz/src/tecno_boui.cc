@@ -218,7 +218,7 @@ void tecno_boui::littleInit(Sint32 time0, Sint32 appar, Sint32 index, Sint32 pow
 //-----------------------------------------------------------------------------
 // explosion of a BouiBoui by a bumper's fire and send gem, money or malus
 //-----------------------------------------------------------------------------
-void tecno_boui::explosion1(tecno_fire *pFire)
+void tecno_boui::explosion1(sprite_projectile *pFire)
 {
 	if(atom_actif > 0)
 		return;

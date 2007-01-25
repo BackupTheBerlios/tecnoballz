@@ -27,7 +27,7 @@ class techno_gem;
 //...............................................................................
 #include "../include/sprite_object.h"
 #include "../include/sprite_ball.h"
-#include "../include/tecno_fire.h"
+#include "../include/sprite_projectile.h"
 //...............................................................................
 enum 
 {
@@ -57,7 +57,7 @@ class techno_gem:public sprite_object
 							~techno_gem();
 		void				littleInit();
 		Sint32				disponible(sprite_ball *pball);
-		Sint32				disponible(tecno_fire *pfire);
+		Sint32				disponible(sprite_projectile *pfire);
 		void				initialGem(Sint32 pos_x, Sint32 pos_y, 
 								sprite_paddle *raket);
 		void				gemcollect(Sint32 ztype);
