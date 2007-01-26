@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.h,v 1.4 2007/01/26 06:25:20 gurumeditation Exp $
+ * $Id: sprite_ball.h,v 1.5 2007/01/26 16:49:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ typedef struct
 
 class sprite_ball:public sprite_object
 {
-  friend class zeNewBalls;
+  friend class controller_balls;
   friend class ballDirect;
   friend class zeRaquette;
   friend class tecno_caps;
@@ -79,7 +79,7 @@ public:
 
 
 private:
-    Sint32 directBall;          //ball direction (0 to 56 step 4)
+  Sint32 directBall;          //ball direction (0 to 56 step 4)
   Sint32 save_Dball;            //last directBall (0 to 56 step 4)
   Sint32 countDball;            //counter before rebound forcing
   sprite_paddle *raket_ball;    //pointer to the bumper touched
@@ -91,7 +91,7 @@ private:
   Sint32 powerBall2;            //value decreasing brick strength (2 4 or 6) 
   Sint32 eject_ball[4];         //flag pour coins haut-gauche/bas-gauche/bas_droite/haut-droite
   Sint32 colleBallF;            //sticky ball flag
-  Sint32 tiltCompte;            //counter before a tilt is possible 
+  Sint32 tilt_delay;            //counter before a tilt is possible 
   Sint32 ClBouiBoui;            //0=no bouibouis collisions
   Sint32 speedCount;            //temps que dure la vitesse
   Sint32 speed_init;            //temps que dure la vitesse (valeur initiale)
@@ -102,7 +102,8 @@ private:
   Sint32 ball_sizeX;            //Pointeur Gfx 
   Sint32 ballPowerX;            //Pointeur Gfx
   Sint32 oeilRotate;            //1=rotation autour de l'oeil  
-  Sint32 brickWidth;            //brick's width in pixels
+  /** Brick's width in pixels 16 or 32 */
+  Sint32 brick_width;
   Sint32 colli_wall;            //collision with one wall
 
   static Sint32 brikPoint1[8];  //Points collision balle taille 1
@@ -118,7 +119,7 @@ private:
 public:
     sprite_ball ();
    ~sprite_ball ();
-  void littleInit (Sint32 start, Sint32 speed,
+  void once_init (Sint32 start, Sint32 speed,
                    sprite_paddle * raket, Sint16 * table, Sint32 bwght);
   void reStarting (sprite_paddle * raket);
   void goSleeping (sprite_paddle * raket);

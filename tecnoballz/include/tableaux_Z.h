@@ -43,7 +43,7 @@ class tableaux_Z;
 #include "../include/handler_display.h"
 #include "../include/ejectBalls.h"
 #include "../include/lesBriques.h"
-#include "../include/zeNewBalls.h"
+#include "../include/controller_balls.h"
 #include "../include/zeCapsules.h"
 #include "../include/ze_gadgets.h"
 #include "../include/zeGigaBlit.h"
@@ -65,7 +65,7 @@ class tableaux_Z:public virtual runGestion
 {
 	friend class            fond_ecran;
 	friend class            zeCapsules;
-	friend class            zeNewBalls;
+	friend class            controller_balls;
 	friend class            zeRaquette;
 	friend class            ze_gadgets;
 	friend class            zeMoveText;
@@ -82,7 +82,7 @@ class tableaux_Z:public virtual runGestion
 		lesBriques*			briquesTab;
 		fond_ecran*			ecranfond4;
 		ejectBalls*			gereEjects;
-		zeNewBalls*			gereBalles;
+		controller_balls*			gereBalles;
 		ballDirect*			ptBaDirect;
 		zeRaquette*			theBumpers;
 		barreScore*			tecZ_barre;

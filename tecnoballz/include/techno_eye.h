@@ -28,11 +28,11 @@ class techno_eye ;
 #include "../include/sprite_object.h"
 #include "../include/sprite_ball.h"
 #include "../include/lesBriques.h"
-#include "../include/zeNewBalls.h"
+#include "../include/controller_balls.h"
 #include "../include/ze_magneye.h"
 //.......................................................................
 class techno_eye : public sprite_object
-{	friend class zeNewBalls;
+{	friend class controller_balls;
 	friend class ze_magneye;
 		
 	private:

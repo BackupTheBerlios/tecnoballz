@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.7 2007/01/26 06:25:20 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.8 2007/01/26 16:49:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 sprite_ball::sprite_ball ()
 {
   clear_sprite_members ();
-  littleInit (0, 0, (sprite_paddle *) NULL, ballSpeed1, 0);
+  once_init (0, 0, (sprite_paddle *) NULL, ballSpeed1, 0);
 }
 
 /**
@@ -52,7 +52,7 @@ sprite_ball::~sprite_ball ()
  * @param bwgth width of brick in pixels 
 */
 void
-sprite_ball::littleInit (Sint32 start, Sint32 speed,
+sprite_ball::once_init (Sint32 start, Sint32 speed,
                          sprite_paddle * raket, Sint16 * table, Sint32 bwght)
 {
   start_init = start;
@@ -61,7 +61,7 @@ sprite_ball::littleInit (Sint32 start, Sint32 speed,
   disable ();
   colleBallF = 0;
   startCount = 0;
-  brickWidth = bwght;
+  brick_width = bwght;
   set_initial_values (raket);
 }
 
@@ -110,12 +110,12 @@ sprite_ball::set_initial_values (sprite_paddle * paddle)
   speedBallT = speedBallZ;
   collisionT = brikPoint1;
   powerBall1 = 1;
-  powerBall2 = brickWidth;
+  powerBall2 = brick_width;
   eject_ball[0] = 0;
   eject_ball[1] = 0;
   eject_ball[2] = 0;
   eject_ball[3] = 0;
-  tiltCompte = 0;
+  tilt_delay = 0;
   ClBouiBoui = 0;
   balle_rota = 1;
   tempo_rota = 1;
@@ -189,7 +189,7 @@ sprite_ball::duplicate3 (sprite_ball * balle, Sint32 angle)
   y_coord = balle->y_coord;
   directBall = angle;
   colleBallF = 0;
-  tiltCompte = 0;
+  tilt_delay = 0;
   ball_sizeX = balle->ball_sizeX;
   ballPowerX = balle->ballPowerX;
   collision_width = balle->collision_width;
@@ -231,7 +231,7 @@ void
 sprite_ball::ball_size2 ()
 {
   powerBall1 = 2;
-  powerBall2 = brickWidth * 2;
+  powerBall2 = brick_width * 2;
   collision_width = BALLWIDTH2 * resolution;
   collision_height = BALLWIDTH2 * resolution;
   ball_sizeX = BALL_SIZE2;
@@ -246,7 +246,7 @@ void
 sprite_ball::ball_size3 ()
 {
   powerBall1 = 3;
-  powerBall2 = brickWidth * 3;
+  powerBall2 = brick_width * 3;
   collision_width = BALLWIDTH3 * resolution;
   collision_height = BALLWIDTH3 * resolution;
   ball_sizeX = BALL_SIZE3;

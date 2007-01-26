@@ -28,7 +28,7 @@ class tecno_gard;
 #include "../include/handler_display.h"
 #include "../include/zeguardian.h"
 #include "../include/zeMissiles.h"
-#include "../include/zeNewBalls.h"
+#include "../include/controller_balls.h"
 #include "../include/zeGigaBlit.h"
 #include "../include/zexplosion.h"
 //..............................................................................
@@ -37,7 +37,7 @@ class tecno_gard:public sprite_object
 	friend class zeguardian;
 	friend class zeMissiles;
 	friend class tecno_miss;
-	friend class zeNewBalls;
+	friend class controller_balls;
 
 	private:
 		const static Sint32	table_gga1[8];	//table different size of gigablitz

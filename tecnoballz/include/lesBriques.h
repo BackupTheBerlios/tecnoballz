@@ -69,7 +69,7 @@ brickClear;
 //...............................................................................
 class lesBriques:public objects_list < sprite_object >
 {
-	friend class zeNewBalls;
+	friend class controller_balls;
 	friend class sprite_projectile;
 	friend class zeGigaBlit;
 	friend class tecno_boui;
@@ -176,7 +176,7 @@ NB_BRICKST = 480 briques a l'ecran
   fonction : collision des balles/tirs avec les 480 briques de l'ecran
   taille   : 7*480 = 3360 octets
   type     : type structure brickInfos 6 mots et 1 pointeur
-   brique_rel : adresse relative du bitmap de la brique, sert pour les collisions/resistance de la brique zeNewBalls::vitusBrick()
+   brique_rel : adresse relative du bitmap de la brique, sert pour les collisions/resistance de la brique controller_balls::vitusBrick()
    brique_aff : adresse relative du bitmap de la brique
    brique_num : numero de la brique (sert a rien ???)
    adresseAff : adresse ecran relative d'affichage (dans le buffer et le tampon)

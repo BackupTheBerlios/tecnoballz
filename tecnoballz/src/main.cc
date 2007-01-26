@@ -4,7 +4,7 @@
 // file         : "main.cc"
 // created      : 2002-08-21
 // updates      : 2005-01-23
-// id		: $Id: main.cc,v 1.17 2007/01/25 20:33:51 gurumeditation Exp $
+// id		: $Id: main.cc,v 1.18 2007/01/26 16:49:19 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -93,7 +93,7 @@ tecno_boui.cc   => sprite_ship
 tecno_bump.cc   => sprite_paddle
 tecno_caps.cc   => sprite_money
 tecnoDefil.cc   => sprite_fonte_menu
-sprite_projectile.cc   => sprite_projectile
+tecno_fire.cc   => sprite_projectile
 tecno_gads.cc   => sprite_capsules
 tecno_gard.cc   => sprite_guardian
 tecno_miss.cc   => sprite_bullet
@@ -115,7 +115,7 @@ zeguardian.cc   => controller_guardians
 ze_magneye.cc   => controller_magnetic_eyes
 zeMissiles.cc   => controller_bullets
 zeMoveText.cc   => controller_level_fontes
-zeNewBalls.cc   => controller_balls
+controller_balls.cc   => controller_balls
 zeRaquette.cc   => controller_paddles
 zexplosion.cc   => controller_explosions
 

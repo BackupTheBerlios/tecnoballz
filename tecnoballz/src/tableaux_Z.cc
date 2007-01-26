@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.17 2007/01/25 20:33:51 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.18 2007/01/26 16:49:19 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -43,7 +43,7 @@ tableaux_Z::tableaux_Z()
 	pt_magneye = new ze_magneye();
 	BottomWall = new sprite_object(); 
 	ptMiniMess = new zeMiniMess();
-	gereBalles = new zeNewBalls(gereEjects, briquesTab, gereBricot, tete_gugus,
+	gereBalles = new controller_balls(gereEjects, briquesTab, gereBricot, tete_gugus,
 					les_atomes, tecZ_barre, BottomWall,
 					ptMiniMess, pt_magneye);
 	ptBaDirect = new ballDirect();

@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.19 2007/01/25 20:33:51 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.20 2007/01/26 16:49:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -242,7 +242,7 @@ void zeRaquette::deactrobot()
 //------------------------------------------------------------------------------
 // bricks levels: intialize bumpers
 //------------------------------------------------------------------------------
-void zeRaquette::initBumper(barreScore *score, zeGigaBlit *blitz, zeNewBalls *balls)
+void zeRaquette::initBumper(barreScore *score, zeGigaBlit *blitz, controller_balls *balls)
 {
 	ptBarreScr = score;
 	ptGigaBlit = blitz;

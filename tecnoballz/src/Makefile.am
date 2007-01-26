@@ -17,6 +17,7 @@ SOURCES_MAIN = \
 	bitmap_data.cc \
 	briqueCote.cc \
 	configfile.cc \
+	controller_balls.cc \
 	ejectBalls.cc \
 	escapeMenu.cc \
 	fond_ecran.cc \
@@ -74,7 +75,6 @@ SOURCES_MAIN = \
 	zeMiniMess.cc \
 	zeMissiles.cc \
 	zeMoveText.cc \
-	zeNewBalls.cc \
 	zeRaquette.cc \
 	zexplosion.cc \
 	$(NULL)

@@ -43,7 +43,7 @@ enum
 class tecno_boui : public sprite_object
 {	friend class zeBouiBoui;
 	friend class sprite_projectile;
-	friend class zeNewBalls;
+	friend class controller_balls;
 	
 	private:
 		static const	Sint32	ATOM_XMINI = 32;

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.20 2007/01/25 20:33:51 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.21 2007/01/26 16:49:19 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -74,7 +74,7 @@ ze_gadgets::~ze_gadgets()
 //		=> cours: pointer to list of bonuses bought in shop
 //------------------------------------------------------------------------------
 void ze_gadgets::initialise(Sint32 mStep, Sint32 bKauf, Sint32 brCnt, const Sint16 *table,
-	Sint32 *cours, zeMiniMess* ptMes, zeRaquette *pRaqu, zeNewBalls* pBall,
+	Sint32 *cours, zeMiniMess* ptMes, zeRaquette *pRaqu, controller_balls* pBall,
 	barreScore* pScor, sprite_object *pWall, ze_magneye* ptEye)
 {
 	ptRaquette = pRaqu;
@@ -368,7 +368,7 @@ void ze_gadgets::gadget_run(sprite_paddle * raket, Sint32 nuGad)
 	bumpSelect = raket;
 	barreScore *barre = ptbarreScr;
 	zeRaquette *oBump = ptRaquette;
-	zeNewBalls *oBall = ptNewBalls;
+	controller_balls *oBall = ptNewBalls;
 
 	if(nuGad == GAD_RANDOM)
 		nuGad = randomlist[hasard_val & 127];
@@ -606,7 +606,7 @@ void ze_gadgets::gadget_run(sprite_paddle * raket, Sint32 nuGad)
 	
 	// balls control 
 	case GAD_CONTRO:
-		oBall->runcontrol();
+		oBall->enable_balls_control();
 		ptMiniMess->mesrequest(34);
 #ifndef SOUNDISOFF
 		audio->play_sound(S_GADGETGO);
@@ -625,7 +625,7 @@ void ze_gadgets::gadget_run(sprite_paddle * raket, Sint32 nuGad)
 void ze_gadgets::gadgetrun2(sprite_paddle *raket, Sint32 nuGad)
 {
 	bumpSelect = raket;
-	zeNewBalls *oBall = ptNewBalls;
+	controller_balls *oBall = ptNewBalls;
 	switch (nuGad)
 	{
 		

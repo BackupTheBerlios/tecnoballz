@@ -28,7 +28,7 @@ class zeRaquette;
 #include "../include/sprite_paddle.h"
 #include "../include/barreScore.h"
 #include "../include/objects_list.h"
-#include "../include/zeNewBalls.h"
+#include "../include/controller_balls.h"
 #include "../include/zeGigaBlit.h"
 //...............................................................................
 
@@ -62,7 +62,7 @@ class zeRaquette:public objects_list < sprite_paddle >
 		sprite_paddle*		tec_robot0;
 		barreScore*		ptBarreScr;
 		zeGigaBlit*		ptGigaBlit;
-		zeNewBalls*		ptNewBalls;
+		controller_balls*		ptNewBalls;
 
 
 		static Sint32	ballePets1[14];
@@ -136,7 +136,7 @@ class zeRaquette:public objects_list < sprite_paddle >
 		void				bp_deplace();
 		void				bp_deplac2();
 		void				initBumper(barreScore *score, zeGigaBlit *blitz,
-									zeNewBalls* balls);
+									controller_balls* balls);
 		Sint32				init_robot();
 		void				activrobot();
 		void				deactrobot();

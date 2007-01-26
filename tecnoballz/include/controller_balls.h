@@ -1,30 +1,35 @@
-//******************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file		: "zeNewBalls.h"
-// created		: ?
-// updates		: 2004-10-10
-// fonction	: manage the balls (move and collisions)
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA 02111-1307, USA.
-//******************************************************************************
-#ifndef __ZENEWBALLS__
-#define __ZENEWBALLS__
-//...............................................................................
-class zeNewBalls;
-//...............................................................................
+/** 
+ * @file controller_balls.h
+ * @brief Control the balls. Move and collisions 
+ * @date 2007-01-26
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.1 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: controller_balls.h,v 1.1 2007/01/26 16:49:19 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
+#ifndef __CONTROLLER_BALLS__
+#define __CONTROLLER_BALLS__
+
+class controller_balls;
+
 #include "../include/sprite_ball.h"
 #include "../include/objects_list.h"
 #include "../include/sprite_paddle.h"
@@ -42,8 +47,7 @@ class zeNewBalls;
 #include "../include/ze_magneye.h"
 #include "../include/techno_eye.h"
 
-//...............................................................................
-class zeNewBalls:public objects_list < sprite_ball >
+class controller_balls:public objects_list < sprite_ball >
 {
 	friend class ejectBalls;
  	friend class sprite_ball;
@@ -55,14 +59,15 @@ class zeNewBalls:public objects_list < sprite_ball >
 		Sint32			tempoVites;		// temps avant changement vitesse
 		Sint32			startCount;		// Temps avant que la balle ne parte
 		Sint32			balle_tilt;		// Temps avant que le tilt soit possible
-		Sint32			balle_ctrl;		//1 = control ball (left mouse button)
+    /* true if ball controlled by the left mouse button */
+		bool			balls_are_controlled;
 		sprite_paddle*		tecBumper1;		//bottom bumper
 		sprite_paddle*		tecBumper2;		//right bumper
 		sprite_paddle*		tecBumper3;		//top bumper
 		sprite_paddle*		tecBumper4;		//left bumper
 		sprite_paddle*		tec_robot0;		//robot bumper
 		ejectBalls*		ejectObjet;
-		lesBriques*		brickObjet;
+		lesBriques*		bricks;
 		briqueCote*		bricoObjet;
 		head_anima*		gugusObjet;
 		zeBouiBoui*		ptBouiBoui;
@@ -91,13 +96,13 @@ class zeNewBalls:public objects_list < sprite_ball >
 			static Sint32*	brick_jump[15];
  
 	public:
-						zeNewBalls(ejectBalls *eject, lesBriques *brick, 
+						controller_balls(ejectBalls *eject, lesBriques *brick, 
 									briqueCote *brico, head_anima* gugus, 
 									zeBouiBoui *atoms, barreScore* score,
 									sprite_object *pwall, zeMiniMess*,
 									ze_magneye* pEyes);
-						zeNewBalls(zeguardian*, zeCapsules*, ze_gadgets*);
-						~zeNewBalls();
+						controller_balls(zeguardian*, zeCapsules*, ze_gadgets*);
+						~controller_balls();
 		void			init_balle(zeRaquette *raket, Sint32 start, Sint32 glueC, 
 							Sint32 speed, Sint32 tiltC, Sint32 table);
 		void			vitusBalle();
@@ -107,7 +112,7 @@ class zeNewBalls:public objects_list < sprite_ball >
 	private:
 		void			vitus_sort();
 		void			vitussort2();
-		void			vitus_tilt();
+		void			activate_tilt();
 		void			vitus_move();
 		void			accelerate();
 		void			vitusmove2();
@@ -118,15 +123,15 @@ class zeNewBalls:public objects_list < sprite_ball >
 		void			vitus_cote();
 		void			vituscote2();
 		void			vitusbound();
-		void			vitusBrick();
+		void			check_bricks_collision();
 		void			vitusAtoms();
 		void			vitus_eyes();
 		void			vitusGuard();
-		void			vitus_ctrl();
+		void			controll_balls();
 		
 
 	public:
-		void			runcontrol();
+		void			enable_balls_control();
 		void			run_2balls();
 		void			run_nballs(Sint32 nball = 0);
 		void			run_3balls();

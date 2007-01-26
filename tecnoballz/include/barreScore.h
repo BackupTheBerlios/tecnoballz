@@ -30,7 +30,7 @@ class barreScore;
 #include "../include/joueurData.h"
 #include "../include/handler_keyboard.h"
 #include "../include/zeGigaBlit.h"
-#include "../include/zeNewBalls.h"
+#include "../include/controller_balls.h"
 //-------------------------------------------------------------------------------
 class barreScore:public print_text
 {
@@ -64,7 +64,7 @@ class barreScore:public print_text
 		bitmap_data*				GFX_Sbarre;		// score panel image bitmap 
 		joueurData*				objetGamer;
 		zeGigaBlit*				ptGigaBlit;
-		zeNewBalls*				ptNewBalls;
+		controller_balls*				ptNewBalls;
 		char*					scoreAdres;		// buffer address score
 		char*					lifesAdres;		// buffer address lifes
 		char*					brickAdres;		// buffer address number bricks
@@ -80,7 +80,7 @@ class barreScore:public print_text
 								barreScore();
 								~barreScore();
 		Sint32					first_init(joueurData *gamer,  
-										zeGigaBlit *gblit, zeNewBalls *balls);
+										zeGigaBlit *gblit, controller_balls *balls);
 		Sint32					affiche_me();
 		void					scoreEcran();
 		void					scoreAjout(Sint32 ajout);

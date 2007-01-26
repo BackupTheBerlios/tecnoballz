@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-11
 // fonction	: handle the the guards levels
-// id		: $Id: gard_tecno.h,v 1.5 2007/01/18 08:42:04 gurumeditation Exp $
+// id		: $Id: gard_tecno.h,v 1.6 2007/01/26 16:49:19 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -32,7 +32,7 @@ class gard_tecno;
 #include "../include/zeguardian.h"
 #include "../include/zeMissiles.h"
 #include "../include/zeRaquette.h"
-#include "../include/zeNewBalls.h"
+#include "../include/controller_balls.h"
 #include "../include/zeCapsules.h"
 #include "../include/ze_gadgets.h"
 #include "../include/printmoney.h"
@@ -57,7 +57,7 @@ class gard_tecno:public virtual runGestion
 		zeguardian*			ptguardian;
 		zeMissiles*			ptMissiles;
 		zeRaquette*			ptRaquette;
-		zeNewBalls*			ptNewBalls;
+		controller_balls*			ptNewBalls;
 		ballDirect*			ptBaDirect;
 		zeCapsules*			ptCapsules;
 		ze_gadgets*			pt_gadgets;
