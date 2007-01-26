@@ -1,14 +1,14 @@
 /** 
  * @file sprite_ball.cc 
  * @brief The ball sprite
- * @date 2007-01-20
+ * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.6 2007/01/24 20:48:22 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.7 2007/01/26 06:25:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,48 +62,42 @@ sprite_ball::littleInit (Sint32 start, Sint32 speed,
   colleBallF = 0;
   startCount = 0;
   brickWidth = bwght;
-  razingBal0 (raket);
+  set_initial_values (raket);
 }
 
-//-----------------------------------------------------------------------------
-// initialize again
-//-----------------------------------------------------------------------------
+/**
+ * Restarts the ball 
+ * @param paddle pointer to a paddle sprite
+ */
 void
-sprite_ball::reStarting (sprite_paddle * raket)
+sprite_ball::reStarting (sprite_paddle * paddle)
 {
   enable ();
   startCount = start_init;
-  colleBallF = raket->bumper_num ();
-  razingBall (raket);
+  colleBallF = paddle->bumper_num ();
+  set_initial_values (paddle);
+  select_image ();
 }
 
 //-----------------------------------------------------------------------------
 // disable the ball
 //-----------------------------------------------------------------------------
 void
-sprite_ball::goSleeping (sprite_paddle * raket)
+sprite_ball::goSleeping (sprite_paddle * paddle)
 {
   disable ();
   colleBallF = 0;
   startCount = 0;
-  razingBall (raket);
+  set_initial_values (paddle);
+  select_image ();
 }
 
-//-----------------------------------------------------------------------------
-// reset some members
-//-----------------------------------------------------------------------------
+/**
+ * Set initial values of the ball
+ * @param paddle pointer to a paddle sprite
+ */
 void
-sprite_ball::razingBall (sprite_paddle * raket)
-{
-  razingBal0 (raket);
-  pointe_GFX ();
-}
-
-//-----------------------------------------------------------------------------
-// reset some members
-//-----------------------------------------------------------------------------
-void
-sprite_ball::razingBal0 (sprite_paddle * raket)
+sprite_ball::set_initial_values (sprite_paddle * paddle)
 {
   speedCount = speed_init;
   collision_width = BALLWIDTH1 * resolution;
@@ -111,8 +105,8 @@ sprite_ball::razingBal0 (sprite_paddle * raket)
   directBall = 0;
   save_Dball = 0;
   countDball = 0;
-  raket_ball = raket;
-  raket_glue = raket;
+  raket_ball = paddle;
+  raket_glue = paddle;
   speedBallT = speedBallZ;
   collisionT = brikPoint1;
   powerBall1 = 1;
@@ -207,7 +201,7 @@ sprite_ball::duplicate3 (sprite_ball * balle, Sint32 angle)
   powerBall1 = balle->powerBall1;
   powerBall2 = balle->powerBall2;
   oeilRotate = 0;
-  pointe_GFX ();
+  select_image ();
 }
 
 //-------------------------------------------------------------------------------
@@ -217,7 +211,7 @@ void
 sprite_ball::ballPower1 ()
 {
   ballPowerX = BALLPOWER1;
-  pointe_GFX ();
+  select_image ();
 }
 
 //-------------------------------------------------------------------------------
@@ -227,7 +221,7 @@ void
 sprite_ball::ballPower2 ()
 {
   ballPowerX = BALLPOWER2;
-  pointe_GFX ();
+  select_image ();
 }
 
 //-------------------------------------------------------------------------------
@@ -242,7 +236,7 @@ sprite_ball::ball_size2 ()
   collision_height = BALLWIDTH2 * resolution;
   ball_sizeX = BALL_SIZE2;
   collisionT = brikPoint2;
-  pointe_GFX ();
+  select_image ();
 }
 
 //-------------------------------------------------------------------------------
@@ -257,7 +251,7 @@ sprite_ball::ball_size3 ()
   collision_height = BALLWIDTH3 * resolution;
   ball_sizeX = BALL_SIZE3;
   collisionT = brikPoint3;
-  pointe_GFX ();
+  select_image ();
 }
 
 //-------------------------------------------------------------------------------
@@ -299,11 +293,11 @@ sprite_ball::ball2eject (Sint32 index, Sint32 otime)
   directBall = 64;              //the ball's motionless 
 }
 
-//-------------------------------------------------------------------------------
-// initialize ball image
-//-------------------------------------------------------------------------------
+/** 
+ * Select the ball image
+ */
 void
-sprite_ball::pointe_GFX ()
+sprite_ball::select_image ()
 {
   frame_index = ball_sizeX + ballPowerX;
   set_image (frame_index);
