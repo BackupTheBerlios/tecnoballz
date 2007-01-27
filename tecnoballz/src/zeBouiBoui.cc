@@ -34,7 +34,7 @@ zeBouiBoui::zeBouiBoui(zeCapsules* pCaps, ze_gadgets* ptGad, zeGemstone* ptGem,
 	pt_briques = pBrik;
 	littleInit();
 	max_of_sprites = 8;
-	objects_have_shades = true;
+	sprites_have_shades = true;
 	sprite_type_id = BOB_ATOMES;
 }
 

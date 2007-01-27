@@ -33,7 +33,7 @@ zeGameOver::zeGameOver()
 {
 	littleInit();
 	max_of_sprites = 8;				//there are 8 letters 
-	objects_have_shades = true;				//shadow enable
+	sprites_have_shades = true;				//shadow enable
 	max_of_sprites = 8;
 	sprite_type_id = BOB_GAMEOV;
 	go_deplace = 0;
@@ -147,7 +147,7 @@ void zeGameOver::execution1(Sint32 iswin)
 			break;
 	}
 	ptScorOver->displayTxt();
-	ptScorOver->draw_copy();
+	ptScorOver->draw_copy_from_bitmap();
 }
 
 //-----------------------------------------------------------------------------

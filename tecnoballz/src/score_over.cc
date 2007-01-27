@@ -74,8 +74,7 @@ Sint32 score_over::first_init(Sint32 offzt)
 	//###################################################################
 	// initialize sprite object
 	//###################################################################
-	error_init(make_sprite(graphTexte, 0));
-	if(erreur_num) return (erreur_num);
+	make_sprite(graphTexte);
 	enable();
 	set_coordinates(32 * resolution + offzt, 80 * resolution);
 

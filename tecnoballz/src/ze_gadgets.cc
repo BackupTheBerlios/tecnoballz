@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.21 2007/01/26 16:49:19 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.22 2007/01/27 21:16:56 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -51,9 +51,10 @@ ze_gadgets::ze_gadgets(Sint32 total, Sint32 vShad)
 	bonus_step = 0;
 	course_ptr = 0;
 	max_of_sprites = 6;
-	objects_have_shades = vShad;
-	fTableByte = 1;
-	//fTableByte = 0;	//test only
+	sprites_have_shades = vShad;
+        /* additional table to drawing pixel by pixel is required
+         * for color cycling of the chance capsule */
+	is_draw_pixel_by_pixel = true;
 	sprite_type_id = BOB_GADGET;
 }
 

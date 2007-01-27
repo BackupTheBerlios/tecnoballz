@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.h
  * @brief Draw sprites on the screen 
- * @date 2007-01-23
+ * @date 2007-01-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.17 2007/01/27 17:17:15 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.18 2007/01/27 21:16:55 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,9 +33,10 @@ class sprite_object;
 #include "../include/handler_memory.h"
 #include "../include/mentatCode.h"
 #include "../include/print_text.h"
-//-------------------------------------------------------------------------------
-// Sprite's number
-//-------------------------------------------------------------------------------
+
+/*
+ * sprite's ID
+ */
 const Sint32 BOB_ATOMES = 0;
 const Sint32 BOB_EJECT1 = 1;
 const Sint32 BOB_EJECT2 = 2;
@@ -103,14 +104,14 @@ const Sint32	BOB_BRICK6 = 63;
 const Sint32	BOB_BRICK7 = 64;
 const Sint32	BOB_BRICK8 = 65;
 const Sint32	BOB_BRICK9 = 66; */
-//-------------------------------------------------------------------------------
+
 typedef struct
 {
   Sint16 BB_COORDX;             // real x = BB_COORDX*16
   Sint16 BB_COORDY;             // real y = BB_COORDY*2
 }
 bbPosition;
-//-------------------------------------------------------------------------------
+
 typedef struct
 {
   Sint16 BB_LARGEUR;            // real width = BB_LARGEUR * 2
@@ -119,7 +120,7 @@ typedef struct
   bbPosition *BBPOSITION;
 }
 bb_describ;
-//-------------------------------------------------------------------------------
+
 typedef struct
 {
   Sint32 COUNTERTAB;            // size of table offsets / loops 
@@ -128,7 +129,7 @@ typedef struct
   char *TABAFFICH2;             // table of pixels
 }
 bb_afligne;
-//-------------------------------------------------------------------------------
+
 class sprite_object:public virtual mentatCode
 {
   friend class zeGameOver;
@@ -140,13 +141,16 @@ class sprite_object:public virtual mentatCode
   friend class print_text;
 
 public:
-  static const Uint32 METHOD_TAB = 0;
-  static const Uint32 METHOD_MSK = 1;
-  static const Uint32 METHOD_LIN = 2;
-  static const Uint32 METHOD_REP = 3;
-  static const Uint32 METHOD_CC1 = 4;
-  static const Uint32 METHOD_CC2 = 5;
-  static const Uint32 CYCLE_PTAB = 6;
+
+  typedef enum {
+    DRAW_WITH_TABLES,
+    COPY_FROM_BITMAP,
+    DRAW_LINE_BY_LINE,
+    DRAW_REPEAT_SPRITE,
+    DRAW_COLOR_CYCLING_MASK,
+    CYCLE_PTAB
+  }
+  DRAW_METHOD_ENUM;
 
 private:
   /** Maximum number of images in the animation */
@@ -177,7 +181,7 @@ private:
   char *current_drawing_data;
   /** List of tables of the drawing pixels data. Used for drawing sprite
    * pixel by pixel, with color cycling.
-   * E.g. projectiles and missiles sprites */
+   * Only used for the chance capsule sprite */
   Sint16 **drawing_pixels; 
   /** Table of drawing data for current sprite image frame */
   Sint16 *current_drawing_pixels;
@@ -196,7 +200,8 @@ protected:
   char *pixel_data;
   Sint32 srceNextLn;
   Sint32 destNextLn;
-  Sint32 is_enabled;            // 1=le BOB peut etre affiche
+  /** true if the sprite is enabled and drawn */
+  Sint32 is_enabled;
   /** true if the sprite has a shadow */
   bool sprite_has_shadow;
   /** X coordinate */
@@ -230,7 +235,7 @@ protected:
   Sint32 x_maximum;
   /** Y coordinate maximum */
   Sint32 y_maximum;
-  /** Type ID of the sprite */
+  /** Type identifier of the sprite, integer from 0 to n */
   Sint32 sprite_type_id;
   Sint32 affligFrSv;            // premiere ligne a afficher (si afflignesF=1)
   Sint32 affligLaSv;            // derniere ligne a afficher (si afflignesF=1)
@@ -240,8 +245,9 @@ protected:
  /** true if the object must release
   * the pixel data memory at its destruction */
   bool is_release_pixel_data;
-  Sint32 fTableByte;            //if set, generate additional table to 
-  //copy byte by byte
+  /** If true generate additional table to drawing pixel by pixel.
+   * Used with for color cycling */
+  bool is_draw_pixel_by_pixel;
 
 public:
   /** Width used for the collisions */
@@ -251,8 +257,8 @@ public:
   Sint32 affligFrst;            // premiere ligne a afficher (si afflignesF=1)
   Sint32 affligLast;            // derniere ligne a afficher (si afflignesF=1)
   Sint32 mirrorVert;            // 1=mirror sprite lines in initialise() function
-  Sint32 affRepeatF;            // > 1 repeat
-  Uint32 put_method;
+  Sint32 num_of_repeats;            // > 1 repeat
+  Uint32 draw_method;
 
 
   Sint32 indexCycle;
@@ -272,10 +278,9 @@ public:
   sprite_object & operator= (const sprite_object &sprite);
   void duplicaBOB (sprite_object *);
   void set_coordinates (Sint32 xcoord, Sint32 ycoord);
-  Sint32 create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
-                     Sint32 ftpix = 0);
-  Sint32 make_sprite (bitmap_data * image, Sint32 ombre);
-  void init_common (bitmap_data * image, Sint32 ombre);
+  Sint32 create_sprite (Sint32 type_id, bitmap_data * bitmap, bool shadow,
+                     bool by_pixel = false);
+  void make_sprite (bitmap_data * image, bool shadow = false);
   void set_x_coord (Sint32 xcoord);
   void set_y_coord (Sint32 ycoord);
   void move_x (Sint32 x_offset);
@@ -289,17 +294,13 @@ public:
   void restore_background_under_sprite ();
   void efface_lin ();
   void draw ();
-  void method_tab ();
   void restore_background_under_shadow ();
   void afficheSHA ();
   void affich_MSK ();
   void afficheCyc ();
-  void afficheCC2 ();
   void cycle_ptab ();
-  void afficheRep ();
-  void afficheLin ();
   void affich_SHA ();
-  void draw_copy ();
+  void draw_copy_from_bitmap ();
   void MSKbitcopy ();
   void MSK_bitclr ();
   void aspire_BOB (sprite_object * bobPT, Sint32 offsX = 0, Sint32 offsY = 0);
@@ -314,9 +315,9 @@ public:
   Uint32 get_sprite_width ();
   Uint32 get_sprite_height ();
   Uint32 get_collision_width ();
-  void initRepeat (Sint32 value);
+  void enable_vertical_repeat (Uint32 numof_repeats);
 
-  void set_method (Uint32 vtype);
+  void set_draw_method (Uint32 method);
   void set_pixel_data (char *pixel, bool is_release = false);
 
 public:
@@ -325,7 +326,11 @@ public:
   static const bb_describ *zelistBOB[];
 
 private:
+  void init_common (bitmap_data * image, bool shadow);
   void alloc_drawing_tables (Sint32 num_images);
+  void draw_line_by_line ();
+  void draw_with_tables ();
+  void draw_vertically_repeated ();
 
 };
 #endif

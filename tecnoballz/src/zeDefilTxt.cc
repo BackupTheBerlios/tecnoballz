@@ -29,7 +29,7 @@ zeDefilTxt::zeDefilTxt()
 {
 	littleInit();
 	max_of_sprites = DEFINUMBER + 2;
-	objects_have_shades = true;
+	sprites_have_shades = true;
 	sprite_type_id = BOB_DEFILE;
 	offset_xx1 = 0;
 	offset_yy1 = 0;

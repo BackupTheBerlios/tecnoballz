@@ -43,7 +43,7 @@ zeGigaBlit::zeGigaBlit()
 	littleInit();
 	max_of_sprites = NOMBREGIGA;			// there are 7 different Gigablitz
   /* shadow disable */
-	objects_have_shades = false;
+	sprites_have_shades = false;
 	brickObjet = (lesBriques *)NULL;
 	gugusObjet = (head_anima *)NULL;
 	ptRaquette = (zeRaquette *)NULL;
@@ -97,7 +97,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 		{	giga_blitz *g = new giga_blitz();
 			g->set_object_pos(i);
 			//g->afflignesF = 1;
-			g->set_method(sprite_object::METHOD_LIN);	
+			g->set_draw_method(sprite_object::DRAW_LINE_BY_LINE);	
 			Sint32 n = numeroBOBs[i];
 			error_init(g->create_sprite(n, image_BOBs, 0));
 			if(erreur_num)
@@ -279,7 +279,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
 		{ giga_blitz *g = new giga_blitz();
 			g->set_object_pos(i);
 			g->mirrorVert = 1;
-			g->set_method(sprite_object::METHOD_LIN);	
+			g->set_draw_method(sprite_object::DRAW_LINE_BY_LINE);	
 			Sint32 n = numeroBOBs[i];
 			error_init(g->create_sprite(n, image_BOBs, 0));
 			if(erreur_num)

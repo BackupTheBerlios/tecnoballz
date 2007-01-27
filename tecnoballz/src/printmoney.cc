@@ -29,7 +29,7 @@ printmoney::printmoney()
 {
 	littleInit();
 	max_of_sprites = 8;
-	objects_have_shades = false;
+	sprites_have_shades = false;
 	y_position = YINVERSEUR * resolution;
 	sprite_type_id = BOB_MONEY0;
 	money_posy = y_position;

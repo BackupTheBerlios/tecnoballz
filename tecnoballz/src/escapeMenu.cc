@@ -143,8 +143,7 @@ Sint32 escapeMenu::first_init(bitmap_data *image, Sint32 nmenu, Sint32 large, Si
 	//###################################################################
 	// initialize sprite object
 	//###################################################################
-	error_init(make_sprite(graphTexte, 0));
-	if(erreur_num) return (erreur_num);
+	make_sprite(graphTexte);
 	Sint32 y = (240 * resolution -  nblin * space2next) / 2;
 	y = (y / space2next) * space2next;
 	set_coordinates((large - sprite_width) / 2, y);	

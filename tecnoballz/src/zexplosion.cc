@@ -30,7 +30,7 @@ zexplosion::zexplosion()
 {
 	littleInit();
 	max_of_sprites = 28;
-	objects_have_shades = false;
+	sprites_have_shades = false;
 	vFrequency = 0;
 	sprite_type_id = BOB_EXPLO1;
 }

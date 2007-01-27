@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.14 2007/01/23 20:51:30 gurumeditation Exp $
+// id		: $Id: menu_tecno.cc,v 1.15 2007/01/27 21:16:55 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -125,7 +125,7 @@ Sint32 menu_tecno::zeMainLoop()
 			break;
 	}
     
-	menu_texte->draw_copy();
+	menu_texte->draw_copy_from_bitmap();
 	if(keyboard->command_is_pressed(handler_keyboard::TOEXITFLAG))
 		end_return = -1;
 	display->deverouill();

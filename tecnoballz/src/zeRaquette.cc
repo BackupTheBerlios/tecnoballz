@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.20 2007/01/26 16:49:19 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.21 2007/01/27 21:16:56 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ zeRaquette::zeRaquette()
 	tecBumper4 = NULL;
 	tec_robot0 = NULL;
 	max_of_sprites = 5;
-	objects_have_shades = true;
+	sprites_have_shades = true;
 	sprite_type_id = BOB_BUMPHR;
 	raket_team = 0;
 	raketLarge = 64 * resolution;
@@ -79,8 +79,8 @@ zeRaquette::zeRaquette(Sint32 nBob)
 	tecBumper4 = NULL;
 	tec_robot0 = NULL;
 	max_of_sprites = 1;
-	objects_have_shades = true;
-	fTableByte = 0;
+	sprites_have_shades = true;
+	is_draw_pixel_by_pixel = false;
 	sprite_type_id = BOB_BUMPER;
 	raket_team = 0;
 	raketLarge = 32* resolution;

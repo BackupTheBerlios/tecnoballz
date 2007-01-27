@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.2 2007/01/27 15:12:36 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.3 2007/01/27 21:16:55 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ controller_balls::controller_balls (ejectBalls * eject, lesBriques * brick,
   balle_tilt = 60;
   balleVites = sprite_ball::donneSpeed (1);
   max_of_sprites = 20;
-  objects_have_shades = 1;
+  sprites_have_shades = true;
   balls_are_controlled = false;
   sprite_type_id = BOB_BALLES;
 }
@@ -98,7 +98,7 @@ controller_balls::controller_balls (zeguardian * pGard, zeCapsules * pCaps,
   balle_tilt = 60;
   balleVites = sprite_ball::donneSpeed (1);
   max_of_sprites = 20;
-  objects_have_shades = true;
+  sprites_have_shades = true;
   balls_are_controlled = false;
   sprite_type_id = BOB_BALLES;
 }

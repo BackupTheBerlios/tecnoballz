@@ -31,7 +31,7 @@ zeMissiles::zeMissiles(sprite_paddle *pBump, zexplosion *pexpl)
 {
 	littleInit();
 	max_of_sprites = 48;
-	objects_have_shades = false;
+	sprites_have_shades = false;
 	sprite_type_id = BOB_MISSIL;
 	ptbumper01 = pBump;
 	pexplosion = pexpl;
@@ -65,15 +65,15 @@ void zeMissiles::anim_fires()
 	xFire->play_animation_loop();
 	Sint32 o = xFire->get_frame_index();
 	Sint32 cycle = o & 0X1;
-	if(!cycle) cycle = sprite_object::METHOD_TAB;
-	else cycle = sprite_object::METHOD_CC1;
+	if(!cycle) cycle = sprite_object::DRAW_WITH_TABLES;
+	else cycle = sprite_object::DRAW_COLOR_CYCLING_MASK;
 	
 	Sint32 t = max_of_sprites;
 	for(Sint32 i = 1; i < t; i++)
 	{	xFire = sprites_list[i];
 		xFire->set_image(o);
 		//xFire->affCycling = cycle;
-		xFire->put_method = cycle;
+		xFire->draw_method = cycle;
 	}
 }
 

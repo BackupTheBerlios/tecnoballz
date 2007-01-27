@@ -32,7 +32,7 @@ zeguardian::zeguardian()
 {
 	littleInit();
 	max_of_sprites = 2;
-	objects_have_shades = true; 
+	sprites_have_shades = true; 
 	sprite_type_id = BOB_INTE1A;
 	offset_ptr = 0;
 	scrollTemp = 0;
@@ -132,7 +132,7 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 		sprites->add(ptBob);
 		ptBob->set_coordinates(i * 16 * resolution, 0);
 		ptBob->enable();
-		ptBob->initRepeat(20);
+		ptBob->enable_vertical_repeat(20);
 	}
 
 	displayNrj();
@@ -153,7 +153,7 @@ void zeguardian::displayNrj()
 			break;
 		}
 		Sint32 h = pgard->gard_power / 4;
-		ptBob->initRepeat(h);
+		ptBob->enable_vertical_repeat(h);
 		if (!h) h = 1;
 		Sint32 y = baseY - h * ptBob->get_sprite_height();
 		ptBob->set_y_coord(y);

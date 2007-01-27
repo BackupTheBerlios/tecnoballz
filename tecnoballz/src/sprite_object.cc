@@ -4,11 +4,11 @@
  * @date 2007-01-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.19 2007/01/27 17:17:15 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.20 2007/01/27 21:16:55 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,19 +61,15 @@ sprite_object::release_sprite ()
           memory->release ((char *) memPT);
           char *memP2 = drawing_data[i];
           memory->release ((char *) memP2);
-          if (fTableByte)
+          if (is_draw_pixel_by_pixel)
             {
               memPT = drawing_pixels[i];
               memory->release ((char *) memPT);
             }
         }
-      //memory->release ((char *) drawing_values);
-      //memory->release ((char *) drawing_data);
-      //if (fTableByte)
-      //  memory->release ((char *) drawing_pixels);
       delete[]drawing_values;
       delete[]drawing_data;
-      if (fTableByte)
+      if (is_draw_pixel_by_pixel)
         {
           delete[]drawing_pixels;
         }
@@ -149,11 +145,11 @@ sprite_object::clear_sprite_members ()
   drawing_peer_line = (bb_afligne **) 0x0;
   has_allocated_memory = false;
   object_pos = -1;
-  affRepeatF = 0;
+  num_of_repeats = 0;
   indexCycle = 0;
   pt_cycling = &cycling_01[0];
   thecounter = 0;
-  put_method = METHOD_MSK;
+  draw_method = COPY_FROM_BITMAP;
   is_release_pixel_data = false;
 }
 
@@ -202,8 +198,8 @@ sprite_object & sprite_object::operator= (const sprite_object & sprite)
   sprite_type_id = sprite.sprite_type_id;
   srceNextLn = sprite.srceNextLn;
   destNextLn = sprite.destNextLn;
-  put_method = sprite.put_method;
-  fTableByte = sprite.fTableByte;
+  draw_method = sprite.draw_method;
+  is_draw_pixel_by_pixel = sprite.is_draw_pixel_by_pixel;
   has_allocated_memory = false;
   return *this;
 }
@@ -253,8 +249,8 @@ sprite_object::duplicaBOB (sprite_object * bobPT)
   bobPT->sprite_type_id = sprite_type_id;
   bobPT->srceNextLn = srceNextLn;
   bobPT->destNextLn = destNextLn;
-  bobPT->put_method = put_method;
-  bobPT->fTableByte = fTableByte;
+  bobPT->draw_method = draw_method;
+  bobPT->is_draw_pixel_by_pixel = is_draw_pixel_by_pixel;
   bobPT->has_allocated_memory = false;
 }
 
@@ -303,15 +299,14 @@ sprite_object::set_display_pos (Sint32 num)
 
 /**
  * Make a simple sprite
- * @param image
- * @param shadow
+ * @param bitmap bitmap containing the images of sprite
+ * @param shadow true if the sprite has shadow, false by default
  */
-Sint32
-sprite_object::make_sprite (bitmap_data * image, Sint32 shadow)
+void
+sprite_object::make_sprite (bitmap_data * bitmap, bool shadow)
 {
-  init_common (image, shadow);
-  pixel_data = image->get_pixel_data ();
-  return erreur_num;
+  init_common (bitmap, shadow);
+  pixel_data = bitmap->get_pixel_data ();
 }
 
 /**
@@ -320,7 +315,7 @@ sprite_object::make_sprite (bitmap_data * image, Sint32 shadow)
  * @param shadow true if the sprite has shadow
  */
 void
-sprite_object::init_common (bitmap_data * bitmap, Sint32 shadow)
+sprite_object::init_common (bitmap_data * bitmap, bool shadow)
 {
   screen_width = display->get_width ();
   screen_height = display->get_height ();
@@ -342,26 +337,23 @@ sprite_object::init_common (bitmap_data * bitmap, Sint32 shadow)
 
 /** 
  * Allocate memory for graphics data sprite for optimized drawing routines
+ * @param numof number maximum of images for this sprite
  */
 void
-sprite_object::alloc_drawing_tables (Sint32 anima)
+sprite_object::alloc_drawing_tables (Sint32 numof)
 {
   has_allocated_memory = true;
-  max_of_images = anima;
-  // reserve la table de pointeur sur les tables d'affichage
-
+  max_of_images = numof;
   try
     {
-
       /* table giving address of each BOBs into BOBs page  */
       images_pixel_data = new char* [max_of_images];
-
       /* drawing tables for offsets and counters values (words and bytes) */
       drawing_values = new Sint16* [max_of_images];
-
+      /* drawing tables of drawing pixels data */
       drawing_data = new char* [max_of_images];
 
-      if (!fTableByte)
+      if (!is_draw_pixel_by_pixel)
         {
           return;
         }
@@ -376,67 +368,33 @@ sprite_object::alloc_drawing_tables (Sint32 anima)
          << max_of_images << " images! " << std::endl;
        throw;
     }
-  
-      //images_pixel_data = (char **) (memory->alloc (sizeof (char *) * max_of_images));
-  //drawing_values = (Sint16 **) (memory->alloc (sizeof (Sint16 *) * max_of_images));
-  //error_init (memory->retour_err ());
-  //if (erreur_num)
-   // return erreur_num;
-
-  // tables of data (pixels of the sprite)
-  //drawing_data = (char **) (memory->alloc (sizeof (char *) * max_of_images));
-  //error_init (memory->retour_err ());
-  //if (erreur_num)
-  //  return erreur_num;
-
-  // tables of offsets and counters (byte peer byte)
-  /*
-  if (fTableByte)
-    {
-      drawing_pixels =
-        (Sint16 **) (memory->alloc (sizeof (Sint16 *) * max_of_images));
-      error_init (memory->retour_err ());
-      if (erreur_num)
-        return erreur_num;
-    }
-
-  return erreur_num;
-  */
 }
-
-
 
 /**
  * Create the structure for drawing the sprite 
  * @param BOBnu shape number 1 to n
- * @praam image graphic object (a big image)
+ * @praam image bitmap containing the images of sprite 
  * @param shadow true if it sprite has a shadow, false otherwise 
- * @ftpix 
+ * @param by_pixel if true generate additional table to drawing
+ *                 pixel by pixel. Used for color cyclyng.
+ *                 False by default
  */
 Sint32
-sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
-                              Sint32 ftpix)
+sprite_object::create_sprite (Sint32 type_id, bitmap_data * image, bool shadow,
+                              bool by_pixel)
 {
 
-  /*printf("sprite_object::initialise(BOBnu=%i, image, shadow=%i, ftpix=%i)\n",
-     BOBnu, shadow, ftpix); */
-  fTableByte = ftpix;
-
-  if (put_method == METHOD_MSK)
+  is_draw_pixel_by_pixel = by_pixel;
+  if (draw_method == COPY_FROM_BITMAP)
     {
-      put_method = METHOD_TAB;
+      draw_method = DRAW_WITH_TABLES;
     }
-/*
-	printf("sprite_object::initialise() BOBnu=%i, image=%x, shadow=%i\n",
-		BOBnu, (Sint32)image, shadow);
-*/
 
-  // L'ecran dans lequel le BOB est affiche
-  sprite_type_id = BOBnu;
+  sprite_type_id = type_id;
   init_common (image, shadow);
-  const bb_describ *descr = zelistBOB[BOBnu];
 
-  /* read sprite caracteristics */
+  /* read sprite characteristics */
+  const bb_describ *descr = zelistBOB[sprite_type_id];
   sprite_height = descr->BB_HAUTEUR;
   sprite_height *= resolution;
   max_of_images = descr->BB_ANIMATE;
@@ -451,7 +409,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
   //###################################################################
   // mode lines by lines
   //###################################################################
-  if (put_method == METHOD_LIN)
+  if (draw_method == DRAW_LINE_BY_LINE)
     {
       affligFrst = 0;
       affligLast = sprite_height;
@@ -477,14 +435,16 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
   /* Allocate list for the lists of the drawing tables */
   alloc_drawing_tables (max_of_images);
 
-  //###################################################################
-  // generate the display table
-  //###################################################################
+  /* 
+   * generate the drawing tables
+   */
   bbPosition *coord = descr->BBPOSITION;
-  for (Sint32 i = 0; i < max_of_images; i++)       //loop for each anim
+  /* process each image frame of the sprite animation */
+  for (Sint32 i = 0; i < max_of_images; i++)
     {
-      Sint32 nbreP = 0;         //pixels counter
-      Sint32 nbreV = 0;         //counter of number of offsets/counter
+      /* counter of the number of pixels of the image frame */
+      Uint32 pixels_count = 0;
+      Uint32 values_count = 0;         //counter of number of offsets/counter
       Sint32 pos_x = (Sint32) coord[i].BB_COORDX;
       pos_x *= resolution;
       pos_x *= 16;
@@ -498,9 +458,9 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
           pos_x > (image->get_width () - sprite_width))
         {
           fprintf (stderr,
-                   "sprite_object::initialise() BOBnu=%i x2=%i>get_width=%i "
+                   "sprite_object::initialise() sprite_type_id=%i x2=%i>get_width=%i "
                    "*AND/OR* y2=%i>get_height=%i\n",
-                   (Sint32) BOBnu, (Sint32) (pos_x + sprite_width),
+                   (Sint32) sprite_type_id, (Sint32) (pos_x + sprite_width),
                    (Sint32) image->get_width (),
                    (Sint32) (pos_y + sprite_height),
                    (Sint32) image->get_height ());
@@ -544,21 +504,21 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
               if (pixel)        //transparent?
                 {
                   npixe++;
-                  nbreP++;      //incremente the size of pixel's table 
+                  pixels_count++;      //incremente the size of pixel's table 
                 }
               else
                 {
                   if (npixe > 0)        //at least one pixel ?
                     {
                       npixe = 0;
-                      nbreV++;  //incremente the table size
+                      values_count++;  //incremente the table size
                     }
                 }
             }
           if (npixe > 0)
             {
               npixe = 0;
-              nbreV++;
+              values_count++;
             }
           gfxPT += offsetSrce;
         }
@@ -566,25 +526,25 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
       //###################################################################
       // genere the sprite's table for display
       //###################################################################
-      char *destP = (char *) memory->alloc ((nbreP) * sizeof (char));
+      char *destP = (char *) memory->alloc ((pixels_count) * sizeof (char));
       error_init (memory->retour_err ());
       if (erreur_num)
         return erreur_num;
-      Sint16 *destV = (Sint16 *) memory->alloc ((nbreV * 3 + 1) * sizeof (Sint16));
+      Sint16 *destV = (Sint16 *) memory->alloc ((values_count * 3 + 1) * sizeof (Sint16));
       error_init (memory->retour_err ());
       if (erreur_num)
         return erreur_num;
       Sint16 *destW = NULL;
-      if (fTableByte)
+      if (is_draw_pixel_by_pixel)
         {
-          destW = (Sint16 *) memory->alloc ((nbreV * 2 + 1) * sizeof (Sint16));
+          destW = (Sint16 *) memory->alloc ((values_count * 2 + 1) * sizeof (Sint16));
           error_init (memory->retour_err ());
           if (erreur_num)
             return erreur_num;
         }
       drawing_values[i] = destV;    //table of offsets and loops counters
       drawing_data[i] = destP;    //table of pixels
-      if (fTableByte)
+      if (is_draw_pixel_by_pixel)
         {
             drawing_pixels[i] = destW;
         }
@@ -594,18 +554,18 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
       npixe = 0;                // counter of the pixels
       gfxPT = image->get_pixel_data (pos_x, pos_y); // graphic address 
       images_pixel_data[i] = gfxPT;
-      *(destV++) = (Sint16) nbreV;      // Nombre d'occurences
-      if (fTableByte)
+      *(destV++) = (Sint16) values_count;      // Nombre d'occurences
+      if (is_draw_pixel_by_pixel)
         {
-          *(destW++) = (Sint16) nbreV;    // Nombre d'occurences
+          *(destW++) = (Sint16) values_count;    // Nombre d'occurences
         }
-      nbreV = 0;                // compteur nombre d'offest et de compteur
+      values_count = 0;                // compteur nombre d'offest et de compteur
       Sint32 nbreO = 0;
       Sint32 flagO = 0;
       for (Sint32 j = 0; j < sprite_height; j++)
         {
           // special display mode line peer line (gigablitz)
-          if (put_method == METHOD_LIN)
+          if (draw_method == DRAW_LINE_BY_LINE)
             {
               bb_afligne *p = drawing_peer_line[i];
               p[j].TABAFFICH1 = destV;
@@ -625,7 +585,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
                 {
                   if (npixe > 0)        //at least one pixel ?
                     {
-                      if (fTableByte)
+                      if (is_draw_pixel_by_pixel)
                         {
                           *(destW++) = (Sint16) depla;  //previous offset
                           *(destW++) = (Sint16) npixe;  //number of pixel(s)    
@@ -641,7 +601,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
                       *(destV++) = (Sint16) npixe;      //number of pixel(s)
                       npixe = 0;
                       depla = 0;
-                      nbreV++;  //COUNTERTAB++
+                      values_count++;  //COUNTERTAB++
                       flagO = 1;
                     }
                   if (flagO == 0)
@@ -652,7 +612,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
           //***
           if (npixe > 0)
             {
-              if (fTableByte)
+              if (is_draw_pixel_by_pixel)
                 {
                   *(destW++) = (Sint16) depla;  //previous offset
                   *(destW++) = (Sint16) npixe;  //number of pixel(s)    
@@ -667,30 +627,29 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
 #endif
               *(destV++) = (Sint16) npixe;      //number of pixel(s)
               npixe = 0;
-              nbreV++;          //COUNTERTAB++
+              values_count++;          //COUNTERTAB++
               depla = 0;
             }
           gfxPT += offsetSrce;
           depla += offsetDest;
 
-          if (put_method == METHOD_LIN)
+          if (draw_method == DRAW_LINE_BY_LINE)
             {
               bb_afligne *p = drawing_peer_line[i];
-              p[j].COUNTERTAB = nbreV;
+              p[j].COUNTERTAB = values_count;
               p[j].OFFSETLEFT = nbreO;
-              nbreV = 0;
+              values_count = 0;
               nbreO = 0;
             }
         }                       //height loop
     }
   current_drawing_values = drawing_values[0];   //table of offsets and loops counters
   current_drawing_data = drawing_data[0];   //adresse table pour "afficheBOB"
-  if (fTableByte)
+  if (is_draw_pixel_by_pixel)
     {
       current_drawing_pixels = drawing_pixels[0];
     }
   pixel_data = images_pixel_data[0];   //adresse GFX pour routine "draw()"
-  //printf("sprite_object::initialise()\n");
   return (erreur_num);
 }
 
@@ -786,7 +745,7 @@ sprite_object::set_image ()
   pixel_data = images_pixel_data[index];
   current_drawing_values = drawing_values[index];
   current_drawing_data = drawing_data[index];
-  if (fTableByte && drawing_pixels)
+  if (is_draw_pixel_by_pixel && drawing_pixels)
     {
       current_drawing_pixels = drawing_pixels[index]; 
     }
@@ -803,7 +762,7 @@ sprite_object::set_image (Sint32 index)
   pixel_data = images_pixel_data[index];
   current_drawing_values = drawing_values[index];
   current_drawing_data = drawing_data[index];
-  if (fTableByte)
+  if (is_draw_pixel_by_pixel)
     {
       current_drawing_pixels = drawing_pixels[index];
     }
@@ -822,7 +781,7 @@ sprite_object::restore_background_under_sprite ()
     }
 
   /* special sprite, restore line by line (gigablitz) */
-  if (put_method == METHOD_LIN)
+  if (draw_method == DRAW_LINE_BY_LINE)
     {
       efface_lin ();
       return;
@@ -1034,21 +993,21 @@ sprite_object::draw ()
     {
       return;
     }
-  switch (put_method)
+  switch (draw_method)
     {
-    case METHOD_TAB:
-      method_tab ();
+    case DRAW_WITH_TABLES:
+      draw_with_tables ();
       break;
-    case METHOD_MSK:
-      draw_copy ();
+    case COPY_FROM_BITMAP:
+      draw_copy_from_bitmap ();
       break;
-    case METHOD_LIN:
-      afficheLin ();
+    case DRAW_LINE_BY_LINE:
+      draw_line_by_line ();
       break;
-    case METHOD_REP:
-      afficheRep ();
+    case DRAW_REPEAT_SPRITE:
+      draw_vertically_repeated ();
       break;
-    case METHOD_CC1:
+    case DRAW_COLOR_CYCLING_MASK:
       afficheCyc ();
       break;
     case CYCLE_PTAB:
@@ -1057,11 +1016,12 @@ sprite_object::draw ()
     }
 }
 
-//------------------------------------------------------------------------------
-// display a sprite (most current metod)
-//------------------------------------------------------------------------------
+/**
+ * Draw a sprite with tables to optimize the copy
+ * It is the method most frequently used
+ */
 void
-sprite_object::method_tab ()
+sprite_object::draw_with_tables ()
 {
   restore_ptr = display->tampon_pos (x_coord, y_coord);
 #ifndef BYTES_COPY
@@ -1104,7 +1064,9 @@ sprite_object::method_tab ()
       gfxP1++;
       o = *(gfxP1++);           //number of pixels contigus
       for (Sint32 k = 0; k < o; k++)
-        *(adres++) = *(gfxP2++);
+        {
+          *(adres++) = *(gfxP2++);
+        }
     }
 #endif
 }
@@ -1157,14 +1119,6 @@ sprite_object::afficheCyc ()
 }
 
 //------------------------------------------------------------------------------
-// 
-//------------------------------------------------------------------------------
-void
-sprite_object::afficheCC2 ()
-{
-}
-
-//------------------------------------------------------------------------------
 // guards weapons: display mask pixel by pixel with color cylcling
 //------------------------------------------------------------------------------
 void
@@ -1194,16 +1148,17 @@ sprite_object::cycle_ptab ()
     }
 }
 
-//------------------------------------------------------------------------------
-//  sprite image will be repeated vertically  (guards's life level) 
-//------------------------------------------------------------------------------
+/**
+ * Draw sprite. Sprite image will be repeated vertically
+ * Used only for the vertical gauge of the guardian's life level
+ */ 
 void
-sprite_object::afficheRep ()
+sprite_object::draw_vertically_repeated ()
 {
   restore_ptr = display->tampon_pos (x_coord, y_coord);
   screen_ptr = display->buffer_pos (x_coord, y_coord);
   Sint32 offsy = 0;
-  for (Sint32 r = 0; r < affRepeatF; r++, offsy += sprite_height)
+  for (Sint32 r = 0; r < num_of_repeats; r++, offsy += sprite_height)
     {
       Uint16 *gfxP1 = (Uint16 *) current_drawing_values;    //offsets and loop counter
       Uint32 t = (Uint32) * (gfxP1++);
@@ -1251,11 +1206,12 @@ sprite_object::afficheRep ()
     }
 }
 
-//------------------------------------------------------------------------------
-// display a sprite line by line (for the gigablitz vertical clipping)
-//------------------------------------------------------------------------------
+/**
+ * Draw a sprite line by line, always by using tables.
+ * Method used for the gigablitz vertical clipping only
+ */
 void
-sprite_object::afficheLin ()
+sprite_object::draw_line_by_line ()
 {
   bb_afligne *p = drawing_peer_line[frame_index];
   restore_ptr = display->tampon_pos (x_coord, y_coord + affligFrst);
@@ -1508,7 +1464,7 @@ sprite_object::affich_SHA ()
  * Draw a sprite into the game offscreen (copy byte to byte, no table)
  */
 void
-sprite_object::draw_copy ()
+sprite_object::draw_copy_from_bitmap ()
 {
   if (!is_enabled)
     {
@@ -1733,7 +1689,7 @@ sprite_object::clip_coordinates ()
 }
 
 /** 
- * get sprite's width 
+ * Get sprite's width 
  * @return the width of the sprite in pixels
  */
 Uint32
@@ -1743,7 +1699,7 @@ sprite_object::get_sprite_width ()
 }
 
 /** 
- * get sprite's height 
+ * Get sprite's height 
  * @return the height of the sprite in pixels
  */
 Uint32
@@ -1762,20 +1718,30 @@ sprite_object::get_collision_width ()
   return collision_width;
 }
 
-//-------------------------------------------------------------------------------
-//
-//-------------------------------------------------------------------------------
+/**
+ * Enable the repeat vetical of drawing of the sprite 
+ * used only for the vertical gauge of the guadian's energy level 
+ * @param numof_repeats 2 to n
+ */
 void
-sprite_object::initRepeat (Sint32 value)
+sprite_object::enable_vertical_repeat (Uint32 numof_repeats)
 {
-  affRepeatF = value;
-  put_method = METHOD_REP;
+  if (numof_repeats < 2)
+    {
+      return;
+    }
+  num_of_repeats = numof_repeats;
+  draw_method = DRAW_REPEAT_SPRITE;
 }
 
+/**
+ * Set the method of displaying used to draw the sprite 
+ * @param method draw method
+ */
 void
-sprite_object::set_method (Uint32 vtype)
+sprite_object::set_draw_method (Uint32 method)
 {
-  put_method = vtype;
+  draw_method = method;
 }
 
 /**

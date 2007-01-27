@@ -4,11 +4,11 @@
  * @date 2007-01-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.2 2007/01/27 15:12:36 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.3 2007/01/27 21:16:56 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ sprite_projectile::sprite_projectile ()
       list_fires[total_fire] = this;
       total_fire++;
     }
-  set_method (METHOD_CC1);
+  set_draw_method (DRAW_COLOR_CYCLING_MASK);
 }
 
 /**
@@ -164,14 +164,14 @@ sprite_projectile::anim_fires ()
   Sint32 o = xFire->get_frame_index ();
   Sint32 cycle = o & 0X1;
   if (!cycle)
-    cycle = sprite_object::METHOD_TAB;
+    cycle = sprite_object::DRAW_WITH_TABLES;
   else
-    cycle = sprite_object::METHOD_CC1;
+    cycle = sprite_object::DRAW_COLOR_CYCLING_MASK;
   for (Sint32 i = 1; i < t; i++)
     {
       xFire = liste[i];
       xFire->set_image (o);
-      xFire->put_method = cycle;
+      xFire->draw_method = cycle;
     }
 }
 

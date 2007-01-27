@@ -35,7 +35,7 @@ zeCongBall::zeCongBall()
 {
 	littleInit();
 	max_of_sprites = 8;				//there are 8 letters 
-	objects_have_shades = true;				//shadow enable
+	sprites_have_shades = true;				//shadow enable
 	sprite_type_id = BOB_ARGENT;
 	speed_rad0 = 0;
 	speed_rad1 = 0;

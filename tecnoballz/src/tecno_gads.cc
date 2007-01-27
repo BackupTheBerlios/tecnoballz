@@ -52,7 +52,7 @@ void tecno_gads::littleInit()
 	y_minimum = 0 * resolution;
 	frame_period = 6;	// vitesse d'animation
 	frame_delay = 1;	// compteur tempo animation
-	set_method(sprite_object::CYCLE_PTAB);
+	set_draw_method(sprite_object::CYCLE_PTAB);
 }
 
 //-----------------------------------------------------------------------------
@@ -61,9 +61,9 @@ void tecno_gads::littleInit()
 void tecno_gads::new_gadget(Sint32 nuGad)
 {
 	if(nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-		set_method(sprite_object::CYCLE_PTAB);
+		set_draw_method(sprite_object::CYCLE_PTAB);
 	else
-		set_method(sprite_object::METHOD_TAB);
+		set_draw_method(sprite_object::DRAW_WITH_TABLES);
 	gadget_num = nuGad;
 	nuGad = nuGad >> 1;
 	hasard_val += nuGad;
@@ -88,9 +88,9 @@ void tecno_gads::new_gadget(Sint32 nuGad)
 void tecno_gads::nouveauGad(brickClear *briPT, Sint32 nuGad)
 {
 	if(nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-		set_method(sprite_object::CYCLE_PTAB);
+		set_draw_method(sprite_object::CYCLE_PTAB);
 	else
-		set_method(sprite_object::METHOD_TAB);
+		set_draw_method(sprite_object::DRAW_WITH_TABLES);
 	gadget_num = nuGad;
 	x_coord = briPT->balle_posX;
 	y_coord = briPT->balle_posY;
@@ -120,9 +120,9 @@ void tecno_gads::nouveauGad(brickClear *briPT, Sint32 nuGad)
 void tecno_gads::nouveauGad(sprite_ball *balle, Sint32 nuGad)
 {
 	if(nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-		set_method(sprite_object::CYCLE_PTAB);
+		set_draw_method(sprite_object::CYCLE_PTAB);
 	else
-		set_method(sprite_object::METHOD_TAB);
+		set_draw_method(sprite_object::DRAW_WITH_TABLES);
 	gadget_num = nuGad;
 	x_coord = balle->get_x_coord();
 	y_coord = balle->get_y_coord();
@@ -151,9 +151,9 @@ void tecno_gads::nouveauGad(sprite_ball *balle, Sint32 nuGad)
 void tecno_gads::nouveauGad(sprite_projectile *pfire, Sint32 nuGad)
 {
 	if(nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-		set_method(sprite_object::CYCLE_PTAB);
+		set_draw_method(sprite_object::CYCLE_PTAB);
 	else
-		set_method(sprite_object::METHOD_TAB);
+		set_draw_method(sprite_object::DRAW_WITH_TABLES);
 	gadget_num = nuGad;
 	x_coord = pfire->get_x_coord();
 	y_coord = pfire->get_y_coord();
@@ -184,9 +184,9 @@ void tecno_gads::nouveauGad(sprite_projectile *pfire, Sint32 nuGad)
 void tecno_gads::new_gadget(sprite_ball *balle, Sint32 nuGad)
 {
 	if(nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-		set_method(sprite_object::CYCLE_PTAB);
+		set_draw_method(sprite_object::CYCLE_PTAB);
 	else
-		set_method(sprite_object::METHOD_TAB);
+		set_draw_method(sprite_object::DRAW_WITH_TABLES);
 	gadget_num = nuGad;
 	x_coord = balle->get_x_coord();
 	y_coord = balle->get_y_coord();

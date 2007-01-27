@@ -30,7 +30,7 @@ zeFireBump::zeFireBump()
 	littleInit();
 	countTempo = 0;
 	max_of_sprites = NUMBERFIRE;
-	objects_have_shades = false;
+	sprites_have_shades = false;
 	sprite_type_id = BOB_FIREBP;
 	if(resolution == 1)
 		scie_sinus = &scieSin320[0];

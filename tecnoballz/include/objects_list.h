@@ -1,14 +1,14 @@
 /** 
  * @file objects_list.h 
  * @brief Template of management of objects list 
- * @date 2007-01-24
+ * @date 2007-01-27
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.5 2007/01/24 17:10:41 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.6 2007/01/27 21:16:55 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,9 +39,9 @@ protected:
   X ** sprites_list;
   Sint32 max_of_sprites;
   Sint32 num_of_sprites;
-  bool objects_have_shades;
+  bool sprites_have_shades;
   Sint32 sprite_type_id;
-  Sint32 fTableByte;
+  bool is_draw_pixel_by_pixel;
 
 public:
   objects_list ();
@@ -79,9 +79,9 @@ template < class X > void objects_list < X >::littleInit ()
   max_of_sprites = 0;
   num_of_sprites = 0;
   sprites_list = NULL;
-  objects_have_shades = 0;
+  sprites_have_shades = false;
   sprite_type_id = 0;
-  fTableByte = 0;
+  is_draw_pixel_by_pixel = false;
 }
 
 /**
@@ -157,13 +157,13 @@ template < class X > Sint32 objects_list < X >::init_liste ()
   /* reserves only once the memory required for the
    * graphic data of the sprite */
   error_init (sprite_template->
-              create_sprite (sprite_type_id, image, objects_have_shades,
-                          fTableByte));
+              create_sprite (sprite_type_id, image, sprites_have_shades,
+                          is_draw_pixel_by_pixel));
   if (erreur_num)
     {
       return erreur_num;
     }
-  sprite_template->set_method (sprite_object::METHOD_TAB);
+  sprite_template->set_draw_method (sprite_object::DRAW_WITH_TABLES);
   sprites->add (sprite_template);
   for (Sint32 i = 1; i < max_of_sprites; i++)
     {

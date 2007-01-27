@@ -35,7 +35,7 @@ lesBriques::lesBriques()
 		max_of_sprites = NB_BRICKSH * NB_BRICKSV;
 	else
 		max_of_sprites = 0;
-	objects_have_shades = true;
+	sprites_have_shades = true;
 	sprite_type_id = BOB_BRICK1;
 	brique_pnt = (brickClear *)NULL;
 	brikTampon = (char *)NULL;

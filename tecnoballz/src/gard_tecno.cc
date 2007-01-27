@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.17 2007/01/26 16:49:19 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.18 2007/01/27 21:16:55 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -250,7 +250,7 @@ Sint32 gard_tecno::first_init()
 	sprites->add(ptBob_name);
 	ptBob_name->enable();
 	ptBob_name->set_coordinates((display->get_width() - ptBob_name->get_sprite_width()) / 2, resolution);
-	ptBob_name->set_method(sprite_object::METHOD_MSK);
+	ptBob_name->set_draw_method(sprite_object::COPY_FROM_BITMAP);
 	return erreur_num;
 }
 

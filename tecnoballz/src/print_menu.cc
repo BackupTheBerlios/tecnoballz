@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.15 2007/01/24 17:10:41 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.16 2007/01/27 21:16:55 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -83,8 +83,7 @@ Sint32 print_menu::first_init()
 	//###################################################################
 	// initialize sprite object
 	//###################################################################
-	error_init(make_sprite(graphTexte, 0));
-	if(erreur_num) return (erreur_num);
+	make_sprite(graphTexte);
 	enable();
 	set_coordinates(32 * resolution, 80 * resolution);
 	
