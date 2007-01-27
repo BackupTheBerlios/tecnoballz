@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.1 2007/01/26 16:49:19 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.2 2007/01/27 15:12:36 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1342,7 +1342,7 @@ controller_balls::vitusAtoms ()
 {
   sprite_ball **liste = sprites_list;
   Sint32 t = ptBouiBoui->get_max_of_sprites ();
-  tecno_boui **aList = ptBouiBoui->get_sprites_list ();
+  sprite_ship **aList = ptBouiBoui->get_sprites_list ();
   Sint32 nouve = (hasard_val & 0xF) << 2;
   for (Sint32 i = 0; i < max_of_sprites; i++)
     {
@@ -1357,10 +1357,10 @@ controller_balls::vitusAtoms ()
           Sint32 y1 = balle->y_coord;
           Sint32 y2 = y1 + h;
           y1 -= 26;
-          tecno_boui **monPT = aList;
+          sprite_ship **monPT = aList;
           for (Sint32 j = 0; j < t; j++)
             {
-              tecno_boui *atome = *(monPT++);
+              sprite_ship *atome = *(monPT++);
               if (!atome->atom_actif)
                 {
                   Sint32 k = atome->y_coord;

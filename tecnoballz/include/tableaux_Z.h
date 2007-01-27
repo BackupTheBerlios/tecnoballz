@@ -34,7 +34,7 @@ class tableaux_Z;
 #include "../include/objects_list.h"
 #include "../include/runGestion.h"
 #include "../include/zeBouiBoui.h"
-#include "../include/tecno_boui.h"
+#include "../include/sprite_ship.h"
 #include "../include/handler_keyboard.h"
 #include "../include/fond_ecran.h"
 #include "../include/zeRaquette.h"

@@ -4,11 +4,11 @@
  * @date 2007-01-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.1 2007/01/25 20:33:51 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.2 2007/01/27 15:12:36 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -283,7 +283,7 @@ sprite_projectile::collision2 ()
 {
   sprite_projectile **liste = list_fires;
   Sint32 t = atomsObjet->get_max_of_sprites ();
-  tecno_boui **aList = atomsObjet->get_sprites_list ();
+  sprite_ship **aList = atomsObjet->get_sprites_list ();
   for (Sint32 i = 0; i < total_fire; i++)
     {
       sprite_projectile *xFire = *(liste++);
@@ -291,7 +291,7 @@ sprite_projectile::collision2 ()
         {
           continue;
         }
-      tecno_boui **monPT = aList;
+      sprite_ship **monPT = aList;
       Sint32 y1 = xFire->y_coord;
       Sint32 y2 = y1 + 3;
       y1 -= 26;
@@ -300,7 +300,7 @@ sprite_projectile::collision2 ()
       x1 -= 20;
       for (Sint32 j = 0; j < t; j++)
         {
-          tecno_boui *atome = *(monPT++);
+          sprite_ship *atome = *(monPT++);
           if (atome->atom_actif > 0)
             {
               continue;

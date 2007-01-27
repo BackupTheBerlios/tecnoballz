@@ -51,10 +51,10 @@ SOURCES_MAIN = \
 	sprite_ball.cc \
   sprite_projectile.cc \
   sprite_paddle.cc \
+  sprite_ship.cc \
 	tableaux_Z.cc \
 	techno_eye.cc \
 	techno_gem.cc \
-	tecno_boui.cc \
 	tecno_caps.cc \
 	tecnoDefil.cc \
 	tecno_gads.cc \

@@ -69,10 +69,10 @@ void zeBouiBoui::initialise(Sint32 time0, Sint32 time1, Sint32 time2, Sint32 tim
 	Sint32 x = sprites_list[0]->atom_xmini;
 	Sint32 y = sprites_list[0]->atom_ymini;
 	Sint32 j = 0;
-	Sint32 offs1 = 20 * tecno_boui::ATOM_ANIMA;
-	Sint32 offs2 = 21 * tecno_boui::ATOM_ANIMA;
+	Sint32 offs1 = 20 * sprite_ship::ATOM_ANIMA;
+	Sint32 offs2 = 21 * sprite_ship::ATOM_ANIMA;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_boui *atome = sprites_list[i];
+	{	sprite_ship *atome = sprites_list[i];
 		atome->littleInit
 		(	time0,						//time before activation
 			apparition[j] + i,			//time before first activation	
@@ -99,7 +99,7 @@ void zeBouiBoui::initialise(Sint32 time0, Sint32 time1, Sint32 time2, Sint32 tim
 void zeBouiBoui::atom_depla()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_boui *atome = sprites_list[i];
+	{	sprite_ship *atome = sprites_list[i];
 		atome->gere_atome();
 		//return; //test only
 	}
@@ -111,7 +111,7 @@ void zeBouiBoui::atom_depla()
 void zeBouiBoui::atomexplos()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_boui *atome = sprites_list[i];
+	{	sprite_ship *atome = sprites_list[i];
 		atome->explosion2();
 	}
 }

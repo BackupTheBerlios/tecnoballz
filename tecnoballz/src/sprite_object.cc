@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.17 2007/01/24 17:10:41 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.18 2007/01/27 15:12:36 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,41 +47,41 @@ sprite_object::~sprite_object ()
   release_sprite ();
 }
 
-//-----------------------------------------------------------------------------
-// free memory used
-//-----------------------------------------------------------------------------
+/** 
+ * Release memory allocated dynamically bu the sprite object
+ */
 void
 sprite_object::release_sprite ()
 {
-  if (memoryflag)
+  if (has_allocated_memory)
     {
       for (Sint32 i = 0; i < max_of_images; i++)
         {
-          Sint16 *memPT = BOBtableP1[i];
+          Sint16 *memPT = drawing_values[i];
           memory->release ((char *) memPT);
-          char *memP2 = BOBtableP2[i];
+          char *memP2 = drawing_data[i];
           memory->release ((char *) memP2);
           if (fTableByte)
             {
-              memPT = BOBtableP3[i];
+              memPT = drawing_pixels[i];
               memory->release ((char *) memPT);
             }
         }
-      memory->release ((char *) BOBtableP1);
-      memory->release ((char *) BOBtableP2);
+      memory->release ((char *) drawing_values);
+      memory->release ((char *) drawing_data);
       if (fTableByte)
-        memory->release ((char *) BOBtableP3);
+        memory->release ((char *) drawing_pixels);
       memory->release ((char *) adresseTAB);    // Tableau des adresses dans la page BOB
-      if (tafflignes)
+      if (drawing_peer_line)
         {
           for (Sint32 i = 0; i < max_of_images; i++)
             {
-              bb_afligne *p = tafflignes[i];
-              tafflignes[i] = (bb_afligne *) NULL;
+              bb_afligne *p = drawing_peer_line[i];
+              drawing_peer_line[i] = (bb_afligne *) NULL;
               memory->release ((char *) p);
             }
-          memory->release ((char *) tafflignes);
-          tafflignes = (bb_afligne **) NULL;
+          memory->release ((char *) drawing_peer_line);
+          drawing_peer_line = (bb_afligne **) NULL;
         }
     }
   if (is_release_pixel_data && pixel_data != NULL)
@@ -110,9 +110,9 @@ sprite_object::clear_sprite_members ()
   is_enabled = 0;
   sprite_height = 0;
   sprite_width = 0;
-  BOBtableP1 = (Sint16 **) NULL;
-  BOBtableP2 = (char **) NULL;
-  BOBtableP3 = (Sint16 **) NULL;
+  drawing_values = (Sint16 **) NULL;
+  drawing_data = (char **) NULL;
+  drawing_pixels = (Sint16 **) NULL;
   collision_height = 0;
   collision_width = 0;
   screen_height = 0;
@@ -129,17 +129,17 @@ sprite_object::clear_sprite_members ()
   frame_index_min = 0;
   offsetDest = 0;
   offsetSrce = 0;
-  tabAffich1 = (Sint16 *) 0x0;
-  tabAffich2 = (char *) 0x0;
-  tabAffich3 = NULL;
+  current_drawing_values = (Sint16 *) NULL;
+  current_drawing_data = (char *) NULL;
+  current_drawing_pixels = NULL;
   sprite_has_shadow = 0;
   sprite_type_id = 0;
   srceNextLn = 0;
   affligFrst = 0;
   affligLast = 1;
   mirrorVert = 0;
-  tafflignes = (bb_afligne **) 0x0;
-  memoryflag = 0;
+  drawing_peer_line = (bb_afligne **) 0x0;
+  has_allocated_memory = false;
   object_pos = -1;
   affRepeatF = 0;
   indexCycle = 0;
@@ -168,9 +168,9 @@ sprite_object & sprite_object::operator= (const sprite_object & sprite)
   is_enabled = sprite.is_enabled;
   sprite_height = sprite.sprite_height;
   sprite_width = sprite.sprite_width;
-  BOBtableP1 = sprite.BOBtableP1;
-  BOBtableP2 = sprite.BOBtableP2;
-  BOBtableP3 = sprite.BOBtableP3;
+  drawing_values = sprite.drawing_values;
+  drawing_data = sprite.drawing_data;
+  drawing_pixels = sprite.drawing_pixels;
   collision_height = sprite.collision_height;
   collision_width = sprite.collision_width;
   screen_height = sprite.screen_height;
@@ -187,16 +187,16 @@ sprite_object & sprite_object::operator= (const sprite_object & sprite)
   frame_index_min = sprite.frame_index_min;
   offsetSrce = sprite.offsetSrce;
   offsetDest = sprite.offsetDest;
-  tabAffich1 = sprite.tabAffich1;
-  tabAffich2 = sprite.tabAffich2;
-  tabAffich3 = sprite.tabAffich3;
+  current_drawing_values = sprite.current_drawing_values;
+  current_drawing_data = sprite.current_drawing_data;
+  current_drawing_pixels = sprite.current_drawing_pixels;
   sprite_has_shadow = sprite.sprite_has_shadow;
   sprite_type_id = sprite.sprite_type_id;
   srceNextLn = sprite.srceNextLn;
   destNextLn = sprite.destNextLn;
   put_method = sprite.put_method;
   fTableByte = sprite.fTableByte;
-  memoryflag = 0;
+  has_allocated_memory = false;
   return *this;
 }
 
@@ -219,9 +219,9 @@ sprite_object::duplicaBOB (sprite_object * bobPT)
   bobPT->is_enabled = is_enabled;
   bobPT->sprite_height = sprite_height;
   bobPT->sprite_width = sprite_width;
-  bobPT->BOBtableP1 = BOBtableP1;
-  bobPT->BOBtableP2 = BOBtableP2;
-  bobPT->BOBtableP3 = BOBtableP3;
+  bobPT->drawing_values = drawing_values;
+  bobPT->drawing_data = drawing_data;
+  bobPT->drawing_pixels = drawing_pixels;
   bobPT->collision_height = collision_height;
   bobPT->collision_width = collision_width;
   bobPT->screen_height = screen_height;
@@ -238,16 +238,16 @@ sprite_object::duplicaBOB (sprite_object * bobPT)
   bobPT->frame_index_min = frame_index_min;
   bobPT->offsetSrce = offsetSrce;
   bobPT->offsetDest = offsetDest;
-  bobPT->tabAffich1 = tabAffich1;
-  bobPT->tabAffich2 = tabAffich2;
-  bobPT->tabAffich3 = tabAffich3;
+  bobPT->current_drawing_values = current_drawing_values;
+  bobPT->current_drawing_data = current_drawing_data;
+  bobPT->current_drawing_pixels = current_drawing_pixels;
   bobPT->sprite_has_shadow = sprite_has_shadow;
   bobPT->sprite_type_id = sprite_type_id;
   bobPT->srceNextLn = srceNextLn;
   bobPT->destNextLn = destNextLn;
   bobPT->put_method = put_method;
   bobPT->fTableByte = fTableByte;
-  bobPT->memoryflag = 0;
+  bobPT->has_allocated_memory = false;
 }
 
 
@@ -332,24 +332,24 @@ sprite_object::initCommun (bitmap_data * image, Sint32 shadow)
   offsetDest = display->buffer_mod (sprite_width);
 }
 
-//------------------------------------------------------------------------------
-// Allocate memory
-//------------------------------------------------------------------------------
+/** 
+ * Allocate memory for graphics data sprite for optimized drawing routines
+ */
 Sint32
 sprite_object::reservBOBt (Sint32 anima)
 {
-  memoryflag = 1;
+  has_allocated_memory = true;
   max_of_images = anima;
   // reserve la table de pointeur sur les tables d'affichage
 
-  // tables of offsets and counters (words and bytes)
-  BOBtableP1 = (Sint16 **) (memory->alloc (sizeof (Sint16 *) * max_of_images));
+  /* drawing tables for offsets and counters values (words and bytes) */
+  drawing_values = (Sint16 **) (memory->alloc (sizeof (Sint16 *) * max_of_images));
   error_init (memory->retour_err ());
   if (erreur_num)
     return erreur_num;
 
   // tables of data (pixels of the sprite)
-  BOBtableP2 = (char **) (memory->alloc (sizeof (char *) * max_of_images));
+  drawing_data = (char **) (memory->alloc (sizeof (char *) * max_of_images));
   error_init (memory->retour_err ());
   if (erreur_num)
     return erreur_num;
@@ -357,7 +357,7 @@ sprite_object::reservBOBt (Sint32 anima)
   // tables of offsets and counters (byte peer byte)
   if (fTableByte)
     {
-      BOBtableP3 =
+      drawing_pixels =
         (Sint16 **) (memory->alloc (sizeof (Sint16 *) * max_of_images));
       error_init (memory->retour_err ());
       if (erreur_num)
@@ -418,7 +418,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
     {
       affligFrst = 0;
       affligLast = sprite_height;
-      tafflignes = (bb_afligne **)
+      drawing_peer_line = (bb_afligne **)
         (memory->alloc (sizeof (bb_afligne *) * max_of_images));
       error_init (memory->retour_err ());
       if (erreur_num)
@@ -430,7 +430,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
           error_init (memory->retour_err ());
           if (erreur_num)
             return erreur_num;
-          tafflignes[i] = p;
+          drawing_peer_line[i] = p;
         }
     }
 
@@ -556,10 +556,10 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
           if (erreur_num)
             return erreur_num;
         }
-      BOBtableP1[i] = destV;    //table of offsets and loops counters
-      BOBtableP2[i] = destP;    //table of pixels
+      drawing_values[i] = destV;    //table of offsets and loops counters
+      drawing_data[i] = destP;    //table of pixels
       if (fTableByte)
-        BOBtableP3[i] = destW;
+        drawing_pixels[i] = destW;
 
       // genere the sprite's table for display ...................................
       Sint32 depla = 0;         // offset
@@ -577,7 +577,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
           // special display mode line peer line (gigablitz)
           if (put_method == METHOD_LIN)
             {
-              bb_afligne *p = tafflignes[i];
+              bb_afligne *p = drawing_peer_line[i];
               p[j].TABAFFICH1 = destV;
               p[j].TABAFFICH2 = destP;
             }
@@ -645,7 +645,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
 
           if (put_method == METHOD_LIN)
             {
-              bb_afligne *p = tafflignes[i];
+              bb_afligne *p = drawing_peer_line[i];
               p[j].COUNTERTAB = nbreV;
               p[j].OFFSETLEFT = nbreO;
               nbreV = 0;
@@ -653,10 +653,10 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
             }
         }                       //height loop
     }
-  tabAffich1 = BOBtableP1[0];   //table of offsets and loops counters
-  tabAffich2 = BOBtableP2[0];   //adresse table pour "afficheBOB"
+  current_drawing_values = drawing_values[0];   //table of offsets and loops counters
+  current_drawing_data = drawing_data[0];   //adresse table pour "afficheBOB"
   if (fTableByte)
-    tabAffich3 = BOBtableP3[0];
+    current_drawing_pixels = drawing_pixels[0];
   pixel_data = adresseTAB[0];   //adresse GFX pour routine "draw()"
   //printf("sprite_object::initialise()\n");
   return (erreur_num);
@@ -752,11 +752,11 @@ sprite_object::set_image ()
 {
   Sint32 index = frame_index;
   pixel_data = adresseTAB[index];
-  tabAffich1 = BOBtableP1[index];
-  tabAffich2 = BOBtableP2[index];
-  if (fTableByte && BOBtableP3)
+  current_drawing_values = drawing_values[index];
+  current_drawing_data = drawing_data[index];
+  if (fTableByte && drawing_pixels)
     {
-      tabAffich3 = BOBtableP3[index]; 
+      current_drawing_pixels = drawing_pixels[index]; 
     }
 }
 
@@ -769,11 +769,11 @@ sprite_object::set_image (Sint32 index)
 {
   frame_index = index;
   pixel_data = adresseTAB[index];
-  tabAffich1 = BOBtableP1[index];
-  tabAffich2 = BOBtableP2[index];
+  current_drawing_values = drawing_values[index];
+  current_drawing_data = drawing_data[index];
   if (fTableByte)
     {
-      tabAffich3 = BOBtableP3[index];
+      current_drawing_pixels = drawing_pixels[index];
     }
 }
 
@@ -800,7 +800,7 @@ sprite_object::restore_background_under_sprite ()
   Sint32 *srcPT = (Sint32 *) restore_ptr;
   Sint32 *adres = (Sint32 *) screen_ptr;
   screen_ptr = (char *) NULL;
-  Sint16 *gfxPT = tabAffich1;
+  Sint16 *gfxPT = current_drawing_values;
   Uint32 t = (Uint32) * (gfxPT++);
   for (Uint32 i = 0; i < t; i++)
     {
@@ -826,7 +826,7 @@ sprite_object::restore_background_under_sprite ()
   char *srcPT = restore_ptr;
   char *adres = screen_ptr;
   screen_ptr = (char *) NULL;
-  Sint16 *gfxPT = tabAffich1;
+  Sint16 *gfxPT = current_drawing_values;
   Uint32 t = (Uint32) * (gfxPT++);
   for (Uint32 i = 0; i < t; i++)
     {
@@ -850,7 +850,7 @@ void
 sprite_object::efface_lin ()
 {
 
-  bb_afligne *p = tafflignes[frame_index];
+  bb_afligne *p = drawing_peer_line[frame_index];
   Sint32 l = affligFrSv;
   Sint16 o = p[l].OFFSETLEFT;
   Uint32 t = (Uint32) p[l].COUNTERTAB;
@@ -955,7 +955,7 @@ sprite_object::restore_background_under_shadow ()
       Sint32 *srcPT = (Sint32 *) adresseTA2;
       Sint32 *adres = (Sint32 *) adresseEC2;
       adresseEC2 = (char *) NULL;
-      Sint16 *gfxPT = tabAffich1;
+      Sint16 *gfxPT = current_drawing_values;
       Uint32 t = (Uint32) * (gfxPT++);
       for (Uint32 i = 0; i < t; i++)
         {
@@ -977,7 +977,7 @@ sprite_object::restore_background_under_shadow ()
       char *srcPT = adresseTA2;
       char *adres = adresseEC2;
       adresseEC2 = (char *) NULL;
-      Sint16 *gfxPT = tabAffich1;
+      Sint16 *gfxPT = current_drawing_values;
       Uint32 t = (Uint32) * (gfxPT++);
       for (Uint32 i = 0; i < t; i++)
         {
@@ -1035,8 +1035,8 @@ sprite_object::method_tab ()
 #ifndef BYTES_COPY
   Sint32 *adres = (Sint32 *) display->buffer_pos (x_coord, y_coord);
   screen_ptr = (char *) adres;
-  Sint32 *gfxP2 = (Sint32 *) tabAffich2;        //pixels
-  Uint16 *gfxP1 = (Uint16 *) tabAffich1;        //offset and loop counter
+  Sint32 *gfxP2 = (Sint32 *) current_drawing_data;        //pixels
+  Uint16 *gfxP1 = (Uint16 *) current_drawing_values;        //offset and loop counter
   Uint32 t = (Uint32) * (gfxP1++);      //height of sprite
   for (Uint32 i = 0; i < t; i++)
     {
@@ -1062,8 +1062,8 @@ sprite_object::method_tab ()
 #else
   char *adres = display->buffer_pos (x_coord, y_coord);
   screen_ptr = adres;
-  char *gfxP2 = tabAffich2;     //pixels (sprite data)
-  Uint16 *gfxP1 = (Uint16 *) tabAffich1;        //offset and loop counter
+  char *gfxP2 = current_drawing_data;     //pixels (sprite data)
+  Uint16 *gfxP1 = (Uint16 *) current_drawing_values;        //offset and loop counter
   Uint32 t = (Uint32) * (gfxP1++);      //height of sprite
   for (Uint32 i = 0; i < t; i++)
     {
@@ -1089,8 +1089,8 @@ sprite_object::afficheCyc ()
 #ifndef BYTES_COPY
   Sint32 *adres = (Sint32 *) display->buffer_pos (x_coord, y_coord);
   screen_ptr = (char *) adres;
-  Sint32 *gfxP2 = (Sint32 *) tabAffich2;        //pixels
-  Uint16 *gfxP1 = (Uint16 *) tabAffich1;        //offset and loop counter
+  Sint32 *gfxP2 = (Sint32 *) current_drawing_data;        //pixels
+  Uint16 *gfxP1 = (Uint16 *) current_drawing_values;        //offset and loop counter
   Uint32 t = (Uint32) * (gfxP1++);
   for (Uint32 i = 0; i < t; i++)
     {
@@ -1110,7 +1110,7 @@ sprite_object::afficheCyc ()
 #else
   char *adres = display->buffer_pos (x_coord, y_coord);
   screen_ptr = adres;
-  Uint16 *gfxP1 = (Uint16 *) tabAffich1;        //offset and loop counter
+  Uint16 *gfxP1 = (Uint16 *) current_drawing_values;        //offset and loop counter
   Uint32 t = (Uint32) * (gfxP1++);
   for (Uint32 i = 0; i < t; i++)
     {
@@ -1143,8 +1143,8 @@ sprite_object::cycle_ptab ()
   char *adres = display->buffer_pos (x_coord, y_coord);
   restore_ptr = display->tampon_pos (x_coord, y_coord);
   screen_ptr = (char *) adres;
-  char *gfxP2 = tabAffich2;     //pixels
-  Uint16 *gfxP3 = (Uint16 *) tabAffich3;        //offset and loop counter
+  char *gfxP2 = current_drawing_data;     //pixels
+  Uint16 *gfxP3 = (Uint16 *) current_drawing_pixels;        //offset and loop counter
   Uint32 t = (Uint32) * (gfxP3++);
   for (Uint32 i = 0; i < t; i++)
     {
@@ -1173,12 +1173,12 @@ sprite_object::afficheRep ()
   Sint32 offsy = 0;
   for (Sint32 r = 0; r < affRepeatF; r++, offsy += sprite_height)
     {
-      Uint16 *gfxP1 = (Uint16 *) tabAffich1;    //offsets and loop counter
+      Uint16 *gfxP1 = (Uint16 *) current_drawing_values;    //offsets and loop counter
       Uint32 t = (Uint32) * (gfxP1++);
 #ifndef BYTES_COPY
       Sint32 *adres =
         (Sint32 *) display->buffer_pos (x_coord, y_coord + offsy);
-      Sint32 *gfxP2 = (Sint32 *) tabAffich2;    //pixels data of the sprite
+      Sint32 *gfxP2 = (Sint32 *) current_drawing_data;    //pixels data of the sprite
       for (Uint32 i = 0; i < t; i++)
         {
           Sint16 o = *(gfxP1++);        //offset in bytes
@@ -1202,7 +1202,7 @@ sprite_object::afficheRep ()
         }
 #else
       char *adres = display->buffer_pos (x_coord, y_coord + offsy);
-      char *gfxP2 = tabAffich2; //pixels data of the sprite
+      char *gfxP2 = current_drawing_data; //pixels data of the sprite
       for (Uint32 i = 0; i < t; i++)
         {
           Sint16 o = *(gfxP1++);        //offset in bytes
@@ -1225,7 +1225,7 @@ sprite_object::afficheRep ()
 void
 sprite_object::afficheLin ()
 {
-  bb_afligne *p = tafflignes[frame_index];
+  bb_afligne *p = drawing_peer_line[frame_index];
   restore_ptr = display->tampon_pos (x_coord, y_coord + affligFrst);
   affligFrSv = affligFrst;;
   affligLaSv = affligLast;
@@ -1337,7 +1337,7 @@ sprite_object::afficheSHA ()
   char j = ombrepixel;
   adresseTA2 =
     display->tampon_pos (x_coord + ombredecax, y_coord + ombredecay);
-  Uint16 *gfxPT = (Uint16 *) tabAffich1;
+  Uint16 *gfxPT = (Uint16 *) current_drawing_values;
   Uint32 t = (Uint32) * (gfxPT++);
 #ifndef BYTES_COPY
   Sint32 q = ombrepixe4;
@@ -1381,12 +1381,12 @@ void
 sprite_object::affich_MSK ()
 {
   restore_ptr = display->tampon_pos (x_coord, y_coord);
-  Uint16 *gfxP1 = (Uint16 *) tabAffich1;        //offset and loop counter
+  Uint16 *gfxP1 = (Uint16 *) current_drawing_values;        //offset and loop counter
   Uint32 t = (Uint32) * (gfxP1++);
 #ifndef BYTES_COPY
   Sint32 *adres = (Sint32 *) display->tampon_pos (x_coord, y_coord);
   screen_ptr = (char *) adres;
-  Sint32 *gfxP2 = (Sint32 *) tabAffich2;        //pixels
+  Sint32 *gfxP2 = (Sint32 *) current_drawing_data;        //pixels
   for (Uint32 i = 0; i < t; i++)
     {
       Sint16 o = *(gfxP1++);    //offset
@@ -1411,7 +1411,7 @@ sprite_object::affich_MSK ()
 #else
   char *adres = display->tampon_pos (x_coord, y_coord);
   screen_ptr = adres;
-  char *gfxP2 = tabAffich2;     //pixels data
+  char *gfxP2 = current_drawing_data;     //pixels data
   for (Uint32 i = 0; i < t; i++)
     {
       Sint16 o = *(gfxP1++);    //offset
@@ -1436,7 +1436,7 @@ sprite_object::affich_SHA ()
   adresseTA2 = display->tampon_pos (x_coord + ombredecax,
                                     y_coord + ombredecay);
   char j = ombrepixel;
-  Uint16 *gfxPT = (Uint16 *) tabAffich1;
+  Uint16 *gfxPT = (Uint16 *) current_drawing_values;
   Uint32 t = (Uint32) * (gfxPT++);
 #ifndef BYTES_COPY
   Sint32 *adres = (Sint32 *) display->tampon_pos (x_coord + ombredecax,

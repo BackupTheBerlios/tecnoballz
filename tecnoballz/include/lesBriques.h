@@ -65,14 +65,14 @@ brickClear;
 #include "../include/barreScore.h"
 #include "../include/zeCapsules.h"
 #include "../include/ze_gadgets.h"
-#include "../include/tecno_boui.h"
+#include "../include/sprite_ship.h"
 //...............................................................................
 class lesBriques:public objects_list < sprite_object >
 {
 	friend class controller_balls;
 	friend class sprite_projectile;
 	friend class zeGigaBlit;
-	friend class tecno_boui;
+	friend class sprite_ship;
 
 	public:
 

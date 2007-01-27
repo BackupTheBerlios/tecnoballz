@@ -1182,7 +1182,7 @@ void zeNewBalls::vitusAtoms()
 {
 	sprite_ball **liste = sprites_list;
 	Sint32 t = ptBouiBoui->get_max_of_sprites();
-	tecno_boui **aList = ptBouiBoui->get_sprites_list();
+	sprite_ship **aList = ptBouiBoui->get_sprites_list();
 	Sint32 nouve = (hasard_val & 0xF) << 2;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = *(liste++);
@@ -1195,9 +1195,9 @@ void zeNewBalls::vitusAtoms()
 			Sint32 y1 = balle->y_coord;
 			Sint32 y2 = y1 + h;
 			y1 -= 26;
-			tecno_boui **monPT = aList;
+			sprite_ship **monPT = aList;
 			for(Sint32 j = 0; j < t; j++)
-			{	tecno_boui *atome = *(monPT++);
+			{	sprite_ship *atome = *(monPT++);
 				if(!atome->atom_actif)
 				{	Sint32 k = atome->y_coord;
 					if(k < y2 && k > y1)

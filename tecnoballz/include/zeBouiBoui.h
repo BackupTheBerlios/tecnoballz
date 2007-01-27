@@ -26,15 +26,15 @@
 class zeBouiBoui ;
 //...............................................................................
 #include "../include/list_sprites.h"
-#include "../include/tecno_boui.h"
+#include "../include/sprite_ship.h"
 #include "../include/objects_list.h"
 #include "../include/handler_display.h"
 #include "../include/zeCapsules.h"
 #include "../include/zeGemstone.h"
 #include "../include/lesBriques.h"
 //..............................................................................
-class zeBouiBoui : public objects_list < tecno_boui >
-{	friend class tecno_boui ;
+class zeBouiBoui : public objects_list < sprite_ship >
+{	friend class sprite_ship ;
 	private:
 		zeCapsules*		ptCapsules;
 		ze_gadgets*		pt_gadgets;

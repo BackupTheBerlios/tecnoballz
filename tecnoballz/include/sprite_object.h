@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.15 2007/01/24 17:10:41 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.16 2007/01/27 15:12:35 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -161,14 +161,27 @@ private:
   Sint32 offsetSrce;            // offset source
   Sint32 offsetDest;            // offset destination
 
-  // table d'affichage
-  Sint16 **BOBtableP1;          // pt/les tables aff. offsets
-  char **BOBtableP2;            // pt/les tables aff. pixels
-  Sint16 **BOBtableP3;          // pt/les tables aff. offsets (byte peer byte)
-  Sint16 *tabAffich1;           // table des offsets en cours
-  char *tabAffich2;             // table des pixels en cours
-  Sint16 *tabAffich3;           // table des offsets en cours (byte peer byte)
-  bb_afligne **tafflignes;      // tables d'affichage pour l'affichage par lignes
+  /* 
+   * Drawing tables
+   */ 
+  /** List of tables of the drawing offsets and repeats values */
+  Sint16 **drawing_values;
+  /** Table of drawing offsets and repeats values for
+   * current sprite image frame */
+  Sint16 *current_drawing_values;
+  /** List of tables of the drawing pixels data */
+  char **drawing_data;
+  /** Table of drawing pixels data for current sprite image frame */
+  char *current_drawing_data;
+  /** List of tables of the drawing pixels data. Used for drawing sprite
+   * pixel by pixel, with color cycling.
+   * E.g. projectiles and missiles sprites */
+  Sint16 **drawing_pixels; 
+  /** Table of drawing data for current sprite image frame */
+  Sint16 *current_drawing_pixels;
+  /** Data structure of drawing sprite line by line.
+   * Only used for the Gigablitz sprite */
+  bb_afligne **drawing_peer_line;
 
   static Sint32 ombredecax;
   static Sint32 ombredecay;
@@ -219,7 +232,8 @@ protected:
   Sint32 sprite_type_id;
   Sint32 affligFrSv;            // premiere ligne a afficher (si afflignesF=1)
   Sint32 affligLaSv;            // derniere ligne a afficher (si afflignesF=1)
-  Sint32 memoryflag;            // This object reserved some memory 
+  /** If true, object has allocated memory */
+  bool has_allocated_memory;
   Sint32 object_pos;            // Numero du BOB dans la liste
  /** true if the object must release
   * the pixel data memory at its destruction */
