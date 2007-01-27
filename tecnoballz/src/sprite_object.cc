@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.cc 
  * @brief Draw sprites on the screen 
- * @date 2007-01-23
+ * @date 2007-01-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.18 2007/01/27 15:12:36 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.19 2007/01/27 17:17:15 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,11 +67,19 @@ sprite_object::release_sprite ()
               memory->release ((char *) memPT);
             }
         }
-      memory->release ((char *) drawing_values);
-      memory->release ((char *) drawing_data);
+      //memory->release ((char *) drawing_values);
+      //memory->release ((char *) drawing_data);
+      //if (fTableByte)
+      //  memory->release ((char *) drawing_pixels);
+      delete[]drawing_values;
+      delete[]drawing_data;
       if (fTableByte)
-        memory->release ((char *) drawing_pixels);
-      memory->release ((char *) adresseTAB);    // Tableau des adresses dans la page BOB
+        {
+          delete[]drawing_pixels;
+        }
+      //memory->release ((char *) images_pixel_data);    // Tableau des adresses dans la page BOB
+      delete[]images_pixel_data;
+
       if (drawing_peer_line)
         {
           for (Sint32 i = 0; i < max_of_images; i++)
@@ -101,7 +109,7 @@ sprite_object::clear_sprite_members ()
 {
   mentatInit ();
   pixel_data = (char *) NULL;
-  adresseTAB = (char **) NULL;
+  images_pixel_data = (char **) NULL;
   screen_ptr = (char *) NULL;
   adresseEC2 = (char *) NULL;
   frame_delay = 1;
@@ -159,7 +167,7 @@ sprite_object & sprite_object::operator= (const sprite_object & sprite)
   printf ("sprite_object: %i = %i \n", object_pos, sprite.object_pos);
 
   pixel_data = sprite.pixel_data;
-  adresseTAB = sprite.adresseTAB;
+  images_pixel_data = sprite.images_pixel_data;
   screen_ptr = sprite.screen_ptr;
   adresseEC2 = sprite.adresseEC2;
   frame_delay = sprite.frame_delay;
@@ -210,7 +218,7 @@ void
 sprite_object::duplicaBOB (sprite_object * bobPT)
 {
   bobPT->pixel_data = pixel_data;
-  bobPT->adresseTAB = adresseTAB;
+  bobPT->images_pixel_data = images_pixel_data;
   bobPT->screen_ptr = screen_ptr;
   bobPT->adresseEC2 = adresseEC2;
   bobPT->frame_delay = frame_delay;
@@ -301,60 +309,88 @@ sprite_object::set_display_pos (Sint32 num)
 Sint32
 sprite_object::make_sprite (bitmap_data * image, Sint32 shadow)
 {
-  initCommun (image, shadow);
+  init_common (image, shadow);
   pixel_data = image->get_pixel_data ();
   return erreur_num;
 }
 
-//------------------------------------------------------------------------------
-// initialize sprite
-// input        => image: bitmap source
-//                      => ombre: 1 = shadow
-//------------------------------------------------------------------------------
+/**
+ * Initialize some common values
+ * @param bitmap bitmap containing the images of sprite
+ * @param shadow true if the sprite has shadow
+ */
 void
-sprite_object::initCommun (bitmap_data * image, Sint32 shadow)
+sprite_object::init_common (bitmap_data * bitmap, Sint32 shadow)
 {
   screen_width = display->get_width ();
   screen_height = display->get_height ();
-  srceNextLn = image->get_row_size ();
+  srceNextLn = bitmap->get_row_size ();
   destNextLn = display->bufferNext ();
   sprite_has_shadow = shadow;
   screen_ptr = (char *) NULL;
   adresseEC2 = (char *) NULL;
-  sprite_width = image->get_width ();
-  sprite_height = image->get_height ();
+  sprite_width = bitmap->get_width ();
+  sprite_height = bitmap->get_height ();
   max_of_images = 1;
   collision_height = sprite_height;
   collision_width = sprite_width;
   x_maximum = screen_width - (Sint32) collision_width;
   y_maximum = screen_height - (Sint32) collision_height;
-  offsetSrce = image->get_line_modulo (sprite_width);
+  offsetSrce = bitmap->get_line_modulo (sprite_width);
   offsetDest = display->buffer_mod (sprite_width);
 }
 
 /** 
  * Allocate memory for graphics data sprite for optimized drawing routines
  */
-Sint32
-sprite_object::reservBOBt (Sint32 anima)
+void
+sprite_object::alloc_drawing_tables (Sint32 anima)
 {
   has_allocated_memory = true;
   max_of_images = anima;
   // reserve la table de pointeur sur les tables d'affichage
 
-  /* drawing tables for offsets and counters values (words and bytes) */
-  drawing_values = (Sint16 **) (memory->alloc (sizeof (Sint16 *) * max_of_images));
-  error_init (memory->retour_err ());
-  if (erreur_num)
-    return erreur_num;
+  try
+    {
+
+      /* table giving address of each BOBs into BOBs page  */
+      images_pixel_data = new char* [max_of_images];
+
+      /* drawing tables for offsets and counters values (words and bytes) */
+      drawing_values = new Sint16* [max_of_images];
+
+      drawing_data = new char* [max_of_images];
+
+      if (!fTableByte)
+        {
+          return;
+        }
+      drawing_pixels = new Sint16 *[max_of_images];
+
+    }
+  catch (std::bad_alloc &)
+    {
+       std::cerr << "(!)sprite_object::alloc_drawing_tables " <<
+         "not enough memory to allocate " <<
+         "list of sprite drawing tables for "
+         << max_of_images << " images! " << std::endl;
+       throw;
+    }
+  
+      //images_pixel_data = (char **) (memory->alloc (sizeof (char *) * max_of_images));
+  //drawing_values = (Sint16 **) (memory->alloc (sizeof (Sint16 *) * max_of_images));
+  //error_init (memory->retour_err ());
+  //if (erreur_num)
+   // return erreur_num;
 
   // tables of data (pixels of the sprite)
-  drawing_data = (char **) (memory->alloc (sizeof (char *) * max_of_images));
-  error_init (memory->retour_err ());
-  if (erreur_num)
-    return erreur_num;
+  //drawing_data = (char **) (memory->alloc (sizeof (char *) * max_of_images));
+  //error_init (memory->retour_err ());
+  //if (erreur_num)
+  //  return erreur_num;
 
   // tables of offsets and counters (byte peer byte)
+  /*
   if (fTableByte)
     {
       drawing_pixels =
@@ -365,6 +401,7 @@ sprite_object::reservBOBt (Sint32 anima)
     }
 
   return erreur_num;
+  */
 }
 
 
@@ -396,7 +433,7 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
 
   // L'ecran dans lequel le BOB est affiche
   sprite_type_id = BOBnu;
-  initCommun (image, shadow);
+  init_common (image, shadow);
   const bb_describ *descr = zelistBOB[BOBnu];
 
   /* read sprite caracteristics */
@@ -434,22 +471,11 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
         }
     }
 
-  //###################################################################
-  // table giving address of each BOBs into BOBs page 
-  //###################################################################
-  adresseTAB = (char **) (memory->alloc (sizeof (char *) * max_of_images));
-  error_init (memory->retour_err ());
-  if (erreur_num)
-    return erreur_num;
   offsetSrce = image->get_line_modulo (sprite_width);
   offsetDest = display->buffer_mod (sprite_width);
 
-  //###################################################################
-  // allocate pointers list
-  //###################################################################
-  error_init (reservBOBt (max_of_images));
-  if (erreur_num)
-    return erreur_num;
+  /* Allocate list for the lists of the drawing tables */
+  alloc_drawing_tables (max_of_images);
 
   //###################################################################
   // generate the display table
@@ -559,16 +585,20 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
       drawing_values[i] = destV;    //table of offsets and loops counters
       drawing_data[i] = destP;    //table of pixels
       if (fTableByte)
-        drawing_pixels[i] = destW;
+        {
+            drawing_pixels[i] = destW;
+        }
 
       // genere the sprite's table for display ...................................
       Sint32 depla = 0;         // offset
       npixe = 0;                // counter of the pixels
       gfxPT = image->get_pixel_data (pos_x, pos_y); // graphic address 
-      adresseTAB[i] = gfxPT;
+      images_pixel_data[i] = gfxPT;
       *(destV++) = (Sint16) nbreV;      // Nombre d'occurences
       if (fTableByte)
-        *(destW++) = (Sint16) nbreV;    // Nombre d'occurences
+        {
+          *(destW++) = (Sint16) nbreV;    // Nombre d'occurences
+        }
       nbreV = 0;                // compteur nombre d'offest et de compteur
       Sint32 nbreO = 0;
       Sint32 flagO = 0;
@@ -656,8 +686,10 @@ sprite_object::create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
   current_drawing_values = drawing_values[0];   //table of offsets and loops counters
   current_drawing_data = drawing_data[0];   //adresse table pour "afficheBOB"
   if (fTableByte)
-    current_drawing_pixels = drawing_pixels[0];
-  pixel_data = adresseTAB[0];   //adresse GFX pour routine "draw()"
+    {
+      current_drawing_pixels = drawing_pixels[0];
+    }
+  pixel_data = images_pixel_data[0];   //adresse GFX pour routine "draw()"
   //printf("sprite_object::initialise()\n");
   return (erreur_num);
 }
@@ -751,7 +783,7 @@ void
 sprite_object::set_image ()
 {
   Sint32 index = frame_index;
-  pixel_data = adresseTAB[index];
+  pixel_data = images_pixel_data[index];
   current_drawing_values = drawing_values[index];
   current_drawing_data = drawing_data[index];
   if (fTableByte && drawing_pixels)
@@ -768,7 +800,7 @@ void
 sprite_object::set_image (Sint32 index)
 {
   frame_index = index;
-  pixel_data = adresseTAB[index];
+  pixel_data = images_pixel_data[index];
   current_drawing_values = drawing_values[index];
   current_drawing_data = drawing_data[index];
   if (fTableByte)

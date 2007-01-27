@@ -4,11 +4,11 @@
  * @date 2007-01-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.16 2007/01/27 15:12:35 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.17 2007/01/27 17:17:15 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -151,7 +151,9 @@ public:
 private:
   /** Maximum number of images in the animation */
   Sint32 max_of_images;
-  char **adresseTAB;            // table adresse des graphismes
+  /** List of pointers of all images of the sprite
+   * in the source bitmap page */
+  char **images_pixel_data;
   /** Pointer to sprite in game offscreen */
   char *screen_ptr;
   /** Pointer to the background in restore offscreen */
@@ -270,11 +272,10 @@ public:
   sprite_object & operator= (const sprite_object &sprite);
   void duplicaBOB (sprite_object *);
   void set_coordinates (Sint32 xcoord, Sint32 ycoord);
-  Sint32 reservBOBt (Sint32 anima);
   Sint32 create_sprite (Sint32 BOBnu, bitmap_data * image, bool shadow,
                      Sint32 ftpix = 0);
   Sint32 make_sprite (bitmap_data * image, Sint32 ombre);
-  void initCommun (bitmap_data * image, Sint32 ombre);
+  void init_common (bitmap_data * image, Sint32 ombre);
   void set_x_coord (Sint32 xcoord);
   void set_y_coord (Sint32 ycoord);
   void move_x (Sint32 x_offset);
@@ -322,6 +323,9 @@ public:
   static const Sint32 cycling_01[8];
   static const Sint32 cycling_02[8];
   static const bb_describ *zelistBOB[];
+
+private:
+  void alloc_drawing_tables (Sint32 num_images);
 
 };
 #endif
