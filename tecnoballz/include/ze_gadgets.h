@@ -83,7 +83,7 @@ class ze_gadgets:public objects_list < tecno_gads >
 		void				send_malus(sprite_ball *);
 		void				send_malus(sprite_projectile *);	
 		void				envoieGads(sprite_ball *pball);
-		Sint32				gadgetShop();
+		void create_shop_sprites_list();
 		void				gadgetShop(Sint32 nuGad);
 		void				gadgetShop(joueurData * gamer);
 		void				bouge_gads();

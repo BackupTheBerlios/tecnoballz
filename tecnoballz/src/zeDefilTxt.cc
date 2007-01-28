@@ -46,10 +46,9 @@ zeDefilTxt::~zeDefilTxt()
 //-----------------------------------------------------------------------------
 // perform some initializations
 //-----------------------------------------------------------------------------
-Sint32 zeDefilTxt::init_chars()
+void zeDefilTxt::create_fontes_list()
 {
-	error_init(init_liste());
-	if(erreur_num) return erreur_num;
+	create_sprites_list();
 	Sint32 i;
 	objectChar[0] = 0;
 	Sint32 j = 0;
@@ -69,7 +68,6 @@ Sint32 zeDefilTxt::init_chars()
 	enable_sprites();
 	object_ptr = &objectChar[DEFINUMBER];
 	scroll_ptr = scrollText;
-	return erreur_num;
 }
 
 //-----------------------------------------------------------------------------

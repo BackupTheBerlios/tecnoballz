@@ -55,7 +55,7 @@ class ejectBalls:public virtual mentatCode
 	public:
 							ejectBalls();
 							~ejectBalls();
-		Sint32				initialise();
+		void				initialise();
 		void				afficheSha();
 		void				afficheGfx();
 		sprite_object*			demandeBOB(Sint32 eject);

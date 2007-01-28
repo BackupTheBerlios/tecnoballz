@@ -127,7 +127,7 @@ class zeRaquette:public objects_list < sprite_paddle >
 							zeRaquette();
 							zeRaquette(Sint32 nBob);
 							~zeRaquette();
-		Sint32				init_fires();
+  void create_projectiles_list ();
 		Sint32				init_liste();
 		void				fire_projectiles ();
 		void				lacheBalle();
@@ -137,7 +137,7 @@ class zeRaquette:public objects_list < sprite_paddle >
 		void				bp_deplac2();
 		void				initBumper(barreScore *score, zeGigaBlit *blitz,
 									controller_balls* balls);
-		Sint32				init_robot();
+		void init_robot();
 		void				activrobot();
 		void				deactrobot();
 		void				move_robot();

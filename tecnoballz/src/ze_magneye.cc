@@ -61,10 +61,9 @@ Sint32 ze_magneye::create_eye()
 //-----------------------------------------------------------------------------
 // initialize eyes
 //-----------------------------------------------------------------------------
-Sint32  ze_magneye::initialize()
+void ze_magneye::create_eyes_list()
 {
-	error_init(init_liste());
-	if(erreur_num) return erreur_num;
+	create_sprites_list();
 	Sint32 hval = hasard_val;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	techno_eye *ptEye = sprites_list[i];
@@ -87,7 +86,6 @@ Sint32  ze_magneye::initialize()
 	eyeCenterX = hypotenuse / 2;
 	eyeCenterY = eyeCenterX;
 	hypotenuse = hypotenuse * hypotenuse;
-	return erreur_num;
 }
 
 //-----------------------------------------------------------------------------

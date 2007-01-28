@@ -49,18 +49,16 @@ zeFireBump::~zeFireBump()
 //-----------------------------------------------------------------------------
 // perform some initializations
 //-----------------------------------------------------------------------------
-Sint32 zeFireBump::installBOB(sprite_paddle * raket)
+void zeFireBump::create_projectiles_list (sprite_paddle * paddle)
 {
-	Sint32 error = init_liste();
-	maRaquette = raket;
+	create_sprites_list();
+	maRaquette = paddle;
 	sprite_projectile **liste = sprites_list;
-	Sint32 t = max_of_sprites;
-	for(Sint32 i = 0; i < t; i++)
+	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_projectile *xFire = *(liste++);
-		xFire->littleInit(raket);
+		xFire->littleInit(paddle);
 	}
 	fire1RunOn();
-	return error;
 }
 
 //-----------------------------------------------------------------------------

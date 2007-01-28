@@ -1,14 +1,14 @@
 /** 
  * @file objects_list.h 
  * @brief Template of management of objects list 
- * @date 2007-01-27
+ * @date 2007-01-28
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.6 2007/01/27 21:16:55 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.7 2007/01/28 21:31:56 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,8 @@ public:
   ~objects_list ();
   void littleInit ();
   void release_sprites_list ();
-  Sint32 init_liste ();
+  void alloc_sprites_list ();
+  void create_sprites_list ();
   void disable_sprites ();
   void enable_sprites ();
   X **get_sprites_list ();
@@ -102,7 +103,7 @@ template < class X > void objects_list < X >::release_sprites_list ()
         }
         sprites_list[i] = (X *) NULL;
     }
-    memory->release ((char *) sprites_list);
+    delete[]sprites_list;
     sprites_list = NULL;
     mentatKill ();
 }
@@ -135,34 +136,50 @@ template < class X > void objects_list < X >::set_max_of_sprites (Sint32 maxof)
 }
 
 /**
- * Initialize the list of sprites objects
+ * Allocate memory for the list of sprites
  */
-template < class X > Sint32 objects_list < X >::init_liste ()
+template < class X > void objects_list < X >::alloc_sprites_list ()
 {
-  bitmap_data *image = image_BOBs;
   if (max_of_sprites <= 0)
     {
-      return erreur_num;
+      std::cerr << "(!)objects_list::alloc_sprites_list() " <<
+          "Our array should always have at least one element in it!" <<
+          std::endl;
+      throw ("(!)objects_list::alloc_sprites_list() failed! "
+          "At least one element is required");
     }
-  sprites_list = (X **) (memory->alloc (sizeof (X *) * max_of_sprites));
-  error_init (memory->retour_err ());
-  if (erreur_num)
+  try
     {
-      return (erreur_num);
+       sprites_list = new X*[max_of_sprites];
     }
+  catch (std::bad_alloc &)
+    {
+      std::cerr << "(!)(!)objects_list::::alloc_sprites_list() " <<
+        "not enough memory to allocate " <<
+        max_of_sprites << " elements!" << std::endl;
+      throw;
+    }
+  for (Sint32 i = 0; i < max_of_sprites; i++)
+    {
+      sprites_list[i] = NULL;
+    }
+}
+
+/**
+ * Initialize the list of sprites objects
+ */
+template < class X > void objects_list < X >::create_sprites_list ()
+{
+  bitmap_data *image = image_BOBs;
+ alloc_sprites_list ();
+ 
   X *sprite_template = new X ();
   sprite_template->set_object_pos (0);
   sprites_list[0] = sprite_template;
   
   /* reserves only once the memory required for the
    * graphic data of the sprite */
-  error_init (sprite_template->
-              create_sprite (sprite_type_id, image, sprites_have_shades,
-                          is_draw_pixel_by_pixel));
-  if (erreur_num)
-    {
-      return erreur_num;
-    }
+  sprite_template->create_sprite (sprite_type_id, image, sprites_have_shades, is_draw_pixel_by_pixel);
   sprite_template->set_draw_method (sprite_object::DRAW_WITH_TABLES);
   sprites->add (sprite_template);
   for (Sint32 i = 1; i < max_of_sprites; i++)
@@ -175,7 +192,6 @@ template < class X > Sint32 objects_list < X >::init_liste ()
       sprites_list[i] = sprite;
       sprites->add (sprite);
     }
-  return erreur_num;
 }
 
 /**

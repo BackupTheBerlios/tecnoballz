@@ -3,11 +3,11 @@
  * @brief Call the drawing methods of all sprites
  * @date 2007-01-16
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: list_sprites.cc,v 1.3 2007/01/23 14:08:51 gurumeditation Exp $
+ * $Id: list_sprites.cc,v 1.4 2007/01/28 21:31:56 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,27 +63,18 @@ list_sprites::~list_sprites ()
  */
 Sint32 list_sprites::init (Sint32 numof)
 {
-  printf("list_sprites::init: %i\n", numof);
   if (shapes == NULL)
     {
       max_of_shapes = numof;
-      printf("list_sprites::init %i\n", max_of_shapes);
       shapes = (sprite_object **) memory->alloc (sizeof (sprite_object *) * numof);
-      printf("list_sprites::init %i\n", max_of_shapes);
       if (shapes == NULL) return memory->retour_err ();
-      printf("list_sprites::init %i\n", max_of_shapes);
     }
   if (shadows == NULL)
     {
-      printf("list_sprites::init %i\n", max_of_shapes);
       shadows = (sprite_object **) memory->alloc (sizeof (sprite_object *) * numof);
-      printf("list_sprites::init %i\n", max_of_shapes);
       if (shadows == NULL) return memory->retour_err ();
-      printf("list_sprites::init %i\n", max_of_shapes);
     }
-  printf("list_sprites::init %i\n", max_of_shapes);
   reset ();
-  printf("list_sprites::init\n");
   return 0;
 }
 

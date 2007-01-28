@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.18 2007/01/27 21:16:55 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.19 2007/01/28 21:31:56 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -115,58 +115,36 @@ Sint32 gard_tecno::first_init()
 	error_init(pRessource->loadSprite());
 	if(erreur_num)
 		return (erreur_num);
-	error_init(ptMissiles->init_liste());
-	if(erreur_num)
-		return (erreur_num);
+        ptMissiles->create_sprites_list();
 	error_init(ptguardian->init_liste(ptMissiles, grdP, ptGigaBlit, pExplosion));
 	if(erreur_num)
 		return (erreur_num);
 	error_init(ptRaquette->init_liste());
 	if(erreur_num)
 		return (erreur_num);
-	error_init(ptNewBalls->init_liste());
-	if(erreur_num)
-		return (erreur_num);
-	error_init(ptCapsules->init_liste());
-	if(erreur_num)
-		return (erreur_num);
-	error_init(pt_gadgets->init_liste());
-	if(erreur_num)
-		return (erreur_num);
-	error_init(ptPrntmney->init_liste());
-	if(erreur_num)
-		return (erreur_num);
-	error_init(pExplosion->init_liste());
-	if(erreur_num)
-		return (erreur_num);
+	ptNewBalls->create_sprites_list();
+	ptCapsules->create_sprites_list();
+	pt_gadgets->create_sprites_list();
+	ptPrntmney->create_sprites_list();
+	pExplosion->create_explosions_list();
 
 	// Initialize money sprite
-	error_init(ptBobMoney->create_sprite(BOB_MONEYS, image_BOBs, 0));
-	if(erreur_num)
-		return (erreur_num);
+	ptBobMoney->create_sprite(BOB_MONEYS, image_BOBs, 0);
 	sprites->add(ptBobMoney);
 	
 	// Initialize extra life sprite
-	error_init(ptBobLifes->create_sprite(BOB_GADGET, image_BOBs, 0));
-	if(erreur_num)
-		return (erreur_num);
+	ptBobLifes->create_sprite(BOB_GADGET, image_BOBs, 0);
 	sprites->add(ptBobLifes);
 
 	// initialize
-	error_init(ptBaDirect->init_liste());
-	if(erreur_num) return erreur_num; 
-	
+	ptBaDirect->create_sprites_list();
+
 	//mobile characters at the end of the level
-	error_init(ptMoveText->init_liste());
-	if(erreur_num) return (erreur_num);
+	ptMoveText->create_sprites_list();
 
-	error_init(ptGameOver->init_liste());
-	if(erreur_num)
-		return (erreur_num); 
+	ptGameOver->create_sprites_list();
 
-	error_init(ptCongBall->init_liste());
-	if(erreur_num)
-		return (erreur_num); 
+	ptCongBall->create_sprites_list();
 
 	// intialize escape menu
 	error_init(ptrEscMenu->first_init
@@ -177,6 +155,7 @@ Sint32 gard_tecno::first_init()
 		1			//initialize color table
 	));
 	if(erreur_num) return (erreur_num); 
+        std::cout << "gard_tecno::first_init freeSprite" << std::endl;
 
 	pRessource->freeSprite();
 	

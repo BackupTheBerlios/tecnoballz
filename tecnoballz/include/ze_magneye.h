@@ -44,7 +44,7 @@ class ze_magneye : public objects_list < techno_eye >
 						ze_magneye();
 						~ze_magneye();
 		Sint32			create_eye();
-		Sint32 			initialize();
+		void create_eyes_list();
 		void			execution1();
 };
 #endif

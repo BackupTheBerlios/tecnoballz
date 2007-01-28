@@ -42,16 +42,18 @@ mousePoint::~mousePoint()
 //-----------------------------------------------------------------------------
 // perform some initializations
 //-----------------------------------------------------------------------------
-Sint32 mousePoint::create_BOB(bitmap_data * image)
+void mousePoint::create_BOB(bitmap_data * image)
 {
 	Sint32 b;
 	if(hasard_val & 1)
+          {
 		b = BOB_MOUSE1;
+          }
 	else
+          {
 		b = BOB_MOUSE2;
-	
-	error_init(create_sprite(b, image, 0));
-	if(erreur_num) return erreur_num;
+          }
+	create_sprite(b, image, 0);
 	sprites->add(this);
 	Sint32 x = display->bufferLarg() / 2;
 	Sint32 y = display->bufferHaut() / 2;
@@ -59,7 +61,6 @@ Sint32 mousePoint::create_BOB(bitmap_data * image)
 	set_coordinates(x, y);
 	enable();
 	set_frame_delay(3);
-	return erreur_num;
 }
 
 //-----------------------------------------------------------------------------

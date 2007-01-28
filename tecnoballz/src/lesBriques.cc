@@ -30,7 +30,7 @@
 //-----------------------------------------------------------------------------
 lesBriques::lesBriques()
 {
-	mentatInit();
+	littleInit();
 	if(bob_ground)
 		max_of_sprites = NB_BRICKSH * NB_BRICKSV;
 	else
@@ -123,10 +123,12 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 
 	if(bob_ground) 
 	{
-		sprites_list = (sprite_object **)
+               alloc_sprites_list ();
+	/*	sprites_list = (sprite_object **)
 			(memory->alloc(sizeof(sprite_object *) * max_of_sprites, 0x4F424A47));
 		error_init(memory->retour_err());
 		if(erreur_num) return (erreur_num);
+            */
 	}
 	
 	if(!GFX_brique)
@@ -288,8 +290,7 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 				if(bob_ground)
 				{
 					sprite_object *ptbob = new sprite_object();
-					error_init(ptbob->create_sprite(BOB_BRICK1, GFX_brique, 1, 0));
-					if(erreur_num) return erreur_num;
+					ptbob->create_sprite(BOB_BRICK1, GFX_brique, 1, 0);
 					sprites_list[bobindex] = ptbob;
 					sprites->add(ptbob);
 					ptbob->enable();

@@ -35,7 +35,7 @@ class zexplosion:public objects_list < sprite_object >
 	public:
 							zexplosion();
 							~zexplosion();
-		Sint32				init_liste();
+		void create_explosions_list();
 		void				add_explos(Sint32 pos_x, Sint32 pos_y);
 		void				execution1();
 	private:

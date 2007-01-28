@@ -52,7 +52,7 @@ class zeFireBump:public objects_list < sprite_projectile >
 	public:
 							zeFireBump();
 							~zeFireBump();
-		Sint32				installBOB(sprite_paddle *raket);
+		void create_projectiles_list (sprite_paddle *paddle);
 		void				disponible();
 		void				nouveauTir();
 		void				init_type1();

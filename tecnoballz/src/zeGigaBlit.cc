@@ -81,13 +81,11 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 	tecBumper3 = ptRaquette->demandeRak(3);	// bottom bumper
 
 	if(max_of_sprites)
-	{	sprites_list = (giga_blitz **) 
-			(memory->alloc(sizeof(giga_blitz *) * max_of_sprites, 0x4F424A47));
-		error_init(memory->retour_err());
-		if(erreur_num)
-			return (erreur_num);
-
-		// unpack bitmap of the Gigablitz
+	{	
+          
+          
+          alloc_sprites_list ();
+          		// unpack bitmap of the Gigablitz
 		error_init(pRessource->loadSprite(ressources::RESGIGABLZ));
 		if(erreur_num)
 			return (erreur_num);
@@ -99,9 +97,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 			//g->afflignesF = 1;
 			g->set_draw_method(sprite_object::DRAW_LINE_BY_LINE);	
 			Sint32 n = numeroBOBs[i];
-			error_init(g->create_sprite(n, image_BOBs, 0));
-			if(erreur_num)
-			return (erreur_num);
+			g->create_sprite(n, image_BOBs, 0);
 			sprites->add(g);
 			sprites_list[i] = g;
 		}
@@ -263,13 +259,10 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
 	ptRaquette = zeRak;
 	tecBumper1 = ptRaquette->demandeRak(1);	// top bumper
 	if(max_of_sprites)
-	{	sprites_list = (giga_blitz **)
-			(memory->alloc(sizeof(giga_blitz *) * max_of_sprites, 0x4F424A47));
-		error_init(memory->retour_err());
-		if(erreur_num)
-			return (erreur_num);
-
-		// unpack bitmap of the Gigablitz
+	{	
+          
+               alloc_sprites_list ();
+               		// unpack bitmap of the Gigablitz
 		error_init(pRessource->loadSprite(ressources::RESGIGABLZ));
 		if(erreur_num)
 			return (erreur_num);
@@ -281,9 +274,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
 			g->mirrorVert = 1;
 			g->set_draw_method(sprite_object::DRAW_LINE_BY_LINE);	
 			Sint32 n = numeroBOBs[i];
-			error_init(g->create_sprite(n, image_BOBs, 0));
-			if(erreur_num)
-				return (erreur_num);
+			g->create_sprite(n, image_BOBs, 0);
 			sprites->add(g);
 			sprites_list[i] = g;
 		}

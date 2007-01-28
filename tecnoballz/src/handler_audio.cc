@@ -5,11 +5,11 @@
  * @date 2007-01-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.cc,v 1.1 2007/01/19 20:37:21 gurumeditation Exp $
+ * $Id: handler_audio.cc,v 1.2 2007/01/28 21:31:56 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -136,13 +136,16 @@ handler_audio::initialize ()
   if (!is_audio_enable)
     {
       if (is_verbose)
-        fprintf (stdout, "handler_audio::initialize() audio disable\n");
+        {
+          std::cout << "handler_audio::initialize() " <<
+            "audio disable!" << std::endl;
+        }
       return E_NO_ERROR;
     }
   if (SDL_Init (SDL_INIT_AUDIO | SDL_INIT_NOPARACHUTE) < 0)
     {
-      fprintf (stderr, "handler_audio::initialize(): SDL_Init() failed: %s\n",
-               SDL_GetError ());
+      std::cerr << "handler_audio::initialize() " <<
+        "SDL_Init() failed: " << SDL_GetError () << std::endl;
       is_audio_enable = 0;
       return E_NO_ERROR;
     }

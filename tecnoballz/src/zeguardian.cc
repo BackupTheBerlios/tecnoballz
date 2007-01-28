@@ -94,22 +94,16 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	//###################################################################
 	// allocate memory for the "tecno_gard" object(s)
 	//###################################################################
-	sprites_list = (tecno_gard **)
-		(memory->alloc(sizeof(tecno_gard *) * max_of_sprites, 0x4F424A47));
-	error_init(memory->retour_err());
-	if(erreur_num)
-		return (erreur_num);
-
-	//###################################################################
+        alloc_sprites_list ();
+	
+        //###################################################################
 	// initialize the "tecno_gard" object(s)
 	//###################################################################
 	for(i = 0; i < max_of_sprites; i++)
 	{	Sint32 p = level_list[grdPt++];
 		tecno_gard *pgard = new tecno_gard();
 		pgard->set_object_pos(i);
-		error_init(pgard->create_sprite(guard_list[p].para_nsbob, image_BOBs, 1));
-		if(erreur_num)
-			return (erreur_num);
+		pgard->create_sprite(guard_list[p].para_nsbob, image_BOBs, 1);
 		sprites_list[i] = pgard;
 		sprites->add(pgard);
 		pgard->enable();
@@ -126,9 +120,7 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	{	sprite_object *ptBob = new sprite_object();
 		pBobEnergy[i] = ptBob;
 		ptBob->set_object_pos(i);
-		error_init(ptBob->create_sprite(BOB_GRDNRJ, image_BOBs, 0));
-		if(erreur_num)
-			return (erreur_num);
+		ptBob->create_sprite(BOB_GRDNRJ, image_BOBs, 0);
 		sprites->add(ptBob);
 		ptBob->set_coordinates(i * 16 * resolution, 0);
 		ptBob->enable();

@@ -112,7 +112,7 @@ class briqueCote:public mentatCode
 		Sint32				coll_haute(Sint32 _iPosX);
 	
 	private:
-		Sint32				bobbg_init();
+		void				bobbg_init();
 		void				execution2();
 		void				execution3();
 };

@@ -46,32 +46,23 @@ zexplosion::~zexplosion()
 //-------------------------------------------------------------------------------
 // initialize the list of explosions
 //-------------------------------------------------------------------------------
-Sint32 zexplosion::init_liste()
+void zexplosion::create_explosions_list()
 {
 
-	// allocate table memory 
-	sprites_list = (sprite_object **)
-		(memory->alloc(sizeof(sprite_object *) * max_of_sprites, 0x4F424A47));
-	error_init(memory->retour_err());
-	if(erreur_num)
-		return (erreur_num);
-
+        alloc_sprites_list ();
 	// allocate and initialize the objects "sprite_object"
 	Sint32 bobn1 = BOB_EXPLO1;
 	Sint32 bobn2 = BOB_EXPLO2;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_object *ptbob = new sprite_object();
 		ptbob->set_object_pos(i);
-		error_init(ptbob->create_sprite(bobn1, image_BOBs, 0));
-		if(erreur_num)
-			return erreur_num;
+		ptbob->create_sprite(bobn1, image_BOBs, 0);
 		Sint32 bobnu = bobn2;
 		bobn2 = bobn1;
 		bobn1 = bobnu;
 		sprites_list[i] = ptbob;
 		sprites->add(ptbob);
 	}
-	return erreur_num; 
 }
 
 //-------------------------------------------------------------------------------

@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.cc 
  * @brief Draw sprites on the screen 
- * @date 2007-01-27
+ * @date 2007-01-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.20 2007/01/27 21:16:55 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.21 2007/01/28 21:31:56 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,35 +57,54 @@ sprite_object::release_sprite ()
     {
       for (Sint32 i = 0; i < max_of_images; i++)
         {
-          Sint16 *memPT = drawing_values[i];
-          memory->release ((char *) memPT);
-          char *memP2 = drawing_data[i];
-          memory->release ((char *) memP2);
-          if (is_draw_pixel_by_pixel)
+          if (drawing_values[i] != NULL)
             {
-              memPT = drawing_pixels[i];
-              memory->release ((char *) memPT);
+              delete[]drawing_values[i];
+              drawing_values[i] = NULL;
             }
+          if (drawing_data[i] != NULL)
+            {
+              delete[]drawing_data[i];
+              drawing_data[i] = NULL;
+            }
+         if (is_draw_pixel_by_pixel && drawing_pixels[i] != NULL)
+            {
+              delete[]drawing_pixels[i];
+              drawing_pixels[i] = NULL;
+           }
         }
-      delete[]drawing_values;
-      delete[]drawing_data;
-      if (is_draw_pixel_by_pixel)
+      if (drawing_values != NULL)
+        {
+          delete[]drawing_values;
+          drawing_values = NULL;
+        }
+      if (drawing_data != NULL)
+        { 
+          delete[]drawing_data;
+          drawing_data = NULL;
+        }
+      if (is_draw_pixel_by_pixel && drawing_pixels != NULL)
         {
           delete[]drawing_pixels;
+          drawing_pixels = NULL;
         }
-      //memory->release ((char *) images_pixel_data);    // Tableau des adresses dans la page BOB
-      delete[]images_pixel_data;
-
-      if (drawing_peer_line)
+      if (images_pixel_data != NULL)
+        { 
+          delete[]images_pixel_data;
+          images_pixel_data = NULL;
+        }
+      if (drawing_peer_line != NULL)
         {
           for (Sint32 i = 0; i < max_of_images; i++)
             {
-              bb_afligne *p = drawing_peer_line[i];
-              drawing_peer_line[i] = (bb_afligne *) NULL;
-              memory->release ((char *) p);
+              if (drawing_peer_line[i] != NULL)
+                {
+                  delete[]drawing_peer_line[i];
+                  drawing_peer_line[i] = NULL;
+                }
             }
-          memory->release ((char *) drawing_peer_line);
-          drawing_peer_line = (bb_afligne **) NULL;
+          delete[]drawing_peer_line;
+          drawing_peer_line = NULL;
         }
     }
   if (is_release_pixel_data && pixel_data != NULL)
@@ -97,9 +116,9 @@ sprite_object::release_sprite ()
   mentatKill ();
 }
 
-//-----------------------------------------------------------------------------
-// reset some values
-//-----------------------------------------------------------------------------
+/**
+ * Clear some values
+ */
 void
 sprite_object::clear_sprite_members ()
 {
@@ -337,7 +356,7 @@ sprite_object::init_common (bitmap_data * bitmap, bool shadow)
 
 /** 
  * Allocate memory for graphics data sprite for optimized drawing routines
- * @param numof number maximum of images for this sprite
+ * @param numof maximum mumber of images for this sprite
  */
 void
 sprite_object::alloc_drawing_tables (Sint32 numof)
@@ -346,19 +365,43 @@ sprite_object::alloc_drawing_tables (Sint32 numof)
   max_of_images = numof;
   try
     {
-      /* table giving address of each BOBs into BOBs page  */
+      /* draw lines by lines */
+      if (draw_method == DRAW_LINE_BY_LINE)
+        {
+          affligFrst = 0;
+          affligLast = sprite_height;
+         drawing_peer_line = new bb_afligne* [max_of_images];
+          for (Sint32 i = 0; i < max_of_images; i++)
+            {
+              bb_afligne *p = new bb_afligne[sprite_height];
+              drawing_peer_line[i] = p;
+            }
+        }
+
+      /* table giving address of each images of the sprite
+       * into bitmap source */
       images_pixel_data = new char* [max_of_images];
       /* drawing tables for offsets and counters values (words and bytes) */
       drawing_values = new Sint16* [max_of_images];
       /* drawing tables of drawing pixels data */
       drawing_data = new char* [max_of_images];
 
-      if (!is_draw_pixel_by_pixel)
+      for (Sint32 i = 0; i < max_of_images; i++)
         {
-          return;
+          images_pixel_data[i] = NULL;
+          drawing_values[i] = NULL;
+          drawing_data[i] = NULL;
         }
-      drawing_pixels = new Sint16 *[max_of_images];
 
+      /* table for draw pixel by pixel, used for color cycling */
+      if (is_draw_pixel_by_pixel)
+        {
+          drawing_pixels = new Sint16 *[max_of_images];
+          for (Sint32 i = 0; i < max_of_images; i++)
+            {
+              drawing_pixels[i] = NULL;
+            }
+        }
     }
   catch (std::bad_alloc &)
     {
@@ -372,18 +415,17 @@ sprite_object::alloc_drawing_tables (Sint32 numof)
 
 /**
  * Create the structure for drawing the sprite 
- * @param BOBnu shape number 1 to n
+ * @param type_id sprite type id, number from 1 to n
  * @praam image bitmap containing the images of sprite 
  * @param shadow true if it sprite has a shadow, false otherwise 
  * @param by_pixel if true generate additional table to drawing
  *                 pixel by pixel. Used for color cyclyng.
  *                 False by default
  */
-Sint32
+void
 sprite_object::create_sprite (Sint32 type_id, bitmap_data * image, bool shadow,
                               bool by_pixel)
 {
-
   is_draw_pixel_by_pixel = by_pixel;
   if (draw_method == COPY_FROM_BITMAP)
     {
@@ -406,29 +448,6 @@ sprite_object::create_sprite (Sint32 type_id, bitmap_data * image, bool shadow,
   x_maximum = screen_width - sprite_width;
   y_maximum = screen_height - sprite_height;
 
-  //###################################################################
-  // mode lines by lines
-  //###################################################################
-  if (draw_method == DRAW_LINE_BY_LINE)
-    {
-      affligFrst = 0;
-      affligLast = sprite_height;
-      drawing_peer_line = (bb_afligne **)
-        (memory->alloc (sizeof (bb_afligne *) * max_of_images));
-      error_init (memory->retour_err ());
-      if (erreur_num)
-        return (erreur_num);
-      for (Sint32 i = 0; i < max_of_images; i++)
-        {
-          bb_afligne *p = (bb_afligne *)
-            (memory->alloc (sizeof (bb_afligne) * sprite_height));
-          error_init (memory->retour_err ());
-          if (erreur_num)
-            return erreur_num;
-          drawing_peer_line[i] = p;
-        }
-    }
-
   offsetSrce = image->get_line_modulo (sprite_width);
   offsetDest = display->buffer_mod (sprite_width);
 
@@ -444,31 +463,33 @@ sprite_object::create_sprite (Sint32 type_id, bitmap_data * image, bool shadow,
     {
       /* counter of the number of pixels of the image frame */
       Uint32 pixels_count = 0;
-      Uint32 values_count = 0;         //counter of number of offsets/counter
+      /* table size counter of offsets and loops counters values */ 
+      Uint32 values_count = 0;
       Sint32 pos_x = (Sint32) coord[i].BB_COORDX;
       pos_x *= resolution;
       pos_x *= 16;
       Sint32 pos_y = (Sint32) coord[i].BB_COORDY;
       pos_y *= resolution;
 
-      //###############################################################
-      //verify page overflow 
-      //###############################################################
+      /* verify page overflow */ 
       if (pos_y > (image->get_height () - sprite_height) ||
           pos_x > (image->get_width () - sprite_width))
         {
-          fprintf (stderr,
-                   "sprite_object::initialise() sprite_type_id=%i x2=%i>get_width=%i "
-                   "*AND/OR* y2=%i>get_height=%i\n",
-                   (Sint32) sprite_type_id, (Sint32) (pos_x + sprite_width),
-                   (Sint32) image->get_width (),
-                   (Sint32) (pos_y + sprite_height),
-                   (Sint32) image->get_height ());
-          fprintf (stderr,
-                   "- pos_x: %i, pos_y:%i, max_of_images:%i " "resolution=%i\n",
-                   coord[i].BB_COORDX, coord[i].BB_COORDY, i, resolution);
-          return E_GENRIQUE;
-        }
+          std::cerr << "(!)sprite_object::create_sprite() " <<
+            "sprite_type_id: " << sprite_type_id << 
+            "; x2: " << pos_x + sprite_width <<
+            "; width of the bitmap: " << image->get_width () <<
+            "; y2: " << pos_y + sprite_height <<
+            "; height of the bitmap: " << image->get_height () <<
+           std::endl;
+          std::cerr << "(!)sprite_object::create_sprite() " <<
+            "pox_x: " <<  coord[i].BB_COORDX << 
+            "; pos_y: " << coord[i].BB_COORDY <<
+            "; image number: " << i <<
+            "; resolution: " << resolution << std::endl;
+          throw std::runtime_error ("(!)sprite_object::create_sprite() "
+                                    "failed! Coordinates out of range");
+       }
 
       //###############################################################
       // mirror y if request
@@ -526,22 +547,28 @@ sprite_object::create_sprite (Sint32 type_id, bitmap_data * image, bool shadow,
       //###################################################################
       // genere the sprite's table for display
       //###################################################################
-      char *destP = (char *) memory->alloc ((pixels_count) * sizeof (char));
-      error_init (memory->retour_err ());
-      if (erreur_num)
-        return erreur_num;
-      Sint16 *destV = (Sint16 *) memory->alloc ((values_count * 3 + 1) * sizeof (Sint16));
-      error_init (memory->retour_err ());
-      if (erreur_num)
-        return erreur_num;
+
+      char *destP;
+      Sint16 *destV;
       Sint16 *destW = NULL;
-      if (is_draw_pixel_by_pixel)
+      try 
         {
-          destW = (Sint16 *) memory->alloc ((values_count * 2 + 1) * sizeof (Sint16));
-          error_init (memory->retour_err ());
-          if (erreur_num)
-            return erreur_num;
+          destP = new char[pixels_count];
+          destV = new Sint16[values_count * 3 + 1];          
+         if (is_draw_pixel_by_pixel)
+            {
+              destW = new Sint16[values_count * 2 + 1];
+           }
         }
+      catch (std::bad_alloc &)
+        {
+          std::cerr << "(!)sprite_object::create_sprite() " <<
+            "not enough memory to allocate " <<
+            "drawing tables for "
+            << pixels_count << " pixels! " << std::endl;
+          throw;
+        }
+
       drawing_values[i] = destV;    //table of offsets and loops counters
       drawing_data[i] = destP;    //table of pixels
       if (is_draw_pixel_by_pixel)
@@ -650,7 +677,6 @@ sprite_object::create_sprite (Sint32 type_id, bitmap_data * image, bool shadow,
       current_drawing_pixels = drawing_pixels[0];
     }
   pixel_data = images_pixel_data[0];   //adresse GFX pour routine "draw()"
-  return (erreur_num);
 }
 
 /**
@@ -792,18 +818,20 @@ sprite_object::restore_background_under_sprite ()
   Sint32 *adres = (Sint32 *) screen_ptr;
   screen_ptr = (char *) NULL;
   Sint16 *gfxPT = current_drawing_values;
-  Uint32 t = (Uint32) * (gfxPT++);
-  for (Uint32 i = 0; i < t; i++)
+  Uint32 s = (Uint32) * (gfxPT++);
+  for (Uint32 i = 0; i < s; i++)
     {
       Sint16 o = *(gfxPT++);    //offset
       adres = (Sint32 *) ((char *) adres + o);
       srcPT = (Sint32 *) ((char *) srcPT + o);
-      o = *(gfxPT++);           //number of bytes contigus
+      /* number of contiguous bytes */
+      o = *(gfxPT++);
       for (Sint32 k = 0; k < o; k++)
         {
           *(adres++) = *(srcPT++);
         }
-      o = *(gfxPT++);           //number of longword contigus
+      /* number of contiguous long words */
+      o = *(gfxPT++);
       char *adreb = (char *) adres;
       char *srcPB = (char *) srcPT;
       for (Sint32 k = 0; k < o; k++)
@@ -825,7 +853,8 @@ sprite_object::restore_background_under_sprite ()
       adres += o;
       srcPT += o;
       gfxPT++;
-      o = *(gfxPT++);           //number of bytes contigus
+      /* number of contiguous bytes */
+      o = *(gfxPT++);
       for (Sint32 k = 0; k < o; k++)
         {
           *(adres++) = *(srcPT++);
@@ -1025,31 +1054,37 @@ sprite_object::draw_with_tables ()
 {
   restore_ptr = display->tampon_pos (x_coord, y_coord);
 #ifndef BYTES_COPY
-  Sint32 *adres = (Sint32 *) display->buffer_pos (x_coord, y_coord);
-  screen_ptr = (char *) adres;
-  Sint32 *gfxP2 = (Sint32 *) current_drawing_data;        //pixels
-  Uint16 *gfxP1 = (Uint16 *) current_drawing_values;        //offset and loop counter
-  Uint32 t = (Uint32) * (gfxP1++);      //height of sprite
-  for (Uint32 i = 0; i < t; i++)
+  Sint32 *screen32 = (Sint32 *) display->buffer_pos (x_coord, y_coord);
+  screen_ptr = (char *) screen32;
+  /* pixels data of the sprite image */
+  Sint32 *pixels32 = (Sint32 *) current_drawing_data;
+  /* offsets and counters of loops for copies */
+  Uint16 *counters = (Uint16 *) current_drawing_values;
+  /* height of the sprite in pixels */
+  Uint32 h = (Uint32) * (counters++);
+  for (Uint32 i = 0; i < h; i++)
     {
-      Sint16 o = *(gfxP1++);    //offset
-      adres = (Sint32 *) ((char *) adres + o);
-      o = *(gfxP1++);           //number of longword contigus
-      for (Sint32 k = 0; k < o; k++)
+      /* offset */
+      Sint16 k = *(counters++);
+      screen32 = (Sint32 *) ((char *) screen32 + k);
+      /* number of contiguous long words */
+      k = *(counters++);
+      for (Sint32 j = 0; j < k; k++)
         {
-          Sint32 j = *(gfxP2++);
-          *(adres++) = j;
+          Sint32 p = *(pixels32++);
+          *(screen32++) = p;
         }
-      o = *(gfxP1++);           //number of bytes contigus
-      char *gfxpb = (char *) gfxP2;
-      char *adreb = (char *) adres;
-      for (Sint32 k = 0; k < o; k++)
+      /* number of contiguous bytes */
+      k = *(counters++);
+      char *pixels8 = (char *) pixels32;
+      char *screen8 = (char *) screen32;
+      for (Sint32 j = 0; j < k; k++)
         {
-          char j = *(gfxpb++);
-          *(adreb++) = j;
+          char p = *(pixels8++);
+          *(screen8++) = p;
         }
-      gfxP2 = (Sint32 *) gfxpb;
-      adres = (Sint32 *) adreb;
+      pixels32 = (Sint32 *) pixels8;
+      screen32 = (Sint32 *) screen8;
     }
 #else
   char *adres = display->buffer_pos (x_coord, y_coord);

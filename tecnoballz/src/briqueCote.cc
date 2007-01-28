@@ -98,9 +98,7 @@ Sint32 briqueCote::initialise(Sint32 build)
 	// create a sprite object for small horizontal bricks 
 	//###################################################################
 	bricote_hz = new sprite_object();
-	error_init(bricote_hz->create_sprite(BOB_BRICKH, image_BOBs, 1));
-	if(erreur_num)
-		return (erreur_num);
+	bricote_hz->create_sprite(BOB_BRICKH, image_BOBs, 1);
 	iLargeurBH = bricote_hz->get_sprite_width();
 	iHauteurBH = bricote_hz->get_sprite_height();
 
@@ -108,9 +106,7 @@ Sint32 briqueCote::initialise(Sint32 build)
 	// create a sprite object for small vertical bricks 
 	//###################################################################
 	bricote_vt = new sprite_object();
-	error_init(bricote_vt->create_sprite(BOB_BRICKV, image_BOBs, 1));
-	if(erreur_num)
-		return (erreur_num);
+	bricote_vt->create_sprite(BOB_BRICKV, image_BOBs, 1);
 	iLargeurBV = bricote_vt->get_sprite_width();
 	iHauteurBV = bricote_vt->get_sprite_height();
 
@@ -192,7 +188,7 @@ Sint32 briqueCote::initialise(Sint32 build)
 	Uint32 _iS1 = iLargeurBH * iHauteurBH;	// size of horizontal bricks
 	Uint32 _iS2 = iLargeurBH * iHauteurBV;	// size of vertical bricks
 	_iS2 = (_iS1 * BRICOTENUM) + (_iS2 * BRICOTENUM) + (_iS2 * BRICOTENUM);
-	fond_sauve = memory->alloc(_iS2, 0x464F4E44);
+	fond_sauve = memory->alloc(_iS2);
 	error_init(memory->retour_err());
 	if(erreur_num)
 		return (erreur_num);
@@ -200,8 +196,7 @@ Sint32 briqueCote::initialise(Sint32 build)
 	//###################################################################
 	// initialize the sprites of the walls (bob_ground = 1)
 	//###################################################################
-	error_init(bobbg_init());
-	if(erreur_num) return (erreur_num);
+	bobbg_init();
 
 	//###################################################################
 	//allocate memory for the redraw bricks table
@@ -216,9 +211,13 @@ Sint32 briqueCote::initialise(Sint32 build)
 //-----------------------------------------------------------------------------
 // initialize the sprites of the walls (bob_ground = 1)
 //-----------------------------------------------------------------------------
-Sint32 briqueCote::bobbg_init()
+void briqueCote::bobbg_init()
 {
-	if(!bob_ground) return erreur_num; 
+	if(!bob_ground)
+          {
+            return;
+          }
+
 	Sint32 x = BRICOTEHRX * resolution;
 	Sint32 yg = BRICOTEGAY * resolution;
 	Sint32 yd = BRICOTEDRY * resolution;
@@ -227,22 +226,19 @@ Sint32 briqueCote::bobbg_init()
 	for(Uint32 i = 0; i < BRICOTENUM; i++)	//12 bricks per wall
 	{
 		bobwal_top[i] = new sprite_object();
-		error_init(bobwal_top[i]->create_sprite(BOB_BRICKH, image_BOBs, 1));
-		if(erreur_num) return (erreur_num);
+		bobwal_top[i]->create_sprite(BOB_BRICKH, image_BOBs, 1);
 		sprites->add(bobwal_top[i]);
 		bobwal_top[i]->set_coordinates(x, BRICOTEHRY * resolution);
 		if(map_duHaut[i]) bobwal_top[i]->enable();
 
 		bobwal_lef[i] = new sprite_object();
-		error_init(bobwal_lef[i]->create_sprite(BOB_BRICKV, image_BOBs, 1));
-		if(erreur_num) return (erreur_num);
+		bobwal_lef[i]->create_sprite(BOB_BRICKV, image_BOBs, 1);
 		sprites->add(bobwal_lef[i]);
 		bobwal_lef[i]->set_coordinates(BRICOTEGAX * resolution, yg);
 		if(map_gauche[i]) bobwal_lef[i]->enable();
 
 		bobwal_rgh[i] = new sprite_object();
-		error_init(bobwal_rgh[i]->create_sprite(BOB_BRICKV, image_BOBs, 1));
-		if(erreur_num) return (erreur_num);
+		bobwal_rgh[i]->create_sprite(BOB_BRICKV, image_BOBs, 1);
 		sprites->add(bobwal_rgh[i]);
 		bobwal_rgh[i]->set_coordinates(BRICOTEDRX * resolution, yd);
 		if(map_droite[i]) bobwal_rgh[i]->enable();
@@ -251,7 +247,6 @@ Sint32 briqueCote::bobbg_init()
 		yd += ht;
 		yg += ht;
 	}
-	return erreur_num;
 }
 
 //-----------------------------------------------------------------------------

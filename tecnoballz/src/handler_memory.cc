@@ -5,11 +5,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_memory.cc,v 1.1 2007/01/16 14:37:34 gurumeditation Exp $
+ * $Id: handler_memory.cc,v 1.2 2007/01/28 21:31:56 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,6 +85,7 @@ handler_memory::alloc (Sint32 size, Uint32 ident)
 {
   char *addr;
   size *= double_mem;
+  std::cout << "handler_memory::alloc: " << size << std::endl;
 
   if (num_of_zones >= max_of_zones)
     {
@@ -178,6 +179,8 @@ handler_memory::release_all ()
 {
   if (num_of_zones > 0)
     {
+      fprintf (stderr, "handler_memory::release_all() "
+               "remain %i not released zones\n", num_of_zones);
       mem_struct *mem_list = memory_list_base;
       for (Sint32 i = 0; i < num_of_zones; i++, mem_list++)
         {

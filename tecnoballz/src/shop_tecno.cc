@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.18 2007/01/24 14:31:28 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.19 2007/01/28 21:31:56 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -145,18 +145,16 @@ Sint32 shop_tecno::first_init()
 	// Initialize LED 
 	//###################################################################
 	if(resolution == 1) 
-		error_init(BOB_allume->create_sprite(BOB_LEDSHP, image_BOBs, 0));
+		BOB_allume->create_sprite(BOB_LEDSHP, image_BOBs, 0);
 	else 
-		error_init(BOB_allume->create_sprite(BOB_LEDSH2, image_BOBs, 0));
-	if(erreur_num) return erreur_num;
+		BOB_allume->create_sprite(BOB_LEDSH2, image_BOBs, 0);
 	sprites->add(BOB_allume);
 	BOB_allume->enable();
 
 	//###################################################################
 	// initialize the gadgets
 	//###################################################################
-	error_init(gereGadget->gadgetShop());
-	if(erreur_num) return erreur_num;
+	gereGadget->create_shop_sprites_list();
 	joueurGere->RAZ_course();
 	Sint32* tp = coursetemp;
 	for(Sint32 i = 0; i < NB_OPTIONS; i++)
@@ -167,9 +165,8 @@ Sint32 shop_tecno::first_init()
 	//###################################################################
 	// Initialize the mouse pointer
 	//###################################################################
-	error_init(objetMouse->create_BOB(image_BOBs));
-	if(erreur_num) return erreur_num;
-	
+	objetMouse->create_BOB(image_BOBs);
+
 	//###################################################################
 	// intialize the "escape menu"
 	//###################################################################

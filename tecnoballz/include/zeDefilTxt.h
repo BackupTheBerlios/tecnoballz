@@ -44,7 +44,7 @@ class zeDefilTxt:public objects_list < tecnoDefil >
 	public:
 							zeDefilTxt();
 							~zeDefilTxt();
-		Sint32				init_chars();
+		void create_fontes_list();
 		void				move_chars();
 
 };

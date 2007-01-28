@@ -4,11 +4,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.3 2007/01/25 20:33:51 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.4 2007/01/28 21:31:56 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,14 +64,13 @@ sprite_paddle::~sprite_paddle ()
     bumperTirs->release_sprites_list ();        //release fires
 }
 
-//------------------------------------------------------------------------------
-// initialize bumper's fires
-//------------------------------------------------------------------------------
-Sint32
-sprite_paddle::init_fires ()
+/**
+ * Create and initializes the list of the projectiles for this paddle
+ */ 
+void
+sprite_paddle::create_projectiles_list ()
 {
-  Sint32 error = bumperTirs->installBOB (this);
-  return (error);
+  bumperTirs->create_projectiles_list (this);
 }
 
 /**

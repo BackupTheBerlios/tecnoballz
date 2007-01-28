@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.18 2007/01/26 16:49:19 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.19 2007/01/28 21:31:56 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -147,61 +147,44 @@ Sint32 tableaux_Z::first_init()
 	//###################################################################
 
 	//wall of bottom 
-	error_init(BottomWall->create_sprite(BOB_WALLBO, image_BOBs, 0));
-	if(erreur_num) return erreur_num;
+	BottomWall->create_sprite(BOB_WALLBO, image_BOBs, 0);
 	sprites->add(BottomWall);
 	BottomWall->set_coordinates(32 * resolution, 232 * resolution);
 	//robot bumper
-	error_init(theBumpers->init_robot());
-	if(erreur_num) return erreur_num;
+	theBumpers->init_robot();
 	Sint32 build = joueurGere->getRebuild();
 	joueurGere->setRebuild(0);
 	error_init(gereBricot->initialise(build));
 	if(erreur_num) return erreur_num;
 	//ejectors 
-	error_init(gereEjects->initialise());
-	if(erreur_num)return erreur_num;
+	gereEjects->initialise();
 	//all balls
-	error_init(gereBalles->init_liste());
-	if(erreur_num) return erreur_num;
+	gereBalles->create_sprites_list();
 	//atoms (aka "bouisbouis")
-	error_init(les_atomes->init_liste());
-	if(erreur_num) return erreur_num;
+	les_atomes->create_sprites_list();
 	//eye magneto 
-	error_init(pt_magneye->initialize());
-	if(erreur_num) return erreur_num;
+	pt_magneye->create_eyes_list();
 	//capsules of money
-	error_init(gereCapsul->init_liste());
-	if(erreur_num) return erreur_num;
+	gereCapsul->create_sprites_list();
 	//gadgets (bonuses and maluses)
-	error_init(gereGadget->init_liste());
-	if(erreur_num) return erreur_num;
+	gereGadget->create_sprites_list();
 	//gems stones
-	error_init(ptGemstone->init_liste());
-	if(erreur_num) return erreur_num;
+	ptGemstone->create_sprites_list();
 	//mobiles characters
-	error_init(gere_texte->init_liste());
-	if(erreur_num) return erreur_num;
-	//weapons's bumpers
-	error_init(theBumpers->init_fires());
-	if(erreur_num) return erreur_num;
+	gere_texte->create_sprites_list();
+	theBumpers->create_projectiles_list();
 	//credits value (left-bottom)
-	error_init(ptPrntmney->init_liste());
-	if(erreur_num) return erreur_num;
+	ptPrntmney->create_sprites_list();
 	//GAME OVER sprites
-	error_init(ptGameOver->init_liste());
-	if(erreur_num) return erreur_num; 
+	ptGameOver->create_sprites_list();
 	//money sprite (left-bottom)
-	error_init(ptBobMoney->create_sprite(BOB_MONEYS, image_BOBs, 0));
-	if(erreur_num) return erreur_num;
+	ptBobMoney->create_sprite(BOB_MONEYS, image_BOBs, 0);
 	sprites->add(ptBobMoney);
 	//reverser sprite (right-bottom)
-	error_init(ptBobRever->create_sprite(BOB_GADGET, image_BOBs, 0));
-	if(erreur_num) return erreur_num;
+	ptBobRever->create_sprite(BOB_GADGET, image_BOBs, 0);
 	sprites->add(ptBobRever);
 	//bumper's viewfinder
-	error_init(ptBaDirect->init_liste());
-	if(erreur_num) return erreur_num; 
+	ptBaDirect->create_sprites_list();
 	//ESC menu
 	error_init(ptrEscMenu->first_init(image_BOBs, 0, 256 * resolution));
 	if(erreur_num) return erreur_num; 

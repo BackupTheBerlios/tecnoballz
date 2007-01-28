@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.21 2007/01/27 21:16:56 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.22 2007/01/28 21:31:56 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,22 +102,15 @@ zeRaquette::~zeRaquette()
 	release_sprites_list();
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: intialize fires of bumpers
-//------------------------------------------------------------------------------
-Sint32 zeRaquette::init_fires()
+/**
+ * Create and initializes the list of the projectiles for the 4 paddles
+ */
+void zeRaquette::create_projectiles_list()
 {
-	error_init(tecBumper1->init_fires());
-	if(erreur_num)
-		return (erreur_num);
-	error_init(tecBumper2->init_fires());
-	if(erreur_num)
-		return (erreur_num);
-	error_init(tecBumper3->init_fires());
-	if(erreur_num)
-		return (erreur_num);
-	error_init(tecBumper4->init_fires());
-	return (erreur_num);
+  tecBumper1->create_projectiles_list();
+  tecBumper2->create_projectiles_list();
+  tecBumper3->create_projectiles_list();
+  tecBumper4->create_projectiles_list();
 }
 
 //------------------------------------------------------------------------------
@@ -130,19 +123,21 @@ Sint32 zeRaquette::init_liste()
 	//###################################################################
 	// allocate list of sprites memory
 	//###################################################################
+        alloc_sprites_list ();
+        /*
 	sprites_list =
 		(sprite_paddle **) (memory->alloc(sizeof(sprite_paddle *) * max_of_sprites,
 			0x4F424A47));
 	error_init(memory->retour_err());
 	if(erreur_num) return erreur_num;
+        */
 
 	//###################################################################
 	// gards levels: create one simple bumper
 	//###################################################################
     if(max_of_sprites == 1)
     {	tecBumper1->set_object_pos(0);
-		error_init(tecBumper1->create_sprite(sprite_type_id, image_BOBs, 1, 0));
-		if(erreur_num) return erreur_num;
+		tecBumper1->create_sprite(sprite_type_id, image_BOBs, 1, 0);
 		sprites->add(tecBumper1);
 		sprites_list[0] = tecBumper1;
 		tecBumper1->set_coordinates(keyboard->get_mouse_x(), bumperYbas);
@@ -173,15 +168,13 @@ Sint32 zeRaquette::init_liste()
 
 		// create bottom bumper sprite
 		tecBumper1->set_object_pos(0);
-		error_init(tecBumper1->create_sprite(BOB_BUMPHR, image_BOBs, 1, 0));
-		if(erreur_num) return erreur_num;
+		tecBumper1->create_sprite(BOB_BUMPHR, image_BOBs, 1, 0);
 		sprites->add(tecBumper1);
 		sprites_list[0] = tecBumper1;
 
 		// create left bumper sprite
 		tecBumper2->set_object_pos(1);
-		error_init(tecBumper2->create_sprite(BOB_BUMPVT, image_BOBs, 1, 0));
-		if(erreur_num) return erreur_num;
+		tecBumper2->create_sprite(BOB_BUMPVT, image_BOBs, 1, 0);
 		sprites->add(tecBumper2);
 		sprites_list[1] = tecBumper2;
 
@@ -206,14 +199,12 @@ Sint32 zeRaquette::init_liste()
 //-------------------------------------------------------------------------------
 // bricks levels: generate robot bumper sprite
 //-------------------------------------------------------------------------------
-Sint32 zeRaquette::init_robot()
+void zeRaquette::init_robot()
 {
 	tec_robot0->set_object_pos(4);
-	error_init(tec_robot0->create_sprite(BOB_ROBOT0, image_BOBs, 1, 0));
-	if(erreur_num) return erreur_num;
+	tec_robot0->create_sprite(BOB_ROBOT0, image_BOBs, 1, 0);
 	sprites->add(tec_robot0);
 	sprites_list[4] = tec_robot0;
-	return erreur_num;
 }
 
 //-------------------------------------------------------------------------------
