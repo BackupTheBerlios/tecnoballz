@@ -5,11 +5,11 @@
  * @date 2007-01-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.2 2007/01/29 16:25:22 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.3 2007/01/29 20:47:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include "../include/handler_resources.h"
 #include "../include/bitmap_data.h"
 #include "../config.h"
+#include <string>
 
 #ifndef DATADIR
 #define DATADIR "/usr/share/games/tecnoballz"
@@ -44,7 +45,8 @@
 #endif
 #endif
 
-char * handler_resources::fnamescore = SCOREFILE;
+char *
+  handler_resources::fnamescore = SCOREFILE;
 const char *
   handler_resources::folderlist[] = { "/",      // Normally unused, except when running from the source directory...
   DATADIR,
@@ -54,13 +56,18 @@ const char *
 };
 
 //const char*   handler_resources::folderdata = "TecnoballZ/";
-const char * handler_resources::folder_640 = "hires/";
-const char * handler_resources::folder_320 = "lores/";
-char handler_resources::stringtemp[512];
-char handler_resources::pathstring[512];
+const char *
+  handler_resources::folder_640 = "hires/";
+const char *
+  handler_resources::folder_320 = "lores/";
+char
+  handler_resources::stringtemp[512];
+char
+  handler_resources::pathstring[512];
 
-const char * handler_resources::standfiles[] = {
-  "cosinus128.list",        //RESCOSLIST
+const char *
+  handler_resources::standfiles[] = {
+  "cosinus128.list",            //RESCOSLIST
   "edmap01.data",               //RESEDMAP01
   "edmap02.data",               //RESEDMAP02
   "edmap03.data",               //RESEDMAP03
@@ -69,7 +76,8 @@ const char * handler_resources::standfiles[] = {
   "min60map.bmp"                //RES60BACKG
 };
 
-const char * handler_resources::musicfiles[] = {
+const char *
+  handler_resources::musicfiles[] = {
   "area1-game2.mod",
   "area2-game.mod",
   "area3-game.mod",
@@ -129,7 +137,8 @@ const char *
   "font_score.bmp"              //RESFONTSCR
 };
 
-char handler_resources::ze_mapfile[] = "map??.bmp";
+char
+  handler_resources::ze_mapfile[] = "map??.bmp";
 
 /** 
  * Create the resources manager object
@@ -157,9 +166,9 @@ handler_resources::~handler_resources ()
  * @return file data buffer pointer
  */
 char *
-handler_resources::load_data (Sint32 resource_id) 
+handler_resources::load_data (Sint32 resource_id)
 {
-  char* filename = get_filename (resource_id);
+  char *filename = get_filename (resource_id);
   if (NULL == filename)
     {
       return NULL;
@@ -261,23 +270,24 @@ char *
 handler_resources::locate_data_file (const char *const name)
 {
 
-  //if(is_verbose)
-  //      fprintf(stdout, "handler_resources::locate_data_file(%s) [START]\n", name);
+  if (is_verbose)
+    {
+      std::
+        cout << "handler_resources::locate_data_file(" << name << ")" << std::
+        endl;
+    }
 
-  //###################################################################
-  // clear path name string
-  //###################################################################
+  /* clear path name string */
   for (Sint32 i = 0; i < 256; i++)
     pathstring[i] = 0;
 
-  //###################################################################
-  // null pointer
-  //###################################################################
-  if (name == NULL)
+  if (NULL == name)
     {
       std::cerr << "handler_resources::locate_data_file() " <<
-         "NULL pointer was passed as an argument!" << std::endl;
-      throw std::ios_base::failure ("NULL pointer was passed as an argument!");
+        "NULL pointer was passed as an argument!" << std::endl;
+      throw std::ios_base::
+        failure ("[!] handler_resources::locate_data_file "
+                 "NULL pointer was passed as an argument!");
     }
 
   /* if absolute path, return a pointer to a duplicate string */
@@ -291,7 +301,8 @@ handler_resources::locate_data_file (const char *const name)
     }
   for (const char **p = folderlist;; p++)
     {
-      //printf("folderlist: %s\n", *p);
+      printf(">>> folderlist: %s\n", *p);
+      
       if (*p == 0)
         {
           const char *subdir = "/share/games/tecnoballz/";
@@ -300,33 +311,43 @@ handler_resources::locate_data_file (const char *const name)
           strcat (pathname, subdir);
           strcat (pathname, name);
         }
-      else if (**p == '~')      // Not used anymore
-        {
-          static const char bogus = '\0';
-          static const char *home_dir = &bogus;
-          if (home_dir == &bogus)
-            home_dir = getenv ("HOME");
-          if (home_dir == 0)
-            continue;           // $HOME not set. Skip this directory.
-          pathname = &pathstring[0];
-          strcpy (pathname, home_dir);
-          strcat (pathname, *p + 1);
-          strcat (pathname, "/");
-          strcat (pathname, name);
-        }
-
-      // regarde deja dans le repertoire courant. (**p == '.')
       else
         {
-          pathname = &pathstring[0];
-          strcpy (pathname, *p);
-          if (pathname[strlen (pathname) - 1] != '/')
-            strcat (pathname, "/");
-          strcat (pathname, name);
-        }
-      //if(is_verbose)
-      //      fprintf(stdout, "handler_resources::locate_data_file() try %s\n", pathname);
+          if (**p == '~')       // Not used anymore
+            {
+              static const char bogus = '\0';
+              static const char *home_dir = &bogus;
+              if (home_dir == &bogus)
+                {
+                  home_dir = getenv ("HOME");
+                }
+              if (home_dir == 0)
+                {
+                  continue;     // $HOME not set. Skip this directory.
+                }
+              pathname = &pathstring[0];
+              strcpy (pathname, home_dir);
+              strcat (pathname, *p + 1);
+              strcat (pathname, "/");
+              strcat (pathname, name);
+            }
 
+          /* check already if the file is located in current directory */
+          else
+            {
+              pathname = &pathstring[0];
+              strcpy (pathname, *p);
+              if (pathname[strlen (pathname) - 1] != '/')
+                {
+                  strcat (pathname, "/");
+                }
+              strcat (pathname, name);
+            }
+        }
+      if (is_verbose)
+        {
+          std::cout << "handler_resources::locate_data_file() try " << pathname << std::endl;
+        }
 #ifdef WIN32
       struct _stat s;
       if (_stat (pathname, &s) == 0 && !_S_ISDIR (s.st_mode))
@@ -336,17 +357,26 @@ handler_resources::locate_data_file (const char *const name)
 #else
       struct stat s;
       if (stat (pathname, &s) == 0 && !S_ISDIR (s.st_mode))
-        {                       //if(is_verbose) fprintf(stdout, "handler_resources::locate_data_file(%s) END\n", pathname);
+        {
+          if (is_verbose)
+            {
+              std::
+                cout << "handler_resources::locate_data_file(" << pathname <<
+                ") find!" << std::endl;
+            }
           return pathname;
         }
 #endif
       if (*p == 0)
-        break;
+        {
+          break;
+        }
     }
-  fprintf (stderr, "handler_resources::locate_data_file: %s not found\n", name);
-  std::cerr << "handler_resources::locate_data_file() " << name << 
-     "not found!" << std::endl;
-  throw std::ios_base::failure ("File not found!");
+  std::cerr << "(!)handler_resources::locate_data_file() file '"
+    << name << "' not found!" << std::endl;
+  throw std::ios_base::failure (std::string
+                                ("[!]handler_resources::locate_data_file() File '")
+                                + name + std::string ("' not found!"));
   return NULL;
 }
 
@@ -370,20 +400,16 @@ void
 handler_resources::release_sprites_bitmap ()
 {
   if (sprites_bitmap != NULL)
-  {
-    delete sprites_bitmap;
-  }
+    {
+      delete sprites_bitmap;
+    }
   sprites_bitmap = (bitmap_data *) NULL;
 }
 
-//------------------------------------------------------------------------------
-// load a file in memory / charge un fichier en memoire
-// input        => fname: filename
-//           _pAdresse     : adresse de chargemebt
-//           zsize      : taille a lire
-// output <= 1             : tout c'est bien passe
-//           0             : erreur
-//------------------------------------------------------------------------------
+/**
+ * Load a file in memory 
+ * @param fname filename specified by path
+ */
 char *
 handler_resources::load_file (char *fname)
 {
@@ -393,6 +419,7 @@ handler_resources::load_file (char *fname)
 /**
  * Load a file in memory 
  * @param fname filename specified by path
+ * @param fsize pointer on the size of file which will be loaded 
  * return a pointer to the file data 
 */
 char *
@@ -400,13 +427,6 @@ handler_resources::load_file (char *fname, Uint32 * fsize)
 {
   /* locate a file under one of the data directories */
   char *pname = locate_data_file (fname);
-  if (NULL == pname)
-    {
-      std::cerr << "(!)handler_resources::load_file() " <<
-        "can't locate file " << fname << std::endl; 
-      throw std::ios_base::failure ("(!)handler_resources::load_file() "
-          "can't locate a file!");
-    }
 
   /* open the file */
 #ifdef WIN32
@@ -417,10 +437,10 @@ handler_resources::load_file (char *fname, Uint32 * fsize)
   if (fhand == -1)
     {
       std::cerr << "(!)handler_resources::load_file() " <<
-        "can't open file " << fname 
-        << "strerror:" << strerror (errno) << std::endl; 
+        "can't open file " << fname
+        << "strerror:" << strerror (errno) << std::endl;
       throw std::ios_base::failure ("(!)handler_resources::load_file() "
-          "can't open a file!");
+                                    "can't open a file!");
       //free(pname);
       return 0;
     }
@@ -430,10 +450,10 @@ handler_resources::load_file (char *fname, Uint32 * fsize)
   if (fstat (fhand, &sStat))
     {
       std::cerr << "(!)handler_resources::load_file() " <<
-        "can't stat file " << fname 
-        << "strerror:" << strerror (errno) << std::endl; 
+        "can't stat file " << fname
+        << "strerror:" << strerror (errno) << std::endl;
       throw std::ios_base::failure ("(!)handler_resources::load_file() "
-          "can't stat a file!");
+                                    "can't stat a file!");
       //free(pname);
       return 0;
     }
@@ -442,32 +462,32 @@ handler_resources::load_file (char *fname, Uint32 * fsize)
   //###################################################################
   // allocate memory
   //###################################################################
-  
+
   char *buffer = NULL;
   try
-    {
-       buffer = new char[sStat.st_size];
-    }
+  {
+    buffer = new char[sStat.st_size];
+  }
   catch (std::bad_alloc &)
-    {
-       std::cerr << "(!)handler_resources::load_file() " <<
-         "not enough memory to allocate " <<
-         sStat.st_size << " bytes!" << std::endl;
-       throw;  
-    }
+  {
+    std::cerr << "(!)handler_resources::load_file() " <<
+      "not enough memory to allocate " <<
+      sStat.st_size << " bytes!" << std::endl;
+    throw;
+  }
   /*
-  char *buffer = (char *) (memory->alloc (sStat.st_size,
-                                         0x31313131));
-  num_erreur = memory->retour_err ();
-  if (num_erreur)
-    {
-      fprintf (stderr,
-               "handler_resources::load_file() %s : out of memory\n\n",
-               pname);
-      //free(pname);
-      return 0;
-    }
-    */
+     char *buffer = (char *) (memory->alloc (sStat.st_size,
+     0x31313131));
+     num_erreur = memory->retour_err ();
+     if (num_erreur)
+     {
+     fprintf (stderr,
+     "handler_resources::load_file() %s : out of memory\n\n",
+     pname);
+     //free(pname);
+     return 0;
+     }
+   */
 
   //###################################################################
   // read the file
@@ -475,10 +495,10 @@ handler_resources::load_file (char *fname, Uint32 * fsize)
   if (read (fhand, buffer, sStat.st_size) != sStat.st_size)
     {                           //menGestion->release(buffer);
       std::cerr << "(!)handler_resources::load_file() " <<
-        "can't read file " << fname 
-        << "strerror:" << strerror (errno) << std::endl; 
+        "can't read file " << fname
+        << "strerror:" << strerror (errno) << std::endl;
       throw std::ios_base::failure ("(!)handler_resources::load_file() "
-          "can't read a file!");
+                                    "can't read a file!");
       //free(pname);
       return 0;
     }
@@ -627,35 +647,35 @@ handler_resources::saveScores (char *ptScr, Uint32 fsize)
 const Sint16
   handler_resources::cosinus360[720] =
   { 0, 2, 4, 7, 9, 11, 13, 15, 18, 20, 22, 24, 26, 29, 31, 33, 35, 37, 39, 41,
-43,
+  43,
   46, 48, 50, 52, 54, 56, 58, 60, 62, 63, 65, 67, 69, 71, 73, 75, 76, 78, 80,
   82, 83, 85, 87, 88, 90, 91, 93, 94, 96, 97, 99, 100, 101, 103, 104, 105,
-    107,
+  107,
   108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 119, 120, 121,
   121, 122, 123, 123, 124, 124, 125, 125, 125, 126, 126, 126, 127, 127, 127,
   127, 127, 127, 127, 127, 127, 127, 127, 126, 126, 126, 125, 125, 125, 124,
   124, 123, 123, 122, 121, 121, 120, 119, 119, 118, 117, 116, 115, 114, 113,
   112, 111, 110, 109, 108, 107, 105, 104, 103, 101, 100, 99, 97, 96, 94, 93,
-    91,
+  91,
   90, 88, 87, 85, 83, 82, 80, 78, 76, 75, 73, 71, 69, 67, 65, 64, 62, 60, 58,
   56, 54, 52, 50, 48, 46, 43, 41, 39, 37, 35, 33, 31, 29, 26, 24, 22, 20, 18,
   16, 13, 11, 9, 7, 4, 2, 0, -2, -4, -7, -9, -11, -13, -15, -18, -20, -22,
-    -24,
+  -24,
   -26, -29, -31, -33, -35, -37, -39, -41, -43, -45, -48, -50, -52, -54, -56,
   -58, -60, -62, -63, -65, -67, -69, -71, -73, -75, -76, -78, -80, -82, -83,
   -85, -87, -88, -90, -91, -93, -94, -96, -97, -99, -100, -101, -103, -104,
   -105, -106, -108, -109, -110, -111, -112, -113, -114, -115, -116, -117,
-    -118,
+  -118,
   -119, -119, -120, -121, -121, -122, -123, -123, -124, -124, -125, -125,
-    -125,
+  -125,
   -126, -126, -126, -127, -127, -127, -127, -127, -127, -127, -127, -127,
-    -127,
+  -127,
   -127, -126, -126, -126, -125, -125, -125, -124, -124, -123, -123, -122,
-    -121,
+  -121,
   -121, -120, -119, -119, -118, -117, -116, -115, -114, -113, -112, -111,
-    -110,
+  -110,
   -109, -108, -107, -105, -104, -103, -101, -100, -99, -97, -96, -94, -93,
-    -91,
+  -91,
   -90, -88, -87, -85, -83, -82, -80, -78, -76, -75, -73, -71, -69, -67, -65,
   -64, -62, -60, -58, -56, -54, -52, -50, -48, -46, -43, -41, -39, -37, -35,
   -33, -31, -29, -26, -24, -22, -20, -18, -16, -13, -11, -9, -7, -4, -2, 127,
@@ -669,15 +689,15 @@ const Sint16
   -62, -63, -65, -67, -69, -71, -73, -75, -76, -78, -80, -82, -83, -85, -87,
   -88, -90, -91, -93, -94, -96, -97, -99, -100, -101, -103, -104, -105, -107,
   -108, -109, -110, -111, -112, -113, -114, -115, -116, -117, -118, -119,
-    -119,
+  -119,
   -120, -121, -121, -122, -123, -123, -124, -124, -125, -125, -125, -126,
-    -126,
+  -126,
   -126, -127, -127, -127, -127, -127, -127, -127, -127, -127, -127, -127,
-    -126,
+  -126,
   -126, -126, -125, -125, -125, -124, -124, -123, -123, -122, -121, -121,
-    -120,
+  -120,
   -119, -119, -118, -117, -116, -115, -114, -113, -112, -111, -110, -109,
-    -108,
+  -108,
   -107, -105, -104, -103, -101, -100, -99, -97, -96, -94, -93, -91, -90, -88,
   -87, -85, -83, -82, -80, -78, -76, -75, -73, -71, -69, -67, -65, -64, -62,
   -60, -58, -56, -54, -52, -50, -48, -46, -43, -41, -39, -37, -35, -33, -31,
@@ -692,7 +712,8 @@ const Sint16 *
   handler_resources::zesinus360 = handler_resources::cosinus360 + 360;
 
 
-const Uint32
+const
+  Uint32
   handler_resources::tabledegas[180] =
   { 0x0400180, 0x0420290, 0x0440392, 0x0500494, 0x0600596, 0x0700698,
   0x0800795, 0x0900893, 0x0A00990, 0x0A20A80, 0x0A40B70, 0x0A60C60,

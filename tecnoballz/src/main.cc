@@ -5,11 +5,11 @@
  * @date 2007-01-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.19 2007/01/28 21:31:56 gurumeditation Exp $
+ * $Id: main.cc,v 1.20 2007/01/29 20:47:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,6 +61,11 @@ main (Sint32 nbArg, char **ptArg)
       error = mentatCode::game_begin ();
       if (error)
         return error;
+    }
+  catch (std::ios_base::failure& fail) 
+    {
+      std::cerr << "(!)std::ios_base::failure" << std::endl;
+      std::cerr << fail.what() << std::endl;
     }
   catch (...)
     {
