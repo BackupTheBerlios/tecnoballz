@@ -22,7 +22,7 @@
 //
 //******************************************************************************
 #include "../include/zeMissiles.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 
 //-----------------------------------------------------------------------------
 // create the object
@@ -338,8 +338,8 @@ void zeMissiles::tir06_init(tecno_gard *pgard)
       xFire->ptguardian = pgard;
       xFire->flagDepla3 = s;
       xFire->flagDepla4 = 2 * resolution;
-      xFire->tablesinus = ressources::cosinus360;
-      xFire->tablecosin = ressources::zesinus360;
+      xFire->tablesinus = handler_resources::cosinus360;
+      xFire->tablecosin = handler_resources::zesinus360;
       s = s + 12;
       n--;
     }
@@ -363,8 +363,8 @@ void zeMissiles::tir07_init(tecno_gard *pgard)
       xFire->flagDepla2 = gardy;
       xFire->flagDepla3 = s;
       xFire->flagDepla4 = 1;
-      xFire->tablesinus = ressources::cosinus360;
-      xFire->tablecosin = ressources::zesinus360;
+      xFire->tablesinus = handler_resources::cosinus360;
+      xFire->tablecosin = handler_resources::zesinus360;
       s = s + 36;
       n--;
     }
@@ -391,8 +391,8 @@ void zeMissiles::tir08_init(tecno_gard *pgard)
       s += 72;
       xFire->flagDepla4 = 0;
       xFire->flagDepla5 = tempo;
-      xFire->tablesinus = ressources::cosinus360;
-      xFire->tablecosin = ressources::zesinus360;
+      xFire->tablesinus = handler_resources::cosinus360;
+      xFire->tablecosin = handler_resources::zesinus360;
       n--;
       if(n == 5)
       {  gardy = gardy + 25 * resolution;
@@ -416,8 +416,8 @@ void zeMissiles::tir09_init(tecno_gard *pgard)
     { xFire->is_enabled = 11;
       xFire->flagDepla1 = gardx;
       xFire->flagDepla2 = gardy;
-      xFire->tablesinus = ressources::cosinus360;
-      xFire->tablecosin = ressources::zesinus360;
+      xFire->tablesinus = handler_resources::cosinus360;
+      xFire->tablecosin = handler_resources::zesinus360;
       xFire->flagDepla3 = s;
       s += 120;
       n--;
@@ -474,8 +474,8 @@ void zeMissiles::tir11_init(tecno_gard *pgard)
 			xFire->flagDepla3 = s;
 			xFire->flagDepla4 = inc_x;
 			xFire->flagDepla5 = inc_y;
-			xFire->tablesinus = ressources::cosinus360;
-			xFire->tablecosin = ressources::zesinus360;
+			xFire->tablesinus = handler_resources::cosinus360;
+			xFire->tablecosin = handler_resources::zesinus360;
 			s += 72;
 			n--;
 			if(n == 10)

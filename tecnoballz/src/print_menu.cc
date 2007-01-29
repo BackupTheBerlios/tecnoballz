@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.16 2007/01/27 21:16:55 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.17 2007/01/29 12:30:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
 #include "../include/print_menu.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/handler_keyboard.h"
 #include "../include/joueurData.h"
 #include "../include/scoretable.h"
@@ -71,7 +71,7 @@ print_menu::~print_menu()
 Sint32 print_menu::first_init()
 {
 
-	error_init(init_print(ressources::RESFONTMEN));
+	error_init(init_print(handler_resources::RESFONTMEN));
 	if(erreur_num) return (erreur_num);
 		
 	//###################################################################
@@ -95,7 +95,7 @@ Sint32 print_menu::first_init()
 	Sint32 i = hasard_val & 0x0F;
 	if(i >= 10)
 		i = i - 10;
-	const Uint32 *ptpal = (ressources::tabledegas + i * 18);
+	const Uint32 *ptpal = (handler_resources::tabledegas + i * 18);
 	for(i = 0; i < 17; i++)
 	{	Uint32 vacol = ptpal[i];
 		Uint32 vablu = vacol & 0x000000ff;

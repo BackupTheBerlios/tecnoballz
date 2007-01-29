@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.19 2007/01/28 21:31:56 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.20 2007/01/29 12:30:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 // Place - Suite 330, Boston, MA  02111-1307, USA.
 //******************************************************************************
 #include "../include/gard_tecno.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 
 //-----------------------------------------------------------------------------
 // create the object
@@ -112,10 +112,8 @@ Sint32 gard_tecno::first_init()
   	//###################################################################
 	// intialize the sprites objects lists
   	//###################################################################
-	error_init(pRessource->loadSprite());
-	if(erreur_num)
-		return (erreur_num);
-        ptMissiles->create_sprites_list();
+	resources->load_sprites_bitmap();
+  ptMissiles->create_sprites_list();
 	error_init(ptguardian->init_liste(ptMissiles, grdP, ptGigaBlit, pExplosion));
 	if(erreur_num)
 		return (erreur_num);
@@ -129,11 +127,11 @@ Sint32 gard_tecno::first_init()
 	pExplosion->create_explosions_list();
 
 	// Initialize money sprite
-	ptBobMoney->create_sprite(BOB_MONEYS, image_BOBs, 0);
+	ptBobMoney->create_sprite(BOB_MONEYS, sprites_bitmap, 0);
 	sprites->add(ptBobMoney);
 	
 	// Initialize extra life sprite
-	ptBobLifes->create_sprite(BOB_GADGET, image_BOBs, 0);
+	ptBobLifes->create_sprite(BOB_GADGET, sprites_bitmap, 0);
 	sprites->add(ptBobLifes);
 
 	// initialize
@@ -148,7 +146,7 @@ Sint32 gard_tecno::first_init()
 
 	// intialize escape menu
 	error_init(ptrEscMenu->first_init
-	(	image_BOBs,
+	(	sprites_bitmap,
 		0,			//menu number
 		320 * resolution,	//width of screen (center)
 		0,			//don't restaure background where leaves
@@ -157,7 +155,7 @@ Sint32 gard_tecno::first_init()
 	if(erreur_num) return (erreur_num); 
         std::cout << "gard_tecno::first_init freeSprite" << std::endl;
 
-	pRessource->freeSprite();
+	resources->freeSprite();
 	
 	//###################################################################
 	// initialize "Game Over"
@@ -257,7 +255,7 @@ Sint32 gard_tecno::zeMainLoop()
 			ptNewBalls->disable_sprites();
 			ptMissiles->disable_sprites();
 			if(tecnwinner)
-			{	defilement->swapScroll(2, ressources::RESEDMAP02);
+			{	defilement->swapScroll(2, handler_resources::RESEDMAP02);
 				ptCongBall->initialize(); //congra
 				scrolSpeed = 1;
 				scrollTemp = 300;

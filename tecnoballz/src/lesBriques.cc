@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //******************************************************************************
 #include "../include/lesBriques.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/handler_memory.h"
 #include "../include/handler_display.h"
 
@@ -176,7 +176,7 @@ Sint32 lesBriques::initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 	// select one of 10 sets of bricks
 	//###################################################################
 	GFXbriques = new bitmap_data();
-	GFXbriques->load(ressources::RESZEBRICK);
+	GFXbriques->load(handler_resources::RESZEBRICK);
 	Sint32 i = hasard_val & 0x0F;
 	//i = 7;
 	if(i >= 10)
@@ -250,7 +250,7 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 	//###################################################################
 	// load bricks levels (34000 bytes => 100 levels)
 	//###################################################################
-	char *tabHd = pRessource->getResData(ressources::RESBLEVELS);
+	char *tabHd = resources->getResData(handler_resources::RESBLEVELS);
 	if(!tabHd)
 	{	error_init(E_NORESOUR);
 		return (erreur_num);
@@ -390,7 +390,7 @@ void lesBriques::initpalett()
 	//Sint32 i = hasard_val & 0x0F;
 	if(i >= 10)
 		i = i - 10;
-	const Uint32 *ptpal = (ressources::tabledegas + i * 18);
+	const Uint32 *ptpal = (handler_resources::tabledegas + i * 18);
 	for(i = 0; i < 17; i++)
 	{	Uint32 vacol = ptpal[i];
 		Uint32 vablu = vacol & 0x000000ff;

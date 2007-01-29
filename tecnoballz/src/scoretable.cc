@@ -5,7 +5,7 @@
 // created	: 2004-04-30
 // updates	: 2005-01-11
 // fonction	: display score table (game over and menu)
-// id		: $Id: scoretable.cc,v 1.3 2007/01/16 14:37:34 gurumeditation Exp $
+// id		: $Id: scoretable.cc,v 1.4 2007/01/29 12:30:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -23,7 +23,7 @@
 //*****************************************************************************
 #include "../include/scoretable.h"
 #include "../include/print_menu.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/joueurData.h"
 
 //-----------------------------------------------------------------------------
@@ -97,9 +97,9 @@ Sint32 scoretable::first_init()
 //------------------------------------------------------------------------------
 Sint32 scoretable::loadScores()
 {
-	char *pData = pRessource->loadScores();
+	char *pData = resources->loadScores();
 	if(pData)
-	{	Uint32 fsize = pRessource->gtLastSize();
+	{	Uint32 fsize = resources->gtLastSize();
 		if(fsize != buffersize)
 		{	fprintf(stderr, "scoretable::loadScores(): bad file size, %i byte(s) instead %i bytes\n",
 				fsize, 	buffersize);
@@ -181,7 +181,7 @@ Sint32 scoretable::saveScores()
 	*pSelf = controlVal(pSelf + 1,
 		(buffersize - sizeof(Uint32)) / sizeof(Uint32));
 	*/
-	pRessource->saveScores(pData, buffersize);
+	resources->saveScores(pData, buffersize);
 	memory->release(pData);
 	return 0;
 }

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-10
 // fonction	: display chars
-// id		: $Id: print_text.cc,v 1.11 2007/01/24 17:10:41 gurumeditation Exp $
+// id		: $Id: print_text.cc,v 1.12 2007/01/29 12:30:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //******************************************************************************
 #include "../include/print_text.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 
 
 //-----------------------------------------------------------------------------
@@ -53,7 +53,7 @@ void print_text::initial_me()
 }
 
 //------------------------------------------------------------------------------
-// release ressources
+// release handler_resources
 //------------------------------------------------------------------------------
 void print_text::destroy_me()
 {
@@ -69,7 +69,7 @@ void print_text::destroy_me()
 //------------------------------------------------------------------------------
 Sint32 print_text::initialise()
 { 
-	return(init_print(ressources::RESFONTGAM));
+	return(init_print(handler_resources::RESFONTGAM));
 }
 
 //------------------------------------------------------------------------------

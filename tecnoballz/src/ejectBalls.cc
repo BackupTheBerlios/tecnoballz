@@ -54,25 +54,25 @@ ejectBalls::~ejectBalls()
 void ejectBalls::initialise()
 {
 	// top-left (1)
-	ejector_01->create_sprite(BOB_EJECT1, image_BOBs, 1);
+	ejector_01->create_sprite(BOB_EJECT1, sprites_bitmap, 1);
 	eject1PosX = EJECT_POS1 * resolution;
 	eject1PosY = (EJECT_POS1 * resolution) - ejector_01->get_sprite_height() / 2;
 	ejector_01->set_coordinates(eject1PosX, eject1PosY);
 
 	// top-right (2)
-	ejector_02->create_sprite(BOB_EJECT4, image_BOBs, 1);
+	ejector_02->create_sprite(BOB_EJECT4, sprites_bitmap, 1);
 	eject2PosX = EJECT_POS2 * resolution;
 	eject2PosY = (EJECT_POS1 * resolution) - ejector_02->get_sprite_height() / 2;
 	ejector_02->set_coordinates(eject2PosX, eject2PosY);
 
 	// bottom-left (3)
-	ejector_03->create_sprite(BOB_EJECT2, image_BOBs, 1);
+	ejector_03->create_sprite(BOB_EJECT2, sprites_bitmap, 1);
 	eject3PosX = EJECT_POS1 * resolution;
 	eject3PosY = (EJECT_POS2 * resolution) - ejector_03->get_sprite_height() / 2;
 	ejector_03->set_coordinates(eject3PosX, eject3PosY);
 
 	// bottom-right(4)
-	ejector_04->create_sprite(BOB_EJECT3, image_BOBs, 1);
+	ejector_04->create_sprite(BOB_EJECT3, sprites_bitmap, 1);
 	eject4PosX = EJECT_POS2 * resolution;
 	eject4PosY = (EJECT_POS2 * resolution) - ejector_04->get_sprite_height() / 2;	
 	ejector_04->set_coordinates(eject4PosX, eject4PosY);

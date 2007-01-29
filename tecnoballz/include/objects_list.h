@@ -4,11 +4,11 @@
  * @date 2007-01-28
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.7 2007/01/28 21:31:56 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.8 2007/01/29 12:30:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -170,7 +170,6 @@ template < class X > void objects_list < X >::alloc_sprites_list ()
  */
 template < class X > void objects_list < X >::create_sprites_list ()
 {
-  bitmap_data *image = image_BOBs;
  alloc_sprites_list ();
  
   X *sprite_template = new X ();
@@ -179,7 +178,7 @@ template < class X > void objects_list < X >::create_sprites_list ()
   
   /* reserves only once the memory required for the
    * graphic data of the sprite */
-  sprite_template->create_sprite (sprite_type_id, image, sprites_have_shades, is_draw_pixel_by_pixel);
+  sprite_template->create_sprite (sprite_type_id, sprites_bitmap, sprites_have_shades, is_draw_pixel_by_pixel);
   sprite_template->set_draw_method (sprite_object::DRAW_WITH_TABLES);
   sprites->add (sprite_template);
   for (Sint32 i = 1; i < max_of_sprites; i++)

@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA  02111-1307, USA.
 //*****************************************************************************
 #include "../include/head_anima.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 
 //-----------------------------------------------------------------------------
 // create the object
@@ -55,7 +55,7 @@ Sint32 head_anima::initialise()
 {
 	bitmap_data *gfxPT = new bitmap_data();
 	headbitmap = gfxPT;
-	gfxPT->load(ressources::RESHEADANI);
+	gfxPT->load(handler_resources::RESHEADANI);
 	off_source = gfxPT->get_row_size();
 	off_destin = display->bufferLarg();
 	adr_source = gfxPT->get_pixel_data();

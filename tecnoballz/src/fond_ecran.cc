@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-07-17
 // fonctions	: display background (bricks levels)
-// Id		: $Id: fond_ecran.cc,v 1.12 2007/01/24 17:10:41 gurumeditation Exp $
+// Id		: $Id: fond_ecran.cc,v 1.13 2007/01/29 12:30:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -25,7 +25,7 @@
 #include "../include/handler_display.h"
 #include "../include/fond_ecran.h"
 #include "../include/handler_keyboard.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 
 //-----------------------------------------------------------------------------
 // create the object
@@ -66,7 +66,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 			// load all 60 backgrounds differents 
 			if(is_verbose)
 				printf("fond_ecran::instalFond TecnoballZ/min60map.bmp\n");
-			fonds->load(ressources::RES60BACKG); 
+			fonds->load(handler_resources::RES60BACKG); 
 			large = FONDLARGE1;
 			haute = FONDHAUTE1;
 			t_pos = table_pos1;
@@ -81,7 +81,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 			 if(nbkdg > 77)
 				nbkdg = nbkdg - 77;
 			//nbkdg = 79; // test only
-			char *pathname = pRessource->getTexFile(nbkdg);
+			char *pathname = resources->getTexFile(nbkdg);
 			if (!pathname) {
 				erreur_num = E_FILERROR;
 				return erreur_num;

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.16 2007/01/28 21:31:56 gurumeditation Exp $
+// id		: $Id: menu_tecno.cc,v 1.17 2007/01/29 12:30:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 // Place - Suite 330, Boston, MA  02111-1307, USA.
 //******************************************************************************
 #include "../include/menu_tecno.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/joueurData.h"
 #include "../include/zeguardian.h"
 
@@ -66,20 +66,18 @@ Sint32 menu_tecno::first_init()
 	audio->play_music(MUSICINTRO);
 #endif
 	
-	error_init(pRessource->loadSprite());
-	if(erreur_num) return (erreur_num);
+	resources->load_sprites_bitmap();
 
-	BOBtecLogo->create_sprite(BOB_LOGOTB, image_BOBs, 1);
+	BOBtecLogo->create_sprite(BOB_LOGOTB, sprites_bitmap, 1);
 	sprites->add(BOBtecLogo);
 	BOBtecLogo->enable();
 	BOBtecLogo->set_coordinates(64, 13);
 
 	BOB_defile->create_fontes_list();
   
-	objetMouse->create_BOB(image_BOBs);
+	objetMouse->create_BOB(sprites_bitmap);
 
-	pRessource->freeSprite();
-	if(erreur_num) return (erreur_num);
+	resources->freeSprite();
 
 	error_init(defilement->initialise(lastScroll::TECZ_COLOR_MENU,
 		lastScroll::MAPED_MENU));

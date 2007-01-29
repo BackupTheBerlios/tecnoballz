@@ -22,7 +22,7 @@
 //*****************************************************************************
 #include "../include/score_over.h"
 #include "../include/print_menu.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/joueurData.h"
 #include "../include/scoretable.h"
 
@@ -62,7 +62,7 @@ score_over::~score_over()
 Sint32 score_over::first_init(Sint32 offzt)
 {
   
-	error_init(init_print(ressources::RESFONTSCR));
+	error_init(init_print(handler_resources::RESFONTSCR));
 	if(erreur_num) return (erreur_num);
 
 	//###################################################################

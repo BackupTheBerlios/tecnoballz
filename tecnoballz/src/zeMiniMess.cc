@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA  02111-1307, USA.
 //*****************************************************************************
 #include "../include/zeMiniMess.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 
 //------------------------------------------------------------------------------
 // create the object
@@ -57,7 +57,7 @@ Sint32 zeMiniMess::intialise1()
 {
 	if(!minifontes)
 	{	minifontes = new bitmap_data();
-		minifontes->load(ressources::RESFONTMES);
+		minifontes->load(handler_resources::RESFONTMES);
 
 		off_desti1 = display->bufferNext();	// modulo destination
 		off_source = minifontes->get_row_size();	// modulo source

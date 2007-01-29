@@ -23,9 +23,9 @@
 //*****************************************************************************
 #include "../include/zeCongBall.h"
 #include "../include/handler_audio.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/scoretable.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 
 
 //-----------------------------------------------------------------------------
@@ -71,8 +71,8 @@ void zeCongBall::initialize()
 //-----------------------------------------------------------------------------
 void zeCongBall::execution1()
 {
-	const Sint16 *ptSin = ressources::zesinus360;
-	const Sint16 *ptCos = ressources::cosinus360;
+	const Sint16 *ptSin = handler_resources::zesinus360;
+	const Sint16 *ptCos = handler_resources::cosinus360;
 	
 	Sint32 r_max = 360;
 	Sint32 rad_x = 80 * resolution;
@@ -124,8 +124,8 @@ void zeCongBall::execution1()
 		//printf("[%i]", zebob->x_maximum);
 		if(zebob->x_maximum  >= r_max) zebob->x_maximum -= r_max;
 		if(zebob->x_maximum  < 0) zebob->x_maximum += r_max;
-		Sint32 pos_x = 	(ressources::zesinus360[zebob->x_maximum] * rad_x) >> 7;
-		Sint32 pos_y = 	(ressources::cosinus360[zebob->x_maximum] * rad_y) >> 7;
+		Sint32 pos_x = 	(handler_resources::zesinus360[zebob->x_maximum] * rad_x) >> 7;
+		Sint32 pos_y = 	(handler_resources::cosinus360[zebob->x_maximum] * rad_y) >> 7;
 		pos_x += centx;
 		pos_y += centy;
 		zebob->x_coord = pos_x;

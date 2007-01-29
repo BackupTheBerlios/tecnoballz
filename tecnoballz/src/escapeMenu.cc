@@ -20,7 +20,7 @@
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //******************************************************************************
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/escapeMenu.h"
 #include "../include/sprite_object.h"
 #include "../include/handler_keyboard.h"
@@ -70,7 +70,7 @@ Sint32 escapeMenu::first_init(bitmap_data *image, Sint32 nmenu, Sint32 large, Si
 		Sint32 i = hasard_val & 0x0F;
 		if(i >= 10)
 			i = i - 10;
-		const Uint32 *ptpal = (ressources::tabledegas + i * 18);
+		const Uint32 *ptpal = (handler_resources::tabledegas + i * 18);
 		for(i = 0; i < 17; i++)
 		{	Uint32 vacol = ptpal[i];
 			Uint32 vablu = vacol & 0x000000ff;
@@ -97,7 +97,7 @@ Sint32 escapeMenu::first_init(bitmap_data *image, Sint32 nmenu, Sint32 large, Si
 	//###################################################################
 	// load fontes bitmap files and perform some initializations
 	//###################################################################
-	error_init(init_print(ressources::RESFONTMEN));
+	error_init(init_print(handler_resources::RESFONTMEN));
 	if(erreur_num) return (erreur_num);	
 	
 	//###################################################################

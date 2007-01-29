@@ -5,11 +5,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.4 2007/01/24 17:10:41 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.5 2007/01/29 12:30:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
  * MA  02110-1301, USA.
  */
 #include "../include/bitmap_data.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/handler_display.h"
 
 /** 
@@ -332,7 +332,7 @@ bitmap_data::cut (Sint32 xcoord, Sint32 ycoord, Sint32 l, Sint32 h)
 void bitmap_data::load (char *fname)
 {
   char *
-    fpath = pRessource->locateFile (fname);
+    fpath = resources->locateFile (fname);
   sdl_load_bmp (fpath);
 }
 
@@ -343,7 +343,7 @@ void bitmap_data::load (char *fname)
 void bitmap_data::load (Sint32 id)
 {
   char *
-    fpath = pRessource->locate_res (id);
+    fpath = resources->locate_res (id);
   sdl_load_bmp (fpath);
 }
 

@@ -22,7 +22,7 @@
 //*****************************************************************************
 #include "../include/ze_magneye.h"
 #include "../include/handler_keyboard.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 
 //-----------------------------------------------------------------------------
 // create the object
@@ -159,8 +159,8 @@ void ze_magneye::execution1()
 		ptEye->radius_360 += 4;
 		if(ptEye->radius_360 >= 360)
 			ptEye->radius_360 -= 360;
-		Sint32 x = (ressources::zesinus360[ptEye->radius_360] * 10 * resolution) >> 7;
-		Sint32 y = (ressources::cosinus360[ptEye->radius_360] * 10 * resolution) >> 7;
+		Sint32 x = (handler_resources::zesinus360[ptEye->radius_360] * 10 * resolution) >> 7;
+		Sint32 y = (handler_resources::cosinus360[ptEye->radius_360] * 10 * resolution) >> 7;
 		ptEye->x_coord = ptEye->centerPosx + x + (15 * resolution);
 		ptEye->y_coord = ptEye->centerPosy + y + (15 * resolution);
 		

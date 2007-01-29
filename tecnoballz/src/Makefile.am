@@ -26,6 +26,7 @@ SOURCES_MAIN = \
   handler_display.cc \
 	handler_keyboard.cc \
 	handler_memory.cc \
+	handler_resources.cc \
 	giga_blitz.cc \
 	head_anima.cc \
 	joueurData.cc \
@@ -41,7 +42,6 @@ SOURCES_MAIN = \
 	print_menu.cc \
 	printmoney.cc \
 	print_text.cc \
-	ressources.cc \
 	runGestion.cc \
 	score_over.cc \
 	scoretable.cc \

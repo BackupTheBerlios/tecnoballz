@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-07
 // fonction	: handle of the scrolling background (menu and gards levels)
-// id		: $Id: lastScroll.cc,v 1.10 2007/01/24 17:10:41 gurumeditation Exp $
+// id		: $Id: lastScroll.cc,v 1.11 2007/01/29 12:30:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //******************************************************************************
 #include "../include/lastScroll.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/handler_memory.h"
 
 //-----------------------------------------------------------------------------
@@ -75,7 +75,7 @@ Sint32 lastScroll::initialise(Uint32 PalNu, Uint32 edmap)
 	// load the page of graphics maps im memory
 	//###################################################################
 	gfx_bitMap = new bitmap_data();
-	gfx_bitMap->load(ressources::RESMAPEDIT);
+	gfx_bitMap->load(handler_resources::RESMAPEDIT);
 
 	//###################################################################
 	// load the map file in memory
@@ -467,13 +467,13 @@ Sint32 lastScroll::ld_mapfile(Uint32 edmap)
 	switch (edmap)
 	{	case MAPED_GARD:
 		default:
-			edmap = ressources::RESEDMAP01;
+			edmap = handler_resources::RESEDMAP01;
 			break;
 		case MAPED_MENU:
-			edmap = ressources::RESEDMAP03;
+			edmap = handler_resources::RESEDMAP03;
 			break;
 		case MAPED_CONG:
-			edmap = ressources::RESEDMAP02;
+			edmap = handler_resources::RESEDMAP02;
 			break;
 	}
 	
@@ -484,7 +484,7 @@ Sint32 lastScroll::ld_mapfile(Uint32 edmap)
 	//	- number of lines		: 273
 	//	- size of map code	: 2 bytes	
 	//###################################################################
-	Uint16 *zfile = (Uint16 *)pRessource->getResData(edmap);
+	Uint16 *zfile = (Uint16 *)resources->getResData(edmap);
 	if(!zfile)
 	{	erreur_num = E_FILERROR;
 		return erreur_num;

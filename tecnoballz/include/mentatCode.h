@@ -4,9 +4,9 @@
 // file		: "mentatCode.h"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.21 2007/01/24 14:31:27 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.22 2007/01/29 12:30:26 gurumeditation Exp $
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.21 2007/01/24 14:31:27 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.22 2007/01/29 12:30:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -63,7 +63,7 @@
 class mentatCode;
 class configfile;
 class scoretable;
-class ressources;
+class handler_resources;
 class level_data;
 class handler_memory;
 class handler_display;
@@ -142,7 +142,8 @@ class mentatCode
 		static const Uint32	LEVEL_AREA = 12;
 	
 		static scoretable*	ptScoreTab;		//mange best scores
-		static ressources*	pRessource;		//manage resources
+    /** Handler of the files resources */
+		static handler_resources*	resources;
 		static level_data*	ptLev_data;		//manage levels
 		static handler_memory*	memory;		//manage memory allocation   
 #ifndef SOUNDISOFF
@@ -160,7 +161,8 @@ class mentatCode
 		static gard_tecno*	garGestion;
 		static menu_tecno*	menGestion;
 		static scrolledit*	ptScrollEd;  
-		static bitmap_data*	image_BOBs;
+    /** A bitmap containing the current images of sprites */
+		static bitmap_data*	sprites_bitmap;
 		static char		zeAreaCode[11];
 
 	public:

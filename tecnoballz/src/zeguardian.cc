@@ -22,7 +22,7 @@
 //
 //******************************************************************************
 #include "../include/zeguardian.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/level_data.h"
 
 //-----------------------------------------------------------------------------
@@ -85,7 +85,7 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	//###################################################################
 	// loading curve of all guards (23304 bytes)
 	//###################################################################
-	lissaCurve = (unsigned char *)pRessource->getResData(ressources::RESGCURVES);
+	lissaCurve = (unsigned char *)resources->getResData(handler_resources::RESGCURVES);
 	if(!lissaCurve)
 	{	error_init(E_NORESOUR);
 		return erreur_num;
@@ -103,7 +103,7 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	{	Sint32 p = level_list[grdPt++];
 		tecno_gard *pgard = new tecno_gard();
 		pgard->set_object_pos(i);
-		pgard->create_sprite(guard_list[p].para_nsbob, image_BOBs, 1);
+		pgard->create_sprite(guard_list[p].para_nsbob, sprites_bitmap, 1);
 		sprites_list[i] = pgard;
 		sprites->add(pgard);
 		pgard->enable();
@@ -120,7 +120,7 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	{	sprite_object *ptBob = new sprite_object();
 		pBobEnergy[i] = ptBob;
 		ptBob->set_object_pos(i);
-		ptBob->create_sprite(BOB_GRDNRJ, image_BOBs, 0);
+		ptBob->create_sprite(BOB_GRDNRJ, sprites_bitmap, 0);
 		sprites->add(ptBob);
 		ptBob->set_coordinates(i * 16 * resolution, 0);
 		ptBob->enable();

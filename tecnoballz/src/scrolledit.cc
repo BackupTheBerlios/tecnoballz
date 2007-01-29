@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA  02111-1307, USA.
 //******************************************************************************
 #include "../include/scrolledit.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/list_sprites.h"
 #include "../include/handler_keyboard.h"
 #include <errno.h>
@@ -92,13 +92,10 @@ Sint32 scrolledit::first_init()
 	screen_width = display->get_width();
 
 	sprites->reset();
-	error_init(pRessource->loadSprite());
-	if(erreur_num) return (erreur_num);
-	objetMouse->create_BOB(image_BOBs);
-	pRessource->freeSprite();
+	resources->load_sprites_bitmap();
+	objetMouse->create_BOB(sprites_bitmap);
+	resources->freeSprite();
 
-	//initialize scrolling
-	if(erreur_num) return (erreur_num);
 	
 	//Sint32	edmap = lastScroll::MAPED_MENU;
 	//Sint32	edmap = lastScroll::MAPED_GARD;

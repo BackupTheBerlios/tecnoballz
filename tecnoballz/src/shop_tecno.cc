@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.19 2007/01/28 21:31:56 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.20 2007/01/29 12:30:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //******************************************************************************
 #include "../include/shop_tecno.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/menu_tecno.h"
 #include "../include/print_menu.h"
 
@@ -134,20 +134,15 @@ Sint32 shop_tecno::first_init()
 	for(Sint32 i = 0; i < 4; i++)
 		ptDes[i] = ptSrc[i];	
 	
-	//###################################################################
-	// load page of sprites in memory
-	//###################################################################
-	error_init(pRessource->loadSprite());
-	if(erreur_num)
-		return (erreur_num);
+	resources->load_sprites_bitmap();
 
 	//###################################################################
 	// Initialize LED 
 	//###################################################################
 	if(resolution == 1) 
-		BOB_allume->create_sprite(BOB_LEDSHP, image_BOBs, 0);
+		BOB_allume->create_sprite(BOB_LEDSHP, sprites_bitmap, 0);
 	else 
-		BOB_allume->create_sprite(BOB_LEDSH2, image_BOBs, 0);
+		BOB_allume->create_sprite(BOB_LEDSH2, sprites_bitmap, 0);
 	sprites->add(BOB_allume);
 	BOB_allume->enable();
 
@@ -165,13 +160,13 @@ Sint32 shop_tecno::first_init()
 	//###################################################################
 	// Initialize the mouse pointer
 	//###################################################################
-	objetMouse->create_BOB(image_BOBs);
+	objetMouse->create_BOB(sprites_bitmap);
 
 	//###################################################################
 	// intialize the "escape menu"
 	//###################################################################
 	error_init(ptrEscMenu->first_init
-	(	image_BOBs,
+	(	sprites_bitmap,
 		1,			//menu number
 		320 * resolution,	//width of screen (center)
 		1,			//restaure background where leaves
@@ -179,7 +174,7 @@ Sint32 shop_tecno::first_init()
 	));
 	
 
-	pRessource->freeSprite();
+	resources->freeSprite();
 	error_init(mega_print->initialise());
 	if(erreur_num) return erreur_num;
 	
@@ -187,7 +182,7 @@ Sint32 shop_tecno::first_init()
 	// load bitmap background of the shop
 	//###################################################################
 	bitmap_data *gfxPT = new bitmap_data();
-	gfxPT->load(ressources::RESNEWSHOP);
+	gfxPT->load(handler_resources::RESNEWSHOP);
 	gfxPT->copyTampon();
 	delete gfxPT;
 

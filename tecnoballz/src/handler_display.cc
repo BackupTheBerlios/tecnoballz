@@ -5,11 +5,11 @@
  * @date 2007-01-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.5 2007/01/24 17:10:41 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.6 2007/01/29 12:30:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #include "../include/handler_display.h"
 #include "../include/handler_keyboard.h"
 #include "../include/handler_audio.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 
 char
   handler_display::nomfenetre[25] = "TecnoballZ by TLK Games\0";
@@ -1065,7 +1065,7 @@ handler_display::gradation1 ()
   Sint32 i = hasard_val & 0x0F;
   if (i >= 10)
     i = i - 10;
-  const Uint32 *ptpal = (ressources::tabledegas + i * 18);
+  const Uint32 *ptpal = (handler_resources::tabledegas + i * 18);
   for (i = 0; i < 17; i++)
     {
       Uint32 vacol = ptpal[i];

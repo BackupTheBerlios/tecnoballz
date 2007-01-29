@@ -22,7 +22,7 @@
 //
 //******************************************************************************
 #include "../include/barreScore.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/scoretable.h"
 
 //-----------------------------------------------------------------------------
@@ -77,7 +77,7 @@ Sint32 barreScore::first_init(joueurData * gamer, zeGigaBlit *gblit, controller_
 Sint32 barreScore::affiche_me()
 {
 	GFX_Sbarre = new bitmap_data();
-	GFX_Sbarre->load(ressources::RESBASCORE);
+	GFX_Sbarre->load(handler_resources::RESBASCORE);
 	GFX_Sbarre->copyTampon(0, 0, 256 * resolution, 0, 64 * resolution, 240 * resolution);
 	joueurData *gamer = objetGamer;
 	tamponAff1(POSX_AREAN * resolution, POSY_AREAN * resolution,

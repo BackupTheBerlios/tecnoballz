@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.22 2007/01/28 21:31:56 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.23 2007/01/29 12:30:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
  * MA  02110-1301, USA.
  */
 #include "../include/zeRaquette.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/joueurData.h"
 #include "../include/zeFireBump.h"
 #include "../include/handler_keyboard.h"
@@ -118,26 +118,13 @@ void zeRaquette::create_projectiles_list()
 //------------------------------------------------------------------------------
 Sint32 zeRaquette::init_liste()
 {
-	if(!max_of_sprites) return erreur_num;
-	
-	//###################################################################
-	// allocate list of sprites memory
-	//###################################################################
-        alloc_sprites_list ();
-        /*
-	sprites_list =
-		(sprite_paddle **) (memory->alloc(sizeof(sprite_paddle *) * max_of_sprites,
-			0x4F424A47));
-	error_init(memory->retour_err());
-	if(erreur_num) return erreur_num;
-        */
-
+   alloc_sprites_list ();
 	//###################################################################
 	// gards levels: create one simple bumper
 	//###################################################################
     if(max_of_sprites == 1)
     {	tecBumper1->set_object_pos(0);
-		tecBumper1->create_sprite(sprite_type_id, image_BOBs, 1, 0);
+		tecBumper1->create_sprite(sprite_type_id, sprites_bitmap, 1, 0);
 		sprites->add(tecBumper1);
 		sprites_list[0] = tecBumper1;
 		tecBumper1->set_coordinates(keyboard->get_mouse_x(), bumperYbas);
@@ -160,21 +147,20 @@ Sint32 zeRaquette::init_liste()
 		Uint32 npage;
 		//if((hasard_val & 0x001))
 		if(joueurGere->getAreaNum() > 2)	
-			npage = ressources::RESBUMPER1;
+			npage = handler_resources::RESBUMPER1;
 		else
-			npage = ressources::RESBUMPER2;
-		error_init(pRessource->loadSprite(npage));
-		if(erreur_num) return erreur_num;
+			npage = handler_resources::RESBUMPER2;
+		resources->load_sprites_bitmap(npage);
 
 		// create bottom bumper sprite
 		tecBumper1->set_object_pos(0);
-		tecBumper1->create_sprite(BOB_BUMPHR, image_BOBs, 1, 0);
+		tecBumper1->create_sprite(BOB_BUMPHR, sprites_bitmap, 1, 0);
 		sprites->add(tecBumper1);
 		sprites_list[0] = tecBumper1;
 
 		// create left bumper sprite
 		tecBumper2->set_object_pos(1);
-		tecBumper2->create_sprite(BOB_BUMPVT, image_BOBs, 1, 0);
+		tecBumper2->create_sprite(BOB_BUMPVT, sprites_bitmap, 1, 0);
 		sprites->add(tecBumper2);
 		sprites_list[1] = tecBumper2;
 
@@ -191,7 +177,7 @@ Sint32 zeRaquette::init_liste()
 		sprites_list[3] = tecBumper4;
 
 		// release bumpers graphic page
-		pRessource->freeSprite();
+		resources->freeSprite();
 	}
 	return erreur_num;
 }
@@ -202,7 +188,7 @@ Sint32 zeRaquette::init_liste()
 void zeRaquette::init_robot()
 {
 	tec_robot0->set_object_pos(4);
-	tec_robot0->create_sprite(BOB_ROBOT0, image_BOBs, 1, 0);
+	tec_robot0->create_sprite(BOB_ROBOT0, sprites_bitmap, 1, 0);
 	sprites->add(tec_robot0);
 	sprites_list[4] = tec_robot0;
 }

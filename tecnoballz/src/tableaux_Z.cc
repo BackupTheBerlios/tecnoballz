@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.19 2007/01/28 21:31:56 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.20 2007/01/29 12:30:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
 #include "../include/tableaux_Z.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 
 //-----------------------------------------------------------------------------
 // create the object
@@ -136,18 +136,15 @@ Sint32 tableaux_Z::first_init()
 	error_init(ptGigaBlit->init_liste(theBumpers, tete_gugus, briquesTab));
 	if(erreur_num) return(erreur_num);
 
-	//###################################################################
-	// load page of sprites in memory (all other sprites)
-	//###################################################################
-	error_init(pRessource->loadSprite());
-	if(erreur_num) return (erreur_num);
+	/* load bitmap of sprites in memory (all other sprites) */
+	resources->load_sprites_bitmap();
 
 	//###################################################################
 	// generation of graphics shapes tables
 	//###################################################################
 
 	//wall of bottom 
-	BottomWall->create_sprite(BOB_WALLBO, image_BOBs, 0);
+	BottomWall->create_sprite(BOB_WALLBO, sprites_bitmap, 0);
 	sprites->add(BottomWall);
 	BottomWall->set_coordinates(32 * resolution, 232 * resolution);
 	//robot bumper
@@ -178,17 +175,17 @@ Sint32 tableaux_Z::first_init()
 	//GAME OVER sprites
 	ptGameOver->create_sprites_list();
 	//money sprite (left-bottom)
-	ptBobMoney->create_sprite(BOB_MONEYS, image_BOBs, 0);
+	ptBobMoney->create_sprite(BOB_MONEYS, sprites_bitmap, 0);
 	sprites->add(ptBobMoney);
 	//reverser sprite (right-bottom)
-	ptBobRever->create_sprite(BOB_GADGET, image_BOBs, 0);
+	ptBobRever->create_sprite(BOB_GADGET, sprites_bitmap, 0);
 	sprites->add(ptBobRever);
 	//bumper's viewfinder
 	ptBaDirect->create_sprites_list();
 	//ESC menu
-	error_init(ptrEscMenu->first_init(image_BOBs, 0, 256 * resolution));
+	error_init(ptrEscMenu->first_init(sprites_bitmap, 0, 256 * resolution));
 	if(erreur_num) return erreur_num; 
-	pRessource->freeSprite();
+	resources->freeSprite();
 	display->verouiller();
 	
 	//###################################################################

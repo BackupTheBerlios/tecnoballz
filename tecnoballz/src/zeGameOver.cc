@@ -23,7 +23,7 @@
 //*****************************************************************************
 #include "../include/zeGameOver.h"
 #include "../include/handler_audio.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/scoretable.h"
 
 //-----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ Sint32 zeGameOver::first_init(Sint32 offzt)
 	// load the bitmap fontes
 	//###################################################################
 	ptGfxFonte = new bitmap_data();
-	ptGfxFonte->load(ressources::RESFONTSCR);
+	ptGfxFonte->load(handler_resources::RESFONTSCR);
 
 	//###################################################################
 	//initialize score table 

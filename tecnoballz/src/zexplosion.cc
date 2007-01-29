@@ -56,7 +56,7 @@ void zexplosion::create_explosions_list()
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_object *ptbob = new sprite_object();
 		ptbob->set_object_pos(i);
-		ptbob->create_sprite(bobn1, image_BOBs, 0);
+		ptbob->create_sprite(bobn1, sprites_bitmap, 0);
 		Sint32 bobnu = bobn2;
 		bobn2 = bobn1;
 		bobn1 = bobnu;

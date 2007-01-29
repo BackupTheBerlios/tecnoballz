@@ -4,7 +4,7 @@
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// id		: $Id: mentatCode.cc,v 1.18 2007/01/24 11:52:25 gurumeditation Exp $
+// id		: $Id: mentatCode.cc,v 1.19 2007/01/29 12:30:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -33,7 +33,7 @@
 #include "../include/bitmap_data.h"
 #include "../include/handler_audio.h"
 #include "../include/level_data.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/scoretable.h"
 #include "../include/scrolledit.h"
 //.............................................................................
@@ -45,7 +45,7 @@ Sint32				mentatCode::counterObj = 0;	//number of objects
 Sint32				mentatCode::hasard_val = 0;	//random value
 Sint32				mentatCode::countframe = 0;
 scoretable*			mentatCode::ptScoreTab = NULL;	//manage best scores
-ressources*			mentatCode::pRessource = NULL;	//manage resources
+handler_resources*			mentatCode::resources = NULL;	//manage resources
 level_data*			mentatCode::ptLev_data = NULL;	//manage levels
 handler_memory*			mentatCode::memory = NULL;	//manage memory allocation  
 #ifndef SOUNDISOFF
@@ -65,7 +65,7 @@ menu_tecno*			mentatCode::menGestion = NULL;	//menu handle
 // 1:bricks level / 2:shop / 3:guards level / 4:main menu / 5:scrolling editor
 Sint32				mentatCode::super_jump = 1;
 Sint32				mentatCode::super_exit = 0;
-bitmap_data*			mentatCode::image_BOBs = 0;
+bitmap_data*			mentatCode::sprites_bitmap = 0;
 Uint32				mentatCode::cheat_flag = 0;
 Uint32				mentatCode::birth_flag = 0;	//all name are "040670"
 Uint32				mentatCode::double_mem = 1;	//2=double all allocations
@@ -95,7 +95,7 @@ Sint32 mentatCode::first_init(configfile* pConf)
 	memory->init(17000);
 	num_erreur = memory->retour_err();
 	
-	pRessource = new ressources();
+	resources = new handler_resources();
 	if(num_erreur) return num_erreur;
 
 	ptScoreTab = new scoretable();
@@ -103,7 +103,7 @@ Sint32 mentatCode::first_init(configfile* pConf)
 	if(num_erreur) return num_erreur;
 	
 	
-	num_erreur = pRessource->load_sinus();
+	num_erreur = resources->load_sinus();
 	if(num_erreur) return (num_erreur);
 
 	
@@ -354,7 +354,7 @@ Sint32 mentatCode::desinstall(configfile* pConf)
 		printf("==8 handler_audio\n");
 	delete audio;
 #endif
-	delete pRessource;
+	delete resources;
 	if(is_verbose)
 		printf("==9 memory\n");
 	delete memory;

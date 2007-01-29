@@ -98,7 +98,7 @@ Sint32 briqueCote::initialise(Sint32 build)
 	// create a sprite object for small horizontal bricks 
 	//###################################################################
 	bricote_hz = new sprite_object();
-	bricote_hz->create_sprite(BOB_BRICKH, image_BOBs, 1);
+	bricote_hz->create_sprite(BOB_BRICKH, sprites_bitmap, 1);
 	iLargeurBH = bricote_hz->get_sprite_width();
 	iHauteurBH = bricote_hz->get_sprite_height();
 
@@ -106,7 +106,7 @@ Sint32 briqueCote::initialise(Sint32 build)
 	// create a sprite object for small vertical bricks 
 	//###################################################################
 	bricote_vt = new sprite_object();
-	bricote_vt->create_sprite(BOB_BRICKV, image_BOBs, 1);
+	bricote_vt->create_sprite(BOB_BRICKV, sprites_bitmap, 1);
 	iLargeurBV = bricote_vt->get_sprite_width();
 	iHauteurBV = bricote_vt->get_sprite_height();
 
@@ -226,19 +226,19 @@ void briqueCote::bobbg_init()
 	for(Uint32 i = 0; i < BRICOTENUM; i++)	//12 bricks per wall
 	{
 		bobwal_top[i] = new sprite_object();
-		bobwal_top[i]->create_sprite(BOB_BRICKH, image_BOBs, 1);
+		bobwal_top[i]->create_sprite(BOB_BRICKH, sprites_bitmap, 1);
 		sprites->add(bobwal_top[i]);
 		bobwal_top[i]->set_coordinates(x, BRICOTEHRY * resolution);
 		if(map_duHaut[i]) bobwal_top[i]->enable();
 
 		bobwal_lef[i] = new sprite_object();
-		bobwal_lef[i]->create_sprite(BOB_BRICKV, image_BOBs, 1);
+		bobwal_lef[i]->create_sprite(BOB_BRICKV, sprites_bitmap, 1);
 		sprites->add(bobwal_lef[i]);
 		bobwal_lef[i]->set_coordinates(BRICOTEGAX * resolution, yg);
 		if(map_gauche[i]) bobwal_lef[i]->enable();
 
 		bobwal_rgh[i] = new sprite_object();
-		bobwal_rgh[i]->create_sprite(BOB_BRICKV, image_BOBs, 1);
+		bobwal_rgh[i]->create_sprite(BOB_BRICKV, sprites_bitmap, 1);
 		sprites->add(bobwal_rgh[i]);
 		bobwal_rgh[i]->set_coordinates(BRICOTEDRX * resolution, yd);
 		if(map_droite[i]) bobwal_rgh[i]->enable();

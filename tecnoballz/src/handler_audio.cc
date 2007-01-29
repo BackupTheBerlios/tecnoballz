@@ -5,11 +5,11 @@
  * @date 2007-01-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.cc,v 1.2 2007/01/28 21:31:56 gurumeditation Exp $
+ * $Id: handler_audio.cc,v 1.3 2007/01/29 12:30:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
  */
 #include "../include/handler_audio.h"
 #ifndef SOUNDISOFF
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 #include "../include/handler_keyboard.h"
 
 
@@ -168,7 +168,7 @@ handler_audio::initialize ()
   waves_size = 0;
   for (Sint32 i = 0; i < S_NOMBRETT; i++)
     {
-      char *pathname = pRessource->getSndFile (i);
+      char *pathname = resources->getSndFile (i);
       if (NULL == pathname)
         {
           fprintf (stderr,
@@ -401,7 +401,7 @@ handler_audio::play_music (Uint32 modnu)
       else
         stopModule ();
     }
-  char *pathname = pRessource->getMusFile (modnu);
+  char *pathname = resources->getMusFile (modnu);
   if (is_verbose)
     printf ("handler_audio::play_music() try load pathname %s\n", pathname);
   if (!pathname)

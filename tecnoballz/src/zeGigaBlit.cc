@@ -22,7 +22,7 @@
 //
 //******************************************************************************
 #include "../include/zeGigaBlit.h"
-#include "../include/ressources.h"
+#include "../include/handler_resources.h"
 //..............................................................................
 Sint32 zeGigaBlit::numeroBOBs[NOMBREGIGA] =
 {	BOB_GIGAB7,
@@ -84,11 +84,9 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 	{	
           
           
-          alloc_sprites_list ();
-          		// unpack bitmap of the Gigablitz
-		error_init(pRessource->loadSprite(ressources::RESGIGABLZ));
-		if(erreur_num)
-			return (erreur_num);
+   alloc_sprites_list ();
+   	// unpack bitmap of the Gigablitz
+		resources->load_sprites_bitmap(handler_resources::RESGIGABLZ);
 
 		// initialize the objects "giga_blitz"
 		for(Sint32 i = 0 ;i < max_of_sprites ;i++)
@@ -97,13 +95,13 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 			//g->afflignesF = 1;
 			g->set_draw_method(sprite_object::DRAW_LINE_BY_LINE);	
 			Sint32 n = numeroBOBs[i];
-			g->create_sprite(n, image_BOBs, 0);
+			g->create_sprite(n, sprites_bitmap, 0);
 			sprites->add(g);
 			sprites_list[i] = g;
 		}
 	
 		// release the bitmap page of gigablitz
- 		pRessource->freeSprite();
+ 		resources->freeSprite();
 	}
 	return (erreur_num);
 }
@@ -263,9 +261,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
           
                alloc_sprites_list ();
                		// unpack bitmap of the Gigablitz
-		error_init(pRessource->loadSprite(ressources::RESGIGABLZ));
-		if(erreur_num)
-			return (erreur_num);
+		resources->load_sprites_bitmap(handler_resources::RESGIGABLZ);
 
 		// initialize the objects "giga_blitz"
 		for(Sint32 i=0 ; i<max_of_sprites ; i++)
@@ -274,13 +270,13 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
 			g->mirrorVert = 1;
 			g->set_draw_method(sprite_object::DRAW_LINE_BY_LINE);	
 			Sint32 n = numeroBOBs[i];
-			g->create_sprite(n, image_BOBs, 0);
+			g->create_sprite(n, sprites_bitmap, 0);
 			sprites->add(g);
 			sprites_list[i] = g;
 		}
 		
 		// release the bitmap page of gigablitz
-		pRessource->freeSprite();
+		resources->freeSprite();
 	}
 	return (erreur_num);
 }
