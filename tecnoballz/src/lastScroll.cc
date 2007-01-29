@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-07
 // fonction	: handle of the scrolling background (menu and gards levels)
-// id		: $Id: lastScroll.cc,v 1.11 2007/01/29 12:30:26 gurumeditation Exp $
+// id		: $Id: lastScroll.cc,v 1.12 2007/01/29 16:25:22 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -484,21 +484,19 @@ Sint32 lastScroll::ld_mapfile(Uint32 edmap)
 	//	- number of lines		: 273
 	//	- size of map code	: 2 bytes	
 	//###################################################################
-	Uint16 *zfile = (Uint16 *)resources->getResData(edmap);
-	if(!zfile)
-	{	erreur_num = E_FILERROR;
-		return erreur_num;
-	}
+	Uint16 *zfile = (Uint16 *)resources->load_data(edmap);
 
 	//###################################################################
 	// allocate memory for the map editor
 	//###################################################################
 	Sint32 tsupp = (display->get_height() / motifhaute) * 2;
 	Sint32 msize = (tsupp + CARTEHAUTE) * CARTELARGE * sizeof(Uint16);
-	carteFirst = (Uint16 *) memory->alloc(msize, 0x54425249);
+	carteFirst = (Uint16 *) memory->alloc(msize);
 	error_init(memory->retour_err());
 	if(erreur_num)
-	{	memory->release((char *)zfile);
+	{	
+    delete[]zfile;
+    //memory->release((char *)zfile);
 		return erreur_num;
 	}
 
@@ -516,7 +514,8 @@ Sint32 lastScroll::ld_mapfile(Uint32 edmap)
 		carteFirst[i++] = codem;
 		ptmap = ptmap + 2;
 	}
-	memory->release((char *)zfile);
+  delete[]zfile;
+	//memory->release((char *)zfile);
 
 	//###################################################################
 	// copy a height of the screen (for scrolling rotation)

@@ -5,11 +5,11 @@
  * @date 2007-01-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.1 2007/01/29 12:30:26 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.2 2007/01/29 16:25:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,22 +83,22 @@ private:
 public:
     handler_resources ();
    ~handler_resources ();
-  char *getResData (Sint32);
-  char *getResFile (Sint32);
+  char *load_data (Sint32);
   char *getMusFile (Sint32);
   char *getSndFile (Sint32);
   char *getTexFile (Sint32);
   char *locate_res (Sint32);
   void load_sprites_bitmap (Sint32 resource_id = RESPAGEBOB);
-  void freeSprite ();
+  void release_sprites_bitmap ();
   void writingLog (char *fname, char *strng);
   Uint32 gtLastSize ();
   Sint32 load_sinus ();
   char *loadScores ();
   Sint32 saveScores (char *ptScr, Uint32 fsize);
-  char *locateFile (const char *const name);
+  char *locate_data_file (const char *const name);
 
 private:
+  char *get_filename (Sint32 resource_id);
   char *load_file (char *fname);
   char *load_file (char *fname, Uint32 * fsize);
 };

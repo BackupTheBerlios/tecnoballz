@@ -101,7 +101,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
 		}
 	
 		// release the bitmap page of gigablitz
- 		resources->freeSprite();
+ 		resources->release_sprites_bitmap();
 	}
 	return (erreur_num);
 }
@@ -276,7 +276,7 @@ Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
 		}
 		
 		// release the bitmap page of gigablitz
-		resources->freeSprite();
+		resources->release_sprites_bitmap();
 	}
 	return (erreur_num);
 }

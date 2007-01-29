@@ -250,7 +250,7 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 	//###################################################################
 	// load bricks levels (34000 bytes => 100 levels)
 	//###################################################################
-	char *tabHd = resources->getResData(handler_resources::RESBLEVELS);
+	char *tabHd = resources->load_data(handler_resources::RESBLEVELS);
 	if(!tabHd)
 	{	error_init(E_NORESOUR);
 		return (erreur_num);

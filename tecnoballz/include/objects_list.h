@@ -4,11 +4,11 @@
  * @date 2007-01-28
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.8 2007/01/29 12:30:26 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.9 2007/01/29 16:25:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -154,7 +154,7 @@ template < class X > void objects_list < X >::alloc_sprites_list ()
     }
   catch (std::bad_alloc &)
     {
-      std::cerr << "(!)(!)objects_list::::alloc_sprites_list() " <<
+      std::cerr << "(!)objects_list::alloc_sprites_list() " <<
         "not enough memory to allocate " <<
         max_of_sprites << " elements!" << std::endl;
       throw;

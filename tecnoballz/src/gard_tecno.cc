@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.20 2007/01/29 12:30:26 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.21 2007/01/29 16:25:22 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -153,9 +153,9 @@ Sint32 gard_tecno::first_init()
 		1			//initialize color table
 	));
 	if(erreur_num) return (erreur_num); 
-        std::cout << "gard_tecno::first_init freeSprite" << std::endl;
+        std::cout << "gard_tecno::first_init release_sprites_bitmap" << std::endl;
 
-	resources->freeSprite();
+	resources->release_sprites_bitmap();
 	
 	//###################################################################
 	// initialize "Game Over"

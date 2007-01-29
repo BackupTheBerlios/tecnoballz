@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.20 2007/01/29 12:30:26 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.21 2007/01/29 16:25:22 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -174,7 +174,7 @@ Sint32 shop_tecno::first_init()
 	));
 	
 
-	resources->freeSprite();
+	resources->release_sprites_bitmap();
 	error_init(mega_print->initialise());
 	if(erreur_num) return erreur_num;
 	

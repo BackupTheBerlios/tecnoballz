@@ -5,11 +5,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.5 2007/01/29 12:30:26 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.6 2007/01/29 16:25:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -331,8 +331,7 @@ bitmap_data::cut (Sint32 xcoord, Sint32 ycoord, Sint32 l, Sint32 h)
  */
 void bitmap_data::load (char *fname)
 {
-  char *
-    fpath = resources->locateFile (fname);
+  char * fpath = resources->locate_data_file (fname);
   sdl_load_bmp (fpath);
 }
 

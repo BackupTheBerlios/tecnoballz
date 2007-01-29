@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.23 2007/01/29 12:30:26 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.24 2007/01/29 16:25:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -177,7 +177,7 @@ Sint32 zeRaquette::init_liste()
 		sprites_list[3] = tecBumper4;
 
 		// release bumpers graphic page
-		resources->freeSprite();
+		resources->release_sprites_bitmap();
 	}
 	return erreur_num;
 }

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.17 2007/01/29 12:30:26 gurumeditation Exp $
+// id		: $Id: menu_tecno.cc,v 1.18 2007/01/29 16:25:22 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -77,7 +77,7 @@ Sint32 menu_tecno::first_init()
   
 	objetMouse->create_BOB(sprites_bitmap);
 
-	resources->freeSprite();
+	resources->release_sprites_bitmap();
 
 	error_init(defilement->initialise(lastScroll::TECZ_COLOR_MENU,
 		lastScroll::MAPED_MENU));

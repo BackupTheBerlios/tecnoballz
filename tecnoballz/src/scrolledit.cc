@@ -94,7 +94,7 @@ Sint32 scrolledit::first_init()
 	sprites->reset();
 	resources->load_sprites_bitmap();
 	objetMouse->create_BOB(sprites_bitmap);
-	resources->freeSprite();
+	resources->release_sprites_bitmap();
 
 	
 	//Sint32	edmap = lastScroll::MAPED_MENU;

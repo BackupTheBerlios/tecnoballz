@@ -85,7 +85,7 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 	//###################################################################
 	// loading curve of all guards (23304 bytes)
 	//###################################################################
-	lissaCurve = (unsigned char *)resources->getResData(handler_resources::RESGCURVES);
+	lissaCurve = (unsigned char *)resources->load_data(handler_resources::RESGCURVES);
 	if(!lissaCurve)
 	{	error_init(E_NORESOUR);
 		return erreur_num;

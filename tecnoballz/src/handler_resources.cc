@@ -5,11 +5,11 @@
  * @date 2007-01-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.1 2007/01/29 12:30:26 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.2 2007/01/29 16:25:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -148,7 +148,7 @@ handler_resources::~handler_resources ()
       memory->release ((char *) table_cosL);
       table_cosL = (Sint16 *) NULL;
     }
-  freeSprite ();
+  release_sprites_bitmap ();
 }
 
 /** 
@@ -157,9 +157,9 @@ handler_resources::~handler_resources ()
  * @return file data buffer pointer
  */
 char *
-handler_resources::getResData (Sint32 resource_id) 
+handler_resources::load_data (Sint32 resource_id) 
 {
-  char* filename = getResFile (resource_id);
+  char* filename = get_filename (resource_id);
   if (NULL == filename)
     {
       return NULL;
@@ -167,36 +167,32 @@ handler_resources::getResData (Sint32 resource_id)
   return load_file (filename);
 }
 
-//------------------------------------------------------------------------------
-// return valid name with full path
-//------------------------------------------------------------------------------
+/** 
+ * Return valid name from a resource identifier
+ */
 char *
-handler_resources::getResFile (Sint32 ident)
+handler_resources::get_filename (Sint32 resource_id)
 {
   const char *pfile;
-  //strcpy(stringtemp, folderdata);
-  if (ident >= 4096)
+  if (resource_id >= 4096)
     {
-      ident -= 4096;
-      pfile = graphfiles[ident];
+      resource_id -= 4096;
+      pfile = graphfiles[resource_id];
       if (resolution == 1)
-        //strcat(stringtemp, folder_320);
-        strcpy (stringtemp, folder_320);
+        {
+          strcpy (stringtemp, folder_320);
+        }
       else
-        //strcat(stringtemp, folder_640);
-        strcpy (stringtemp, folder_640);
-
-      //printf("*** handler_resources::getResFile() = %s \n", stringtemp);
+        {
+          strcpy (stringtemp, folder_640);
+        }
       strcat (stringtemp, pfile);
     }
   else
     {
-      pfile = standfiles[ident];
-      //strcat(stringtemp, pfile);
+      pfile = standfiles[resource_id];
       strcpy (stringtemp, pfile);
     }
-  //printf("*** handler_resources::getResFile(%i) = %s / pfile=%s\n", ident, stringtemp, pfile);
-  //return locateFile(stringtemp);
   return stringtemp;
 }
 
@@ -213,7 +209,7 @@ handler_resources::getMusFile (Sint32 ident)
   pfile = musicfiles[ident];
   strcat (stringtemp, pfile);
   //printf("handler_resources::getMusFile(%i) = %s\n", ident, stringtemp);
-  return locateFile (stringtemp);
+  return locate_data_file (stringtemp);
   //return stringtemp;
 }
 
@@ -230,7 +226,7 @@ handler_resources::getSndFile (Sint32 ident)
   pfile = soundfiles[ident];
   strcat (stringtemp, pfile);
   //printf("handler_resources::getSndFile(%i) = %s\n", ident, stringtemp);
-  return locateFile (stringtemp);
+  return locate_data_file (stringtemp);
   //return stringtemp;
 }
 
@@ -254,18 +250,19 @@ handler_resources::getTexFile (Sint32 nbkdg)
 char *
 handler_resources::locate_res (Sint32 ident)
 {
-  return locateFile (getResFile (ident));
+  return locate_data_file (get_filename (ident));
 }
 
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
+/**
+ * Locate a file under one of the data directories
+ * @param name name of file relative to data directory
+ */
 char *
-handler_resources::locateFile (const char *const name)
+handler_resources::locate_data_file (const char *const name)
 {
 
   //if(is_verbose)
-  //      fprintf(stdout, "handler_resources::locateFile(%s) [START]\n", name);
+  //      fprintf(stdout, "handler_resources::locate_data_file(%s) [START]\n", name);
 
   //###################################################################
   // clear path name string
@@ -277,11 +274,13 @@ handler_resources::locateFile (const char *const name)
   // null pointer
   //###################################################################
   if (name == NULL)
-    return NULL;
+    {
+      std::cerr << "handler_resources::locate_data_file() " <<
+         "NULL pointer was passed as an argument!" << std::endl;
+      throw std::ios_base::failure ("NULL pointer was passed as an argument!");
+    }
 
-  //###################################################################
-  // if absolute path, return a pointer to a duplicate string
-  //###################################################################
+  /* if absolute path, return a pointer to a duplicate string */
   char *pathname;
   if (*name == '/')
     {
@@ -326,7 +325,7 @@ handler_resources::locateFile (const char *const name)
           strcat (pathname, name);
         }
       //if(is_verbose)
-      //      fprintf(stdout, "handler_resources::locateFile() try %s\n", pathname);
+      //      fprintf(stdout, "handler_resources::locate_data_file() try %s\n", pathname);
 
 #ifdef WIN32
       struct _stat s;
@@ -337,15 +336,18 @@ handler_resources::locateFile (const char *const name)
 #else
       struct stat s;
       if (stat (pathname, &s) == 0 && !S_ISDIR (s.st_mode))
-        {                       //if(is_verbose) fprintf(stdout, "handler_resources::locateFile(%s) END\n", pathname);
+        {                       //if(is_verbose) fprintf(stdout, "handler_resources::locate_data_file(%s) END\n", pathname);
           return pathname;
         }
 #endif
       if (*p == 0)
         break;
     }
-  fprintf (stderr, "handler_resources::locateFile: %s not found\n", name);
-  return 0;                     //not found.
+  fprintf (stderr, "handler_resources::locate_data_file: %s not found\n", name);
+  std::cerr << "handler_resources::locate_data_file() " << name << 
+     "not found!" << std::endl;
+  throw std::ios_base::failure ("File not found!");
+  return NULL;
 }
 
 /** 
@@ -355,7 +357,7 @@ handler_resources::locateFile (const char *const name)
 void
 handler_resources::load_sprites_bitmap (Sint32 resource_id)
 {
-  freeSprite ();
+  release_sprites_bitmap ();
   sprites_bitmap = new bitmap_data ();
   sprites_bitmap->load (resource_id);
   sprites_bitmap->enable_palette ();
@@ -365,7 +367,7 @@ handler_resources::load_sprites_bitmap (Sint32 resource_id)
  * Release the bitmap of sprites
  */
 void
-handler_resources::freeSprite ()
+handler_resources::release_sprites_bitmap ()
 {
   if (sprites_bitmap != NULL)
   {
@@ -396,22 +398,17 @@ handler_resources::load_file (char *fname)
 char *
 handler_resources::load_file (char *fname, Uint32 * fsize)
 {
-  //printf("handler_resources::load_file %s\n", fname);
-  //###################################################################
-  // check the path name
-  //###################################################################
-  char *pname = locateFile (fname);
-  if (pname == 0)
+  /* locate a file under one of the data directories */
+  char *pname = locate_data_file (fname);
+  if (NULL == pname)
     {
-      fprintf (stderr,
-               "handler_resources::load_file() : can't locate file : %s\n\n",
-               fname);
-      return NULL;
+      std::cerr << "(!)handler_resources::load_file() " <<
+        "can't locate file " << fname << std::endl; 
+      throw std::ios_base::failure ("(!)handler_resources::load_file() "
+          "can't locate a file!");
     }
 
-  //###################################################################
-  // open the file
-  //###################################################################
+  /* open the file */
 #ifdef WIN32
   Sint32 fhand = open (pname, O_RDONLY | O_BINARY, 0);
 #else
@@ -419,22 +416,24 @@ handler_resources::load_file (char *fname, Uint32 * fsize)
 #endif
   if (fhand == -1)
     {
-      fprintf (stderr,
-               "handler_resources::load_file() : can't open file : %s (%s)\n\n",
-               pname, strerror (errno));
+      std::cerr << "(!)handler_resources::load_file() " <<
+        "can't open file " << fname 
+        << "strerror:" << strerror (errno) << std::endl; 
+      throw std::ios_base::failure ("(!)handler_resources::load_file() "
+          "can't open a file!");
       //free(pname);
       return 0;
     }
 
-  //###################################################################
-  // read the size of the file
-  //###################################################################
+  /* read the size of the file */
   struct stat sStat;
   if (fstat (fhand, &sStat))
     {
-      fprintf (stderr,
-               "handler_resources::load_file() : can't stat file : %s (%s)\n\n",
-               pname, strerror (errno));
+      std::cerr << "(!)handler_resources::load_file() " <<
+        "can't stat file " << fname 
+        << "strerror:" << strerror (errno) << std::endl; 
+      throw std::ios_base::failure ("(!)handler_resources::load_file() "
+          "can't stat a file!");
       //free(pname);
       return 0;
     }
@@ -443,7 +442,21 @@ handler_resources::load_file (char *fname, Uint32 * fsize)
   //###################################################################
   // allocate memory
   //###################################################################
-  char *ptMem = (char *) (memory->alloc (sStat.st_size,
+  
+  char *buffer = NULL;
+  try
+    {
+       buffer = new char[sStat.st_size];
+    }
+  catch (std::bad_alloc &)
+    {
+       std::cerr << "(!)handler_resources::load_file() " <<
+         "not enough memory to allocate " <<
+         sStat.st_size << " bytes!" << std::endl;
+       throw;  
+    }
+  /*
+  char *buffer = (char *) (memory->alloc (sStat.st_size,
                                          0x31313131));
   num_erreur = memory->retour_err ();
   if (num_erreur)
@@ -454,15 +467,18 @@ handler_resources::load_file (char *fname, Uint32 * fsize)
       //free(pname);
       return 0;
     }
+    */
 
   //###################################################################
   // read the file
   //###################################################################
-  if (read (fhand, ptMem, sStat.st_size) != sStat.st_size)
-    {                           //menGestion->release(ptMem);
-      fprintf (stderr,
-               "handler_resources::load_file() can't read file %s (%s)\n\n",
-               pname, strerror (errno));
+  if (read (fhand, buffer, sStat.st_size) != sStat.st_size)
+    {                           //menGestion->release(buffer);
+      std::cerr << "(!)handler_resources::load_file() " <<
+        "can't read file " << fname 
+        << "strerror:" << strerror (errno) << std::endl; 
+      throw std::ios_base::failure ("(!)handler_resources::load_file() "
+          "can't read a file!");
       //free(pname);
       return 0;
     }
@@ -474,7 +490,7 @@ handler_resources::load_file (char *fname, Uint32 * fsize)
   /*fprintf(stdout, "handler_resources::load_file : file %s was loaded in memory\n",
      pname); */
   //free(pname);
-  return ptMem;
+  return buffer;
 }
 
 //------------------------------------------------------------------------------
@@ -526,7 +542,7 @@ handler_resources::gtLastSize ()
 Sint32
 handler_resources::load_sinus ()
 {
-  table_cosL = (Sint16 *) getResData (handler_resources::RESCOSLIST);
+  table_cosL = (Sint16 *) load_data (handler_resources::RESCOSLIST);
   if (!table_cosL)
     {
       num_erreur = E_FILERROR;
