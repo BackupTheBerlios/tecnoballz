@@ -2,14 +2,14 @@
  * @file handler_resources.cc 
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-01-29
+ * @date 2007-01-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.3 2007/01/29 20:47:25 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.4 2007/01/30 06:18:14 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -178,6 +178,7 @@ handler_resources::load_data (Sint32 resource_id)
 
 /** 
  * Return valid name from a resource identifier
+ * @param resource_id resource identifier
  */
 char *
 handler_resources::get_filename (Sint32 resource_id)
@@ -592,20 +593,31 @@ handler_resources::load_sinus ()
   return num_erreur;
 }
 
-//------------------------------------------------------------------------------
-// load scores table
-//------------------------------------------------------------------------------
+/**
+ * load scores table
+ */
 char *
-handler_resources::loadScores ()
+handler_resources::load_high_score_file ()
 {
-  return load_file (fnamescore, &zeLastSize);
+  char* filedata = NULL;
+  try
+    {
+      filedata = load_file (fnamescore, &zeLastSize);
+    }
+  catch (...)
+    {
+       std::cerr << "handler_resources::load_high_score_file() " <<
+         "can't open the scores files!";
+       filedata = NULL;
+    }
+  return filedata;
 }
 
 //------------------------------------------------------------------------------
 // save scores table
 //------------------------------------------------------------------------------
-Sint32
-handler_resources::saveScores (char *ptScr, Uint32 fsize)
+void
+handler_resources::save_high_score_file (char *buffer, Uint32 size)
 {
 #ifdef WIN32
   _umask (0002);                //set umask so that files are group-writable
@@ -618,27 +630,27 @@ handler_resources::saveScores (char *ptScr, Uint32 fsize)
       fprintf (stderr,
                "handler_resources::saveScores(): file:%s / error:%s\n",
                fnamescore, strerror (errno));
-      return 0;
+      //return 0;
     }
 #ifdef WIN32
-  _write (fhand, ptScr, fsize);
+  _write (fhand, buffer, size);
 #else
-  write (fhand, ptScr, fsize);
+  write (fhand, buffer, size);
 #endif
   if (close (fhand) == -1)
     {
       fprintf (stderr,
                "handler_resources::saveScores(): file:%s / error:%s\n",
                fnamescore, strerror (errno));
-      return 0;
+      //return 0;
     }
   else
     {
       if (is_verbose)
         fprintf (stdout, "handler_resources::saveScores(): "
-                 "file:%s size:%i\n", fnamescore, fsize);
+                 "file:%s size:%i\n", fnamescore, size);
     }
-  return 1;
+  //return 1;
 }
 
 //------------------------------------------------------------------------------

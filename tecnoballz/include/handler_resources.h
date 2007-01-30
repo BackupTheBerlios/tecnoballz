@@ -5,11 +5,11 @@
  * @date 2007-01-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.2 2007/01/29 16:25:22 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.3 2007/01/30 06:18:14 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -93,8 +93,8 @@ public:
   void writingLog (char *fname, char *strng);
   Uint32 gtLastSize ();
   Sint32 load_sinus ();
-  char *loadScores ();
-  Sint32 saveScores (char *ptScr, Uint32 fsize);
+  char *load_high_score_file ();
+  void save_high_score_file (char *buffer, Uint32 size);
   char *locate_data_file (const char *const name);
 
 private:
