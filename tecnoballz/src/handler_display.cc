@@ -5,11 +5,11 @@
  * @date 2007-01-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.6 2007/01/29 12:30:26 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.7 2007/01/30 16:37:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -365,7 +365,7 @@ handler_display::waitVBLchr ()
 	keyboard->read_events();
 	fullscreen();
 #ifndef SOUNDISOFF
-	audio->execution1();
+	audio->run();
 #endif
 	gameFrame++;
 	Uint32 delay = 32-(int)(24.0 * gameSpeed);
@@ -429,7 +429,7 @@ handler_display::waitVBLtec ()
   keyboard->read_events ();
   fullscreen ();
 #ifndef SOUNDISOFF
-  audio->execution1 ();
+  audio->run ();
 #endif
   return;
 }

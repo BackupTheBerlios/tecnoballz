@@ -4,7 +4,7 @@
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// id		: $Id: mentatCode.cc,v 1.19 2007/01/29 12:30:26 gurumeditation Exp $
+// id		: $Id: mentatCode.cc,v 1.20 2007/01/30 16:37:21 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -102,9 +102,7 @@ Sint32 mentatCode::first_init(configfile* pConf)
 	num_erreur = ptScoreTab->first_init();
 	if(num_erreur) return num_erreur;
 	
-	
-	num_erreur = resources->load_sinus();
-	if(num_erreur) return (num_erreur);
+	resources->load_sinus();
 
 	
 #ifndef SOUNDISOFF		

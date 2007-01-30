@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.21 2007/01/29 16:25:22 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.22 2007/01/30 16:37:21 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -87,7 +87,7 @@ Sint32 gard_tecno::first_init()
 {
 #ifndef SOUNDISOFF
 	audio->play_music(MUSICGUARD);
-	audio->startSound();
+	audio->enable_sound();
 #endif
 	sprites->reset();
 	end_return = 0;
@@ -244,7 +244,7 @@ Sint32 gard_tecno::zeMainLoop()
 	{	if(!isgameover)
 		{	
 #ifndef SOUNDISOFF
-			audio->stop_sound();
+			audio->disable_sound();
 #endif
 			ptRaquette->bumpersOff();
 			pt_gadgets->disable_sprites();

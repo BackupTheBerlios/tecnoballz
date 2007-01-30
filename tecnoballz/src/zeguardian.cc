@@ -43,8 +43,9 @@ zeguardian::zeguardian()
 //-----------------------------------------------------------------------------
 zeguardian::~zeguardian()
 {
-	if(lissaCurve)
-	{	memory->release((char *)lissaCurve);
+	if(lissaCurve != NULL)
+	{	
+    delete[] (char *)lissaCurve;
 		lissaCurve = NULL;
 	}
 	if (pBobEnergy)
@@ -82,14 +83,8 @@ Sint32 zeguardian::init_liste(zeMissiles *pMiss, Sint32 grdPt, zeGigaBlit *pBliz
 		max_of_sprites++;
 	} while (i >= 0);
 
-	//###################################################################
-	// loading curve of all guards (23304 bytes)
-	//###################################################################
+	/* loading curves file of all guards (23304 bytes) */
 	lissaCurve = (unsigned char *)resources->load_data(handler_resources::RESGCURVES);
-	if(!lissaCurve)
-	{	error_init(E_NORESOUR);
-		return erreur_num;
-	}
 
 	//###################################################################
 	// allocate memory for the "tecno_gard" object(s)

@@ -5,11 +5,11 @@
  * @date 2007-01-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.4 2007/01/30 06:18:14 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.5 2007/01/30 16:37:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,23 +45,13 @@
 #endif
 #endif
 
-char *
-  handler_resources::fnamescore = SCOREFILE;
-const char *
-  handler_resources::folderlist[] = { "/",      // Normally unused, except when running from the source directory...
-  DATADIR,
-  "./TecnoballZ/",
-  0                             // Special value meaning "$(PREFIX)/share/games/tecnoballz/"
-    // Also marks end of list
-};
-
-//const char*   handler_resources::folderdata = "TecnoballZ/";
+char * handler_resources::fnamescore = SCOREFILE;
 const char *
   handler_resources::folder_640 = "hires/";
 const char *
   handler_resources::folder_320 = "lores/";
 char
-  handler_resources::stringtemp[512];
+  handler_resources::tmp_filename[512];
 char
   handler_resources::pathstring[512];
 
@@ -162,23 +152,20 @@ handler_resources::~handler_resources ()
 
 /** 
  * Load a resources file in memory
- * @param resource_id resource identifier
+ * @param resource_id resource identifier of the data
  * @return file data buffer pointer
  */
 char *
 handler_resources::load_data (Sint32 resource_id)
 {
   char *filename = get_filename (resource_id);
-  if (NULL == filename)
-    {
-      return NULL;
-    }
   return load_file (filename);
 }
 
 /** 
  * Return valid name from a resource identifier
  * @param resource_id resource identifier
+ * @return filename with a relative pathname
  */
 char *
 handler_resources::get_filename (Sint32 resource_id)
@@ -190,79 +177,86 @@ handler_resources::get_filename (Sint32 resource_id)
       pfile = graphfiles[resource_id];
       if (resolution == 1)
         {
-          strcpy (stringtemp, folder_320);
+          strcpy (tmp_filename, folder_320);
         }
       else
         {
-          strcpy (stringtemp, folder_640);
+          strcpy (tmp_filename, folder_640);
         }
-      strcat (stringtemp, pfile);
+      strcat (tmp_filename, pfile);
     }
   else
     {
       pfile = standfiles[resource_id];
-      strcpy (stringtemp, pfile);
+      strcpy (tmp_filename, pfile);
     }
-  return stringtemp;
+  return tmp_filename;
 }
 
-//------------------------------------------------------------------------------
-// return valid name with full path
-//------------------------------------------------------------------------------
+/**
+ * Return valid music filename from a resource identifier
+ * @param resource_id resource identifier of the music
+ * @return music filename with a relative pathname
+ */
 char *
-handler_resources::getMusFile (Sint32 ident)
+handler_resources::get_music_filename (Sint32 resource_id)
 {
   const char *pfile;
-  //strcpy(stringtemp, folderdata);
-  //strcat(stringtemp, "musics/");
-  strcpy (stringtemp, "musics/");
-  pfile = musicfiles[ident];
-  strcat (stringtemp, pfile);
-  //printf("handler_resources::getMusFile(%i) = %s\n", ident, stringtemp);
-  return locate_data_file (stringtemp);
-  //return stringtemp;
+  strcpy (tmp_filename, "musics/");
+  pfile = musicfiles[resource_id];
+  strcat (tmp_filename, pfile);
+  return locate_data_file (tmp_filename);
 }
 
-//------------------------------------------------------------------------------
-// return valid name with full path
-//------------------------------------------------------------------------------
+/**
+ * Return valid sound filename from a resource identifier
+ * @param resource_id resource identifier of the sound
+ * @return sound filename with a relative pathname
+ */
 char *
-handler_resources::getSndFile (Sint32 ident)
+handler_resources::get_sound_filename (Sint32 resource_id)
 {
-  const char *pfile;
-  //strcpy(stringtemp, folderdata);
-  //strcat(stringtemp, "sounds/");
-  strcpy (stringtemp, "sounds/");
-  pfile = soundfiles[ident];
-  strcat (stringtemp, pfile);
-  //printf("handler_resources::getSndFile(%i) = %s\n", ident, stringtemp);
-  return locate_data_file (stringtemp);
-  //return stringtemp;
+  strcpy (tmp_filename, "sounds/");
+  strcat (tmp_filename, soundfiles[resource_id]);
+  return locate_data_file (tmp_filename);
 }
 
-//------------------------------------------------------------------------------
-// return valid name with full path
-//------------------------------------------------------------------------------
+/**
+ * Return valid tilemaps filename from a tilemap number
+ * @param title_num filename number from 1 to 78
+ * @return tilemap filename with a relative pathname
+ */
 char *
-handler_resources::getTexFile (Sint32 nbkdg)
+handler_resources::get_tilemaps_filename (Sint32 title_num)
 {
-  //strcpy(stringtemp, folderdata);
-  //strcat(stringtemp, "textures/");
-  strcpy (stringtemp, "textures/");
-  intToASCII (nbkdg, ze_mapfile + 3, 1);
-  strcat (stringtemp, ze_mapfile);
-  return stringtemp;
+  sprintf(tmp_filename, "textures/map%02d.bmp", title_num);
+  return tmp_filename;
 }
 
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
+/**
+ * Return the full pathname from a resource identifier
+ * @param resource_id a resource identifier
+ * @return a pointer to the file data buffer
+ */
 char *
-handler_resources::locate_res (Sint32 ident)
+handler_resources::get_full_pathname (Sint32 resource_id)
 {
-  return locate_data_file (get_filename (ident));
+  return locate_data_file (get_filename (resource_id));
 }
 
+/** 
+ * Directory list to locate a file 
+ */
+const char * handler_resources::folderlist[] =
+{ 
+  /* special value meaning "$(PREFIX)/share/games/tecnoballz/" */
+  DATADIR,
+  "/",
+  /* normally unused, except when running from the source directory */
+  "./TecnoballZ/",
+  /* also marks end of list */
+  0
+};
 /**
  * Locate a file under one of the data directories
  * @param name name of file relative to data directory
@@ -271,12 +265,14 @@ char *
 handler_resources::locate_data_file (const char *const name)
 {
 
+/*
   if (is_verbose)
     {
       std::
-        cout << "handler_resources::locate_data_file(" << name << ")" << std::
+        cout << "(*) handler_resources::locate_data_file(" << name << ")" << std::
         endl;
     }
+*/
 
   /* clear path name string */
   for (Sint32 i = 0; i < 256; i++)
@@ -297,58 +293,39 @@ handler_resources::locate_data_file (const char *const name)
     {
       pathname = &pathstring[0];
       strcpy (pathname, name);
-      //printf("return %s\n", pathname);
       return pathname;
     }
+
+  /* process each folder of the list */
   for (const char **p = folderlist;; p++)
     {
-      printf(">>> folderlist: %s\n", *p);
-      
-      if (*p == 0)
+      if (*p != 0)
         {
+          /* check if the file is located in current directory */
+          pathname = &pathstring[0];
+          strcpy (pathname, *p);
+          if (pathname[strlen (pathname) - 1] != '/')
+            {
+              strcat (pathname, "/");
+            }
+          strcat (pathname, name);
+         
+        }
+      else
+        {
+          /* file not found, try default folder as last chance */
           const char *subdir = "/share/games/tecnoballz/";
           pathname = &pathstring[0];
           strcpy (pathname, nomprefix);
           strcat (pathname, subdir);
           strcat (pathname, name);
         }
-      else
-        {
-          if (**p == '~')       // Not used anymore
-            {
-              static const char bogus = '\0';
-              static const char *home_dir = &bogus;
-              if (home_dir == &bogus)
-                {
-                  home_dir = getenv ("HOME");
-                }
-              if (home_dir == 0)
-                {
-                  continue;     // $HOME not set. Skip this directory.
-                }
-              pathname = &pathstring[0];
-              strcpy (pathname, home_dir);
-              strcat (pathname, *p + 1);
-              strcat (pathname, "/");
-              strcat (pathname, name);
-            }
-
-          /* check already if the file is located in current directory */
-          else
-            {
-              pathname = &pathstring[0];
-              strcpy (pathname, *p);
-              if (pathname[strlen (pathname) - 1] != '/')
-                {
-                  strcat (pathname, "/");
-                }
-              strcat (pathname, name);
-            }
-        }
+        /*
       if (is_verbose)
         {
           std::cout << "handler_resources::locate_data_file() try " << pathname << std::endl;
         }
+        */
 #ifdef WIN32
       struct _stat s;
       if (_stat (pathname, &s) == 0 && !_S_ISDIR (s.st_mode))
@@ -359,15 +336,18 @@ handler_resources::locate_data_file (const char *const name)
       struct stat s;
       if (stat (pathname, &s) == 0 && !S_ISDIR (s.st_mode))
         {
+/*
           if (is_verbose)
             {
               std::
                 cout << "handler_resources::locate_data_file(" << pathname <<
                 ") find!" << std::endl;
             }
+*/
           return pathname;
         }
 #endif
+      /* end of the list, error file not found! */
       if (*p == 0)
         {
           break;
@@ -378,7 +358,6 @@ handler_resources::locate_data_file (const char *const name)
   throw std::ios_base::failure (std::string
                                 ("[!]handler_resources::locate_data_file() File '")
                                 + name + std::string ("' not found!"));
-  return NULL;
 }
 
 /** 
@@ -414,7 +393,7 @@ handler_resources::release_sprites_bitmap ()
 char *
 handler_resources::load_file (char *fname)
 {
-  return load_file (fname, &zeLastSize);
+  return load_file (fname, &last_filesize_loaded);
 }
 
 /**
@@ -442,145 +421,76 @@ handler_resources::load_file (char *fname, Uint32 * fsize)
         << "strerror:" << strerror (errno) << std::endl;
       throw std::ios_base::failure ("(!)handler_resources::load_file() "
                                     "can't open a file!");
-      //free(pname);
-      return 0;
     }
 
   /* read the size of the file */
-  struct stat sStat;
-  if (fstat (fhand, &sStat))
+  struct stat sb;
+  if (fstat (fhand, &sb))
     {
       std::cerr << "(!)handler_resources::load_file() " <<
         "can't stat file " << fname
         << "strerror:" << strerror (errno) << std::endl;
       throw std::ios_base::failure ("(!)handler_resources::load_file() "
                                     "can't stat a file!");
-      //free(pname);
-      return 0;
     }
-  (*fsize) = sStat.st_size;     //save file size
+  /* save filesize */
+  (*fsize) = sb.st_size;
 
-  //###################################################################
-  // allocate memory
-  //###################################################################
-
+  /* allocate memory require to load the filedata */
   char *buffer = NULL;
   try
   {
-    buffer = new char[sStat.st_size];
+    buffer = new char[sb.st_size];
   }
   catch (std::bad_alloc &)
   {
     std::cerr << "(!)handler_resources::load_file() " <<
       "not enough memory to allocate " <<
-      sStat.st_size << " bytes!" << std::endl;
+      sb.st_size << " bytes!" << std::endl;
     throw;
   }
-  /*
-     char *buffer = (char *) (memory->alloc (sStat.st_size,
-     0x31313131));
-     num_erreur = memory->retour_err ();
-     if (num_erreur)
-     {
-     fprintf (stderr,
-     "handler_resources::load_file() %s : out of memory\n\n",
-     pname);
-     //free(pname);
-     return 0;
-     }
-   */
 
-  //###################################################################
-  // read the file
-  //###################################################################
-  if (read (fhand, buffer, sStat.st_size) != sStat.st_size)
-    {                           //menGestion->release(buffer);
+  /* read the file */
+  if (read (fhand, buffer, sb.st_size) != sb.st_size)
+    {
       std::cerr << "(!)handler_resources::load_file() " <<
         "can't read file " << fname
         << "strerror:" << strerror (errno) << std::endl;
       throw std::ios_base::failure ("(!)handler_resources::load_file() "
                                     "can't read a file!");
-      //free(pname);
       return 0;
     }
 
-  //###################################################################
-  // close the file
-  //###################################################################
+  /* close the file */
   close (fhand);
-  /*fprintf(stdout, "handler_resources::load_file : file %s was loaded in memory\n",
-     pname); */
-  //free(pname);
   return buffer;
 }
 
-//------------------------------------------------------------------------------
-// writing a line into log file
-//------------------------------------------------------------------------------
-void
-handler_resources::writingLog (char *pname, char *strng)
-{
-  //###################################################################
-  // open file
-  //###################################################################
-  Sint32 fhand;
-#ifdef WIN32
-  _umask (0002);                //set umask so that files are group-writable
-#else
-  umask (0002);
-#endif
-  fhand = open (pname, O_WRONLY | O_APPEND | O_CREAT, 00666);
-  if (fhand == -1)
-    {
-      fprintf (stderr, "handler_resources::writingLog() open failed %s: %s\n",
-               pname, strerror (errno));
-      return;
-
-    }
-
-  //###################################################################
-  // write and close
-  //###################################################################
-  write (fhand, strng, strlen (strng));
-  if (close (fhand) == -1)
-    fprintf (stderr, "handler_resources::writingLog() close failed %s: %s\n",
-             pname, strerror (errno));
-}
-
-//------------------------------------------------------------------------------
-// return size last file charged in memory
-//------------------------------------------------------------------------------
+/**
+ * Return size last file loaded in memory
+ * @return the size of the last filesize previously
+ */
 Uint32
-handler_resources::gtLastSize ()
+handler_resources::get_filesize_loaded ()
 {
-  return zeLastSize;
+  return last_filesize_loaded;
 }
 
-//------------------------------------------------------------------------------
-// load sinus & cosinus table (1790 bytes <=> 895 values)
-// 0 to 511 cosinus / 383 to 894 sinus
-//------------------------------------------------------------------------------
-Sint32
+/**
+ * Load a precalculated sinus & cosinus table (1790 bytes <=> 895 values)
+ * 0 to 511 cosinus / 383 to 894 sinus
+ */
+void
 handler_resources::load_sinus ()
 {
   table_cosL = (Sint16 *) load_data (handler_resources::RESCOSLIST);
-  if (!table_cosL)
-    {
-      num_erreur = E_FILERROR;
-      return num_erreur;
-    }
-  else
-    {
-      table_sinL = table_cosL + 383;
-      num_erreur = E_NO_ERROR;
-    }
+  table_sinL = table_cosL + 383;
 
-  //###################################################################
-  // convert big endian values to little endian values    
-  //###################################################################
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
-  Sint32 fsize = gtLastSize ();
-  fsize = fsize / 2;            // convert bytes => words
+  /* convert big endian values to little endian values */    
+  Sint32 fsize = get_filesize_loaded ();
+  /* convert bytes = 16-bits words */
+  fsize = fsize / 2;
   for (Sint32 i = 0; i < fsize; i++)
     {
       char *p = (char *) &table_cosL[i];
@@ -589,8 +499,6 @@ handler_resources::load_sinus ()
       p[1] = a;
     }
 #endif
-
-  return num_erreur;
 }
 
 /**
@@ -602,7 +510,7 @@ handler_resources::load_high_score_file ()
   char* filedata = NULL;
   try
     {
-      filedata = load_file (fnamescore, &zeLastSize);
+      filedata = load_file (fnamescore, &last_filesize_loaded);
     }
   catch (...)
     {
@@ -613,9 +521,11 @@ handler_resources::load_high_score_file ()
   return filedata;
 }
 
-//------------------------------------------------------------------------------
-// save scores table
-//------------------------------------------------------------------------------
+/* 
+ * Save scores table
+ * @param buffer
+ * @pram size
+ */
 void
 handler_resources::save_high_score_file (char *buffer, Uint32 size)
 {
@@ -630,7 +540,6 @@ handler_resources::save_high_score_file (char *buffer, Uint32 size)
       fprintf (stderr,
                "handler_resources::saveScores(): file:%s / error:%s\n",
                fnamescore, strerror (errno));
-      //return 0;
     }
 #ifdef WIN32
   _write (fhand, buffer, size);
@@ -642,7 +551,6 @@ handler_resources::save_high_score_file (char *buffer, Uint32 size)
       fprintf (stderr,
                "handler_resources::saveScores(): file:%s / error:%s\n",
                fnamescore, strerror (errno));
-      //return 0;
     }
   else
     {
@@ -650,12 +558,11 @@ handler_resources::save_high_score_file (char *buffer, Uint32 size)
         fprintf (stdout, "handler_resources::saveScores(): "
                  "file:%s size:%i\n", fnamescore, size);
     }
-  //return 1;
 }
 
-//------------------------------------------------------------------------------
-// cosinus and sinus table
-//------------------------------------------------------------------------------
+/**
+ * Precalculated cosinus and sinus table
+ */
 const Sint16
   handler_resources::cosinus360[720] =
   { 0, 2, 4, 7, 9, 11, 13, 15, 18, 20, 22, 24, 26, 29, 31, 33, 35, 37, 39, 41,

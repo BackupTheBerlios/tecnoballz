@@ -5,11 +5,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.6 2007/01/29 16:25:22 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.7 2007/01/30 16:37:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -341,8 +341,7 @@ void bitmap_data::load (char *fname)
  */
 void bitmap_data::load (Sint32 id)
 {
-  char *
-    fpath = resources->locate_res (id);
+  char * fpath = resources->get_full_pathname (id);
   sdl_load_bmp (fpath);
 }
 

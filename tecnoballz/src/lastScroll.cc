@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-07
 // fonction	: handle of the scrolling background (menu and gards levels)
-// id		: $Id: lastScroll.cc,v 1.12 2007/01/29 16:25:22 gurumeditation Exp $
+// id		: $Id: lastScroll.cc,v 1.13 2007/01/30 16:37:21 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -495,8 +495,7 @@ Sint32 lastScroll::ld_mapfile(Uint32 edmap)
 	error_init(memory->retour_err());
 	if(erreur_num)
 	{	
-    delete[]zfile;
-    //memory->release((char *)zfile);
+    delete[](char*)zfile;
 		return erreur_num;
 	}
 
@@ -514,8 +513,7 @@ Sint32 lastScroll::ld_mapfile(Uint32 edmap)
 		carteFirst[i++] = codem;
 		ptmap = ptmap + 2;
 	}
-  delete[]zfile;
-	//memory->release((char *)zfile);
+  delete[] (char *)zfile;
 
 	//###################################################################
 	// copy a height of the screen (for scrolling rotation)

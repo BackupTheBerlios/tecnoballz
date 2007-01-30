@@ -2,14 +2,14 @@
  * @file handler_audio.cc 
  * @brief Handler of the sound and music
  * @created 2004-03-22
- * @date 2007-01-19
+ * @date 2007-01-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.cc,v 1.3 2007/01/29 12:30:26 gurumeditation Exp $
+ * $Id: handler_audio.cc,v 1.4 2007/01/30 16:37:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,14 +31,10 @@
 #include "../include/handler_resources.h"
 #include "../include/handler_keyboard.h"
 
-
-
 handler_audio * handler_audio::audio_singleton = NULL;
 bool handler_audio::is_audio_enable = true;
 
-//######################################################################
-// positions in music modules
-//######################################################################
+/** Positions in music modules */
 const musics_pos
   handler_audio::ptMusicpos[] = { {0,   // first music of a "bricks level"
                                    2,   // restart first music
@@ -59,8 +55,8 @@ const musics_pos
 //######################################################################
 // list of sounds pointers
 //######################################################################
-Mix_Chunk * handler_audio::sound_list[S_NOMBRETT];
-char handler_audio::soundtable[S_NOMBRETT];
+Mix_Chunk * handler_audio::sound_list[NUM_OF_SOUNDS];
+char handler_audio::sounds_play[NUM_OF_SOUNDS];
 
 /**
  * Create the handler_audoi singleton object, and clear members
@@ -71,14 +67,10 @@ handler_audio::handler_audio ()
   initialize ();
   aera_number = 0;
   level_number = 0;
-  ptModAmiga = NULL;
-  is_sound_enable = false;
-  music_flag = 0;
-  sound_flag = 0;
-  music_flag = ~music_flag;
-  sound_flag = ~sound_flag;
-  lastModule = MUSICINTRO;
-
+  song_module = NULL;
+  is_only_music = true;
+  is_music_enable = true;
+  is_sound_enable = true;
 }
 
 /**
@@ -86,22 +78,22 @@ handler_audio::handler_audio ()
  */
 handler_audio::~handler_audio ()
 {
-  if (NULL != ptModAmiga)
+  if (NULL != song_module)
     {
       Mix_HaltMusic ();
-      Mix_FreeMusic (pMixmodule);
-      ptModAmiga = NULL;
+      Mix_FreeMusic (current_music);
+      song_module = NULL;
     }
 
   /* release the samples */
-  for (Sint32 i = 0; i < S_NOMBRETT; i++)
+  for (Sint32 i = 0; i < NUM_OF_SOUNDS; i++)
     {
       if (sound_list[i])
         {
           Mix_FreeChunk (sound_list[i]);
           sound_list[i] = NULL;
         }
-      soundtable[i] = 0;
+      sounds_play[i] = false;
     }
 
   if (is_audio_enable)
@@ -128,9 +120,9 @@ handler_audio::get_instance ()
 }
 
 /**
- *  Initializes SDL audio and load files waves in memory 
+ *  Initialize SDL audio and load files waves in memory 
  */
-Sint32
+void
 handler_audio::initialize ()
 {
   if (!is_audio_enable)
@@ -140,60 +132,64 @@ handler_audio::initialize ()
           std::cout << "handler_audio::initialize() " <<
             "audio disable!" << std::endl;
         }
-      return E_NO_ERROR;
+        return;
     }
   if (SDL_Init (SDL_INIT_AUDIO | SDL_INIT_NOPARACHUTE) < 0)
     {
       std::cerr << "handler_audio::initialize() " <<
-        "SDL_Init() failed: " << SDL_GetError () << std::endl;
-      is_audio_enable = 0;
-      return E_NO_ERROR;
+        "SDL_Init() return " << SDL_GetError () << std::endl;
+      is_audio_enable = false;
+      return;
     }
   if (Mix_OpenAudio (44100, AUDIO_S16, 2, 4096))
     {
-      fprintf (stderr, "handler_audio::initialize(): %s\n", SDL_GetError ());
-      is_audio_enable = 0;
+      std::cerr << "handler_audio::initialize() " <<
+        "Mix_OpenAudio() return " << SDL_GetError () << std::endl;
+      is_audio_enable = false;
       SDL_Quit ();
-      return E_NO_ERROR;
+      return;
     }
   //query_spec();
-  musicVolum = Mix_VolumeMusic (-1);
+  music_volume = Mix_VolumeMusic (-1);
   Mix_AllocateChannels (8);
 
   /* load files waves in memory */
-  for (Sint32 i = 0; i < S_NOMBRETT; i++)
+  for (Sint32 i = 0; i < NUM_OF_SOUNDS; i++)
     {
       sound_list[i] = NULL;
     }
   waves_size = 0;
-  for (Sint32 i = 0; i < S_NOMBRETT; i++)
+  for (Sint32 i = 0; i < NUM_OF_SOUNDS; i++)
     {
-      char *pathname = resources->getSndFile (i);
+      char *pathname = resources->get_sound_filename (i);
       if (NULL == pathname)
         {
           fprintf (stderr,
                    "handler_audio::initialize() file %i not found\n", i);
-          is_audio_enable = 0;
-          return (E_NO_ERROR);
+          is_audio_enable = false;
+          return;
         }
 
       Mix_Chunk *ptWav = Mix_LoadWAV (pathname);
-      if (!ptWav)
+      if (NULL == ptWav)
         {
-          fprintf (stderr, "handler_audio::initialize() "
-                   "Mix_LoadWAV(%s): %s\n", pathname, SDL_GetError ());
-          is_audio_enable = 0;
-          return (E_NO_ERROR);
+          std::cerr << "handler_audio::initialize() " << 
+            "Mix_LoadWAV(" << pathname << ") return " <<
+            SDL_GetError () << std::endl;
+          is_audio_enable = false;
+          return;
         }
       Mix_VolumeChunk (ptWav, 32);
       sound_list[i] = ptWav;
       waves_size += ptWav->alen;
     }
-  is_audio_enable = 1;
-  is_sound_enable = true;
+  is_audio_enable = true;
+  is_only_music = false;
   if (is_verbose)
-    fprintf (stdout, "handler_audio::initialize() initialize succeded\n");
-  return E_NO_ERROR;
+    {
+      std::cout << "handler_audio::initialize() initialize succeded" 
+        << std::endl;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -267,7 +263,7 @@ handler_audio::play_level_music (Uint32 aera_num, Uint32 level)
     }
   play_music (music);
   Mix_SetMusicPosition (position_1);
-  musicphase = PHASE_GAME;
+  current_portion_music = GAME_PORTION;
   Player_Stop ();
   return (E_NO_ERROR);
 }
@@ -279,305 +275,323 @@ handler_audio::play_level_music (Uint32 aera_num, Uint32 level)
 Sint32
 handler_audio::play_shop_music (Uint32 aera_num)
 {
-  if (!is_audio_enable || NULL == ptModAmiga)
+  if (!is_audio_enable || NULL == song_module)
     {
       return E_NO_ERROR;
     }
   aera_number = aera_num;
   Uint32 music = area_music (aera_num);
   position_1 = ptMusicpos[music].pos_zeshop;
-  position_2 = ptModAmiga->numpos - 1;
+  position_2 = song_module->numpos - 1;
   modposloop = position_1;
   play_music (music);
   Mix_SetMusicPosition (position_1);
-  musicphase = PHASE_SHOP;
+  current_portion_music = SHOP_PORTION;
   return (E_NO_ERROR);
 }
 
 /**
  * Play the music of the victory, when the player finished a level
  */
-Sint32
+void
 handler_audio::play_win_music ()
 {
   if (!is_audio_enable)
     {
-      return E_NO_ERROR;
+      return;
     }
   Uint32 music = area_music (aera_number);
   position_1 = ptMusicpos[music].pos_winner;
   position_2 = ptMusicpos[music].pos_losing - 1;
   modposloop = position_1;
   Mix_SetMusicPosition (position_1);
-  musicphase = PHASE_WINN;
-  return E_NO_ERROR;
+  current_portion_music = WIN_PORTION;
 }
 
 /**
  * Play the music of the defeat, when the player loses a life
  */
-Sint32
+void
 handler_audio::play_lost_music ()
 {
-  if (!is_audio_enable || musicphase == PHASE_LOST)
+  if (!is_audio_enable || current_portion_music == LOST_PORTION)
     {
-      return E_NO_ERROR;
+      return;
     }
   Uint32 music = area_music (aera_number);
   position_1 = ptMusicpos[music].pos_losing;
   position_2 = ptMusicpos[music].pos_zeshop - 1;
   modposloop = position_1;
   Mix_SetMusicPosition (position_1);
-  musicphase = PHASE_LOST;
-  return (E_NO_ERROR);
+  current_portion_music = LOST_PORTION;
 }
 
-//------------------------------------------------------------------------------
-// stop the music lost
-//------------------------------------------------------------------------------
-Sint32
-handler_audio::lostm_stop ()
-{
-  if (!is_audio_enable)
-    return E_NO_ERROR;
-  if (musicphase != PHASE_LOST)
-    return (E_NO_ERROR);
-  play_level_music (aera_number, level_number);
-  return (E_NO_ERROR);
-}
-
-//------------------------------------------------------------------------------
-// bricks level end music is finish? 
-//------------------------------------------------------------------------------
-Uint32
-handler_audio::winn_isend ()
-{
-  if (!is_audio_enable)
-    return 1;
-  if (musicphase == PHASE_WINN)
-    return 0;
-  else
-    return 1;
-}
-
-//------------------------------------------------------------------------------
-//      if a music is played, it is stopped
-//------------------------------------------------------------------------------
+/**
+ * Stop the music of the defeat, when the player loses a life
+ */
 void
-handler_audio::stopModule ()
+handler_audio::stop_lost_music ()
 {
-  if (!is_audio_enable)
-    return;
-  if (ptModAmiga)
+  if (!is_audio_enable || current_portion_music != LOST_PORTION)
     {
-      Mix_HaltMusic ();
-      Mix_FreeMusic (pMixmodule);
-      ptModAmiga = NULL;
-      nummodule1 = -1;
+      return;
+    }
+  play_level_music (aera_number, level_number);
+}
+
+/**
+ * Check if the music of the victory is finished
+ * @return true if the music of the victory is finished
+ */
+bool
+handler_audio::is_win_music_finished ()
+{
+  if (!is_audio_enable || NULL == song_module)
+    {
+      return true;
+    }
+  if (WIN_PORTION == current_portion_music)
+    {
+      return false;
+    }
+  else
+    {
+      return true;
     }
 }
 
-//------------------------------------------------------------------------------
-// play a module
-// input => audio       : 1 = sound actif
-// ouput <= error 
-//-----------------------------------------------------------------------------
-Sint32
-handler_audio::play_music (Uint32 modnu)
+/**
+ * If a music is played, it is stopped
+ */
+void
+handler_audio::stop_music ()
 {
-  //return E_NO_ERROR;    //test only
+  if (!is_audio_enable || NULL == song_module)
+    {
+      return;
+    }
+  Mix_HaltMusic ();
+  Mix_FreeMusic (current_music);
+  song_module = NULL;
+  current_music_id = -1;
+}
+
+/** 
+ * Play a music module
+ * @param music_id resource identifier of the music module
+ */
+void
+handler_audio::play_music (Uint32 music_id)
+{
   if (!is_audio_enable)
-    return E_NO_ERROR;
-  //if (!music_flag) return E_NO_ERROR;
-
-
-  //###################################################################
-  //      if a music is played, it is stopped
-  //###################################################################
-  if (ptModAmiga)
     {
-      if (nummodule1 == (Sint32) modnu)
-        return E_NO_ERROR;
+      return;
+    }
+
+  /* if a music is played, it is stopped */
+  if (NULL != song_module )
+    {
+      if (current_music_id == (Sint32) music_id)
+        {
+          return;
+        }
       else
-        stopModule ();
+        {
+          stop_music ();
+        }
     }
-  char *pathname = resources->getMusFile (modnu);
+  char *pathname = resources->get_music_filename (music_id);
   if (is_verbose)
-    printf ("handler_audio::play_music() try load pathname %s\n", pathname);
-  if (!pathname)
     {
-      fprintf (stderr,
-               "handler_audio::play_music () modnu %i %s has no file \n",
-               modnu, pathname);
-      return (erreur_num = E_SDLMIXER);
+       std::cout << "handler_audio::play_music() " <<
+         "try load pathname '" << pathname << "'" << std::endl;
     }
 
-  //###################################################################
-  // load the music in memory
-  //###################################################################
-  pMixmodule = Mix_LoadMUS (pathname);
-  if (!pMixmodule)
+  /* load the music in memory */
+  current_music = Mix_LoadMUS (pathname);
+  if (NULL == current_music)
     {
-      fprintf (stderr, "handler_audio::charge_mod () erreur %s\n",
-               SDL_GetError ());
-      return (erreur_num = E_SDLMIXER);
+       std::cerr << "handler_audio::play_music() " <<
+         "Mix_LoadMUS return " << SDL_GetError () << std::endl;
+      return;
     }
-  // Ugly way to access sdl-mixer's internal structures.
+  /* Ugly way to access sdl-mixer's internal structures */
   union
   {
     int i;
     void *p;
   } dummy;
-  memcpy (&ptModAmiga, (Uint8 *) pMixmodule + sizeof (dummy),
+  memcpy (&song_module, (Uint8 *) current_music + sizeof (dummy),
           sizeof (void *));
 
-
-  //###################################################################
-  // play the music 
-  //###################################################################
-  if (Mix_PlayMusic (pMixmodule, -1) == -1)
+  /* start the music */ 
+  if (Mix_PlayMusic (current_music, -1) == -1)
     {
-      fprintf (stderr, "! handler_audio::play_music() %s\n", SDL_GetError ());
-      return (erreur_num = E_SDLMIXER);
+      std::cerr << "(!)handler_audio::play_music() " <<
+        SDL_GetError () << std::endl;
+      return;
     }
 
-
-  musicphase = PHASE_NORM;
-  lastsngpos = -1;
+  current_portion_music = MUSIC_UNDIVIDED;
+  song_pos = -1;
   lastpatpos = -1;
-  nummodule1 = modnu;
+  current_music_id = music_id;
   if (is_verbose)
-    fprintf (stdout, "handler_audio::play_music() module %i playing\n",
-             nummodule1);
-  lastModule = modnu;
-  if (music_flag)
-    Mix_VolumeMusic (musicVolum);
+    {
+      std::cout << "handler_audio::play_music() module " << 
+        current_music_id << " playing!" << std::endl;
+    }
+  if (is_music_enable)
+    {
+      Mix_VolumeMusic (music_volume);
+    }
   else
-    Mix_VolumeMusic (0);
-
-  return (E_NO_ERROR);
+    {
+      Mix_VolumeMusic (0);
+    }
+  return;
 }
 
-//------------------------------------------------------------------------------
-// 
-//------------------------------------------------------------------------------
+/**
+ * Return the portion of the music currently played
+ * @return identifier of the portion played
+ */
 Uint32
-handler_audio::get_mphase ()
+handler_audio::get_portion_music_played ()
 {
-  return musicphase;
+  return current_portion_music;
 }
 
-//------------------------------------------------------------------------------
-// management of the music and sounds
-//-----------------------------------------------------------------------------
+/**
+ * Handler of toggle keys, played sounds, and portions
+ * of the music played 
+ */
 void
-handler_audio::execution1 ()
+handler_audio::run ()
 {
   if (!is_audio_enable)
-    return;
+    {
+      return;
+    }
 
-  // [CTRL] + [S]: enable/disable sfx - mfx
+  /* 
+   * [Ctrl] + [S]: enable/disable sfx - mfx
+   */
   if (keyboard->command_is_pressed (handler_keyboard::MFXSFXFLAG, true))
     {
-      if (!music_flag || !sound_flag)
+      if (!is_music_enable || !is_sound_enable)
         {
-          if (!music_flag)
-            music_flag = ~music_flag;
-          if (!sound_flag)
-            sound_flag = ~sound_flag;
-          Mix_VolumeMusic (musicVolum);
-          //printf("[CTRL] + [S] : enable sound and music\n");
+          is_music_enable = true;
+          is_sound_enable = true;
+          Mix_VolumeMusic (music_volume);
         }
       else
         {
-          music_flag = 0;
-          sound_flag = 0;
+          is_music_enable = false;
+          is_sound_enable = false;
           Mix_VolumeMusic (0);
-          //printf("[CTRL] + [S] : disable sound and music\n");
         }
     }
   else
-    {                           // [CTRL] + [F]: enable/disable sfx
+    { 
+      /* [Ctrl] + [F]: enable/disable sfx */
       if (keyboard->command_is_pressed (handler_keyboard::SOUND_FLAG, true))
         {
-          sound_flag = ~sound_flag;
-          //printf("[CTRL] + [F] : %i\n", sound_flag);
+          is_sound_enable = is_sound_enable ? false : true; 
+          if (!is_sound_enable)
+            {
+               for (Sint32 i = 0; i < NUM_OF_SOUNDS; i++)
+                {
+                  sounds_play[i] = false;
+                }
+            }
         }
-      // [CTRL] + [D]: enable/disable mfx
+      /* [Ctrl] + [D]: enable/disable mfx */
       else
         {
           if (keyboard->
               command_is_pressed (handler_keyboard::MUSIC_FLAG, true))
             {
-              music_flag = ~music_flag;
-              //printf("[CTRL] + [D] : %i %i\n", music_flag, musicVolum);
-              if (music_flag)
-                Mix_VolumeMusic (musicVolum);
+              is_music_enable = is_music_enable ? false : true;
+              if (is_music_enable)
+                {
+                  Mix_VolumeMusic (music_volume);
+                }
               else
-                Mix_VolumeMusic (0);
+                {
+                  Mix_VolumeMusic (0);
+                }
             }
         }
     }
-  mus_handle ();
-  snd_handle ();
+  control_music_position ();
+  play_requested_sounds ();
 }
 
-//------------------------------------------------------------------------------
-// 
-//------------------------------------------------------------------------------
+/**
+ * Play all requested sounds 
+ */
 void
-handler_audio::snd_handle ()
+handler_audio::play_requested_sounds ()
 {
-  if (!is_sound_enable)
-    return;
-  if (!sound_flag)
-    return;
-  for (Sint32 i = 0; i < S_NOMBRETT; i++)
+  if (is_only_music || !is_sound_enable)
     {
-      if (soundtable[i])
+      return;
+    }
+  for (Sint32 i = 0; i < NUM_OF_SOUNDS; i++)
+    {
+      if (sounds_play[i])
         {
-          soundtable[i] = 0;
+          sounds_play[i] = false;
           Mix_PlayChannel (-1, sound_list[i], 0);
         }
     }
 }
 
 /**
- * Request of a sound
+ * Request to play sound effect
  * @param sound_num sound number
  */
 void
 handler_audio::play_sound (Uint32 sound_num)
 {
-  if (is_sound_enable)
+  if (!is_only_music)
     {
-      soundtable[sound_num] = 1;
+      sounds_play[sound_num] = true;
     }
 }
 
-//------------------------------------------------------------------------------
-// management of the music
-//-----------------------------------------------------------------------------
+/**
+ * Control of the portion of the played musics
+ */
 void
-handler_audio::mus_handle ()
+handler_audio::control_music_position ()
 {
-  if (!ptModAmiga)
-    return;
-
-  if (lastsngpos != ptModAmiga->sngpos)
-    lastsngpos = ptModAmiga->sngpos;
-
-  Sint32 posgo = -1;
-  switch (musicphase)
+  if (NULL == song_module)
     {
-    case PHASE_GAME:
-    case PHASE_SHOP:
-      if (ptModAmiga->sngpos < position_1)
-        posgo = position_1;
-      if (ptModAmiga->sngpos > position_2)
-        posgo = modposloop;
-      if (ptModAmiga->patpos >= 63 && ptModAmiga->sngpos == position_2)
-        posgo = modposloop;
+      return;
+    }
+  if (song_pos != song_module->sngpos)
+    {
+      song_pos = song_module->sngpos;
+    }
+  Sint32 posgo = -1;
+  switch (current_portion_music)
+    {
+    case GAME_PORTION:
+    case SHOP_PORTION:
+      if (song_module->sngpos < position_1)
+        {
+          posgo = position_1;
+        }
+      if (song_module->sngpos > position_2)
+        {
+          posgo = modposloop;
+        }
+      if (song_module->patpos >= 63 && song_module->sngpos == position_2)
+        {
+          posgo = modposloop;
+        }
       if (posgo >= 0)
         {
           if (is_verbose)
@@ -588,33 +602,35 @@ handler_audio::mus_handle ()
         }
       break;
 
-    case PHASE_LOST:
-      if (ptModAmiga->sngpos < position_1 ||
-          ptModAmiga->sngpos > position_2 ||
-          (ptModAmiga->patpos >= 63 && ptModAmiga->sngpos == position_2))
-        play_level_music (aera_number, level_number);
-      break;
-
-    case PHASE_WINN:
-      if (ptModAmiga->sngpos < position_1 ||
-          ptModAmiga->sngpos > position_2 ||
-          (ptModAmiga->patpos >= 63 && ptModAmiga->sngpos == position_2))
-        {                       //Mix_PauseMusic();
-          if (!Player_Paused ())
-            Player_TogglePause ();
-          musicphase = PHASE_MOFF;
+    case LOST_PORTION:
+      if (song_module->sngpos < position_1 ||
+          song_module->sngpos > position_2 ||
+          (song_module->patpos >= 63 && song_module->sngpos == position_2))
+        {
+          play_level_music (aera_number, level_number);
         }
       break;
 
-
+    case WIN_PORTION:
+      if (song_module->sngpos < position_1 ||
+          song_module->sngpos > position_2 ||
+          (song_module->patpos >= 63 && song_module->sngpos == position_2))
+        {
+          if (!Player_Paused ())
+            {
+              Player_TogglePause ();
+            }
+          current_portion_music = MUSIC_IS_OFF;
+        }
+      break;
     }
 }
 
-//------------------------------------------------------------------------------
-// return the number of the music aera
-// input => narea       : number of the area (1 to 5)
-// ouput <= narea       : number of the music area (0 to 5) 
-//-----------------------------------------------------------------------------
+/**
+  return music aera identifier
+  @param narea area number, form 1 to 5
+  @return music aera identifier
+*/
 Uint32
 handler_audio::area_music (Uint32 narea)
 {
@@ -639,31 +655,30 @@ handler_audio::area_music (Uint32 narea)
   return MUSICAREA1;
 }
 
-//------------------------------------------------------------------------------
-// disable sound
-//------------------------------------------------------------------------------
+/** 
+ * Disable the sound effect
+ */
 void
-handler_audio::stop_sound ()
+handler_audio::disable_sound ()
 {
-  is_sound_enable = false;
-  for (Sint32 i = 0; i < S_NOMBRETT; i++)
+  is_only_music = true;
+  for (Sint32 i = 0; i < NUM_OF_SOUNDS; i++)
     {
-      soundtable[i] = 0;
+      sounds_play[i] = false;
     }
 }
 
-//------------------------------------------------------------------------------
-// enable sound
-//------------------------------------------------------------------------------
+/* 
+ * Enable the sound effect
+ */
 void
-handler_audio::startSound ()
+handler_audio::enable_sound ()
 {
-  for (Sint32 i = 0; i < S_NOMBRETT; i++)
+  for (Sint32 i = 0; i < NUM_OF_SOUNDS; i++)
     {
-      soundtable[i] = 0;
+      sounds_play[i] = false;
     }
-  is_sound_enable = true;
+  is_only_music = false;
 }
-
 
 #endif

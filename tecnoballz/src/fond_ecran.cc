@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-07-17
 // fonctions	: display background (bricks levels)
-// Id		: $Id: fond_ecran.cc,v 1.13 2007/01/29 12:30:26 gurumeditation Exp $
+// Id		: $Id: fond_ecran.cc,v 1.14 2007/01/30 16:37:20 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -81,14 +81,12 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 			 if(nbkdg > 77)
 				nbkdg = nbkdg - 77;
 			//nbkdg = 79; // test only
-			char *pathname = resources->getTexFile(nbkdg);
-			if (!pathname) {
-				erreur_num = E_FILERROR;
-				return erreur_num;
-			}
-			if(is_verbose)
-				 printf("fond_ecran::instalFond() : try to initialize %s\n", 
-					pathname);
+			char *pathname = resources->get_tilemaps_filename(nbkdg);
+		if(is_verbose)
+      {
+        std::cout << "fond_ecran::instalFond() " <<
+          "try to initialize" << pathname << std::endl;
+      }
 			fonds->load(pathname);
 			large = FONDLARGE2;
 			haute = FONDHAUTE2;

@@ -247,14 +247,8 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 	brickCount = 0;	//reset the number of bricks of the level 
 	brickDestr = 0;	//reset the number of destroyed bricks 
 
-	//###################################################################
-	// load bricks levels (34000 bytes => 100 levels)
-	//###################################################################
+	/* load bricks levels (34000 bytes => 100 levels) */
 	char *tabHd = resources->load_data(handler_resources::RESBLEVELS);
-	if(!tabHd)
-	{	error_init(E_NORESOUR);
-		return (erreur_num);
-	}
 	if(tablo >= 6) tablo--;
 	char *tabPT = tabHd + (SIZEOFAREA * 2 * (areaN - 1)) +
 		(LEVEL_SIZE * 2 * (tablo - 1));
@@ -306,8 +300,10 @@ Sint32 lesBriques::tabNouveau(Sint32 areaN, Sint32 tablo)
 		//printf("\n");
 	
 	}
-	if(tabHd)
-		memory->release((char*)tabHd);
+	if(tabHd != NULL)
+    {
+      delete[](char* )tabHd;
+    }
 
 	//###################################################################
 	// Initialize the number of total bricks to destroy 

@@ -2,14 +2,14 @@
  * @file handler_resources.h
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-01-29
+ * @date 2007-01-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.3 2007/01/30 06:18:14 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.4 2007/01/30 16:37:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ private:
   static const char *folder_320;
   static const char *folder_640;
   static char *fnamescore;
-  static char stringtemp[512];
+  static char tmp_filename[512];
   static char pathstring[512];
   static char ze_mapfile[];
 
@@ -78,21 +78,21 @@ public:
   static const Uint32 tabledegas[180];
 
 private:
-    Uint32 zeLastSize;          //size last file charged in memory
+    /** size last file loaded in memory */
+    Uint32 last_filesize_loaded;
 
 public:
     handler_resources ();
    ~handler_resources ();
-  char *load_data (Sint32);
-  char *getMusFile (Sint32);
-  char *getSndFile (Sint32);
-  char *getTexFile (Sint32);
-  char *locate_res (Sint32);
+  char *load_data (Sint32 resource_id);
+  char *get_music_filename (Sint32 resource_id);
+  char *get_sound_filename (Sint32 resource_id);
+  char *get_tilemaps_filename (Sint32 tile_num);
+  char *get_full_pathname (Sint32 resource_id);
   void load_sprites_bitmap (Sint32 resource_id = RESPAGEBOB);
   void release_sprites_bitmap ();
-  void writingLog (char *fname, char *strng);
-  Uint32 gtLastSize ();
-  Sint32 load_sinus ();
+  Uint32 get_filesize_loaded ();
+  void load_sinus ();
   char *load_high_score_file ();
   void save_high_score_file (char *buffer, Uint32 size);
   char *locate_data_file (const char *const name);

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.21 2007/01/29 16:25:22 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.22 2007/01/30 16:37:21 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -112,7 +112,7 @@ Sint32 tableaux_Z::first_init()
 	//levelTecno = 5; //test only
 #ifndef SOUNDISOFF
 	audio->play_level_music (areaNumber, levelTecno);
-	audio->startSound();
+	audio->enable_sound();
 #endif
 	
 	count_next = 0;
@@ -328,8 +328,8 @@ Sint32 tableaux_Z::zeMainLoop()
 	{	if(!isgameover)
 		{	
 #ifndef SOUNDISOFF
-			audio->stop_sound();
-			audio->stopModule();
+			audio->disable_sound();
+			audio->stop_music();
 #endif
 			theBumpers->bumpersOff();
 			briquesTab->clr_bricks();
@@ -423,20 +423,20 @@ Sint32 tableaux_Z::zeMainLoop()
 		if(!tecZ_barre->resteBrick())
 		{	if(count_next > 0)
  			{	count_next++;
-				Sint32 endmu = 0;
+				bool music_finished = false;
 				if(count_next > 350)
-				{	endmu = 1;
+				{	music_finished = true;
 #ifndef SOUNDISOFF	
-					endmu = audio->winn_isend();
+					music_finished = audio->is_win_music_finished();
 #endif
 				}
 				if(count_next > 20000000 ||
-					keyboard->key_is_pressed(SDLK_SPACE) || endmu)
+					keyboard->key_is_pressed(SDLK_SPACE) || music_finished)
 				{	gereBricot->sauve_etat();
 					joueurGere = joueurData::nextplayer(joueurGere,
 						&end_return, 1);
 #ifndef SOUNDISOFF	
-					audio->stopModule();
+					audio->stop_music();
 #endif
 				}
 				gereBalles->disable_sprites();
@@ -451,7 +451,7 @@ Sint32 tableaux_Z::zeMainLoop()
 #endif
 				ptMiniMess->mesrequest(17);
 #ifndef SOUNDISOFF	
-				audio->stop_sound();
+				audio->disable_sound();
 #endif
 				count_next = 1;
 			}
@@ -475,9 +475,9 @@ Sint32 tableaux_Z::zeMainLoop()
  	// control position music's module
 	//###################################################################
 #ifndef SOUNDISOFF	
- 	Uint32 phase = audio->get_mphase();
-	if(phase == PHASE_LOST && 
-		phase != audio->get_mphase())
+ 	Uint32 phase = audio->get_portion_music_played();
+	if(phase == handler_audio::LOST_PORTION && 
+		phase != audio->get_portion_music_played())
 	{	ptMiniMess->mesrequest(2);
 		theBumpers->free_balls();
 	}

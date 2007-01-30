@@ -4,11 +4,11 @@
  * @date 2007-01-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: zeRaquette.cc,v 1.24 2007/01/29 16:25:22 gurumeditation Exp $
+ * $Id: zeRaquette.cc,v 1.25 2007/01/30 16:37:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -387,7 +387,7 @@ void zeRaquette::lacheBalle()
 			tecBumper3->lacheBalle();
  			tecBumper4->lacheBalle();
 #ifndef SOUNDISOFF
-			audio->lostm_stop();
+			audio->stop_lost_music();
 #endif
 		}
 	}

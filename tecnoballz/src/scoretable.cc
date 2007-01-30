@@ -5,7 +5,7 @@
 // created	: 2004-04-30
 // updates	: 2005-01-11
 // fonction	: display score table (game over and menu)
-// id		: $Id: scoretable.cc,v 1.5 2007/01/30 06:18:14 gurumeditation Exp $
+// id		: $Id: scoretable.cc,v 1.6 2007/01/30 16:37:21 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -99,7 +99,7 @@ Sint32 scoretable::loadScores()
 {
 	char *pData = resources->load_high_score_file();
 	if(pData)
-	{	Uint32 fsize = resources->gtLastSize();
+	{	Uint32 fsize = resources->get_filesize_loaded();
 		if(fsize != buffersize)
 		{	fprintf(stderr, "scoretable::loadScores(): bad file size, %i byte(s) instead %i bytes\n",
 				fsize, 	buffersize);
