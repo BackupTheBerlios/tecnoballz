@@ -5,11 +5,11 @@
  * @date 2007-01-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.20 2007/01/29 20:47:25 gurumeditation Exp $
+ * $Id: main.cc,v 1.21 2007/01/30 21:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,6 +90,23 @@ main (Sint32 nbArg, char **ptArg)
 
 
 /*
+ 
+ a faire
+ - utiliser les tilemaps de 16x16 originales dans le definlement menu/gardiens pour eviter
+   d'utiliser les tilemaps 32x32 (qui ont ete doubles avec GIMP) refaire donc un mapeditor
+   special pour le 640x480
+ - gigablitz doit tuer les bouisbouis
+ - si une raquette enclenche un multiballes pendant la musique lost, couper cette musique
+ - si le joueur perd une balle et qu'il a le bouton droit presse ne pas ejecter la balle
+   de suite attendre qu'il relache le bouton
+ - si game over supprimer les gems
+ - faire les textes du jeu (intro, magasin, jeu) en francais et anglais (fichiers externes)
+ - accelerer l'affichage des mini messages si beaucoup de bonus
+ 
+ - ? faire des fonds defilents des tableaux briques 
+ - ? mettre les donnees (tableaux, sprites?, ...) au format XML avec tiny xml 
+ - ? utiliser kyro comme moteur de sprites 
+ - ? mode balle Arkanoid ?
 
 main.cc
 mentatCode.cc    => tecnoballz 
@@ -118,7 +135,7 @@ tecno_miss.cc   => sprite_bullet
 tecno_text.cc   => sprite_fonte_game
  
 ballDirect.cc   => controller_balls
-lesBriques.cc   => controller_bricks
+controller_bricks.cc   => controller_bricks
 printmoney.cc   => controller_indicators
 zeBouiBoui.cc   => controller_ships
 zeCapsules.cc   => controller_moneys

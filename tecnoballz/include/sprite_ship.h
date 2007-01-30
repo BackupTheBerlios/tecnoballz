@@ -32,7 +32,7 @@ class sprite_ship;
 #include "../include/zeGemstone.h"
 #include "../include/sprite_projectile.h"
 #include "../include/sprite_ball.h"
-#include "../include/lesBriques.h"
+#include "../include/controller_bricks.h"
 //.......................................................................
 enum
 { CODE_GEMME,
@@ -57,7 +57,7 @@ private:
     zeCapsules * ptCapsules;
   ze_gadgets *pt_gadgets;
   zeGemstone *ptGemstone;
-  lesBriques *pt_briques;
+  controller_bricks *pt_briques;
   Sint32 atom_power;            // strength
   Sint32 init_power;            // strength
   Sint32 atom_deplX;            // offset X
@@ -91,7 +91,7 @@ private:
   void gere_atome ();
   void littleInit (Sint32 time0, Sint32 appar, Sint32 index,
                    Sint32 power, Sint32 pos_x, Sint32 pos_y, Sint32 offst,
-                   zeCapsules *, ze_gadgets *, zeGemstone *, lesBriques *);
+                   zeCapsules *, ze_gadgets *, zeGemstone *, controller_bricks *);
   void explosion1 (sprite_projectile *);
   void explosion1 (sprite_ball *);
   void explosion2 ();

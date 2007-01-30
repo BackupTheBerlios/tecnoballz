@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.1 2007/01/26 16:49:19 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.2 2007/01/30 21:06:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ class controller_balls;
 #include "../include/objects_list.h"
 #include "../include/sprite_paddle.h"
 #include "../include/ejectBalls.h"
-#include "../include/lesBriques.h"
+#include "../include/controller_bricks.h"
 #include "../include/briqueCote.h"
 #include "../include/head_anima.h"
 #include "../include/zeBouiBoui.h"
@@ -67,7 +67,7 @@ class controller_balls:public objects_list < sprite_ball >
 		sprite_paddle*		tecBumper4;		//left bumper
 		sprite_paddle*		tec_robot0;		//robot bumper
 		ejectBalls*		ejectObjet;
-		lesBriques*		bricks;
+		controller_bricks*		bricks;
 		briqueCote*		bricoObjet;
 		head_anima*		gugusObjet;
 		zeBouiBoui*		ptBouiBoui;
@@ -96,7 +96,7 @@ class controller_balls:public objects_list < sprite_ball >
 			static Sint32*	brick_jump[15];
  
 	public:
-						controller_balls(ejectBalls *eject, lesBriques *brick, 
+						controller_balls(ejectBalls *eject, controller_bricks *brick, 
 									briqueCote *brico, head_anima* gugus, 
 									zeBouiBoui *atoms, barreScore* score,
 									sprite_object *pwall, zeMiniMess*,

@@ -4,11 +4,11 @@
  * @date 2007-01-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.3 2007/01/27 21:16:56 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.4 2007/01/30 21:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ sprite_projectile::littleInit (sprite_paddle * raket)
 // static method: initialise all bumper's fires before a bricks level
 //-----------------------------------------------------------------------------
 void
-sprite_projectile::start_list (lesBriques * brick, zeBouiBoui * atoms,
+sprite_projectile::start_list (controller_bricks * brick, zeBouiBoui * atoms,
                          barreScore * score)
 {
   brickObjet = brick;
@@ -182,7 +182,7 @@ void
 sprite_projectile::collision1 ()
 {
 
-  Sint32 bwght = brickObjet->getBkWidth ();     //brick's width in pixels
+  Sint32 bwght = brickObjet->get_brick_width ();     //brick's width in pixels
   Sint32 byoff = brickObjet->getYOffset ();     //y-offset between 2 bricks
   Sint32 indus = brickObjet->getBkIndus ();     //first indestructible brick
   sprite_projectile **liste = list_fires;
@@ -202,7 +202,7 @@ sprite_projectile::collision1 ()
           briP2->balle_posY = y;
           x /= bwght;
           y /= byoff;
-          y *= lesBriques::NB_BRICKSH;
+          y *= controller_bricks::NB_BRICKSH;
           x += y;
           brickInfos *megaT = (tMega + x);
           x = megaT->brique_rel;
@@ -227,7 +227,7 @@ sprite_projectile::collision1 ()
                           briP2->brique_num = megaT->brique_num;
                           briP2->briqueFlag = 1;        //1 = restore background
                           save += 1;    // inc. pt/restaure table
-                          save &= (lesBriques::MAXBRIKCLR - 1);
+                          save &= (controller_bricks::MAXBRIKCLR - 1);
                         }
                       else
                         {
@@ -267,7 +267,7 @@ sprite_projectile::collision1 ()
                       briP2->briqueFlag = 0;    // flag display brick
                     }
                   save += 1;    // inc. pt/restaure table
-                  save &= (lesBriques::MAXBRIKCLR - 1);
+                  save &= (controller_bricks::MAXBRIKCLR - 1);
                 }
             }
         }
@@ -347,7 +347,7 @@ sprite_projectile::disable_sprites ()
 Sint32 sprite_projectile::total_fire = 0;
 sprite_projectile *
   sprite_projectile::list_fires[maxi_fires];
-lesBriques *
+controller_bricks *
   sprite_projectile::brickObjet;
 zeBouiBoui *
   sprite_projectile::atomsObjet;

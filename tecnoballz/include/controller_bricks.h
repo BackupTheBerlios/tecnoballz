@@ -1,32 +1,35 @@
-//******************************************************************************
-// copyright (c) 1991-2006 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file		: "lesBriques.h"
-// created	: 1996-11-13
-// updates	: 2006-10-03
-// fonction	: manage the bricks
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA  02111-1307, USA.
-//******************************************************************************
-#ifndef __LESBRIQUES__
-#define __LESBRIQUES__
-//...............................................................................
-class lesBriques;
+/** 
+ * @file controller_bricks.h
+ * @brief Control the bricks in bricks levels
+ * @created 1996-11-13
+ * @date 2007-01-30
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.1 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: controller_bricks.h,v 1.1 2007/01/30 21:06:03 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
+#ifndef __CONTROLLER_BRICKS__
+#define __CONTROLLER_BRICKS__
+class controller_bricks;
 class sprite_paddle;
-//...............................................................................
-//#include <SDL/SDL.h>
 #include "../include/mentatCode.h"
 
 //-----------------------------------------------------------------------------
@@ -34,29 +37,29 @@ class sprite_paddle;
 //-----------------------------------------------------------------------------
 typedef struct
 {
-	Sint32		brique_rel;	// adresse source relative Gfx de la brique (collision)
-	Sint32		brique_aff;	// adresse source relative Gfx de la brique (reaffichage)
-	Sint32		brique_num;	// numero de la brique par rapport a la premiere
-	Sint32		adresseAff;	// adresse ecran relative d'affichage
-	Sint32		briquePosX;	// abscisse de la brique dans la page Gfx brique
-	Sint32		briquePosY;	// ordonnee de la brique dans la page Gfx brique
-	Sint32*		briqueFond;	// adresse du fond de la brique (modulo 0)
-	Sint32		brickcolor;	// color's bricks (17 colors possibles)
+  Sint32 brique_rel;            // adresse source relative Gfx de la brique (collision)
+  Sint32 brique_aff;            // adresse source relative Gfx de la brique (reaffichage)
+  Sint32 brique_num;            // numero de la brique par rapport a la premiere
+  Sint32 adresseAff;            // adresse ecran relative d'affichage
+  Sint32 briquePosX;            // abscisse de la brique dans la page Gfx brique
+  Sint32 briquePosY;            // ordonnee de la brique dans la page Gfx brique
+  Sint32 *briqueFond;           // adresse du fond de la brique (modulo 0)
+  Sint32 brickcolor;            // color's bricks (17 colors possibles)
 }
-brickInfos;	// used into "mega_table"
+brickInfos;                     // used into "mega_table"
 
 //-----------------------------------------------------------------------------
 // structure for draw brick / restaure background
 //-----------------------------------------------------------------------------
 typedef struct
 {
-	Sint32		balle_posX;	// ball screen X-coordinate 
-	Sint32		balle_posY;	// ball screen Y-coordinate 
-	sprite_paddle*	raquettePT;	// pointeur sur la raquette qui a touche cette balle en dernier
-	Sint32		brique_num;	// numero de la brique touchee
-	Sint32		briqueFlag;	// 1=affiche le decor du fond ou 0=affiche la brique
-	Sint32		adresseAff;	// offset d'affichage ecran de la brique
-	brickInfos*	adresseTab;	// adresse de la brique dans "mega_table"
+  Sint32 balle_posX;            // ball screen X-coordinate 
+  Sint32 balle_posY;            // ball screen Y-coordinate 
+  sprite_paddle *raquettePT;    // pointeur sur la raquette qui a touche cette balle en dernier
+  Sint32 brique_num;            // numero de la brique touchee
+  Sint32 briqueFlag;            // 1=affiche le decor du fond ou 0=affiche la brique
+  Sint32 adresseAff;            // offset d'affichage ecran de la brique
+  brickInfos *adresseTab;       // adresse de la brique dans "mega_table"
 }
 brickClear;
 //...............................................................................
@@ -67,100 +70,101 @@ brickClear;
 #include "../include/ze_gadgets.h"
 #include "../include/sprite_ship.h"
 //...............................................................................
-class lesBriques:public objects_list < sprite_object >
+class controller_bricks:public objects_list < sprite_object >
 {
-	friend class controller_balls;
-	friend class sprite_projectile;
-	friend class zeGigaBlit;
-	friend class sprite_ship;
+  friend class controller_balls;
+  friend class sprite_projectile;
+  friend class zeGigaBlit;
+  friend class sprite_ship;
 
-	public:
+public:
 
-		static const Sint32	MAXBRIKCLR = 2 << 8;	//maximum number of bricks to erase 
-		static const Sint32	NB_BRICKSH = 16;	//numbers of bricks peer line
-		static const Sint32	NB_BRICKSV = 30;	//numbers of lines of bricks
-		static const Sint32	NB_BRICKST =
-			NB_BRICKSH * (NB_BRICKSV + 8);			//numbers total of bricks
-	
-	private:
-		static const Sint32	BRICKWIDTH = 16;	// brick's width in pixels
-		static const Sint32	BRICKHEIGH = 7;		// brick's height in pixels
-		static const Sint32	offBri_DD = 1;
-		static const Sint32	offBri_GG = -1;
-		static const Sint32	offBri_HH = -NB_BRICKSH;
-		static const Sint32	offBri_BB = NB_BRICKSH;
-		static const Sint32	offBri_BG = NB_BRICKSH - 1;
-		static const Sint32	offBri_BD = NB_BRICKSH + 1;
-		static const Sint32	offBri_HG = -NB_BRICKSH - 1;
-		static const Sint32	offBri_HD = -NB_BRICKSH + 1;
-		static const Sint32	LEVELWIDTH = 10;	//width of a simple level
-		static const Sint32	LEVELHEIGH = 17;		//height of a simple level
-		static const Sint32	LEVEL_SIZE =
-			LEVELWIDTH * LEVELHEIGH; 
-		static const Sint32	LEVELSAREA = 10;		//number of levels in a area
-		static const Sint32	SIZEOFAREA =
-			LEVELSAREA * LEVEL_SIZE;
-		static const Sint32	BRKYOFFSET = 8;			//y-offset between 2 bricks 
-		
-	private:
-		bitmap_data*			GFXbriques;	// les 10 jeux de briques decompactes
-		bitmap_data*			GFX_brique;	//set of current bricks
-		barreScore*			barreObjet;
-		zeCapsules*			caps_objet;
-		ze_gadgets*			gads_objet;
+  static const Sint32 MAXBRIKCLR = 2 << 8;      //maximum number of bricks to erase 
+  static const Sint32 NB_BRICKSH = 16;  //numbers of bricks peer line
+  static const Sint32 NB_BRICKSV = 30;  //numbers of lines of bricks
+  static const Sint32 NB_BRICKST = NB_BRICKSH * (NB_BRICKSV + 8);       //numbers total of bricks
 
-		Sint32				brickCount;	//number of bricks in the level 
-		Sint32				brickDestr;	//number of destroyed bricks 
-		Sint32				less_brick;	//"less brick" option flag
-		Sint32				less_count;	//"less brick" option counter 
-		brickInfos*			mega_table;	// tableau de 16*30
+private:
+  static const Sint32 BRICKWIDTH = 16;  // brick's width in pixels
+  static const Sint32 BRICKHEIGH = 7;   // brick's height in pixels
+  static const Sint32 offBri_DD = 1;
+  static const Sint32 offBri_GG = -1;
+  static const Sint32 offBri_HH = -NB_BRICKSH;
+  static const Sint32 offBri_BB = NB_BRICKSH;
+  static const Sint32 offBri_BG = NB_BRICKSH - 1;
+  static const Sint32 offBri_BD = NB_BRICKSH + 1;
+  static const Sint32 offBri_HG = -NB_BRICKSH - 1;
+  static const Sint32 offBri_HD = -NB_BRICKSH + 1;
+  static const Sint32 LEVELWIDTH = 10;  //width of a simple level
+  static const Sint32 LEVELHEIGH = 17;  //height of a simple level
+  static const Sint32 LEVEL_SIZE = LEVELWIDTH * LEVELHEIGH;
+  static const Sint32 LEVELSAREA = 10;  //number of levels in a area
+  static const Sint32 SIZEOFAREA = LEVELSAREA * LEVEL_SIZE;
+  static const Sint32 BRKYOFFSET = 8;   //y-offset between 2 bricks 
 
-		Sint32				pageBrickH;	//width of the brick page 
-		Sint32				pageBrickV;	//height of the  page 
-		Sint32				brickWidth;	//brick's width in pixels
-		Sint32				brickHeigh;	//brick's height in pixels
-		Sint32				brick_size;	//brick's size in bytes
-		Sint32				brickIndus;	//first indestructible brick
-		Sint32				brkyoffset;	//y-offset between 2 bricks 
-		Sint32				ombre_deca;	//size of shadow in pixels (3 or 6)
-		Sint32				ombre_left;	//(4 or 8)
-		Sint32				ombre_yoff;	//space between 2 bricks (1 or 2)
-		Sint32				ombre_top1;	//(2 or 4)
-	
-	protected:
-		brickClear*			brique_pnt;	// table de reaffichage 
-		Sint32				briqueSave;	// pointeur sur "brique_pnt"
-		Sint32				brique_clr;	// pointeur sur "brique_pnt"
-		char*				brikTampon;	// sauvegarde briques
-		Sint32				offsSource;	// adresse de la page brique
-		Sint32				offsDestin;	//
-		Sint32*				adr_source;	// adresse de la page brique
-		Sint32*				adr_desti1;	// adresse du buffer (ecran travail)
-		Sint32*				adr_desti2;	// adresse du tampon (ecran restitution) 
+private:
+  bitmap_data *bitmap_bricks;      //set of current bricks
+  barreScore *barreObjet;
+  zeCapsules *caps_objet;
+  ze_gadgets *gads_objet;
 
-	public:
-						lesBriques();
-						~lesBriques();
-		Sint32				first_init(barreScore *barre, zeCapsules *capsu, ze_gadgets *gadge);
-		Sint32				initialise(Sint32 areaN, Sint32 tablo, Sint32 lbrik);
-		Sint32				brickRemap();
-		Sint32				getbrikCnt();
-		void				lessbricks();
-		void				dsplybrick(char *srcPT, Sint32 adres, Sint32 colbr);
-		void				initpalett();
-		void				clr_bricks();
-	
-	
-		Sint32				getBkWidth();
-		Sint32				getBkHeigh();
-		Sint32				getBkIndus();
-		Sint32				getYOffset();
+  /** Number of bricks in the current level */
+  Sint32 num_of_bricks;
+  Sint32 less_brick;            //"less brick" option flag
+  Sint32 less_count;            //"less brick" option counter 
+  brickInfos *mega_table;       // tableau de 16*30
 
-  private:
-		Sint32				tabNouveau(Sint32 area, Sint32 tablo);    
-		void				bricksShad();	// display bricks shadows       
-		void				bricks_aff();	// display all bricks   
-		void				sauve_fond();	// save background under bricks
+  /** Width in pixels of a set of bricks */
+  Sint32 bricks_height;
+  /** Height in pixels of a set of bricks */
+  Sint32 bricks_width;
+  /** Brick's width in pixels */
+  Sint32 brick_width;
+  /** Brick's height in pixels */
+  Sint32 brick_height;
+  /** Brick's size in bytes */
+  Sint32 brick_size;
+  Sint32 brickIndus;            //first indestructible brick
+  Sint32 brkyoffset;            //y-offset between 2 bricks 
+  Sint32 ombre_deca;            //size of shadow in pixels (3 or 6)
+  Sint32 ombre_left;            //(4 or 8)
+  Sint32 ombre_yoff;            //space between 2 bricks (1 or 2)
+  Sint32 ombre_top1;            //(2 or 4)
+
+protected:
+  brickClear * brique_pnt;    // table de reaffichage 
+  Sint32 briqueSave;            // pointeur sur "brique_pnt"
+  Sint32 brique_clr;            // pointeur sur "brique_pnt"
+  char *brikTampon;             // sauvegarde briques
+  Sint32 offsSource;            // adresse de la page brique
+  Sint32 offsDestin;            //
+  Sint32 *adr_source;           // adresse de la page brique
+  Sint32 *adr_desti1;           // adresse du buffer (ecran travail)
+  Sint32 *adr_desti2;           // adresse du tampon (ecran restitution) 
+
+public:
+    controller_bricks ();
+   ~controller_bricks ();
+  void first_init (barreScore * barre, zeCapsules * capsu,
+                     ze_gadgets * gadge);
+  void initialize (Sint32 areaN, Sint32 tablo, Sint32 lbrik);
+  Sint32 brickRemap ();
+  Sint32 get_num_of_bricks ();
+  void lessbricks ();
+  void dsplybrick (char *srcPT, Sint32 adres, Sint32 colbr);
+  void initpalett ();
+  void clr_bricks ();
+
+
+  Sint32 get_brick_width ();
+  Sint32 getBkIndus ();
+  Sint32 getYOffset ();
+
+private:
+  void load_level (Sint32 area, Sint32 tablo);
+  void draw_bricks_shadows ();
+  void draw_bricks ();
+  void sauve_fond ();           // save background under bricks
 };
 #endif
 

@@ -31,7 +31,7 @@ class zeBouiBoui ;
 #include "../include/handler_display.h"
 #include "../include/zeCapsules.h"
 #include "../include/zeGemstone.h"
-#include "../include/lesBriques.h"
+#include "../include/controller_bricks.h"
 //..............................................................................
 class zeBouiBoui : public objects_list < sprite_ship >
 {	friend class sprite_ship ;
@@ -39,13 +39,13 @@ class zeBouiBoui : public objects_list < sprite_ship >
 		zeCapsules*		ptCapsules;
 		ze_gadgets*		pt_gadgets;
 		zeGemstone*		ptGemstone;
-		lesBriques*		pt_briques;
+		controller_bricks*		pt_briques;
 		Sint32			apparition[4]; 		
 		Sint32			reappTemps;
 		Sint32			power_init;
 	public:
 						zeBouiBoui(zeCapsules*, ze_gadgets*, zeGemstone*,
-							lesBriques*);
+							controller_bricks*);
 						~zeBouiBoui();
 		void			initialise(Sint32 time0, Sint32 time1, Sint32 time2,
 							Sint32 time3, Sint32 time4, Sint32 power) ;

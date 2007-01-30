@@ -31,7 +31,7 @@
 //-----------------------------------------------------------------------------
 // bricks levels: create the object
 //-----------------------------------------------------------------------------
-zeNewBalls::zeNewBalls(ejectBalls *eject, lesBriques *brick, briqueCote *brico, 
+zeNewBalls::zeNewBalls(ejectBalls *eject, controller_bricks *brick, briqueCote *brico, 
 	head_anima *gugus, zeBouiBoui *atoms, barreScore *score, sprite_object *pwall,
 	zeMiniMess* pMess, ze_magneye* pEyes)
 {
@@ -134,7 +134,7 @@ void zeNewBalls::init_balle(zeRaquette *raket, Sint32 start, Sint32 glueC,
 	// initialize the balls
 	Sint32 bwgth;
 	if(brickObjet)
-		bwgth =  brickObjet->getBkWidth();
+		bwgth =  brickObjet->get_brick_width();
 	else
 		bwgth = 16 * resolution;
 	//printf("bwght : %i\n", bwgth);	
@@ -999,7 +999,7 @@ void zeNewBalls::vitusbound()
 //-------------------------------------------------------------------------------
 void zeNewBalls::vitusBrick()
 {
-	Sint32 bwght = brickObjet->getBkWidth();	//brick's width in pixels
+	Sint32 bwght = brickObjet->get_brick_width();	//brick's width in pixels
 	Sint32 byoff = brickObjet->getYOffset();	//y-offset between 2 bricks
 	Sint32 indus = brickObjet->getBkIndus();	//first indestructible brick
 	//printf("bwght:%i, byoff:%i, indus:%i\n",bwght, byoff, indus);
@@ -1026,7 +1026,7 @@ void zeNewBalls::vitusBrick()
 				briP2->balle_posY = y;
 				x /= bwght;
 				y /= byoff;
-				y *= lesBriques::NB_BRICKSH;
+				y *= controller_bricks::NB_BRICKSH;
 				x += y;
 				brickInfos *megaT = (tMega + x);
 				x = megaT->brique_rel;
@@ -1049,7 +1049,7 @@ void zeNewBalls::vitusBrick()
 								briP2->brique_num = megaT->brique_num;
 								briP2->briqueFlag = 1;	//1 = restore background
 								save += 1;				// augmente pointeur table brique effacement
-								save &= (lesBriques::MAXBRIKCLR - 1);
+								save &= (controller_bricks::MAXBRIKCLR - 1);
 							}
 							else
 							{	x = 2;
@@ -1085,7 +1085,7 @@ void zeNewBalls::vitusBrick()
 							briP2->briqueFlag = 0;	//flag redraw new brick
 						}
 						save += 1;	// augmente pointeur table brique effacement
-						save &= (lesBriques::MAXBRIKCLR - 1);
+						save &= (controller_bricks::MAXBRIKCLR - 1);
 					}
 					rebon += incre;	// incremente le flag rebond
 				}

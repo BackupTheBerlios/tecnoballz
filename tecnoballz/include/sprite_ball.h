@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.h,v 1.5 2007/01/26 16:49:19 gurumeditation Exp $
+ * $Id: sprite_ball.h,v 1.6 2007/01/30 21:06:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ typedef struct
 
 
 #include "../include/sprite_paddle.h"
-#include "../include/lesBriques.h"
+#include "../include/controller_bricks.h"
 #include "../include/ballDirect.h"
 #include "../include/ejectBalls.h"
 

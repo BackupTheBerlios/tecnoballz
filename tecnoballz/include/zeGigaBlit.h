@@ -34,7 +34,7 @@ class zeGigaBlit;
 #include "../include/tableaux_Z.h"
 #include "../include/objects_list.h"
 #include "../include/head_anima.h"
-#include "../include/lesBriques.h"
+#include "../include/controller_bricks.h"
 #include "../include/zexplosion.h"
 //...............................................................................
 class zeGigaBlit:public objects_list < giga_blitz >
@@ -44,7 +44,7 @@ class zeGigaBlit:public objects_list < giga_blitz >
 		static const Uint32		NOMBREGIGA = 7;
 		static Sint32			numeroBOBs[NOMBREGIGA];  
     
-		lesBriques*			brickObjet;
+		controller_bricks*			brickObjet;
 		head_anima*			gugusObjet;
 		zeRaquette*			ptRaquette;
 		zexplosion*			pexplosion;
@@ -66,7 +66,7 @@ class zeGigaBlit:public objects_list < giga_blitz >
 						zeGigaBlit();
 						~zeGigaBlit();
 		Sint32				init_liste(zeRaquette *zeRak, head_anima *gugus, 
-							lesBriques *brick);
+							controller_bricks *brick);
 		void				initDepart();
 		void				execution1();
 		void				collision1();

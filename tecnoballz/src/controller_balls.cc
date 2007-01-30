@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.3 2007/01/27 21:16:55 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.4 2007/01/30 21:06:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
 /** 
  * Create the balls controller into bricks levels
  */
-controller_balls::controller_balls (ejectBalls * eject, lesBriques * brick,
+controller_balls::controller_balls (ejectBalls * eject, controller_bricks * brick,
                                     briqueCote * brico, head_anima * gugus,
                                     zeBouiBoui * atoms, barreScore * score,
                                     sprite_object * pwall, zeMiniMess * pMess,
@@ -139,7 +139,7 @@ controller_balls::init_balle (zeRaquette * raket, Sint32 start, Sint32 glueC,
   Sint32 w;
   if (bricks != NULL)
     {
-      w = bricks->getBkWidth ();
+      w = bricks->get_brick_width ();
     }
   else
     {
@@ -1112,7 +1112,7 @@ controller_balls::vitusbound ()
 void
 controller_balls::check_bricks_collision ()
 {
-  Sint32 bwght = bricks->getBkWidth (); //brick's width in pixels
+  Sint32 bwght = bricks->get_brick_width (); //brick's width in pixels
   Sint32 byoff = bricks->getYOffset (); //y-offset between 2 bricks
   Sint32 indus = bricks->getBkIndus (); //first indestructible brick
 
@@ -1144,7 +1144,7 @@ controller_balls::check_bricks_collision ()
           briP2->balle_posY = y;
           x /= bwght;
           y /= byoff;
-          y *= lesBriques::NB_BRICKSH;
+          y *= controller_bricks::NB_BRICKSH;
           x += y;
           brickInfos *megaT = (tMega + x);
           x = megaT->brique_rel;
@@ -1172,7 +1172,7 @@ controller_balls::check_bricks_collision ()
                       briP2->brique_num = megaT->brique_num;
                       briP2->briqueFlag = 1;    //1 = restore background
                       save += 1;        // augmente pointeur table brique effacement
-                      save &= (lesBriques::MAXBRIKCLR - 1);
+                      save &= (controller_bricks::MAXBRIKCLR - 1);
                     }
                   else
                     {
@@ -1213,7 +1213,7 @@ controller_balls::check_bricks_collision ()
                   briP2->briqueFlag = 0;        //flag redraw new brick
                 }
               save += 1;        // augmente pointeur table brique effacement
-              save &= (lesBriques::MAXBRIKCLR - 1);
+              save &= (controller_bricks::MAXBRIKCLR - 1);
             }
           rebon += incre;       // incremente le flag rebond
           //incre = incre + incre;

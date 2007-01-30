@@ -42,7 +42,7 @@ class tableaux_Z;
 #include "../include/barreScore.h"
 #include "../include/handler_display.h"
 #include "../include/ejectBalls.h"
-#include "../include/lesBriques.h"
+#include "../include/controller_bricks.h"
 #include "../include/controller_balls.h"
 #include "../include/zeCapsules.h"
 #include "../include/ze_gadgets.h"
@@ -79,7 +79,7 @@ class tableaux_Z:public virtual runGestion
 		printmoney*			ptPrntmney;
 		briqueCote*			gereBricot;
 		head_anima*			tete_gugus;
-		lesBriques*			briquesTab;
+		controller_bricks*			briquesTab;
 		fond_ecran*			ecranfond4;
 		ejectBalls*			gereEjects;
 		controller_balls*			gereBalles;

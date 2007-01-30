@@ -4,11 +4,11 @@
  * @date 2007-01-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ship.cc,v 1.1 2007/01/27 15:12:36 gurumeditation Exp $
+ * $Id: sprite_ship.cc,v 1.2 2007/01/30 21:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -144,7 +144,7 @@ sprite_ship::gere_atome ()
 Sint32
 sprite_ship::over_brick (Sint32 pos_x, Sint32 pos_y)
 {
-  Sint32 bwght = pt_briques->getBkWidth ();     //brick's width in pixels
+  Sint32 bwght = pt_briques->get_brick_width ();     //brick's width in pixels
   Sint32 byoff = pt_briques->getYOffset ();     //y-offset between 2 bricks
   brickInfos *tMega = pt_briques->mega_table;
   Sint32 c = 0;
@@ -154,7 +154,7 @@ sprite_ship::over_brick (Sint32 pos_x, Sint32 pos_y)
       Sint32 y = pos_y + collisionT[c++];
       x /= bwght;               // /32
       y /= byoff;               // /16
-      y *= lesBriques::NB_BRICKSH;
+      y *= controller_bricks::NB_BRICKSH;
       x += y;
       brickInfos *megaT = (tMega + x);
       x = megaT->brique_rel;
@@ -176,13 +176,13 @@ sprite_ship::over_brick (Sint32 pos_x, Sint32 pos_y)
 //                      => pCaps: object "zeCapsules"
 //                      => ptGad: object "ze_gadgets
 //                      => ptGem: object "zeGemstone
-//                      => pBrik: object "lesBriques
+//                      => pBrik: object "controller_bricks
 //-----------------------------------------------------------------------------
 void
 sprite_ship::littleInit (Sint32 time0, Sint32 appar, Sint32 index,
                          Sint32 power, Sint32 pos_x, Sint32 pos_y,
                          Sint32 offst, zeCapsules * pCaps, ze_gadgets * ptGad,
-                         zeGemstone * ptGem, lesBriques * pBrik)
+                         zeGemstone * ptGem, controller_bricks * pBrik)
 {
   ptCapsules = pCaps;
   pt_gadgets = ptGad;

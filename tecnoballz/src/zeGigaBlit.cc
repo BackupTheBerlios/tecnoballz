@@ -44,7 +44,7 @@ zeGigaBlit::zeGigaBlit()
 	max_of_sprites = NOMBREGIGA;			// there are 7 different Gigablitz
   /* shadow disable */
 	sprites_have_shades = false;
-	brickObjet = (lesBriques *)NULL;
+	brickObjet = (controller_bricks *)NULL;
 	gugusObjet = (head_anima *)NULL;
 	ptRaquette = (zeRaquette *)NULL;
 	tecBumper1 = (sprite_paddle *)NULL;
@@ -72,7 +72,7 @@ zeGigaBlit::~zeGigaBlit()
 // bricks levels: perform some initializations of gigablitz
 //-------------------------------------------------------------------------------
 Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
-	lesBriques *brick)
+	controller_bricks *brick)
 {
 	gugusObjet = gugus;
 	ptRaquette = zeRak;
@@ -208,7 +208,7 @@ void zeGigaBlit::execution1()
 void zeGigaBlit::collision1()
 {
 	
-	Sint32 bwght = brickObjet->getBkWidth();	//brick's width in pixels
+	Sint32 bwght = brickObjet->get_brick_width();	//brick's width in pixels
 	Sint32 byoff = brickObjet->getYOffset();	//y-offset between 2 bricks
 	Sint32 indus = brickObjet->getBkIndus();	//first indestructible brick	
 	if(blitz_brik > 0)
@@ -217,7 +217,7 @@ void zeGigaBlit::collision1()
 		Sint32 y = blitzobjet->get_y_coord();
 		x /= bwght;		// x = x / 32 (width of a brick)
 		y /= byoff;		// y = y / 16 (space between two bricks in height)
-		y *= lesBriques::NB_BRICKSH;		// y = y * 16 (number of bricks on the same line)
+		y *= controller_bricks::NB_BRICKSH;		// y = y * 16 (number of bricks on the same line)
 		x += y;
 		brickInfos *tMega = brickObjet->mega_table;
 		Sint32 save = brickObjet->briqueSave;		// save => offset on "brique_pnt"
@@ -238,7 +238,7 @@ void zeGigaBlit::collision1()
 				briP2->brique_num = megaT->brique_num;	// brick number
 				briP2->briqueFlag = 1;				// flag restaure background
 				save += 1;							// inc. pt restaure table
-				save &= (lesBriques::MAXBRIKCLR - 1);
+				save &= (controller_bricks::MAXBRIKCLR - 1);
 			}
 			x++;
 		}

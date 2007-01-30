@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.22 2007/01/30 16:37:21 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.23 2007/01/30 21:06:04 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -37,7 +37,7 @@ tableaux_Z::tableaux_Z()
 	gereCapsul = new zeCapsules();
 	gereGadget = new ze_gadgets(6);
 	ptGemstone = new zeGemstone();
-	briquesTab = new lesBriques();
+	briquesTab = new controller_bricks();
 	tete_gugus = new head_anima();
 	les_atomes = new zeBouiBoui(gereCapsul, gereGadget, ptGemstone, briquesTab);
 	pt_magneye = new ze_magneye();
@@ -251,7 +251,7 @@ Sint32 tableaux_Z::first_init()
 	//##############################################################
 	Sint32 *cours = joueurGere->get_course();
 	Sint32 counb = joueurGere->get_cou_nb();
-	Sint32 brCnt = briquesTab->getbrikCnt();
+	Sint32 brCnt = briquesTab->get_num_of_bricks();
 	gereGadget->initialise(
 		//frequency of appearance of malus 
 		levelParam->malusCount * hardChoice,
@@ -590,12 +590,10 @@ Sint32 tableaux_Z::background(Sint32 nbkdg)
 	//###################################################################
 	// intialize the bricks level
 	//###################################################################
-	error_init(briquesTab->first_init(tecZ_barre, gereCapsul, gereGadget));
-	if(erreur_num) return erreur_num;
+	briquesTab->first_init(tecZ_barre, gereCapsul, gereGadget);
 	Sint32 lbrik = joueurGere->get_lessBk();
 	joueurGere->set_lessBk(0);
-	error_init(briquesTab->initialise(areaNumber, levelTecno, lbrik));
-	if(erreur_num) return erreur_num;
+	briquesTab->initialize(areaNumber, levelTecno, lbrik);
 	return erreur_num;
 }
 

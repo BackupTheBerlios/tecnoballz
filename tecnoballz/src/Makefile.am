@@ -18,6 +18,7 @@ SOURCES_MAIN = \
 	briqueCote.cc \
 	configfile.cc \
 	controller_balls.cc \
+	controller_bricks.cc \
 	ejectBalls.cc \
 	escapeMenu.cc \
 	fond_ecran.cc \
@@ -31,7 +32,6 @@ SOURCES_MAIN = \
 	head_anima.cc \
 	joueurData.cc \
 	lastScroll.cc \
-	lesBriques.cc \
 	level_data.cc \
 	lispreader.cc \
   list_sprites.cc \

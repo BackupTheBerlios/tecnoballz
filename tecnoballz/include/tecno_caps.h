@@ -29,7 +29,7 @@ class tecno_caps;
 #include "../include/sprite_paddle.h"
 #include "../include/barreScore.h"
 #include "../include/handler_display.h"
-#include "../include/lesBriques.h"
+#include "../include/controller_bricks.h"
 #include "../include/sprite_ball.h"
 #include "../include/sprite_projectile.h"
 //...............................................................................

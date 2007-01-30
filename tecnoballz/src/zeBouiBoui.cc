@@ -26,7 +26,7 @@
 // create the object
 //-----------------------------------------------------------------------------
 zeBouiBoui::zeBouiBoui(zeCapsules* pCaps, ze_gadgets* ptGad, zeGemstone* ptGem,
-						lesBriques* pBrik)
+						controller_bricks* pBrik)
 {
 	ptCapsules = pCaps;
 	pt_gadgets = ptGad;
@@ -84,7 +84,7 @@ void zeBouiBoui::initialise(Sint32 time0, Sint32 time1, Sint32 time2, Sint32 tim
 			ptCapsules,					//object "zeCapsules"
 			pt_gadgets,					//object "ze_gadgets"
 			ptGemstone,					//object "zeGemstone"
-			pt_briques);				//object "lesBriques
+			pt_briques);				//object "controller_bricks
 		j++;
 		j &= 3;
 		Sint32 k = offs2;
