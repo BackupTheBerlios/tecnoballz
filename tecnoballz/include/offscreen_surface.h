@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: offscreen_surface.h,v 1.2 2007/01/31 16:45:39 gurumeditation Exp $
+ * $Id: offscreen_surface.h,v 1.3 2007/01/31 21:20:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,6 +54,9 @@ public:
   Uint32 get_line_modulo (Sint32 w);
   void lock_surface ();
   void unlock_surface ();
+  void blit_surface (offscreen_surface *offscreen);
+  void blit_surface (offscreen_surface *offscreen, Uint32 xcoord, Uint32 ycoord, Uint32 width, Uint32 height);
+  void set_palette (SDL_Color *colors);
 
 private:
   void create_surface (Sint32 width, Sint32 height, Sint32 depth, Uint32 flags = SDL_ANYFORMAT, Uint32 red_mask = 0xf00, Uint32 green_mask = 0x0f0, Uint32 blue_mask = 0x00f, Uint32 alpha_mask = 0x00);

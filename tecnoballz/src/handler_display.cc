@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.10 2007/01/31 19:49:07 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.11 2007/01/31 21:20:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ targetAdj = 1.0;
 }
 
 /**
- * Release the object
+ * Release the display handler object
  */
 handler_display::~handler_display ()
 {
@@ -80,20 +80,7 @@ handler_display::~handler_display ()
       delete background_screen;
       background_screen = NULL;
     }
-/*
-  if (NULL != bufSurface)
-    {
-      SDL_FreeSurface (bufSurface);
-      bufSurface = (SDL_Surface *) NULL;;
-    }
-
-  if (NULL != tamSurface)
-    {
-      SDL_FreeSurface (tamSurface);
-      tamSurface = (SDL_Surface *) NULL;;
-    }
-*/
-  SDL_Quit ();
+ SDL_Quit ();
 }
 
 /**
@@ -114,16 +101,6 @@ handler_display::initialize ()
 
   game_screen = new offscreen_surface (bufLargeur, bufHauteur, bitspixels, offsetplus);
 
-/*
-  bufSurface = SDL_CreateRGBSurface (SDL_ANYFORMAT, bufLargeur, bufHauteur,
-                                     bitspixels, 0xf00, 0x0f0, 0x00f, 0x00);
-  if (bufSurface == NULL)
-    {
-      fprintf (stderr, "(!)handler_display::initialize() "
-               "SDL_CreateRGBSurface return %s\n", SDL_GetError ());
-      return E_SDLERROR;
-    }
-*/
   bufSurface = game_screen->get_surface ();
 
   buf_nextLn = bufSurface->pitch;
@@ -135,17 +112,6 @@ handler_display::initialize ()
 
 
   /* allocate "tampon" surface */
-  /*
-  tamSurface =
-    SDL_CreateRGBSurface (SDL_ANYFORMAT, bufLargeur, bufHauteur, bitspixels,
-                          0xf00, 0x0f0, 0x00f, 0x00);
-  if (tamSurface == NULL)
-    {
-      fprintf (stderr, "handler_display::initialize() "
-               "SDL_CreateRGBSurface return %s\n", SDL_GetError ());
-      return E_SDLERROR;
-    }
-  */
   tam_nextLn = tamSurface->pitch;
   tamAdresse = (char *) tamSurface->pixels + tam_nextLn * offsetplus;
 
@@ -234,26 +200,18 @@ handler_display::get_height ()
 void
 handler_display::lock_surfaces ()
 {
-  if (SDL_LockSurface (bufSurface))
-    {
-      std::cerr << "(!)handler_display::lock_surfaces() " <<
-        " SDL_LockSurface return " << SDL_GetError () << std::endl; 
-    }
-  if (SDL_LockSurface (tamSurface))
-    {
-      std::cerr << "(!)handler_display::lock_surfaces() " <<
-        " SDL_LockSurface return " << SDL_GetError () << std::endl; 
-    }
+  game_screen->lock_surface ();
+  background_screen->lock_surface ();
 }
 
-//------------------------------------------------------------------------------
-// unlock buffer & tampon surfaces
-//------------------------------------------------------------------------------
+/**
+ * unlock surfaces of the game offscreen and background offscreen
+ */
 void
 handler_display::unlock_surfaces ()
 {
-  SDL_UnlockSurface (bufSurface);
-  SDL_UnlockSurface (tamSurface);
+  game_screen->unlock_surface ();
+  background_screen->unlock_surface ();
 }
 
 // -----------------------------------------------------------------------------
@@ -489,146 +447,6 @@ handler_display::mise_a_zero_timer ()
   datepreced = SDL_GetTicks ();
 }
 
-//------------------------------------------------------------------------------
-// buffer: convert (x,y) to pointer into the buffer memory
-//      input   => pos_x: x coordinate
-//                      => pos_y: y coordinate
-//------------------------------------------------------------------------------
-char *
-handler_display::buffer_pos (Sint32 pos_x, Sint32 pos_y)
-{
-  return (bufAdresse + pos_y * buf_nextLn + pos_x);
-}
-
-//------------------------------------------------------------------------------
-// buffer: display into the buffer
-//------------------------------------------------------------------------------
-void
-handler_display::buffer_GFX (char *srcPT, Sint32 large, Sint32 haute)
-{
-  genericGFX (srcPT, large, haute, large, bufAdresse, bufLargeur,
-              bufHauteur, buf_nextLn);
-}
-
-//------------------------------------------------------------------------------
-// tampon: return pointer to the buffer memory 
-//------------------------------------------------------------------------------
-char *
-handler_display::tampon_adr ()
-{
-  return (tamAdresse);
-}
-
-//------------------------------------------------------------------------------
-// tampon: convert (x,y) to pointer into the buffer memory
-//      input   => pos_x: x coordinate
-//                      => pos_y: y coordinate
-//------------------------------------------------------------------------------
-char *
-handler_display::tampon_pos (Sint32 pos_x, Sint32 pos_y)
-{
-  return (tamAdresse + pos_y * tam_nextLn + pos_x);
-}
-
-//------------------------------------------------------------------------------
-// tampon: clear the entirety of the tampon memory 
-//------------------------------------------------------------------------------
-void
-handler_display::tampon_RAZ (Sint32 pixel)
-{
-  char *d = tamAdresse;
-  char p = (char) pixel;
-  Sint32 o = tam_nextLn;
-  Sint32 l = bufLargeur * bufProfond;
-  Sint32 h = bufHauteur;
-  for (Sint32 j = 0; j < h; j++, d += o)
-    {
-      for (Sint32 i = 0; i < l; i++)
-        d[i] = p;
-    }
-}
-
-//------------------------------------------------------------------------------
-// tampon: clear a zone of the tampon memory 
-//------------------------------------------------------------------------------
-void
-handler_display::tampon_RAZ (Sint32 pixel, Sint32 x_pos, Sint32 y_pos,
-                             Sint32 width, Sint32 heigh)
-{
-  char *ptMem = tampon_pos (x_pos, y_pos);
-  Sint32 a = width;
-  Sint32 b = heigh;
-  Sint32 n = tam_nextLn;
-  for (Sint32 j = 0; j < b; j++, ptMem += n)
-    {
-      for (Sint32 i = 0; i < a; i++)
-        ptMem[i] = pixel;
-    }
-}
-
-//------------------------------------------------------------------------------
-// tampon: return size of line in bytes
-//------------------------------------------------------------------------------
-Sint32
-handler_display::tamponNext ()
-{
-  return tam_nextLn;
-}
-
-//------------------------------------------------------------------------------
-// tampon: return offset in bytes
-//------------------------------------------------------------------------------
-Sint32
-handler_display::tampon_rel (Sint32 pos_x, Sint32 pos_y)
-{
-  return (pos_y * tam_nextLn + pos_x);
-}
-
-//------------------------------------------------------------------------------
-// tampon: return modulo
-//------------------------------------------------------------------------------
-Sint32
-handler_display::tampon_mod (Uint32 large)
-{
-  return (Sint32) (tam_nextLn - (large * bufProfond));
-}
-
-//------------------------------------------------------------------------------
-// tampon memory: 
-//------------------------------------------------------------------------------
-void
-handler_display::tampon_GFX (SDL_Surface * srcPT, Sint32 large, Sint32 haute)
-{
-  SDL_Rect r;
-  r.x = 0;
-  r.y = 0;
-  r.w = large;
-  r.h = haute;
-  Sint32 v = SDL_BlitSurface (srcPT, &r, tamSurface, &r);
-  if (v < 0)
-    fprintf (stderr,
-             "handler_display::tampon_GFX() BlitSurface error: %s\n",
-             SDL_GetError ());
-}
-
-//------------------------------------------------------------------------------
-// copy the "tampon" memory in the "buffer" memory
-//------------------------------------------------------------------------------
-void
-handler_display::tamponBuff ()
-{
-  char *s = (char *) tamSurface->pixels;
-  char *d = (char *) bufSurface->pixels;
-  Sint32 n = tam_nextLn;
-  Sint32 o = buf_nextLn;
-  Sint32 l = bufLargeur * bufProfond;
-  Sint32 h = bufHauteur;
-  for (Sint32 j = 0; j < h; j++, s += n, d += o)
-    {
-      for (Sint32 i = 0; i < l; i++)
-        d[i] = s[i];
-    }
-}
 
 //------------------------------------------------------------------------------
 // copy a part of the "tampon" in the "buffer"
@@ -637,6 +455,7 @@ handler_display::tamponBuff ()
 //                      => large: width
 //                      => haute: height
 //------------------------------------------------------------------------------
+/*
 void
 handler_display::tamponBuff (Sint32 pos_x, Sint32 pos_y, Sint32 large,
                              Sint32 haute)
@@ -663,6 +482,7 @@ handler_display::tamponBuff (Sint32 pos_x, Sint32 pos_y, Sint32 large,
       d = d + o;
     }
 }
+*/
 
 //------------------------------------------------------------------------------
 // buffer & tampon: convert (x,y) to offset
@@ -692,7 +512,9 @@ handler_display::enable_palette (unsigned char *palPT)
       color->b = p[k++];
       color++;
     }
-  SDL_SetPalette (bufSurface, SDL_LOGPAL | SDL_PHYSPAL, ze_palette, 0, 256);
+
+  game_screen->set_palette (ze_palette);
+  background_screen->set_palette (ze_palette);
   SDL_SetPalette (sdl_screen, SDL_LOGPAL | SDL_PHYSPAL, ze_palette, 0, 256);
 }
 
@@ -702,7 +524,8 @@ handler_display::enable_palette (unsigned char *palPT)
 void
 handler_display::enable_palette (SDL_Color * palPT)
 {
-  SDL_SetPalette (bufSurface, SDL_LOGPAL | SDL_PHYSPAL, palPT, 0, 256);
+  game_screen->set_palette (ze_palette);
+  background_screen->set_palette (ze_palette);
   SDL_SetPalette (sdl_screen, SDL_LOGPAL | SDL_PHYSPAL, palPT, 0, 256);
 }
 
@@ -792,7 +615,8 @@ handler_display::rectShadow (Sint32 pos_x, Sint32 pos_y, Sint32 width,
   Sint32 m = pos_y + heigh;
   for (Sint32 j = pos_y; j < m; j++)
     {
-      char *monPT = tampon_pos (pos_x, j);
+      //char *monPT = tampon_pos (pos_x, j);
+      char *monPT = background_screen->get_pixel_data (pos_x, j);
       for (Sint32 i = 0; i < l; i++)
         *(monPT)++ |= k;
     }

@@ -273,7 +273,7 @@ void briqueCote::sauveFond()
 	//###################################################################
 	// wall of the top
 	//###################################################################
-	Sint32 _iModulo = display->tampon_mod(iLargeurBH);
+	Sint32 _iModulo = background_screen->get_line_modulo(iLargeurBH);
 	Sint32 _iPosX = BRICOTEHRX * resolution;
 	char* _pBuffer = fond_sauve;
 	char* _pSource;
@@ -293,7 +293,7 @@ void briqueCote::sauveFond()
 	//###################################################################
 	// wall of the right
 	//###################################################################
-	_iModulo = display->tampon_mod(iLargeurBV);
+	_iModulo = background_screen->get_line_modulo(iLargeurBV);
 	Sint32 _iPosY = BRICOTEGAY * resolution;
 	for(Uint32 _iIndex = 0; _iIndex < BRICOTENUM; _iIndex++)
 	{	_pSource = background_screen->get_pixel_data(BRICOTEGAX * resolution, _iPosY);
@@ -371,7 +371,7 @@ void briqueCote::execution2()
 				posx1 = pos_duHaut[_iIndex][0];
 				posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
 				_iPosY = pos_duHaut[_iIndex][1];
-				_iTmod = display->tampon_mod(iLargeurBH);
+				_iTmod = background_screen->get_line_modulo(iLargeurBH);
 				_iBmod = game_screen->get_line_modulo(iLargeurBH);
 				widt1 = iLargeurBH;
 				widt2 = iLargeurBH;
@@ -391,7 +391,7 @@ void briqueCote::execution2()
 				posx1 = pos_gauche[_iIndex][0];
 				posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
 				_iPosY = pos_gauche[_iIndex][1];
-				_iTmod = display->tampon_mod(iLargeurBV);
+				_iTmod = background_screen->get_line_modulo(iLargeurBV);
 				_iBmod = game_screen->get_line_modulo(iLargeurBV);
 				widt1 = iLargeurBV;
 				widt2 = iLargeurBV;
@@ -407,7 +407,7 @@ void briqueCote::execution2()
 				posx1 = pos_droite[_iIndex][0];
 				posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
 				_iPosY = pos_droite[_iIndex][1];
-				_iTmod = display->tampon_mod(iLargeurBV);
+				_iTmod = background_screen->get_line_modulo(iLargeurBV);
 				_iBmod = game_screen->get_line_modulo(iLargeurBV);
 				widt1 = iLargeurBV;
 				widt2 = iLargeurBV;

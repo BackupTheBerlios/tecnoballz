@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.23 2007/01/31 16:45:39 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.24 2007/01/31 21:20:02 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -186,7 +186,7 @@ Sint32 shop_tecno::first_init()
 	gfxPT->copyTampon();
 	delete gfxPT;
 
-	display->tamponBuff();		//copy tampon memory into buffer memory  
+        background_screen->blit_surface(game_screen);
 	display->bufferCopy();		//copy buffer memory into the screen
 
 
@@ -206,16 +206,14 @@ Sint32 shop_tecno::zeMainLoop()
 {
 	Sint32 Ecode = -1; 
 	display->wait_frame();
+
+        /* copy the background offscreen to the game offscreen */
+        background_screen->blit_surface(game_screen, 290* resolution, 3 * resolution, 26 * resolution, 180 * resolution);
 	display->lock_surfaces();
 	end_return = 0;
 	sprites->clear();
 	
-	//###################################################################
-	// copy the "tampon" memory in the "buffer" memory
-	//###################################################################
-	display->tamponBuff(290* resolution, 3 * resolution, 
-		26 * resolution, 180 * resolution);
-	
+
 	if(!ptrEscMenu->is_enable())
 	{	pos_select();
 		Sint32 x = objetMouse->get_x_coord();

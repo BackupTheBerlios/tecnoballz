@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.26 2007/01/31 16:45:39 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.27 2007/01/31 21:20:02 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -295,8 +295,11 @@ Sint32 tableaux_Z::first_init()
 	error_init(ptBaDirect->initialize(theBumpers, 4));
 	if(erreur_num) return (erreur_num);
 	
-	display->tamponBuff();	// recopie le tampon dans le buffer
 	display->unlock_surfaces();
+        /* copy the background offscreen to the game offscreen */
+        background_screen->blit_surface(game_screen);
+
+
 	Sint32 k = memory->get_total_size();
 	if(is_verbose)
 		printf("tableaux_Z::first_init(): memory size allocated : %i \n",k);
@@ -518,7 +521,7 @@ Sint32 tableaux_Z::zeMainLoop()
 		if(is_verbose)
 			printf("tableaux_Z::background() : changebkgd:%i\n", indexbgrnd);
 		background(indexbgrnd);
-		display->tamponBuff();
+                background_screen->blit_surface(game_screen);
 	 }
 
 	if(keyboard->key_is_pressed(SDLK_v))

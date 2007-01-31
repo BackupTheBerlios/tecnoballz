@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.4 2007/01/31 19:49:07 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.5 2007/01/31 21:20:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -220,7 +220,7 @@ controller_bricks::initialize (Sint32 areaN, Sint32 tablo, Sint32 lbrik)
       offsDestin = game_screen->get_line_modulo (brick_width);
       adr_source = (Sint32 *) bitmap_bricks->get_pixel_data ();
       adr_desti1 = (Sint32 *) game_screen->get_pixel_data ();
-      adr_desti2 = (Sint32 *) display->tampon_adr ();
+      adr_desti2 = (Sint32 *) background_screen->get_pixel_data ();
 
       initpalett ();
     }

@@ -82,7 +82,7 @@ Sint32 zeMiniMess::intialise1()
 	//###################################################################
 	char *pfond = pt_mesfond;
 	char *ptamp = ptr_tampon;
-	Sint32 zemod = display->tamponNext();
+	Sint32 zemod = background_screen->get_row_size();
 	for(Sint32 y = 0; y < ft_hauteur; y++)
 	{	for(Sint32 x = 0; x < fonteslarg; x++)
 			pfond[x] = ptamp[x];

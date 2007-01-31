@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.h,v 1.4 2007/01/31 19:49:07 gurumeditation Exp $
+ * $Id: handler_display.h,v 1.5 2007/01/31 21:20:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,22 +112,9 @@ public:
   Sint32 get_framepee ();
   void mise_a_zero_timer ();
 
-  // buffer and tampon
-  char *buffer_pos (Sint32 pos_x, Sint32 pos_y);
-  void buffer_GFX (char *gfxPT, Sint32 large, Sint32 haute);
-
-  char *tampon_adr ();
-  char *tampon_pos (Sint32 pos_x, Sint32 pos_y);
-  void tampon_RAZ (Sint32 pixel);
-  void tampon_RAZ (Sint32 pixel, Sint32 x_pos, Sint32 y_pos, Sint32 width,
-                   Sint32 heigh);
-  Sint32 tamponNext ();
-  void tamponBuff ();
-  void tamponBuff (Sint32 pos_x, Sint32 pos_y, Sint32 large, Sint32 haute);
-  Sint32 tampon_rel (Sint32 pos_x, Sint32 pos_y);
-  Sint32 tampon_mod (Uint32 large);
-  void tampon_GFX (SDL_Surface * gfxPT, Sint32 large, Sint32 haute);
   Sint32 ecran_next (Sint32 zbase, Sint32 offsx, Sint32 offsy);
+  //void tamponBuff ();
+  //void tamponBuff (Sint32 pos_x, Sint32 pos_y, Sint32 large, Sint32 haute);
 
 
 

@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: offscreen_surface.cc,v 1.2 2007/01/31 16:45:39 gurumeditation Exp $
+ * $Id: offscreen_surface.cc,v 1.3 2007/01/31 21:20:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -201,4 +201,63 @@ offscreen_surface::unlock_surface ()
 {
   SDL_UnlockSurface (surface);
 }
+
+/**
+ * Perform a blit from the source surface to the destination surface
+ * @param offscreen pointer to a offscreen surface object
+ */
+void
+offscreen_surface::blit_surface (offscreen_surface *offscreen)
+{
+  SDL_Surface* surface_dest = offscreen->get_surface ();
+  SDL_Rect rect = {0, vertical_offset, surface->w, surface->h - vertical_offset};
+  if (SDL_BlitSurface (surface, &rect, surface_dest, &rect) < 0)
+    {
+      std::cerr << "offscreen_surface::blit_surface() " <<
+        "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+    }
+}
+
+/**
+ * Perform a blit from the source surface to the destination surface
+ * @param offscreen pointer to a offscreen surface object
+ */
+void
+offscreen_surface::blit_surface (offscreen_surface *offscreen, Uint32 xcoord, Uint32 ycoord, Uint32 width, Uint32 height)
+{
+  SDL_Surface* surface_dest = offscreen->get_surface ();
+  SDL_Rect rect = {xcoord, ycoord + vertical_offset, width, height};
+  if (SDL_BlitSurface (surface, &rect, surface_dest, &rect) < 0)
+    {
+      std::cerr << "offscreen_surface::blit_surface() " <<
+        "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+    }
+}
+
+
+
+
+/**
+* Set the colors in the palette of an 8-bit surface
+* @param colors pointer to aSDL_Color structure
+*/
+void
+offscreen_surface::set_palette (SDL_Color *colors)
+{
+  if (bytes_per_pixel > 1)
+    {
+      return;
+    }
+  if (!SDL_SetPalette (surface, SDL_LOGPAL | SDL_PHYSPAL, colors, 0, 256))
+   {
+      std::cerr << "offscreen_surface::set_palette() " <<
+        "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+   }
+}
+
+
+
+
+
+
 
