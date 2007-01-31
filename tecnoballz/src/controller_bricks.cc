@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-01-30
+ * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.1 2007/01/30 21:06:04 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.2 2007/01/31 07:09:06 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,8 +53,8 @@ controller_bricks::controller_bricks ()
   bitmap_bricks = (bitmap_data *) NULL;
   briqueSave = 0;
   brique_clr = 0;
-  less_brick = 0;
-  less_count = 10;
+  less_bricks_count = 0;
+  less_bricks_delay = 10;
   bricks_height = 112 * resolution;
   bricks_width = 63 * resolution;
   brick_width = BRICKWIDTH * resolution;
@@ -143,7 +143,7 @@ controller_bricks::initialize (Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 
   if (NULL == bitmap_bricks)
     {
-      less_brick = lbrik;
+      less_bricks_count = lbrik;
 
       /* clear restauration list */
       briqueSave = 0;
@@ -241,33 +241,37 @@ controller_bricks::get_num_of_bricks ()
 
 /**
  * Load and initialize a new level
- * @param areaN area number from 1 to 5
- * @param tablo level number from 1 to 12
+ * @param area_nu area number from 1 to 5
+ * @param level_nu level number from 1 to 12
  */
 void
-controller_bricks::load_level (Sint32 areaN, Sint32 tablo)
+controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
 {
-  //if(is_verbose)
-  printf ("controller_bricks::load_level()  areaN=%i / tablo=%i \n", areaN,
-          tablo);
+  if (is_verbose)
+    { 
+      std::cout << "controller_bricks::load_level() area_nu: " << 
+        area_nu << "level_nu: " << level_nu << std::endl; 
+    }
   // un tableau fait 17 lignes sur 10 colonnes = 170 * 2 = 340 octets  
   // a table makes 17 lines out of 10 columns 
-  num_of_bricks = 0;               //reset the number of bricks of the level 
+  /* clear he number of bricks of the level */
+  num_of_bricks = 0;
 
   /* load bricks levels (34000 bytes => 100 levels) */
-  char *tabHd = resources->load_data (handler_resources::RESBLEVELS);
-  if (tablo >= 6)
+  char *all_levels = resources->load_data (handler_resources::RESBLEVELS);
+  if (level_nu >= 6)
     {
-      tablo--;
+      level_nu--;
     }
-  char *tabPT = tabHd + (SIZEOFAREA * 2 * (areaN - 1)) +
-    (LEVEL_SIZE * 2 * (tablo - 1));
+  char *tabPT = all_levels + (SIZEOFAREA * 2 * (area_nu - 1)) +
+    (LEVEL_SIZE * 2 * (level_nu - 1));
 
-  //###################################################################
-  // select a level randomly (2 possible levels for a level)
-  //###################################################################
+  /* Select a level at random.
+   * Two different levels are possible for a level */
   if ((hasard_val & 0x001))
-    tabPT = tabPT + LEVEL_SIZE * 2 * 50;
+    {
+      tabPT = tabPT + LEVEL_SIZE * 2 * 50;
+    }
 
   //###################################################################
   // copy all bricks of the level in the structure "mega_table"
@@ -309,19 +313,15 @@ controller_bricks::load_level (Sint32 areaN, Sint32 tablo)
             }
           megaT->brique_rel = adres;
           megaT->brique_aff = adres;
-          //printf("%i ", megaT->brique_rel);
         }
-      //printf("\n");
 
     }
-  if (tabHd != NULL)
+  if (all_levels != NULL)
     {
-      delete[](char *) tabHd;
+      delete[](char *) all_levels;
     }
 
-  //###################################################################
-  // Initialize the number of total bricks to destroy 
-  //###################################################################
+  /* Initialize the number of total bricks to destroy */
   barreObjet->scoreBrick (num_of_bricks);
 }
 
@@ -364,40 +364,44 @@ controller_bricks::draw_bricks ()
               pos_x *= 8 * resolution;  // planar -> chunky
               pos_y *= brick_height;
               char *srcPT = bitmap_bricks->get_pixel_data (pos_x, pos_y);
-              dsplybrick (srcPT, megaT->adresseAff, megaT->brickcolor);
+              draw_brick (srcPT, megaT->adresseAff, megaT->brickcolor);
             }
         }
     }
 }
 
-// -----------------------------------------------------------------------------
-// display one brick
-//      input   => srcPT : pointer on the graphics of the brick
-//                      => adres : relative pointer on the graphics of the "buffer"
-//                      => colbr : colormap number (239 to 255)
-// -----------------------------------------------------------------------------
+/**
+ * Draw one brick
+ * @param pixels pointer on the graphics of the brick
+ * @param offset relative pointer on the graphics of the offscreen 
+ * @param color colormap number from 239 to 255
+ */
 void
-controller_bricks::dsplybrick (char *srcPT, Sint32 adres, Sint32 colbr)
+controller_bricks::draw_brick (char *pixels, Sint32 offset, Sint32 color)
 {
-  Sint32 line1 = offsSource;
-  Sint32 line2 = offsDestin;
-  char *desP1 = (char *) adr_desti1;    // pointer to the "buffer"
-  char *desP2 = (char *) adr_desti2;    // pointer to the "tampon"
-  desP1 = desP1 + adres;
-  desP2 = desP2 + adres;
+  Sint32 offset_src = offsSource;
+  Sint32 offset_dst = offsDestin;
+  char *screen1 = (char *) adr_desti1;    // pointer to the "buffer"
+  char *screen2 = (char *) adr_desti2;    // pointer to the "tampon"
+  screen1 += offset;
+  screen2 += offset;
   for (Sint32 j = 0; j < brick_height; j++)
     {
       for (Sint32 i = 0; i < brick_width; i++)
         {
-          char p = *(srcPT++);
-          if (p == 0)           // color 0 ?
-            p = colbr;          // yes, replace
-          *(desP1++) = p;
-          *(desP2++) = p;
+          char p = *(pixels++);
+          /* color 0 */
+          if (p == 0)
+            {
+              /* replace by the color of the bricks */
+              p = color;
+            }
+          *(screen1++) = p;
+          *(screen2++) = p;
         }
-      srcPT = srcPT + line1;
-      desP1 = desP1 + line2;
-      desP2 = desP2 + line2;
+      pixels += offset_src;
+      screen1 += offset_dst;
+      screen2 += offset_dst;
     }
 }
 
@@ -457,25 +461,27 @@ controller_bricks::sauve_fond ()
     }
 }
 
-
-// -----------------------------------------------------------------------------
-// handle "less bricks"
-// -----------------------------------------------------------------------------
+/**
+ * Decrease the counter of bricks to be destroyed
+ * It is an option bought from the shop 
+ */
 void
-controller_bricks::lessbricks ()
+controller_bricks::less_bricks ()
 {
-  if (less_brick > 0)
+  if (less_bricks_count < 1)
     {
-      if (--less_count <= 0)
-        {
-          less_count = 10;
-          less_brick--;
-          barreObjet->brickMoins (1);
-#ifndef SOUNDISOFF
-          audio->play_sound (S_TOUBRIK1);
-#endif
-        }
+      return;      
     }
+  if (--less_bricks_delay > 0)
+    {
+      return;      
+    }
+  less_bricks_delay = 10;
+  less_bricks_count--;
+  barreObjet->brickMoins (1);
+#ifndef SOUNDISOFF
+  audio->play_sound (S_TOUBRIK1);
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -602,7 +608,7 @@ controller_bricks::brickRemap ()
       {
         char *gfxad = bitmap_bricks->get_pixel_data ();
         brickInfos *megaT = briPT->adresseTab;
-        dsplybrick (gfxad + briPT->brique_num, adres, megaT->brickcolor);
+        draw_brick (gfxad + briPT->brique_num, adres, megaT->brickcolor);
         barreObjet->scoreAjout (10);
 #ifndef SOUNDISOFF
         audio->play_sound (S_TOUBRIK1);

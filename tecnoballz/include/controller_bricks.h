@@ -5,11 +5,11 @@
  * @date 2007-01-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.1 2007/01/30 21:06:03 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.2 2007/01/31 07:09:06 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,15 +103,18 @@ private:
   static const Sint32 BRKYOFFSET = 8;   //y-offset between 2 bricks 
 
 private:
-  bitmap_data *bitmap_bricks;      //set of current bricks
+  /** Bitmap of the set of current bricks */
+  bitmap_data *bitmap_bricks;
   barreScore *barreObjet;
   zeCapsules *caps_objet;
   ze_gadgets *gads_objet;
 
   /** Number of bricks in the current level */
   Sint32 num_of_bricks;
-  Sint32 less_brick;            //"less brick" option flag
-  Sint32 less_count;            //"less brick" option counter 
+  /** Less bricks counter */
+  Sint32 less_bricks_count;
+  /** Time delay for the "less bricks" option */
+  Sint32 less_bricks_delay;
   brickInfos *mega_table;       // tableau de 16*30
 
   /** Width in pixels of a set of bricks */
@@ -147,11 +150,11 @@ public:
    ~controller_bricks ();
   void first_init (barreScore * barre, zeCapsules * capsu,
                      ze_gadgets * gadge);
-  void initialize (Sint32 areaN, Sint32 tablo, Sint32 lbrik);
+  void initialize (Sint32 area_nu, Sint32 level_nu, Sint32 lbrik);
   Sint32 brickRemap ();
   Sint32 get_num_of_bricks ();
-  void lessbricks ();
-  void dsplybrick (char *srcPT, Sint32 adres, Sint32 colbr);
+  void less_bricks ();
+  void draw_brick (char *srcPT, Sint32 adres, Sint32 colbr);
   void initpalett ();
   void clr_bricks ();
 
@@ -161,7 +164,7 @@ public:
   Sint32 getYOffset ();
 
 private:
-  void load_level (Sint32 area, Sint32 tablo);
+  void load_level (Sint32 area_nu, Sint32 level_nu);
   void draw_bricks_shadows ();
   void draw_bricks ();
   void sauve_fond ();           // save background under bricks

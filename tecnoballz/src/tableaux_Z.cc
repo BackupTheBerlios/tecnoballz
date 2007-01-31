@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.23 2007/01/30 21:06:04 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.24 2007/01/31 07:09:06 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -384,7 +384,7 @@ Sint32 tableaux_Z::zeMainLoop()
 			ptGigaBlit->execution1();
 			
 			//handle the "less bricks" option
-			briquesTab->lessbricks();
+			briquesTab->less_bricks();
 			
 			theBumpers->bp_deplace();	//move bumpers
 			if(tecZ_barre->resteBrick())
