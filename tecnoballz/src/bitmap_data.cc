@@ -5,11 +5,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.9 2007/01/31 16:45:39 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.10 2007/01/31 19:49:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -226,7 +226,7 @@ bitmap_data::copyTampon (Sint32 srceX, Sint32 srceY, Sint32 destX,
   Sint32 n = width;
   Sint32 o = display->tamponNext ();
   char *s = get_pixel_data (srceX, srceY);
-  char *d = display->tampon_pos (destX, destY);
+  char *d = background_screen->get_pixel_data (destX, destY);
   Sint32 h = haute;
   for (Sint32 i = 0; i < h; i++, s += n, d += o)
     {

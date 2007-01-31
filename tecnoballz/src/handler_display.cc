@@ -2,14 +2,14 @@
  * @file handler_display.cc 
  * @briefi Handle displaying and updating with SDL 
  * @created 2002-08-17 
- * @date 2007-01-17
+ * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.9 2007/01/31 16:45:39 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.10 2007/01/31 19:49:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,19 +75,24 @@ handler_display::~handler_display ()
       delete game_screen;
       game_screen = NULL;
     }
+  if (NULL != background_screen)
+    {
+      delete background_screen;
+      background_screen = NULL;
+    }
 /*
   if (NULL != bufSurface)
     {
       SDL_FreeSurface (bufSurface);
       bufSurface = (SDL_Surface *) NULL;;
     }
-*/
 
   if (NULL != tamSurface)
     {
       SDL_FreeSurface (tamSurface);
       tamSurface = (SDL_Surface *) NULL;;
     }
+*/
   SDL_Quit ();
 }
 
@@ -125,7 +130,12 @@ handler_display::initialize ()
   bufAdresse = (char *) bufSurface->pixels + buf_nextLn * offsetplus;
   bufProfond = bufSurface->format->BytesPerPixel;
 
+  background_screen = new offscreen_surface (bufLargeur, bufHauteur, bitspixels, offsetplus);
+  tamSurface = background_screen->get_surface ();
+
+
   /* allocate "tampon" surface */
+  /*
   tamSurface =
     SDL_CreateRGBSurface (SDL_ANYFORMAT, bufLargeur, bufHauteur, bitspixels,
                           0xf00, 0x0f0, 0x00f, 0x00);
@@ -135,6 +145,7 @@ handler_display::initialize ()
                "SDL_CreateRGBSurface return %s\n", SDL_GetError ());
       return E_SDLERROR;
     }
+  */
   tam_nextLn = tamSurface->pitch;
   tamAdresse = (char *) tamSurface->pixels + tam_nextLn * offsetplus;
 
@@ -479,17 +490,6 @@ handler_display::mise_a_zero_timer ()
 }
 
 //------------------------------------------------------------------------------
-// buffer: return pointer to the buffer memory 
-//------------------------------------------------------------------------------
-/*
-char *
-handler_display::buffer_adr ()
-{
-  return bufAdresse;
-}
-*/
-
-//------------------------------------------------------------------------------
 // buffer: convert (x,y) to pointer into the buffer memory
 //      input   => pos_x: x coordinate
 //                      => pos_y: y coordinate
@@ -499,85 +499,6 @@ handler_display::buffer_pos (Sint32 pos_x, Sint32 pos_y)
 {
   return (bufAdresse + pos_y * buf_nextLn + pos_x);
 }
-
-//------------------------------------------------------------------------------
-// buffer: clear the entirety of the buffer memory 
-//------------------------------------------------------------------------------
-/*
-void
-handler_display::buffer_RAZ (Sint32 pixel)
-{
-  char *d = bufAdresse;
-  char p = (char) pixel;
-  Sint32 o = buf_nextLn;
-  Sint32 l = bufLargeur * bufProfond;
-  Sint32 h = bufHauteur;
-  for (Sint32 j = 0; j < h; j++, d += o)
-    {
-      for (Sint32 i = 0; i < l; i++)
-        d[i] = p;
-    }
-}
-*/
-
-//------------------------------------------------------------------------------
-// buffer: clear a zone of the buffer memory 
-//      input   => pixel: pixel color
-//                      => x_pos: x coordinate
-//                      => y_pos: y coordinate
-//                      => width: zone width
-//                      => heigh: zone height
-//------------------------------------------------------------------------------
-/*
-void
-handler_display::buffer_RAZ (Sint32 pixel, Sint32 x_pos, Sint32 y_pos,
-                             Sint32 width, Sint32 heigh)
-{
-  char *ptMem = buffer_pos (x_pos, y_pos);
-  Sint32 a = width;
-  Sint32 b = heigh;
-  Sint32 n = buf_nextLn;
-  for (Sint32 j = 0; j < b; j++, ptMem += n)
-    {
-      for (Sint32 i = 0; i < a; i++)
-        ptMem[i] = pixel;
-    }
-}
-*/
-
-//------------------------------------------------------------------------------
-// buffer: return size of line in bytes
-//------------------------------------------------------------------------------
-/*
-Sint32
-handler_display::bufferNext ()
-{
-  return buf_nextLn;
-}
-*/
-
-//------------------------------------------------------------------------------
-// buffer: return offset in bytes
-//------------------------------------------------------------------------------
-/*
-Sint32
-handler_display::buffer_rel (Sint32 pos_x, Sint32 pos_y)
-{
-  return (pos_y * buf_nextLn + pos_x);
-}
-*/
-
-//------------------------------------------------------------------------------
-// buffer: return modulo
-//      input   => width: width 
-//------------------------------------------------------------------------------
-/*
-Sint32
-handler_display::buffer_mod (Sint32 width)
-{
-  return (Sint32) (buf_nextLn - (width * bufProfond));
-}
-*/
 
 //------------------------------------------------------------------------------
 // buffer: display into the buffer
@@ -744,28 +665,6 @@ handler_display::tamponBuff (Sint32 pos_x, Sint32 pos_y, Sint32 large,
 }
 
 //------------------------------------------------------------------------------
-// buffer & tampon: return height of there in pixels
-//------------------------------------------------------------------------------
-/*
-Sint32
-handler_display::bufferHaut ()
-{
-  return bufHauteur;
-}
-*/
-
-//------------------------------------------------------------------------------
-// buffer & tampon: return width of there in bytes
-//------------------------------------------------------------------------------
-/*
-Sint32
-handler_display::bufferLarg ()
-{
-  return bufLargeur;
-}
-*/
-
-//------------------------------------------------------------------------------
 // buffer & tampon: convert (x,y) to offset
 //      input   => zbase: start offset
 //                      => offsx: x coordinate
@@ -928,33 +827,34 @@ handler_display::clr_shadow (Sint32 offst, Sint32 large, Sint32 haute)
     }
 }
 
-//-------------------------------------------------------------------------------
-// buffer & tampon: clear shadow box
-//      input   => _iPosX:
-//                      => _iPosY:
-//                      => _iLarg: width box in pixels
-//                      => _iHaut: height box en pixels
-//-------------------------------------------------------------------------------
+/**
+ * Clear a shadow region
+ * @param xcoord
+ * @param ycoord
+ * @param width
+ * @param height
+ */
 void
-handler_display::clr_shadow (Sint32 _iPosX, Sint32 _iPosY, Sint32 _iLarg,
-                             Sint32 _iHaut)
+handler_display::clr_shadow (Sint32 xcoord, Sint32 ycoord, Sint32 width,
+                             Sint32 height)
 {
   char zmask = 0x7F;
-  char *bffer = tampon_pos (_iPosX, _iPosY);
-  char *tmpon = buffer_pos (_iPosX, _iPosY);
-  Sint32 a = _iLarg;
-  Sint32 b = _iHaut;
-  Sint32 n = buf_nextLn - a;
-  for (Sint32 j = 0; j < b; j++, bffer += n, tmpon += n)
+  char *screen = background_screen->get_pixel_data (xcoord, ycoord);
+  char *bkgd = game_screen->get_pixel_data (xcoord, ycoord);
+
+  Sint32 h = width;
+  Sint32 v = height;
+  Sint32 n = buf_nextLn - h;
+  for (Sint32 j = 0; j < v; j++, screen += n, bkgd += n)
     {
-      for (Sint32 i = 0; i < a; i++)
+      for (Sint32 i = 0; i < h; i++)
         {
-          char pixel = *bffer;
+          char pixel = *screen;
           pixel &= zmask;
-          *(bffer++) = pixel;
-          pixel = *tmpon;
+          *(screen++) = pixel;
+          pixel = *bkgd;
           pixel &= zmask;
-          *(tmpon++) = pixel;
+          *(bkgd++) = pixel;
         }
     }
 }

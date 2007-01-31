@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.3 2007/01/31 16:45:39 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.4 2007/01/31 19:49:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -449,7 +449,7 @@ controller_bricks::sauve_fond ()
       for (Sint32 i = 0; i < NB_BRICKSH * brick_width;
            i += brick_width, megaT++)
         {
-          Sint32 *monPT = (Sint32 *) display->tampon_pos (i, j);
+          Sint32 *monPT = (Sint32 *) background_screen->get_pixel_data (i, j);
           megaT->briqueFond = bufPT;
           for (Sint32 k = 0; k < brick_height;
                k++, monPT = (Sint32 *) ((char *) monPT + offs))

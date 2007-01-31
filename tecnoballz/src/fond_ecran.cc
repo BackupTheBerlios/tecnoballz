@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-07-17
 // fonctions	: display background (bricks levels)
-// Id		: $Id: fond_ecran.cc,v 1.15 2007/01/31 16:45:39 gurumeditation Exp $
+// Id		: $Id: fond_ecran.cc,v 1.16 2007/01/31 19:49:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -150,7 +150,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 			src_X = t_pos[src_X];	//source position (0 to 4)
 			src_X *= large;
 			char *srcPT = fonds->get_pixel_data(baseX + src_X, baseY);
-			char *detPT = display->tampon_pos(det_X * large, det_Y * haute);
+			char *detPT = background_screen->get_pixel_data(det_X * large, det_Y * haute);
 			switch (iFond_type)
 			{	case 0:
 					display->buf_affx32(srcPT, detPT, oSour, nline);
@@ -173,7 +173,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	dVert = display->get_height();
 	for(Sint32 det_Y = 0; det_Y < (handler_display::SHADOWOFFY * resolution); det_Y++)
 	{	for(Sint32 det_X = 0; det_X < dHorz; det_X++)
-		{	char *detPT = display->tampon_pos(det_X, det_Y);
+		{	char *detPT = background_screen->get_pixel_data(det_X, det_Y);
 			*detPT |= handler_display::SHADOW_PIX;
 		}
 	}
@@ -183,7 +183,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	//###############################################################
 	for(Sint32 det_Y = 0; det_Y < dVert; det_Y++)
 	{	for(Sint32 det_X = (252 * resolution); det_X < (256 * resolution); det_X++)
-		{	char *detPT = display->tampon_pos(det_X, det_Y);
+		{	char *detPT = background_screen->get_pixel_data(det_X, det_Y);
 			*detPT |= handler_display::SHADOW_PIX;
 		}
 	}

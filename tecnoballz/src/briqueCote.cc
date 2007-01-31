@@ -278,7 +278,7 @@ void briqueCote::sauveFond()
 	char* _pBuffer = fond_sauve;
 	char* _pSource;
 	for(Uint32 _iIndex = 0; _iIndex < BRICOTENUM; _iIndex++)
-	{	_pSource = display->tampon_pos(_iPosX, BRICOTEHRY * resolution);
+	{	_pSource = background_screen->get_pixel_data(_iPosX, BRICOTEHRY * resolution);
 		adr_duHaut[_iIndex] = _pBuffer;
 		pos_duHaut[_iIndex][0] = _iPosX;
 		pos_duHaut[_iIndex][1] = BRICOTEHRY * resolution;
@@ -296,7 +296,7 @@ void briqueCote::sauveFond()
 	_iModulo = display->tampon_mod(iLargeurBV);
 	Sint32 _iPosY = BRICOTEGAY * resolution;
 	for(Uint32 _iIndex = 0; _iIndex < BRICOTENUM; _iIndex++)
-	{	_pSource = display->tampon_pos(BRICOTEGAX * resolution, _iPosY);
+	{	_pSource = background_screen->get_pixel_data(BRICOTEGAX * resolution, _iPosY);
 		adr_gauche[_iIndex] = _pBuffer;
 		pos_gauche[_iIndex][0] = BRICOTEGAX * resolution;
 		pos_gauche[_iIndex][1] = _iPosY;
@@ -313,7 +313,7 @@ void briqueCote::sauveFond()
 	//###################################################################
 	_iPosY = BRICOTEGAY * resolution;
 	for(Uint32 _iIndex = 0; _iIndex < BRICOTENUM; _iIndex++)
-	{	_pSource = display->tampon_pos(BRICOTEDRX * resolution, _iPosY);
+	{	_pSource = background_screen->get_pixel_data(BRICOTEDRX * resolution, _iPosY);
 		adr_droite[_iIndex] = _pBuffer;
 		pos_droite[_iIndex][0] = BRICOTEDRX * resolution;
 		pos_droite[_iIndex][1] = _iPosY;
@@ -418,7 +418,7 @@ void briqueCote::execution2()
 				break;
 		}
  
-		char *_pBuffer = display->tampon_pos(posx1, _iPosY);
+		char *_pBuffer = background_screen->get_pixel_data(posx1, _iPosY);
 		char *_pTampon = game_screen->get_pixel_data(posx1, _iPosY);
 
 		//###############################################################

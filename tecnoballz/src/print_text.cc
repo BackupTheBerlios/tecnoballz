@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-10
 // fonction	: display chars
-// id		: $Id: print_text.cc,v 1.13 2007/01/31 16:45:39 gurumeditation Exp $
+// id		: $Id: print_text.cc,v 1.14 2007/01/31 19:49:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -116,7 +116,7 @@ void print_text::bufferAff1(Sint32 x, Sint32 y, Sint32 value, Sint32 baseN)
 // -----------------------------------------------------------------------------
 void print_text::tamponAff1(Sint32 x, Sint32 y, Sint32 value, Sint32 baseN)
 {
-	char *desP1 = display->tampon_pos(x, y);
+	char *desP1 = background_screen->get_pixel_data(x, y);
 	affNombre1(desP1, value, baseN);
 }
 // -----------------------------------------------------------------------------
@@ -308,7 +308,7 @@ void print_text::aff_texte1(char *desP1, char *chain, Sint32 total)
 // -----------------------------------------------------------------------------
 void print_text::tamponAff2(Sint32 x, Sint32 y, char *chain, Sint32 total)
 {
-	char *desP1 = display->tampon_pos(x, y);
+	char *desP1 = background_screen->get_pixel_data(x, y);
 	aff_texte1(desP1, chain, total);
 }
 
