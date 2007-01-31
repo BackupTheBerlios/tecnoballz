@@ -5,11 +5,11 @@
  * @date 2007-01-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.7 2007/01/30 16:37:21 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.8 2007/01/31 15:20:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,12 +70,20 @@ targetAdj = 1.0;
  */
 handler_display::~handler_display ()
 {
-  if (bufSurface == NULL)
+  if (NULL != game_screen)
+    {
+      delete game_screen;
+      game_screen = NULL;
+    }
+/*
+  if (NULL != bufSurface)
     {
       SDL_FreeSurface (bufSurface);
       bufSurface = (SDL_Surface *) NULL;;
     }
-  if (tamSurface == NULL)
+*/
+
+  if (NULL != tamSurface)
     {
       SDL_FreeSurface (tamSurface);
       tamSurface = (SDL_Surface *) NULL;;
@@ -98,6 +106,10 @@ handler_display::initialize ()
   /* allocate "buffer" surface */
   bufLargeur = window_width;
   bufHauteur = window_height + offsetplus * 2;
+
+  game_screen = new offscreen_surface (bufLargeur, bufHauteur, bitspixels, offsetplus * 2);
+
+/*
   bufSurface = SDL_CreateRGBSurface (SDL_ANYFORMAT, bufLargeur, bufHauteur,
                                      bitspixels, 0xf00, 0x0f0, 0x00f, 0x00);
   if (bufSurface == NULL)
@@ -106,6 +118,9 @@ handler_display::initialize ()
                "SDL_CreateRGBSurface return %s\n", SDL_GetError ());
       return E_SDLERROR;
     }
+*/
+  bufSurface = game_screen->get_surface ();
+
   buf_nextLn = bufSurface->pitch;
   bufAdresse = (char *) bufSurface->pixels + buf_nextLn * offsetplus;
   bufProfond = bufSurface->format->BytesPerPixel;
@@ -202,38 +217,32 @@ handler_display::get_height ()
   return (Sint32) (sdl_screen->h);
 }
 
-//------------------------------------------------------------------------------
-// lock buffer & tampon surfaces
-//------------------------------------------------------------------------------
-Sint32
-handler_display::verouiller ()
+/**
+ * Lock surfaces of the game offscreen and the background offscreen
+ */
+void
+handler_display::lock_surfaces ()
 {
   if (SDL_LockSurface (bufSurface))
     {
-      fprintf (stderr,
-               "handler_display::verouiller(): SDL_LockSurface return %s\n",
-               SDL_GetError ());
-      return E_SDLERROR;
+      std::cerr << "(!)handler_display::lock_surfaces() " <<
+        " SDL_LockSurface return " << SDL_GetError () << std::endl; 
     }
   if (SDL_LockSurface (tamSurface))
     {
-      fprintf (stderr,
-               "handler_display::verouiller(): SDL_LockSurface return %s\n",
-               SDL_GetError ());
-      return E_SDLERROR;
+      std::cerr << "(!)handler_display::lock_surfaces() " <<
+        " SDL_LockSurface return " << SDL_GetError () << std::endl; 
     }
-  return E_NO_ERROR;
 }
 
 //------------------------------------------------------------------------------
 // unlock buffer & tampon surfaces
 //------------------------------------------------------------------------------
-Sint32
-handler_display::deverouill ()
+void
+handler_display::unlock_surfaces ()
 {
   SDL_UnlockSurface (bufSurface);
   SDL_UnlockSurface (tamSurface);
-  return E_NO_ERROR;
 }
 
 // -----------------------------------------------------------------------------

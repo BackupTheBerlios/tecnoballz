@@ -4,7 +4,7 @@
 // file		: "mentatCode.cc"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// id		: $Id: mentatCode.cc,v 1.20 2007/01/30 16:37:21 gurumeditation Exp $
+// id		: $Id: mentatCode.cc,v 1.21 2007/01/31 15:20:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -79,6 +79,8 @@ bool				mentatCode::bob_ground = false;
 char				mentatCode::zeAreaCode[11] =
 					"          ";
 
+offscreen_surface* mentatCode::game_screen = NULL;
+offscreen_surface* mentatCode::background_screen = NULL;
 //------------------------------------------------------------------------------
 // once initialization
 //------------------------------------------------------------------------------

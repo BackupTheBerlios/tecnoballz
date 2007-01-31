@@ -4,9 +4,9 @@
 // file		: "mentatCode.h"
 // created	: 2002-08-18
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.22 2007/01/29 12:30:26 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.23 2007/01/31 15:20:07 gurumeditation Exp $
 // updates	: 2006-10-02
-// ID		: $Id: mentatCode.h,v 1.22 2007/01/29 12:30:26 gurumeditation Exp $
+// ID		: $Id: mentatCode.h,v 1.23 2007/01/31 15:20:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -50,7 +50,7 @@
 //...............................................................................
 #ifndef __MENTATCODE__
 #define __MENTATCODE__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2005-08-26)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-01-31)"
 #define TU_TRICHES		//devel only
 #define BYTES_COPY		//force bytes copy (SPARC unaligned memory access)
 #ifndef SCOREFILE
@@ -79,6 +79,7 @@ class gard_tecno;
 class menu_tecno;
 class scrolledit;
 class bitmap_data;
+class offscreen_surface;
 //..............................................................................
 const Sint32 E_NO_ERROR = 0;
 const Sint32 E_GENRIQUE = -1;	// erreur generique
@@ -164,6 +165,9 @@ class mentatCode
     /** A bitmap containing the current images of sprites */
 		static bitmap_data*	sprites_bitmap;
 		static char		zeAreaCode[11];
+
+    static offscreen_surface* game_screen;
+    static offscreen_surface* background_screen;
 
 	public:
 		static Sint32		first_init(configfile* pConf);

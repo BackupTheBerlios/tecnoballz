@@ -2,14 +2,14 @@
  * @file handler_display.cc 
  * @briefi Handle displaying and updating with SDL 
  * @created 2002-08-17 
- * @date 2007-01-17
+ * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.h,v 1.2 2007/01/24 17:10:41 gurumeditation Exp $
+ * $Id: handler_display.h,v 1.3 2007/01/31 15:20:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@
 #ifndef __HANDLER_DISPLAY__
 #define __HANDLER_DISPLAY__
 #include "../include/mentatCode.h"
+#include "../include/offscreen_surface.h"
+
 class handler_display:public virtual mentatCode
 {
 	public:
@@ -97,8 +99,8 @@ class handler_display:public virtual mentatCode
 			Sint32			set_video_mode();
 			Sint32			get_width();
 			Sint32			get_height();
-			Sint32			verouiller();
-			Sint32			deverouill();
+			void			lock_surfaces();
+			void			unlock_surfaces();
 			Sint32			SDL_informations();
 			Sint32			synchro_CalculDifference();
 			Sint32			synchro_processusPause(Sint32 _iTemps);
@@ -119,7 +121,8 @@ class handler_display:public virtual mentatCode
 			Sint32			buffer_rel(Sint32 pos_x, Sint32 pos_y);
 			Sint32			buffer_mod(Sint32 large);
 			void			buffer_GFX(char *gfxPT, Sint32 large, Sint32 haute);
-			char*			tampon_adr();
+			
+      char*			tampon_adr();
 			char*			tampon_pos(Sint32 pos_x, Sint32 pos_y);
 			void			tampon_RAZ(Sint32 pixel);
 			void			tampon_RAZ(Sint32 pixel, Sint32 x_pos, Sint32 y_pos, Sint32 width, Sint32 heigh);

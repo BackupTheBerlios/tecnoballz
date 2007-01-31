@@ -120,7 +120,7 @@ Sint32 scrolledit::first_init()
 Sint32 scrolledit::zeMainLoop()
 {
 	display->wait_frame();
-	display->verouiller();
+	display->lock_surfaces();
 
 	pt_select1->boxOffsetY = defilement->returnPosy();
 	pt_select2->boxOffsetY = titlesPosy;
@@ -141,7 +141,7 @@ Sint32 scrolledit::zeMainLoop()
 	//###################################################################
 	// copy whole buffer surface into screen surface
 	//###################################################################
-	display->deverouill();
+	display->unlock_surfaces();
 	display->bufferCTab();
 
 	//###################################################################

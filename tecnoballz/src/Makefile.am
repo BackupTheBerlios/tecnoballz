@@ -39,6 +39,7 @@ SOURCES_MAIN = \
 	mentatCode.cc \
 	menu_tecno.cc \
 	mousePoint.cc \
+	offscreen_surface.cc \
 	print_menu.cc \
 	printmoney.cc \
 	print_text.cc \

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.21 2007/01/29 16:25:22 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.22 2007/01/31 15:20:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -206,7 +206,7 @@ Sint32 shop_tecno::zeMainLoop()
 {
 	Sint32 Ecode = -1; 
 	display->wait_frame();
-	display->verouiller();
+	display->lock_surfaces();
 	end_return = 0;
 	sprites->clear();
 	
@@ -280,7 +280,7 @@ Sint32 shop_tecno::zeMainLoop()
 	//###################################################################
 	// copy buffer surface to screen surface
 	//###################################################################
-	display->deverouill();
+	display->unlock_surfaces();
 	display->bufferCTab();
 
 	//###################################################################

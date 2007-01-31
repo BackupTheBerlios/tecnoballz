@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.18 2007/01/29 16:25:22 gurumeditation Exp $
+// id		: $Id: menu_tecno.cc,v 1.19 2007/01/31 15:20:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -100,7 +100,7 @@ Sint32 menu_tecno::zeMainLoop()
 {
 
 	display->wait_frame();
-	display->verouiller();
+	display->lock_surfaces();
 	offset_inc();
 	moveZeLogo();			//move the TecnoballZ logo
 	BOB_defile->move_chars();	//move the characters (scroll-text)
@@ -123,7 +123,7 @@ Sint32 menu_tecno::zeMainLoop()
 	menu_texte->draw_copy_from_bitmap();
 	if(keyboard->command_is_pressed(handler_keyboard::TOEXITFLAG))
 		end_return = -1;
-	display->deverouill();
+	display->unlock_surfaces();
 	
 	//###################################################################
 	// copy whole buffer surface into screen surface

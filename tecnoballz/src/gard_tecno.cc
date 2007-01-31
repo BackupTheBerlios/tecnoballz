@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.22 2007/01/30 16:37:21 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.23 2007/01/31 15:20:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -163,7 +163,7 @@ Sint32 gard_tecno::first_init()
 	error_init(ptGameOver->first_init(32 * resolution));
 	if(erreur_num) return (erreur_num);
 	init_level();
-	display->verouiller();
+	display->lock_surfaces();
 	
   	//###################################################################
   	// initialize background vertical scrolling
@@ -217,7 +217,7 @@ Sint32 gard_tecno::first_init()
 	error_init(ptBaDirect->initialize(ptRaquette, 1));
 	if(erreur_num) return (erreur_num);
 
-	display->deverouill();
+	display->unlock_surfaces();
 	display->bufferCopy();	//copy "buffer memory" to "screen memory"
 	keyboard->clear_command_keys();
 	keyboard->set_grab_input (true);
@@ -263,7 +263,7 @@ Sint32 gard_tecno::zeMainLoop()
 		}
 		isgameover++;
 		display->wait_frame();
-		display->verouiller();
+		display->lock_surfaces();
 
 		if (scrollTemp > 0)
 		{	scrollTemp--;
@@ -281,7 +281,7 @@ Sint32 gard_tecno::zeMainLoop()
 		ptPrntmney->execution2(joueurGere->creditFric, joueurGere->superLifes);
 		ptMoveText->goMoveText();
 		sprites->draw();
-		display->deverouill();
+		display->unlock_surfaces();
 		display->bufferCTab();
 		if(keyboard->is_left_button() && isgameover > 150)
 		{	joueurGere = joueurData::nextplayer(
@@ -296,7 +296,7 @@ Sint32 gard_tecno::zeMainLoop()
 		// game running !
 		//######################################################
 		display->wait_frame();
-		display->verouiller();
+		display->lock_surfaces();
 		if(!keyboard->command_is_pressed(handler_keyboard::COMMAND_KEY_PAUSE))
 		{	run_scroll();
 			defilement->scrolling1(scrolSpeed);
@@ -326,7 +326,7 @@ Sint32 gard_tecno::zeMainLoop()
 		//###################################################################
 		sprites->draw();
 		Ecode = ptrEscMenu->execution1();
-		display->deverouill();
+		display->unlock_surfaces();
 		display->bufferCTab();	//copy buffer's memory in the screen
 	}
 	

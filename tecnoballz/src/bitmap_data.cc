@@ -5,11 +5,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.7 2007/01/30 16:37:20 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.8 2007/01/31 15:20:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,7 +112,7 @@ Sint32 bitmap_data::get_height ()
 /**
  * Return bitmap memory address from the corresponding coordinates
  * @param xcoord x coordinate in the bitmap
- * @param xcoord y coordinate in the bitmap
+ * @param ycoord y coordinate in the bitmap
  * @return a pointer to the pixel data
  */
 char *

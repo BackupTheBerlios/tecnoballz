@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.24 2007/01/31 07:09:06 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.25 2007/01/31 15:20:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -186,7 +186,7 @@ Sint32 tableaux_Z::first_init()
 	error_init(ptrEscMenu->first_init(sprites_bitmap, 0, 256 * resolution));
 	if(erreur_num) return erreur_num; 
 	resources->release_sprites_bitmap();
-	display->verouiller();
+	display->lock_surfaces();
 	
 	//###################################################################
 	// initialize "Game Over"
@@ -296,7 +296,7 @@ Sint32 tableaux_Z::first_init()
 	if(erreur_num) return (erreur_num);
 	
 	display->tamponBuff();	// recopie le tampon dans le buffer
-	display->deverouill();
+	display->unlock_surfaces();
 	Sint32 k = memory->get_total_size();
 	if(is_verbose)
 		printf("tableaux_Z::first_init(): memory size allocated : %i \n",k);
@@ -342,7 +342,7 @@ Sint32 tableaux_Z::zeMainLoop()
 		}
 		ptMiniMess->execution1();
 		display->wait_frame();
-		display->verouiller();
+		display->lock_surfaces();
 		tete_gugus->execution1();
 		ptGigaBlit->execution1();
 		sprites->clear();
@@ -361,7 +361,7 @@ Sint32 tableaux_Z::zeMainLoop()
 		tecZ_barre->scoreEcran();
 		tecZ_barre->barreTemoin();
 		ptPrntmney->execution1(joueurGere->creditFric);
-		display->deverouill();
+		display->unlock_surfaces();
 		display->bufferCTab();
 		if(keyboard->is_left_button() && isgameover > 60)
 			joueurGere = joueurData::nextplayer(joueurGere, &end_return, 1);
@@ -372,7 +372,7 @@ Sint32 tableaux_Z::zeMainLoop()
 	//###################################################################	
 	else
 	{	display->wait_frame();
-		display->verouiller();
+		display->lock_surfaces();
 		sprites->clear();
 		briquesTab->brickRemap();	//restore bricks
 		gereBricot->execution1();	//restore bricks on side
@@ -414,7 +414,7 @@ Sint32 tableaux_Z::zeMainLoop()
 		sprites->draw();
 		tecZ_barre->scoreEcran();
 		Ecode = ptrEscMenu->execution1();
-		display->deverouill();
+		display->unlock_surfaces();
 		display->bufferCTab();
 
 		//###################################################################
