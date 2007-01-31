@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-07-17
 // fonctions	: display background (bricks levels)
-// Id		: $Id: fond_ecran.cc,v 1.14 2007/01/30 16:37:20 gurumeditation Exp $
+// Id		: $Id: fond_ecran.cc,v 1.15 2007/01/31 16:45:39 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -98,7 +98,7 @@ Sint32 fond_ecran::instalFond(Sint32 nbkdg)
 	}
 	if(erreur_num) return erreur_num;
 
-	Sint32 dHorz = (display->bufferLarg() - 64 * resolution) / large - 1;
+	Sint32 dHorz = (game_screen->get_width() - 64 * resolution) / large - 1;
 	Sint32 oSour = fonds->get_row_size();
 	Sint32 dVert = (240 * resolution) / haute - 1;
 	Sint32 mVert = (240 * resolution) % haute - 1;

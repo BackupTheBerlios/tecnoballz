@@ -372,7 +372,7 @@ void briqueCote::execution2()
 				posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
 				_iPosY = pos_duHaut[_iIndex][1];
 				_iTmod = display->tampon_mod(iLargeurBH);
-				_iBmod = display->buffer_mod(iLargeurBH);
+				_iBmod = game_screen->get_line_modulo(iLargeurBH);
 				widt1 = iLargeurBH;
 				widt2 = iLargeurBH;
 				heig1 = iHauteurBH;
@@ -392,7 +392,7 @@ void briqueCote::execution2()
 				posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
 				_iPosY = pos_gauche[_iIndex][1];
 				_iTmod = display->tampon_mod(iLargeurBV);
-				_iBmod = display->buffer_mod(iLargeurBV);
+				_iBmod = game_screen->get_line_modulo(iLargeurBV);
 				widt1 = iLargeurBV;
 				widt2 = iLargeurBV;
 				heig1 = iHauteurBV;
@@ -408,7 +408,7 @@ void briqueCote::execution2()
 				posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
 				_iPosY = pos_droite[_iIndex][1];
 				_iTmod = display->tampon_mod(iLargeurBV);
-				_iBmod = display->buffer_mod(iLargeurBV);
+				_iBmod = game_screen->get_line_modulo(iLargeurBV);
 				widt1 = iLargeurBV;
 				widt2 = iLargeurBV;
 				heig1 = iHauteurBV;
@@ -419,7 +419,7 @@ void briqueCote::execution2()
 		}
  
 		char *_pBuffer = display->tampon_pos(posx1, _iPosY);
-		char *_pTampon = display->buffer_pos(posx1, _iPosY);
+		char *_pTampon = game_screen->get_pixel_data(posx1, _iPosY);
 
 		//###############################################################
 		// clear brick

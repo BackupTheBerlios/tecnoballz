@@ -5,11 +5,11 @@
  * @date 2007-01-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.8 2007/01/31 15:20:07 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.9 2007/01/31 16:45:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -107,7 +107,7 @@ handler_display::initialize ()
   bufLargeur = window_width;
   bufHauteur = window_height + offsetplus * 2;
 
-  game_screen = new offscreen_surface (bufLargeur, bufHauteur, bitspixels, offsetplus * 2);
+  game_screen = new offscreen_surface (bufLargeur, bufHauteur, bitspixels, offsetplus);
 
 /*
   bufSurface = SDL_CreateRGBSurface (SDL_ANYFORMAT, bufLargeur, bufHauteur,
@@ -481,11 +481,13 @@ handler_display::mise_a_zero_timer ()
 //------------------------------------------------------------------------------
 // buffer: return pointer to the buffer memory 
 //------------------------------------------------------------------------------
+/*
 char *
 handler_display::buffer_adr ()
 {
   return bufAdresse;
 }
+*/
 
 //------------------------------------------------------------------------------
 // buffer: convert (x,y) to pointer into the buffer memory
@@ -501,6 +503,7 @@ handler_display::buffer_pos (Sint32 pos_x, Sint32 pos_y)
 //------------------------------------------------------------------------------
 // buffer: clear the entirety of the buffer memory 
 //------------------------------------------------------------------------------
+/*
 void
 handler_display::buffer_RAZ (Sint32 pixel)
 {
@@ -515,6 +518,7 @@ handler_display::buffer_RAZ (Sint32 pixel)
         d[i] = p;
     }
 }
+*/
 
 //------------------------------------------------------------------------------
 // buffer: clear a zone of the buffer memory 
@@ -524,6 +528,7 @@ handler_display::buffer_RAZ (Sint32 pixel)
 //                      => width: zone width
 //                      => heigh: zone height
 //------------------------------------------------------------------------------
+/*
 void
 handler_display::buffer_RAZ (Sint32 pixel, Sint32 x_pos, Sint32 y_pos,
                              Sint32 width, Sint32 heigh)
@@ -538,34 +543,41 @@ handler_display::buffer_RAZ (Sint32 pixel, Sint32 x_pos, Sint32 y_pos,
         ptMem[i] = pixel;
     }
 }
+*/
 
 //------------------------------------------------------------------------------
 // buffer: return size of line in bytes
 //------------------------------------------------------------------------------
+/*
 Sint32
 handler_display::bufferNext ()
 {
   return buf_nextLn;
 }
+*/
 
 //------------------------------------------------------------------------------
 // buffer: return offset in bytes
 //------------------------------------------------------------------------------
+/*
 Sint32
 handler_display::buffer_rel (Sint32 pos_x, Sint32 pos_y)
 {
   return (pos_y * buf_nextLn + pos_x);
 }
+*/
 
 //------------------------------------------------------------------------------
 // buffer: return modulo
 //      input   => width: width 
 //------------------------------------------------------------------------------
+/*
 Sint32
 handler_display::buffer_mod (Sint32 width)
 {
   return (Sint32) (buf_nextLn - (width * bufProfond));
 }
+*/
 
 //------------------------------------------------------------------------------
 // buffer: display into the buffer
@@ -734,20 +746,24 @@ handler_display::tamponBuff (Sint32 pos_x, Sint32 pos_y, Sint32 large,
 //------------------------------------------------------------------------------
 // buffer & tampon: return height of there in pixels
 //------------------------------------------------------------------------------
+/*
 Sint32
 handler_display::bufferHaut ()
 {
   return bufHauteur;
 }
+*/
 
 //------------------------------------------------------------------------------
 // buffer & tampon: return width of there in bytes
 //------------------------------------------------------------------------------
+/*
 Sint32
 handler_display::bufferLarg ()
 {
   return bufLargeur;
 }
+*/
 
 //------------------------------------------------------------------------------
 // buffer & tampon: convert (x,y) to offset

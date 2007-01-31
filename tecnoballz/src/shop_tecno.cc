@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.22 2007/01/31 15:20:07 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.23 2007/01/31 16:45:39 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -661,7 +661,7 @@ void shop_tecno::affichtext()
 	Sint32 x_pos = 60 * resolution;
 	Sint32 y_pos = 180 * resolution;
 	Sint32 yspac = charH + resolution;
-	display->buffer_RAZ(0, x_pos, y_pos, 22 * 8 * resolution, 3 * yspac);
+  game_screen->clear (0, x_pos, y_pos, 22 * 8 * resolution, 3 * yspac);
 	mega_print->bufferAff2(x_pos, y_pos, shop_line1, 22);
 	mega_print->bufferAff2(x_pos, y_pos + yspac, shop_line2, 22);
 	mega_print->bufferAff2(x_pos, y_pos + yspac * 2 , shop_line3, 22);
@@ -844,8 +844,8 @@ void shop_tecno::aff_select()
 
 		Sint32 tmpco = 0;
 		Sint32 color = box_colour;
-		char* pBuff = display->buffer_pos(x, y);
-		Sint32 nextl = display->bufferNext();
+		char* pBuff = game_screen->get_pixel_data(x, y);
+		Sint32 nextl = game_screen->get_row_size();
 		for(Sint32 v = 0; v < h; v++)
 		{	for(Sint32 h = 0; h < l; h++)
 			{	unsigned char pixel = cyclingtab[color];

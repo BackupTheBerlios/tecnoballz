@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.2 2007/01/31 07:09:06 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.3 2007/01/31 16:45:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -170,7 +170,7 @@ controller_bricks::initialize (Sint32 areaN, Sint32 tablo, Sint32 lbrik)
             {
               megaT->brique_rel = 0;
               megaT->brique_aff = 0;
-              megaT->adresseAff = display->buffer_rel (i, j);
+              megaT->adresseAff = game_screen->get_offset (i, j);
               megaT->briquePosX = 0;
               megaT->briquePosY = 0;
               megaT->brique_num = c++;
@@ -217,9 +217,9 @@ controller_bricks::initialize (Sint32 areaN, Sint32 tablo, Sint32 lbrik)
 
       /* read somes values for the graphic routine */
       offsSource = bitmap_bricks->get_line_modulo (brick_width);
-      offsDestin = display->buffer_mod (brick_width);
+      offsDestin = game_screen->get_line_modulo (brick_width);
       adr_source = (Sint32 *) bitmap_bricks->get_pixel_data ();
-      adr_desti1 = (Sint32 *) display->buffer_adr ();
+      adr_desti1 = (Sint32 *) game_screen->get_pixel_data ();
       adr_desti2 = (Sint32 *) display->tampon_adr ();
 
       initpalett ();
@@ -443,7 +443,7 @@ controller_bricks::sauve_fond ()
 {
   Sint32 *bufPT = (Sint32 *) brikTampon;
   brickInfos *megaT = mega_table;
-  Sint32 offs = display->bufferNext () - brick_width;
+  Sint32 offs = game_screen->get_row_size () - brick_width;
   for (Sint32 j = 0; j < NB_BRICKSV * brkyoffset; j += brkyoffset)
     {
       for (Sint32 i = 0; i < NB_BRICKSH * brick_width;

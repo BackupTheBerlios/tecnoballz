@@ -57,9 +57,9 @@ Sint32 head_anima::initialise()
 	headbitmap = gfxPT;
 	gfxPT->load(handler_resources::RESHEADANI);
 	off_source = gfxPT->get_row_size();
-	off_destin = display->bufferLarg();
+	off_destin = game_screen->get_width();
 	adr_source = gfxPT->get_pixel_data();
-	adr_destin = display->buffer_pos(272 * resolution, 106 * resolution);
+	adr_destin = game_screen->get_pixel_data(272 * resolution, 106 * resolution);
 	la_hauteur = gfxPT->get_height();
 	return (erreur_num);
 }

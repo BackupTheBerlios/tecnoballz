@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: offscreen_surface.h,v 1.1 2007/01/31 15:20:07 gurumeditation Exp $
+ * $Id: offscreen_surface.h,v 1.2 2007/01/31 16:45:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,9 @@ public:
   char* get_pixel_data ();
   char* get_pixel_data (Uint32 coord_x, Uint32 coord_x);
   Uint32 get_row_size ();
-  void clear (Uint32 color);
+  Uint32 get_offset (Uint32 xcoord, Uint32 ycoord);
+  void clear (Uint32 color = 0);
+  void clear (Uint32 color, Uint32 xcoord, Uint32 ycoord, Uint32 width, Uint32 height);
   Uint32 get_width ();
   Uint32 get_height ();
   Uint32 get_line_modulo (Sint32 w);

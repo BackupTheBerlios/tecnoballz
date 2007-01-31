@@ -55,8 +55,8 @@ void mousePoint::create_BOB(bitmap_data * image)
           }
 	create_sprite(b, image, 0);
 	sprites->add(this);
-	Sint32 x = display->bufferLarg() / 2;
-	Sint32 y = display->bufferHaut() / 2;
+	Sint32 x = game_screen->get_width() / 2;
+	Sint32 y = game_screen->get_height() / 2;
 
 	set_coordinates(x, y);
 	enable();

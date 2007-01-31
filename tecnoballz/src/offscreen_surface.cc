@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: offscreen_surface.cc,v 1.1 2007/01/31 15:20:07 gurumeditation Exp $
+ * $Id: offscreen_surface.cc,v 1.2 2007/01/31 16:45:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,9 +80,8 @@ offscreen_surface::create_surface (Sint32 width, Sint32 height, Sint32 depth, Ui
         "SDL_CreateRGBSurface return  " << SDL_GetError ();
       throw std::runtime_error ("SDL_CreateRGBSurface() failed!");
     }
-  pixel_data = (char *) surface->pixels + vertical_offset * surface->pitch; 
+  pixel_data = (char *) surface->pixels + surface->pitch * vertical_offset; 
   bytes_per_pixel = surface->format->BytesPerPixel;
-
 }
 
 /** 
@@ -97,14 +96,14 @@ offscreen_surface::get_pixel_data ()
 
 /**
  * Return offscreen memory address from the corresponding coordinates
- * @param xcoord x coordinate in the bitmap
- * @param ycoord y coordinate in the bitmap
+ * @param xcoord x coordinate in the offscreen
+ * @param ycoord y coordinate in the offscreen 
  * @return a pointer to the pixel data
  */
 char*
 offscreen_surface::get_pixel_data (Uint32 xcoord, Uint32 ycoord)
 {
-  return (pixel_data + ycoord * surface->pitch + xcoord);
+  return pixel_data + ycoord * surface->pitch + xcoord * bytes_per_pixel;
 }
 
 /**
@@ -118,12 +117,35 @@ offscreen_surface::get_row_size ()
 }
 
 /**
+ * Return offscreen memory offset from the corresponding coordinate
+ * @param xcoord x coordinate in the offscreen
+ * @param ycoord y coordinate in the offscreen 
+ * @return offset to the pixel data
+ */
+Uint32
+offscreen_surface::get_offset (Uint32 xcoord, Uint32 ycoord)
+{
+  return ycoord * surface->pitch + xcoord * bytes_per_pixel;
+}
+
+/**
  * Clear offscreen
  */
 void
 offscreen_surface::clear (Uint32 color)
 {
   SDL_Rect rect = {0, vertical_offset, surface->w, surface->h - vertical_offset};
+  SDL_FillRect (surface, &rect, color);
+}
+
+
+/**
+ * Clear offscreen
+ */
+void
+offscreen_surface::clear (Uint32 color, Uint32 xcoord, Uint32 ycoord, Uint32 width, Uint32 height)
+{
+  SDL_Rect rect = {xcoord, vertical_offset + ycoord, width, height};
   SDL_FillRect (surface, &rect, color);
 }
 

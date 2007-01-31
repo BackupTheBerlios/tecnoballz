@@ -473,7 +473,7 @@ void scrolledit::drawingBox()
 		Sint32 color = box_colour;
 
 		
-		//char *ptBuf = display->buffer_pos(box_pos_x1, box_pos_y1);
+		//char *ptBuf = game_screen->get_pixel_data(box_pos_x1, box_pos_y1);
 		
 		Sint32 width = x2 - x1;
 		Sint32 heigh = y2 - y1;
@@ -485,7 +485,7 @@ void scrolledit::drawingBox()
 		// top
 		if(y1 >= 0 && y1 < screen_height)
 		{		
-		pBuff = display->buffer_pos(x1, y1);
+		pBuff = game_screen->get_pixel_data(x1, y1);
 		tmpco = 0; 
 		for(Sint32 i = 0; i < width; i++)
 		{	unsigned char pixel = cyclingtab[color];
@@ -498,8 +498,8 @@ void scrolledit::drawingBox()
 		}
 		
 		// right
-		Sint32 nextl = display->bufferNext();
-		pBuff = display->buffer_pos(x2 - 1,  y1 + 1);
+		Sint32 nextl = game_screen->get_row_size();
+		pBuff = game_screen->get_pixel_data(x2 - 1,  y1 + 1);
 		for(Sint32 i = 1; i < heigh; i++)
 		{	unsigned char pixel = cyclingtab[color];
 			if(y1 + i >= 0 && y1 + i < screen_height)
@@ -514,7 +514,7 @@ void scrolledit::drawingBox()
 		// bottom
 		if(y2 >= 0 && y2 < screen_height)
 		{
-		pBuff = display->buffer_pos(x1, y2);
+		pBuff = game_screen->get_pixel_data(x1, y2);
 		for(Sint32 i = width - 1; i >= 0; i--)
 		{	unsigned char pixel = cyclingtab[color];
 			pBuff[i] = pixel;
@@ -526,7 +526,7 @@ void scrolledit::drawingBox()
 		}
 		
 		// left
-		pBuff = display->buffer_pos(x1, y2 - 1);
+		pBuff = game_screen->get_pixel_data(x1, y2 - 1);
 		for(Sint32 i = 1; i < heigh; i++)
 		{	unsigned char pixel = cyclingtab[color];
 			if(y2 - i >= 0 && y2 - i < screen_height)

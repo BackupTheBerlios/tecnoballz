@@ -59,9 +59,9 @@ Sint32 zeMiniMess::intialise1()
 	{	minifontes = new bitmap_data();
 		minifontes->load(handler_resources::RESFONTMES);
 
-		off_desti1 = display->bufferNext();	// modulo destination
+		off_desti1 = game_screen->get_row_size();	// modulo destination
 		off_source = minifontes->get_row_size();	// modulo source
-		ptr_buffer = display->buffer_pos(MESSAGEPOSX * resolution,
+		ptr_buffer = game_screen->get_pixel_data(MESSAGEPOSX * resolution,
 												MESSAGEPOSY * resolution);
 		ptr_tampon = display->tampon_pos(MESSAGEPOSX * resolution,
 												MESSAGEPOSY * resolution);
@@ -186,7 +186,7 @@ void zeMiniMess::clear_mess()
 {
 	Sint32 pos_x = MESSAGEPOSX * resolution;
 	Sint32 pos_y = (MESSAGEPOSY * resolution) + mess_pause;
-	char *pbuff = display->buffer_pos(pos_x, pos_y);
+	char *pbuff = game_screen->get_pixel_data(pos_x, pos_y);
 	char *ptamp = display->tampon_pos(pos_x, pos_y);
 	char *pfond = pt_mesfond + (mess_pause * fonteslarg);
 	for(Sint32 x = 0; x < fonteslarg; x++)

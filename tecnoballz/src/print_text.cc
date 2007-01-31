@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-10
 // fonction	: display chars
-// id		: $Id: print_text.cc,v 1.12 2007/01/29 12:30:26 gurumeditation Exp $
+// id		: $Id: print_text.cc,v 1.13 2007/01/31 16:45:39 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -89,7 +89,7 @@ Sint32 print_text::init_print(Sint32 ident)
 	GFX_fontes->load(ident);
 	fontes_adr = GFX_fontes->get_pixel_data(216 * resolution, 0);	//characters '0' to '9'
 	caract_adr = GFX_fontes->get_pixel_data(0, 0);					//characters 'A' to 'Z'
-	off_desti1 = display->bufferNext();							//modulo destination
+	off_desti1 = game_screen->get_row_size();							//modulo destination
 	off_source = GFX_fontes->get_row_size();						//modulo source
 	charHeight = GFX_fontes->get_height(); 
 	return erreur_num;
@@ -104,7 +104,7 @@ Sint32 print_text::init_print(Sint32 ident)
 // -----------------------------------------------------------------------------
 void print_text::bufferAff1(Sint32 x, Sint32 y, Sint32 value, Sint32 baseN)
 {
-	char *desP1 = display->buffer_pos(x, y);
+	char *desP1 = game_screen->get_pixel_data(x, y);
 	affNombre1(desP1, value, baseN);
 }
 // -----------------------------------------------------------------------------
@@ -321,7 +321,7 @@ void print_text::tamponAff2(Sint32 x, Sint32 y, char *chain, Sint32 total)
 //------------------------------------------------------------------------------
 void print_text::bufferAff2(Sint32 x, Sint32 y, char *chain, Sint32 total)
 {
-	char *desP1 = display->buffer_pos(x, y);
+	char *desP1 = game_screen->get_pixel_data(x, y);
 	aff_texte1(desP1, chain, total);
 }
 
@@ -384,7 +384,7 @@ sprite_object*  print_text::string2bob(const char* ptStr)
 	ptBob->sprite_height = pBmap->get_height();
 	ptBob->srceNextLn = pBmap->get_row_size();
 	ptBob->max_of_images = 1;
-	ptBob->destNextLn = display->bufferNext();
+	ptBob->destNextLn = game_screen->get_row_size();
 	delete pBmap;
 	return ptBob;
 }

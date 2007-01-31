@@ -4,11 +4,11 @@
  * @date 2007-01-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.21 2007/01/28 21:31:56 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.22 2007/01/31 16:45:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -339,7 +339,7 @@ sprite_object::init_common (bitmap_data * bitmap, bool shadow)
   screen_width = display->get_width ();
   screen_height = display->get_height ();
   srceNextLn = bitmap->get_row_size ();
-  destNextLn = display->bufferNext ();
+  destNextLn = game_screen->get_row_size ();
   sprite_has_shadow = shadow;
   screen_ptr = (char *) NULL;
   adresseEC2 = (char *) NULL;
@@ -351,7 +351,7 @@ sprite_object::init_common (bitmap_data * bitmap, bool shadow)
   x_maximum = screen_width - (Sint32) collision_width;
   y_maximum = screen_height - (Sint32) collision_height;
   offsetSrce = bitmap->get_line_modulo (sprite_width);
-  offsetDest = display->buffer_mod (sprite_width);
+  offsetDest = game_screen->get_line_modulo (sprite_width);
 }
 
 /** 
@@ -449,7 +449,7 @@ sprite_object::create_sprite (Sint32 type_id, bitmap_data * image, bool shadow,
   y_maximum = screen_height - sprite_height;
 
   offsetSrce = image->get_line_modulo (sprite_width);
-  offsetDest = display->buffer_mod (sprite_width);
+  offsetDest = game_screen->get_line_modulo (sprite_width);
 
   /* Allocate list for the lists of the drawing tables */
   alloc_drawing_tables (max_of_images);
@@ -1054,7 +1054,7 @@ sprite_object::draw_with_tables ()
 {
   restore_ptr = display->tampon_pos (x_coord, y_coord);
 #ifndef BYTES_COPY
-  Sint32 *screen32 = (Sint32 *) display->buffer_pos (x_coord, y_coord);
+  Sint32 *screen32 = (Sint32 *) game_screen->get_pixel_data (x_coord, y_coord);
   screen_ptr = (char *) screen32;
   /* pixels data of the sprite image */
   Sint32 *pixels32 = (Sint32 *) current_drawing_data;
@@ -1087,7 +1087,7 @@ sprite_object::draw_with_tables ()
       screen32 = (Sint32 *) screen8;
     }
 #else
-  char *adres = display->buffer_pos (x_coord, y_coord);
+  char *adres = game_screen->get_pixel_data (x_coord, y_coord);
   screen_ptr = adres;
   char *gfxP2 = current_drawing_data;     //pixels (sprite data)
   Uint16 *gfxP1 = (Uint16 *) current_drawing_values;        //offset and loop counter
@@ -1116,7 +1116,7 @@ sprite_object::afficheCyc ()
   Sint32 pixel = pt_cycling[indexCycle++];
   restore_ptr = display->tampon_pos (x_coord, y_coord);
 #ifndef BYTES_COPY
-  Sint32 *adres = (Sint32 *) display->buffer_pos (x_coord, y_coord);
+  Sint32 *adres = (Sint32 *) game_screen->get_pixel_data (x_coord, y_coord);
   screen_ptr = (char *) adres;
   Sint32 *gfxP2 = (Sint32 *) current_drawing_data;        //pixels
   Uint16 *gfxP1 = (Uint16 *) current_drawing_values;        //offset and loop counter
@@ -1137,7 +1137,7 @@ sprite_object::afficheCyc ()
       adres = (Sint32 *) adreb;
     }
 #else
-  char *adres = display->buffer_pos (x_coord, y_coord);
+  char *adres = game_screen->get_pixel_data (x_coord, y_coord);
   screen_ptr = adres;
   Uint16 *gfxP1 = (Uint16 *) current_drawing_values;        //offset and loop counter
   Uint32 t = (Uint32) * (gfxP1++);
@@ -1161,7 +1161,7 @@ sprite_object::cycle_ptab ()
 {
   indexCycle &= 7;
   Sint32 pixel = pt_cycling[indexCycle++];
-  char *adres = display->buffer_pos (x_coord, y_coord);
+  char *adres = game_screen->get_pixel_data (x_coord, y_coord);
   restore_ptr = display->tampon_pos (x_coord, y_coord);
   screen_ptr = (char *) adres;
   char *gfxP2 = current_drawing_data;     //pixels
@@ -1191,7 +1191,7 @@ void
 sprite_object::draw_vertically_repeated ()
 {
   restore_ptr = display->tampon_pos (x_coord, y_coord);
-  screen_ptr = display->buffer_pos (x_coord, y_coord);
+  screen_ptr = game_screen->get_pixel_data (x_coord, y_coord);
   Sint32 offsy = 0;
   for (Sint32 r = 0; r < num_of_repeats; r++, offsy += sprite_height)
     {
@@ -1199,7 +1199,7 @@ sprite_object::draw_vertically_repeated ()
       Uint32 t = (Uint32) * (gfxP1++);
 #ifndef BYTES_COPY
       Sint32 *adres =
-        (Sint32 *) display->buffer_pos (x_coord, y_coord + offsy);
+        (Sint32 *) game_screen->get_pixel_data (x_coord, y_coord + offsy);
       Sint32 *gfxP2 = (Sint32 *) current_drawing_data;    //pixels data of the sprite
       for (Uint32 i = 0; i < t; i++)
         {
@@ -1223,7 +1223,7 @@ sprite_object::draw_vertically_repeated ()
           adres = (Sint32 *) adreb;
         }
 #else
-      char *adres = display->buffer_pos (x_coord, y_coord + offsy);
+      char *adres = game_screen->get_pixel_data (x_coord, y_coord + offsy);
       char *gfxP2 = current_drawing_data; //pixels data of the sprite
       for (Uint32 i = 0; i < t; i++)
         {
@@ -1259,7 +1259,7 @@ sprite_object::draw_line_by_line ()
   gfxP1++;
 #ifndef BYTES_COPY
   Sint32 *adres =
-    (Sint32 *) display->buffer_pos (x_coord, y_coord + affligFrst);
+    (Sint32 *) game_screen->get_pixel_data (x_coord, y_coord + affligFrst);
   Sint32 *gfxP2 = (Sint32 *) p[l].TABAFFICH2;
   screen_ptr = (char *) adres;
   for (Uint32 i = 0; i < t; i++)
@@ -1312,7 +1312,7 @@ sprite_object::draw_line_by_line ()
         }
     }
 #else
-  char *adres = display->buffer_pos (x_coord, y_coord + affligFrst);
+  char *adres = game_screen->get_pixel_data (x_coord, y_coord + affligFrst);
   char *gfxP2 = p[l].TABAFFICH2;
   screen_ptr = adres;
   for (Uint32 i = 0; i < t; i++)
@@ -1365,7 +1365,7 @@ sprite_object::afficheSHA ()
 #ifndef BYTES_COPY
   Sint32 q = ombrepixe4;
   Sint32 *adres =
-    (Sint32 *) display->buffer_pos (x_coord + ombredecax,
+    (Sint32 *) game_screen->get_pixel_data (x_coord + ombredecax,
                                     y_coord + ombredecay);
   adresseEC2 = (char *) adres;
   for (Uint32 i = 0; i < t; i++)
@@ -1383,7 +1383,7 @@ sprite_object::afficheSHA ()
     }
 #else
   char *adres =
-    display->buffer_pos (x_coord + ombredecax, y_coord + ombredecay);
+    game_screen->get_pixel_data (x_coord + ombredecax, y_coord + ombredecay);
   adresseEC2 = adres;
   for (Uint32 i = 0; i < t; i++)
     {
@@ -1506,7 +1506,7 @@ sprite_object::draw_copy_from_bitmap ()
       return;
     }
   char *s = pixel_data;
-  char *d = display->buffer_pos (x_coord, y_coord);
+  char *d = game_screen->get_pixel_data (x_coord, y_coord);
   restore_ptr = display->tampon_pos (x_coord, y_coord);
   screen_ptr = d;
   Sint32 m = srceNextLn;
@@ -1540,7 +1540,7 @@ sprite_object::MSKbitcopy ()
   if (!is_enabled)
     return;
   char *s = pixel_data;
-  char *d = display->buffer_pos (x_coord, y_coord);
+  char *d = game_screen->get_pixel_data (x_coord, y_coord);
   restore_ptr = display->tampon_pos (x_coord, y_coord);
   screen_ptr = d;
   Sint32 m = srceNextLn;

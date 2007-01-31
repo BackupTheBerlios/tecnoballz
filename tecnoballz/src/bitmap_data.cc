@@ -5,11 +5,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.8 2007/01/31 15:20:07 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.9 2007/01/31 16:45:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -248,9 +248,9 @@ bitmap_data::copyBuffer (Sint32 srceX, Sint32 srceY, Sint32 destX,
   if (haute == -1)
     haute = height;
   Sint32 n = width;
-  Sint32 o = display->bufferNext ();
+  Sint32 o = game_screen->get_row_size ();
   char *s = get_pixel_data (srceX, srceY);
-  char *d = display->buffer_pos (destX, destY);
+  char *d = game_screen->get_pixel_data (destX, destY);
   Sint32 h = haute;
   for (Sint32 i = 0; i < h; i++, s += n, d += o)
     {

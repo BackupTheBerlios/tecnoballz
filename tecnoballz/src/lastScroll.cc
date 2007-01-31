@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-07
 // fonction	: handle of the scrolling background (menu and gards levels)
-// id		: $Id: lastScroll.cc,v 1.13 2007/01/30 16:37:21 gurumeditation Exp $
+// id		: $Id: lastScroll.cc,v 1.14 2007/01/31 16:45:39 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -92,11 +92,11 @@ Sint32 lastScroll::initialise(Uint32 PalNu, Uint32 edmap)
 	//###################################################################
 	// calculation certain values for the display loop
 	//###################################################################
-	hauteMotif = display->bufferHaut() / motifhaute;
-	largeMotif = display->bufferLarg() / motiflarge;
-	afficheAdr = (Sint32 *)display->buffer_adr();
-	destinMod1 = display->buffer_mod(0);
-	largeEcran = display->bufferNext();
+	hauteMotif = game_screen->get_height() / motifhaute;
+	largeMotif = game_screen->get_width() / motiflarge;
+	afficheAdr = (Sint32 *)game_screen->get_pixel_data();
+	destinMod1 = game_screen->get_line_modulo(0);
+	largeEcran = game_screen->get_row_size();
 	afficheAdr = afficheAdr - largeEcran * motifhaute;
 	destinMod2 = (motifhaute * largeEcran) - motiflarge;
 	destinMod3 = (motifhaute * largeEcran) - (motiflarge * largeMotif);

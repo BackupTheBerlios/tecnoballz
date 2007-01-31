@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.25 2007/01/31 15:20:07 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.26 2007/01/31 16:45:39 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -505,7 +505,8 @@ Sint32 tableaux_Z::zeMainLoop()
 	if((keyboard->key_is_released(SDLK_w) && devel_keyw) ||
 		(keyboard->key_is_released(SDLK_x) && devel_keyx))
 	{
-		display->buffer_RAZ();
+    game_screen->clear ();
+
 		if(devel_keyw)
 		{	devel_keyw = 0;
 			if(--indexbgrnd < 0) indexbgrnd = 49;
