@@ -5,11 +5,11 @@
  * @date 2007-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: offscreen_surface.h,v 1.4 2007/02/01 13:24:22 gurumeditation Exp $
+ * $Id: offscreen_surface.h,v 1.5 2007/02/01 20:24:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,8 @@ private:
 public:
   offscreen_surface (Uint32 width, Uint32 height, Uint32 depth, Uint32 voffset = 0);
   ~offscreen_surface ();
+  void clear (Uint32 color = 0);
+  void clear (Uint32 color, Uint32 xcoord, Uint32 ycoord, Uint32 w, Uint32 height);
   void blit_surface (offscreen_surface *offscreen);
   void blit_surface (offscreen_surface *offscreen, Uint32 xcoord, Uint32 ycoord, Uint32 width, Uint32 height);
 };
