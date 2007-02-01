@@ -46,6 +46,7 @@ SOURCES_MAIN = \
 	score_over.cc \
 	scoretable.cc \
 	scrolledit.cc \
+	surface_sdl.cc \
 	shop_tecno.cc \
 	sprite_object.cc \
 	sprite_ball.cc \
