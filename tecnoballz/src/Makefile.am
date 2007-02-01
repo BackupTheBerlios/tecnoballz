@@ -21,7 +21,6 @@ SOURCES_MAIN = \
 	controller_bricks.cc \
 	ejectBalls.cc \
 	escapeMenu.cc \
-	fond_ecran.cc \
 	gard_tecno.cc \
   handler_audio.cc \
   handler_display.cc \
@@ -62,6 +61,7 @@ SOURCES_MAIN = \
 	tecno_gard.cc \
 	tecno_miss.cc \
 	tecno_text.cc \
+	tiles_background.cc \
 	zeBouiBoui.cc \
 	zeCapsules.cc \
 	zeCongBall.cc \

@@ -33,13 +33,13 @@ class shop_tecno;
 #include "../include/joueurData.h"
 #include "../include/runGestion.h"
 #include "../include/escapeMenu.h"
-#include "../include/fond_ecran.h"
+#include "../include/tiles_background.h"
 //...............................................................................
 class shop_tecno:public runGestion
 {
 	private:
 		static const Sint32	STEXTWIDHT = 22;	//largeur d'une ligne texte en caracteres
-		fond_ecran*			ecranfond4;
+		tiles_background*			ecranfond4;
 		mousePoint*			objetMouse;
 		sprite_object*			BOB_allume;
 		ze_gadgets*			gereGadget;

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.27 2007/01/31 21:20:02 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.28 2007/02/01 11:17:24 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -31,7 +31,7 @@ tableaux_Z::tableaux_Z()
 {
 	initialise();
 	gereBricot = new briqueCote();
-	ecranfond4 = new fond_ecran();
+	ecranfond4 = new tiles_background();
 	tecZ_barre = new barreScore();
 	gereEjects = new ejectBalls();
 	gereCapsul = new zeCapsules();
@@ -573,8 +573,7 @@ Sint32 tableaux_Z::background(Sint32 nbkdg)
 	//###################################################################
 	// display background
  	//###################################################################
-	error_init(ecranfond4->instalFond(nbkdg));
-	if(erreur_num) return erreur_num;
+	ecranfond4->setup(nbkdg);
 	
  	//###################################################################
 	// initialize the mini messages

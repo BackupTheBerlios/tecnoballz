@@ -5,11 +5,11 @@
  * @date 2007-01-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.21 2007/01/30 21:06:04 gurumeditation Exp $
+ * $Id: main.cc,v 1.22 2007/02/01 11:17:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,78 +108,79 @@ main (Sint32 nbArg, char **ptArg)
  - ? utiliser kyro comme moteur de sprites 
  - ? mode balle Arkanoid ?
 
-main.cc
-mentatCode.cc    => tecnoballz 
-list_sprites.cc  => 
-runGestion.cc    => supervisor.cc
-configfile.cc    => 
-lispreader.cc    =>
-GFX_bitmap.cc 
-GIF_bitMap.cc    => bitmap_data
+main
+mentatCode    => tecnoballz 
+list_sprites  => 
+runGestion    => supervisor
+configfile    => 
+lispreader    =>
+*GFX_bitmap 
+*GIF_bitMap    => bitmap_data
  
-sprite_object  => sprite_object
+*BOB_killer  => sprite_object
 
-giga_blitz.cc   => sprite_gigablitz
-mousePoint.cc   => sprite_mouse_pointer
-technoBall.cc   => sprite_ball
-techno_eye.cc   => sprite_eye
-techno_gem.cc   => sprite_gem
-tecno_boui.cc   => sprite_ship
-tecno_bump.cc   => sprite_paddle
-tecno_caps.cc   => sprite_money
-tecnoDefil.cc   => sprite_fonte_menu
-tecno_fire.cc   => sprite_projectile
-tecno_gads.cc   => sprite_capsules
-tecno_gard.cc   => sprite_guardian
-tecno_miss.cc   => sprite_bullet
-tecno_text.cc   => sprite_fonte_game
+giga_blitz   => sprite_gigablitz
+mousePoint   => sprite_mouse_pointer
+technoBall   => sprite_ball
+techno_eye   => sprite_eye
+techno_gem   => sprite_gem
+*tecno_boui   => sprite_ship
+*tecno_bump   => sprite_paddle
+tecno_caps   => sprite_money
+tecnoDefil   => sprite_fonte_menu
+*tecno_fire   => sprite_projectile
+tecno_gads   => sprite_capsules
+tecno_gard   => sprite_guardian
+tecno_miss   => sprite_bullet
+tecno_text   => sprite_fonte_game
  
-ballDirect.cc   => controller_balls
-controller_bricks.cc   => controller_bricks
-printmoney.cc   => controller_indicators
-zeBouiBoui.cc   => controller_ships
-zeCapsules.cc   => controller_moneys
-zeCongBall.cc   => controller_spheres
-zeDefilTxt.cc   => controller_scroll_fontes
-zeFireBump.cc   => controller_fires
-ze_gadgets.cc   => controller_capsules
-zeGameOver.cc   => controller_game_over
-zeGemstone.cc   => controller_gems
-zeGigaBlit.cc   => controller_gigablitz
-zeguardian.cc   => controller_guardians
-ze_magneye.cc   => controller_magnetic_eyes
-zeMissiles.cc   => controller_bullets
-zeMoveText.cc   => controller_level_fontes
-zeNewBalls.cc   => controller_balls
-zeRaquette.cc   => controller_paddles
-zexplosion.cc   => controller_explosions
+ballDirect   => controller_balls
+*lesBriques   => controller_bricks
+printmoney   => controller_indicators
+zeBouiBoui   => controller_ships
+zeCapsules   => controller_moneys
+zeCongBall   => controller_spheres
+zeDefilTxt   => controller_scroll_fontes
+zeFireBump   => controller_fires
+ze_gadgets   => controller_capsules
+zeGameOver   => controller_game_over
+zeGemstone   => controller_gems
+zeGigaBlit   => controller_gigablitz
+zeguardian   => controller_guardians
+ze_magneye   => controller_magnetic_eyes
+zeMissiles   => controller_bullets
+zeMoveText   => controller_level_fontes
+zeNewBalls   => controller_balls
+*zeRaquette   => controller_paddles
+zexplosion   => controller_explosions
 
-tableaux_Z.cc   => supervisor_bricks_level
-gard_tecno.cc   => supervisor_guards_level
-shop_tecno.cc   => supervisor_shop
-scrolledit.cc   => supervisor_scrolleditor 
-menu_tecno.cc   => supervisor_main_menu
+tableaux_Z   => supervisor_bricks_level
+gard_tecno   => supervisor_guards_level
+shop_tecno   => supervisor_shop
+scrolledit   => supervisor_scrolleditor 
+menu_tecno   => supervisor_main_menu
 
-audiomixer.cc   => handler_audio.cc 
-clavierMac.cc   => handler_keyboard.cc
-ecran_hard.cc   => handler_display.cc 
-RAM_killer.cc   => handler_memory.cc
-ressources.cc   => handler_resources.cc 
-scoretable.cc   => handler_score_table
-joueurData.cc   => handler_players
-level_data.cc   => handler_levels 
-print_text.cc   => handler_print_text 
+*audiomixer   => handler_audio 
+*clavierMac   => handler_keyboard
+*ecran_hard   => handler_display 
+              => offscreen_surface
+*RAM_killer   => handler_memory
+*ressources   => handler_resources 
+scoretable   => handler_score_table
+joueurData   => handler_players
+level_data   => handler_levels 
+print_text   => handler_print_text 
 
-zeMiniMess.cc   => item_small_messages 
-barreScore.cc   => item_score_panel
-briqueCote.cc   => items_sides_bricks
-ejectBalls.cc   => items_balls_ejectors
-escapeMenu.cc   => item_popup_menu 
-fond_ecran.cc   => item_background
-head_anima.cc   => item_head_anim
-lastScroll.cc   => item_vertical_scroll
-print_menu.cc   => item_menu_text
-score_over.cc   => item_score_table
+zeMiniMess   => item_small_messages 
+barreScore   => item_score_panel
+briqueCote   => items_sides_bricks
+ejectBalls   => items_balls_ejectors
+escapeMenu   => item_popup_menu 
+*fond_ecran   => tiles_background
+head_anima   => item_head_anim
+lastScroll   => item_vertical_scroll
+print_menu   => item_menu_text
+score_over   => item_score_table
 
 
 */

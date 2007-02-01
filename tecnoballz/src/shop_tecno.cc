@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.24 2007/01/31 21:20:02 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.25 2007/02/01 11:17:24 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -32,7 +32,7 @@
 shop_tecno::shop_tecno()
 {
 	initialise();
-	ecranfond4 = new fond_ecran();
+	ecranfond4 = new tiles_background();
 	objetMouse = new mousePoint();
 	BOB_allume = new sprite_object();
 	gereGadget = new ze_gadgets(NB_OPTIONS + 2, 0);
@@ -195,7 +195,7 @@ Sint32 shop_tecno::first_init()
 		shop_line3 = &shoptext00[STEXTWIDHT * 3];
 
 	keyboard->set_grab_input (false);
-	ecranfond4->coulDuFond();
+	ecranfond4->set_4_color_palette();
 	return erreur_num;
 }
 

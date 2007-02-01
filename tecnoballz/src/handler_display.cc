@@ -2,14 +2,14 @@
  * @file handler_display.cc 
  * @briefi Handle displaying and updating with SDL 
  * @created 2002-08-17 
- * @date 2007-01-31
+ * @date 2007-02-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.11 2007/01/31 21:20:02 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.12 2007/02/01 11:17:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
