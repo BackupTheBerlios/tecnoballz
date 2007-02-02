@@ -5,11 +5,11 @@
  * @date 2007-02-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.cc,v 1.2 2007/02/02 17:05:53 gurumeditation Exp $
+ * $Id: surface_sdl.cc,v 1.3 2007/02/02 21:07:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -275,8 +275,10 @@ surface_sdl::blit_surface (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, Uint
 void
 surface_sdl::blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h)
 {
+  /*
   std::cout << "surface_sdl::blit_surface() source(" << x1 << ", " << y1
     << ") dest(" << x2 << "," << y2 << ") size(" << w << ", " << h << ")" << std::endl;
+  */
   SDL_Surface* dest_surface = dest->get_surface ();
   SDL_Rect src_rect = {x1, y1, w, h};
   SDL_Rect dest_rect = {x2, y2, w, h};

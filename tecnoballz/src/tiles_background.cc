@@ -4,11 +4,11 @@
  * @date 2007-02-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.2 2007/02/02 17:05:53 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.3 2007/02/02 21:07:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -163,7 +163,8 @@ tiles_background::setup(Uint32 tiles_num)
   Sint32 oSour = current_tiles->get_row_size ();
   Sint32 mVert = (240 * resolution) % tiles_height - 1;
   map_height = (240 * resolution) / tiles_height;
-  map_xmax = map_width;
+  map_xmax = map_width * map_width;
+  map_ymax = map_height * map_height + mVert;
   if (mVert > 0)
     {
       map_height++;
@@ -171,7 +172,7 @@ tiles_background::setup(Uint32 tiles_num)
 
   try
   {
-    map_tiles = new char[map_width * map_height];
+    map_tiles = new Uint32[map_width * map_height];
   }
   catch (std::bad_alloc &)
   {
@@ -244,7 +245,8 @@ tiles_background::setup(Uint32 tiles_num)
           src_X &= 0x0f;        //table index (0 to 15)
           src_X = t_pos[src_X]; //source position (0 to 4)
           src_X *= tiles_width;
-          map_tiles[det_Y * det_X] = src_X;
+          map_tiles[det_Y * map_height + det_X] = src_X;
+          printf("map_tiles[%i] = %i\n", det_Y * map_height + det_X, src_X);
           char *srcPT = current_tiles->get_pixel_data (baseX + src_X, baseY);
           char *detPT =
             background_screen->get_pixel_data (det_X * tiles_width, det_Y * tiles_height);
@@ -302,19 +304,90 @@ tiles_background::setup(Uint32 tiles_num)
 void
 tiles_background::draw ()
 {
+  if (map_ycoord++ > map_ymax - 1)
+    {
+      map_ycoord = 0;
+    } 
+  
+  Uint32 voffset = background_screen->get_vertical_offset ();
+  game_screen->unlock_surface ();
   SDL_Rect src_rect;
   SDL_Rect dest_rect;
 
+  //SDL_Surface *screen_surface = game_screen->get_surface ();
   SDL_Surface *screen_surface = game_screen->get_surface ();
   SDL_Surface *tiles_surface = current_tiles->get_surface (); 
   Uint32 y = map_ycoord;
   Uint32 x = map_xcoord;
 
+  src_rect.y = 0;
+
+  /*
+   * x = 10
+   * w = 54
+   *
+   */
+
+  Uint32 modulox = map_xcoord % tiles_width;
+  Uint32 moduloy = map_ycoord % tiles_height;
+  Uint32 width = tiles_width - modulox;
+  Uint32 height = tiles_height - moduloy;
+  
+
+  dest_rect.x = 0;
+  dest_rect.y = voffset;
+  dest_rect.w = width;
+  dest_rect.h = height;
+  printf ("%i\n", y / tiles_height * map_width + x / tiles_width);
+  src_rect.x = map_tiles[y / tiles_height * map_width + x / tiles_width];
+  src_rect.x = 0;
+  src_rect.w = width;
+  src_rect.h = height;
+  printf("(%i, %i, %i, %i), (%i,%i,%i,%i)\n", src_rect.x, src_rect.y, src_rect.w, src_rect.h, dest_rect.x,dest_rect.y, dest_rect.w, dest_rect.h);
+  if (SDL_BlitSurface (tiles_surface, &src_rect, screen_surface, &dest_rect) < 0)
+    {
+      std::cerr << "tiles_background::draw() " <<
+        "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+    }
+
+
+  src_rect.h = tiles_height;
+  dest_rect.h = tiles_height;
+
+  y = map_ycoord + tiles_height;
+  
+  Uint32 ycoord = voffset + height;
+ 
+  for (Uint32 v = 1; v < map_height - 1; v++)
+    {
+      src_rect.x = map_tiles[y / tiles_height * map_width + x / tiles_width];
+      src_rect.x = 0;
+      dest_rect.y = ycoord;
+      if (SDL_BlitSurface (tiles_surface, &src_rect, screen_surface, &dest_rect) < 0)
+        {
+          std::cerr << "tiles_background::draw() " <<  v <<
+            " SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+        }
+      if (y+= tiles_height > map_ymax)
+        {
+          y-= map_ymax;
+        }
+      ycoord+= tiles_height;
+    }
+
+
+  game_screen->lock_surface ();
+  return;
   for (Uint32 v = 0; v < map_height; v++)
     {
          for (Uint32 h = 0; h < map_height; v++)
            {
                Uint32 x_source = map_tiles[y / tiles_height * map_width + x / tiles_width];  
+               if (SDL_BlitSurface (tiles_surface, &src_rect, screen_surface, &dest_rect) < 0)
+                 {
+                   std::cerr << "surface_sdl::blit_surface() " <<
+                     "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+                 }
 
            }
     }
