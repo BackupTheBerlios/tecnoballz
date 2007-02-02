@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.23 2007/01/31 15:20:07 gurumeditation Exp $
+// id		: $Id: gard_tecno.cc,v 1.24 2007/02/02 17:05:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -48,7 +48,7 @@ gard_tecno::gard_tecno()
 	ptBobLifes = new tecno_gads();
 	ptGameOver = new zeGameOver();
 	ptCongBall = new zeCongBall();
-	ptrEscMenu = new escapeMenu();
+	ptrEscMenu = new handler_popup_menu();
 	ptBob_name = NULL;
 }
 
@@ -145,14 +145,13 @@ Sint32 gard_tecno::first_init()
 	ptCongBall->create_sprites_list();
 
 	// intialize escape menu
-	error_init(ptrEscMenu->first_init
+	ptrEscMenu->first_init
 	(	sprites_bitmap,
 		0,			//menu number
 		320 * resolution,	//width of screen (center)
 		0,			//don't restaure background where leaves
 		1			//initialize color table
-	));
-	if(erreur_num) return (erreur_num); 
+	);
         std::cout << "gard_tecno::first_init release_sprites_bitmap" << std::endl;
 
 	resources->release_sprites_bitmap();
@@ -375,13 +374,13 @@ Sint32 gard_tecno::zeMainLoop()
 	// escape key to quit the game !
 	//###################################################################
 	if(keyboard->command_is_pressed(handler_keyboard::TOEXITFLAG) ||
-		Ecode == escapeMenu::WEQUITGAME)
+		Ecode == handler_popup_menu::WEQUITGAME)
 		end_return = -1;
 	if(keyboard->command_is_pressed(handler_keyboard::TOOVERFLAG) ||
-		Ecode == escapeMenu::GOGAMEOVER)
+		Ecode == handler_popup_menu::GOGAMEOVER)
 		joueurGere->lifesReset();
 	if(keyboard->command_is_pressed(handler_keyboard::TOMENUFLAG) ||
-		Ecode == escapeMenu::EXITTOMENU)
+		Ecode == handler_popup_menu::EXITTOMENU)
 		end_return = 4;
 
 	

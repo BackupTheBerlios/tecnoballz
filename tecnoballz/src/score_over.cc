@@ -69,7 +69,8 @@ Sint32 score_over::first_init(Sint32 offzt)
 	// allocate 512 * 323 pixels buffer for text menu 
 	//###################################################################
 	graphTexte = new bitmap_data();
-	graphTexte->create(TEXT_LARGE * width_font, TEXT_HAUTE * space2next , 1);
+	//graphTexte->create(TEXT_LARGE * width_font, TEXT_HAUTE * space2next , 1);
+	graphTexte->create_surface(TEXT_LARGE * width_font, TEXT_HAUTE * space2next);
 
 	//###################################################################
 	// initialize sprite object

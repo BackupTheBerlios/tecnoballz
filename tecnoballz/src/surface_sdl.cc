@@ -5,11 +5,11 @@
  * @date 2007-02-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.cc,v 1.1 2007/02/01 13:24:22 gurumeditation Exp $
+ * $Id: surface_sdl.cc,v 1.2 2007/02/02 17:05:53 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@
  */
 surface_sdl::surface_sdl ()
 {
+  mentatInit ();
 }
 
 /**
@@ -45,6 +46,7 @@ surface_sdl::surface_sdl ()
  */
 surface_sdl::surface_sdl (Uint32 w, Uint32 h, Uint32 depth)
 {
+  mentatInit ();
   std::cout << "surface_sdl() w=" << w << " h=" << h << " d=" << depth << std::endl; 
   create_surface (w, h, depth);
 }
@@ -57,6 +59,7 @@ surface_sdl::~surface_sdl ()
       SDL_FreeSurface (surface);
       surface = NULL;;
     }
+  mentatKill ();
 }
 
 /**
@@ -83,7 +86,11 @@ surface_sdl::get_surface ()
 void
 surface_sdl::create_surface (Uint32 w, Uint32 h, Sint32 depth, Uint32 flags, Uint32 red_mask, Uint32 green_mask, Uint32 blue_mask, Uint32 alpha_mask)
 {
-
+  if (is_verbose)
+    {
+      std::cout << "surface_sdl::create_surface() width: " << w << 
+        " height: " << h << " depth: " << depth << std::endl;
+    } 
   surface = SDL_CreateRGBSurface (flags, w, h, depth, red_mask, green_mask, blue_mask, alpha_mask);
   if (NULL == surface)
     {
@@ -237,7 +244,7 @@ surface_sdl::blit_surface (surface_sdl *dest)
 
 /**
  * Perform a blit from the source surface to the destination surface
- * @param surface pointer to a surface surface object
+ * @param dest pointer to a surface object
  * @param xcoord x coordinate in the source and destination
  * @param ycoord y coordinate in the source and destination
  * @param w the width in pixels to copy 
@@ -249,6 +256,31 @@ surface_sdl::blit_surface (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, Uint
   SDL_Surface* surface_dest = dest->get_surface ();
   SDL_Rect rect = {xcoord, ycoord, w, h};
   if (SDL_BlitSurface (surface, &rect, surface_dest, &rect) < 0)
+    {
+      std::cerr << "surface_sdl::blit_surface() " <<
+        "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+    }
+}
+
+/**
+ * Perform a blit from the source surface to the destination surface
+ * @param dest pointer to a surface object
+ * @param x1 source x coordinate in the source and destination
+ * @param y1 source y coordinate in the source and destination
+ * @param x2 destination x coordinate in the source and destination
+ * @param y2 destination y coordinate in the source and destination
+ * @param w the width in pixels to copy 
+ * @param h the height in pixels to copy
+ */
+void
+surface_sdl::blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h)
+{
+  std::cout << "surface_sdl::blit_surface() source(" << x1 << ", " << y1
+    << ") dest(" << x2 << "," << y2 << ") size(" << w << ", " << h << ")" << std::endl;
+  SDL_Surface* dest_surface = dest->get_surface ();
+  SDL_Rect src_rect = {x1, y1, w, h};
+  SDL_Rect dest_rect = {x2, y2, w, h};
+  if (SDL_BlitSurface (surface, &src_rect, dest_surface, &dest_rect) < 0)
     {
       std::cerr << "surface_sdl::blit_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
@@ -272,4 +304,27 @@ surface_sdl::set_palette (SDL_Color *colors)
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
    }
 }
+
+/**
+* Set the colors in the palette of an 8-bit surface
+ * @param dest pointer to a surface object
+*/
+void
+surface_sdl::set_palette (surface_sdl *dest)
+{
+  if (bytes_per_pixel > 1)
+    {
+      return;
+    }
+  if (!SDL_SetPalette (dest->get_surface (), SDL_LOGPAL | SDL_PHYSPAL, surface->format->palette->colors, 0, 256))
+   {
+      std::cerr << "surface_sdl::set_palette() " <<
+        "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+   }
+}
+
+
+
+
+
 

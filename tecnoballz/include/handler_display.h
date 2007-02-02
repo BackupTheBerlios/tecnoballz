@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.h,v 1.5 2007/01/31 21:20:02 gurumeditation Exp $
+ * $Id: handler_display.h,v 1.6 2007/02/02 17:05:53 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -101,6 +101,7 @@ public:
   Sint32 get_height ();
   void lock_surfaces ();
   void unlock_surfaces ();
+  Uint32 get_bits_per_pixel ();
   Sint32 SDL_informations ();
   Sint32 synchro_CalculDifference ();
   Sint32 synchro_processusPause (Sint32 _iTemps);

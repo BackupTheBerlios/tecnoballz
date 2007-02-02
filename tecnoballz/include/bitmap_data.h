@@ -2,14 +2,14 @@
  * @file bitmap_data.h 
  * @briefi Handle the bitmap 
  * @created 1996-06-29 
- * @date 2007-02-01
+ * @date 2007-02-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.h,v 1.5 2007/02/01 13:24:22 gurumeditation Exp $
+ * $Id: bitmap_data.h,v 1.6 2007/02/02 17:05:53 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,13 +30,11 @@
 #define __BITMAP_DATA__
 class bitmap_data;
 #include "../include/mentatCode.h"
+#include "../include/surface_sdl.h"
 
-class bitmap_data:public virtual mentatCode
+class bitmap_data:public virtual surface_sdl 
 {
 private:
-  SDL_Surface * surface;
-  /** The actual pixel data */
-  char *pixel_buffer;
   /** Height in linges */
   Sint32 height;
   /** Width in pixels */
@@ -56,7 +54,6 @@ public:
 
   void clear_members ();
   void release ();
-  SDL_Surface* get_surface ();
   Sint32 get_width ();
   Sint32 get_row_size ();
   Sint32 get_height ();
@@ -64,7 +61,9 @@ public:
   char *get_pixel_data ();
   Sint32 get_offset (Sint32 xcoord, Sint32 ycoord);
   Sint32 get_line_modulo (Sint32 w);
-  void create (Sint32 w, Sint32 h, Sint32 d);
+  void create (Uint32 w, Uint32 h, Uint32 d);
+  void create_surface (Uint32 w, Uint32 h);
+
   char *duplicate_pixel_data ();
   void copyTampon ();
   void copyTampon (Sint32 srceX, Sint32 srceY, Sint32 destX,
@@ -84,10 +83,6 @@ public:
                                Sint32 h);
 
 private:
-  void create_surface (Sint32 width, Sint32 height, Sint32 depth,
-                       Uint32 flags = SDL_ANYFORMAT, Uint32 red_mask =
-                       0xf00, Uint32 green_mask = 0x0f0, Uint32 blue_mask =
-                       0x00f, Uint32 alpha_mask = 0x00);
   void sdl_load_bmp (char *filename);
 };
 #endif

@@ -73,7 +73,8 @@ Sint32 zeMiniMess::intialise1()
 
 	if(!messa_fond)
 	{	messa_fond = new bitmap_data();
-		messa_fond->create(fonteslarg, ft_hauteur, 1);
+		//messa_fond->create(fonteslarg, ft_hauteur, 1);
+		messa_fond->create_surface (fonteslarg, ft_hauteur);
 		pt_mesfond = messa_fond->get_pixel_data();
 	}
 

@@ -547,9 +547,10 @@ void scrolledit::brushAlloc()
 	if(pBrush_bob)
 		delete pBrush_bob;
 	pBrush_bob = new bitmap_data();
-	pBrush_bob->create(pt_select0->box_widthT * tile_width,
-		pt_select0->box_height * tile_width, 1);
-
+	//pBrush_bob->create(pt_select0->box_widthT * tile_width,
+	//	pt_select0->box_height * tile_width, 1);
+	pBrush_bob->create_surface(pt_select0->box_widthT * tile_width,
+		pt_select0->box_height * tile_width);
 	brushWidth = pt_select0->box_widthT;
 	brushHeigh = pt_select0->box_height;
 	

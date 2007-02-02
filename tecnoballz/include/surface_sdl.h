@@ -2,14 +2,14 @@
  * @file surface_surface.h 
  * @brief an surface drawing surface
  * @created 2007-02-01
- * @date 2007-02-01
+ * @date 2007-02-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.h,v 1.1 2007/02/01 13:24:22 gurumeditation Exp $
+ * $Id: surface_sdl.h,v 1.2 2007/02/02 17:05:53 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,10 +28,12 @@
  */
 #ifndef __SURFACE_SDL__ 
 #define __SURFACE_SDL__
+class surface_sdl;
 #include "../include/mentatCode.h"
 
 class surface_sdl:public virtual mentatCode
 {
+
 protected:
   SDL_Surface* surface;
   /** The number of bytes used to represent each pixel in a surface */
@@ -56,9 +58,11 @@ public:
   void unlock_surface ();
   void blit_surface (surface_sdl *dest);
   void blit_surface (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, Uint32 w, Uint32 h);
+  void blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h);
   void set_palette (SDL_Color *colors);
+  void set_palette (surface_sdl *dest);
 
-protected:
+public:
   void create_surface (Uint32 w, Uint32 h, Sint32 depth, Uint32 flags = SDL_ANYFORMAT, Uint32 red_mask = 0xf00, Uint32 green_mask = 0x0f0, Uint32 blue_mask = 0x00f, Uint32 alpha_mask = 0x00);
 };
 

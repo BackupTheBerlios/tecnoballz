@@ -5,11 +5,11 @@
  * @date 2007-02-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: offscreen_surface.cc,v 1.5 2007/02/01 20:24:54 gurumeditation Exp $
+ * $Id: offscreen_surface.cc,v 1.6 2007/02/02 17:05:53 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,6 +55,16 @@ offscreen_surface::~offscreen_surface ()
 }
 
 /**
+ * Get the vertical offset
+ * @return vertical offset
+ */
+Uint32
+offscreen_surface::get_vertical_offset ()
+{
+  return vertical_offset;
+}
+
+/**
  * Perform a blit from the source surface to the destination surface
  * @param offscreen pointer to a offscreen surface object
  */
@@ -86,6 +96,26 @@ offscreen_surface::blit_surface (offscreen_surface * offscreen, Uint32 xcoord,
       std::cerr << "offscreen_surface::blit_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
+}
+
+/**
+ * Perform a blit from the source surface to the destination surface
+ * @param dest pointer to a surface object
+ * @param x1 source x coordinate in the source and destination
+ * @param y1 source y coordinate in the source and destination
+ * @param x2 destination x coordinate in the source and destination
+ * @param y2 destination y coordinate in the source and destination
+ * @param w the width in pixels to copy 
+ * @param h the height in pixels to copy
+ */
+void
+offscreen_surface::blit_surface (offscreen_surface * offscreen, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h)
+{
+  dynamic_cast < surface_sdl * >(this)->blit_surface (offscreen,
+                                                      x1, y1,
+                                                      x2,
+                                                      y2 + vertical_offset,
+                                                      w, h);
 }
 
 /**

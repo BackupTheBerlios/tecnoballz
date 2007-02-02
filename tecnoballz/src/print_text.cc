@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-10
 // fonction	: display chars
-// id		: $Id: print_text.cc,v 1.14 2007/01/31 19:49:07 gurumeditation Exp $
+// id		: $Id: print_text.cc,v 1.15 2007/02/02 17:05:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -332,7 +332,8 @@ sprite_object*  print_text::string2bob(const char* ptStr)
 {
 	Sint32 numch = strlen(ptStr);
 	bitmap_data* pBmap = new bitmap_data();
-	pBmap->create(numch * charHeight, charHeight, 1);
+	//pBmap->create(numch * charHeight, charHeight, 1);
+	pBmap->create_surface(numch * charHeight, charHeight);
 	Sint32 *basPT = (Sint32 *)caract_adr;
 	char *desP1 = pBmap->get_pixel_data();
 	Sint32 offSc = off_source;

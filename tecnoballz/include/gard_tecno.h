@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-11
 // fonction	: handle the the guards levels
-// id		: $Id: gard_tecno.h,v 1.6 2007/01/26 16:49:19 gurumeditation Exp $
+// id		: $Id: gard_tecno.h,v 1.7 2007/02/02 17:05:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -43,7 +43,7 @@ class gard_tecno;
 #include "../include/ballDirect.h"
 #include "../include/zeGameOver.h"
 #include "../include/zeCongBall.h"
-#include "../include/escapeMenu.h"
+#include "../include/handler_popup_menu.h"
 #include "../include/zeMoveText.h"
 
 
@@ -67,7 +67,7 @@ class gard_tecno:public virtual runGestion
 		sprite_object*			ptBobMoney;
 		sprite_object*			ptBob_name;
 		tecno_gads*			ptBobLifes;
-		escapeMenu*			ptrEscMenu;
+		handler_popup_menu*			ptrEscMenu;
 		Sint32				areaNumber;		// number of area 1 to 5
 		Sint32				levelTecno;		// number of level 1 to 12
 		const atariLevel*		levelParam;

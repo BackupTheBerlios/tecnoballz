@@ -32,7 +32,7 @@ class shop_tecno;
 #include "../include/print_text.h"
 #include "../include/joueurData.h"
 #include "../include/runGestion.h"
-#include "../include/escapeMenu.h"
+#include "../include/handler_popup_menu.h"
 #include "../include/tiles_background.h"
 //...............................................................................
 class shop_tecno:public runGestion
@@ -44,7 +44,7 @@ class shop_tecno:public runGestion
 		sprite_object*			BOB_allume;
 		ze_gadgets*			gereGadget;
 		print_text*			mega_print;
-		escapeMenu*			ptrEscMenu;
+		handler_popup_menu*			ptrEscMenu;
 		Sint32				shop_point;	//pointeur
 		Sint32				shoppoint3;	//pointeur
     

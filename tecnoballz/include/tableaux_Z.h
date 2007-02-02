@@ -56,7 +56,7 @@ class tableaux_Z;
 #include "../include/level_data.h"
 #include "../include/zeGemstone.h"
 #include "../include/ballDirect.h"
-#include "../include/escapeMenu.h"
+#include "../include/handler_popup_menu.h"
 #include "../include/ze_magneye.h"
 
 
@@ -96,7 +96,7 @@ class tableaux_Z:public virtual runGestion
 		zeGameOver*			ptGameOver;
 		sprite_object*			BottomWall;
 		sprite_object*			ptBobMoney;
-		escapeMenu*			ptrEscMenu;
+		handler_popup_menu*			ptrEscMenu;
 		tecno_gads*			ptBobRever;
 		Sint32				areaNumber;	// number of area 1 to 5
 		Sint32				levelTecno;	// number of level 1 to 12

@@ -2,14 +2,14 @@
  * @file handler_display.cc 
  * @briefi Handle displaying and updating with SDL 
  * @created 2002-08-17 
- * @date 2007-02-01
+ * @date 2007-02-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.12 2007/02/01 11:17:24 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.13 2007/02/02 17:05:53 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -212,6 +212,15 @@ handler_display::unlock_surfaces ()
 {
   game_screen->unlock_surface ();
   background_screen->unlock_surface ();
+}
+/**
+ * Return the number of bits per pixel
+ * @return then number of bits per pixel, 8 for 256 colors
+ */
+Uint32
+handler_display::get_bits_per_pixel ()
+{
+  return bitspixels;
 }
 
 // -----------------------------------------------------------------------------

@@ -20,12 +20,12 @@ SOURCES_MAIN = \
 	controller_balls.cc \
 	controller_bricks.cc \
 	ejectBalls.cc \
-	escapeMenu.cc \
 	gard_tecno.cc \
   handler_audio.cc \
   handler_display.cc \
 	handler_keyboard.cc \
 	handler_memory.cc \
+	handler_popup_menu.cc \
 	handler_resources.cc \
 	giga_blitz.cc \
 	head_anima.cc \

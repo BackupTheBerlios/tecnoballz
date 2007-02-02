@@ -4,11 +4,11 @@
  * @date 2007-02-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.h,v 1.1 2007/02/01 11:17:24 gurumeditation Exp $
+ * $Id: tiles_background.h,v 1.2 2007/02/02 17:05:53 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,10 +35,10 @@ private:
   static Sint32 table_pos1[16];
   static Sint32 table_pos2[16];
   static char couleurs[448];
-  static const Sint32 FONDLARGE1 = 32;
-  static const Sint32 FONDHAUTE1 = 32;
-  static const Sint32 FONDLARGE2 = 64;
-  static const Sint32 FONDHAUTE2 = 64;
+  static const Sint32 TILES_32_WIDTH = 32;
+  static const Sint32 TILES_32_HEIGHT = 32;
+  static const Sint32 TILES_64_WIDTH = 64;
+  static const Sint32 TILES_64_HEIGHT = 64;
 
   typedef enum {
     TILES_32x32_WITH_4_COLORS,
@@ -51,13 +51,26 @@ private:
   /** 4 color palette index */
   Uint32 palette_index;
 
+  bitmap_data *current_tiles;
+  char *map_tiles;
+  Uint32 map_height;
+  Uint32 map_width;
+  Uint32 map_xcoord;
+  Uint32 map_ycoord;
+  Uint32 map_xmax;
+  Uint32 map_ymax;
+  Uint32 tiles_width;
+  Uint32 tiles_height;
+
 private:
+  void set_palette ();
   void set_4_color_palette (Uint32 pal_index);
 
 public:
     tiles_background ();
    ~tiles_background ();
   void setup (Uint32 titles_num);
+  void draw ();
   void set_4_color_palette ();
   void next_4_color_palette ();
   void prev_4_color_palette ();

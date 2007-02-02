@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.28 2007/02/01 11:17:24 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.29 2007/02/02 17:05:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -55,7 +55,7 @@ tableaux_Z::tableaux_Z()
 
 	ptBobMoney = new sprite_object();
 	ptBobRever = new tecno_gads();
-	ptrEscMenu = new escapeMenu();
+	ptrEscMenu = new handler_popup_menu();
 	
 	sprite_projectile::start_list(briquesTab, les_atomes, tecZ_barre);
 	levelTecno = 1;
@@ -183,8 +183,7 @@ Sint32 tableaux_Z::first_init()
 	//bumper's viewfinder
 	ptBaDirect->create_sprites_list();
 	//ESC menu
-	error_init(ptrEscMenu->first_init(sprites_bitmap, 0, 256 * resolution));
-	if(erreur_num) return erreur_num; 
+	ptrEscMenu->first_init(sprites_bitmap, 0, 256 * resolution);
 	resources->release_sprites_bitmap();
 	display->lock_surfaces();
 	
@@ -465,13 +464,13 @@ Sint32 tableaux_Z::zeMainLoop()
 	// escape key to quit the game !
 	//###################################################################
 	if(keyboard->command_is_pressed(handler_keyboard::TOEXITFLAG) ||
-		Ecode == escapeMenu::WEQUITGAME)
+		Ecode == handler_popup_menu::WEQUITGAME)
 		end_return = -1;
 	if(keyboard->command_is_pressed(handler_keyboard::TOOVERFLAG) ||
-		Ecode == escapeMenu::GOGAMEOVER)
+		Ecode == handler_popup_menu::GOGAMEOVER)
 		joueurGere->lifesReset();
 	if(keyboard->command_is_pressed(handler_keyboard::TOMENUFLAG) ||
-		Ecode == escapeMenu::EXITTOMENU)
+		Ecode == handler_popup_menu::EXITTOMENU)
 		end_return = 4;
 
 	//###################################################################

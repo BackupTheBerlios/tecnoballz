@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.25 2007/02/01 11:17:24 gurumeditation Exp $
+// id		: $Id: shop_tecno.cc,v 1.26 2007/02/02 17:05:53 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -37,7 +37,7 @@ shop_tecno::shop_tecno()
 	BOB_allume = new sprite_object();
 	gereGadget = new ze_gadgets(NB_OPTIONS + 2, 0);
 	mega_print = new print_text();
-	ptrEscMenu = new escapeMenu();
+	ptrEscMenu = new handler_popup_menu();
 	shop_point = 0;
 	optioninfo = 0;
 	infodejavu = 0;
@@ -165,14 +165,13 @@ Sint32 shop_tecno::first_init()
 	//###################################################################
 	// intialize the "escape menu"
 	//###################################################################
-	error_init(ptrEscMenu->first_init
+	ptrEscMenu->first_init
 	(	sprites_bitmap,
 		1,			//menu number
 		320 * resolution,	//width of screen (center)
 		1,			//restaure background where leaves
 		1			//initialize color table
-	));
-	
+	);
 
 	resources->release_sprites_bitmap();
 	error_init(mega_print->initialise());
@@ -285,10 +284,10 @@ Sint32 shop_tecno::zeMainLoop()
 	// escape key to quit the game !
 	//###################################################################
 	if(keyboard->command_is_pressed(handler_keyboard::TOEXITFLAG) ||
-		Ecode == escapeMenu::WEQUITGAME)
+		Ecode == handler_popup_menu::WEQUITGAME)
 		end_return = -1;
 	if(keyboard->command_is_pressed(handler_keyboard::TOMENUFLAG) ||
-		Ecode == escapeMenu::EXITTOMENU)
+		Ecode == handler_popup_menu::EXITTOMENU)
 		end_return = 4;
 
 	tu_triches();

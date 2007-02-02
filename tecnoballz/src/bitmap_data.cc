@@ -5,11 +5,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.12 2007/02/01 13:24:22 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.13 2007/02/02 17:05:53 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,9 +52,8 @@ bitmap_data::~bitmap_data ()
 void
 bitmap_data::clear_members ()
 {
-  mentatInit ();
   surface = (SDL_Surface *) NULL;
-  pixel_buffer = (char *) NULL;
+  pixel_data = (char *) NULL;
   height = 0;
   width = 0;
   row_size = 0;
@@ -72,24 +71,13 @@ bitmap_data::release ()
     {
       SDL_FreeSurface (surface);
       surface = (SDL_Surface *) NULL;
-      pixel_buffer = (char *) NULL;
+      pixel_data = (char *) NULL;
     }
-  else if (pixel_buffer != NULL)
+  else if (pixel_data != NULL)
     {
-      delete[]pixel_buffer;
-      pixel_buffer = (char *) NULL;
+      delete[]pixel_data;
+      pixel_data = (char *) NULL;
     }
-  mentatKill ();
-}
-
-/**
- * Return the SDL surface
- * @return a pointer to the SDL surface structure
- */
-SDL_Surface*
-bitmap_data::get_surface ()
-{
-  return surface;
 }
 
 /**
@@ -131,7 +119,7 @@ bitmap_data::get_height ()
 char *
 bitmap_data::get_pixel_data (Sint32 xcoord, Sint32 ycoord)
 {
-  return (pixel_buffer + ycoord * row_size + (xcoord * depth));
+  return (pixel_data + ycoord * row_size + (xcoord * depth));
 }
 
 /** 
@@ -141,7 +129,7 @@ bitmap_data::get_pixel_data (Sint32 xcoord, Sint32 ycoord)
 char *
 bitmap_data::get_pixel_data ()
 {
-  return pixel_buffer;
+  return pixel_data;
 }
 
 /** 
@@ -174,7 +162,7 @@ bitmap_data::get_offset (Sint32 posX, Sint32 posY)
  * @param d depth of the bitmap 
  */
 void
-bitmap_data::create (Sint32 w, Sint32 h, Sint32 d)
+bitmap_data::create (Uint32 w, Uint32 h, Uint32 d)
 {
   width = w;
   height = h;
@@ -183,43 +171,33 @@ bitmap_data::create (Sint32 w, Sint32 h, Sint32 d)
   bytes_size = height * row_size;
   try
   {
-    pixel_buffer = new char[bytes_size];
+    pixel_data = new char[bytes_size];
   }
   catch (std::bad_alloc &)
   {
     std::
-      cerr << "bitmap_data::create() not enough memory to allocate " <<
-      bytes_size << " bytes " << std::endl;
+      cerr << "(!)bitmap_data::create() not enough memory to allocate " <<
+      bytes_size << " bytes!" << std::endl;
     throw;
   }
   clear ();
 }
 
 /** 
- * Create an empty bitmap SDL surface
- * @param width width of the offscreen in pixels 
- * @param height height of the offscreen in pixels
- * @param depth number of byte(s) per pixel (1 to 4)
- * @param flags specifies the type of surface
- * @param red_mask
- * @param green_mask
- * @param blue_mask
- * @param alpha_mask
+ * Create a new SDL surface
+ * @param w width of the surface in pixels
+ * @param h height of the surface in pixels
  */
 void
-bitmap_data::create_surface (Sint32 width, Sint32 height, Sint32 depth,
-                             Uint32 flags, Uint32 red_mask, Uint32 green_mask,
-                             Uint32 blue_mask, Uint32 alpha_mask)
+bitmap_data::create_surface (Uint32 w, Uint32 h)
 {
-  surface =
-    SDL_CreateRGBSurface (flags, width, height, depth, red_mask, green_mask,
-                          blue_mask, alpha_mask);
-  if (NULL == surface)
-    {
-      std::cerr << "(!)handler_display::initialize() " <<
-        "SDL_CreateRGBSurface return  " << SDL_GetError ();
-      throw std::runtime_error ("SDL_CreateRGBSurface() failed!");
-    }
+  Uint32 d = display->get_bits_per_pixel ();
+  dynamic_cast < surface_sdl * >(this)->create_surface (w, h, d);
+  width = w;
+  height = h;
+  depth = d / 8;
+  row_size = (Sint32) (width * depth);
+  bytes_size = height * row_size;
 }
 
 /**
@@ -244,7 +222,7 @@ bitmap_data::duplicate_pixel_data ()
   }
   for (Sint32 i = 0; i < bytes_size; i++)
     {
-      pixel[i] = pixel_buffer[i];
+      pixel[i] = pixel_data[i];
     }
   return pixel;
 }
@@ -308,15 +286,23 @@ bitmap_data::copyBuffer (Sint32 srceX, Sint32 srceY, Sint32 destX,
 void
 bitmap_data::clear (Sint32 pixel)
 {
+  if (pixel_data == NULL)
+  {
+    std::cerr << "pixel_data is NULL!\n";
+    return;
+  }
+  //std::cout << "clear " << width << " " << height << " " << row_size << "\n";
   Sint32 w = width;
   Sint32 h = height;
   Sint32 p = pixel;
-  char *d = pixel_buffer;
-  Sint32 n = width;
+  char *d = pixel_data;
+  Sint32 n = row_size;
   for (Sint32 i = 0; i < h; i++, d += n)
     {
+      //std::cout << " y:" << i << std::endl;
       for (Sint32 j = 0; j < w; j++)
         {
+          //std::cout << " x:" << j << std::endl;
           d[j] = p;
         }
     }
@@ -378,18 +364,18 @@ bitmap_data *
 bitmap_data::cut_to_surface (Sint32 xcoord, Sint32 ycoord, Sint32 l, Sint32 h)
 {
   bitmap_data *bmp = new bitmap_data ();
-  bmp->create_surface (l, h, depth);
+  bmp->create_surface (l, h);
   SDL_Surface* surface_dest = bmp->get_surface ();
   SDL_Rect rect = { xcoord, ycoord, l, h };
-  if (SDL_BlitSurface (surface, &rect, surface_dest, &rect) < 0)
+  if (depth == 1)
+    {
+      SDL_SetPalette (surface_dest, SDL_LOGPAL | SDL_PHYSPAL, surface->format->palette->colors, 0, 256);
+    }
+  if (SDL_BlitSurface (surface, &rect, surface_dest, NULL) < 0)
     {
       std::cerr << "offscreen_surface::blit_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
-  if (depth == 1)
-{
-    SDL_SetPalette (surface_dest, SDL_LOGPAL | SDL_PHYSPAL, surface->format->palette->colors, 0, 256);
-  }
   return bmp;
 }
 
@@ -430,7 +416,7 @@ bitmap_data::sdl_load_bmp (char *fpath)
         << "SDL_LoadBMP return " << SDL_GetError () << std::endl;
       throw std::runtime_error ("SDL_LoadBMP() failed!");
     }
-  pixel_buffer = (char *) surface->pixels;
+  pixel_data = (char *) surface->pixels;
   width = surface->w;
   row_size = width;
   height = surface->h;

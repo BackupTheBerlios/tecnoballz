@@ -5,11 +5,11 @@
  * @date 2007-01-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.22 2007/02/01 11:17:24 gurumeditation Exp $
+ * $Id: main.cc,v 1.23 2007/02/02 17:05:53 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -160,6 +160,7 @@ shop_tecno   => supervisor_shop
 scrolledit   => supervisor_scrolleditor 
 menu_tecno   => supervisor_main_menu
 
+*escapeMenu   => item_popup_menu 
 *audiomixer   => handler_audio 
 *clavierMac   => handler_keyboard
 *ecran_hard   => handler_display 
@@ -175,7 +176,6 @@ zeMiniMess   => item_small_messages
 barreScore   => item_score_panel
 briqueCote   => items_sides_bricks
 ejectBalls   => items_balls_ejectors
-escapeMenu   => item_popup_menu 
 *fond_ecran   => tiles_background
 head_anima   => item_head_anim
 lastScroll   => item_vertical_scroll
