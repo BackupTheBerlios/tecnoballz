@@ -4,11 +4,11 @@
  * @date 2007-02-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.h,v 1.3 2007/02/02 21:07:43 gurumeditation Exp $
+ * $Id: tiles_background.h,v 1.4 2007/02/03 20:52:28 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ private:
   Uint32 *map_tiles;
   Uint32 map_height;
   Uint32 map_width;
+  Uint32 map_row_size;
   Uint32 map_xcoord;
   Uint32 map_ycoord;
   Uint32 map_xmax;
@@ -71,6 +72,7 @@ public:
    ~tiles_background ();
   void setup (Uint32 titles_num);
   void draw ();
+  void draw2 ();
   void set_4_color_palette ();
   void next_4_color_palette ();
   void prev_4_color_palette ();

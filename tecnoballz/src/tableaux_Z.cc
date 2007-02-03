@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-02
 // fonctions	: manage bricks levels
-// id		: $Id: tableaux_Z.cc,v 1.30 2007/02/02 21:07:43 gurumeditation Exp $
+// id		: $Id: tableaux_Z.cc,v 1.31 2007/02/03 20:52:28 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -413,8 +413,8 @@ Sint32 tableaux_Z::zeMainLoop()
 			ptPrntmney->execution1(joueurGere->creditFric);
 		}
 
-		sprites->draw();
                 ecranfond4->draw();
+		sprites->draw();
 		tecZ_barre->scoreEcran();
 		Ecode = ptrEscMenu->execution1();
 		display->unlock_surfaces();
