@@ -1,14 +1,14 @@
 /** 
  * @file tiles_background.h
  * @brief Draw tiles background in bricks levels 
- * @date 2007-02-01
+ * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.h,v 1.4 2007/02/03 20:52:28 gurumeditation Exp $
+ * $Id: tiles_background.h,v 1.5 2007/02/04 15:56:45 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +63,12 @@ private:
   Uint32 tiles_width;
   Uint32 tiles_height;
 
+  Uint32 map_move_num;
+  Uint32 map_move_angle;
+
+
 private:
+  void generate_map ();
   void set_palette ();
   void set_4_color_palette (Uint32 pal_index);
 
@@ -72,7 +77,7 @@ public:
    ~tiles_background ();
   void setup (Uint32 titles_num);
   void draw ();
-  void draw2 ();
+  void draw (offscreen_surface * offscreen);
   void set_4_color_palette ();
   void next_4_color_palette ();
   void prev_4_color_palette ();

@@ -1,14 +1,14 @@
 /** 
  * @file tiles_background.cc 
  * @brief Draw tiles background in bricks levels 
- * @date 2007-02-01
+ * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.5 2007/02/04 12:33:13 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.6 2007/02/04 15:56:45 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,11 +37,11 @@
 tiles_background::tiles_background ()
 {
   mentatInit ();
-  type_of_tiles = TILES_64x64_WITH_16_COLORS; 
+  type_of_tiles = TILES_64x64_WITH_16_COLORS;
   palette_index = 0;
   if (resolution == 1 || bg4_colors)
     {
-      type_of_tiles = TILES_32x32_WITH_4_COLORS; 
+      type_of_tiles = TILES_32x32_WITH_4_COLORS;
     }
   current_tiles = NULL;
   map_tiles = NULL;
@@ -53,6 +53,8 @@ tiles_background::tiles_background ()
   map_ymax = 0;
   tiles_width = 0;
   tiles_height = 0;
+  map_move_num = 0;
+  map_move_angle = 0;
 }
 
 /** 
@@ -78,55 +80,56 @@ tiles_background::~tiles_background ()
  * @param tiles_num 
  */
 void
-tiles_background::setup(Uint32 tiles_num)
+tiles_background::setup (Uint32 tiles_num)
 {
   if (is_verbose)
     {
-      std::cout << "tiles_background::setup() tiles_num:" << tiles_num << std::endl;
+      std::
+        cout << "tiles_background::setup() tiles_num:" << tiles_num << std::
+        endl;
     }
   if (type_of_tiles > TILES_64x64_WITH_16_COLORS)
     {
       type_of_tiles = TILES_64x64_WITH_16_COLORS;
     }
 
-  Sint32 *t_pos;
   switch (type_of_tiles)
     {
     case TILES_32x32_WITH_4_COLORS:
-    {
-      bitmap_data *bmp = new bitmap_data ();
-      if (is_verbose)
-        {
-          std::cout << "tiles_background::setup() "
-            "load 32x32 tiles with 4 colors" << std::endl;
-        }
-      bmp->load (handler_resources::RES60BACKG);
-      tiles_width = TILES_32_WIDTH;
-      tiles_height = TILES_32_HEIGHT;
-      t_pos = table_pos1;
+      {
+        bitmap_data *bmp = new bitmap_data ();
+        if (is_verbose)
+          {
+            std::cout << "tiles_background::setup() "
+              "load 32x32 tiles with 4 colors" << std::endl;
+          }
+        bmp->load (handler_resources::RES60BACKG);
+        tiles_width = TILES_32_WIDTH;
+        tiles_height = TILES_32_HEIGHT;
 
-      /* select one of the 60 backgrounds */
-      /* value from 0 to 63 */
-      Uint32 x;
-      Uint32 y = hasard_val & 0x3F;
-      if (y >= 60)
-        {
-          y -= 60;
-        }
-      if (y & 0x1)
-        {
-          /* right side */
-          x = bmp->get_width () / 2;
-        }
-      else
-        {
-          x = 0;
-        }
-      y >>= 1;
-      y = y * tiles_height;
-      current_tiles = bmp->cut_to_surface (x, y, 5 * tiles_width, tiles_height);
-      delete bmp;
-    }
+        /* select one of the 60 backgrounds */
+        /* value from 0 to 63 */
+        Uint32 x;
+        Uint32 y = hasard_val & 0x3F;
+        if (y >= 60)
+          {
+            y -= 60;
+          }
+        if (y & 0x1)
+          {
+            /* right side */
+            x = bmp->get_width () / 2;
+          }
+        else
+          {
+            x = 0;
+          }
+        y >>= 1;
+        y = y * tiles_height;
+        current_tiles =
+          bmp->cut_to_surface (x, y, 5 * tiles_width, tiles_height);
+        delete bmp;
+      }
       break;
 
     case TILES_64x64_WITH_16_COLORS:
@@ -150,17 +153,11 @@ tiles_background::setup(Uint32 tiles_num)
         current_tiles->load (pathname);
         tiles_width = TILES_64_WIDTH;
         tiles_height = TILES_64_HEIGHT;
-        t_pos = table_pos1;
-        if (current_tiles->get_width () / TILES_64_WIDTH > 5)
-          {
-            t_pos = table_pos2;
-          }
       }
       break;
     }
 
   map_width = (game_screen->get_width () - 64 * resolution) / tiles_width;
-  Sint32 oSour = current_tiles->get_row_size ();
   Sint32 mVert = (240 * resolution) % tiles_height - 1;
   map_height = (240 * resolution) / tiles_height;
   map_xmax = tiles_width * map_width;
@@ -171,112 +168,15 @@ tiles_background::setup(Uint32 tiles_num)
   map_ymax = tiles_height * map_height;
   map_row_size = tiles_height * map_width;
 
-  try
-  {
-    map_tiles = new Uint32[map_width * map_height];
-  }
-  catch (std::bad_alloc &)
-  {
-    std::
-      cerr << "(!)tiles_background::setup() not enough memory to allocate "
-        << map_width * map_height << " bytes!" << std::endl;
-    throw;
-  }
-
-  Sint32 baseX;
-  Sint32 baseY;
-  switch (type_of_tiles)
-    {
-      case TILES_32x32_WITH_4_COLORS:
-        baseX = 0;
-        baseY = 0;
-        break;
-
-      case TILES_64x64_WITH_16_COLORS:
-      default:
-        baseX = 0;
-        baseY = 0;
-        break;
-    }
- 
   set_palette ();
- 
+  /* generating random map */
+  generate_map ();
 
-  //###############################################################
-  // display background map 
-  //###############################################################
-  Sint32 src_X = 0;
-#if __WORDSIZE == 64
-  Sint32 h = (long) display;
-  Sint32 k = (long) current_tiles;
-#else
-  Sint32 h = (Sint32) display;  //use pointer address as random value
-  Sint32 k = (Sint32) current_tiles;    //use pointer address as random value
-#endif
-  Sint32 nline;
-  if (mVert > 0)
-    {
-      nline = mVert;
-    }
-  else
-    {
-      nline = tiles_height;
-    }
+  /* draw the tiles in background offscreen */
+  map_xcoord = hasard_val % map_xmax;
+  map_ycoord = hasard_val * countframe % map_ymax;
+  draw (background_screen);
 
-  std::cout << "mVert " << mVert << " nline " << nline << std::endl;
-  std::cout << "tiles_width " << tiles_width << " tiles_height " << tiles_height << std::endl;
-  std::cout << "map_width:" << map_width << "; map_height:" << map_height <<std::endl;
-
-  
-  Uint32 voffset = background_screen->get_vertical_offset ();
-
-  /* 7 => 0: 480/64 = 7.5 */
-  background_screen->unlock_surface ();
-  for (Sint32 det_Y = map_height - 1; det_Y >= 0; det_Y--)
-    {
-       //std::cout << "(" << det_Y << ")\n";
-      /* 7 => 0: 512/64 = 8*/
-      for (Sint32 det_X = map_width - 1; det_X >=0 ; det_X--)
-        {
-          //std::cout << "(" << det_Y << ", " << det_X << ")\n";
-          hasard_val = hasard_val + h + k + 1 + keyboard->get_mouse_x ();
-          h = h + countframe + det_Y;
-          k = k + display->get_framepee ();
-          src_X = hasard_val;
-          src_X &= 0x0f;        //table index (0 to 15)
-          src_X = t_pos[src_X]; //source position (0 to 4)
-          src_X *= tiles_width;
-          map_tiles[det_Y * map_height + det_X] = src_X;
-          //printf("map_tiles[%i] = %i\n", det_Y * map_height + det_X, src_X);
-          char *srcPT = current_tiles->get_pixel_data (baseX + src_X, baseY);
-          char *detPT =
-            background_screen->get_pixel_data (det_X * tiles_width, det_Y * tiles_height);
-          switch (type_of_tiles)
-            {
-            case 0:
-              display->buf_affx32 (srcPT, detPT, oSour, nline);
-              break;
-            case 1:
-              break;
-              current_tiles->blit_surface (
-                background_screen, 
-                src_X,
-                0,
-                det_X * tiles_width,
-                det_Y * tiles_height + voffset,
-                tiles_width,
-                nline);
-
-
-              break;
-            case 2:
-              display->buf_affx64 (srcPT, detPT, oSour, nline);
-              break;
-            }
-        }
-      nline = tiles_height;
-    }
-  background_screen->lock_surface ();
   /* draw top shadow */
   Uint32 hscreen = display->get_width () - (64 * resolution);
   for (Sint32 det_Y = 0; det_Y < (handler_display::SHADOWOFFY * resolution);
@@ -303,55 +203,149 @@ tiles_background::setup(Uint32 tiles_num)
 
 }
 
+/**
+ * Generate tiles map
+ */
+void
+tiles_background::generate_map ()
+{
+
+  /* allocate memory of the map */
+  if (NULL == map_tiles)
+    {
+      try
+        {
+          map_tiles = new Uint32[map_width * map_height * 4];
+        }
+      catch (std::bad_alloc &)
+        {
+          std::
+            cerr << "(!)tiles_background::generate_map() "
+              "not enough memory to allocate " <<
+              map_width * map_height << " bytes!" << std::endl;
+          throw;
+        }
+    }
 
 
+  Sint32 *positions;
+  switch (type_of_tiles)
+    {
+    case TILES_32x32_WITH_4_COLORS:
+      positions = table_pos1;
+      break;
+    case TILES_64x64_WITH_16_COLORS:
+    default:
+      positions = table_pos1;
+      if (current_tiles->get_width () / TILES_64_WIDTH > 5)
+        {
+          positions = table_pos2;
+        }
+      break;
+    }
 
+#if __WORDSIZE == 64
+  Sint32 rand1 = (long) display;
+  Sint32 rand2 = (long) current_tiles;
+#else
+  /* use pointer address as random value */
+  Sint32 rand1 = (Sint32) display;
+  /* use pointer address as random value */
+  Sint32 rand2 = (Sint32) current_tiles;
+#endif
+  for (Uint32 v = 0; v <  map_height; v++)
+    {
+      for (Uint32 h = 0; h < map_width; h++)
+        {
+          hasard_val = hasard_val + rand1 + rand2 + 1 + keyboard->get_mouse_x ();
+          rand1 = rand1 + countframe + v;
+          rand2 = rand2 + display->get_framepee ();
+          
+          Uint32 x = hasard_val;
+          /* table index, from 0 to  15 */
+          x &= 0x0f;
+          /* position source, from 0 to 4 */
+          x = positions[x];
+          x *= tiles_width;
 
-//static Uint32 wwww = 0;
+          Uint32 map_index = v * map_width * 2 + h;
+          map_tiles[map_index] = x;
+          map_tiles[map_index + map_width] = x;
+          map_tiles[map_index + map_width * 2 * map_height] = x;
+          map_tiles[map_index + map_width * 2 * map_height + map_width] =
+            x;
 
+        }
 
+    }
+
+}
+
+/**
+ * Draw the tiles background
+ */
 void
 tiles_background::draw ()
 {
-  if (++map_ycoord > map_ymax - 1)
-    {
-      map_ycoord = 0;
-    } 
-  if (++map_xcoord > map_xmax - 1)
-    {
-      map_xcoord = 0;
-    } 
- 
 
-  Uint32 modulo_x = map_xcoord % tiles_width;
-  Uint32 modulo_y = map_ycoord % tiles_height;
-  Uint32 first_width = tiles_width - modulo_x;
-  Uint32 first_height = tiles_height - modulo_y;
-
-  offscreen_surface *offscreen = game_screen;
+  switch (map_move_num)
+    {
+    default:
+        {
+          Uint32 a = map_move_angle + 5;
+          a &= SINUS_MASK;
+          map_move_angle = a;
+          map_ycoord = (table_sinL[a] * 20 * resolution) >> SINUS_DECA;
+          map_xcoord = (table_cosL[a] * 20 * resolution) >> SINUS_DECA;
+        }
+    }
+  draw (game_screen);
+}
+/**
+ * Draw the tiles background
+ * @param offscreen pointer to a offscreen_surface object
+ */
+void
+tiles_background::draw (offscreen_surface *offscreen)
+{
+  map_xcoord = map_xcoord % map_xmax;
+  map_ycoord = map_ycoord % map_ymax;
+  
   SDL_Surface *screen_surface = offscreen->get_surface ();
-  SDL_Surface *tiles_surface = current_tiles->get_surface (); 
+  SDL_Surface *tiles_surface = current_tiles->get_surface ();
   Uint32 voffset = offscreen->get_vertical_offset ();
-  //offscreen->clear (0, 0, voffset, 256 * resolution, 240 * resolution);
   offscreen->unlock_surface ();
   
+  /* width and height of the visible window */
+  Uint32 width_box = offscreen->get_width () - 64 * resolution;
   Uint32 height_box = offscreen->get_height () - voffset * 2;
-  Uint32 width_box = offscreen->get_width() - 64 * resolution;
-  
+  /* index on the first  tile map */
+  Uint32 map_index =
+    (map_ycoord / tiles_height % map_height) * map_height * 2 +
+    (map_xcoord / tiles_width % map_width);
+  /* calculate the width of the tiles of the first column */
+  Uint32 modulo_x = map_xcoord % tiles_width;
+  Uint32 first_width = tiles_width - modulo_x;
+  /* calculate the height of the tiles of the first line */
+  Uint32 modulo_y = map_ycoord % tiles_height;
+  Uint32 first_height = tiles_height - modulo_y;
+  /* calculate the width of the tiles of the last column, 
+   * zero value is * possible */
+  Uint32 last_width = (width_box - first_width) % tiles_width;
+  /* calculate the height of the tiles of the last line, 
+   * zero value is * possible */
+  Uint32 last_height = (height_box - first_height) % tiles_height;
+
+
   SDL_Rect rect_src;
   SDL_Rect rect_dst;
 
   rect_dst.y = voffset;
-  
-  Uint32 vcount = (height_box - first_height) / tiles_height + 1;
-  Uint32 last_height = (height_box - first_height) % tiles_height;
-  
-  Uint32 hcount = (width_box - first_width) / tiles_width + 1;
-  Uint32 last_width = (width_box - first_width) % tiles_width;
 
+  Uint32 vcount = (height_box - first_height) / tiles_height + 1;
+  Uint32 hcount = (width_box - first_width) / tiles_width + 1;
   for (Uint32 v = 0; v <= vcount; v++)
     {
-      //printf("%i) : rect_dst.y:%i\n", v, rect_dst.y - voffset);
       if (v == 0)
         {
           rect_src.h = rect_dst.h = first_height;
@@ -360,213 +354,75 @@ tiles_background::draw ()
       else
         {
           rect_src.y = 0;
-          if (v == vcount && last_height > 0)
+          if (v < vcount)
             {
-              rect_src.h = last_height = last_height;
+              rect_src.h = rect_dst.h = tiles_height;
             }
           else
             {
-              rect_src.h = rect_dst.h = tiles_height;
+              if (last_height > 0)
+                {
+                  rect_src.h = rect_dst.h = last_height;
+                }
+              else
+                {
+                 continue;
+                }
             }
         }
       rect_dst.x = 0;
       for (Uint32 h = 0; h <= hcount; h++)
         {
-          if (h == 0) 
+          if (h == 0)
             {
               rect_src.w = rect_dst.w = first_width;
-              rect_src.x = modulo_x;
+              rect_src.x = map_tiles[map_index] + modulo_x;
             }
           else
             {
-              rect_src.x = 0;
-	      if (h == hcount && last_width > 0)
-	        {
-                  rect_src.w = rect_dst.w = last_width;
-	        }
-              else
-	        {
-	          if (h == hcount) continue;
+              rect_src.x = map_tiles[map_index + h];
+              if (h < hcount)
+                {
                   rect_src.w = rect_dst.w = tiles_width;
-	        }
+                }
+              else
+                {
+                  if (last_width > 0)
+                    {
+                      rect_src.w = rect_dst.w = last_width;
+                    }
+                  else
+                    {
+                     continue;
+                    }
+                }
             }
-          if (SDL_BlitSurface (tiles_surface, &rect_src, screen_surface, &rect_dst) < 0)
+          if (SDL_BlitSurface
+              (tiles_surface, &rect_src, screen_surface, &rect_dst) < 0)
             {
-              std::cerr << "surface_sdl::blit_surface() " <<
+              std::cerr << "(!)tiles_background::draw() " <<
                 "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
             }
           rect_dst.x += rect_dst.w;
         }
+      map_index += map_width * 2;
       rect_dst.y += rect_dst.h;
     }
-  //printf("rect_dst.y:%i vcount:%i\n", rect_dst.y, vcount);
-
-
-
   offscreen->lock_surface ();
-}
-
-void
-tiles_background::draw2 ()
-{
-  //if (++wwww < 5) return;
-  // wwww = 0;
-
-  offscreen_surface *offscreen = game_screen;
-
-  if (++map_ycoord > map_ymax - 1)
-    {
-      map_ycoord = 0;
-    } 
-  
-  offscreen->clear ();
-  Uint32 voffset = offscreen->get_vertical_offset ();
-  Uint32 hscreen = offscreen->get_height () - voffset * 2;
-  Uint32 wscreen = offscreen->get_width ();
-
-  offscreen->unlock_surface ();
-  SDL_Rect src_rect;
-  SDL_Rect dest_rect;
-
-  SDL_Surface *screen_surface = offscreen->get_surface ();
-  SDL_Surface *tiles_surface = current_tiles->get_surface (); 
-
-
-  /*
-   * x = 10
-   * w = 54
-   *
-   */
-
-  Uint32 modulox = map_xcoord % tiles_width;
-  Uint32 moduloy = map_ycoord % tiles_height;
-  Uint32 width = tiles_width - modulox;
-  Uint32 height = tiles_height - moduloy;
-  
-
-  /*
-   * top-left corner
-   */
-  Uint32 y = map_ycoord;
-  Uint32 x = map_xcoord;
-  src_rect.x = map_tiles[y / tiles_height * map_width + x / tiles_width];
-  src_rect.x = modulox;
-  src_rect.y = moduloy;
-  src_rect.w = width;
-  src_rect.h = height;
-  dest_rect.x = 0;
-  dest_rect.y = voffset;
-  dest_rect.w = width;
-  dest_rect.h = height;
-  if (SDL_BlitSurface (tiles_surface, &src_rect, screen_surface, &dest_rect) < 0)
-    {
-      std::cerr << "tiles_background::draw() " <<
-        "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
-    }
-
-
-  /*
-   * left column
-   */
-  y = map_ycoord + tiles_height;
-  src_rect.h = tiles_height;
-  dest_rect.h = tiles_height;
-  src_rect.y = 0;
-  Uint32 ycoord = voffset + height;
-  Uint32 vcount = (hscreen - height) / tiles_height;
-  for (Uint32 v = 1; v <= vcount; v++)
-    {
-      src_rect.x = map_tiles[y / tiles_height * map_width + x / tiles_width];
-      src_rect.x = 0;
-      dest_rect.y = ycoord;
-      if (SDL_BlitSurface (tiles_surface, &src_rect, screen_surface, &dest_rect) < 0)
-        {
-          std::cerr << "tiles_background::draw() " <<  v <<
-            " SDL_BlitSurface() return " << SDL_GetError () << std::endl;
-        }
-      if (y+= tiles_height > map_ymax)
-        {
-          y-= map_ymax;
-        }
-      ycoord+= tiles_height;
-    }
-
-  /*
-   * bottom-left
-   */
-  vcount = (hscreen - height) % tiles_height;
-  if (vcount > 0)
-    {
-      dest_rect.y = ycoord;
-      src_rect.h = vcount;
-      dest_rect.h = vcount;
-      src_rect.x = map_tiles[y / tiles_height * map_width + x / tiles_width];
-      src_rect.x = 0;
-      if (SDL_BlitSurface (tiles_surface, &src_rect, screen_surface, &dest_rect) < 0)
-        {
-          std::cerr << "tiles_background::draw() " <<
-            "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
-        }
-    }
-  
-  /*
-   * top line
-   */
-  y = map_ycoord + tiles_height;
-  src_rect.y = moduloy;
-  src_rect.w = tiles_width;
-  src_rect.h = height;
-  dest_rect.y = voffset + height;;
-  dest_rect.w = tiles_width;
-  dest_rect.h = height;
-  Uint32 wcount = (wscreen - width) / tiles_width;
-  Uint32 xcoord = width;
-  for (Uint32 v = 1; v <= wcount; v++)
-    {
-      src_rect.x = map_tiles[y / tiles_height * map_width + x / tiles_width];
-      src_rect.x = 0;
-      dest_rect.x = xcoord;
-      if (SDL_BlitSurface (tiles_surface, &src_rect, screen_surface, &dest_rect) < 0)
-        {
-          std::cerr << "tiles_background::draw() " <<  v <<
-            " SDL_BlitSurface() return " << SDL_GetError () << std::endl;
-        }
-      if (x+= tiles_width > map_xmax)
-        {
-          x-= map_xmax;
-        }
-      xcoord+= tiles_width;
-    }
-
-
-  
-  offscreen->lock_surface ();
-  return;
-  for (Uint32 v = 0; v < map_height; v++)
-    {
-         for (Uint32 h = 0; h < map_height; v++)
-           {
-               Uint32 x_source = map_tiles[y / tiles_height * map_width + x / tiles_width];  
-               if (SDL_BlitSurface (tiles_surface, &src_rect, screen_surface, &dest_rect) < 0)
-                 {
-                   std::cerr << "surface_sdl::blit_surface() " <<
-                     "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
-                 }
-
-           }
-    }
 }
 
 /**
  * x-coordinates of sources in the tiles bitmap
  */
-Sint32
-tiles_background::table_pos1[16] =
-  { 3, 0, 0, 3, 4, 2, 1, 4, 3, 2, 1, 1, 0, 0, 2, 4 };
-Sint32
-tiles_background::table_pos2[16] =
-  { 3, 0, 0, 3, 4, 2, 1, 4, 3, 2, 1, 1, 5, 0, 5, 4 };
+Sint32 tiles_background::table_pos1[16] =
+{
+  3, 0, 0, 3, 4, 2, 1, 4, 3, 2, 1, 1, 0, 0, 2, 4
+};
 
+Sint32 tiles_background::table_pos2[16] =
+{
+  3, 0, 0, 3, 4, 2, 1, 4, 3, 2, 1, 1, 5, 0, 5, 4
+};
 
 void
 tiles_background::set_palette ()
@@ -574,38 +430,38 @@ tiles_background::set_palette ()
   /* initialize color palette */
   switch (type_of_tiles)
     {
-      case TILES_32x32_WITH_4_COLORS:
-        set_4_color_palette ();
-        break;
-    
-      case TILES_64x64_WITH_16_COLORS:
-      default:
-        unsigned char *colPT = current_tiles->get_palette ();
-        SDL_Color *palPT = display->paletteAdr ();
-        SDL_Color *palP1 = palPT;
-        SDL_Color *palP2 = palP1 + 128;
-        unsigned char pixel;
-        for (Sint32 i = 0; i < 16; i++)
-          {
-            /* red */
-            pixel = *(colPT++);
-            palP1->r = pixel;
-            pixel >>= 1;
-            palP2->r = pixel;
-            /* green */
-            pixel = *(colPT++);
-            palP1->g = pixel;
-            pixel >>= 1;
-            palP2->g = pixel;
-            /* blue */
-            pixel = *(colPT++);
-            palP1->b = pixel;
-            pixel >>= 1;
-            palP2->b = pixel;
-            palP1++;
-            palP2++;
-          }
-        display->enable_palette (palPT);
+    case TILES_32x32_WITH_4_COLORS:
+      set_4_color_palette ();
+      break;
+
+    case TILES_64x64_WITH_16_COLORS:
+    default:
+      unsigned char *colPT = current_tiles->get_palette ();
+      SDL_Color *palPT = display->paletteAdr ();
+      SDL_Color *palP1 = palPT;
+      SDL_Color *palP2 = palP1 + 128;
+      unsigned char pixel;
+      for (Sint32 i = 0; i < 16; i++)
+        {
+          /* red */
+          pixel = *(colPT++);
+          palP1->r = pixel;
+          pixel >>= 1;
+          palP2->r = pixel;
+          /* green */
+          pixel = *(colPT++);
+          palP1->g = pixel;
+          pixel >>= 1;
+          palP2->g = pixel;
+          /* blue */
+          pixel = *(colPT++);
+          palP1->b = pixel;
+          pixel >>= 1;
+          palP2->b = pixel;
+          palP1++;
+          palP2++;
+        }
+      display->enable_palette (palPT);
     }
 }
 
@@ -691,53 +547,53 @@ tiles_background::set_4_color_palette (Uint32 pal_index)
   display->enable_palette (palPT);
 }
 
-//------------------------------------------------------------------------------
-// preset palettes: 4 colors original background (mode 320x200)
-//------------------------------------------------------------------------------
-// 448 / 16     : 28 preset palettes
-// 4 * 4        : 16 composantes by palette
-// 112 * 4      : 448 composantes
+/**
+ * Preset palettes: 4 colors original background (mode 320x200)
+ * 448 / 16 : 28 preset palettes
+ * 4 * 4    : 16 composantes by palette
+ * 112 * 4  : 448 composantes
+*/
 char
   tiles_background::couleurs[448] = {
   0x00, 0x40, 0x20, 0x40, 0x00, 0x60, 0x40, 0x60, 0x00, 0x80, 0x60, 0x80,
-    0x00, 0xA0, 0x80, 0xA0, 0x00, 0x00, 0x20, 0x40, 0x00, 0x20,
+  0x00, 0xA0, 0x80, 0xA0, 0x00, 0x00, 0x20, 0x40, 0x00, 0x20,
   0x40, 0x60, 0x00, 0x40, 0x60, 0x80, 0x00, 0x60, 0x80, 0xA0, 0x00, 0x00,
-    0x20, 0x20, 0x00, 0x20, 0x40, 0x40, 0x00, 0x40, 0x60, 0x60,
+  0x20, 0x20, 0x00, 0x20, 0x40, 0x40, 0x00, 0x40, 0x60, 0x60,
   0x00, 0x60, 0x80, 0x80, 0x00, 0x00, 0x20, 0x40, 0x00, 0x00, 0x40, 0x60,
-    0x00, 0x20, 0x60, 0x80, 0x00, 0x40, 0x80, 0xA0, 0x00, 0x30,
+  0x00, 0x20, 0x60, 0x80, 0x00, 0x40, 0x80, 0xA0, 0x00, 0x30,
   0x40, 0x30, 0x00, 0x50, 0x60, 0x50, 0x00, 0x70, 0x80, 0x70, 0x00, 0x90,
-    0xA0, 0x90, 0x00, 0x20, 0x20, 0x40, 0x00, 0x40, 0x40, 0x60,
+  0xA0, 0x90, 0x00, 0x20, 0x20, 0x40, 0x00, 0x40, 0x40, 0x60,
   0x00, 0x60, 0x60, 0x80, 0x00, 0x80, 0x80, 0xA0, 0x00, 0x00, 0x40, 0x40,
-    0x00, 0x20, 0x60, 0x60, 0x00, 0x40, 0x80, 0x80, 0x00, 0x60,
+  0x00, 0x20, 0x60, 0x60, 0x00, 0x40, 0x80, 0x80, 0x00, 0x60,
   0xA0, 0xA0, 0x00, 0x20, 0x00, 0x20, 0x00, 0x40, 0x20, 0x40, 0x00, 0x60,
-    0x40, 0x60, 0x00, 0x80, 0x60, 0x80, 0x00, 0x00, 0x40, 0x20,
+  0x40, 0x60, 0x00, 0x80, 0x60, 0x80, 0x00, 0x00, 0x40, 0x20,
   0x00, 0x00, 0x60, 0x40, 0x00, 0x20, 0x80, 0x60, 0x00, 0x40, 0xA0, 0x80,
-    0x00, 0x40, 0x20, 0x00, 0x00, 0x60, 0x40, 0x20, 0x00, 0x80,
+  0x00, 0x40, 0x20, 0x00, 0x00, 0x60, 0x40, 0x20, 0x00, 0x80,
   0x60, 0x40, 0x00, 0xA0, 0x80, 0x60, 0x00, 0x40, 0x00, 0x00, 0x00, 0x60,
-    0x20, 0x20, 0x00, 0x80, 0x40, 0x40, 0x00, 0xA0, 0x60, 0x60,
+  0x20, 0x20, 0x00, 0x80, 0x40, 0x40, 0x00, 0xA0, 0x60, 0x60,
   0x00, 0x40, 0x00, 0x40, 0x00, 0x60, 0x20, 0x60, 0x00, 0x80, 0x40, 0x80,
-    0x00, 0xA0, 0x60, 0xA0, 0x00, 0x00, 0x20, 0x00, 0x00, 0x20,
+  0x00, 0xA0, 0x60, 0xA0, 0x00, 0x00, 0x20, 0x00, 0x00, 0x20,
   0x40, 0x20, 0x00, 0x40, 0x60, 0x40, 0x00, 0x60, 0x80, 0x60, 0x00, 0x20,
-    0x40, 0x20, 0x00, 0x40, 0x60, 0x40, 0x00, 0x60, 0x80, 0x60,
+  0x40, 0x20, 0x00, 0x40, 0x60, 0x40, 0x00, 0x60, 0x80, 0x60,
   0x00, 0x80, 0xA0, 0x80, 0x00, 0x40, 0x40, 0x00, 0x00, 0x60, 0x60, 0x20,
-    0x00, 0x80, 0x80, 0x40, 0x00, 0xA0, 0xA0, 0x60, 0x00, 0x00,
+  0x00, 0x80, 0x80, 0x40, 0x00, 0xA0, 0xA0, 0x60, 0x00, 0x00,
   0x40, 0x00, 0x00, 0x20, 0x60, 0x20, 0x00, 0x40, 0x80, 0x40, 0x00, 0x60,
-    0xA0, 0x60, 0x00, 0x20, 0x20, 0x20, 0x00, 0x40, 0x40, 0x40,
+  0xA0, 0x60, 0x00, 0x20, 0x20, 0x20, 0x00, 0x40, 0x40, 0x40,
   0x00, 0x60, 0x60, 0x60, 0x00, 0x80, 0x80, 0x80, 0x00, 0x40, 0x20, 0x60,
-    0x00, 0x60, 0x40, 0x80, 0x00, 0x80, 0x60, 0xA0, 0x00, 0xA0,
+  0x00, 0x60, 0x40, 0x80, 0x00, 0x80, 0x60, 0xA0, 0x00, 0xA0,
   0x80, 0xC0, 0x00, 0x20, 0x20, 0x00, 0x00, 0x40, 0x40, 0x20, 0x00, 0x60,
-    0x60, 0x40, 0x00, 0x80, 0x80, 0x60, 0x00, 0x20, 0x40, 0x60,
+  0x60, 0x40, 0x00, 0x80, 0x80, 0x60, 0x00, 0x20, 0x40, 0x60,
   0x00, 0x40, 0x60, 0x80, 0x00, 0x60, 0x80, 0xA0, 0x00, 0x80, 0xA0, 0xC0,
-    0x00, 0x60, 0x40, 0x20, 0x00, 0x80, 0x60, 0x40, 0x00, 0xA0,
+  0x00, 0x60, 0x40, 0x20, 0x00, 0x80, 0x60, 0x40, 0x00, 0xA0,
   0x80, 0x60, 0x00, 0xC0, 0xA0, 0x80, 0x00, 0x40, 0x00, 0x60, 0x00, 0x60,
-    0x20, 0x80, 0x00, 0x80, 0x40, 0xA0, 0x00, 0xA0, 0x60, 0xC0,
+  0x20, 0x80, 0x00, 0x80, 0x40, 0xA0, 0x00, 0xA0, 0x60, 0xC0,
   0x00, 0x40, 0x00, 0x20, 0x00, 0x60, 0x20, 0x40, 0x00, 0x80, 0x40, 0x60,
-    0x00, 0xA0, 0x60, 0x80, 0x00, 0x20, 0x20, 0x60, 0x00, 0x40,
+  0x00, 0xA0, 0x60, 0x80, 0x00, 0x20, 0x20, 0x60, 0x00, 0x40,
   0x40, 0x80, 0x00, 0x60, 0x60, 0xA0, 0x00, 0x80, 0x80, 0xC0, 0x00, 0x60,
-    0x40, 0x00, 0x00, 0x80, 0x60, 0x20, 0x00, 0xA0, 0x80, 0x40,
+  0x40, 0x00, 0x00, 0x80, 0x60, 0x20, 0x00, 0xA0, 0x80, 0x40,
   0x00, 0xC0, 0x80, 0x60, 0x00, 0x20, 0x40, 0x00, 0x00, 0x40, 0x60, 0x20,
-    0x00, 0x60, 0x80, 0x40, 0x00, 0x80, 0xA0, 0x60, 0x00, 0x40,
+  0x00, 0x60, 0x80, 0x40, 0x00, 0x80, 0xA0, 0x60, 0x00, 0x40,
   0x20, 0x20, 0x00, 0x60, 0x40, 0x40, 0x00, 0x80, 0x60, 0x60, 0x00, 0xA0,
-    0x80, 0x80, 0x00, 0x20, 0x40, 0x40, 0x00, 0x40, 0x60, 0x60,
+  0x80, 0x80, 0x00, 0x20, 0x40, 0x40, 0x00, 0x40, 0x60, 0x60,
   0x00, 0x60, 0x80, 0x80, 0x00, 0x80, 0xA0, 0xA0
 };
