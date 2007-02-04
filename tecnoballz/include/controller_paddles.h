@@ -1,7 +1,7 @@
 //*****************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "zeRaquette.h"
+// file		: "controller_paddles.h"
 // created		: ?
 // updates		: 2004-08-30
 // fonction	: manage the bumpers
@@ -23,7 +23,7 @@
 #ifndef __ZERAQUETTE__
 #define __ZERAQUETTE__
 //...............................................................................
-class zeRaquette;
+class controller_paddles;
 //...............................................................................
 #include "../include/sprite_paddle.h"
 #include "../include/barreScore.h"
@@ -32,7 +32,7 @@ class zeRaquette;
 #include "../include/zeGigaBlit.h"
 //...............................................................................
 
-class zeRaquette:public objects_list < sprite_paddle >
+class controller_paddles:public objects_list < sprite_paddle >
 {
 	friend class sprite_paddle;
 
@@ -124,9 +124,9 @@ class zeRaquette:public objects_list < sprite_paddle >
 		
 
 	public:
-							zeRaquette();
-							zeRaquette(Sint32 nBob);
-							~zeRaquette();
+							controller_paddles();
+							controller_paddles(Sint32 nBob);
+							~controller_paddles();
   void create_projectiles_list ();
 		Sint32				init_liste();
 		void				fire_projectiles ();

@@ -2,14 +2,14 @@
  * @file main.cc 
  * @brief The main function is where the program starts execution 
  * @created 2002-08-21 
- * @date 2007-01-28
+ * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.26 2007/02/04 20:59:41 gurumeditation Exp $
+ * $Id: main.cc,v 1.27 2007/02/04 21:05:05 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,11 +38,6 @@ configfile oConfigure;
 Sint32
 main (Sint32 nbArg, char **ptArg)
 {
-
-#ifdef __LP64__
-  printf ("LP64\n");
-#endif
-
   oConfigure.loadconfig ();
   if (!oConfigure.scanZeArgs (nbArg, ptArg))
     return 0;
