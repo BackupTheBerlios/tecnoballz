@@ -46,7 +46,7 @@ class zeGigaBlit:public objects_list < giga_blitz >
     
 		controller_bricks*			brickObjet;
 		head_anima*			gugusObjet;
-		zeRaquette*			ptRaquette;
+		controller_paddles*			ptRaquette;
 		zexplosion*			pexplosion;
 		sprite_paddle*			tecBumper1;
 		sprite_paddle*			tecBumper3;
@@ -65,12 +65,12 @@ class zeGigaBlit:public objects_list < giga_blitz >
 	public:
 						zeGigaBlit();
 						~zeGigaBlit();
-		Sint32				init_liste(zeRaquette *zeRak, head_anima *gugus, 
+		Sint32				init_liste(controller_paddles *zeRak, head_anima *gugus, 
 							controller_bricks *brick);
 		void				initDepart();
 		void				execution1();
 		void				collision1();
-		Sint32				init_liste(zeRaquette *zeRak, zexplosion *pexpl);
+		Sint32				init_liste(controller_paddles *zeRak, zexplosion *pexpl);
 		void				execution2();
 		void 				collision2();
 		Sint32				guard_shoot(Sint32 value, Sint32 pos_x, Sint32 pos_y,

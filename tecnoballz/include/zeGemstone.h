@@ -27,7 +27,7 @@
 class zeGemstone;
 //...............................................................................
 #include "../include/objects_list.h"
-#include "../include/zeRaquette.h"
+#include "../include/controller_paddles.h"
 #include "../include/techno_gem.h"
 #include "../include/joueurData.h"
 #include "../include/printmoney.h"
@@ -39,7 +39,7 @@ class zeGemstone:public objects_list < techno_gem >
 		static const Sint32	NUMBER_GEM = 6;
 	
 	private:
-		zeRaquette*			ptRaquette;
+		controller_paddles*			ptRaquette;
 		joueurData*			pJoueurDat;
 		barreScore*			ptBarScore;
 		printmoney*			ptPrintmon;
@@ -48,7 +48,7 @@ class zeGemstone:public objects_list < techno_gem >
 							zeGemstone();
 							~zeGemstone();
 		Sint32				initialise(joueurData*, barreScore*, 
-								printmoney*, zeRaquette*);
+								printmoney*, controller_paddles*);
 		void				sendNewGem(sprite_ball *pball);
 		void				sendNewGem(sprite_projectile *pball);
 		void				moving_gem();

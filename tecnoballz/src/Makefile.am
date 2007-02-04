@@ -19,6 +19,7 @@ SOURCES_MAIN = \
 	configfile.cc \
 	controller_balls.cc \
 	controller_bricks.cc \
+  controller_paddles.cc \
 	ejectBalls.cc \
   handler_audio.cc \
   handler_display.cc \
@@ -77,7 +78,6 @@ SOURCES_MAIN = \
 	zeMiniMess.cc \
 	zeMissiles.cc \
 	zeMoveText.cc \
-	zeRaquette.cc \
 	zexplosion.cc \
 	$(NULL)
 

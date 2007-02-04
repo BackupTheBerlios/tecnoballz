@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: supervisor_guards_level.cc,v 1.1 2007/02/04 20:17:32 gurumeditation Exp $
+// id		: $Id: supervisor_guards_level.cc,v 1.2 2007/02/04 20:59:41 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -32,7 +32,7 @@ supervisor_guards_level::supervisor_guards_level()
 	initialise();
 	defilement = new lastScroll();
 	ptguardian = new zeguardian();
-	ptRaquette = new zeRaquette(BOB_BUMPER);
+	ptRaquette = new controller_paddles(BOB_BUMPER);
 	ptMoveText = new zeMoveText();
 	pExplosion = new zexplosion();
 	sprite_paddle *pBump = ptRaquette->demandeRak(1);

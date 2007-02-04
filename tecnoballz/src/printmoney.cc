@@ -50,7 +50,7 @@ printmoney::~printmoney()
 //			=> money:
 //			=> rever:
 //-----------------------------------------------------------------------------
-void printmoney::initialise(joueurData *gamer, zeRaquette* raket,
+void printmoney::initialise(joueurData *gamer, controller_paddles* raket,
 	sprite_object *money, tecno_gads *rever)
 {
 	ptJoueurDa = gamer;
@@ -82,7 +82,7 @@ void printmoney::initialise(joueurData *gamer, zeRaquette* raket,
 //			=> money:
 //			=> lifes:
 //-----------------------------------------------------------------------------
-void printmoney::init_guard(joueurData *gamer, zeRaquette* raket,
+void printmoney::init_guard(joueurData *gamer, controller_paddles* raket,
 	sprite_object *money, tecno_gads *lifes)
 {
 	ptJoueurDa = gamer;

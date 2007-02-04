@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.2 2007/01/30 21:06:03 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.3 2007/02/04 20:59:41 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ class controller_balls;
 #include "../include/zeCapsules.h"
 #include "../include/ze_gadgets.h"
 #include "../include/zeMiniMess.h"
-#include "../include/zeRaquette.h"
+#include "../include/controller_paddles.h"
 #include "../include/ze_magneye.h"
 #include "../include/techno_eye.h"
 
@@ -103,7 +103,7 @@ class controller_balls:public objects_list < sprite_ball >
 									ze_magneye* pEyes);
 						controller_balls(zeguardian*, zeCapsules*, ze_gadgets*);
 						~controller_balls();
-		void			init_balle(zeRaquette *raket, Sint32 start, Sint32 glueC, 
+		void			init_balle(controller_paddles *raket, Sint32 start, Sint32 glueC, 
 							Sint32 speed, Sint32 tiltC, Sint32 table);
 		void			vitusBalle();
 		void			vitusBall2();

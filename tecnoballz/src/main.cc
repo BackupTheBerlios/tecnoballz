@@ -5,11 +5,11 @@
  * @date 2007-01-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.25 2007/02/04 20:17:32 gurumeditation Exp $
+ * $Id: main.cc,v 1.26 2007/02/04 20:59:41 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -148,8 +148,8 @@ zeguardian   => controller_guardians
 ze_magneye   => controller_magnetic_eyes
 zeMissiles   => controller_bullets
 zeMoveText   => controller_level_fontes
-zeNewBalls   => controller_balls
-*zeRaquette   => controller_paddles
+*zeNewBalls  => controller_balls
+*zeRaquette  => controller_paddles
 zexplosion   => controller_explosions
 
 *tableaux_Z  => supervisor_bricks_level

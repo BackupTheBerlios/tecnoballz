@@ -26,7 +26,7 @@ class printmoney;
 //...............................................................................
 #include "../include/objects_list.h"
 #include "../include/joueurData.h"
-#include "../include/zeRaquette.h"
+#include "../include/controller_paddles.h"
 #include "../include/tecno_gads.h"
 //...............................................................................
 class printmoney:public objects_list < sprite_object >
@@ -35,7 +35,7 @@ class printmoney:public objects_list < sprite_object >
 		static const Sint32	YINVERSEUR = 232;
 		Sint32				y_position;
 		joueurData*			ptJoueurDa;
-		zeRaquette*			ptZraquett;
+		controller_paddles*			ptZraquett;
 		Sint32				money_posy;
 		sprite_object*			ptBobMoney;
 		tecno_gads*			ptBobRever;
@@ -45,9 +45,9 @@ class printmoney:public objects_list < sprite_object >
 	public:
 							printmoney();
 							~printmoney();
-		void				initialise(joueurData*, zeRaquette*, sprite_object*, 
+		void				initialise(joueurData*, controller_paddles*, sprite_object*, 
 									tecno_gads*);
-		void				init_guard(joueurData*, zeRaquette*, sprite_object*, 
+		void				init_guard(joueurData*, controller_paddles*, sprite_object*, 
 									tecno_gads*);
 		void				execution1(Sint32 value);
 		void				execution2(Sint32, Sint32);

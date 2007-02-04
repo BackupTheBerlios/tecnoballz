@@ -4,11 +4,11 @@
  * @date 2007-01-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.5 2007/01/28 21:31:56 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.6 2007/02/04 20:59:41 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ class sprite_paddle;
 #include "../include/zeGigaBlit.h"
 class sprite_paddle:public sprite_object
 {
-  friend class zeRaquette;
+  friend class controller_paddles;
   friend class controller_balls;
   friend class zeFireBump;
   friend class tecno_miss;

@@ -51,7 +51,7 @@ ballDirect::~ballDirect()
 //-----------------------------------------------------------------------------
 // perform some initializations
 //-----------------------------------------------------------------------------
-Sint32 ballDirect::initialize(zeRaquette* pBump, Uint32 nBump)
+Sint32 ballDirect::initialize(controller_paddles* pBump, Uint32 nBump)
 {
 	if(!nBump) return E_GENRIQUE;
 	numBumpers = nBump;

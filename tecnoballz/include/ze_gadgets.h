@@ -27,7 +27,7 @@ class ze_gadgets;
 #include "../include/objects_list.h"
 #include "../include/tecno_gads.h"
 #include "../include/zeMiniMess.h"
-#include "../include/zeRaquette.h"
+#include "../include/controller_paddles.h"
 #include "../include/controller_balls.h"
 #include "../include/barreScore.h"
 #include "../include/ze_magneye.h"
@@ -44,7 +44,7 @@ class ze_gadgets:public objects_list < tecno_gads >
 	private:
 		sprite_paddle*			bumpSelect;		//bump select (cheat mode)
 		zeMiniMess*			ptMiniMess;		//use for display minis messages
-		zeRaquette*			ptRaquette;
+		controller_paddles*			ptRaquette;
 		controller_balls*			ptNewBalls;
 		barreScore*			ptbarreScr;
 		sprite_object*			ptBob_wall;
@@ -76,7 +76,7 @@ class ze_gadgets:public objects_list < tecno_gads >
 							~ze_gadgets();
 		void				initialise(Sint32 mStep, Sint32 mKauf, Sint32 bStep, 
 								const Sint16 *table, Sint32 *cours, 
-								zeMiniMess* ptMes, zeRaquette *pRaqu, 
+								zeMiniMess* ptMes, controller_paddles *pRaqu, 
 								controller_balls* pBall, barreScore* pScor, sprite_object*,
 								ze_magneye* ptEye);
 		void				envoieGads(brickClear *briPT);

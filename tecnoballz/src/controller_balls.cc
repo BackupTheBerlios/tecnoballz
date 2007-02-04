@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.4 2007/01/30 21:06:03 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.5 2007/02/04 20:59:41 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -121,7 +121,7 @@ controller_balls::~controller_balls ()
  * @param table speed ball (1 to 4)
  */
 void
-controller_balls::init_balle (zeRaquette * raket, Sint32 start, Sint32 glueC,
+controller_balls::init_balle (controller_paddles * raket, Sint32 start, Sint32 glueC,
                               Sint32 speed, Sint32 tiltC, Sint32 table)
 {
   startCount = start;

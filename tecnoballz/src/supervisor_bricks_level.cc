@@ -4,11 +4,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.1 2007/02/04 20:17:32 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.2 2007/02/04 20:59:41 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
                           les_atomes, tecZ_barre, BottomWall, ptMiniMess,
                           pt_magneye);
   ptBaDirect = new ballDirect ();
-  theBumpers = new zeRaquette ();
+  theBumpers = new controller_paddles ();
   gere_texte = new zeMoveText ();
   ptGigaBlit = new zeGigaBlit ();
   ptPrntmney = new printmoney ();

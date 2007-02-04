@@ -27,7 +27,7 @@ class ballDirect;
 //...............................................................................
 #include "../include/objects_list.h"
 #include "../include/sprite_paddle.h"
-#include "../include/zeRaquette.h"
+#include "../include/controller_paddles.h"
 //...............................................................................
 class ballDirect:public objects_list < sprite_object >
 {
@@ -38,7 +38,7 @@ class ballDirect:public objects_list < sprite_object >
 	public:
 							ballDirect();
 							~ballDirect();
-		Sint32				initialize(zeRaquette* pBump, Uint32 nBump);
+		Sint32				initialize(controller_paddles* pBump, Uint32 nBump);
 		void				execution1();
 };
 

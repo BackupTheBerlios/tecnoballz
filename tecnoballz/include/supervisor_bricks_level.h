@@ -4,11 +4,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.1 2007/02/04 20:17:32 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.2 2007/02/04 20:59:41 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ class supervisor_bricks_level;
 #include "../include/sprite_ship.h"
 #include "../include/handler_keyboard.h"
 #include "../include/tiles_background.h"
-#include "../include/zeRaquette.h"
+#include "../include/controller_paddles.h"
 #include "../include/briqueCote.h"
 #include "../include/barreScore.h"
 #include "../include/handler_display.h"
@@ -69,7 +69,7 @@ class supervisor_bricks_level:public virtual supervisor
   friend class tiles_background;
   friend class zeCapsules;
   friend class controller_balls;
-  friend class zeRaquette;
+  friend class controller_paddles;
   friend class ze_gadgets;
   friend class zeMoveText;
   friend class zeBouiBoui;
@@ -85,7 +85,7 @@ private:
   ejectBalls *gereEjects;
   controller_balls *gereBalles;
   ballDirect *ptBaDirect;
-  zeRaquette *theBumpers;
+  controller_paddles *theBumpers;
   barreScore *tecZ_barre;
   zeBouiBoui *les_atomes;
   ze_magneye *pt_magneye;

@@ -46,7 +46,7 @@ zeGigaBlit::zeGigaBlit()
 	sprites_have_shades = false;
 	brickObjet = (controller_bricks *)NULL;
 	gugusObjet = (head_anima *)NULL;
-	ptRaquette = (zeRaquette *)NULL;
+	ptRaquette = (controller_paddles *)NULL;
 	tecBumper1 = (sprite_paddle *)NULL;
 	tecBumper3 = (sprite_paddle *)NULL;
 	blitz_posy = 0;
@@ -71,7 +71,7 @@ zeGigaBlit::~zeGigaBlit()
 //-------------------------------------------------------------------------------
 // bricks levels: perform some initializations of gigablitz
 //-------------------------------------------------------------------------------
-Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, head_anima *gugus,
+Sint32 zeGigaBlit::init_liste(controller_paddles *zeRak, head_anima *gugus,
 	controller_bricks *brick)
 {
 	gugusObjet = gugus;
@@ -251,7 +251,7 @@ void zeGigaBlit::collision1()
 //-------------------------------------------------------------------------------
 // guards levels: perform some initializations of gigablitz
 //-------------------------------------------------------------------------------
-Sint32 zeGigaBlit::init_liste(zeRaquette *zeRak, zexplosion *pexpl)
+Sint32 zeGigaBlit::init_liste(controller_paddles *zeRak, zexplosion *pexpl)
 {
 	pexplosion = pexpl;
 	ptRaquette = zeRak;

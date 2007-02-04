@@ -1,7 +1,7 @@
 //******************************************************************************
 // copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "zeNewBalls.cc"
+// file		: "controller_balls.cc"
 // created	: ?
 // updates	: 2005-08-26
 // fonction	: manage the balls (move and collisions)
@@ -20,7 +20,7 @@
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA 021117-1307, USA.
 //******************************************************************************
-#include "../include/zeNewBalls.h"
+#include "../include/controller_balls.h"
 #include "../include/joueurData.h"
 #include "../include/handler_memory.h"
 #include "../include/handler_keyboard.h"
@@ -31,7 +31,7 @@
 //-----------------------------------------------------------------------------
 // bricks levels: create the object
 //-----------------------------------------------------------------------------
-zeNewBalls::zeNewBalls(ejectBalls *eject, controller_bricks *brick, briqueCote *brico, 
+controller_balls::controller_balls(ejectBalls *eject, controller_bricks *brick, briqueCote *brico, 
 	head_anima *gugus, zeBouiBoui *atoms, barreScore *score, sprite_object *pwall,
 	zeMiniMess* pMess, ze_magneye* pEyes)
 {
@@ -66,7 +66,7 @@ zeNewBalls::zeNewBalls(ejectBalls *eject, controller_bricks *brick, briqueCote *
 //-----------------------------------------------------------------------------
 // guards levels: create the object
 //-----------------------------------------------------------------------------
-zeNewBalls::zeNewBalls(zeguardian *pGard, zeCapsules *pCaps, ze_gadgets *pGads)
+controller_balls::controller_balls(zeguardian *pGard, zeCapsules *pCaps, ze_gadgets *pGads)
 {
 	littleInit();
 	num_erreur = 0;
@@ -98,7 +98,7 @@ zeNewBalls::zeNewBalls(zeguardian *pGard, zeCapsules *pCaps, ze_gadgets *pGads)
 //-----------------------------------------------------------------------------
 // release the object
 //-----------------------------------------------------------------------------
-zeNewBalls::~zeNewBalls()
+controller_balls::~controller_balls()
 {
 	release_sprites_list();
 }
@@ -112,13 +112,13 @@ zeNewBalls::~zeNewBalls()
 //				tiltC	: time before "tilt" is available
 //				table	: speed ball (1 to 4)
 //-------------------------------------------------------------------------------
-void zeNewBalls::init_balle(zeRaquette *raket, Sint32 start, Sint32 glueC, 
+void controller_balls::init_balle(controller_paddles *raket, Sint32 start, Sint32 glueC, 
 	Sint32 speed, Sint32 tiltC, Sint32 table)
 {
 	//start = start / 3;	//test only
 	//glueC = glueC / 3;	//test only
 	//speed = speed /10;	//test only
-	//printf("zeNewBalls::init_balle() speed: %i\n", speed);
+	//printf("controller_balls::init_balle() speed: %i\n", speed);
 	
 	startCount = start;
 	balle_glue = glueC;
@@ -155,7 +155,7 @@ void zeNewBalls::init_balle(zeRaquette *raket, Sint32 start, Sint32 glueC,
 //-------------------------------------------------------------------------------
 // bricks levels: balls moves and collisions
 //-------------------------------------------------------------------------------
-void zeNewBalls::vitusBalle()
+void controller_balls::vitusBalle()
 {
 	vitus_sort();	//test if balls go out of the screen
 	vitus_tilt();
@@ -175,7 +175,7 @@ void zeNewBalls::vitusBalle()
 //-------------------------------------------------------------------------------
 // guards levels: balls moves and collisions
 //-------------------------------------------------------------------------------
-void zeNewBalls::vitusBall2()
+void controller_balls::vitusBall2()
 {
 	vitussort2();	//test if balls go out of the screen
 	vitus_tilt();
@@ -192,7 +192,7 @@ void zeNewBalls::vitusBall2()
 // test si les balles sortent de l'ecran de jeu 
 // test if balls go out of the screen of game
 //------------------------------------------------------------------------------
-void zeNewBalls::vitus_sort()
+void controller_balls::vitus_sort()
 {
 	// pointer to the object "bumper of bottom"
 	sprite_paddle *raket = tecBumper1;
@@ -260,7 +260,7 @@ void zeNewBalls::vitus_sort()
 //------------------------------------------------------------------------------
 // guards levels: test if balls go out of the screen of game
 //------------------------------------------------------------------------------
-void zeNewBalls::vitussort2()
+void controller_balls::vitussort2()
 {
 	Sint32 max_y = sprite_ball::MAXIMUM_PY * resolution;
 	sprite_paddle *raket = tecBumper1;	 //pointer to the object "bumper of bottom"
@@ -292,7 +292,7 @@ void zeNewBalls::vitussort2()
 //------------------------------------------------------------------------------
 // 2 buttons at the same time = tilt
 //------------------------------------------------------------------------------
-void zeNewBalls::vitus_tilt()
+void controller_balls::vitus_tilt()
 {
 	Uint32 ftilt = 0;
 	if(keyboard->is_right_left_buttons())
@@ -325,7 +325,7 @@ void zeNewBalls::vitus_tilt()
 //-------------------------------------------------------------------------------
 // ball accelerates
 //-------------------------------------------------------------------------------
-void zeNewBalls::accelerate()
+void controller_balls::accelerate()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
@@ -337,7 +337,7 @@ void zeNewBalls::accelerate()
 //-------------------------------------------------------------------------------
 // bricks levels: displacement of the balls glued on the bumper 
 //-------------------------------------------------------------------------------
-void zeNewBalls::vitus_move()
+void controller_balls::vitus_move()
 {
 
 	Sint32 j;
@@ -416,7 +416,7 @@ void zeNewBalls::vitus_move()
 			{	j = balle->directBall;	//ball is moving
 				if(j > 64)
 				{	fprintf(stderr,
-						"zeNewBalls::vitus_move() balle->directBall = %i\n",
+						"controller_balls::vitus_move() balle->directBall = %i\n",
 						j);
 					j = 60;
 				}
@@ -435,7 +435,7 @@ void zeNewBalls::vitus_move()
 //-------------------------------------------------------------------------------
 // guards levels: displacement of the balls glued on the bumper 
 //-------------------------------------------------------------------------------
-void zeNewBalls::vitusmove2()
+void controller_balls::vitusmove2()
 {
 	Sint32 j;
 	Sint32 *monPT;
@@ -488,7 +488,7 @@ void zeNewBalls::vitusmove2()
 			{	j = balle->directBall;	//ball is moving
 				if(j > 64)
 				{	fprintf(stderr,
-						"zeNewBalls::vitus_move() balle->directBall = %i\n",
+						"controller_balls::vitus_move() balle->directBall = %i\n",
 						j);
 					j = 60;
 				}
@@ -507,7 +507,7 @@ void zeNewBalls::vitusmove2()
 //-------------------------------------------------------------------------------
 // bricks level: collisions balls and bumpers 
 //-------------------------------------------------------------------------------
-void zeNewBalls::vitus_bump()
+void controller_balls::vitus_bump()
 {
 	Sint32 j, x, y;
 	const Sint32 *monPT;
@@ -609,7 +609,7 @@ void zeNewBalls::vitus_bump()
 				j = balle->directBall;
 				if(j > 64)
 				{	fprintf(stderr,
-						"zeNewBalls::vitus_bump() (1) balle->directBall = %i\n",
+						"controller_balls::vitus_bump() (1) balle->directBall = %i\n",
 						j);
 					j = 64;
 				}
@@ -620,7 +620,7 @@ void zeNewBalls::vitus_bump()
 
 				if(j > 64)
 				{	fprintf(stderr,
-						"zeNewBalls::vitus_bump() (2) balle->directBall = %i (%i)\n",
+						"controller_balls::vitus_bump() (2) balle->directBall = %i (%i)\n",
 						j, balle->directBall);
 					for(Sint32 v = 0; v < 16; v++)
 						printf("%i ; ",  bumpX->rebonds_GD[v]);
@@ -654,7 +654,7 @@ void zeNewBalls::vitus_bump()
 //-------------------------------------------------------------------------------
 // guards level: collisions balls and bumper 
 //-------------------------------------------------------------------------------
-void zeNewBalls::vitusbump2()
+void controller_balls::vitusbump2()
 {
 	Sint32 j, x, y;
 	const Sint32 *monPT;
@@ -708,7 +708,7 @@ void zeNewBalls::vitusbump2()
 //-------------------------------------------------------------------------------
 // bricks level: collisions balls and robot bumper
 //-------------------------------------------------------------------------------
-void zeNewBalls::vitusrobot()
+void controller_balls::vitusrobot()
 {
 	if(tec_robot0->bump_actif)
 	{	sprite_paddle *raket = tec_robot0;
@@ -745,7 +745,7 @@ void zeNewBalls::vitusrobot()
 //-----------------------------------------------------------------------------
 // bricks levels: handle ejectos/balls collisions
 //-----------------------------------------------------------------------------
-void zeNewBalls::vitusEject()
+void controller_balls::vitusEject()
 {
 	sprite_object *coin1 = ejectObjet->demandeBOB(1);
 	sprite_object *coin2 = ejectObjet->demandeBOB(2);
@@ -853,7 +853,7 @@ void zeNewBalls::vitusEject()
 //------------------------------------------------------------------------------
 // bricks levels: handle the collision with the 3 walls
 //------------------------------------------------------------------------------
-void zeNewBalls::vitus_cote()
+void controller_balls::vitus_cote()
 {
 	Sint32 murGa = bricoObjet->getCollisG();
 	Sint32 murDr = bricoObjet->getCollisD();
@@ -920,7 +920,7 @@ void zeNewBalls::vitus_cote()
 //------------------------------------------------------------------------------
 // guards levels: handle the collision with the 3 walls
 //------------------------------------------------------------------------------
-void zeNewBalls::vituscote2()
+void controller_balls::vituscote2()
 {
 	Sint32 murGa = 16 * resolution;
 	Sint32 murDr = 300 * resolution;
@@ -973,7 +973,7 @@ void zeNewBalls::vituscote2()
 //------------------------------------------------------------------------------
 // guards levels: prevent that the ball remains blocked horizontally 
 //------------------------------------------------------------------------------
-void zeNewBalls::vitusbound()
+void controller_balls::vitusbound()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = sprites_list[i];
@@ -997,7 +997,7 @@ void zeNewBalls::vitusbound()
 //-------------------------------------------------------------------------------
 // bricks levels: collision of balls with bricks
 //-------------------------------------------------------------------------------
-void zeNewBalls::vitusBrick()
+void controller_balls::vitusBrick()
 {
 	Sint32 bwght = brickObjet->get_brick_width();	//brick's width in pixels
 	Sint32 byoff = brickObjet->getYOffset();	//y-offset between 2 bricks
@@ -1109,7 +1109,7 @@ void zeNewBalls::vitusBrick()
 //----------------------------------------------------------------------
 // bricks levels: collision of balls with eyes
 //----------------------------------------------------------------------
-void zeNewBalls::vitus_eyes()
+void controller_balls::vitus_eyes()
 {
 	Sint32 vhypo = pt_magneye->hypotenuse;
 	sprite_ball **liste = sprites_list;
@@ -1178,7 +1178,7 @@ void zeNewBalls::vitus_eyes()
 //----------------------------------------------------------------------
 // bricks levels: collision of balls with Bouibouis
 //----------------------------------------------------------------------
-void zeNewBalls::vitusAtoms()
+void controller_balls::vitusAtoms()
 {
 	sprite_ball **liste = sprites_list;
 	Sint32 t = ptBouiBoui->get_max_of_sprites();
@@ -1223,7 +1223,7 @@ void zeNewBalls::vitusAtoms()
 //----------------------------------------------------------------------
 // guards levels: collision of balls with the guardiens
 //----------------------------------------------------------------------
-void zeNewBalls::vitusGuard()
+void controller_balls::vitusGuard()
 {
 	Sint32 u = max_of_sprites;					// number of balls (1 to n)
 	sprite_ball **liste = sprites_list;
@@ -1279,7 +1279,7 @@ void zeNewBalls::vitusGuard()
 //----------------------------------------------------------------------
 // return the first enable ball
 //----------------------------------------------------------------------
-sprite_ball *zeNewBalls::first_ball()
+sprite_ball *controller_balls::first_ball()
 {
 	sprite_ball **liste = sprites_list;
 	Sint32 t = max_of_sprites;
@@ -1294,7 +1294,7 @@ sprite_ball *zeNewBalls::first_ball()
 //----------------------------------------------------------------------
 // bricks levels: enable control ball with the left mouse button
 //----------------------------------------------------------------------
-void zeNewBalls::runcontrol()
+void controller_balls::runcontrol()
 {
 	balle_ctrl = 1;
 }
@@ -1302,7 +1302,7 @@ void zeNewBalls::runcontrol()
 //-------------------------------------------------------------------------------
 // bricks levels: extra balls; add 2 balls into ejectors
 //-------------------------------------------------------------------------------
-void zeNewBalls::run_2balls()
+void controller_balls::run_2balls()
 {
 	run_nballs(2);
 }
@@ -1310,7 +1310,7 @@ void zeNewBalls::run_2balls()
 //-------------------------------------------------------------------------------
 // bricks levels: add n ball(s) into ejectors
 //-------------------------------------------------------------------------------
-void zeNewBalls::run_nballs(Sint32 nball)
+void controller_balls::run_nballs(Sint32 nball)
 {
 	if(nball < 1) nball = max_of_sprites;
 	sprite_ball **liste = sprites_list;
@@ -1332,7 +1332,7 @@ void zeNewBalls::run_nballs(Sint32 nball)
 //----------------------------------------------------------------------
 // bricks levels: add 3 balls starting from the first enable ball 
 //----------------------------------------------------------------------
-void zeNewBalls::run_3balls()
+void controller_balls::run_3balls()
 {
 	sprite_ball *model = first_ball();
 	Sint32 j = model->directBall;	//direction of the current ball 
@@ -1355,7 +1355,7 @@ void zeNewBalls::run_3balls()
 //----------------------------------------------------------------------
 // transform all the enable balls into balls power 1
 //----------------------------------------------------------------------
-void zeNewBalls::run_power1()
+void controller_balls::run_power1()
 {
 	sprite_ball **liste = sprites_list;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
@@ -1368,7 +1368,7 @@ void zeNewBalls::run_power1()
 //----------------------------------------------------------------------
 // transform all the enable balls into balls power 2
 //----------------------------------------------------------------------
-void zeNewBalls::run_power2()
+void controller_balls::run_power2()
 {
 	sprite_ball **liste = sprites_list;
 	Sint32 t = max_of_sprites;
@@ -1382,7 +1382,7 @@ void zeNewBalls::run_power2()
 //----------------------------------------------------------------------
 // transform all the enable balls into balls size 2 (7*7 or 14*14)
 //----------------------------------------------------------------------
-void zeNewBalls::run_size01()
+void controller_balls::run_size01()
 {
 	sprite_ball **liste = sprites_list;
 	Sint32 t = max_of_sprites;
@@ -1396,7 +1396,7 @@ void zeNewBalls::run_size01()
 //----------------------------------------------------------------------
 // transform all the enable balls into balls size 3 (10*10 or 20*20)
 //----------------------------------------------------------------------
-void zeNewBalls::run_size02()
+void controller_balls::run_size02()
 {
 	sprite_ball **liste = sprites_list;
 	Sint32 t = max_of_sprites;
@@ -1410,7 +1410,7 @@ void zeNewBalls::run_size02()
 //----------------------------------------------------------------------
 // increase the speed of the balls to the maximum
 //----------------------------------------------------------------------
-void zeNewBalls::maxi_speed()
+void controller_balls::maxi_speed()
 {
 	sprite_ball **liste = sprites_list;
 	Sint32 t = max_of_sprites;
@@ -1424,7 +1424,7 @@ void zeNewBalls::maxi_speed()
 //------------------------------------------------------------------------------
 // bricks levels: test if the player can use the tilt 
 //------------------------------------------------------------------------------
-void zeNewBalls::time_2tilt()
+void controller_balls::time_2tilt()
 {
 	Uint32 tilt = 0;
 	sprite_ball **liste = sprites_list;
@@ -1456,7 +1456,7 @@ void zeNewBalls::time_2tilt()
 //------------------------------------------------------------------------------
 // guards levels: test if the player can use the tilt 
 //------------------------------------------------------------------------------
-void zeNewBalls::time2tilt2()
+void controller_balls::time2tilt2()
 {
 	Uint32 tilt = 0;
 	sprite_ball **liste = sprites_list;
@@ -1487,7 +1487,7 @@ void zeNewBalls::time2tilt2()
 //------------------------------------------------------------------------------
 // bricks levels: handle the control of the ball with the left mouse button
 //------------------------------------------------------------------------------
-void zeNewBalls::vitus_ctrl()
+void controller_balls::vitus_ctrl()
 {
 	if(balle_ctrl > 0)
 	{	if(keyboard->is_right_button())
@@ -1511,7 +1511,7 @@ void zeNewBalls::vitus_ctrl()
 //------------------------------------------------------------------------------
 // bricks levels: check if there remains at least a ball glue
 //------------------------------------------------------------------------------
-Sint32 zeNewBalls::least_glue()
+Sint32 controller_balls::least_glue()
 {
 	sprite_ball **liste = sprites_list;
 	Sint32 t = max_of_sprites;
@@ -1528,46 +1528,46 @@ Sint32 zeNewBalls::least_glue()
 // directions of the ball when it is leave an ejector. 
 //------------------------------------------------------------------------------
 // top-left
-Sint32 zeNewBalls::ballEject1[] =
+Sint32 controller_balls::ballEject1[] =
 {	52, 56, 60, 60, 52, 56, 60, 60, 52, 52, 56, 52, 52, 60, 56, 52, 56, 56
 };
 // bottom-left
-Sint32 zeNewBalls::ballEject2[] =
+Sint32 controller_balls::ballEject2[] =
 {	8, 4, 12, 12, 8, 4, 4, 12, 8, 4, 12, 4, 8, 12, 4, 8, 12, 4, 4
 };
 // bottom-right
-Sint32 zeNewBalls::ballEject3[] =
+Sint32 controller_balls::ballEject3[] =
 {	20, 28, 24, 20, 20, 28, 28, 24, 20, 28, 24, 24, 28, 28, 20, 20, 24, 24, 28
 };
 // top-right 
-Sint32 zeNewBalls::ballEject4[] =
+Sint32 controller_balls::ballEject4[] =
 {	36, 44, 40, 36, 36, 44, 44, 40, 40, 36, 44, 40, 40, 36, 36, 44, 44, 40, 36
 };
 
 //------------------------------------------------------------------------------
 // directions of the ball after a rebound on a brick. 
 //------------------------------------------------------------------------------
-Sint32 zeNewBalls::rb0[16] =
+Sint32 controller_balls::rb0[16] =
 {	64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64 };
 // right
-Sint32 zeNewBalls::rb1[16] =
+Sint32 controller_balls::rb1[16] =
 {	32, 28, 24, 20, 20, 24, 24, 28, 32, 36, 40, 40, 44, 44, 40, 36 };
-Sint32 zeNewBalls::rb2[16] =
+Sint32 controller_balls::rb2[16] =
 {	48, 36, 40, 44, 32, 44, 24, 28, 32, 36, 40, 44, 48, 48, 44, 40 };
 //top
-Sint32 zeNewBalls::rb3[16] =
+Sint32 controller_balls::rb3[16] =
 {	60, 60, 56, 52, 48, 44, 40, 36, 36, 40, 40, 44, 48, 52, 56, 56 };
-Sint32 zeNewBalls::rb4[16] =
+Sint32 controller_balls::rb4[16] =
 {	0, 4, 8, 0, 0, 52, 56, 60, 48, 52, 56, 44, 48, 52, 56, 60 };
 // left
-Sint32 zeNewBalls::rb5[16] =
+Sint32 controller_balls::rb5[16] =
 {	0, 4, 8, 8, 12, 12, 8, 4, 0, 60, 56, 52, 52, 36, 56, 60 };
-Sint32 zeNewBalls::rb6[16] =
+Sint32 controller_balls::rb6[16] =
 {	0, 4, 8, 12, 16, 20, 24, 12, 16, 12, 8, 4, 0, 4, 8, 60 };
 // bottom
-Sint32 zeNewBalls::rb7[16] =
+Sint32 controller_balls::rb7[16] =
 {	4, 8, 12, 12, 16, 20, 20, 24, 28, 28, 24, 20, 16, 12, 8, 4 };
-Sint32 zeNewBalls::rb8[16] =
+Sint32 controller_balls::rb8[16] =
 {	16, 20, 24, 12, 16, 20, 24, 28, 32, 36, 40, 28, 32, 20, 24, 28 };
-Sint32 *zeNewBalls::brick_jump[15] =
+Sint32 *controller_balls::brick_jump[15] =
 {	rb1, rb3, rb2, rb5, rb1, rb4, rb3, rb7, rb8, rb2, rb1, rb6, rb7, rb5, rb1 };
