@@ -31,7 +31,7 @@ class zeGigaBlit;
 #include "../include/ballDirect.h"
 #include "../include/zeFireBump.h"
 #include "../include/joueurData.h"
-#include "../include/tableaux_Z.h"
+#include "../include/supervisor_bricks_level.h"
 #include "../include/objects_list.h"
 #include "../include/head_anima.h"
 #include "../include/controller_bricks.h"

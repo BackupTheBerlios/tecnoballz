@@ -33,8 +33,8 @@ class joueurData;
 class joueurData:public virtual tecnoballz
 {
 	friend class barreScore;
-	friend class gard_tecno;
-	friend class tableaux_Z;
+	friend class supervisor_guards_level;
+	friend class supervisor_bricks_level;
 	friend class printmoney;
 	friend class scoretable;
 	

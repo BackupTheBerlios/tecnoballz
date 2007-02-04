@@ -1,7 +1,7 @@
 //*****************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file         : "scrolledit.cc"
+// file         : "supervisor_map_editor.cc"
 // created      : 2004-09-13
 // updates      : 2004-09-14
 // fonction     : edit scrolling map (menu and guards)
@@ -20,7 +20,7 @@
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA  02111-1307, USA.
 //******************************************************************************
-#include "../include/scrolledit.h"
+#include "../include/supervisor_map_editor.h"
 #include "../include/handler_resources.h"
 #include "../include/list_sprites.h"
 #include "../include/handler_keyboard.h"
@@ -32,7 +32,7 @@
 //-----------------------------------------------------------------------------
 // create the object
 //-----------------------------------------------------------------------------
-scrolledit::scrolledit()
+supervisor_map_editor::supervisor_map_editor()
 {
 	initialise();
 	defilement = new lastScroll();	// background scrolling
@@ -61,7 +61,7 @@ scrolledit::scrolledit()
 //-----------------------------------------------------------------------------
 // release the object
 //-----------------------------------------------------------------------------
-scrolledit::~scrolledit()
+supervisor_map_editor::~supervisor_map_editor()
 {
 	delete objetMouse;
 	delete defilement;
@@ -79,7 +79,7 @@ scrolledit::~scrolledit()
 //-----------------------------------------------------------------------------
 //	perform some initializations
 //-----------------------------------------------------------------------------
-Sint32 scrolledit::first_init()
+Sint32 supervisor_map_editor::first_init()
 {	
 	
 	pt_select1 = (selectinfo *) memory->alloc 
@@ -117,7 +117,7 @@ Sint32 scrolledit::first_init()
 //------------------------------------------------------------------------------
 // main loop
 //------------------------------------------------------------------------------
-Sint32 scrolledit::zeMainLoop()
+Sint32 supervisor_map_editor::main_loop()
 {
 	display->wait_frame();
 	display->lock_surfaces();
@@ -170,7 +170,7 @@ Sint32 scrolledit::zeMainLoop()
 //------------------------------------------------------------------------------
 // map view mode
 //------------------------------------------------------------------------------
-void scrolledit::vscrolling()
+void supervisor_map_editor::vscrolling()
 {
 	pt_select0 = pt_select1;
 	Sint32 speed = getZeSpeed();
@@ -183,9 +183,9 @@ void scrolledit::vscrolling()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void scrolledit::maps2brush()
+void supervisor_map_editor::maps2brush()
 {
-	printf("scrolledit::maps2brush() : [%i, %i, %i, %i]\n", 
+	printf("supervisor_map_editor::maps2brush() : [%i, %i, %i, %i]\n", 
 		pt_select0->box_pos_x1, pt_select0->box_pos_y1, pt_select0->box_pos_x2, pt_select0->box_pos_y2);
 
 	//###################################################################
@@ -219,7 +219,7 @@ void scrolledit::maps2brush()
 //------------------------------------------------------------------------------
 // tiles wiew mode
 //------------------------------------------------------------------------------
-void scrolledit::view_tiles()
+void supervisor_map_editor::view_tiles()
 {
 	pt_select0 = pt_select2;
 	Sint32 speed = getZeSpeed();
@@ -240,9 +240,9 @@ void scrolledit::view_tiles()
 //------------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------------
-void scrolledit::tile2brush()
+void supervisor_map_editor::tile2brush()
 {
-	printf("scrolledit::tile2brush() : [%i, %i, %i, %i]\n", 
+	printf("supervisor_map_editor::tile2brush() : [%i, %i, %i, %i]\n", 
 		pt_select0->box_pos_x1, pt_select0->box_pos_y1, pt_select0->box_pos_x2, pt_select0->box_pos_y2);
 
 	
@@ -282,7 +282,7 @@ void scrolledit::tile2brush()
 //------------------------------------------------------------------------------
 // check keyboard keys
 //------------------------------------------------------------------------------
-void scrolledit::check_keys()
+void supervisor_map_editor::check_keys()
 {
 	if(keyboard->key_is_pressed(SDLK_SPACE))
 		flagSpaceK = 1;
@@ -302,7 +302,7 @@ void scrolledit::check_keys()
 //------------------------------------------------------------------------------
 // determine scrolling speed
 //------------------------------------------------------------------------------
-Sint32 scrolledit::getZeSpeed()
+Sint32 supervisor_map_editor::getZeSpeed()
 {	
 	Sint32 speed = 0;
 	Sint32 mousY = keyboard->get_mouse_y();
@@ -325,7 +325,7 @@ Sint32 scrolledit::getZeSpeed()
 //------------------------------------------------------------------------------
 // handle selection (right mouse button)
 //------------------------------------------------------------------------------
-void scrolledit::select_box()
+void supervisor_map_editor::select_box()
 {
 	
 	
@@ -392,7 +392,7 @@ void scrolledit::select_box()
 
 	if(flag_press && presR)
 	{	pt_select0->box_typeID = 2;
-		//printf("scrolledit::select_box() / pressed\n");
+		//printf("supervisor_map_editor::select_box() / pressed\n");
 	}
 	else
 	{	
@@ -403,7 +403,7 @@ void scrolledit::select_box()
 		if(!presR && flag_press)
 		{	flag_press = 0;
 			pt_select0->box_typeID = 1;
-			printf("scrolledit::select_box() / relased\n");
+			printf("supervisor_map_editor::select_box() / relased\n");
 
 			if(pt_select0->box_pos_x1 > pt_select0->box_pos_x2 )
 			{	Sint32 x = pt_select0->box_pos_x1;
@@ -441,7 +441,7 @@ void scrolledit::select_box()
 //------------------------------------------------------------------------------
 // draw selection
 //------------------------------------------------------------------------------
-void scrolledit::drawingBox()
+void supervisor_map_editor::drawingBox()
 {
 		char *pBuff;
 		Sint32 tmpco = 0;
@@ -478,7 +478,7 @@ void scrolledit::drawingBox()
 		Sint32 width = x2 - x1;
 		Sint32 heigh = y2 - y1;
 		
-		/*printf("scrolledit::drawingBox() : [%i, %i, %i, %i]\n", 
+		/*printf("supervisor_map_editor::drawingBox() : [%i, %i, %i, %i]\n", 
 			x1, y1, x2, y2);*/
 
 	
@@ -542,7 +542,7 @@ void scrolledit::drawingBox()
 //------------------------------------------------------------------------------
 // allocate brush 
 //------------------------------------------------------------------------------
-void scrolledit::brushAlloc()
+void supervisor_map_editor::brushAlloc()
 {
 	if(pBrush_bob)
 		delete pBrush_bob;
@@ -608,7 +608,7 @@ void scrolledit::brushAlloc()
 //------------------------------------------------------------------------------
 // display brush 
 //------------------------------------------------------------------------------
-void scrolledit::brush_draw()
+void supervisor_map_editor::brush_draw()
 {
 	if(!pBrush_bob) return;
 	Sint32 pos_x = keyboard->get_mouse_x();
@@ -636,14 +636,14 @@ void scrolledit::brush_draw()
 	else
 	{	if(!presL  && flagPress2)
 		{	flagPress2 = 0;
-			printf("scrolledit::brush_draw() : brush_posx:%i / brush_posy:%i\n",
+			printf("supervisor_map_editor::brush_draw() : brush_posx:%i / brush_posy:%i\n",
 				brush_posx, brush_posy);
 			
 			
 			Sint32 i = scrlY + brush_posy;
 
 
-			printf("scrolledit::brush_draw() : scrlY:%i /  i :%i motifhaute:%i\n",
+			printf("supervisor_map_editor::brush_draw() : scrlY:%i /  i :%i motifhaute:%i\n",
 				scrlY, i, defilement->motifhaute);
 
 			i = (i / defilement->motifhaute) + 4;
@@ -653,7 +653,7 @@ void scrolledit::brush_draw()
 			Uint16* t_end = defilement->carteFirst + (lastScroll::CARTEHAUTE * lastScroll::CARTELARGE);
 			table += (brush_posx / defilement->motiflarge);
 
-			printf("scrolledit::brush_draw() : (table - carteFirst):%i /  i:%i\n",
+			printf("supervisor_map_editor::brush_draw() : (table - carteFirst):%i /  i:%i\n",
 				(table - defilement->carteFirst), i);
 			
 			
@@ -682,7 +682,7 @@ void scrolledit::brush_draw()
 	
 }
 
-Sint32 scrolledit::saveTheMap()
+Sint32 supervisor_map_editor::saveTheMap()
 {
 	Sint32 zsize = lastScroll::CARTEHAUTE * lastScroll::CARTELARGE;
 	
@@ -711,24 +711,24 @@ Sint32 scrolledit::saveTheMap()
 	umask(0002);
 	Sint32 fhand = open( fnamescore, O_WRONLY | O_CREAT, 00666);
 	if(fhand == -1)
-	{	fprintf(stderr, "scrolledit::saveTheMap(): file:%s / error:%s\n", 
+	{	fprintf(stderr, "supervisor_map_editor::saveTheMap(): file:%s / error:%s\n", 
 					fnamescore, strerror(errno));
 		memory->release((char *)ptDes);
 		return 0;
 	}
 	write(fhand, carte, msize);
 	if(close(fhand) == -1)
-	{	fprintf(stderr, "scrolledit::saveTheMap(): file:%s / error:%s\n", 
+	{	fprintf(stderr, "supervisor_map_editor::saveTheMap(): file:%s / error:%s\n", 
 		fnamescore, strerror(errno));
 		memory->release((char *)ptDes);
 		return 0;
 	}
 	memory->release((char *)carte);
-	printf("scrolledit::saveTheMap() : %s file was saved\n", fnamescore);
+	printf("supervisor_map_editor::saveTheMap() : %s file was saved\n", fnamescore);
 	return 	erreur_num;
 }
 
-const unsigned char scrolledit::cyclingtab[] =
+const unsigned char supervisor_map_editor::cyclingtab[] =
 {	239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
 	253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
 	243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,

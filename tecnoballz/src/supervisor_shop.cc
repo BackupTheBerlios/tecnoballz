@@ -1,11 +1,11 @@
 //******************************************************************************
 // copyright (c) 1991-2006 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "shop_tecno.cc"
+// file		: "supervisor_shop.cc"
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: shop_tecno.cc,v 1.26 2007/02/02 17:05:53 gurumeditation Exp $
+// id		: $Id: supervisor_shop.cc,v 1.1 2007/02/04 20:17:32 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -21,15 +21,15 @@
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //******************************************************************************
-#include "../include/shop_tecno.h"
+#include "../include/supervisor_shop.h"
 #include "../include/handler_resources.h"
-#include "../include/menu_tecno.h"
+#include "../include/supervisor_main_menu.h"
 #include "../include/print_menu.h"
 
 //-----------------------------------------------------------------------------
 // create the object
 //-----------------------------------------------------------------------------
-shop_tecno::shop_tecno()
+supervisor_shop::supervisor_shop()
 {
 	initialise();
 	ecranfond4 = new tiles_background();
@@ -76,7 +76,7 @@ shop_tecno::shop_tecno()
 //-----------------------------------------------------------------------------
 // release the object
 //-----------------------------------------------------------------------------
-shop_tecno::~shop_tecno()
+supervisor_shop::~supervisor_shop()
 {
 	delete ptrEscMenu;
 	delete mega_print;
@@ -93,7 +93,7 @@ shop_tecno::~shop_tecno()
 //-------------------------------------------------------------------------------
 // Initialize the shop
 //-------------------------------------------------------------------------------
-Sint32 shop_tecno::first_init()
+Sint32 supervisor_shop::first_init()
 {
 	Sint32 arean = joueurGere->getAreaNum();
 	Sint32 level = joueurGere->getLevelNu();
@@ -115,7 +115,7 @@ Sint32 shop_tecno::first_init()
 	intToASCII(joueurGere->getLifeNum(), &info_text1[STEXTWIDHT * 4 + 5], 1);
 
 	if(arean > 1)
-	{	const char* pPass = menu_tecno::getTheCode(arean, hardChoice);
+	{	const char* pPass = supervisor_main_menu::getTheCode(arean, hardChoice);
 		ptDes = &info_text3[1 * STEXTWIDHT + 10];
 		for(Sint32 i = 0; i < 10; i++)
 			ptDes[i] = pPass[i];
@@ -201,7 +201,7 @@ Sint32 shop_tecno::first_init()
 //-------------------------------------------------------------------------------
 // shop main loop
 //-------------------------------------------------------------------------------
-Sint32 shop_tecno::zeMainLoop()
+Sint32 supervisor_shop::main_loop()
 {
 	Sint32 Ecode = -1; 
 	display->wait_frame();
@@ -298,7 +298,7 @@ Sint32 shop_tecno::zeMainLoop()
 //------------------------------------------------------------------------------
 // display list bonus bought in the shop (on the right of the screen)
 //------------------------------------------------------------------------------
-void shop_tecno::aff_course()
+void supervisor_shop::aff_course()
 {	
 	Sint32 *p = joueurGere->get_course();
  	tecno_gads **liste = gereGadget->get_sprites_list();
@@ -318,7 +318,7 @@ void shop_tecno::aff_course()
 //		=>	y: ordinate of the mouse pointer
 //	output	<=	index: 0 to 24 (-1: disable)
 //------------------------------------------------------------------------------
-Sint32 shop_tecno::testkursor(Sint32 x, Sint32 y)
+Sint32 supervisor_shop::testkursor(Sint32 x, Sint32 y)
 {
 	if(x < shop_xmini || x > shop_xmaxi || y > shop_ymax2 ||
 		(x > shop_xmax2 && y > shop_ymax1))
@@ -344,7 +344,7 @@ Sint32 shop_tecno::testkursor(Sint32 x, Sint32 y)
 //	input	=>	index: index of the selected bonus; 0 to 24 (-1: disable)
 //	output	<=	price: price of the selected bonus 
 //-------------------------------------------------------------------------------
-Sint32 shop_tecno::led_moving(Sint32 index)
+Sint32 supervisor_shop::led_moving(Sint32 index)
 {
 	if(index < 0)
 	{	BOB_allume->disable();
@@ -378,7 +378,7 @@ Sint32 shop_tecno::led_moving(Sint32 index)
 // bought a gadget
 //	input	=> gadnu: option number
 //-------------------------------------------------------------------------------
-void shop_tecno::faitcourse(Sint32 gadnu)
+void supervisor_shop::faitcourse(Sint32 gadnu)
 {
 	if(gadnu != GAD_INFORM)
 		optioninfo = 0;
@@ -592,7 +592,7 @@ void shop_tecno::faitcourse(Sint32 gadnu)
 //------------------------------------------------------------------------------
 // check if a purchase is possible, so decrement the credit
 //------------------------------------------------------------------------------
-Sint32 shop_tecno::sub_credit(Sint32 value)
+Sint32 supervisor_shop::sub_credit(Sint32 value)
 {
 	if(joueurGere->sub_credit(prixActuel))
 		return 1;
@@ -605,7 +605,7 @@ Sint32 shop_tecno::sub_credit(Sint32 value)
 //------------------------------------------------------------------------------
 // purchase a bonus if possible
 //------------------------------------------------------------------------------
-void shop_tecno::achete_gad(Sint32 gadnb)
+void supervisor_shop::achete_gad(Sint32 gadnb)
 {
 	//gadgets maximum number ?
 	if(bonusachat >= NB_OPTIONS)
@@ -629,7 +629,7 @@ void shop_tecno::achete_gad(Sint32 gadnb)
 //------------------------------------------------------------------------------
 // change the 3 lines of the text
 //------------------------------------------------------------------------------
-void shop_tecno::message_ok()
+void supervisor_shop::message_ok()
 {
 	Sint32 i = shoptextPT[shop_point] * STEXTWIDHT * 3;
 	char *texte = shoptext12 + i;
@@ -640,7 +640,7 @@ void shop_tecno::message_ok()
 //------------------------------------------------------------------------------
 // pointe les trois lignes a afficher 
 //------------------------------------------------------------------------------
-void shop_tecno::putthetext(char *ligne)
+void supervisor_shop::putthetext(char *ligne)
 {
 	shop_line1 = ligne;
 	ligne += STEXTWIDHT;
@@ -652,7 +652,7 @@ void shop_tecno::putthetext(char *ligne)
 //-------------------------------------------------------------------------------
 // display the three lines of text in the box in bottom
 //-------------------------------------------------------------------------------
-void shop_tecno::affichtext()
+void supervisor_shop::affichtext()
 {
 	Uint32 charH = mega_print->getCharHgt();
 	Sint32 x_pos = 60 * resolution;
@@ -667,7 +667,7 @@ void shop_tecno::affichtext()
 //-------------------------------------------------------------------------------
 // drag and drop the gadget
 //-------------------------------------------------------------------------------
-void shop_tecno::sh_ballade()
+void supervisor_shop::sh_ballade()
 {
 	if(get_object >= 0)	//pointer to the table "case_price" (-1 = no drag object)
 	{	if(keyboard->is_left_button())
@@ -779,7 +779,7 @@ void shop_tecno::sh_ballade()
 //-------------------------------------------------------------------------------
 // calculate position of box cursor
 //-------------------------------------------------------------------------------
-void shop_tecno::pos_select()
+void supervisor_shop::pos_select()
 { 
 	Sint32 y = objetMouse->get_y_coord() - cadre_ymin;
 	Sint32 o = (y / cadre_haut);			//y / 9 (height of cursor)
@@ -814,7 +814,7 @@ void shop_tecno::pos_select()
 //-------------------------------------------------------------------------------
 // display the cursor of the bonus selected in the list on the right 
 //-------------------------------------------------------------------------------
-void shop_tecno::aff_select()
+void supervisor_shop::aff_select()
 { 
 	if(box_colour++ > 32)
 		box_colour = 0;
@@ -860,7 +860,7 @@ void shop_tecno::aff_select()
 //-------------------------------------------------------------------------------
 // test the cheat code
 //-------------------------------------------------------------------------------
-void shop_tecno::tu_triches()
+void supervisor_shop::tu_triches()
 {
 	objetMouse->set_frame_period(3);
 	if(cheat_flag) return;
@@ -886,7 +886,7 @@ void shop_tecno::tu_triches()
 //-------------------------------------------------------------------------------
 // Contenu de chaque case 
 //-------------------------------------------------------------------------------
-Sint32 shop_tecno::case_types[] =
+Sint32 supervisor_shop::case_types[] =
 {	GAD_SIZE_P, GAD_FIRE01, GAD_FIRE02, GAD_REBUIL, GAD_BALLE2, GAD_BALLE3,
  	GAD_POWER1, GAD_POWER2, GAD_LESSBR, GAD_LIFE_P, GAD_INFORM, GAD_WALL01,
 	GAD_BUMP04, GAD_BUMP03, GAD_BUMP02, GAD_SIZE01, GAD_SIZE02, GAD_ROBOT1,
@@ -897,12 +897,12 @@ Sint32 shop_tecno::case_types[] =
 //-------------------------------------------------------------------------------
 //
 //-------------------------------------------------------------------------------
-Sint32 shop_tecno::sh_tablept[NB_OPTIONS];
+Sint32 supervisor_shop::sh_tablept[NB_OPTIONS];
 
 //-------------------------------------------------------------------------------
 // Prix des gadgets 
 //-------------------------------------------------------------------------------
-Sint32 shop_tecno::case_price[] =
+Sint32 supervisor_shop::case_price[] =
 {	60, 75, 150, 350, 25, 50,
 	250, 500, 400, 450, 10, 75,
 	100, 100, 100, 60, 75, 100,
@@ -913,33 +913,33 @@ Sint32 shop_tecno::case_price[] =
 //-------------------------------------------------------------------------------
 // texts 
 //-------------------------------------------------------------------------------
-char shop_tecno::shoptext00[] =
+char supervisor_shop::shoptext00[] =
 {	"WELCOME ...... TO THE " \
 	"  TECNOBALL-Z SHOP    " \
 	"                      " \
 	"PRICE BONUS IS ENABLE "
 };
 //...............................................................................
-char shop_tecno::shoptext41[] =
+char supervisor_shop::shoptext41[] =
 {	"SORRY, BUT YOU HAVEN'T" \
 	"   GOT ENOUGH MONEY   " \
 	"  TO BUY THIS OPTION  "
 };
 //...............................................................................
-char shop_tecno::shoptext63[] =
+char supervisor_shop::shoptext63[] =
 {	"                     " \
 	"  YOU CAN ONLY BUY   " \
 	"      .. GADGETS     " \
 	"                     "
 };
 //...............................................................................
-char shop_tecno::shoptext56[] =
+char supervisor_shop::shoptext56[] =
 {	"  SORRY  THIS OPTION  " \
 	"   CAN ONLY BE USED   " \
 	"      FOR AREA 5      "
 };
 //...............................................................................
-char shop_tecno::shoptextPT[]=
+char supervisor_shop::shoptextPT[]=
 {	 0, 1, 2, 3, 4, 5,		//S+/F1/F2/RW/B2/B3
 	 6, 7, 8, 9,10,11,		//P1/P2/LB/L+/??/WA
 	12,13,14,15,16,17,		//BL/BU/BR/S2/S3/RB
@@ -948,7 +948,7 @@ char shop_tecno::shoptextPT[]=
 };
 
 //*- S+ --------------------------------------------------------------------*
-char shop_tecno::shoptext12[] =
+char supervisor_shop::shoptext12[] =
 {	"    AH YEAH IT IS     " \
 	"  MUCH BETTER WITH A  " \
 	" SUCH LONGER BUMPER   " \
@@ -1035,7 +1035,7 @@ char shop_tecno::shoptext12[] =
 	"                      " \
 };
 
-char shop_tecno::info_text1[] =
+char supervisor_shop::info_text1[] =
 {	
 	"RIGHT BUMPER:NO ACTIVE" \
 	"UP BUMPER   :NO ACTIVE" \
@@ -1062,7 +1062,7 @@ char shop_tecno::info_text1[] =
 	"        INFINIS       " \
 };
 
-char shop_tecno::info_text2[] =
+char supervisor_shop::info_text2[] =
 {	
 	"RIGHT BUMPER:  ACTIVE " \
 	"RIGHT BUMPER:NO ACTIVE" \
@@ -1074,7 +1074,7 @@ char shop_tecno::info_text2[] =
 	"LEFT BUMPER :NO ACTIVE" \
 	"  BUY A LEFT BUMPER   " \
 };
-char shop_tecno::info_text3[] =
+char supervisor_shop::info_text3[] =
 {	
 	" THE PASSWORD FOR THIS" \
 	"  AREA IS ..........  " \
@@ -1082,7 +1082,7 @@ char shop_tecno::info_text3[] =
 	" FOR THIS AREA.       " \
 };
 
-const unsigned char shop_tecno::cyclingtab[] =
+const unsigned char supervisor_shop::cyclingtab[] =
 {	239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
 	253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
 	243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,

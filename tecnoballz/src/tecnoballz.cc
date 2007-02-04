@@ -5,11 +5,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.1 2007/02/04 17:10:17 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.2 2007/02/04 20:17:32 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,16 +32,16 @@
 #include "../include/handler_keyboard.h"
 #include "../include/list_sprites.h"
 #include "../include/joueurData.h"
-#include "../include/tableaux_Z.h"
-#include "../include/shop_tecno.h"
-#include "../include/gard_tecno.h"
-#include "../include/menu_tecno.h"
+#include "../include/supervisor_bricks_level.h"
+#include "../include/supervisor_shop.h"
+#include "../include/supervisor_guards_level.h"
+#include "../include/supervisor_main_menu.h"
 #include "../include/bitmap_data.h"
 #include "../include/handler_audio.h"
 #include "../include/level_data.h"
 #include "../include/handler_resources.h"
 #include "../include/scoretable.h"
-#include "../include/scrolledit.h"
+#include "../include/supervisor_map_editor.h"
 //.............................................................................
 Sint32
   tecnoballz::arg_jumper = -1;
@@ -81,16 +81,16 @@ Sint16 *
   tecnoballz::table_cosL = NULL;        //cosinus table
 Sint16 *
   tecnoballz::table_sinL = NULL;        //sinus table
-tableaux_Z *
-  tecnoballz::tabGestion = NULL;        //bricks levels handle
-shop_tecno *
-  tecnoballz::shpGestion = NULL;        //shop handle
-gard_tecno *
-  tecnoballz::garGestion = NULL;        //guard handle
-scrolledit *
-  tecnoballz::ptScrollEd = NULL;        //scroll editor handle
-menu_tecno *
-  tecnoballz::menGestion = NULL;        //menu handle
+supervisor_bricks_level *
+  tecnoballz::bricks_level = NULL;        //bricks levels handle
+supervisor_shop *
+  tecnoballz::shop = NULL;        //shop handle
+supervisor_guards_level *
+  tecnoballz::guards_level = NULL;        //guard handle
+supervisor_map_editor *
+  tecnoballz::map_editor = NULL;        //scroll editor handle
+supervisor_main_menu *
+  tecnoballz::main_menu = NULL;        //menu handle
 // 1:bricks level / 2:shop / 3:guards level / 4:main menu / 5:scrolling editor
 Sint32
   tecnoballz::super_jump = 1;
@@ -125,14 +125,17 @@ offscreen_surface *
   tecnoballz::game_screen = NULL;
 offscreen_surface *
   tecnoballz::background_screen = NULL;
-//------------------------------------------------------------------------------
-// once initialization
-//------------------------------------------------------------------------------
+
+/**
+ * Once initialization, create persistent objects
+ */
 Sint32
 tecnoballz::first_init (configfile * pConf)
 {
   if (is_verbose)
-    printf ("tecnoballz::first_init() [START]\n");
+    {
+      std::cout << "tecnoballz::first_init() start!" << std::endl;
+    }
 #if __WORDSIZE == 64
   hasard_val = (long) first_init;
 #else
@@ -234,46 +237,46 @@ tecnoballz::game_begin ()
           break;
 
           // initialize bricks level
-        case 1:
+        case BRICKS_LEVEL:
           release_objects ();
-          tabGestion = new tableaux_Z ();
-          num_erreur = tabGestion->first_init ();
+          bricks_level = new supervisor_bricks_level ();
+          num_erreur = bricks_level->first_init ();
           if (num_erreur)
             return num_erreur;
           break;
 
           // initialize the shop
-        case 2:
+        case SHOP:
           release_objects ();
-          shpGestion = new shop_tecno ();
-          num_erreur = shpGestion->first_init ();
+          shop = new supervisor_shop ();
+          num_erreur = shop->first_init ();
           if (num_erreur)
             return num_erreur;
           break;
 
           // initialize guards level
-        case 3:
+        case GUARDS_LEVEL:
           release_objects ();
-          garGestion = new gard_tecno ();
-          num_erreur = garGestion->first_init ();
+          guards_level = new supervisor_guards_level ();
+          num_erreur = guards_level->first_init ();
           if (num_erreur)
             return num_erreur;
           break;
 
           // initialize menu
-        case 4:
+        case MAIN_MENU:
           release_objects ();
-          menGestion = new menu_tecno ();
-          num_erreur = menGestion->first_init ();
+          main_menu = new supervisor_main_menu ();
+          num_erreur = main_menu->first_init ();
           if (num_erreur)
             return num_erreur;
           break;
 
           // initialize scrolling editor (menu and guards)
-        case 5:
+        case MAP_EDITOR:
           release_objects ();
-          ptScrollEd = new scrolledit ();
-          num_erreur = ptScrollEd->first_init ();
+          map_editor = new supervisor_map_editor ();
+          num_erreur = map_editor->first_init ();
           if (num_erreur)
             return num_erreur;
           break;
@@ -285,51 +288,51 @@ tecnoballz::game_begin ()
       switch (super_jump)
         {
           // bricks level
-        case 1:
+        case BRICKS_LEVEL:
           super_jump = 0;
           do
             {
-              super_jump = tabGestion->zeMainLoop ();
+              super_jump = bricks_level->main_loop ();
             }
           while (!super_jump);
           break;
 
           // the shop
-        case 2:
+        case SHOP:
           super_jump = 0;
           do
             {
-              super_jump = shpGestion->zeMainLoop ();
+              super_jump = shop->main_loop ();
             }
           while (!super_jump);
           break;
 
           // guards level
-        case 3:
+        case GUARDS_LEVEL:
           super_jump = 0;
           do
             {
-              super_jump = garGestion->zeMainLoop ();
+              super_jump = guards_level->main_loop ();
             }
           while (!super_jump);
           break;
 
           // the menu
-        case 4:
+        case MAIN_MENU:
           super_jump = 0;
           do
             {
-              super_jump = menGestion->zeMainLoop ();
+              super_jump = main_menu->main_loop ();
             }
           while (!super_jump);
           break;
 
           // scrolling editor (menu and guards)
-        case 5:
+        case MAP_EDITOR:
           super_jump = 0;
           do
             {
-              super_jump = ptScrollEd->zeMainLoop ();
+              super_jump = map_editor->main_loop ();
             }
           while (!super_jump);
           break;
@@ -347,61 +350,61 @@ tecnoballz::game_begin ()
 void
 tecnoballz::release_objects ()
 {
-  if (NULL != tabGestion)
+  if (NULL != bricks_level)
     {
-      delete tabGestion;
-      tabGestion = NULL;
+      delete bricks_level;
+      bricks_level = NULL;
       if (is_verbose)
         {
           std::cout << "tecnoballz::release_objects() " <<
-            "'tableaux_Z' released" << std::endl;
+            "'supervisor_bricks_level' released" << std::endl;
         }
     }
-  if (NULL != shpGestion)
+  if (NULL != shop)
     {
-      delete shpGestion;
-      shpGestion = NULL;
+      delete shop;
+      shop = NULL;
       if (is_verbose)
         {
           std::cout << "tecnoballz::release_objects() " <<
-            "'shop_tecno' released" << std::endl;
+            "'supervisor_shop' released" << std::endl;
         }
     }
-  if (NULL != garGestion)
+  if (NULL != guards_level)
     {
-      delete garGestion;
-      garGestion = NULL;
+      delete guards_level;
+      guards_level = NULL;
       if (is_verbose)
         {
           std::cout << "tecnoballz::release_objects() " <<
-            "'gard_tecno' released" << std::endl;
+            "'supervisor_guards_level' released" << std::endl;
         }
     }
-  if (NULL != menGestion)
+  if (NULL != main_menu)
     {
-      delete menGestion;
-      menGestion = NULL;
+      delete main_menu;
+      main_menu = NULL;
       if (is_verbose)
         {
           std::cout << "tecnoballz::release_objects() " <<
-            "'menu_tecno' released" << std::endl;
+            "'supervisor_main_menu' released" << std::endl;
         }
     }
-  if (NULL != ptScrollEd)
+  if (NULL != map_editor)
     {
-      delete ptScrollEd;
-      ptScrollEd = NULL;
+      delete map_editor;
+      map_editor = NULL;
       if (is_verbose)
         {
           std::cout << "tecnoballz::release_objects() " <<
-            "'scrolledit' released" << std::endl;
+            "'supervisor_map_editor' released" << std::endl;
         }
     }
 }
 
-//------------------------------------------------------------------------------
-// game exit: relase all objects
-//------------------------------------------------------------------------------
+/**
+ * Game exit, relase all objects
+ */
 void
 tecnoballz::release_all_objects (configfile * pConf)
 {
@@ -445,16 +448,16 @@ tecnoballz::tecnoballz ()
 {
 }
 
-//-----------------------------------------------------------------------------
-// release the object
-//-----------------------------------------------------------------------------
+/** 
+ * release object
+ */
 tecnoballz::~tecnoballz ()
 {
 }
 
-//-------------------------------------------------------------------------------
-// perform some initializations of gigablitz
-//-------------------------------------------------------------------------------
+/** 
+ * Initialize some members
+ */ 
 void
 tecnoballz::mentatInit ()
 {
@@ -463,9 +466,9 @@ tecnoballz::mentatInit ()
   counterObj++;
 }
 
-//-------------------------------------------------------------------------------
-// object destroyed
-//-------------------------------------------------------------------------------
+/**
+ * Object destroyed
+ */
 void
 tecnoballz::mentatKill ()
 {

@@ -32,7 +32,7 @@ class zeCapsules;
 #include "../include/barreScore.h"
 #include "../include/tecno_caps.h"
 #include "../include/barreScore.h"
-#include "../include/tableaux_Z.h"
+#include "../include/supervisor_bricks_level.h"
 #include "../include/printmoney.h"
 #include "../include/sprite_ball.h"
 //...............................................................................

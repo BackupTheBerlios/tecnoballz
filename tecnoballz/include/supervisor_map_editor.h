@@ -1,6 +1,6 @@
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file         : "scrolledit.h"
+// file         : "supervisor_map_editor.h"
 // created      : 2004-09-13
 // updates      : 2004-09-13
 // fonction     : edit scrolling map (menu and guards)
@@ -22,7 +22,7 @@
 #ifndef __SCROLLEDIT__
 #define __SCROLLEDIT__
 
-#include "../include/runGestion.h"
+#include "../include/supervisor.h"
 #include "../include/lastScroll.h"
 #include "../include/mousePoint.h"
 #include "../include/bitmap_data.h"
@@ -45,7 +45,7 @@ typedef struct
 selectinfo;
 
 
-class scrolledit:public virtual runGestion
+class supervisor_map_editor:public virtual supervisor
 {
 	private:
 		static const Sint32 YCOORDNULL = -10240;
@@ -82,10 +82,10 @@ class scrolledit:public virtual runGestion
 		
 	
 	public:
-							scrolledit();
-							~scrolledit();
+							supervisor_map_editor();
+							~supervisor_map_editor();
 		Sint32				first_init();
-		Sint32				zeMainLoop();
+		Sint32				main_loop();
 
 	private:
 		void				vscrolling();

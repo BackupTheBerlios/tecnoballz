@@ -91,7 +91,7 @@ const Sint16	XXX_PROTEC = 19 * XXX_IMAGES;
 class tecno_gads:public sprite_object
 {
 	friend class ze_gadgets;
-	friend class shop_tecno;
+	friend class supervisor_shop;
 
 	private:
 		Sint32				directionX;

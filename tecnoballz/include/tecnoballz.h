@@ -5,11 +5,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.1 2007/02/04 17:10:16 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.2 2007/02/04 20:17:32 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,11 +74,11 @@ class handler_audio;
 #endif
 class list_sprites;
 class joueurData;
-class tableaux_Z;
-class shop_tecno;
-class gard_tecno;
-class menu_tecno;
-class scrolledit;
+class supervisor_bricks_level;
+class supervisor_shop;
+class supervisor_guards_level;
+class supervisor_main_menu;
+class supervisor_map_editor;
 class bitmap_data;
 class offscreen_surface;
 
@@ -96,13 +96,15 @@ const Sint32 SINUS_DECA = 7;
 class tecnoballz
 
 {
-private:
-    /*
+public:
   typedef enum {
-    BRICKS_LEVELS,
-    SHOP
-  };
-  */
+    BRICKS_LEVEL = 1,
+    SHOP,
+    GUARDS_LEVEL,
+    MAIN_MENU,
+    MAP_EDITOR,    
+  }
+  GAME_PHASE;
 
 
 public:
@@ -167,11 +169,11 @@ protected:
 
   static Sint16 *table_cosL;
   static Sint16 *table_sinL;
-  static tableaux_Z *tabGestion;
-  static shop_tecno *shpGestion;
-  static gard_tecno *garGestion;
-  static menu_tecno *menGestion;
-  static scrolledit *ptScrollEd;
+  static supervisor_bricks_level *bricks_level;
+  static supervisor_shop *shop;
+  static supervisor_guards_level *guards_level;
+  static supervisor_main_menu *main_menu;
+  static supervisor_map_editor *map_editor;
     /** A bitmap containing the current images of sprites */
   static bitmap_data *sprites_bitmap;
   static char zeAreaCode[11];

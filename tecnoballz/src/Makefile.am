@@ -20,7 +20,6 @@ SOURCES_MAIN = \
 	controller_balls.cc \
 	controller_bricks.cc \
 	ejectBalls.cc \
-	gard_tecno.cc \
   handler_audio.cc \
   handler_display.cc \
 	handler_keyboard.cc \
@@ -35,24 +34,25 @@ SOURCES_MAIN = \
 	lispreader.cc \
   list_sprites.cc \
 	main.cc \
-	menu_tecno.cc \
 	mousePoint.cc \
 	offscreen_surface.cc \
 	print_menu.cc \
 	printmoney.cc \
 	print_text.cc \
-	runGestion.cc \
 	score_over.cc \
 	scoretable.cc \
-	scrolledit.cc \
 	surface_sdl.cc \
-	shop_tecno.cc \
 	sprite_object.cc \
 	sprite_ball.cc \
   sprite_projectile.cc \
   sprite_paddle.cc \
   sprite_ship.cc \
-	tableaux_Z.cc \
+  supervisor.c \
+  supervisor_bricks_level.cc \
+  supervisor_main_menu.cc \
+  supervisor_map_editor.cc \
+  supervisor_guards_level.cc \
+  supervisor_shop.cc \
 	techno_eye.cc \
 	techno_gem.cc \
 	tecno_caps.cc \

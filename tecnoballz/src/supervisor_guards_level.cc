@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: gard_tecno.cc,v 1.24 2007/02/02 17:05:53 gurumeditation Exp $
+// id		: $Id: supervisor_guards_level.cc,v 1.1 2007/02/04 20:17:32 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -21,13 +21,13 @@
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA  02111-1307, USA.
 //******************************************************************************
-#include "../include/gard_tecno.h"
+#include "../include/supervisor_guards_level.h"
 #include "../include/handler_resources.h"
 
 //-----------------------------------------------------------------------------
 // create the object
 //-----------------------------------------------------------------------------
-gard_tecno::gard_tecno()
+supervisor_guards_level::supervisor_guards_level()
 {
 	initialise();
 	defilement = new lastScroll();
@@ -55,7 +55,7 @@ gard_tecno::gard_tecno()
 //-----------------------------------------------------------------------------
 // release the object
 //-----------------------------------------------------------------------------
-gard_tecno::~gard_tecno()
+supervisor_guards_level::~supervisor_guards_level()
 {
 	if(ptBob_name)
 		delete ptBob_name;
@@ -83,7 +83,7 @@ gard_tecno::~gard_tecno()
 // -----------------------------------------------------------------------------
 // initializations of the guards's level
 // -----------------------------------------------------------------------------
-Sint32 gard_tecno::first_init()
+Sint32 supervisor_guards_level::first_init()
 {
 #ifndef SOUNDISOFF
 	audio->play_music(MUSICGUARD);
@@ -99,7 +99,7 @@ Sint32 gard_tecno::first_init()
 	Sint32 grdP =  joueurGere->getGuardPt();
 	//levelTecno = 6; //test only
 	if(is_verbose)
-		printf("gard_tecno::first_init() : areaNumber=%i, "
+		printf("supervisor_guards_level::first_init() : areaNumber=%i, "
 			"levelTecno=%i grdP=%i\n",
 			areaNumber, levelTecno, grdP);
     
@@ -152,7 +152,7 @@ Sint32 gard_tecno::first_init()
 		0,			//don't restaure background where leaves
 		1			//initialize color table
 	);
-        std::cout << "gard_tecno::first_init release_sprites_bitmap" << std::endl;
+        std::cout << "supervisor_guards_level::first_init release_sprites_bitmap" << std::endl;
 
 	resources->release_sprites_bitmap();
 	
@@ -233,7 +233,7 @@ Sint32 gard_tecno::first_init()
 //------------------------------------------------------------------------------
 // main loop of the guards's phase
 //------------------------------------------------------------------------------
-Sint32 gard_tecno::zeMainLoop()
+Sint32 supervisor_guards_level::main_loop()
 {
 	Sint32 Ecode = -1; 
 	//###################################################################	
@@ -391,7 +391,7 @@ Sint32 gard_tecno::zeMainLoop()
 //------------------------------------------------------------------------------
 // Calcul le pointeur sur le niveau de la diffculte des gardiens
 //------------------------------------------------------------------------------
-void gard_tecno::init_level()
+void supervisor_guards_level::init_level()
 { 
 	levelParam = ptLev_data->guardlevel(areaNumber, levelTecno);
 	scrollType = levelParam->scrollType;
@@ -402,7 +402,7 @@ void gard_tecno::init_level()
 //------------------------------------------------------------------------------
 // manage scrolling speed
 //------------------------------------------------------------------------------
-void gard_tecno::run_scroll()
+void supervisor_guards_level::run_scroll()
 {	
 	if (scrollTemp > 0)
 	{	scrollTemp--;
@@ -417,7 +417,7 @@ void gard_tecno::run_scroll()
 //------------------------------------------------------------------------------
 // cheat mode: F2=destroyed the two guards / F3=guard 1 / F4=guard 2 
 //------------------------------------------------------------------------------
-void gard_tecno::cheat_keys()
+void supervisor_guards_level::cheat_keys()
 {
 	if (!cheat_flag) return;
 	if(	!keyboard->key_is_pressed(SDLK_RSHIFT) ||

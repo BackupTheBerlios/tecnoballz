@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-11
 // fonction	: handle the the guards levels
-// id		: $Id: gard_tecno.h,v 1.7 2007/02/02 17:05:53 gurumeditation Exp $
+// id		: $Id: supervisor_guards_level.h,v 1.1 2007/02/04 20:17:32 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -23,12 +23,12 @@
 //******************************************************************************
 #ifndef __GARD_TECNO__
 #define __GARD_TECNO__
-class gard_tecno;
+class supervisor_guards_level;
 #include "../include/lastScroll.h"
 #include "../include/tecno_miss.h"
 #include "../include/handler_display.h"
 #include "../include/handler_keyboard.h"
-#include "../include/runGestion.h"
+#include "../include/supervisor.h"
 #include "../include/zeguardian.h"
 #include "../include/zeMissiles.h"
 #include "../include/zeRaquette.h"
@@ -47,7 +47,7 @@ class gard_tecno;
 #include "../include/zeMoveText.h"
 
 
-class gard_tecno:public virtual runGestion
+class supervisor_guards_level:public virtual supervisor
 {
 	friend class zeMoveText;
 
@@ -87,9 +87,9 @@ class gard_tecno:public virtual runGestion
 		void				cheat_keys();
  
 	public:
-						gard_tecno();
-						~gard_tecno();
+						supervisor_guards_level();
+						~supervisor_guards_level();
 		Sint32				first_init();
-		Sint32				zeMainLoop();
+		Sint32				main_loop();
 };
 #endif

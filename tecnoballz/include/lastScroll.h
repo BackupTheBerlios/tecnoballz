@@ -28,10 +28,10 @@ class lastScroll;
 #include "../include/handler_display.h"
 #include "../include/bitmap_data.h"
 #include "../include/tecnoballz.h"
-#include "../include/scrolledit.h"
+#include "../include/supervisor_map_editor.h"
 //...............................................................................
 class lastScroll:public virtual tecnoballz
-{	friend class scrolledit;
+{	friend class supervisor_map_editor;
 	
 	public:
 		static const Uint32		COLOR_GARD = 0;

@@ -1,11 +1,11 @@
 //******************************************************************************
 // copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "menu_tecno.cc"
+// file		: "supervisor_main_menu.cc"
 // created	: ?
 // updates	: 2005-02-4
 // fonction	: management of the menu principal
-// id		: $Id: menu_tecno.cc,v 1.19 2007/01/31 15:20:07 gurumeditation Exp $
+// id		: $Id: supervisor_main_menu.cc,v 1.1 2007/02/04 20:17:32 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -21,7 +21,7 @@
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA  02111-1307, USA.
 //******************************************************************************
-#include "../include/menu_tecno.h"
+#include "../include/supervisor_main_menu.h"
 #include "../include/handler_resources.h"
 #include "../include/joueurData.h"
 #include "../include/zeguardian.h"
@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------------------
 // create the object
 //-----------------------------------------------------------------------------
-menu_tecno::menu_tecno()
+supervisor_main_menu::supervisor_main_menu()
 {
 	initialise();
 	defilement = new lastScroll();	// background scrolling
@@ -43,7 +43,7 @@ menu_tecno::menu_tecno()
 //-----------------------------------------------------------------------------
 // release the object
 //-----------------------------------------------------------------------------
-menu_tecno::~menu_tecno()
+supervisor_main_menu::~supervisor_main_menu()
 {
 	delete objetMouse;
 	delete menu_texte;
@@ -56,11 +56,11 @@ menu_tecno::~menu_tecno()
 //-----------------------------------------------------------------------------
 //	perform some initializations
 //-----------------------------------------------------------------------------
-Sint32 menu_tecno::first_init()
+Sint32 supervisor_main_menu::first_init()
 {
 	if(is_verbose)
 		fprintf (stdout,
-			"menu_tecno::first_init() : [START]\n");	
+			"supervisor_main_menu::first_init() : [START]\n");	
 	sprites->reset();
 #ifndef SOUNDISOFF
 	audio->play_music(MUSICINTRO);
@@ -89,14 +89,14 @@ Sint32 menu_tecno::first_init()
 
 	if(is_verbose)
 		fprintf (stdout,
-			"menu_tecno::first_init() : [END]\n");	
+			"supervisor_main_menu::first_init() : [END]\n");	
 	return (erreur_num);
 }
 
 //------------------------------------------------------------------------------
 // menu : main loop
 //------------------------------------------------------------------------------
-Sint32 menu_tecno::zeMainLoop()
+Sint32 supervisor_main_menu::main_loop()
 {
 
 	display->wait_frame();
@@ -143,7 +143,7 @@ Sint32 menu_tecno::zeMainLoop()
 //------------------------------------------------------------------------------
 // Increment the offset on the sinus table
 //------------------------------------------------------------------------------
-void menu_tecno::offset_inc()
+void supervisor_main_menu::offset_inc()
 {
 	Sint32 m = SINUS_MASK;
 	Sint32 a = offset_xx1 + 6;
@@ -154,7 +154,7 @@ void menu_tecno::offset_inc()
 //------------------------------------------------------------------------------
 // move the TecnoballZ logo
 //------------------------------------------------------------------------------
-void menu_tecno::moveZeLogo()
+void supervisor_main_menu::moveZeLogo()
 {
 	Sint32 a, b;
 	a = offset_xx1;
@@ -173,7 +173,7 @@ void menu_tecno::moveZeLogo()
 //------------------------------------------------------------------------------
 // start new TecnoballZ game 
 //------------------------------------------------------------------------------
-Sint32 menu_tecno::start_tecz()
+Sint32 supervisor_main_menu::start_tecz()
 {
 	cheat_flag = 0;
 #ifdef TU_TRICHES
@@ -216,7 +216,7 @@ Sint32 menu_tecno::start_tecz()
 				}
 				hardChoice = hardN;
 				if(is_verbose)
-					printf("menu_tecno::start_tecz() %s "
+					printf("supervisor_main_menu::start_tecz() %s "
 						"is OK; nArea = %i;" \
 						"level = %i, hardN = %i\n",
 						&zeAreaCode[0], nArea, level,
@@ -270,12 +270,12 @@ Sint32 menu_tecno::start_tecz()
 //
 //------------------------------------------------------------------------------
 /*
-unsigned char menu_tecno::colors_map[] =
+unsigned char supervisor_main_menu::colors_map[] =
 { 0, 0, 0, 0, 0, 0, 48, 80, 112, 16, 48, 80, 64, 96, 128, 112, 112, 144, 80,
   80, 112, 32, 64, 96, 144, 144, 176
 };*/
 
-const char*	menu_tecno::getTheCode(Uint32 arean, Uint32 hardc)
+const char*	supervisor_main_menu::getTheCode(Uint32 arean, Uint32 hardc)
 {	if(arean < 2)
 		return NULL;
 	return &codesarea[(arean -2) * 40 + (hardc - 1) * 10];
@@ -291,7 +291,7 @@ const char*	menu_tecno::getTheCode(Uint32 arean, Uint32 hardc)
 	SHELLSHOCK: area 5 level 13
 */
 
-const char menu_tecno::codesarea[241] =
+const char supervisor_main_menu::codesarea[241] =
 {
 	"LARRYHEARD" \
 	"SAUNDERSON" \

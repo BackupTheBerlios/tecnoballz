@@ -1,11 +1,11 @@
 //******************************************************************************
 // copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file         : "menu_tecno.h"
+// file         : "supervisor_main_menu.h"
 // created      : ?
 // updates      : 2005-01-18
 // fonction     : management of the menu principal
-// id		: $Id: menu_tecno.h,v 1.7 2007/01/24 11:52:25 gurumeditation Exp $
+// id		: $Id: supervisor_main_menu.h,v 1.1 2007/02/04 20:17:32 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -24,7 +24,7 @@
 #ifndef __MENU_TECNO__
 #define __MENU_TECNO__
 #include "../include/lastScroll.h"
-#include "../include/runGestion.h"
+#include "../include/supervisor.h"
 #include "../include/handler_keyboard.h"
 #include "../include/sprite_object.h"
 #include "../include/list_sprites.h"
@@ -33,7 +33,7 @@
 #include "../include/print_menu.h"
 #include "../include/mousePoint.h"
 #include "../include/handler_audio.h"
-class menu_tecno:public virtual runGestion
+class supervisor_main_menu:public virtual supervisor
 {
 	private:
 		lastScroll*		defilement;
@@ -46,10 +46,10 @@ class menu_tecno:public virtual runGestion
 		static const char	codesarea[241];
 
 	public:
-					menu_tecno();
-					~menu_tecno();
+					supervisor_main_menu();
+					~supervisor_main_menu();
 		Sint32			first_init();
-		Sint32			zeMainLoop();
+		Sint32			main_loop();
 		static const char*	getTheCode(Uint32 arean, Uint32 hardc);
 	
 	private:

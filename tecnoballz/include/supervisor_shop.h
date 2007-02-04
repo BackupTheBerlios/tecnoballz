@@ -1,7 +1,7 @@
 //******************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "shop_tecno.h"
+// file		: "supervisor_shop.h"
 // created		: ?
 // updates		: 2004-10-11
 // fonction	: manage the shop
@@ -23,7 +23,7 @@
 #ifndef __SHOP_TECNO__
 #define __SHOP_TECNO__
 //...............................................................................
-class shop_tecno;
+class supervisor_shop;
 //...............................................................................
 #include "../include/list_sprites.h"
 #include "../include/mousePoint.h"
@@ -31,11 +31,11 @@ class shop_tecno;
 #include "../include/ze_gadgets.h"
 #include "../include/print_text.h"
 #include "../include/joueurData.h"
-#include "../include/runGestion.h"
+#include "../include/supervisor.h"
 #include "../include/handler_popup_menu.h"
 #include "../include/tiles_background.h"
 //...............................................................................
-class shop_tecno:public runGestion
+class supervisor_shop:public supervisor
 {
 	private:
 		static const Sint32	STEXTWIDHT = 22;	//largeur d'une ligne texte en caracteres
@@ -104,10 +104,10 @@ class shop_tecno:public runGestion
 		static char			info_text3[];
     
 	public:
-								shop_tecno();
-								~shop_tecno();
+								supervisor_shop();
+								~supervisor_shop();
 		Sint32				first_init();
-		Sint32				zeMainLoop();
+		Sint32				main_loop();
 		Sint32				testkursor(Sint32 x, Sint32 y);
 		void				faitcourse(Sint32 gadnu);
 		void				aff_course();

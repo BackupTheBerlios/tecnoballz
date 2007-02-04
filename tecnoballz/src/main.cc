@@ -5,11 +5,11 @@
  * @date 2007-01-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.24 2007/02/04 17:10:17 gurumeditation Exp $
+ * $Id: main.cc,v 1.25 2007/02/04 20:17:32 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,7 +109,7 @@ main (Sint32 nbArg, char **ptArg)
 main
 mentatCode    => tecnoballz 
 list_sprites  => 
-runGestion    => supervisor
+supervisor    => supervisor
 configfile    => 
 lispreader    =>
 *GFX_bitmap 
@@ -152,11 +152,11 @@ zeNewBalls   => controller_balls
 *zeRaquette   => controller_paddles
 zexplosion   => controller_explosions
 
-tableaux_Z   => supervisor_bricks_level
-gard_tecno   => supervisor_guards_level
-shop_tecno   => supervisor_shop
-scrolledit   => supervisor_scrolleditor 
-menu_tecno   => supervisor_main_menu
+*tableaux_Z  => supervisor_bricks_level
+*gard_tecno  => supervisor_guards_level
+*shop_tecno  => supervisor_shop
+*menu_tecno  => supervisor_supervisor_map_editoror 
+*scrolledit  => supervisor_main_menu
 
 *escapeMenu   => item_popup_menu 
 *audiomixer   => handler_audio 
