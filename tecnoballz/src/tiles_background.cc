@@ -4,11 +4,11 @@
  * @date 2007-02-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.4 2007/02/03 20:52:28 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.5 2007/02/04 12:33:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -347,6 +347,7 @@ tiles_background::draw ()
   Uint32 last_height = (height_box - first_height) % tiles_height;
   
   Uint32 hcount = (width_box - first_width) / tiles_width + 1;
+  Uint32 last_width = (width_box - first_width) % tiles_width;
 
   for (Uint32 v = 0; v <= vcount; v++)
     {
@@ -369,7 +370,7 @@ tiles_background::draw ()
             }
         }
       rect_dst.x = 0;
-      for (Uint32 h = 0; h < map_width; h++)
+      for (Uint32 h = 0; h <= hcount; h++)
         {
           if (h == 0) 
             {
@@ -378,8 +379,16 @@ tiles_background::draw ()
             }
           else
             {
-              rect_src.w = rect_dst.w = tiles_width;
               rect_src.x = 0;
+	      if (h == hcount && last_width > 0)
+	        {
+                  rect_src.w = rect_dst.w = last_width;
+	        }
+              else
+	        {
+	          if (h == hcount) continue;
+                  rect_src.w = rect_dst.w = tiles_width;
+	        }
             }
           if (SDL_BlitSurface (tiles_surface, &rect_src, screen_surface, &rect_dst) < 0)
             {
