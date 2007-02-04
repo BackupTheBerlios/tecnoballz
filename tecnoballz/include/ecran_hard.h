@@ -4,7 +4,7 @@
 // file         : "ecran_hard.h"
 // created      : 2002-08-17
 // updates      : 2005-01-19
-// id		: $Id: ecran_hard.h,v 1.4 2007/01/24 17:10:41 gurumeditation Exp $
+// id		: $Id: ecran_hard.h,v 1.5 2007/02/04 17:10:16 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -23,9 +23,9 @@
 #ifndef __ECRAN_HARD__
 #define __ECRAN_HARD__
 //...............................................................................
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 //...............................................................................
-class ecran_hard:public virtual mentatCode
+class ecran_hard:public virtual tecnoballz
 {
 	public:
 		static const Sint32		SHADOWOFFX = -4;

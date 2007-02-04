@@ -26,11 +26,11 @@
 class joueurData;
 
 
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 #include "../include/ze_gadgets.h"
 //const Sint32 COURSEMAXI = 20;
 
-class joueurData:public virtual mentatCode
+class joueurData:public virtual tecnoballz
 {
 	friend class barreScore;
 	friend class gard_tecno;

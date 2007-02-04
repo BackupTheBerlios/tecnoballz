@@ -26,10 +26,10 @@
 class ejectBalls;
 //...............................................................................
 #include "../include/sprite_object.h"
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 #include "../include/sprite_ball.h"
 //...............................................................................
-class ejectBalls:public virtual mentatCode
+class ejectBalls:public virtual tecnoballz
 {
 	private:
 		static const Sint32	EJECT_POS1 = 16;

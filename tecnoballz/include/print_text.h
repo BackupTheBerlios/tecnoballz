@@ -27,10 +27,10 @@ class print_text;
 //...............................................................................
 #include "../include/handler_display.h"
 #include "../include/bitmap_data.h"
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 #include "../include/sprite_object.h"
 //...............................................................................
-class print_text:public virtual mentatCode
+class print_text:public virtual tecnoballz
 {
 	protected:
 		static char			ascii2code[128];

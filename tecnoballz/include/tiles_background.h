@@ -4,11 +4,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.h,v 1.5 2007/02/04 15:56:45 gurumeditation Exp $
+ * $Id: tiles_background.h,v 1.6 2007/02/04 17:10:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,8 @@
 #ifndef __TILES_BACKGROUND__
 #define __TILES_BACKGROUND__
 class tiles_background;
-#include "../include/mentatCode.h"
-class tiles_background:public virtual mentatCode
+#include "../include/tecnoballz.h"
+class tiles_background:public virtual tecnoballz
 {
 private:
   static Sint32 table_pos1[16];

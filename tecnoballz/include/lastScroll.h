@@ -27,10 +27,10 @@ class lastScroll;
 //...............................................................................
 #include "../include/handler_display.h"
 #include "../include/bitmap_data.h"
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 #include "../include/scrolledit.h"
 //...............................................................................
-class lastScroll:public virtual mentatCode
+class lastScroll:public virtual tecnoballz
 {	friend class scrolledit;
 	
 	public:

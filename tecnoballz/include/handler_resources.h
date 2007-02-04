@@ -5,11 +5,11 @@
  * @date 2007-01-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.4 2007/01/30 16:37:20 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.5 2007/02/04 17:10:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,10 +28,10 @@
  */
 #ifndef __RESSOURCES__
 #define __RESSOURCES__
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 #include "../include/handler_memory.h"
 
-class handler_resources:public virtual mentatCode
+class handler_resources:public virtual tecnoballz
 {
 private:
   static const char *folderlist[];

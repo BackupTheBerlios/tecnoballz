@@ -25,10 +25,10 @@
 #define __ZEMINIMESS__
 class zeMiniMess;
 #include "../include/handler_display.h"
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 #include "../include/bitmap_data.h"
 //.............................................................................
-class zeMiniMess:public virtual mentatCode
+class zeMiniMess:public virtual tecnoballz
 {
 	private:
 		bitmap_data*			minifontes;

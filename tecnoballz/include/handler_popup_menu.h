@@ -5,11 +5,11 @@
  * @date 2007-02-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.h,v 1.1 2007/02/02 19:50:45 gurumeditation Exp $
+ * $Id: handler_popup_menu.h,v 1.2 2007/02/04 17:10:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 #define __HANDLER_POPUP_MENU__
 class handler_popup_menu;
 
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 #include "../include/print_text.h"
 #include "../include/sprite_object.h"
 

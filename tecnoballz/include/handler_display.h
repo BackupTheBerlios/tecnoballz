@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.h,v 1.6 2007/02/02 17:05:53 gurumeditation Exp $
+ * $Id: handler_display.h,v 1.7 2007/02/04 17:10:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,10 +28,10 @@
  */
 #ifndef __HANDLER_DISPLAY__
 #define __HANDLER_DISPLAY__
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 #include "../include/offscreen_surface.h"
 
-class handler_display:public virtual mentatCode
+class handler_display:public virtual tecnoballz
 {
 public:
   static const Sint32 SHADOWOFFX = -4;

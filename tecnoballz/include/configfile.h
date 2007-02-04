@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2005-01-19
-// id		: $Id: configfile.h,v 1.4 2006/06/21 13:46:04 patrice Exp $
+// id		: $Id: configfile.h,v 1.5 2007/02/04 17:10:16 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -33,7 +33,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 #include "../include/lispreader.h"
 
 //..............................................................................
@@ -49,7 +49,7 @@
 #endif
 #define CONFIG_FILE_NAME "tecnoballz.conf"
 //..............................................................................
-class configfile:public virtual mentatCode
+class configfile:public virtual tecnoballz
 {
 	public:
 		/*bool		fullscreen;	//0=windowed mode / 1=full screen

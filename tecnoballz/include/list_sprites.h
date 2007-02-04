@@ -3,11 +3,11 @@
  * @brief Call the drawing methods of all sprites
  * @date 2007-01-16
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: list_sprites.h,v 1.1 2007/01/16 21:27:13 gurumeditation Exp $
+ * $Id: list_sprites.h,v 1.2 2007/02/04 17:10:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,10 +30,10 @@
 class list_sprites;
 #include "../include/sprite_object.h"
 #include "../include/handler_memory.h"
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 //const Sint32 BOBNumMaxi = 200;
 
-class list_sprites:public mentatCode
+class list_sprites:public tecnoballz
 {
 private:
   Sint32 num_of_shapes;

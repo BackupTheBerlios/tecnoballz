@@ -5,11 +5,11 @@
  * @date 2007-01-15
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: handler_memory.h,v 1.1 2007/01/16 14:37:58 gurumeditation Exp $
+ * $Id: handler_memory.h,v 1.2 2007/02/04 17:10:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #ifndef __HANDLER_MEMORY__
 #define __HANDLER_MEMORY__
 class handler_memory;
-#include "mentatCode.h"
+#include "tecnoballz.h"
 
 /** Memory-block description */
 typedef struct
@@ -41,7 +41,7 @@ typedef struct
 }
 mem_struct;
 
-class handler_memory:public virtual mentatCode
+class handler_memory:public virtual tecnoballz
 {
 private:
   mem_struct * memory_list_base;

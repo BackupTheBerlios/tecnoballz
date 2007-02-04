@@ -4,11 +4,11 @@
  * @date 2007-01-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.h,v 1.1 2007/01/19 19:09:03 gurumeditation Exp $
+ * $Id: handler_keyboard.h,v 1.2 2007/02/04 17:10:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,9 +28,9 @@
 #ifndef __HANDLER_KEYBOARD
 #define __HANDLER_KEYBOARD
 
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 
-class handler_keyboard:public virtual mentatCode
+class handler_keyboard:public virtual tecnoballz
 {
 public:
   

@@ -25,7 +25,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class level_data;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // :-) :-) :-) :-) :-) :-) :-) :-) :-) :-)   (-: (-: (-: (-: (-: (-: (-: (-: (-:   
@@ -68,7 +68,7 @@ typedef struct
 atariLevel;
 
 // definition of the class
-class level_data:public virtual mentatCode
+class level_data:public virtual tecnoballz
 {
 
 	public:

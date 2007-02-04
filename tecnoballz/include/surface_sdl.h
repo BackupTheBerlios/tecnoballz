@@ -5,11 +5,11 @@
  * @date 2007-02-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.h,v 1.2 2007/02/02 17:05:53 gurumeditation Exp $
+ * $Id: surface_sdl.h,v 1.3 2007/02/04 17:10:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,9 @@
 #ifndef __SURFACE_SDL__ 
 #define __SURFACE_SDL__
 class surface_sdl;
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 
-class surface_sdl:public virtual mentatCode
+class surface_sdl:public virtual tecnoballz
 {
 
 protected:

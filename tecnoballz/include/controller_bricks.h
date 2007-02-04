@@ -5,11 +5,11 @@
  * @date 2007-01-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.2 2007/01/31 07:09:06 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.3 2007/02/04 17:10:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 #define __CONTROLLER_BRICKS__
 class controller_bricks;
 class sprite_paddle;
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 
 //-----------------------------------------------------------------------------
 // structure of one simple bricks into current level

@@ -5,11 +5,11 @@
  * @date 2007-01-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.h,v 1.2 2007/01/30 16:37:20 gurumeditation Exp $
+ * $Id: handler_audio.h,v 1.3 2007/02/04 17:10:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 #include <SDL/SDL_mixer.h>
 #include <mikmod.h>
 class handler_audio;
-#include "mentatCode.h"
+#include "tecnoballz.h"
 
 /* numbers of the music */
 typedef enum
@@ -95,7 +95,7 @@ typedef enum
   NUM_OF_SOUNDS
 } sound_code;
 
-class handler_audio:public virtual mentatCode
+class handler_audio:public virtual tecnoballz
 {
 
 public:

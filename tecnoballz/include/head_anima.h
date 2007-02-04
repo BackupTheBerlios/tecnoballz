@@ -26,9 +26,9 @@ class head_anima;
 //.......................................................................
 #include "../include/handler_display.h"
 #include "../include/bitmap_data.h"
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 //.......................................................................
-class head_anima:public virtual mentatCode
+class head_anima:public virtual tecnoballz
 {
 	private:
 		Sint32				off_source;	//modulo source

@@ -22,8 +22,8 @@
 //*****************************************************************************
 #ifndef __RUNGESTION__
 #define __RUNGESTION__
-#include "../include/mentatCode.h"
-class  runGestion : public virtual mentatCode
+#include "../include/tecnoballz.h"
+class  runGestion : public virtual tecnoballz
 {
 	protected :
 		Sint32			end_return;

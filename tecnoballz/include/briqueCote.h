@@ -26,7 +26,7 @@
 class briqueCote;
 //...............................................................................
 #include "../include/sprite_object.h"
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 //...............................................................................
 
 //-----------------------------------------------------------------------------
@@ -37,7 +37,7 @@ typedef struct
 	Sint32 iMapOffset;	//pointer to the background buffer
 } coteStruct;
 
-class briqueCote:public mentatCode
+class briqueCote:public tecnoballz
 {
 	public:
 		static const Uint32	BRICOTENUM = 12;	//number bricks per wall

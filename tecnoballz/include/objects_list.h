@@ -4,11 +4,11 @@
  * @date 2007-01-28
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.9 2007/01/29 16:25:22 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.10 2007/02/04 17:10:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,9 +31,9 @@
 template < class X > class objects_list;
 #include "../include/list_sprites.h"
 #include "../include/handler_display.h"
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 
-template < class X > class objects_list:public virtual mentatCode
+template < class X > class objects_list:public virtual tecnoballz
 {
 protected:
   X ** sprites_list;

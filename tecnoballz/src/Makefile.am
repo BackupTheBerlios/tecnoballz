@@ -35,7 +35,6 @@ SOURCES_MAIN = \
 	lispreader.cc \
   list_sprites.cc \
 	main.cc \
-	mentatCode.cc \
 	menu_tecno.cc \
 	mousePoint.cc \
 	offscreen_surface.cc \
@@ -62,6 +61,7 @@ SOURCES_MAIN = \
 	tecno_gard.cc \
 	tecno_miss.cc \
 	tecno_text.cc \
+  tecnoballz.cc \
 	tiles_background.cc \
 	zeBouiBoui.cc \
 	zeCapsules.cc \

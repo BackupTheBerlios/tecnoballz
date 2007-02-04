@@ -5,11 +5,11 @@
  * @date 2007-02-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.cc,v 1.3 2007/02/02 21:07:43 gurumeditation Exp $
+ * $Id: surface_sdl.cc,v 1.4 2007/02/04 17:10:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 #include "../include/surface_sdl.h"
 
 /**

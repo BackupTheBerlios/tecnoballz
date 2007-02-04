@@ -5,11 +5,11 @@
  * @date 2007-01-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.23 2007/02/02 17:05:53 gurumeditation Exp $
+ * $Id: main.cc,v 1.24 2007/02/04 17:10:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 #include "../include/handler_display.h"
 #include "../include/handler_audio.h"
 #include "../include/configfile.h"
@@ -46,7 +46,7 @@ main (Sint32 nbArg, char **ptArg)
   oConfigure.loadconfig ();
   if (!oConfigure.scanZeArgs (nbArg, ptArg))
     return 0;
-  if (mentatCode::is_verbose)
+  if (tecnoballz::is_verbose)
     {
       std::cout << "================================" << std::endl
         << "TecnoballZ starts! " << std::endl 
@@ -55,10 +55,10 @@ main (Sint32 nbArg, char **ptArg)
   Sint32 error = 0;
   try
     {
-      error = mentatCode::first_init (&oConfigure);
+      error = tecnoballz::first_init (&oConfigure);
       if (error)
         return error;
-      error = mentatCode::game_begin ();
+      error = tecnoballz::game_begin ();
       if (error)
         return error;
     }
@@ -70,17 +70,15 @@ main (Sint32 nbArg, char **ptArg)
   catch (...)
     {
       std::cerr << "fatal error" << std::endl;
-      mentatCode::desinstall (&oConfigure);
+      tecnoballz::release_all_objects (&oConfigure);
       throw;
     }
-  if (mentatCode::is_verbose)
+  if (tecnoballz::is_verbose)
     {
       std::cout << "================================" << std::endl;
     }
-  error = mentatCode::desinstall (&oConfigure);
-  if (error)
-    return error;
-  if (mentatCode::is_verbose)
+  tecnoballz::release_all_objects (&oConfigure);
+  if (tecnoballz::is_verbose)
     {
       std::cout << "TecnoballZ is finished! ========" << std::endl;
     }

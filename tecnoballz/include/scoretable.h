@@ -5,7 +5,7 @@
 // created	: 2003-04-30
 // updates	: 2005-01-05
 // fonction	: display score table (game over)
-// id		: $Id: scoretable.h,v 1.2 2005/01/11 05:34:14 gurumeditation Exp $
+// id		: $Id: scoretable.h,v 1.3 2007/02/04 17:10:16 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -26,7 +26,7 @@
 //...............................................................................
 class scoretable;
 //...............................................................................
-#include "../include/mentatCode.h"
+#include "../include/tecnoballz.h"
 //...............................................................................
 typedef struct
 {
@@ -36,7 +36,7 @@ typedef struct
 	Uint32	scoreLevel; 
 } score_list;
 //...............................................................................
-class scoretable:public virtual mentatCode
+class scoretable:public virtual tecnoballz
 {
 	public:
 		static const Uint32	NUMBSCORES = 10;
