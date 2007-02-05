@@ -96,7 +96,7 @@ void tecno_gads::nouveauGad(brickClear *briPT, Sint32 nuGad)
 	y_coord = briPT->balle_posY;
 	sprite_paddle *raket = briPT->raquettePT;
 	raquettePT = raket;
-	directionX = raket->bumper_num();
+	directionX = raket->get_paddle_number();
 	nuGad = nuGad >> 1;
 	hasard_val += nuGad;
 	const Sint16 *p = gagdetBrik + nuGad;
@@ -128,7 +128,7 @@ void tecno_gads::nouveauGad(sprite_ball *balle, Sint32 nuGad)
 	y_coord = balle->get_y_coord();
 	sprite_paddle *raket = balle->donne_bump();
 	raquettePT = raket;
-	directionX = raket->bumper_num();
+	directionX = raket->get_paddle_number();
 	nuGad = nuGad >> 1;
 	hasard_val += nuGad;
 	const Sint16 *p = gagdetBrik + nuGad;
@@ -159,7 +159,7 @@ void tecno_gads::nouveauGad(sprite_projectile *pfire, Sint32 nuGad)
 	y_coord = pfire->get_y_coord();
 	sprite_paddle *raket = pfire->raquettePT;
 	raquettePT = raket;
-	directionX = raket->bumper_num();
+	directionX = raket->get_paddle_number();
 	nuGad = nuGad >> 1;
 	hasard_val += nuGad;
 	const Sint16 *p = gagdetBrik + nuGad;
@@ -192,7 +192,7 @@ void tecno_gads::new_gadget(sprite_ball *balle, Sint32 nuGad)
 	y_coord = balle->get_y_coord();
 	sprite_paddle *raket = balle->donne_bump();
 	raquettePT = raket;
-	directionX = raket->bumper_num();
+	directionX = raket->get_paddle_number();
 	nuGad = nuGad >> 1;
 	hasard_val += nuGad;
 	const Sint16 *p = gagdetGuar + nuGad;

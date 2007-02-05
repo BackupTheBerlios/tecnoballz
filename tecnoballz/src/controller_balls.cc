@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.7 2007/02/05 20:16:33 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.8 2007/02/05 21:02:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -708,7 +708,7 @@ controller_balls::vitus_bump ()
                   bumpX->ball_glued = (sprite_ball *) balle;
                   balle->raket_glue = bumpX;
                   balle->startCount = balle_glue;       //time of the glue 
-                  balle->colleBallF = raket->bumpNumero;
+                  balle->colleBallF = raket->paddle_number;
                 }
 
             }
@@ -770,7 +770,7 @@ controller_balls::vitusbump2 ()
                   bumpX->ball_glued = (sprite_ball *) balle;
                   balle->raket_glue = bumpX;
                   balle->startCount = balle_glue;       //time of the glue 
-                  balle->colleBallF = raket->bumpNumero;
+                  balle->colleBallF = raket->paddle_number;
                 }
             }
         }

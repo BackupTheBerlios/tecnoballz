@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.2 2007/02/05 15:44:09 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.3 2007/02/05 21:02:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,7 +133,7 @@ controller_paddles::create_paddles_sprites ()
       paddle_bottom->set_coordinates (keyboard->get_mouse_x (), bumperYbas);
       /* width of the paddle in pixels */
       paddle_bottom->collision_width = paddle_length;
-      paddle_bottom->bumpNumero = 1;
+      paddle_bottom->paddle_number = 1;
       paddle_bottom->bumperType = 0;
       /* ball rebounds table */
       paddle_bottom->rebonds_Ga = midi1_left;
@@ -239,7 +239,7 @@ controller_paddles::initBumper (barreScore * score, zeGigaBlit * blitz,
   /* initialize bottom paddle */ 
   paddle_bottom->set_coordinates (centre, bumperYbas);
   paddle_bottom->collision_width = paddle_length;     // bumper's width : 8,16,24,32,40,48,56 or 64
-  paddle_bottom->bumpNumero = 1;
+  paddle_bottom->paddle_number = 1;
   paddle_bottom->bumperType = 0;
   paddle_bottom->bumpActive (is_team_mode, paddle_length, 3);
   paddle_bottom->bump_TFIRE = 2;
@@ -262,7 +262,7 @@ controller_paddles::initBumper (barreScore * score, zeGigaBlit * blitz,
   /* initialize right paddle */ 
   paddle_right->set_coordinates (bumperXdro, centre);
   paddle_right->collision_height = paddle_length;
-  paddle_right->bumpNumero = 2;
+  paddle_right->paddle_number = 2;
   paddle_right->bumperType = 1;
   paddle_right->bumpActive (is_team_mode, paddle_length, joueurGere->get_bumpOn (2));
   paddle_right->bump_TFIRE = 2;
@@ -286,7 +286,7 @@ controller_paddles::initBumper (barreScore * score, zeGigaBlit * blitz,
   /* initialize top paddle */ 
   paddle_top->set_coordinates (centre, bumperYhau);
   paddle_top->collision_width = paddle_length;
-  paddle_top->bumpNumero = 3;
+  paddle_top->paddle_number = 3;
   paddle_top->bumperType = 0;
   paddle_top->bumpActive (is_team_mode, paddle_length, joueurGere->get_bumpOn (3));
   paddle_top->bump_TFIRE = 2;
@@ -310,7 +310,7 @@ controller_paddles::initBumper (barreScore * score, zeGigaBlit * blitz,
   /* initialize left paddle */ 
   paddle_left->set_coordinates (bumperXgau, centre);
   paddle_left->collision_height = paddle_length;
-  paddle_left->bumpNumero = 4;
+  paddle_left->paddle_number = 4;
   paddle_left->bumperType = 1;
   paddle_left->bumpActive (is_team_mode, paddle_length, joueurGere->get_bumpOn (4));
   paddle_left->bump_TFIRE = 2;
@@ -334,7 +334,7 @@ controller_paddles::initBumper (barreScore * score, zeGigaBlit * blitz,
   // Bumper robot du bas
   tec_robot0->set_coordinates (centre, bumperYbas);
   tec_robot0->collision_width = width_maxi;     // bumper's width always 128 pixels
-  tec_robot0->bumpNumero = 5;   // bumper robot
+  tec_robot0->paddle_number = 5;   // bumper robot
   tec_robot0->bumperType = 0;
   tec_robot0->bump_TFIRE = 2;
   tec_robot0->bumper_FX0 = 0;

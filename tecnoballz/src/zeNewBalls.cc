@@ -642,7 +642,7 @@ void controller_balls::vitus_bump()
 					bumpX->ball_glued = (sprite_ball *) balle;
 					balle->raket_glue = bumpX;
 					balle->startCount = balle_glue;	//time of the glue 
-					balle->colleBallF = raket->bumpNumero;
+					balle->colleBallF = raket->paddle_number;
 				}
 			
 			}
@@ -698,7 +698,7 @@ void controller_balls::vitusbump2()
 					bumpX->ball_glued = (sprite_ball *) balle;
 					balle->raket_glue = bumpX;
 					balle->startCount = balle_glue;	//time of the glue 
-					balle->colleBallF = raket->bumpNumero;
+					balle->colleBallF = raket->paddle_number;
 				}
 			}
 		}

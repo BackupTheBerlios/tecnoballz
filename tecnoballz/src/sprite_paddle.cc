@@ -1,14 +1,14 @@
 /** 
  * @file sprite_paddle.cc 
  * @brief A paddle sprite 
- * @date 2007-01-24
+ * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.4 2007/01/28 21:31:56 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.5 2007/02/05 21:02:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ sprite_paddle::sprite_paddle (zeFireBump * fBump)
   bump_speed = 0;
   bump_actif = 0;
   balleTouch = 0;
-  bumpNumero = 0;
+  paddle_number = 0;
   ball_glued = (sprite_ball *) NULL;
   bumperTirs = fBump;
   invincible = 0;
@@ -112,7 +112,7 @@ sprite_paddle::bumpActive (Sint32 rTeam, Sint32 large, Sint32 actif)
       bump_actif--;
       is_enabled = 1;
     }
-  if (bumpNumero == 1 || (bumpNumero == 4 && rTeam == 1))
+  if (paddle_number == 1 || (paddle_number == 4 && rTeam == 1))
     {
       bump_actif = 1;
       is_enabled = 1;
@@ -174,42 +174,42 @@ sprite_paddle::select_image ()
   select_image (length);
 }
 
-//------------------------------------------------------------------------------
-// return the number of the bumper
-// output       <= bumpNumero: 1 (bottom), 2 (right), 3 (top), 4 (left) or 5 (robot)
-//------------------------------------------------------------------------------
-Sint32
-sprite_paddle::bumper_num ()
+/**
+ * Return the paddle number
+ * @return 1  1 (bottom), 2 (right), 3 (top), 4 (left) or 5 (robot)
+ */
+Uint32
+sprite_paddle::get_paddle_number ()
 {
-  return bumpNumero;
+  return paddle_number;
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: transform into bumper glue 
-//------------------------------------------------------------------------------
+/**
+ * Transform into paddle glue in the bricks levels
+ */
 void
-sprite_paddle::bumpGoGlue ()
+sprite_paddle::set_glue ()
 {
   is_glue = 1;
   select_image ();
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: transform into bumper fire 1 
-//------------------------------------------------------------------------------
+/**
+ * Transform into paddle fire 1 in the bricks levels
+ */ 
 void
-sprite_paddle::bump_fire1 ()
+sprite_paddle::set_fire_1 ()
 {
   bumperFire = 1;
   select_image ();
   bumperTirs->fire1RunOn ();
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: transform into bumper fire 2
-//------------------------------------------------------------------------------
+/**
+ * Transform into paddle fire 2 in the bricks levels
+ */
 void
-sprite_paddle::bump_fire2 ()
+sprite_paddle::set_fire_2 ()
 {
   bumperFire = 1;
   select_image ();

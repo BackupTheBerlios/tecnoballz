@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.cc,v 1.1 2007/02/05 20:42:27 gurumeditation Exp $
+ * $Id: sprite_money.cc,v 1.2 2007/02/05 21:02:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -127,7 +127,7 @@ sprite_money::init_money (Sint32 pos_x, Sint32 pos_y, sprite_paddle * raket)
   Sint32 i = hasard_val;
   i = i & 0x003;
   hasard_val += i;
-  directionX = raket->bumper_num ();
+  directionX = raket->get_paddle_number ();
   switch (i)
     {
     case 0:

@@ -1,14 +1,14 @@
 /** 
  * @file sprite_paddle.h
  * @brief A paddle sprite 
- * @date 2007-01-24
+ * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.6 2007/02/04 20:59:41 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.7 2007/02/05 21:02:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,8 @@ class sprite_paddle:public sprite_object
 private:
   Sint32 bump_actif;          // flag : raquette active
   Sint32 bumperType;            // flag : type 0=horizontal / 1=vertical                
-  Sint32 bumpNumero;            // numero de la raquette 1 a 4
+  /** Paddle number from 0 to 5 */
+  Uint32 paddle_number;
   Sint32 length;            //bumper's width (in pixels)
   Sint32 width_mini;            //bumper mini width (32 or 64)
   Sint32 width_maxi;            //bumper maxi width (64 or 128)
@@ -93,10 +94,10 @@ public:
   void set_height (Sint32 h);
   void select_image (Sint32 l);
   void select_image ();
-  Sint32 bumper_num ();
-  void bumpGoGlue ();
-  void bump_fire1 ();
-  void bump_fire2 ();
+  Uint32 get_paddle_number ();
+  void set_glue ();
+  void set_fire_1 ();
+  void set_fire_2 ();
   void lacheBalle ();
   void attachBall (sprite_ball * xBall);
   void directBall ();

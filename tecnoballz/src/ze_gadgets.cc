@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.25 2007/02/05 15:44:09 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.26 2007/02/05 21:02:11 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -369,7 +369,9 @@ void ze_gadgets::gadget_run(sprite_paddle * raket, Sint32 nuGad)
 	controller_balls *oBall = ptNewBalls;
 
 	if(nuGad == GAD_RANDOM)
-		nuGad = randomlist[hasard_val & 127];
+          {
+            nuGad = randomlist[hasard_val & 127];
+          }
 	
 	switch (nuGad)
 	{ 
@@ -380,7 +382,7 @@ void ze_gadgets::gadget_run(sprite_paddle * raket, Sint32 nuGad)
 		audio->play_sound(S_TRANSFOR);
 #endif
 		ptMiniMess->mesrequest(16);
-		raket->bumpGoGlue();
+		raket->set_glue();
 		break;
 
 	// next level
@@ -395,7 +397,7 @@ void ze_gadgets::gadget_run(sprite_paddle * raket, Sint32 nuGad)
 		audio->play_sound(S_TRANSFOR);
 #endif
 		ptMiniMess->mesrequest(4);
-		raket->bump_fire1();
+		raket->set_fire_1();
 		break;
 	
 	// fire power 2
@@ -404,7 +406,7 @@ void ze_gadgets::gadget_run(sprite_paddle * raket, Sint32 nuGad)
 		audio->play_sound(S_TRANSFOR);
 #endif
 		ptMiniMess->mesrequest(5);
-		raket->bump_fire2();
+		raket->set_fire_2();
 		break;
 
 	// shrink bumper
@@ -552,23 +554,23 @@ void ze_gadgets::gadget_run(sprite_paddle * raket, Sint32 nuGad)
 		oBall->run_power2();
 		oBall->run_size02();
 	
-		raket->bumpGoGlue();
-		raket->bump_fire2();
+		raket->set_glue();
+		raket->set_fire_2();
 	
 		bumpSelect = oBump->get_paddle(2);
 		bumpSelect->enable();
-		bumpSelect->bumpGoGlue();
-		bumpSelect->bump_fire2();
+		bumpSelect->set_glue();
+		bumpSelect->set_fire_2();
 	
 		bumpSelect = oBump->get_paddle(3);
 		bumpSelect->enable();
-		bumpSelect->bumpGoGlue();
-		bumpSelect->bump_fire2();
+		bumpSelect->set_glue();
+		bumpSelect->set_fire_2();
 
 		bumpSelect = oBump->get_paddle(4);
 		bumpSelect->enable();
-		bumpSelect->bumpGoGlue();
-		bumpSelect->bump_fire2();
+		bumpSelect->set_glue();
+		bumpSelect->set_fire_2();
 		break;
 
 	// Bonus price (shop's price at 1 in the shop) (no gadget)
