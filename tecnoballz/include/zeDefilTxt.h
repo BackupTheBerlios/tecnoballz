@@ -24,8 +24,8 @@
 #define __ZEDEFILTXT__
 
 #include "../include/objects_list.h"
-#include "../include/tecnoDefil.h"
-class zeDefilTxt:public objects_list < tecnoDefil >
+#include "../include/sprite_fonte_menu.h"
+class zeDefilTxt:public objects_list < sprite_fonte_menu >
 {
 	private:
 		static const Sint32	DEFINUMBER = 14;	//numbers maximum characters
@@ -33,10 +33,10 @@ class zeDefilTxt:public objects_list < tecnoDefil >
 		static char			asciiToBob[128];
 
 	private:
-		tecnoDefil*			objectChar[DEFINUMBER + 2];
-		tecnoDefil*			objectLeft;
-		tecnoDefil*			objectRigh;
-		tecnoDefil**		object_ptr;
+		sprite_fonte_menu*			objectChar[DEFINUMBER + 2];
+		sprite_fonte_menu*			objectLeft;
+		sprite_fonte_menu*			objectRigh;
+		sprite_fonte_menu**		object_ptr;
 		char*				scroll_ptr;
 		Sint32				offset_xx1;
 		Sint32				offset_yy1;

@@ -53,7 +53,7 @@ void zeCapsules::initialise(Sint32 frequ, barreScore *score, printmoney *money)
 	ptbarreScr = score;
 	ptPrntmney = money;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_caps *capsu = sprites_list[i];
+	{	sprite_money *capsu = sprites_list[i];
 		capsu->littleInit();
 	}
 }
@@ -67,7 +67,7 @@ void zeCapsules::envoieFric(brickClear *briPT)
 	if(zeCompteur > frequenceX)
 	{	zeCompteur = 0;
 		for(Sint32 i = 0; i < max_of_sprites; i++)
-		{	tecno_caps *capsu = sprites_list[i];
+		{	sprite_money *capsu = sprites_list[i];
 			if(capsu->disponible(briPT))
 				return;
 		}
@@ -80,7 +80,7 @@ void zeCapsules::envoieFric(brickClear *briPT)
 void zeCapsules::send_money(sprite_ball *pball)
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_caps *capsu = sprites_list[i];
+	{	sprite_money *capsu = sprites_list[i];
 		if(capsu->disponible(pball))
 			return;
 	}
@@ -92,7 +92,7 @@ void zeCapsules::send_money(sprite_ball *pball)
 void zeCapsules::send_money(sprite_projectile *pfire)
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_caps *capsu = sprites_list[i];
+	{	sprite_money *capsu = sprites_list[i];
 		if(capsu->disponible(pfire))
 			return;
 	}
@@ -104,7 +104,7 @@ void zeCapsules::send_money(sprite_projectile *pfire)
 void zeCapsules::bouge_fric()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_caps *capsu = sprites_list[i];
+	{	sprite_money *capsu = sprites_list[i];
 		capsu->play_animation_loop();
 		Sint32 j = capsu->deplaceMoi();
 		if(j)
@@ -123,7 +123,7 @@ void zeCapsules::initialise(Sint32 frequ, printmoney *money)
 	frequenceX = frequ;
 	ptPrntmney = money;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_caps *capsu = sprites_list[i];
+	{	sprite_money *capsu = sprites_list[i];
 		capsu->littleInit();
 	}
 }
@@ -137,7 +137,7 @@ void zeCapsules::envoieFric(sprite_ball *pball)
 	if(zeCompteur > frequenceX)
 	{	zeCompteur = 0;
 		for(Sint32 i = 0; i < max_of_sprites; i++)
-		{	tecno_caps *capsu = sprites_list[i];
+		{	sprite_money *capsu = sprites_list[i];
  			if(capsu->disponible(pball))
 				return;
 		}
@@ -150,7 +150,7 @@ void zeCapsules::envoieFric(sprite_ball *pball)
 void zeCapsules::bougefric2()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_caps *capsu = sprites_list[i];
+	{	sprite_money *capsu = sprites_list[i];
 		capsu->play_animation_loop();
 		Sint32 j = capsu->deplaceMe2();
 		if(j)

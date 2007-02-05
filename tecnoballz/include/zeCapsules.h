@@ -30,13 +30,13 @@ class zeCapsules;
 #include "../include/objects_list.h"
 #include "../include/handler_display.h"
 #include "../include/barreScore.h"
-#include "../include/tecno_caps.h"
+#include "../include/sprite_money.h"
 #include "../include/barreScore.h"
 #include "../include/supervisor_bricks_level.h"
 #include "../include/printmoney.h"
 #include "../include/sprite_ball.h"
 //...............................................................................
-class zeCapsules:public objects_list < tecno_caps >
+class zeCapsules:public objects_list < sprite_money >
 {
 	private:
 		Sint32			frequenceX;

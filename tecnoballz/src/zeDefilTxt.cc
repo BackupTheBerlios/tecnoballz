@@ -53,7 +53,7 @@ void zeDefilTxt::create_fontes_list()
 	objectChar[0] = 0;
 	Sint32 j = 0;
 	for(i = 0; i < DEFINUMBER; i++, j = (j + 18) & SINUS_MASK)
-	{	tecnoDefil *zeBOB = sprites_list[i];
+	{	sprite_fonte_menu *zeBOB = sprites_list[i];
 		objectChar[i + 1] = zeBOB;
 		zeBOB->zeCosValue = j;
 		zeBOB->set_x_coord(100);
@@ -77,8 +77,8 @@ void zeDefilTxt::move_chars()
 {
 	Sint32 a, b, large;
 	Sint16 *table, *sinPT, *cosPT;
-	tecnoDefil *zeBOB;
-	tecnoDefil *zzBOB;
+	sprite_fonte_menu *zeBOB;
+	sprite_fonte_menu *zzBOB;
 
 	sinPT = table_sinL;
 	cosPT = table_cosL;
@@ -94,7 +94,7 @@ void zeDefilTxt::move_chars()
 	large = ((*table * 10 * resolution) >> SINUS_DECA) + 132 * resolution; 
 	Sint32 depla = 1;
 	if(birth_flag) depla *= 2;
-	tecnoDefil **BOBpt = object_ptr;
+	sprite_fonte_menu **BOBpt = object_ptr;
 	for(Sint32 i = 0; i < DEFINUMBER; i++)
 	{	if(!*BOBpt)
 			BOBpt = &objectChar[DEFINUMBER];

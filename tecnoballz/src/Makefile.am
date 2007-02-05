@@ -46,6 +46,9 @@ SOURCES_MAIN = \
   sprite_gigablitz.cc \
   sprite_mouse_pointer.cc \
   sprite_eye.cc \
+  sprite_fonte_menu.cc \
+  sprite_gem.cc \
+  sprite_money.cc \
   sprite_projectile.cc \
   sprite_paddle.cc \
   sprite_ship.cc \
@@ -55,9 +58,6 @@ SOURCES_MAIN = \
   supervisor_map_editor.cc \
   supervisor_guards_level.cc \
   supervisor_shop.cc \
-	techno_gem.cc \
-	tecno_caps.cc \
-	tecnoDefil.cc \
 	tecno_gads.cc \
 	tecno_gard.cc \
 	tecno_miss.cc \
