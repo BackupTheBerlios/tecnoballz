@@ -112,7 +112,7 @@ void zeFireBump::nouveauTir()
 {
 	if(maRaquette->bumperFire)
  	{	Sint32 i = maRaquette->length;
-		raketLarge = i;
+		paddle_length = i;
 		i -= maRaquette->width_mini;	//smallest bumper is of 16/32 pixels width
 		i >>= maRaquette->width_deca;	//size of bumper step by 8/16 pixels
 		switch (i)
@@ -152,9 +152,9 @@ void zeFireBump::init_type1()
 		Sint32 x = raket->x_coord;
 		Sint32 y = raket->y_coord;
 		if(raket->bumperType)	//vertical bumper ?
-			y += (raketLarge / 2) - (SIZEOFFIRE / 2);
+			y += (paddle_length / 2) - (SIZEOFFIRE / 2);
 		else
-			x += (raketLarge / 2) - (SIZEOFFIRE / 2);
+			x += (paddle_length / 2) - (SIZEOFFIRE / 2);
 		sprite_projectile *xFire = sprites_list[0];
 		xFire->is_enabled = 1;
 		xFire->x_coord = x;
@@ -173,9 +173,9 @@ void zeFireBump::init_type2()
 		Sint32 x = raket->x_coord;
 		Sint32 y = raket->y_coord;
 		if(raket->bumperType)	//vertical bumper ?
-			y += (raketLarge / 2) - (SIZEOFFIRE / 2);
+			y += (paddle_length / 2) - (SIZEOFFIRE / 2);
 		else
-			x += (raketLarge / 2) - (SIZEOFFIRE / 2);
+			x += (paddle_length / 2) - (SIZEOFFIRE / 2);
 		sprite_projectile **liste = sprites_list;
 		sprite_projectile *xFire;
 		Sint32 f = 1;
@@ -201,9 +201,9 @@ void zeFireBump::init_type3()
 		Sint32 x = raket->x_coord;
 		Sint32 y = raket->y_coord;
 		if(raket->bumperType)//vertical bumper ?
-			y += (raketLarge / 2) - (SIZEOFFIRE / 2);
+			y += (paddle_length / 2) - (SIZEOFFIRE / 2);
 		else
-			x += (raketLarge / 2) - (SIZEOFFIRE / 2);
+			x += (paddle_length / 2) - (SIZEOFFIRE / 2);
 		sprite_projectile **liste = sprites_list;
 		sprite_projectile *xFire;
 		Sint32 f = 1;
@@ -279,7 +279,7 @@ void zeFireBump::init_type5()
 		xFire->is_enabled = f;
 		xFire->x_coord = x;
 		xFire->y_coord = y;
-		Sint32 quart = raketLarge / 4;
+		Sint32 quart = paddle_length / 4;
 		if(raket->bumperType)	//vertical bumper ?
 		{	Sint32 i = raket->bumper_FX1;
 			x += i;
@@ -470,7 +470,7 @@ void zeFireBump::init_type7()
 void zeFireBump::deplaceTir()
 {
 	Sint32 i = maRaquette->length;
-	raketLarge = i;
+	paddle_length = i;
 	i -= maRaquette->width_mini;	//smallest bumper is of 16/32 pixels width
 	i >>= maRaquette->width_deca;	//size of bumper step by 8/16 pixels
 	switch (i)

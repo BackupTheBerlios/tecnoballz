@@ -71,7 +71,7 @@ class joueurData:public virtual tecnoballz
 		Sint32				rebuild_ok;                          // Flag reconstruit les murs
 		Sint32				less_brick;                          // Flag "less brick"
 		Sint32				life_bonus;                          // Compteur point une vie gratuite
-		Sint32				raketLarge;                          // Largeur des raquettes
+		Sint32				paddle_length;                          // Largeur des raquettes
 		Sint32				bonusPrice;                          // Bonus prix du magasin a 1
 		char				gemmeActif[6];                       // Etat des 6 gemmes
 		Sint32				gemmeNombr;                          // Nombre de gemme(s) ramassee(s)

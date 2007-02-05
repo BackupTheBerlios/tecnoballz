@@ -4,11 +4,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.2 2007/02/04 20:59:41 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.3 2007/02/05 15:44:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,12 +80,12 @@ private:
   printmoney *ptPrntmney;
   briqueCote *gereBricot;
   head_anima *tete_gugus;
-  controller_bricks *briquesTab;
-  tiles_background *ecranfond4;
+  controller_bricks *bricks;
+  tiles_background *tiles_ground;
   ejectBalls *gereEjects;
   controller_balls *gereBalles;
   ballDirect *ptBaDirect;
-  controller_paddles *theBumpers;
+  controller_paddles *paddles;
   barreScore *tecZ_barre;
   zeBouiBoui *les_atomes;
   ze_magneye *pt_magneye;
@@ -97,7 +97,7 @@ private:
   zeGameOver *ptGameOver;
   sprite_object *BottomWall;
   sprite_object *ptBobMoney;
-  handler_popup_menu *ptrEscMenu;
+  handler_popup_menu *popup_menu;
   tecno_gads *ptBobRever;
   /** Area number from 1 to 2 */
   Sint32 areaNumber;

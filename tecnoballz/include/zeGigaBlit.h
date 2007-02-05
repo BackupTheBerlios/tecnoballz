@@ -48,8 +48,8 @@ class zeGigaBlit:public objects_list < giga_blitz >
 		head_anima*			gugusObjet;
 		controller_paddles*			ptRaquette;
 		zexplosion*			pexplosion;
-		sprite_paddle*			tecBumper1;
-		sprite_paddle*			tecBumper3;
+		sprite_paddle*			paddle_bottom;
+		sprite_paddle*			paddle_top;
 		giga_blitz*			blitzobjet;	//pointer on the current "giga_blitz" 
 		Sint32				blitz_colx;
 		Sint32				blitz_posx;

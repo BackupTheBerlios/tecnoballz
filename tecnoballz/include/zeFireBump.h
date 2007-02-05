@@ -46,7 +46,7 @@ class zeFireBump:public objects_list < sprite_projectile >
 	private:
 		sprite_paddle*			maRaquette;
 		Sint32				countTempo;
-		Sint32				raketLarge;
+		Sint32				paddle_length;
 		const Sint16*		scie_sinus;
 
 	public:

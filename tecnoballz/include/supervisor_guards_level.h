@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-11
 // fonction	: handle the the guards levels
-// id		: $Id: supervisor_guards_level.h,v 1.2 2007/02/04 20:59:41 gurumeditation Exp $
+// id		: $Id: supervisor_guards_level.h,v 1.3 2007/02/05 15:44:09 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -56,8 +56,8 @@ class supervisor_guards_level:public virtual supervisor
 		lastScroll*			defilement;
 		zeguardian*			ptguardian;
 		zeMissiles*			ptMissiles;
-		controller_paddles*			ptRaquette;
-		controller_balls*			ptNewBalls;
+		controller_paddles*			paddles;
+		controller_balls*			balls;
 		ballDirect*			ptBaDirect;
 		zeCapsules*			ptCapsules;
 		ze_gadgets*			pt_gadgets;

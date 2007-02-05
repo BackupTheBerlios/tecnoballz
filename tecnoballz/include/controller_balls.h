@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.3 2007/02/04 20:59:41 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.4 2007/02/05 15:44:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,10 +61,10 @@ class controller_balls:public objects_list < sprite_ball >
 		Sint32			balle_tilt;		// Temps avant que le tilt soit possible
     /* true if ball controlled by the left mouse button */
 		bool			balls_are_controlled;
-		sprite_paddle*		tecBumper1;		//bottom bumper
-		sprite_paddle*		tecBumper2;		//right bumper
-		sprite_paddle*		tecBumper3;		//top bumper
-		sprite_paddle*		tecBumper4;		//left bumper
+		sprite_paddle*		paddle_bottom;		//bottom bumper
+		sprite_paddle*		paddle_right;		//right bumper
+		sprite_paddle*		paddle_top;		//top bumper
+		sprite_paddle*		paddle_left;		//left bumper
 		sprite_paddle*		tec_robot0;		//robot bumper
 		ejectBalls*		ejectObjet;
 		controller_bricks*		bricks;

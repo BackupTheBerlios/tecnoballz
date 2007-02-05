@@ -47,8 +47,8 @@ zeGigaBlit::zeGigaBlit()
 	brickObjet = (controller_bricks *)NULL;
 	gugusObjet = (head_anima *)NULL;
 	ptRaquette = (controller_paddles *)NULL;
-	tecBumper1 = (sprite_paddle *)NULL;
-	tecBumper3 = (sprite_paddle *)NULL;
+	paddle_bottom = (sprite_paddle *)NULL;
+	paddle_top = (sprite_paddle *)NULL;
 	blitz_posy = 0;
 	blitz_haut = 0;
 	bitz_ystop = 0;
@@ -77,8 +77,8 @@ Sint32 zeGigaBlit::init_liste(controller_paddles *zeRak, head_anima *gugus,
 	gugusObjet = gugus;
 	ptRaquette = zeRak;
 	brickObjet = brick;
-	tecBumper1 = ptRaquette->demandeRak(1);	// top bumper
-	tecBumper3 = ptRaquette->demandeRak(3);	// bottom bumper
+	paddle_bottom = ptRaquette->get_paddle(1);	// top bumper
+	paddle_top = ptRaquette->get_paddle(3);	// bottom bumper
 
 	if(max_of_sprites)
 	{	
@@ -112,23 +112,23 @@ Sint32 zeGigaBlit::init_liste(controller_paddles *zeRak, head_anima *gugus,
 void zeGigaBlit::initDepart()
 {
 	if(!blitz_haut)
-	{	Sint32 large = tecBumper1->get_length();
+	{	Sint32 large = paddle_bottom->get_length();
 		Sint32 l = large;
-		l -= tecBumper1->width_mini;	//smallest bumper is of 16/32 pixels width
-		l >>= tecBumper1->width_deca;	//size of bumper step by 8/16 pixels
+		l -= paddle_bottom->width_mini;	//smallest bumper is of 16/32 pixels width
+		l >>= paddle_bottom->width_deca;	//size of bumper step by 8/16 pixels
 		l = NOMBREGIGA - l - 1;
 		giga_blitz *g = sprites_list[l];
 		blitzobjet = g;
 		blitz_haut = g->get_sprite_height();
-		Sint32 x = tecBumper1->get_x_coord();
-		Sint32 y = tecBumper1->get_y_coord();
+		Sint32 x = paddle_bottom->get_x_coord();
+		Sint32 y = paddle_bottom->get_y_coord();
 		blitz_posx = x;
 		blitz_colx = x;	//special collision
 		g->set_coordinates(x, y);
-		//bitz_ystop = tecBumper3->get_y_coord() - blitz_haut;
+		//bitz_ystop = paddle_top->get_y_coord() - blitz_haut;
 		bitz_ystop = 8 * resolution - blitz_haut;
-		bitz_maxiy = tecBumper1->get_y_coord();
-		//bitz_miniy = tecBumper3->get_y_coord();
+		bitz_maxiy = paddle_bottom->get_y_coord();
+		//bitz_miniy = paddle_top->get_y_coord();
 		bitz_miniy = 8 * resolution;
 		y = large;
 		if(resolution == 1)
@@ -255,7 +255,7 @@ Sint32 zeGigaBlit::init_liste(controller_paddles *zeRak, zexplosion *pexpl)
 {
 	pexplosion = pexpl;
 	ptRaquette = zeRak;
-	tecBumper1 = ptRaquette->demandeRak(1);	// top bumper
+	paddle_bottom = ptRaquette->get_paddle(1);	// top bumper
 	if(max_of_sprites)
 	{	
           
@@ -332,15 +332,15 @@ void zeGigaBlit::execution2()
 // ------------------------------------------------------------------------------
 void zeGigaBlit::collision2()
 {
-	if(blitz_haut && !tecBumper1->is_invincible())
+	if(blitz_haut && !paddle_bottom->is_invincible())
 	{	Sint32 gx = blitzobjet->get_x_coord();
 		Sint32 gy = blitzobjet->get_y_coord();
 		//Sint32 gh = blitzobjet->get_sprite_height();
 		Sint32 gw = blitzobjet->get_collision_width();
-		Sint32 bx = tecBumper1->get_x_coord();
-		Sint32 by = tecBumper1->get_y_coord();
-		Sint32 bw = tecBumper1->get_length();
-		Sint32 bh = tecBumper1->get_sprite_height();
+		Sint32 bx = paddle_bottom->get_x_coord();
+		Sint32 by = paddle_bottom->get_y_coord();
+		Sint32 bw = paddle_bottom->get_length();
+		Sint32 bh = paddle_bottom->get_sprite_height();
 		/*printf("zeGigaBlit::collision2(): get_collision_width=%i / get_sprite_width=%i / get_sprite_height=%i /  blitz_haut =%i\n",
 			blitzobjet->get_collision_width(), blitzobjet->get_sprite_width(),
 			blitzobjet->get_sprite_height(), blitz_haut);*/
@@ -350,14 +350,14 @@ void zeGigaBlit::collision2()
 			gx <= bx + bw && 
 			gy <= by + bh)
 		{
-			tecBumper1->set_invincibility(100);
+			paddle_bottom->set_invincibility(100);
 #ifndef SOUNDISOFF
 			audio->play_sound(S_RAKEXPLO);
 			audio->play_sound(S_ENLEVVIE);
 #endif
 			joueurGere->lifesMoins(1);
-			pexplosion->add_explos(bx + tecBumper1->get_length()/2, 
-				by + tecBumper1->get_sprite_height()/2);
+			pexplosion->add_explos(bx + paddle_bottom->get_length()/2, 
+				by + paddle_bottom->get_sprite_height()/2);
 		}
 	}
 }

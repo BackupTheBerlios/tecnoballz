@@ -62,7 +62,7 @@ Sint32 ballDirect::initialize(controller_paddles* pBump, Uint32 nBump)
 	if(erreur_num)
 		return (erreur_num);
 	for(Uint32 i = 0; i < nBump; i++)
-		listBumper[i] = pBump->demandeRak(i + 1);
+		listBumper[i] = pBump->get_paddle(i + 1);
 	return erreur_num;
 }
 

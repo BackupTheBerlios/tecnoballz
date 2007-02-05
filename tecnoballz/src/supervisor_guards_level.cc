@@ -5,7 +5,7 @@
 // created	: 2003-01-09
 // updates	: 2005-01-18
 // fonction	: support the guards levels
-// id		: $Id: supervisor_guards_level.cc,v 1.2 2007/02/04 20:59:41 gurumeditation Exp $
+// id		: $Id: supervisor_guards_level.cc,v 1.3 2007/02/05 15:44:09 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -24,22 +24,22 @@
 #include "../include/supervisor_guards_level.h"
 #include "../include/handler_resources.h"
 
-//-----------------------------------------------------------------------------
-// create the object
-//-----------------------------------------------------------------------------
-supervisor_guards_level::supervisor_guards_level()
+/**
+ * Create the guards level supervisor
+ */
+ supervisor_guards_level::supervisor_guards_level()
 {
 	initialise();
 	defilement = new lastScroll();
 	ptguardian = new zeguardian();
-	ptRaquette = new controller_paddles(BOB_BUMPER);
+	paddles = new controller_paddles(BOB_BUMPER);
 	ptMoveText = new zeMoveText();
 	pExplosion = new zexplosion();
-	sprite_paddle *pBump = ptRaquette->demandeRak(1);
+	sprite_paddle *pBump = paddles->get_paddle(1);
 	ptMissiles = new zeMissiles(pBump, pExplosion);
 	ptCapsules = new zeCapsules();
 	pt_gadgets = new ze_gadgets(6);
-	ptNewBalls = new controller_balls(ptguardian, ptCapsules,  pt_gadgets);
+	balls = new controller_balls(ptguardian, ptCapsules,  pt_gadgets);
 	ptBaDirect = new ballDirect();
 	ptPrntmney = new printmoney();
 	ptMiniMess = new zeMiniMess();
@@ -52,9 +52,9 @@ supervisor_guards_level::supervisor_guards_level()
 	ptBob_name = NULL;
 }
 
-//-----------------------------------------------------------------------------
-// release the object
-//-----------------------------------------------------------------------------
+/**
+ * Release the guards level supervisor
+ */
 supervisor_guards_level::~supervisor_guards_level()
 {
 	if(ptBob_name)
@@ -68,13 +68,13 @@ supervisor_guards_level::~supervisor_guards_level()
 	delete ptMiniMess;
 	delete ptPrntmney;
 	delete ptBaDirect;
-	delete ptNewBalls;
+	delete balls;
 	delete pt_gadgets;
 	delete ptCapsules;
 	delete ptMissiles;
 	delete pExplosion;
 	delete ptMoveText;
-	delete ptRaquette;
+	delete paddles;
 	delete ptguardian;
 	delete defilement;
 	liberation();
@@ -106,7 +106,7 @@ Sint32 supervisor_guards_level::first_init()
   	//###################################################################
 	// initialize gigablitz
   	//###################################################################
-	error_init(ptGigaBlit->init_liste(ptRaquette, pExplosion));
+	error_init(ptGigaBlit->init_liste(paddles, pExplosion));
 	if(erreur_num) return erreur_num; 
 
   	//###################################################################
@@ -117,10 +117,8 @@ Sint32 supervisor_guards_level::first_init()
 	error_init(ptguardian->init_liste(ptMissiles, grdP, ptGigaBlit, pExplosion));
 	if(erreur_num)
 		return (erreur_num);
-	error_init(ptRaquette->init_liste());
-	if(erreur_num)
-		return (erreur_num);
-	ptNewBalls->create_sprites_list();
+	paddles->create_paddles_sprites ();
+	balls->create_sprites_list();
 	ptCapsules->create_sprites_list();
 	pt_gadgets->create_sprites_list();
 	ptPrntmney->create_sprites_list();
@@ -172,7 +170,7 @@ Sint32 supervisor_guards_level::first_init()
   	//###################################################################
 	// initialization balls
   	//###################################################################
-	ptNewBalls->init_balle(ptRaquette,
+	balls->init_balle(paddles,
 		levelParam->startCount,		//time before ball leaves bumper
 		0,				//(not applicable)
 		50 * 99,			//time before ball accelerates
@@ -182,7 +180,7 @@ Sint32 supervisor_guards_level::first_init()
    	//###################################################################
    	// force "powerball 2" (guards levels only)
 	//###################################################################
-	ptNewBalls->run_power2();
+	balls->run_power2();
 
    	//###################################################################
 	// Initialize the object which handles the "capsules of money"
@@ -199,8 +197,8 @@ Sint32 supervisor_guards_level::first_init()
 		levelParam->malusListe,		//the list of malus
 		NULL,				//the list of bonus bought in the shop (not applicable)
 		NULL,				//object which displays the small messages (not applicable)
-		ptRaquette,			//object which handles the bumpers
-		ptNewBalls,			//object which handles the balls
+		paddles,			//object which handles the bumpers
+		balls,			//object which handles the balls
 		NULL,				//object which handles the display of the text (not applicable)
 		NULL,
 		NULL);
@@ -208,12 +206,12 @@ Sint32 supervisor_guards_level::first_init()
   	//###################################################################
   	//
 	//###################################################################
-	ptPrntmney->init_guard(joueurGere, ptRaquette, ptBobMoney, ptBobLifes);
+	ptPrntmney->init_guard(joueurGere, paddles, ptBobMoney, ptBobLifes);
 
 	//initialize mobile characters at the end of the level
 	ptMoveText->initialise(levelTecno, 32 * resolution);
 	
-	error_init(ptBaDirect->initialize(ptRaquette, 1));
+	error_init(ptBaDirect->initialize(paddles, 1));
 	if(erreur_num) return (erreur_num);
 
 	display->unlock_surfaces();
@@ -245,13 +243,13 @@ Sint32 supervisor_guards_level::main_loop()
 #ifndef SOUNDISOFF
 			audio->disable_sound();
 #endif
-			ptRaquette->bumpersOff();
+			paddles->bumpersOff();
 			pt_gadgets->disable_sprites();
 			ptCapsules->disable_sprites();
 			ptguardian->disable_sprites();
 			pExplosion->disable_sprites();
 			ptGigaBlit->disable_sprites();
-			ptNewBalls->disable_sprites();
+			balls->disable_sprites();
 			ptMissiles->disable_sprites();
 			if(tecnwinner)
 			{	defilement->swapScroll(2, handler_resources::RESEDMAP02);
@@ -299,9 +297,9 @@ Sint32 supervisor_guards_level::main_loop()
 		if(!keyboard->command_is_pressed(handler_keyboard::COMMAND_KEY_PAUSE))
 		{	run_scroll();
 			defilement->scrolling1(scrolSpeed);
-			ptRaquette->bp_deplac2();
-			ptRaquette->lacheBall2();
-			ptNewBalls->vitusBall2();	//moving ball(s)
+			paddles->bp_deplac2();
+			paddles->lacheBall2();
+			balls->vitusBall2();	//moving ball(s)
 			ptBaDirect->execution1();	//handle ball viewfinder
 			ptguardian->execution1();	//moving the guard(s)
 			ptMissiles->execution1();	//moving the guards's weapons
@@ -337,7 +335,7 @@ Sint32 supervisor_guards_level::main_loop()
 	{	if(count_next > 0)
  		{	count_next++;
 			ptGigaBlit->disable_sprites();
-			ptNewBalls->disable_sprites();
+			balls->disable_sprites();
 			ptMissiles->disable_sprites();
 			if(count_next > 500 ||
 				keyboard->key_is_pressed(SDLK_SPACE))
@@ -359,7 +357,7 @@ Sint32 supervisor_guards_level::main_loop()
 		else
 		{	ptMoveText->activeText();
 			ptGigaBlit->disable_sprites();
-			ptNewBalls->disable_sprites();
+			balls->disable_sprites();
 			ptMissiles->disable_sprites();
 			count_next = 1;
 		}
@@ -410,7 +408,7 @@ void supervisor_guards_level::run_scroll()
 		return;
 	} 
 	tecno_miss *weapo = ptMissiles->getWeapOne();
-	sprite_ball *balle = ptNewBalls->first_ball();
+	sprite_ball *balle = balls->first_ball();
 	scrolSpeed = ptguardian->run_scroll(scrollType, scrolSpeed, balle, weapo);
 }
 

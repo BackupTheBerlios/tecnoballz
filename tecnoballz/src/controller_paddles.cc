@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.cc
  * @brief Paddles controller 
- * @date 2007-02-04
+ * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.1 2007/02/04 21:05:05 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.2 2007/02/05 15:44:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,30 +32,30 @@
 #include "../include/handler_keyboard.h"
 
 /** 
- * Create the paddles controller in  bricks levels
+ * Create the paddles controller in bricks levels
  */
 controller_paddles::controller_paddles ()
 {
   littleInit ();
-  tecBumper1 = NULL;
-  tecBumper2 = NULL;
-  tecBumper3 = NULL;
-  tecBumper4 = NULL;
+  paddle_bottom = NULL;
+  paddle_right = NULL;
+  paddle_top = NULL;
+  paddle_left = NULL;
   tec_robot0 = NULL;
   max_of_sprites = 5;
   sprites_have_shades = true;
   sprite_type_id = BOB_BUMPHR;
-  raket_team = 0;
-  raketLarge = 64 * resolution;
+  is_team_mode = false;
+  paddle_length = 64 * resolution;
   rak_invers = 0;
   zeFireBump *fBump = new zeFireBump ();
-  tecBumper1 = new sprite_paddle (fBump);
+  paddle_bottom = new sprite_paddle (fBump);
   fBump = new zeFireBump ();
-  tecBumper2 = new sprite_paddle (fBump);
+  paddle_right = new sprite_paddle (fBump);
   fBump = new zeFireBump ();
-  tecBumper3 = new sprite_paddle (fBump);
+  paddle_top = new sprite_paddle (fBump);
   fBump = new zeFireBump ();
-  tecBumper4 = new sprite_paddle (fBump);
+  paddle_left = new sprite_paddle (fBump);
   tec_robot0 = new sprite_paddle (NULL);
   bumperMini = 32 * resolution;
   bumperMaxi = 224 * resolution;
@@ -67,25 +67,25 @@ controller_paddles::controller_paddles ()
   width_mini = 16 * resolution;
 }
 
-//-----------------------------------------------------------------------------
-// gards levels: create the object
-//-----------------------------------------------------------------------------
+/** 
+ * Create the paddles controller in guards levels
+ */
 controller_paddles::controller_paddles (Sint32 nBob)
 {
   littleInit ();
-  tecBumper1 = NULL;
-  tecBumper2 = NULL;
-  tecBumper3 = NULL;
-  tecBumper4 = NULL;
+  paddle_bottom = NULL;
+  paddle_right = NULL;
+  paddle_top = NULL;
+  paddle_left = NULL;
   tec_robot0 = NULL;
   max_of_sprites = 1;
   sprites_have_shades = true;
   is_draw_pixel_by_pixel = false;
   sprite_type_id = BOB_BUMPER;
-  raket_team = 0;
-  raketLarge = 32 * resolution;
+  is_team_mode = 0;
+  paddle_length = 32 * resolution;
   rak_invers = 0;
-  tecBumper1 = new sprite_paddle (NULL);
+  paddle_bottom = new sprite_paddle (NULL);
   width_maxi = 32 * resolution;
   width_mini = 32 * resolution;
   bumperYbas = (232 - 8) * resolution;
@@ -93,10 +93,9 @@ controller_paddles::controller_paddles (Sint32 nBob)
   bumperMaxi = 300 * resolution;
 }
 
-
-//-----------------------------------------------------------------------------
-// release the object
-//-----------------------------------------------------------------------------
+/** 
+ * Release the paddles controller in guards levels
+ */
 controller_paddles::~controller_paddles ()
 {
   release_sprites_list ();
@@ -108,44 +107,46 @@ controller_paddles::~controller_paddles ()
 void
 controller_paddles::create_projectiles_list ()
 {
-  tecBumper1->create_projectiles_list ();
-  tecBumper2->create_projectiles_list ();
-  tecBumper3->create_projectiles_list ();
-  tecBumper4->create_projectiles_list ();
+  paddle_bottom->create_projectiles_list ();
+  paddle_right->create_projectiles_list ();
+  paddle_top->create_projectiles_list ();
+  paddle_left->create_projectiles_list ();
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: intialize bumpers
-//------------------------------------------------------------------------------
-Sint32
-controller_paddles::init_liste ()
+/**
+ * Intialize bumpers 
+ */
+void
+controller_paddles::create_paddles_sprites ()
 {
   alloc_sprites_list ();
-  //###################################################################
-  // gards levels: create one simple bumper
-  //###################################################################
+
+  /*
+   * Create one simple paddle in guards levels
+   */
   if (max_of_sprites == 1)
     {
-      tecBumper1->set_object_pos (0);
-      tecBumper1->create_sprite (sprite_type_id, sprites_bitmap, 1, 0);
-      sprites->add (tecBumper1);
-      sprites_list[0] = tecBumper1;
-      tecBumper1->set_coordinates (keyboard->get_mouse_x (), bumperYbas);
-      tecBumper1->collision_width = raketLarge; // bumper's width
-      tecBumper1->bumpNumero = 1;
-      tecBumper1->bumperType = 0;
-      tecBumper1->rebonds_Ga = midi1_left;      //ball rebounds table
-      tecBumper1->rebonds_Dr = midi1Right;      //ball rebounds table 
-      tecBumper1->bump_actif = 1;
-      tecBumper1->enable ();
-      tecBumper1->direct_tab = ballePets1;      // table direction balle collee
+      paddle_bottom->set_object_pos (0);
+      paddle_bottom->create_sprite (sprite_type_id, sprites_bitmap, 1, 0);
+      sprites->add (paddle_bottom);
+      sprites_list[0] = paddle_bottom;
+      paddle_bottom->set_coordinates (keyboard->get_mouse_x (), bumperYbas);
+      /* width of the paddle in pixels */
+      paddle_bottom->collision_width = paddle_length;
+      paddle_bottom->bumpNumero = 1;
+      paddle_bottom->bumperType = 0;
+      /* ball rebounds table */
+      paddle_bottom->rebonds_Ga = midi1_left;
+      paddle_bottom->rebonds_Dr = midi1Right;
+      paddle_bottom->bump_actif = 1;
+      paddle_bottom->enable ();
+      paddle_bottom->direct_tab = ballePets1;      // table direction balle collee
     }
   else
     {
-      //###################################################################
-      // bricks levels: create 4 bumpers sprites
-      //###################################################################
-
+      /**
+       * create 4 paddles sprites
+       */
       // load bumpers graphic page
       Uint32 npage;
       //if((hasard_val & 0x001))
@@ -155,34 +156,33 @@ controller_paddles::init_liste ()
         npage = handler_resources::RESBUMPER2;
       resources->load_sprites_bitmap (npage);
 
-      // create bottom bumper sprite
-      tecBumper1->set_object_pos (0);
-      tecBumper1->create_sprite (BOB_BUMPHR, sprites_bitmap, 1, 0);
-      sprites->add (tecBumper1);
-      sprites_list[0] = tecBumper1;
+      /* create bottom paddle sprite */
+      paddle_bottom->set_object_pos (0);
+      paddle_bottom->create_sprite (BOB_BUMPHR, sprites_bitmap, 1, 0);
+      sprites->add (paddle_bottom);
+      sprites_list[0] = paddle_bottom;
 
-      // create left bumper sprite
-      tecBumper2->set_object_pos (1);
-      tecBumper2->create_sprite (BOB_BUMPVT, sprites_bitmap, 1, 0);
-      sprites->add (tecBumper2);
-      sprites_list[1] = tecBumper2;
+      /* create left paddle sprite */
+      paddle_right->set_object_pos (1);
+      paddle_right->create_sprite (BOB_BUMPVT, sprites_bitmap, 1, 0);
+      sprites->add (paddle_right);
+      sprites_list[1] = paddle_right;
 
-      // create top bumper sprite
-      tecBumper3->set_object_pos (2);
-      tecBumper1->duplicaBOB (tecBumper3);
-      sprites->add (tecBumper3);
-      sprites_list[2] = tecBumper3;
+      /* create top paddle sprite */
+      paddle_top->set_object_pos (2);
+      paddle_bottom->duplicaBOB (paddle_top);
+      sprites->add (paddle_top);
+      sprites_list[2] = paddle_top;
 
-      // create right bumper sprite
-      tecBumper4->set_object_pos (3);
-      tecBumper2->duplicaBOB (tecBumper4);
-      sprites->add (tecBumper4);
-      sprites_list[3] = tecBumper4;
+      /* create right bumper sprite */
+      paddle_left->set_object_pos (3);
+      paddle_right->duplicaBOB (paddle_left);
+      sprites->add (paddle_left);
+      sprites_list[3] = paddle_left;
 
-      // release bumpers graphic page
+      /* release paddles graphic page */
       resources->release_sprites_bitmap ();
     }
-  return erreur_num;
 }
 
 //-------------------------------------------------------------------------------
@@ -233,105 +233,103 @@ controller_paddles::initBumper (barreScore * score, zeGigaBlit * blitz,
   ptGigaBlit = blitz;
   ptNewBalls = balls;
 
-  raketLarge = joueurGere->get_paddle_width ();
-  Sint32 centre = (bumperMaxi - bumperMini) / 2 - (raketLarge / 2);
+  paddle_length = joueurGere->get_paddle_width ();
+  Sint32 centre = (bumperMaxi - bumperMini) / 2 - (paddle_length / 2);
 
-  // bottom bumper
-  tecBumper1->set_coordinates (centre, bumperYbas);
-  tecBumper1->collision_width = raketLarge;     // bumper's width : 8,16,24,32,40,48,56 or 64
-  tecBumper1->bumpNumero = 1;
-  tecBumper1->bumperType = 0;
-  tecBumper1->bumpActive (raket_team, raketLarge, 3);
-  tecBumper1->bump_TFIRE = 2;
-  tecBumper1->bumper_FX0 = 0;
-  tecBumper1->bumper_FY0 = -5 * resolution;
-  tecBumper1->bumper_FX1 = -1 * resolution;
-  tecBumper1->bumper_FY1 = -4 * resolution;
-  tecBumper1->bumper_FX2 = 1 * resolution;
-  tecBumper1->bumper_FY2 = -4 * resolution;
-  tecBumper1->bump_Xscie = 32 * resolution;
-  tecBumper1->bump_Yscie = -20 * resolution;
-  tecBumper1->bump_xdeca = 0;
-  tecBumper1->bump_ydeca = -10 * resolution;
-  tecBumper1->rebonds_Ga = midi1_left;  // rebonds raquette va a gauche
-  tecBumper1->rebonds_Dr = midi1Right;  // rebonds raquette va a droite
-  tecBumper1->direct_tab = ballePets1;  // table direction balle collee
-  tecBumper1->width_mini = width_mini;
-  tecBumper1->width_maxi = width_maxi;
+  /* initialize bottom paddle */ 
+  paddle_bottom->set_coordinates (centre, bumperYbas);
+  paddle_bottom->collision_width = paddle_length;     // bumper's width : 8,16,24,32,40,48,56 or 64
+  paddle_bottom->bumpNumero = 1;
+  paddle_bottom->bumperType = 0;
+  paddle_bottom->bumpActive (is_team_mode, paddle_length, 3);
+  paddle_bottom->bump_TFIRE = 2;
+  paddle_bottom->bumper_FX0 = 0;
+  paddle_bottom->bumper_FY0 = -5 * resolution;
+  paddle_bottom->bumper_FX1 = -1 * resolution;
+  paddle_bottom->bumper_FY1 = -4 * resolution;
+  paddle_bottom->bumper_FX2 = 1 * resolution;
+  paddle_bottom->bumper_FY2 = -4 * resolution;
+  paddle_bottom->bump_Xscie = 32 * resolution;
+  paddle_bottom->bump_Yscie = -20 * resolution;
+  paddle_bottom->bump_xdeca = 0;
+  paddle_bottom->bump_ydeca = -10 * resolution;
+  paddle_bottom->rebonds_Ga = midi1_left;  // rebonds raquette va a gauche
+  paddle_bottom->rebonds_Dr = midi1Right;  // rebonds raquette va a droite
+  paddle_bottom->direct_tab = ballePets1;  // table direction balle collee
+  paddle_bottom->width_mini = width_mini;
+  paddle_bottom->width_maxi = width_maxi;
 
-  // right bumper
-  tecBumper2->set_coordinates (bumperXdro, centre);
-  tecBumper2->collision_height = raketLarge;
-  tecBumper2->bumpNumero = 2;
-  tecBumper2->bumperType = 1;
-  tecBumper2->bumpActive (raket_team, raketLarge, joueurGere->get_bumpOn (2));
-  tecBumper2->bump_TFIRE = 2;
-  tecBumper2->bumper_FX0 = -5 * resolution;
-  tecBumper2->bumper_FY0 = 0;
-  tecBumper2->bumper_FX1 = -4 * resolution;
-  tecBumper2->bumper_FY1 = 1 * resolution;
-  tecBumper2->bumper_FX2 = -4 * resolution;
-  tecBumper2->bumper_FY2 = -1 * resolution;
-  tecBumper2->bump_Xscie = -20 * resolution;
-  tecBumper2->bump_Yscie = 32 * resolution;
-  tecBumper2->bump_xdeca = -10 * resolution;
-  tecBumper2->bump_ydeca = 0;
-  tecBumper2->rebonds_Ga = midi2_left;
-  tecBumper2->rebonds_Dr = midi2Right;
-  tecBumper2->direct_tab = ballePets2;
-  tecBumper2->width_mini = width_mini;
-  tecBumper2->width_maxi = width_maxi;
-  joueurGere->set_bumpOn (2, tecBumper2->bump_actif);
+  /* initialize right paddle */ 
+  paddle_right->set_coordinates (bumperXdro, centre);
+  paddle_right->collision_height = paddle_length;
+  paddle_right->bumpNumero = 2;
+  paddle_right->bumperType = 1;
+  paddle_right->bumpActive (is_team_mode, paddle_length, joueurGere->get_bumpOn (2));
+  paddle_right->bump_TFIRE = 2;
+  paddle_right->bumper_FX0 = -5 * resolution;
+  paddle_right->bumper_FY0 = 0;
+  paddle_right->bumper_FX1 = -4 * resolution;
+  paddle_right->bumper_FY1 = 1 * resolution;
+  paddle_right->bumper_FX2 = -4 * resolution;
+  paddle_right->bumper_FY2 = -1 * resolution;
+  paddle_right->bump_Xscie = -20 * resolution;
+  paddle_right->bump_Yscie = 32 * resolution;
+  paddle_right->bump_xdeca = -10 * resolution;
+  paddle_right->bump_ydeca = 0;
+  paddle_right->rebonds_Ga = midi2_left;
+  paddle_right->rebonds_Dr = midi2Right;
+  paddle_right->direct_tab = ballePets2;
+  paddle_right->width_mini = width_mini;
+  paddle_right->width_maxi = width_maxi;
+  joueurGere->set_bumpOn (2, paddle_right->bump_actif);
 
-  // top bumper
-  tecBumper3->set_coordinates (centre, bumperYhau);
-  tecBumper3->collision_width = raketLarge;
-  tecBumper3->bumpNumero = 3;
-  tecBumper3->bumperType = 0;
-  tecBumper3->bumpActive (raket_team, raketLarge, joueurGere->get_bumpOn (3));
-  tecBumper3->bump_TFIRE = 2;
-  tecBumper3->bumper_FX0 = 0;
-  tecBumper3->bumper_FY0 = 5 * resolution;
-  tecBumper3->bumper_FX1 = 1 * resolution;
-  tecBumper3->bumper_FY1 = 4 * resolution;
-  tecBumper3->bumper_FX2 = -1 * resolution;
-  tecBumper3->bumper_FY2 = 4 * resolution;
-  tecBumper3->bump_Xscie = 32 * resolution - 5;
-  tecBumper3->bump_Yscie = 24 * resolution;
-  tecBumper3->bump_xdeca = 0;
-  tecBumper3->bump_ydeca = 10 * resolution;
-  tecBumper3->rebonds_Ga = midi3_left;
-  tecBumper3->rebonds_Dr = midi3Right;
-  tecBumper3->direct_tab = ballePets3;
-  tecBumper3->width_mini = width_mini;
-  tecBumper3->width_maxi = width_maxi;
-  joueurGere->set_bumpOn (3, tecBumper3->bump_actif);
+  /* initialize top paddle */ 
+  paddle_top->set_coordinates (centre, bumperYhau);
+  paddle_top->collision_width = paddle_length;
+  paddle_top->bumpNumero = 3;
+  paddle_top->bumperType = 0;
+  paddle_top->bumpActive (is_team_mode, paddle_length, joueurGere->get_bumpOn (3));
+  paddle_top->bump_TFIRE = 2;
+  paddle_top->bumper_FX0 = 0;
+  paddle_top->bumper_FY0 = 5 * resolution;
+  paddle_top->bumper_FX1 = 1 * resolution;
+  paddle_top->bumper_FY1 = 4 * resolution;
+  paddle_top->bumper_FX2 = -1 * resolution;
+  paddle_top->bumper_FY2 = 4 * resolution;
+  paddle_top->bump_Xscie = 32 * resolution - 5;
+  paddle_top->bump_Yscie = 24 * resolution;
+  paddle_top->bump_xdeca = 0;
+  paddle_top->bump_ydeca = 10 * resolution;
+  paddle_top->rebonds_Ga = midi3_left;
+  paddle_top->rebonds_Dr = midi3Right;
+  paddle_top->direct_tab = ballePets3;
+  paddle_top->width_mini = width_mini;
+  paddle_top->width_maxi = width_maxi;
+  joueurGere->set_bumpOn (3, paddle_top->bump_actif);
 
-
-  // Bumper de gauche
-  tecBumper4->set_coordinates (bumperXgau, centre);
-  tecBumper4->collision_height = raketLarge;
-  tecBumper4->bumpNumero = 4;
-  tecBumper4->bumperType = 1;
-  tecBumper4->bumpActive (raket_team, raketLarge, joueurGere->get_bumpOn (4));
-  tecBumper4->bump_TFIRE = 2;
-  tecBumper4->bumper_FX0 = 5 * resolution;
-  tecBumper4->bumper_FY0 = 0 * resolution;
-  tecBumper4->bumper_FX1 = 4 * resolution;
-  tecBumper4->bumper_FY1 = 1 * resolution;
-  tecBumper4->bumper_FX2 = 4 * resolution;
-  tecBumper4->bumper_FY2 = -1 * resolution;
-  tecBumper4->bump_Xscie = 24 * resolution;
-  tecBumper4->bump_Yscie = 32 * resolution - 5;
-  tecBumper4->bump_xdeca = 10 * resolution;
-  tecBumper4->bump_ydeca = 00;
-  tecBumper4->rebonds_Ga = midi4_left;
-  tecBumper4->rebonds_Dr = midi4Right;
-  tecBumper4->direct_tab = ballePets4;
-  tecBumper4->width_mini = width_mini;
-  tecBumper4->width_maxi = width_maxi;
-  joueurGere->set_bumpOn (4, tecBumper4->bump_actif);
-
+  /* initialize left paddle */ 
+  paddle_left->set_coordinates (bumperXgau, centre);
+  paddle_left->collision_height = paddle_length;
+  paddle_left->bumpNumero = 4;
+  paddle_left->bumperType = 1;
+  paddle_left->bumpActive (is_team_mode, paddle_length, joueurGere->get_bumpOn (4));
+  paddle_left->bump_TFIRE = 2;
+  paddle_left->bumper_FX0 = 5 * resolution;
+  paddle_left->bumper_FY0 = 0 * resolution;
+  paddle_left->bumper_FX1 = 4 * resolution;
+  paddle_left->bumper_FY1 = 1 * resolution;
+  paddle_left->bumper_FX2 = 4 * resolution;
+  paddle_left->bumper_FY2 = -1 * resolution;
+  paddle_left->bump_Xscie = 24 * resolution;
+  paddle_left->bump_Yscie = 32 * resolution - 5;
+  paddle_left->bump_xdeca = 10 * resolution;
+  paddle_left->bump_ydeca = 00;
+  paddle_left->rebonds_Ga = midi4_left;
+  paddle_left->rebonds_Dr = midi4Right;
+  paddle_left->direct_tab = ballePets4;
+  paddle_left->width_mini = width_mini;
+  paddle_left->width_maxi = width_maxi;
+  joueurGere->set_bumpOn (4, paddle_left->bump_actif);
 
   // Bumper robot du bas
   tec_robot0->set_coordinates (centre, bumperYbas);
@@ -362,24 +360,24 @@ controller_paddles::fire_projectiles ()
 {
 
   // Mode  solo
-  if (!raket_team)
+  if (!is_team_mode)
     {
       if (keyboard->is_left_button ())
         {
-          tecBumper1->fire_projectiles ();      //sprite_paddle::fire_projectiles (bumper object)
-          tecBumper2->fire_projectiles ();
-          tecBumper3->fire_projectiles ();
-          tecBumper4->fire_projectiles ();
+          paddle_bottom->fire_projectiles ();      //sprite_paddle::fire_projectiles (bumper object)
+          paddle_right->fire_projectiles ();
+          paddle_top->fire_projectiles ();
+          paddle_left->fire_projectiles ();
         }
     }
   else
     // Mode Team (no implemented)
     {
     }
-  tecBumper1->deplaceTir ();
-  tecBumper2->deplaceTir ();
-  tecBumper3->deplaceTir ();
-  tecBumper4->deplaceTir ();
+  paddle_bottom->deplaceTir ();
+  paddle_right->deplaceTir ();
+  paddle_top->deplaceTir ();
+  paddle_left->deplaceTir ();
 }
 
 //------------------------------------------------------------------------------
@@ -391,14 +389,14 @@ controller_paddles::lacheBalle ()
   //###################################################################
   // release ball
   //###################################################################
-  if (!raket_team)
+  if (!is_team_mode)
     {
       if (keyboard->is_right_button ())
         {
-          tecBumper1->lacheBalle ();
-          tecBumper2->lacheBalle ();
-          tecBumper3->lacheBalle ();
-          tecBumper4->lacheBalle ();
+          paddle_bottom->lacheBalle ();
+          paddle_right->lacheBalle ();
+          paddle_top->lacheBalle ();
+          paddle_left->lacheBalle ();
 #ifndef SOUNDISOFF
           audio->stop_lost_music ();
 #endif
@@ -420,7 +418,7 @@ void
 controller_paddles::lacheBall2 ()
 {
   if (keyboard->is_right_button ())
-    tecBumper1->lacheBalle ();
+    paddle_bottom->lacheBalle ();
 }
 
 //------------------------------------------------------------------------------
@@ -429,10 +427,10 @@ controller_paddles::lacheBall2 ()
 void
 controller_paddles::free_balls ()
 {
-  tecBumper1->lacheBalle ();
-  tecBumper2->lacheBalle ();
-  tecBumper3->lacheBalle ();
-  tecBumper4->lacheBalle ();
+  paddle_bottom->lacheBalle ();
+  paddle_right->lacheBalle ();
+  paddle_top->lacheBalle ();
+  paddle_left->lacheBalle ();
 }
 
 //------------------------------------------------------------------------------
@@ -443,10 +441,10 @@ controller_paddles::bp_deplace ()
 {
   Sint32 speed = 0;
   const Sint32 **tabB1, **tabB2, **tabB3, **tabB4;
-  Sint32 x = tecBumper1->x_coord;
+  Sint32 x = paddle_bottom->x_coord;
   Sint32 off_x = keyboard->get_mouse_x_offset ();
   // Mode Solo
-  if (!raket_team)
+  if (!is_team_mode)
     {
       raketDepla = 0;           // pas de deplacement
       rakVgauche = 0;
@@ -467,38 +465,38 @@ controller_paddles::bp_deplace ()
               raketDepla = 1;   // deplacement a gauche 
               rakVgauche = -off_x;
               speed = rakVgauche;
-              tabB1 = tecBumper1->rebonds_Ga;
-              tabB2 = tecBumper2->rebonds_Ga;
-              tabB3 = tecBumper3->rebonds_Ga;
-              tabB4 = tecBumper4->rebonds_Ga;
+              tabB1 = paddle_bottom->rebonds_Ga;
+              tabB2 = paddle_right->rebonds_Ga;
+              tabB3 = paddle_top->rebonds_Ga;
+              tabB4 = paddle_left->rebonds_Ga;
             }
           else
             {
-              Sint32 i = bumperMaxi - raketLarge;
+              Sint32 i = bumperMaxi - paddle_length;
               if (x >= i)
                 x = i;
               raketDepla = 2;   // deplacement a droite
               rakVdroite = off_x;
               speed = rakVdroite;
-              tabB1 = tecBumper1->rebonds_Dr;
-              tabB2 = tecBumper2->rebonds_Dr;
-              tabB3 = tecBumper3->rebonds_Dr;
-              tabB4 = tecBumper4->rebonds_Dr;
+              tabB1 = paddle_bottom->rebonds_Dr;
+              tabB2 = paddle_right->rebonds_Dr;
+              tabB3 = paddle_top->rebonds_Dr;
+              tabB4 = paddle_left->rebonds_Dr;
             }
 
           // selectionne table de rebond balle suivant le deplacement
           if (speed > 10)
             speed = 10;
-          tecBumper1->rebonds_GD = *(tabB1 + speed);
-          tecBumper2->rebonds_GD = *(tabB2 + speed);
-          tecBumper3->rebonds_GD = *(tabB3 + speed);
-          tecBumper4->rebonds_GD = *(tabB4 + speed);
+          paddle_bottom->rebonds_GD = *(tabB1 + speed);
+          paddle_right->rebonds_GD = *(tabB2 + speed);
+          paddle_top->rebonds_GD = *(tabB3 + speed);
+          paddle_left->rebonds_GD = *(tabB4 + speed);
 
           // Change position des raquettes
-          tecBumper1->set_x_coord (x);  // raquette du bas
-          tecBumper2->set_y_coord (x - 16);     // raquette de droite
-          tecBumper3->set_x_coord (x);  // raquette du haut
-          tecBumper4->set_y_coord (x - 16);     // raquette de gauche
+          paddle_bottom->set_x_coord (x);  // raquette du bas
+          paddle_right->set_y_coord (x - 16);     // raquette de droite
+          paddle_top->set_x_coord (x);  // raquette du haut
+          paddle_left->set_y_coord (x - 16);     // raquette de gauche
         }
 
     }
@@ -518,10 +516,10 @@ controller_paddles::bp_deplac2 ()
 {
   Sint32 speed = 0;
   const Sint32 **tabB1;
-  Sint32 x = tecBumper1->x_coord;
+  Sint32 x = paddle_bottom->x_coord;
   Sint32 off_x = keyboard->get_mouse_x_offset ();
   // mode solo
-  if (!raket_team)
+  if (!is_team_mode)
     {
       raketDepla = 0;           //no move
       rakVgauche = 0;
@@ -536,27 +534,27 @@ controller_paddles::bp_deplac2 ()
           raketDepla = 1;       //moving on the left
           rakVgauche = -off_x;
           speed = rakVgauche;
-          tabB1 = tecBumper1->rebonds_Ga;
+          tabB1 = paddle_bottom->rebonds_Ga;
         }
       else
         {
-          Sint32 i = bumperMaxi - raketLarge;
+          Sint32 i = bumperMaxi - paddle_length;
           if (x >= i)
             x = i;
           raketDepla = 2;       //moving on the right
           rakVdroite = off_x;
           speed = rakVdroite;
-          tabB1 = tecBumper1->rebonds_Dr;
+          tabB1 = paddle_bottom->rebonds_Dr;
         }
 
       //select table of rebound ball according to bumper's moving 
       if (speed > 10)
         speed = 10;
-      tecBumper1->rebonds_GD = *(tabB1 + speed);
+      paddle_bottom->rebonds_GD = *(tabB1 + speed);
 
       //change position of bumpers
-      tecBumper1->set_x_coord (x);      //bottom bumper
-      tecBumper1->flickerRun ();        //flick the bumper
+      paddle_bottom->set_x_coord (x);      //bottom bumper
+      paddle_bottom->flickerRun ();        //flick the bumper
     }
 
   // mode team, no implemented (on Amiga I had two mice simultaneously)
@@ -626,26 +624,28 @@ controller_paddles::move_robot ()
     }
 }
 
-//------------------------------------------------------------------------------
-// return bumper object pointer
-//------------------------------------------------------------------------------
+/**
+ * Return a pointer to a paddle sprite from a paddle identifier number
+ * @param id identifier number of the paddle
+ * @return pointer to a paddle sprite
+ */
 sprite_paddle *
-controller_paddles::demandeRak (Sint32 numer)
+controller_paddles::get_paddle (Uint32 id)
 {
-  switch (numer)
+  switch (id)
     {
     case 1:
-      return tecBumper1;
+      return paddle_bottom;
     case 2:
-      return tecBumper2;
+      return paddle_right;
     case 3:
-      return tecBumper3;
+      return paddle_top;
     case 4:
-      return tecBumper4;
+      return paddle_left;
     case 5:
       return tec_robot0;
     }
-  return ((sprite_paddle *) NULL);
+  return NULL;
 }
 
 //------------------------------------------------------------------------------
@@ -654,24 +654,24 @@ controller_paddles::demandeRak (Sint32 numer)
 void
 controller_paddles::maxi_bumps ()
 {
-  if (raketLarge >= 64 * resolution)
+  if (paddle_length >= 64 * resolution)
     return;
-  raketLarge = 64 * resolution;
-  Sint32 x = tecBumper1->get_x_coord ();
-  Sint32 i = bumperMaxi - raketLarge;
+  paddle_length = 64 * resolution;
+  Sint32 x = paddle_bottom->get_x_coord ();
+  Sint32 i = bumperMaxi - paddle_length;
   if (x >= i)
     {
       x = i;
-      tecBumper1->set_x_coord (x);
-      tecBumper2->set_y_coord (x);
-      tecBumper3->set_x_coord (x);
-      tecBumper4->set_y_coord (x);
+      paddle_bottom->set_x_coord (x);
+      paddle_right->set_y_coord (x);
+      paddle_top->set_x_coord (x);
+      paddle_left->set_y_coord (x);
     }
-  tecBumper1->set_width (raketLarge);
-  tecBumper2->set_height (raketLarge);
-  tecBumper3->set_width (raketLarge);
-  tecBumper4->set_height (raketLarge);
-  joueurGere->setLargeur (raketLarge);
+  paddle_bottom->set_width (paddle_length);
+  paddle_right->set_height (paddle_length);
+  paddle_top->set_width (paddle_length);
+  paddle_left->set_height (paddle_length);
+  joueurGere->setLargeur (paddle_length);
 
 }
 
@@ -681,24 +681,24 @@ controller_paddles::maxi_bumps ()
 void
 controller_paddles::incremente ()
 {
-  if (raketLarge < (64 * resolution))
+  if (paddle_length < (64 * resolution))
     {
-      raketLarge += (8 * resolution);
-      Sint32 x = tecBumper1->get_x_coord ();
-      Sint32 i = bumperMaxi - raketLarge;
+      paddle_length += (8 * resolution);
+      Sint32 x = paddle_bottom->get_x_coord ();
+      Sint32 i = bumperMaxi - paddle_length;
       if (x >= i)
         {
           x = i;
-          tecBumper1->set_x_coord (x);
-          tecBumper2->set_y_coord (x);
-          tecBumper3->set_x_coord (x);
-          tecBumper4->set_y_coord (x);
+          paddle_bottom->set_x_coord (x);
+          paddle_right->set_y_coord (x);
+          paddle_top->set_x_coord (x);
+          paddle_left->set_y_coord (x);
         }
-      tecBumper1->set_width (raketLarge);
-      tecBumper2->set_height (raketLarge);
-      tecBumper3->set_width (raketLarge);
-      tecBumper4->set_height (raketLarge);
-      joueurGere->setLargeur (raketLarge);
+      paddle_bottom->set_width (paddle_length);
+      paddle_right->set_height (paddle_length);
+      paddle_top->set_width (paddle_length);
+      paddle_left->set_height (paddle_length);
+      joueurGere->setLargeur (paddle_length);
     }
 }
 
@@ -708,14 +708,14 @@ controller_paddles::incremente ()
 void
 controller_paddles::decremente ()
 {
-  if (raketLarge > (16 * resolution))
+  if (paddle_length > (16 * resolution))
     {
-      raketLarge -= (8 * resolution);
-      tecBumper1->set_width (raketLarge);
-      tecBumper2->set_height (raketLarge);
-      tecBumper3->set_width (raketLarge);
-      tecBumper4->set_height (raketLarge);
-      joueurGere->setLargeur (raketLarge);
+      paddle_length -= (8 * resolution);
+      paddle_bottom->set_width (paddle_length);
+      paddle_right->set_height (paddle_length);
+      paddle_top->set_width (paddle_length);
+      paddle_left->set_height (paddle_length);
+      joueurGere->setLargeur (paddle_length);
     }
 }
 
@@ -743,14 +743,14 @@ controller_paddles::get_invers ()
 void
 controller_paddles::bumpersOff ()
 {
-  if (tecBumper1)
-    tecBumper1->disable ();
-  if (tecBumper2)
-    tecBumper2->disable ();
-  if (tecBumper3)
-    tecBumper3->disable ();
-  if (tecBumper4)
-    tecBumper4->disable ();
+  if (paddle_bottom)
+    paddle_bottom->disable ();
+  if (paddle_right)
+    paddle_right->disable ();
+  if (paddle_top)
+    paddle_top->disable ();
+  if (paddle_left)
+    paddle_left->disable ();
   if (tec_robot0)
     tec_robot0->disable ();
 }

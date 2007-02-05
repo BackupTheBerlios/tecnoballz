@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.5 2007/02/04 20:59:41 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.6 2007/02/05 15:44:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -129,11 +129,11 @@ controller_balls::init_balle (controller_paddles * raket, Sint32 start, Sint32 g
   tempoVites = speed;
   balle_tilt = tiltC;
   balleVites = sprite_ball::donneSpeed (table);
-  tecBumper1 = raket->demandeRak (1);   // bottom bumper
-  tecBumper2 = raket->demandeRak (2);   // right bumper
-  tecBumper3 = raket->demandeRak (3);   // top bumper
-  tecBumper4 = raket->demandeRak (4);   // left bumper
-  tec_robot0 = raket->demandeRak (5);   // robot bumper
+  paddle_bottom = raket->get_paddle (1);   // bottom bumper
+  paddle_right = raket->get_paddle (2);   // right bumper
+  paddle_top = raket->get_paddle (3);   // top bumper
+  paddle_left = raket->get_paddle (4);   // left bumper
+  tec_robot0 = raket->get_paddle (5);   // robot bumper
 
   /* Get the width of a brick in pixels */
   Sint32 w;
@@ -149,13 +149,13 @@ controller_balls::init_balle (controller_paddles * raket, Sint32 start, Sint32 g
   for (Sint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];
-      ball->once_init (start, speed, tecBumper1, balleVites, w);
+      ball->once_init (start, speed, paddle_bottom, balleVites, w);
     }
 
   // first ball special initialization
   sprite_ball *balle = sprites_list[0];
-  tecBumper1->ball_glued = balle;
-  balle->startBalle (tecBumper1->collision_width);
+  paddle_bottom->ball_glued = balle;
+  balle->startBalle (paddle_bottom->collision_width);
   num_of_sprites = 1;           // one ball to screen
   if (ejectObjet)
     ejectObjet->ballPosIni (&sprite_ball::furaxTable[0]);
@@ -207,7 +207,7 @@ void
 controller_balls::vitus_sort ()
 {
   // pointer to the object "bumper of bottom"
-  sprite_paddle *raket = tecBumper1;
+  sprite_paddle *raket = paddle_bottom;
   Sint32 min_x = sprite_ball::MINIMUM_PX * resolution;
   Sint32 max_x = sprite_ball::MAXIMUM_PX * resolution;
   Sint32 min_y = sprite_ball::MINIMUM_PY * resolution;
@@ -222,18 +222,18 @@ controller_balls::vitus_sort ()
           rakPT = (sprite_paddle *) NULL;
           Sint32 j = balle->x_coord;
           if (j < min_x)
-            rakPT = tecBumper4;
+            rakPT = paddle_left;
           else
             {
               if (j > max_x)
-                rakPT = tecBumper2;
+                rakPT = paddle_right;
               else
                 {
                   j = balle->y_coord;
                   if (j < min_y)
-                    rakPT = tecBumper3;
+                    rakPT = paddle_top;
                   else if (j > max_y)
-                    rakPT = tecBumper1;
+                    rakPT = paddle_bottom;
                 }
             }
 
@@ -280,7 +280,7 @@ void
 controller_balls::vitussort2 ()
 {
   Sint32 max_y = sprite_ball::MAXIMUM_PY * resolution;
-  sprite_paddle *raket = tecBumper1;    //pointer to the object "bumper of bottom"
+  sprite_paddle *raket = paddle_bottom;    //pointer to the object "bumper of bottom"
   for (Sint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
@@ -566,10 +566,10 @@ controller_balls::vitus_bump ()
   Sint32 j, x, y;
   const Sint32 *monPT;
   sprite_paddle *raket, *bumpX;
-  tecBumper1->balleTouch = 0;
-  tecBumper2->balleTouch = 0;
-  tecBumper3->balleTouch = 0;
-  tecBumper4->balleTouch = 0;
+  paddle_bottom->balleTouch = 0;
+  paddle_right->balleTouch = 0;
+  paddle_top->balleTouch = 0;
+  paddle_left->balleTouch = 0;
   for (Sint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
@@ -578,7 +578,7 @@ controller_balls::vitus_bump ()
           //###########################################################
           // bottom bumper
           //###########################################################
-          raket = tecBumper1;
+          raket = paddle_bottom;
           bumpX = 0;
           if (raket->is_enabled)
             {
@@ -600,7 +600,7 @@ controller_balls::vitus_bump ()
           //###########################################################
           if (!bumpX)
             {
-              raket = tecBumper2;
+              raket = paddle_right;
               if (raket->is_enabled)
                 {
                   x = raket->x_coord;
@@ -621,7 +621,7 @@ controller_balls::vitus_bump ()
           //###########################################################
           if (!bumpX)
             {
-              raket = tecBumper3;
+              raket = paddle_top;
               if (raket->is_enabled)
                 {
                   x = raket->x_coord;
@@ -642,7 +642,7 @@ controller_balls::vitus_bump ()
           //###########################################################
           if (!bumpX)
             {
-              raket = tecBumper4;
+              raket = paddle_left;
               if (raket->is_enabled)
                 {
                   x = raket->x_coord;
@@ -726,13 +726,13 @@ controller_balls::vitusbump2 ()
   Sint32 j, x, y;
   const Sint32 *monPT;
   sprite_paddle *raket, *bumpX;
-  tecBumper1->balleTouch = 0;
+  paddle_bottom->balleTouch = 0;
   for (Sint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
       if (balle->is_enabled)
         {
-          raket = tecBumper1;
+          raket = paddle_bottom;
           bumpX = 0;
           if (raket->is_enabled)
             {

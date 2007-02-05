@@ -130,7 +130,7 @@ void joueurData::resetvalue()
 	rebuild_ok = z;				//reset flag "rebuild wall" option
 	less_brick = z;				//reset flag "less brick" option
 	life_bonus = z;				//counter of points giving a free life
-	raketLarge = 32 * resolution;			//width of the bumper
+	paddle_length = 32 * resolution;			//width of the bumper
 	bonusPrice = z;				//reset flag "bonus price" option
 	guardianPt = 0;
 	RAZgemlist();
@@ -199,7 +199,7 @@ Sint32 joueurData::getLifeNum()
 //-----------------------------------------------------------------------------
 Sint32 joueurData::get_paddle_width()
 {
-	return raketLarge;
+	return paddle_length;
 }
 
 //-----------------------------------------------------------------------------
@@ -207,7 +207,7 @@ Sint32 joueurData::get_paddle_width()
 //-----------------------------------------------------------------------------
 void joueurData::setLargeur(Sint32 large)
 {
-	raketLarge = large;
+	paddle_length = large;
 }
 
 //-----------------------------------------------------------------------------

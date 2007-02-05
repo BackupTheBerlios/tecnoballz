@@ -114,11 +114,11 @@ void zeGemstone::moving_gem()
 					pJoueurDat->set_bumpOn(3, 3);	// active top bumper
 					pJoueurDat->set_bumpOn(4, 3);	// active left bumper
 					sprite_paddle* pBump;
-					pBump = ptRaquette->demandeRak(2);
+					pBump = ptRaquette->get_paddle(2);
 					pBump->enable();
-					pBump = ptRaquette->demandeRak(3);
+					pBump = ptRaquette->get_paddle(3);
 					pBump->enable();
-					pBump = ptRaquette->demandeRak(4);
+					pBump = ptRaquette->get_paddle(4);
 					pBump->enable();
 					return;
 				}

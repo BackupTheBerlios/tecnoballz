@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.24 2007/02/04 20:59:41 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.25 2007/02/05 15:44:09 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -83,7 +83,7 @@ void ze_gadgets::initialise(Sint32 mStep, Sint32 bKauf, Sint32 brCnt, const Sint
 	ptbarreScr = pScor;
 	ptBob_wall = pWall;
 	pt_magneye = ptEye;
-	bumpSelect = ptRaquette->demandeRak(1);
+	bumpSelect = ptRaquette->get_paddle(1);
 	malus_frek = mStep;
 	bonusAchet = bKauf;
 	bonus_step = 0;
@@ -495,27 +495,27 @@ void ze_gadgets::gadget_run(sprite_paddle * raket, Sint32 nuGad)
 
 	// bottom bumper[1] enable (no gadget)
 	case GAD_BUMP01:
-		bumpSelect = oBump->demandeRak(1);
+		bumpSelect = oBump->get_paddle(1);
 		break;
 
 	// right bumper[2] enable (no gadget)
 	case GAD_BUMP02:
 		ptMiniMess->mesrequest(26);
-		bumpSelect = oBump->demandeRak(2);
+		bumpSelect = oBump->get_paddle(2);
 		bumpSelect->enable();
 		break;
 
 	// top bumper[3] enable (no gadget)
 	case GAD_BUMP03:
 		ptMiniMess->mesrequest(27);
-		bumpSelect = oBump->demandeRak(3);
+		bumpSelect = oBump->get_paddle(3);
 		bumpSelect->enable();
 		break;
 
 	// right bumper[4] enable (no gadget)
 	case GAD_BUMP04:
 		ptMiniMess->mesrequest(28);
-		bumpSelect = oBump->demandeRak(4);
+		bumpSelect = oBump->get_paddle(4);
 		bumpSelect->enable();
 		break;
 
@@ -555,17 +555,17 @@ void ze_gadgets::gadget_run(sprite_paddle * raket, Sint32 nuGad)
 		raket->bumpGoGlue();
 		raket->bump_fire2();
 	
-		bumpSelect = oBump->demandeRak(2);
+		bumpSelect = oBump->get_paddle(2);
 		bumpSelect->enable();
 		bumpSelect->bumpGoGlue();
 		bumpSelect->bump_fire2();
 	
-		bumpSelect = oBump->demandeRak(3);
+		bumpSelect = oBump->get_paddle(3);
 		bumpSelect->enable();
 		bumpSelect->bumpGoGlue();
 		bumpSelect->bump_fire2();
 
-		bumpSelect = oBump->demandeRak(4);
+		bumpSelect = oBump->get_paddle(4);
 		bumpSelect->enable();
 		bumpSelect->bumpGoGlue();
 		bumpSelect->bump_fire2();
@@ -629,7 +629,7 @@ void ze_gadgets::gadgetrun2(sprite_paddle *raket, Sint32 nuGad)
 		
 		// bumper protect
 		case GAD_PROTEC:
-			//ptbumper01 = PtRaquette->demandeRak(1);
+			//ptbumper01 = PtRaquette->get_paddle(1);
 			raket->set_invincibility(200);
 			break;
 
