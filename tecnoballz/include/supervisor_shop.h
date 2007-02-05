@@ -26,7 +26,7 @@
 class supervisor_shop;
 //...............................................................................
 #include "../include/list_sprites.h"
-#include "../include/mousePoint.h"
+#include "../include/sprite_mouse_pointer.h"
 #include "../include/sprite_object.h"
 #include "../include/ze_gadgets.h"
 #include "../include/print_text.h"
@@ -40,7 +40,7 @@ class supervisor_shop:public supervisor
 	private:
 		static const Sint32	STEXTWIDHT = 22;	//largeur d'une ligne texte en caracteres
 		tiles_background*			ecranfond4;
-		mousePoint*			objetMouse;
+		sprite_mouse_pointer*			mouse_pointer;
 		sprite_object*			BOB_allume;
 		ze_gadgets*			gereGadget;
 		print_text*			mega_print;

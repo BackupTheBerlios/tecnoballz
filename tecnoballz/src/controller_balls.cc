@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.6 2007/02/05 15:44:09 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.7 2007/02/05 20:16:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1248,10 +1248,10 @@ controller_balls::vitus_eyes ()
       sprite_ball *balle = *(liste++);
       if (!balle->is_enabled)
         continue;
-      techno_eye **pEyes = pt_magneye->get_sprites_list ();
+      sprite_eye **pEyes = pt_magneye->get_sprites_list ();
       for (Sint32 j = 0; j < nbEye; j++)
         {
-          techno_eye *ptEye = *(pEyes++);
+          sprite_eye *ptEye = *(pEyes++);
           if (!ptEye->is_enabled)
             continue;
           Sint32 centX = ptEye->x_coord + pt_magneye->eyeCenterX;

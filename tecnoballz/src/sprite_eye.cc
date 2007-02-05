@@ -1,7 +1,7 @@
 //*****************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "techno_eye.h"
+// file		: "sprite_eye.cc"
 // created		: 2004-09-17
 // updates		: 2004-09-17
 // function	: handle eye (only bricks levels)
@@ -20,30 +20,19 @@
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
-#ifndef __TECHNO_EYE__
-#define __TECHNO_EYE__
-//.......................................................................
-class techno_eye ;
-//.......................................................................
-#include "../include/sprite_object.h"
-#include "../include/sprite_ball.h"
-#include "../include/controller_bricks.h"
-#include "../include/controller_balls.h"
-#include "../include/ze_magneye.h"
-//.......................................................................
-class techno_eye : public sprite_object
-{	friend class controller_balls;
-	friend class ze_magneye;
-		
-	private:
-		Sint32			finishPosx;		
-		Sint32			finishPosy;
-		Sint32			centerPosx;	
-		Sint32			centerPosy;	
-		Sint32			radius_360;
-	
-	public :
-						techno_eye();
-						~techno_eye();
-};
-#endif
+#include "../include/sprite_eye.h"
+
+//-----------------------------------------------------------------------------
+// create the object
+//-----------------------------------------------------------------------------
+sprite_eye::sprite_eye()
+{
+	clear_sprite_members();
+}
+
+//-----------------------------------------------------------------------------
+// release the object
+//-----------------------------------------------------------------------------
+sprite_eye::~sprite_eye()
+{
+}

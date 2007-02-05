@@ -24,7 +24,7 @@
 #define __ZEGIGABLIT__
 class zeGigaBlit;
 //...............................................................................
-#include "../include/giga_blitz.h"
+#include "../include/sprite_gigablitz.h"
 #include "../include/list_sprites.h"
 #include "../include/barreScore.h"
 #include "../include/handler_keyboard.h"
@@ -37,8 +37,8 @@ class zeGigaBlit;
 #include "../include/controller_bricks.h"
 #include "../include/zexplosion.h"
 //...............................................................................
-class zeGigaBlit:public objects_list < giga_blitz >
-{	friend class            giga_blitz;
+class zeGigaBlit:public objects_list < sprite_gigablitz >
+{	friend class            sprite_gigablitz;
  
 	private:
 		static const Uint32		NOMBREGIGA = 7;
@@ -50,7 +50,7 @@ class zeGigaBlit:public objects_list < giga_blitz >
 		zexplosion*			pexplosion;
 		sprite_paddle*			paddle_bottom;
 		sprite_paddle*			paddle_top;
-		giga_blitz*			blitzobjet;	//pointer on the current "giga_blitz" 
+		sprite_gigablitz*			blitzobjet;	//pointer on the current "sprite_gigablitz" 
 		Sint32				blitz_colx;
 		Sint32				blitz_posx;
 		Sint32				blitz_posy;

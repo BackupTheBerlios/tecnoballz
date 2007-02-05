@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.4 2007/02/05 15:44:09 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.5 2007/02/05 20:16:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ class controller_balls;
 #include "../include/zeMiniMess.h"
 #include "../include/controller_paddles.h"
 #include "../include/ze_magneye.h"
-#include "../include/techno_eye.h"
+#include "../include/sprite_eye.h"
 
 class controller_balls:public objects_list < sprite_ball >
 {

@@ -1,28 +1,33 @@
-//******************************************************************************
-// copyright (c) 1991-2005 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file         : "supervisor_main_menu.h"
-// created      : ?
-// updates      : 2005-01-18
-// fonction     : management of the menu principal
-// id		: $Id: supervisor_main_menu.h,v 1.1 2007/02/04 20:17:32 gurumeditation Exp $
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA  02111-1307, USA.
-//******************************************************************************
-#ifndef __MENU_TECNO__
-#define __MENU_TECNO__
+/** 
+ * @file supervisor_main_menu.h
+ * @brief TecnoballZ's main menu supervisor 
+ * @date 2007-02-05
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.2 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: supervisor_main_menu.h,v 1.2 2007/02/05 20:16:33 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
+#ifndef __SUPERVISOR__MAIN_MENU__
+#define __SUPERVISOR__MAIN_MENU__
+
 #include "../include/lastScroll.h"
 #include "../include/supervisor.h"
 #include "../include/handler_keyboard.h"
@@ -31,31 +36,30 @@
 #include "../include/zeDefilTxt.h"
 #include "../include/print_text.h"
 #include "../include/print_menu.h"
-#include "../include/mousePoint.h"
+#include "../include/sprite_mouse_pointer.h"
 #include "../include/handler_audio.h"
+
 class supervisor_main_menu:public virtual supervisor
 {
-	private:
-		lastScroll*		defilement;
-		sprite_object*		BOBtecLogo;
-		zeDefilTxt*		BOB_defile;
-		print_menu*		menu_texte;
-		Sint32			offset_xx1;
-		mousePoint*		objetMouse;
-		//static unsigned char	colors_map[];
-		static const char	codesarea[241];
+private:
+  lastScroll * defilement;
+  sprite_object *tecnoballz_logo;
+  zeDefilTxt *BOB_defile;
+  print_menu *menu_texte;
+  Sint32 offset_xx1;
+  sprite_mouse_pointer *mouse_pointer;
+  static const char codesarea[241];
 
-	public:
-					supervisor_main_menu();
-					~supervisor_main_menu();
-		Sint32			first_init();
-		Sint32			main_loop();
-		static const char*	getTheCode(Uint32 arean, Uint32 hardc);
-	
-	private:
-		void			offset_inc();
-		void			moveZeLogo();
-		Sint32			image_fond();
-		Sint32			start_tecz();
+public:
+    supervisor_main_menu ();
+   ~supervisor_main_menu ();
+  Sint32 first_init ();
+  Sint32 main_loop ();
+  static const char *getTheCode (Uint32 arean, Uint32 hardc);
+
+private:
+  void offset_inc ();
+  void move_tecnoballz_logo ();
+  Sint32 start_new_game ();
 };
 #endif

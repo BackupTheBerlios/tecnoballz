@@ -88,9 +88,9 @@ Sint32 zeGigaBlit::init_liste(controller_paddles *zeRak, head_anima *gugus,
    	// unpack bitmap of the Gigablitz
 		resources->load_sprites_bitmap(handler_resources::RESGIGABLZ);
 
-		// initialize the objects "giga_blitz"
+		// initialize the objects "sprite_gigablitz"
 		for(Sint32 i = 0 ;i < max_of_sprites ;i++)
-		{	giga_blitz *g = new giga_blitz();
+		{	sprite_gigablitz *g = new sprite_gigablitz();
 			g->set_object_pos(i);
 			//g->afflignesF = 1;
 			g->set_draw_method(sprite_object::DRAW_LINE_BY_LINE);	
@@ -117,7 +117,7 @@ void zeGigaBlit::initDepart()
 		l -= paddle_bottom->width_mini;	//smallest bumper is of 16/32 pixels width
 		l >>= paddle_bottom->width_deca;	//size of bumper step by 8/16 pixels
 		l = NOMBREGIGA - l - 1;
-		giga_blitz *g = sprites_list[l];
+		sprite_gigablitz *g = sprites_list[l];
 		blitzobjet = g;
 		blitz_haut = g->get_sprite_height();
 		Sint32 x = paddle_bottom->get_x_coord();
@@ -155,7 +155,7 @@ void zeGigaBlit::initDepart()
 void zeGigaBlit::execution1()
 {
 	if(!blitz_haut) return;
-	giga_blitz *g = blitzobjet;
+	sprite_gigablitz *g = blitzobjet;
 	
 	//###################################################################
 	// vertical moving
@@ -263,9 +263,9 @@ Sint32 zeGigaBlit::init_liste(controller_paddles *zeRak, zexplosion *pexpl)
                		// unpack bitmap of the Gigablitz
 		resources->load_sprites_bitmap(handler_resources::RESGIGABLZ);
 
-		// initialize the objects "giga_blitz"
+		// initialize the objects "sprite_gigablitz"
 		for(Sint32 i=0 ; i<max_of_sprites ; i++)
-		{ giga_blitz *g = new giga_blitz();
+		{ sprite_gigablitz *g = new sprite_gigablitz();
 			g->set_object_pos(i);
 			g->mirrorVert = 1;
 			g->set_draw_method(sprite_object::DRAW_LINE_BY_LINE);	
@@ -287,7 +287,7 @@ Sint32 zeGigaBlit::init_liste(controller_paddles *zeRak, zexplosion *pexpl)
 void zeGigaBlit::execution2()
 {
 	if(blitz_haut)
-	{	giga_blitz *g = blitzobjet;
+	{	sprite_gigablitz *g = blitzobjet;
 		Sint32 y = g->get_y_coord();
 		y = y + (6 * resolution);
 		blitz_xsin = (blitz_xsin + 50) & SINUS_MASK;
@@ -374,7 +374,7 @@ Sint32 zeGigaBlit::guard_shoot(Sint32 value, Sint32 pos_x, Sint32 pos_y,
 	Sint32 large, Sint32 haute)
 { 
 	if(!blitz_haut)
-	{	giga_blitz *g = sprites_list[value];
+	{	sprite_gigablitz *g = sprites_list[value];
 			//g = sprites_list[0];	// test only
 		blitzobjet = g;
 		blitz_haut = g->get_sprite_height();

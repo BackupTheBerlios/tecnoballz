@@ -1117,9 +1117,9 @@ void controller_balls::vitus_eyes()
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_ball *balle = *(liste++);
 		if(!balle->is_enabled) continue;
-		techno_eye **pEyes = pt_magneye->get_sprites_list();
+		sprite_eye **pEyes = pt_magneye->get_sprites_list();
 		for(Sint32 j = 0; j < nbEye; j++)
-		{	techno_eye *ptEye = *(pEyes++);
+		{	sprite_eye *ptEye = *(pEyes++);
 			if(!ptEye->is_enabled) continue;
 			Sint32 centX = ptEye->x_coord + pt_magneye->eyeCenterX;
 			Sint32 centY = ptEye->y_coord + pt_magneye->eyeCenterY;

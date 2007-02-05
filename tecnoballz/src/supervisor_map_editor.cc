@@ -36,7 +36,7 @@ supervisor_map_editor::supervisor_map_editor()
 {
 	initialise();
 	defilement = new lastScroll();	// background scrolling
-	objetMouse = new mousePoint();
+	mouse_pointer = new sprite_mouse_pointer();
 	displayMod = 0;
 	flagSpaceK = 0;
 	titlesPosy = 0;
@@ -63,7 +63,7 @@ supervisor_map_editor::supervisor_map_editor()
 //-----------------------------------------------------------------------------
 supervisor_map_editor::~supervisor_map_editor()
 {
-	delete objetMouse;
+	delete mouse_pointer;
 	delete defilement;
 	if(pt_select1)
 		memory->release((char *)pt_select1);
@@ -93,7 +93,7 @@ Sint32 supervisor_map_editor::first_init()
 
 	sprites->reset();
 	resources->load_sprites_bitmap();
-	objetMouse->create_BOB(sprites_bitmap);
+	mouse_pointer->create_pointer_sprite(sprites_bitmap);
 	resources->release_sprites_bitmap();
 
 	
@@ -134,7 +134,7 @@ Sint32 supervisor_map_editor::main_loop()
 			break;
 	}
 		
-	objetMouse->bouge_test();
+	mouse_pointer->move();
 	sprites->draw();
 	
 	

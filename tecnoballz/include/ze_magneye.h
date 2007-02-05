@@ -25,11 +25,11 @@
 class ze_magneye ;
 //...............................................................................
 #include "../include/list_sprites.h"
-#include "../include/techno_eye.h"
+#include "../include/sprite_eye.h"
 #include "../include/objects_list.h"
 //..............................................................................
-class ze_magneye : public objects_list < techno_eye >
-{	friend class techno_eye ;
+class ze_magneye : public objects_list < sprite_eye >
+{	friend class sprite_eye ;
 
 	private:
 		static const Uint16	Xcoordinat[32];

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: supervisor_shop.cc,v 1.1 2007/02/04 20:17:32 gurumeditation Exp $
+// id		: $Id: supervisor_shop.cc,v 1.2 2007/02/05 20:16:33 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -33,7 +33,7 @@ supervisor_shop::supervisor_shop()
 {
 	initialise();
 	ecranfond4 = new tiles_background();
-	objetMouse = new mousePoint();
+	mouse_pointer = new sprite_mouse_pointer();
 	BOB_allume = new sprite_object();
 	gereGadget = new ze_gadgets(NB_OPTIONS + 2, 0);
 	mega_print = new print_text();
@@ -85,7 +85,7 @@ supervisor_shop::~supervisor_shop()
 	{	delete BOB_allume;
 		BOB_allume = (sprite_object*)NULL;
 	}
-	delete objetMouse;
+	delete mouse_pointer;
 	delete ecranfond4;
 	liberation();
 }
@@ -157,10 +157,8 @@ Sint32 supervisor_shop::first_init()
 	tecno_gads **liste = gereGadget->get_sprites_list();
 	bob_volant = liste[(NB_OPTIONS + 2) - 1 - 1];
 
-	//###################################################################
-	// Initialize the mouse pointer
-	//###################################################################
-	objetMouse->create_BOB(sprites_bitmap);
+	/* initialize the mouse pointer */
+	mouse_pointer->create_pointer_sprite(sprites_bitmap);
 
 	//###################################################################
 	// intialize the "escape menu"
@@ -215,8 +213,8 @@ Sint32 supervisor_shop::main_loop()
 
 	if(!ptrEscMenu->is_enable())
 	{	pos_select();
-		Sint32 x = objetMouse->get_x_coord();
-		Sint32 y = objetMouse->get_y_coord();
+		Sint32 x = mouse_pointer->get_x_coord();
+		Sint32 y = mouse_pointer->get_y_coord();
 		if (get_object == -1)	//-1 = not a drag object
 		{	Sint32 x2, y2;
 			bool mousreleas = keyboard->is_left_button_up(&x2, &y2);
@@ -250,7 +248,7 @@ Sint32 supervisor_shop::main_loop()
 		prixActuel, 100000);
 	mega_print->bufferAff1(263 * resolution, 183 * resolution,
 		joueurGere->get_credit(), 100000);
-	objetMouse->bouge_test();
+	mouse_pointer->move();
 	if(cheat_flag)
 		gereGadget->animations(2);
 	else
@@ -672,7 +670,7 @@ void supervisor_shop::sh_ballade()
 	if(get_object >= 0)	//pointer to the table "case_price" (-1 = no drag object)
 	{	if(keyboard->is_left_button())
 		{	bob_volant->enable();
-			bob_volant->set_coordinates(objetMouse->get_x_coord(), objetMouse->get_y_coord());
+			bob_volant->set_coordinates(mouse_pointer->get_x_coord(), mouse_pointer->get_y_coord());
 			if(bobclignot->is_enabled)
 				bobclignot->is_enabled = 0;
 			else
@@ -781,7 +779,7 @@ void supervisor_shop::sh_ballade()
 //-------------------------------------------------------------------------------
 void supervisor_shop::pos_select()
 { 
-	Sint32 y = objetMouse->get_y_coord() - cadre_ymin;
+	Sint32 y = mouse_pointer->get_y_coord() - cadre_ymin;
 	Sint32 o = (y / cadre_haut);			//y / 9 (height of cursor)
 	y = o * cadre_haut + cadre_ymin;
 	if(y < cadre_ymin)
@@ -790,8 +788,8 @@ void supervisor_shop::pos_select()
 		y = cadre_ymax;
 	cadre_posy = y ;				//cursor y coordinate
 	
-	Sint32 x = objetMouse->get_x_coord();
-	y = objetMouse->get_y_coord();
+	Sint32 x = mouse_pointer->get_x_coord();
+	y = mouse_pointer->get_y_coord();
 	cadre_flag = 0;					//don't display cursor (by default)
 	cadre_offs = -1;
 
@@ -862,11 +860,11 @@ void supervisor_shop::aff_select()
 //-------------------------------------------------------------------------------
 void supervisor_shop::tu_triches()
 {
-	objetMouse->set_frame_period(3);
+	mouse_pointer->set_frame_period(3);
 	if(cheat_flag) return;
 	if(!birth_flag) return;
-	if(!objetMouse->get_x_coord() && !objetMouse->get_y_coord())
-	{	objetMouse->set_frame_period(20);
+	if(!mouse_pointer->get_x_coord() && !mouse_pointer->get_y_coord())
+	{	mouse_pointer->set_frame_period(20);
 		Sint32 k = keyboard->get_key_down_code();
 		if(triche_key != k && k)
 		{	triche_key = k;

@@ -27,7 +27,6 @@ SOURCES_MAIN = \
 	handler_memory.cc \
 	handler_popup_menu.cc \
 	handler_resources.cc \
-	giga_blitz.cc \
 	head_anima.cc \
 	joueurData.cc \
 	lastScroll.cc \
@@ -35,7 +34,6 @@ SOURCES_MAIN = \
 	lispreader.cc \
   list_sprites.cc \
 	main.cc \
-	mousePoint.cc \
 	offscreen_surface.cc \
 	print_menu.cc \
 	printmoney.cc \
@@ -43,8 +41,11 @@ SOURCES_MAIN = \
 	score_over.cc \
 	scoretable.cc \
 	surface_sdl.cc \
-	sprite_object.cc \
 	sprite_ball.cc \
+	sprite_object.cc \
+  sprite_gigablitz.cc \
+  sprite_mouse_pointer.cc \
+  sprite_eye.cc \
   sprite_projectile.cc \
   sprite_paddle.cc \
   sprite_ship.cc \
@@ -54,7 +55,6 @@ SOURCES_MAIN = \
   supervisor_map_editor.cc \
   supervisor_guards_level.cc \
   supervisor_shop.cc \
-	techno_eye.cc \
 	techno_gem.cc \
 	tecno_caps.cc \
 	tecnoDefil.cc \
