@@ -2,14 +2,14 @@
  * @file surface_sdl.cc 
  * @brief an drawing surface
  * @created 2007-02-01
- * @date 2007-02-01
+ * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.cc,v 1.4 2007/02/04 17:10:17 gurumeditation Exp $
+ * $Id: surface_sdl.cc,v 1.5 2007/02/06 09:46:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
  */
 surface_sdl::surface_sdl ()
 {
-  mentatInit ();
+  object_init ();
 }
 
 /**
@@ -46,20 +46,18 @@ surface_sdl::surface_sdl ()
  */
 surface_sdl::surface_sdl (Uint32 w, Uint32 h, Uint32 depth)
 {
-  mentatInit ();
-  std::cout << "surface_sdl() w=" << w << " h=" << h << " d=" << depth << std::endl; 
+  object_init ();
   create_surface (w, h, depth);
 }
 
 surface_sdl::~surface_sdl ()
 {
-  std::cout << "surface_sdl() destroyed!" << std::endl;
   if (NULL == surface)
     {
       SDL_FreeSurface (surface);
       surface = NULL;;
     }
-  mentatKill ();
+  object_free ();
 }
 
 /**

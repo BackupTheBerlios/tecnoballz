@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-07
 // fonction	: handle of the scrolling background (menu and gards levels)
-// id		: $Id: lastScroll.cc,v 1.14 2007/01/31 16:45:39 gurumeditation Exp $
+// id		: $Id: lastScroll.cc,v 1.15 2007/02/06 09:46:13 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -30,7 +30,7 @@
 //-----------------------------------------------------------------------------
 lastScroll::lastScroll()
 {
-	mentatInit();
+	object_init();
 	carteFirst = (Uint16 *) NULL;
 	gfx_bitMap = (bitmap_data *) NULL;
 	mapAddress = (char **) NULL;
@@ -52,7 +52,7 @@ lastScroll::~lastScroll()
 	gfx_bitMap = (bitmap_data*) NULL;
 	carteFirst = (Uint16 *) NULL;
 	mapAddress = (char **) NULL;
-	mentatKill();
+	object_free();
 }
 
 //-----------------------------------------------------------------------------

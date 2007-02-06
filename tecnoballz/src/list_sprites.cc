@@ -1,13 +1,13 @@
 /** 
  * @file list_sprites.cc 
  * @brief Call the drawing methods of all sprites
- * @date 2007-01-16
+ * @date 2007-02-06
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: list_sprites.cc,v 1.4 2007/01/28 21:31:56 gurumeditation Exp $
+ * $Id: list_sprites.cc,v 1.5 2007/02/06 09:46:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ list_sprites::list_sprites ()
   num_of_shapes = 0;
   num_of_shadows = 0;
   max_of_shapes = 0;
-  mentatInit ();
+  object_init ();
 }
 
 /**
@@ -46,34 +46,44 @@ list_sprites::~list_sprites ()
 {
   if (shapes != NULL)
     {
-      memory->release ( (char *) shapes);
+      delete[]shapes;
       shapes = NULL;
     }
   if (shadows != NULL)
     {
-      memory->release ( (char *) shadows);
+      delete[]shadows;
       shadows = NULL;
     }
-  mentatKill ();
+  object_free ();
 }
 
 /**
  * Allocate memory for the list of shapes and shadow
  * @params numof max numbers of shapes 
  */
-Sint32 list_sprites::init (Sint32 numof)
+Sint32
+list_sprites::init (Sint32 numof)
 {
-  if (shapes == NULL)
-    {
-      max_of_shapes = numof;
-      shapes = (sprite_object **) memory->alloc (sizeof (sprite_object *) * numof);
-      if (shapes == NULL) return memory->retour_err ();
-    }
-  if (shadows == NULL)
-    {
-      shadows = (sprite_object **) memory->alloc (sizeof (sprite_object *) * numof);
-      if (shadows == NULL) return memory->retour_err ();
-    }
+  try
+  {
+    if (NULL == shapes)
+      {
+        max_of_shapes = numof;
+        shapes = new sprite_object *[max_of_shapes];
+      }
+    if (NULL == shadows)
+      {
+        shadows = new sprite_object *[max_of_shapes];
+      }
+  }
+  catch (std::bad_alloc &)
+  {
+    std::
+      cerr << "(!)list_sprites::init() "
+      "not enough memory to allocate " <<
+      max_of_shapes << " list elements!" << std::endl;
+    throw;
+  }
   reset ();
   return 0;
 }
@@ -146,9 +156,12 @@ list_sprites::clear ()
   for (Sint32 i = 0; i < num_of_shapes; i++)
     {
       sprite_object *sprite = shapes[i];
-      sprite->restore_background_under_shadow ();
       sprite->restore_background_under_sprite ();
     }
+
+  for (Sint32 i = 0; i < num_of_shadows; i++)
+    {
+      sprite_object *sprite = shadows[i];
+      sprite->restore_background_under_shadow ();
+    }
 }
-
-

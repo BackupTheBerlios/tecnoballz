@@ -4,11 +4,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.6 2007/02/04 15:56:45 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.7 2007/02/06 09:46:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
  */
 tiles_background::tiles_background ()
 {
-  mentatInit ();
+  object_init ();
   type_of_tiles = TILES_64x64_WITH_16_COLORS;
   palette_index = 0;
   if (resolution == 1 || bg4_colors)
@@ -72,7 +72,7 @@ tiles_background::~tiles_background ()
       delete map_tiles;
       map_tiles = NULL;
     }
-  mentatKill ();
+  object_free ();
 }
 
 /**
@@ -218,13 +218,13 @@ tiles_background::generate_map ()
           map_tiles = new Uint32[map_width * map_height * 4];
         }
       catch (std::bad_alloc &)
-        {
-          std::
-            cerr << "(!)tiles_background::generate_map() "
-              "not enough memory to allocate " <<
-              map_width * map_height << " bytes!" << std::endl;
-          throw;
-        }
+      {
+        std::
+          cerr << "(!)tiles_background::generate_map() "
+          "not enough memory to allocate " <<
+          map_width * map_height << " bytes!" << std::endl;
+        throw;
+      }
     }
 
 

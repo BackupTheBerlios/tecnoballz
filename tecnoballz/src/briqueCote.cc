@@ -30,7 +30,7 @@
 //-----------------------------------------------------------------------------	
 briqueCote::briqueCote()
 {
-	mentatInit();
+	object_init();
 	bricote_hz = (sprite_object *)NULL;	//sprite object (small horizontal bricks)
 	bricote_vt = (sprite_object *)NULL;	//sprite object (small vertical bricks)
 	mur_duhaut = 0;				//0=wall of the top is unbreakable
@@ -86,7 +86,7 @@ briqueCote::~briqueCote()
 			bobwal_rgh[i] = NULL;
 		}
 	}
-	mentatKill();
+	object_free();
 }
 
 //-----------------------------------------------------------------------------

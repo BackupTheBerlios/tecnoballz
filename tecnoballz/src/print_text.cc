@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-10
 // fonction	: display chars
-// id		: $Id: print_text.cc,v 1.15 2007/02/02 17:05:53 gurumeditation Exp $
+// id		: $Id: print_text.cc,v 1.16 2007/02/06 09:46:13 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -46,7 +46,7 @@
 //------------------------------------------------------------------------------
 void print_text::initial_me()
 {
-	mentatInit();
+	object_init();
 	GFX_fontes = (bitmap_data *) NULL;
 	off_source = 0;
 	off_desti1 = 0;
@@ -60,7 +60,7 @@ void print_text::destroy_me()
 	if(GFX_fontes)
 		delete GFX_fontes;
 	GFX_fontes = (bitmap_data *) NULL;
-	mentatKill();
+	object_free();
 }
 
 

@@ -5,11 +5,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_memory.cc,v 1.2 2007/01/28 21:31:56 gurumeditation Exp $
+ * $Id: handler_memory.cc,v 1.3 2007/02/06 09:46:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
  */
 handler_memory::handler_memory ()
 {
-  mentatInit ();
+  object_init ();
   total_size = 0;
   free_fail_count = 0;
   maxi_zones = 0;
@@ -45,7 +45,7 @@ handler_memory::handler_memory ()
 handler_memory::~handler_memory ()
 {
   release_all ();
-  mentatKill ();
+  object_free ();
   if (memory_list_base == NULL)
     {
       free ((char *) memory_list_base);

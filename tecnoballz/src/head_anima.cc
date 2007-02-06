@@ -28,7 +28,7 @@
 //-----------------------------------------------------------------------------
 head_anima::head_anima()
 {
-	mentatInit();
+	object_init();
 	headbitmap = (bitmap_data*)NULL;
 	head_count = 0;
 	head_reque = 0;	//animation requested 
@@ -41,7 +41,7 @@ head_anima::head_anima()
 //-------------------------------------------------------------------------------
  head_anima::~head_anima()
 {
-	mentatKill();
+	object_free();
 	if(headbitmap)
 	{	delete headbitmap;
 		headbitmap = (bitmap_data*)NULL;

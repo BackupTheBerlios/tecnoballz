@@ -31,7 +31,7 @@ zeMiniMess::zeMiniMess()
 	minifontes = (bitmap_data *)NULL;
 	messa_fond = (bitmap_data *)NULL;
 	mess_pause = 0;
-	mentatInit();
+	object_init();
 }
 
 //------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ zeMiniMess::~zeMiniMess()
 	{	delete messa_fond;
 		messa_fond = (bitmap_data *)NULL;
 	}
-	mentatKill();
+	object_free();
 }
 
 //-----------------------------------------------------------------------------

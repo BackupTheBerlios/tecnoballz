@@ -4,11 +4,11 @@
  * @date 2007-01-28
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.10 2007/02/04 17:10:16 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.11 2007/02/06 09:46:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ template < class X > objects_list < X >::~objects_list ()
  */
 template < class X > void objects_list < X >::littleInit ()
 {
-  mentatInit ();
+  object_init ();
   max_of_sprites = 0;
   num_of_sprites = 0;
   sprites_list = NULL;
@@ -105,7 +105,7 @@ template < class X > void objects_list < X >::release_sprites_list ()
     }
     delete[]sprites_list;
     sprites_list = NULL;
-    mentatKill ();
+    object_free ();
 }
 
 /**

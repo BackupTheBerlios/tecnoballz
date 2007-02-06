@@ -38,7 +38,7 @@ joueurData**	joueurData::playerlist = NULL;
 joueurData::joueurData()
 {
 	
-	mentatInit();
+	object_init();
 
 	//###################################################################
 	// add a new player
@@ -82,7 +82,7 @@ joueurData::~joueurData()
 	}
 	else
 		player_one = NULL;
-	mentatKill();
+	object_free();
 }
 
 //-----------------------------------------------------------------------------

@@ -28,7 +28,7 @@
 //-----------------------------------------------------------------------------
 ejectBalls::ejectBalls()
 {
-	mentatInit();
+	object_init();
 	ejector_01 = new sprite_object();
 	ejector_02 = new sprite_object();
 	ejector_03 = new sprite_object();
@@ -45,7 +45,7 @@ ejectBalls::~ejectBalls()
   delete ejector_02;
   delete ejector_03;
   delete ejector_04;
-  mentatKill();
+  object_free();
 }
 
 //-----------------------------------------------------------------------------

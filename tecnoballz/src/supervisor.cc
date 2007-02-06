@@ -4,11 +4,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor.cc,v 1.1 2007/02/04 20:17:32 gurumeditation Exp $
+ * $Id: supervisor.cc,v 1.2 2007/02/06 09:46:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,14 +46,14 @@ supervisor::~supervisor ()
 void
 supervisor::initialise ()
 {
-  mentatInit ();
+  object_init ();
   end_return = 0;
 }
 
 void
 supervisor::liberation ()
 {
-  mentatKill ();
+  object_free ();
 }
 
 Sint32

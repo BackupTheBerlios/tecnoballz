@@ -5,11 +5,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.2 2007/02/04 20:17:32 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.3 2007/02/06 09:46:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -459,7 +459,7 @@ tecnoballz::~tecnoballz ()
  * Initialize some members
  */ 
 void
-tecnoballz::mentatInit ()
+tecnoballz::object_init ()
 {
   erreur_num = 0;
   numero_obj = counterObj;
@@ -470,7 +470,7 @@ tecnoballz::mentatInit ()
  * Object destroyed
  */
 void
-tecnoballz::mentatKill ()
+tecnoballz::object_free ()
 {
   counterObj--;
 }

@@ -5,11 +5,11 @@
  * @date 2007-01-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.cc,v 1.4 2007/01/30 16:37:21 gurumeditation Exp $
+ * $Id: handler_audio.cc,v 1.5 2007/02/06 09:46:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ char handler_audio::sounds_play[NUM_OF_SOUNDS];
  */
 handler_audio::handler_audio ()
 {
-  mentatInit ();
+  object_init ();
   initialize ();
   aera_number = 0;
   level_number = 0;

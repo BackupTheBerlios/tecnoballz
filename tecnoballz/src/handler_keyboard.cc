@@ -4,11 +4,11 @@
  * @date 2007-01-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.1 2007/01/19 19:09:03 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.2 2007/02/06 09:46:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ handler_keyboard * handler_keyboard::keyboard_singleton = NULL;
  */
 handler_keyboard::handler_keyboard ()
 {
-  mentatInit ();
+  object_init ();
   is_grab_input = false;
   previous_mouse_x_coord = 0;
   previous_mouse_y_coord = 0;
@@ -71,7 +71,7 @@ handler_keyboard::handler_keyboard ()
  */
 handler_keyboard::~handler_keyboard ()
 {
-  mentatKill ();
+  object_free ();
 }
 
 /**

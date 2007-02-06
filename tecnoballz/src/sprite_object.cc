@@ -4,11 +4,11 @@
  * @date 2007-01-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.23 2007/01/31 19:49:07 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.24 2007/02/06 09:46:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -113,7 +113,7 @@ sprite_object::release_sprite ()
       is_release_pixel_data = false;
       pixel_data = NULL;
     }
-  mentatKill ();
+  object_free ();
 }
 
 /**
@@ -122,7 +122,7 @@ sprite_object::release_sprite ()
 void
 sprite_object::clear_sprite_members ()
 {
-  mentatInit ();
+  object_init ();
   pixel_data = (char *) NULL;
   images_pixel_data = (char **) NULL;
   screen_ptr = (char *) NULL;
