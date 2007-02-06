@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.30 2007/02/06 12:26:01 gurumeditation Exp $
+ * $Id: main.cc,v 1.31 2007/02/06 16:28:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,10 +122,10 @@ lispreader    =>
 *tecno_caps  => sprite_money
 *tecnoDefil  => sprite_fonte_menu
 *tecno_fire  => sprite_projectile
-tecno_gads   => sprite_capsules
+*tecno_gads  => sprite_capsule
 *tecno_gard  => sprite_guardian
-tecno_miss   => sprite_bullet
-tecno_text   => sprite_fonte_game
+*tecno_miss  => sprite_bullet
+*tecno_text  => sprite_fonte_game
  
 ballDirect   => controller_balls
 *lesBriques   => controller_bricks

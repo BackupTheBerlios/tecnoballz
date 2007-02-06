@@ -27,7 +27,7 @@ class printmoney;
 #include "../include/objects_list.h"
 #include "../include/handler_players.h"
 #include "../include/controller_paddles.h"
-#include "../include/tecno_gads.h"
+#include "../include/sprite_capsule.h"
 //...............................................................................
 class printmoney:public objects_list < sprite_object >
 {
@@ -38,17 +38,17 @@ class printmoney:public objects_list < sprite_object >
 		controller_paddles*			ptZraquett;
 		Sint32				money_posy;
 		sprite_object*			ptBobMoney;
-		tecno_gads*			ptBobRever;
-		tecno_gads*			ptBobLifes;
+		sprite_capsule*			ptBobRever;
+		sprite_capsule*			ptBobLifes;
 		//Sint32				flag_level;	// 0 = "bricks" / 1 = "guards"
 
 	public:
 							printmoney();
 							~printmoney();
 		void				initialise(handler_players*, controller_paddles*, sprite_object*, 
-									tecno_gads*);
+									sprite_capsule*);
 		void				init_guard(handler_players*, controller_paddles*, sprite_object*, 
-									tecno_gads*);
+									sprite_capsule*);
 		void				execution1(Sint32 value);
 		void				execution2(Sint32, Sint32);
 		void				creditPlus(Sint32 value);

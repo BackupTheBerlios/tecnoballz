@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.cc,v 1.1 2007/02/06 12:26:01 gurumeditation Exp $
+ * $Id: controller_guardians.cc,v 1.2 2007/02/06 16:28:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -258,7 +258,7 @@ controller_guardians::killguards (Sint32 numGa)
 //-------------------------------------------------------------------------------
 Sint32
 controller_guardians::run_scroll (Uint32 ntype, Sint32 speed,
-                                  sprite_ball * balle, tecno_miss * weapo)
+                                  sprite_ball * balle, sprite_bullet * weapo)
 {
   sprite_guardian *pGua1, *pGua2;
   if (max_of_sprites < 1)

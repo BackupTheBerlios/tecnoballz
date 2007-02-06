@@ -93,7 +93,7 @@ void zeGemstone::moving_gem()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_gem *ptGem = sprites_list[i];
-		Sint32 ztype = ptGem->deplaceMoi();
+		Sint32 ztype = ptGem->move();
 		if(ztype >= 0)
 		{	if (!pJoueurDat->gem_is_set(ztype))
 			{	ptBarScore->scoreAjout(500);	// one gem collected

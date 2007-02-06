@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.4 2007/02/06 12:26:01 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.5 2007/02/06 16:28:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
   ptGameOver = new zeGameOver ();
 
   ptBobMoney = new sprite_object ();
-  ptBobRever = new tecno_gads ();
+  ptBobRever = new sprite_capsule ();
   popup_menu = new handler_popup_menu ();
 
   sprite_projectile::start_list (bricks, les_atomes, tecZ_barre);

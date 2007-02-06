@@ -25,7 +25,7 @@
 class ze_gadgets; 
 //...............................................................................
 #include "../include/objects_list.h"
-#include "../include/tecno_gads.h"
+#include "../include/sprite_capsule.h"
 #include "../include/zeMiniMess.h"
 #include "../include/controller_paddles.h"
 #include "../include/controller_balls.h"
@@ -33,7 +33,7 @@ class ze_gadgets;
 #include "../include/ze_magneye.h"
 
 //...............................................................................
-class ze_gadgets:public objects_list < tecno_gads >
+class ze_gadgets:public objects_list < sprite_capsule >
 {
 	public:
 		static const Sint32		SGADGET_X1 = 146;	//abscissa of the first bonus
@@ -54,7 +54,7 @@ class ze_gadgets:public objects_list < tecno_gads >
 		Sint32				frame_index;
 
 		// shop
-		tecno_gads*			temoin_gad;		// bonus indicator
+		sprite_capsule*			temoin_gad;		// bonus indicator
 	
 		// maluses
 		Sint32				malus_step;		// drop malus counter

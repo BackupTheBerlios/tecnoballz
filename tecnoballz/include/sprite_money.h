@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.h,v 1.1 2007/02/05 20:42:27 gurumeditation Exp $
+ * $Id: sprite_money.h,v 1.2 2007/02/06 16:28:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ public:
 
   void init_money (Sint32 pos_x, Sint32 pos_y, sprite_paddle * raket);
 
-  Sint32 deplaceMoi ();
+  Sint32 move ();
   Sint32 deplaceMe2 ();
 };
 #endif

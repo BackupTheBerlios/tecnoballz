@@ -43,16 +43,19 @@ SOURCES_MAIN = \
 	scoretable.cc \
 	surface_sdl.cc \
 	sprite_ball.cc \
-	sprite_object.cc \
-  sprite_gigablitz.cc \
-  sprite_mouse_pointer.cc \
+	sprite_bullet.cc \
+	sprite_capsule.cc \
   sprite_eye.cc \
+	sprite_fonte_game.cc \
   sprite_fonte_menu.cc \
-	sprite_guardian.cc \
   sprite_gem.cc \
+  sprite_gigablitz.cc \
+	sprite_guardian.cc \
   sprite_money.cc \
-  sprite_projectile.cc \
+  sprite_mouse_pointer.cc \
+	sprite_object.cc \
   sprite_paddle.cc \
+  sprite_projectile.cc \
   sprite_ship.cc \
   supervisor.c \
   supervisor_bricks_level.cc \
@@ -60,9 +63,6 @@ SOURCES_MAIN = \
   supervisor_map_editor.cc \
   supervisor_guards_level.cc \
   supervisor_shop.cc \
-	tecno_gads.cc \
-	tecno_miss.cc \
-	tecno_text.cc \
   tecnoballz.cc \
 	tiles_background.cc \
 	zeBouiBoui.cc \

@@ -51,7 +51,7 @@ printmoney::~printmoney()
 //			=> rever:
 //-----------------------------------------------------------------------------
 void printmoney::initialise(handler_players *gamer, controller_paddles* raket,
-	sprite_object *money, tecno_gads *rever)
+	sprite_object *money, sprite_capsule *rever)
 {
 	ptJoueurDa = gamer;
 	ptZraquett = raket;
@@ -83,7 +83,7 @@ void printmoney::initialise(handler_players *gamer, controller_paddles* raket,
 //			=> lifes:
 //-----------------------------------------------------------------------------
 void printmoney::init_guard(handler_players *gamer, controller_paddles* raket,
-	sprite_object *money, tecno_gads *lifes)
+	sprite_object *money, sprite_capsule *lifes)
 {
 	ptJoueurDa = gamer;
 	ptZraquett = raket;

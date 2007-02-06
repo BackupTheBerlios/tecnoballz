@@ -106,7 +106,7 @@ void zeCapsules::bouge_fric()
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_money *capsu = sprites_list[i];
 		capsu->play_animation_loop();
-		Sint32 j = capsu->deplaceMoi();
+		Sint32 j = capsu->move();
 		if(j)
 		{	joueurGere->add_scores(20);
 			ptPrntmney->creditPlus(j);

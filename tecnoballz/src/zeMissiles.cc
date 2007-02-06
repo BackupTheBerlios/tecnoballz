@@ -51,7 +51,7 @@ zeMissiles::~zeMissiles()
 void zeMissiles::execution1()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_miss *xFire = sprites_list[i];
+	{	sprite_bullet *xFire = sprites_list[i];
 		xFire->execution1();
 	}
 }
@@ -61,7 +61,7 @@ void zeMissiles::execution1()
 //-----------------------------------------------------------------------------
 void zeMissiles::anim_fires()
 {
-	tecno_miss *xFire = sprites_list[0];
+	sprite_bullet *xFire = sprites_list[0];
 	xFire->play_animation_loop();
 	Sint32 o = xFire->get_frame_index();
 	Sint32 cycle = o & 0X1;
@@ -87,7 +87,7 @@ void zeMissiles::bumper_col()
 	Sint32 bmpx2 = bumpx + ptbumper01->get_length();
 	Sint32 bmpy2 = bumpy + ptbumper01->get_sprite_height();
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_miss *xFire = sprites_list[i];
+	{	sprite_bullet *xFire = sprites_list[i];
 		if(xFire->is_enabled)
 		{	Sint32 weapy = xFire->y_coord;
 			if (weapy < bmpy2)
@@ -118,9 +118,9 @@ void zeMissiles::bumper_col()
 }
 
 //-----------------------------------------------------------------------------
-// return the first object "tecno_miss" (first simple weapon)
+// return the first object "sprite_bullet" (first simple weapon)
 //-----------------------------------------------------------------------------
-tecno_miss*	zeMissiles::getWeapOne()
+sprite_bullet*	zeMissiles::getWeapOne()
 {
 	return sprites_list[max_of_sprites - 1];
 }
@@ -177,7 +177,7 @@ void zeMissiles::tir01_init(sprite_guardian *pgard)
   Sint32 n = 12;                                                 //12 objets pour ce tir
   Sint32 s = 0;                                                  //pointeur sur la table sinus
   do
-  { tecno_miss *xFire = sprites_list[t];
+  { sprite_bullet *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { xFire->is_enabled = 1;
       xFire->x_coord = tir01_posi[s] * resolution + gardx;
@@ -202,7 +202,7 @@ void zeMissiles::tir02_init(sprite_guardian *pgard)
   Sint32 s = 0;
   Sint32 n = 10;                                                 //10 objets pour ce tir
   do
-  { tecno_miss *xFire = sprites_list[t];
+  { sprite_bullet *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { if(n > 3)
       { xFire->is_enabled = 2;
@@ -235,7 +235,7 @@ void zeMissiles::tir03_init(sprite_guardian *pgard)
   Sint32 gardy = pgard->y_coord + pgard->gard_ycent;
   Sint32 n = 5;                                                 //5 objets pour ce tir
   do
-  { tecno_miss *xFire = sprites_list[t];
+  { sprite_bullet *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { xFire->ptbumper01 = ptbumper01;
       if(n == 1)
@@ -282,7 +282,7 @@ void zeMissiles::tir04_init(sprite_guardian *pgard)
   Sint32 n = 7;                                                  //7 objets pour ce tir
   const Sint16* ptir = tir04_posi;
   do
-  { tecno_miss *xFire = sprites_list[t];
+  { sprite_bullet *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { xFire->is_enabled = 4;
       xFire->flagDepla1 = gardx;
@@ -309,7 +309,7 @@ void zeMissiles::tir05_init(sprite_guardian *pgard)
   Sint32 incrx = -5 * resolution;
   Sint32 n = 9;                                                  //9 objets pour ce tir
   do
-  { tecno_miss *xFire = sprites_list[t];
+  { sprite_bullet *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { xFire->is_enabled = 5;
       xFire->x_coord = gardx;
@@ -332,7 +332,7 @@ void zeMissiles::tir06_init(sprite_guardian *pgard)
   Sint32 s = 0;
   Sint32 n = 30;                                                  //30 objets pour ce tir
   do
-  { tecno_miss *xFire = sprites_list[t];
+  { sprite_bullet *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { xFire->is_enabled = 8;
       xFire->ptguardian = pgard;
@@ -356,7 +356,7 @@ void zeMissiles::tir07_init(sprite_guardian *pgard)
   Sint32 s = 0;
   Sint32 n = 10;                                                  //10 objets pour ce tir
   do
-  { tecno_miss *xFire = sprites_list[t];
+  { sprite_bullet *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { xFire->is_enabled = 9;
       xFire->flagDepla1 = gardx;
@@ -382,7 +382,7 @@ void zeMissiles::tir08_init(sprite_guardian *pgard)
   Sint32 n = 10;                                                  //10 objets pour ce tir
   Sint32 tempo = 20;
   do
-  { tecno_miss *xFire = sprites_list[t];
+  { sprite_bullet *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { xFire->is_enabled = 10;
       xFire->flagDepla1 = gardx;
@@ -411,7 +411,7 @@ void zeMissiles::tir09_init(sprite_guardian *pgard)
   Sint32 s = 0;
   Sint32 n = 9;                                                  //10 objets pour ce tir
   do
-  { tecno_miss *xFire = sprites_list[t];
+  { sprite_bullet *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { xFire->is_enabled = 11;
       xFire->flagDepla1 = gardx;
@@ -445,7 +445,7 @@ void zeMissiles::tir10_init(sprite_guardian *pgard)
   const Sint16 * ptir = tir10_posi;
   Sint32 n = 6;	//6 objets pour ce tir
   do
-  { tecno_miss *xFire = sprites_list[t];
+  { sprite_bullet *xFire = sprites_list[t];
     if(!xFire->is_enabled)
     { xFire->is_enabled = 3;
       xFire->x_coord = gardx + (*(ptir++) * xFire->sprite_width);
@@ -466,7 +466,7 @@ void zeMissiles::tir11_init(sprite_guardian *pgard)
 	Sint32 inc_y = 5 * resolution;
 	Sint32 s = 0;
 	do
-	{	tecno_miss *xFire = sprites_list[t];
+	{	sprite_bullet *xFire = sprites_list[t];
 		if(!xFire->is_enabled)
 		{	xFire->is_enabled = 12;
 			xFire->flagDepla1 = gardx;

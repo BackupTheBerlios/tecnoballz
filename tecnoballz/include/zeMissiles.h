@@ -26,13 +26,13 @@
 class zeMissiles;
 
 #include "../include/list_sprites.h"
-#include "../include/tecno_miss.h"
+#include "../include/sprite_bullet.h"
 #include "../include/objects_list.h"
 #include "../include/sprite_guardian.h"
 #include "../include/sprite_paddle.h"
 #include "../include/zexplosion.h"
 
-class zeMissiles:public objects_list < tecno_miss >
+class zeMissiles:public objects_list < sprite_bullet >
 {
 	friend class controller_guardians;
 		
@@ -52,7 +52,7 @@ class zeMissiles:public objects_list < tecno_miss >
 		void					execution1();
 		void					anim_fires();
 		void					bumper_col();
-		tecno_miss*				getWeapOne();
+		sprite_bullet*				getWeapOne();
 		void					newMissile(Sint32 nfire, sprite_guardian *pgard);
     
   private:

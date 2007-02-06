@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: supervisor_shop.cc,v 1.3 2007/02/06 12:26:01 gurumeditation Exp $
+// id		: $Id: supervisor_shop.cc,v 1.4 2007/02/06 16:28:17 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -49,7 +49,7 @@ supervisor_shop::supervisor_shop()
 	pt_get_obj = 0;
 	shop_point = 0;
 	shoppoint3 = 0;
-	bobclignot = (tecno_gads*)NULL;
+	bobclignot = (sprite_capsule*)NULL;
 
 	shop_xmini = 6 * resolution;
 	shop_xmaxi = 283 * resolution;
@@ -154,7 +154,7 @@ Sint32 supervisor_shop::first_init()
 	Sint32* tp = coursetemp;
 	for(Sint32 i = 0; i < NB_OPTIONS; i++)
 		*(tp++) = 0;
-	tecno_gads **liste = gereGadget->get_sprites_list();
+	sprite_capsule **liste = gereGadget->get_sprites_list();
 	bob_volant = liste[(NB_OPTIONS + 2) - 1 - 1];
 
 	/* initialize the mouse pointer */
@@ -299,10 +299,10 @@ Sint32 supervisor_shop::main_loop()
 void supervisor_shop::aff_course()
 {	
 	Sint32 *p = joueurGere->get_course();
- 	tecno_gads **liste = gereGadget->get_sprites_list();
+ 	sprite_capsule **liste = gereGadget->get_sprites_list();
  	Sint32 pos_y = 4 * resolution;
  	for(Sint32 i = 0; i < NB_OPTIONS; i++)
-	{	tecno_gads *gadgt = *(liste++);
+	{	sprite_capsule *gadgt = *(liste++);
 		gadgt->set_coordinates(294 * resolution, pos_y); 
 		pos_y = pos_y + 9 * resolution;
 		Sint32 o = *(p++);
@@ -617,8 +617,8 @@ void supervisor_shop::achete_gad(Sint32 gadnb)
 	Sint32 *p = joueurGere->get_course();
 	p[bonusachat] = gadnb;
 	sh_tablept[bonusachat] = shop_point;
-	tecno_gads **liste = gereGadget->get_sprites_list();
-	tecno_gads *gadgt = liste[bonusachat++];
+	sprite_capsule **liste = gereGadget->get_sprites_list();
+	sprite_capsule *gadgt = liste[bonusachat++];
 	gadgt->nouveauGad(gadnb);
 	message_ok();
 	joueurGere->set_cou_nb(bonusachat);
@@ -763,7 +763,7 @@ void supervisor_shop::sh_ballade()
 		{	Sint32 i = cadre_offs;
 			if(i >=0) 
 			{	Sint32 *p = joueurGere->get_course();
-				tecno_gads **liste = gereGadget->get_sprites_list();
+				sprite_capsule **liste = gereGadget->get_sprites_list();
 				courseList = p + i;
 				bobclignot = *(liste + i);
 				get_object = *(sh_tablept + i);

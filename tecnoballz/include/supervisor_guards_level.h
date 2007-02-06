@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.4 2007/02/06 12:26:01 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.5 2007/02/06 16:28:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 #define __SUPERVISOR_GUARDS_LEVEL__
 class supervisor_guards_level;
 #include "../include/lastScroll.h"
-#include "../include/tecno_miss.h"
+#include "../include/sprite_bullet.h"
 #include "../include/handler_display.h"
 #include "../include/handler_keyboard.h"
 #include "../include/supervisor.h"
@@ -71,7 +71,7 @@ private:
   zexplosion *pExplosion;
   sprite_object *ptBobMoney;
   sprite_object *ptBob_name;
-  tecno_gads *ptBobLifes;
+  sprite_capsule *ptBobLifes;
   handler_popup_menu *popup_menu;
   /** Area number from 1 to 5 */
   Uint32 areaNumber;

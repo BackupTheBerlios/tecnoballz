@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.cc,v 1.1 2007/02/06 12:26:01 gurumeditation Exp $
+ * $Id: sprite_guardian.cc,v 1.2 2007/02/06 16:28:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -173,7 +173,7 @@ sprite_guardian::run (Uint32 voffset)
 }
 
 //-----------------------------------------------------------------------------
-// start a new weapon (composed of several objects "tecno_miss")
+// start a new weapon (composed of several objects "sprite_bullet")
 //-----------------------------------------------------------------------------
 void
 sprite_guardian::start_fire ()

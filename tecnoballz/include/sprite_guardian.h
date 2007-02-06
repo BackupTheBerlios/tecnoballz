@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.h,v 1.1 2007/02/06 12:26:01 gurumeditation Exp $
+ * $Id: sprite_guardian.h,v 1.2 2007/02/06 16:28:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ class sprite_guardian:public sprite_object
 {
   friend class controller_guardians;
   friend class zeMissiles;
-  friend class tecno_miss;
+  friend class sprite_bullet;
   friend class controller_balls;
 
 private:

@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.4 2007/02/06 12:26:01 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.5 2007/02/06 16:28:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ supervisor_guards_level::supervisor_guards_level ()
   ptMiniMess = new zeMiniMess ();
   ptGigaBlit = new zeGigaBlit ();
   ptBobMoney = new sprite_object ();
-  ptBobLifes = new tecno_gads ();
+  ptBobLifes = new sprite_capsule ();
   ptGameOver = new zeGameOver ();
   ptCongBall = new zeCongBall ();
   popup_menu = new handler_popup_menu ();
@@ -429,7 +429,7 @@ supervisor_guards_level::run_scroll ()
       scrolSpeed = 0;
       return;
     }
-  tecno_miss *weapo = ptMissiles->getWeapOne ();
+  sprite_bullet *weapo = ptMissiles->getWeapOne ();
   sprite_ball *balle = balls->first_ball ();
   scrolSpeed = guards->run_scroll (scrollType, scrolSpeed, balle, weapo);
 }

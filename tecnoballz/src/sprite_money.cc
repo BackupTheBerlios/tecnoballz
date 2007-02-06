@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.cc,v 1.2 2007/02/05 21:02:11 gurumeditation Exp $
+ * $Id: sprite_money.cc,v 1.3 2007/02/06 16:28:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -157,7 +157,7 @@ sprite_money::init_money (Sint32 pos_x, Sint32 pos_y, sprite_paddle * raket)
 // bricks level: displacement and collision of the money
 //-----------------------------------------------------------------------------
 Sint32
-sprite_money::deplaceMoi ()
+sprite_money::move ()
 {
   if (is_enabled)
     {

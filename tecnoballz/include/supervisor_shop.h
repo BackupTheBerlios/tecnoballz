@@ -59,8 +59,8 @@ class supervisor_shop:public supervisor
 		Sint32				curseur_y1;
 		Sint32				get_object;	// drag object : pointer to the table "case_price" (-1 = no drag object)
 		Sint32				pt_get_obj;
-		tecno_gads*			bobclignot;
-		tecno_gads*			bob_volant;
+		sprite_capsule*			bobclignot;
+		sprite_capsule*			bob_volant;
 		Sint32*				courseList;
 	
 		// temporary list of the bonuses bought

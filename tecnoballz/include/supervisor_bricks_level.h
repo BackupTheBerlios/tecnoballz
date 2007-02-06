@@ -4,11 +4,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.4 2007/02/06 12:26:01 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.5 2007/02/06 16:28:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ private:
   sprite_object *BottomWall;
   sprite_object *ptBobMoney;
   handler_popup_menu *popup_menu;
-  tecno_gads *ptBobRever;
+  sprite_capsule *ptBobRever;
   /** Area number from 1 to 2 */
   Sint32 areaNumber;
   /** Level number from 1 to 12 */

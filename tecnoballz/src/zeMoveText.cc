@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-23
 // fonction	: manage mobiles characters ("LEVEL x COMPLETED")
-// id		: $Id: zeMoveText.cc,v 1.10 2007/01/27 21:16:56 gurumeditation Exp $
+// id		: $Id: zeMoveText.cc,v 1.11 2007/02/06 16:28:17 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -80,7 +80,7 @@ void zeMoveText::initialise(Sint32 level, Sint32 offzt)
 	//###################################################################
 	monPT = ze_bobText;
 	for(Sint32 i = 0; i < size_total; i++)
-	{	tecno_text *chara = sprites_list[i];
+	{	sprite_fonte_game *chara = sprites_list[i];
 		char c = *(monPT++);
 		if(c == '\0')
 			c = *(monPT++);
@@ -124,7 +124,7 @@ Sint32 zeMoveText::startValue(Sint32 nchar, Sint32 zeRad, Sint32 index,
 	xStrt += chrOffsetX;
 	
 	for(Sint32 i = index; i < (nchar + index); i++, xStrt += e, xStop += width)
-	{	tecno_text *chara = sprites_list[i];
+	{	sprite_fonte_game *chara = sprites_list[i];
 		chara->set_coordinates(xStrt, yStrt);
 		if(xStrt > xStop)
 			xOffs = -1;
@@ -147,7 +147,7 @@ Sint32 zeMoveText::startValue(Sint32 nchar, Sint32 zeRad, Sint32 index,
 void zeMoveText::goMoveText()
 {
 	for(Sint32 i = 0; i < size_total; i++)
-	{	tecno_text *chara = sprites_list[i];
+	{	sprite_fonte_game *chara = sprites_list[i];
 		chara->moveCaract();
 	}
 }
@@ -158,7 +158,7 @@ void zeMoveText::goMoveText()
 void zeMoveText::activeText()
 {
 	for(Sint32 i = 0; i < size_total; i++)
-	{	tecno_text *chara = sprites_list[i];
+	{	sprite_fonte_game *chara = sprites_list[i];
 		chara->enable();
 	}
 }

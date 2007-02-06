@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.h,v 1.1 2007/02/06 12:26:01 gurumeditation Exp $
+ * $Id: controller_guardians.h,v 1.2 2007/02/06 16:28:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ public:
   void run ();
   void killguards (Sint32 numGa = 0);
   bool is_guardians_destroyed ();
-  Sint32 run_scroll (Uint32, Sint32, sprite_ball *, tecno_miss *);
+  Sint32 run_scroll (Uint32, Sint32, sprite_ball *, sprite_bullet *);
 private:
   Sint32 scrollTemp;          //use for scroll background
   Sint32 offset_ptr;

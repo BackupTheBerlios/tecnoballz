@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.27 2007/02/06 12:26:01 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.28 2007/02/06 16:28:17 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -92,7 +92,7 @@ void ze_gadgets::initialise(Sint32 mStep, Sint32 bKauf, Sint32 brCnt, const Sint
 	brick_kass = 0;	//number of bricks current destroyed
 	bonusTombe = 0;	//number of bonuses dropped 
 	ptMiniMess = ptMes;
-	tecno_gads *bonus = sprites_list[0];
+	sprite_capsule *bonus = sprites_list[0];
 	for(Sint32 i = 0; i < max_of_sprites; i++)
 	{	bonus = sprites_list[i];
 		bonus->littleInit();
@@ -134,7 +134,7 @@ void ze_gadgets::envoieGads(brickClear * briPT)
 {
 	brick_kass++;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_gads *gadg = sprites_list[i];
+	{	sprite_capsule *gadg = sprites_list[i];
 		if(!gadg->is_enabled)
 		{	//###########################################################
 			// handle maluses
@@ -176,7 +176,7 @@ void ze_gadgets::envoieGads(brickClear * briPT)
 void ze_gadgets::send_malus(sprite_ball *pball)
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_gads *gadg = sprites_list[i];
+	{	sprite_capsule *gadg = sprites_list[i];
 		if(!gadg->is_enabled)
 		{	Sint16 j = hasard_val & 0x1F;	//value 0 to 31 
 			j = *(malusTable + j);
@@ -191,7 +191,7 @@ void ze_gadgets::send_malus(sprite_ball *pball)
 void ze_gadgets::send_malus(sprite_projectile *pfire)
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_gads *gadg = sprites_list[i];
+	{	sprite_capsule *gadg = sprites_list[i];
 		if(!gadg->is_enabled)
 		{	Sint16 j = hasard_val & 0x1F;	//value 0 to 31 
 			j = *(malusTable + j);
@@ -210,7 +210,7 @@ void ze_gadgets::envoieGads(sprite_ball *pball)
 	malus_step++;
 	if(malus_step <= malus_frek) return;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_gads *gadg = sprites_list[i];
+	{	sprite_capsule *gadg = sprites_list[i];
 		if(!gadg->is_enabled)
 		{	Sint16 j = hasard_val & 0x1F;	//value 0 to 31 
 			j = *(malusTable + j);
@@ -229,8 +229,8 @@ void ze_gadgets::create_shop_sprites_list()
 	set_max_of_sprites(NB_OPTIONS + 2);
 	create_sprites_list();
 	Sint32 t = NB_OPTIONS;
-	tecno_gads **liste = sprites_list;
-	tecno_gads *bonus = *liste;
+	sprite_capsule **liste = sprites_list;
+	sprite_capsule *bonus = *liste;
 	Sint32 h = bonus->sprite_height + 1;
 	Sint32 x = SGADGET_X1 * resolution;
 	Sint32 y = SGADGET_Y1 * resolution;
@@ -267,10 +267,10 @@ void ze_gadgets::gadgetShop(Sint32 nuGad)
 void ze_gadgets::gadgetShop(handler_players * gamer)
 {
 	Sint32 t = NB_OPTIONS;
-	tecno_gads **liste = sprites_list;
+	sprite_capsule **liste = sprites_list;
 	Sint32 *cours = gamer->get_course();
 	for(Sint32 i = 0; i < t; i++)
-	{	tecno_gads *bonus = *(liste++);
+	{	sprite_capsule *bonus = *(liste++);
 		Sint32 n = *(cours++);
 		bonus->nouveauGad(n);
 	}
@@ -282,9 +282,9 @@ void ze_gadgets::gadgetShop(handler_players * gamer)
 void ze_gadgets::bouge_gads()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_gads *bonus = sprites_list[i];
+	{	sprite_capsule *bonus = sprites_list[i];
 		bonus->play_animation_loop();
-		sprite_paddle *raket = bonus->deplaceMoi();
+		sprite_paddle *raket = bonus->move();
 		if(raket)
 		{	Sint32 g = bonus->get_gadget();
 			gadget_run(raket, g);
@@ -298,9 +298,9 @@ void ze_gadgets::bouge_gads()
 void ze_gadgets::bougegads2()
 {
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_gads *bonus = sprites_list[i];
+	{	sprite_capsule *bonus = sprites_list[i];
 		bonus->play_animation_loop();
-		sprite_paddle *raket = bonus->deplaceMoi();
+		sprite_paddle *raket = bonus->move();
 		if(raket)
 		{	Sint32 g = bonus->get_gadget();
 			gadgetrun2(raket, g);
@@ -319,9 +319,9 @@ void ze_gadgets::animations(Sint32 value)
 				frame_index = 0;
 	}
 	Sint32 a = frame_index;
-	tecno_gads **liste = sprites_list;
+	sprite_capsule **liste = sprites_list;
 	for(Sint32 i = 0; i < max_of_sprites; i++)
-	{	tecno_gads *bonus = *(liste++);
+	{	sprite_capsule *bonus = *(liste++);
 		Sint32 o = bonus->frame_index_min + a;
 		bonus->set_image(o);
 	}
