@@ -1,7 +1,7 @@
 //******************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "joueurData.cc"
+// file		: "handler_players.cc"
 // created		: ?
 // updates		: 2004-10-15
 // fonction	: handle player (data for every player)
@@ -20,22 +20,22 @@
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //******************************************************************************
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 #include "../include/zeGemstone.h"
 #include "../include/briqueCote.h"
 #include "../include/zeGemstone.h"
 //...............................................................................
-Sint32			joueurData::totalActif = 0;
-Sint32			joueurData::joueur_run = 0;
-joueurData*		joueurData::player_one = NULL;
-Sint32			joueurData::best_score = 0;
-char			joueurData::bestPlayer[6] = {' ', ' ', ' ', ' ', ' ', ' '};
-joueurData**	joueurData::playerlist = NULL;
+Sint32			handler_players::totalActif = 0;
+Sint32			handler_players::joueur_run = 0;
+handler_players*		handler_players::player_one = NULL;
+Sint32			handler_players::best_score = 0;
+char			handler_players::bestPlayer[6] = {' ', ' ', ' ', ' ', ' ', ' '};
+handler_players**	handler_players::playerlist = NULL;
 
 //-----------------------------------------------------------------------------
 // create the object
 //-----------------------------------------------------------------------------	
-joueurData::joueurData()
+handler_players::handler_players()
 {
 	
 	object_init();
@@ -50,7 +50,7 @@ joueurData::joueurData()
 	}
 	else
 	{	playerNext = player_one;
-		joueurData *avant = player_one->prevPlayer();
+		handler_players *avant = player_one->prevPlayer();
 		playerPrev = avant;
 		player_one->prevPlayer(this);
 		avant->nextPlayer(this);
@@ -71,7 +71,7 @@ joueurData::joueurData()
 //-----------------------------------------------------------------------------
 // release the object
 //-----------------------------------------------------------------------------
-joueurData::~joueurData()
+handler_players::~handler_players()
 {
 	totalActif--;
 	if(totalActif)
@@ -93,7 +93,7 @@ joueurData::~joueurData()
 // 			=> monay: credit
 // 			=> grdPt: level_list of the guards
 //-----------------------------------------------------------------------------
-void joueurData::initialise(Sint32 lifes, Sint32 areaN, Sint32 level,
+void handler_players::initialise(Sint32 lifes, Sint32 areaN, Sint32 level,
 								Sint32 monay, Sint32 grdPt)
 {
 	resetvalue();
@@ -108,7 +108,7 @@ void joueurData::initialise(Sint32 lifes, Sint32 areaN, Sint32 level,
 //-----------------------------------------------------------------------------
 // reset some members values
 //-----------------------------------------------------------------------------
-void joueurData::resetvalue()
+void handler_players::resetvalue()
 {
 	Uint32 z = 0;
 	superScore = z;				//reset score of the player
@@ -139,7 +139,7 @@ void joueurData::resetvalue()
 //-----------------------------------------------------------------------------
 // initialize a new name
 //-----------------------------------------------------------------------------
-void joueurData::setNewName(char* pName)
+void handler_players::setNewName(char* pName)
 {
 	for(Uint32 i = 0; i < 6; i++)
 		nameString[i] = ' ';
@@ -162,7 +162,7 @@ void joueurData::setNewName(char* pName)
 //-----------------------------------------------------------------------------
 // return current name
 //-----------------------------------------------------------------------------
-char* joueurData::returnName()
+char* handler_players::returnName()
 {
 	return &nameString[0];
 }
@@ -171,7 +171,7 @@ char* joueurData::returnName()
 // return area number
 //	output	<= areaNumber: area number (1 to 5)
 //-----------------------------------------------------------------------------
-Sint32 joueurData::getAreaNum()
+Sint32 handler_players::getAreaNum()
 {
 	return areaNumber;
 }
@@ -180,7 +180,7 @@ Sint32 joueurData::getAreaNum()
 // return level number
 //	output	<= levelTecno: level number (1 to 13)
 //-----------------------------------------------------------------------------
-Sint32 joueurData::getLevelNu()
+Sint32 handler_players::getLevelNu()
 {
 	return levelTecno;
 }
@@ -189,7 +189,7 @@ Sint32 joueurData::getLevelNu()
 // return the number of life(s)
 //	output	<= superLifes: number of life(s)
 //-----------------------------------------------------------------------------
-Sint32 joueurData::getLifeNum()
+Sint32 handler_players::getLifeNum()
 { 
 	return superLifes;
 }
@@ -197,7 +197,7 @@ Sint32 joueurData::getLifeNum()
 //-----------------------------------------------------------------------------
 // return bumper width
 //-----------------------------------------------------------------------------
-Sint32 joueurData::get_paddle_width()
+Sint32 handler_players::get_paddle_width()
 {
 	return paddle_length;
 }
@@ -205,7 +205,7 @@ Sint32 joueurData::get_paddle_width()
 //-----------------------------------------------------------------------------
 // initialize bumper width
 //-----------------------------------------------------------------------------
-void joueurData::setLargeur(Sint32 large)
+void handler_players::setLargeur(Sint32 large)
 {
 	paddle_length = large;
 }
@@ -213,7 +213,7 @@ void joueurData::setLargeur(Sint32 large)
 //-----------------------------------------------------------------------------
 // return credit value
 //-----------------------------------------------------------------------------
-Sint32 joueurData::get_credit()
+Sint32 handler_players::get_credit()
 {
 	return creditFric;
 }
@@ -221,7 +221,7 @@ Sint32 joueurData::get_credit()
 //-----------------------------------------------------------------------------
 // decrease credit
 //-----------------------------------------------------------------------------
-Sint32 joueurData::sub_credit(Sint32 value)
+Sint32 handler_players::sub_credit(Sint32 value)
 {	if(value > creditFric)
 		return 0;
 	creditFric = creditFric - value;
@@ -231,7 +231,7 @@ Sint32 joueurData::sub_credit(Sint32 value)
 //-----------------------------------------------------------------------------
 // increase credit
 //-----------------------------------------------------------------------------
-void joueurData::add_credit(Sint32 value)
+void handler_players::add_credit(Sint32 value)
 {	
 	creditFric = creditFric + value;
 }
@@ -239,7 +239,7 @@ void joueurData::add_credit(Sint32 value)
 //-----------------------------------------------------------------------------
 // increase score
 //-----------------------------------------------------------------------------
-void joueurData::add_scores(Sint32 value)
+void handler_players::add_scores(Sint32 value)
 {	superScore += value;
 	score_life += value;
 	if(score_life > 25000)
@@ -251,7 +251,7 @@ void joueurData::add_scores(Sint32 value)
 //-----------------------------------------------------------------------------
 // RAZ the list of bonuses bought
 //-----------------------------------------------------------------------------
-void joueurData::RAZ_course()
+void handler_players::RAZ_course()
 {
 	Sint32 t = NB_OPTIONS;
 	Sint32 z = 0;
@@ -265,7 +265,7 @@ void joueurData::RAZ_course()
 // return memory pointer to the list of bonuses bought
 // output	<= pointer to the start of list
 //-----------------------------------------------------------------------------
-Sint32 *joueurData::get_course()
+Sint32 *handler_players::get_course()
 {
 	return courseList;
 }
@@ -273,7 +273,7 @@ Sint32 *joueurData::get_course()
 // return number of bonuses bought
 // output	<= number of bonuses
 //-----------------------------------------------------------------------------
-Sint32 joueurData::get_cou_nb()
+Sint32 handler_players::get_cou_nb()
 {
 	return courseNmbr;
 }
@@ -281,7 +281,7 @@ Sint32 joueurData::get_cou_nb()
 // set number of bonuses bought
 //	input	=> value: number of bonuses
 //-----------------------------------------------------------------------------
-void joueurData::set_cou_nb(Sint32 value)
+void handler_players::set_cou_nb(Sint32 value)
 {
 	courseNmbr = value;
 }
@@ -289,7 +289,7 @@ void joueurData::set_cou_nb(Sint32 value)
 //-----------------------------------------------------------------------------
 // Reset the list of gems collected
 //-----------------------------------------------------------------------------
-void joueurData::RAZgemlist()
+void handler_players::RAZgemlist()
 {
 	for(Sint32 i = 0; i < zeGemstone::NUMBER_GEM; i++)
 		gemmeActif[i] = 0;	//states of the 6 gems
@@ -299,7 +299,7 @@ void joueurData::RAZgemlist()
 //-----------------------------------------------------------------------------
 // verify if the 6 gemstones are collected
 //-----------------------------------------------------------------------------
-Sint32 joueurData::gem_enable(Sint32 gemNu)
+Sint32 handler_players::gem_enable(Sint32 gemNu)
 {
 	gemmeActif[gemNu] = 1;
 	for(Sint32 i = 0; i < zeGemstone::NUMBER_GEM; i++)
@@ -313,7 +313,7 @@ Sint32 joueurData::gem_enable(Sint32 gemNu)
 //-----------------------------------------------------------------------------
 // return the state of one of six gemstones
 //-----------------------------------------------------------------------------
-Sint32 joueurData::gem_is_set(Sint32 gemNu)
+Sint32 handler_players::gem_is_set(Sint32 gemNu)
 {
 	return gemmeActif[gemNu];
 }
@@ -323,7 +323,7 @@ Sint32 joueurData::gem_is_set(Sint32 gemNu)
 // input	=> bumpN: bumper number (2 = right, 3 = top, or 4 left)
 // output	<= 0(disable) or > 1 (enable)
 //-----------------------------------------------------------------------------
-Sint32 joueurData::get_bumpOn(Sint32 bumpN)
+Sint32 handler_players::get_bumpOn(Sint32 bumpN)
 {
 	switch(bumpN)
 	{	case 2:
@@ -343,7 +343,7 @@ Sint32 joueurData::get_bumpOn(Sint32 bumpN)
 // input	=> bumpN: bumper number (2 = right, 3 = top, or 4 left)
 //			=> value: 0 (disable) or > 1 (enable)
 //-----------------------------------------------------------------------------
-void joueurData::set_bumpOn(Sint32 bumpN, Sint32 value)
+void handler_players::set_bumpOn(Sint32 bumpN, Sint32 value)
 {
 	switch(bumpN)
 	{	case 2:
@@ -361,7 +361,7 @@ void joueurData::set_bumpOn(Sint32 bumpN, Sint32 value)
 //-----------------------------------------------------------------------------
 // initialize state "less bricks" option
 //-----------------------------------------------------------------------------
-void joueurData::set_lessBk(Sint32 value)
+void handler_players::set_lessBk(Sint32 value)
 {
 	less_brick = value;
 }
@@ -369,7 +369,7 @@ void joueurData::set_lessBk(Sint32 value)
 //-----------------------------------------------------------------------------
 // return state "less bricks" option
 //-----------------------------------------------------------------------------
-Sint32 joueurData::get_lessBk()
+Sint32 handler_players::get_lessBk()
 {
 	return less_brick;
 }
@@ -377,7 +377,7 @@ Sint32 joueurData::get_lessBk()
 //-----------------------------------------------------------------------------
 // initialize state "bonus price" option
 //-----------------------------------------------------------------------------
-void joueurData::set_Bprice(Sint32 value)
+void handler_players::set_Bprice(Sint32 value)
 {
 	bonusPrice = value;
 }
@@ -385,7 +385,7 @@ void joueurData::set_Bprice(Sint32 value)
 //-----------------------------------------------------------------------------
 // return state "bonus price" option
 //-----------------------------------------------------------------------------
-Sint32 joueurData::get_Bprice()
+Sint32 handler_players::get_Bprice()
 {
 	return bonusPrice;
 }
@@ -394,7 +394,7 @@ Sint32 joueurData::get_Bprice()
 //-----------------------------------------------------------------------------
 // initialize state of "rebuild wall" option
 //-----------------------------------------------------------------------------
-void joueurData::setRebuild(Sint32 build)
+void handler_players::setRebuild(Sint32 build)
 {
 	rebuild_ok = build;
 }
@@ -402,7 +402,7 @@ void joueurData::setRebuild(Sint32 build)
 //-----------------------------------------------------------------------------
 // return state of "rebuild wall" option
 //-----------------------------------------------------------------------------
-Sint32 joueurData::getRebuild()
+Sint32 handler_players::getRebuild()
 {
 	return rebuild_ok;
 }
@@ -410,7 +410,7 @@ Sint32 joueurData::getRebuild()
 //-----------------------------------------------------------------------------
 // return state of the wall of left (small bricks)
 //-----------------------------------------------------------------------------
-char *joueurData::getBriLeft()
+char *handler_players::getBriLeft()
 {
 	return bricotLeft;
 }
@@ -418,7 +418,7 @@ char *joueurData::getBriLeft()
 //-----------------------------------------------------------------------------
 // return state of the wall of right (small bricks)
 //-----------------------------------------------------------------------------
-char *joueurData::getBriRigh()
+char *handler_players::getBriRigh()
 {
 	return bricotRigh;
 }
@@ -426,7 +426,7 @@ char *joueurData::getBriRigh()
 //-----------------------------------------------------------------------------
 // return state of the wall of top (small bricks)
 //-----------------------------------------------------------------------------
-char *joueurData::getBri_top()
+char *handler_players::getBri_top()
 {
 	return bricot_top;
 }
@@ -435,7 +435,7 @@ char *joueurData::getBri_top()
 // is the lastest level of tecnoballz?
 //	output <= 1: end of game :-)
 //-----------------------------------------------------------------------------
-Sint32 joueurData::zlastlevel()
+Sint32 handler_players::zlastlevel()
 {
 	if(areaNumber >= 5 && levelTecno >= 13)
 		return 1;
@@ -447,11 +447,11 @@ Sint32 joueurData::zlastlevel()
 // next level
 //	output <= 1: end of game :-)
 //-----------------------------------------------------------------------------
-Sint32 joueurData::next_level(Sint32 grdNx)
+Sint32 handler_players::next_level(Sint32 grdNx)
 {
 	Sint32 r = 0;
 	if(is_verbose)
-		printf("joueurData::next_level() areaNumber=%i, levelTecno=%i grdNx=%i guardianPt =%i\n",
+		printf("handler_players::next_level() areaNumber=%i, levelTecno=%i grdNx=%i guardianPt =%i\n",
 		areaNumber, levelTecno, grdNx, guardianPt);
 	if(areaNumber == 5 && levelTecno == 13)
 	{	areaNumber = 1;
@@ -476,7 +476,7 @@ Sint32 joueurData::next_level(Sint32 grdNx)
 		}
 	}
 	if(is_verbose)
-		printf("joueurData::next_level() areaNumber=%i, levelTecno=%i,  guardianPt=%i\n",
+		printf("handler_players::next_level() areaNumber=%i, levelTecno=%i,  guardianPt=%i\n",
 			areaNumber, levelTecno, guardianPt);
 	return r;
 }
@@ -484,7 +484,7 @@ Sint32 joueurData::next_level(Sint32 grdNx)
 //-----------------------------------------------------------------------------
 // 
 //-----------------------------------------------------------------------------
-Sint32 joueurData::level2jump()
+Sint32 handler_players::level2jump()
 {
 	Sint32 rcode = 4; //menu
 	if(levelTecno == 6 || levelTecno == 12 || levelTecno == 13)
@@ -499,7 +499,7 @@ Sint32 joueurData::level2jump()
 //-----------------------------------------------------------------------------
 // return previous player
 //-----------------------------------------------------------------------------
-joueurData *joueurData::prevPlayer()
+handler_players *handler_players::prevPlayer()
 {
 	return playerPrev;
 }
@@ -507,7 +507,7 @@ joueurData *joueurData::prevPlayer()
 //-----------------------------------------------------------------------------
 // return next player
 //-----------------------------------------------------------------------------
-joueurData *joueurData::nextPlayer()
+handler_players *handler_players::nextPlayer()
 {
 	return	playerNext;
 }
@@ -515,7 +515,7 @@ joueurData *joueurData::nextPlayer()
 //-----------------------------------------------------------------------------
 // set next player
 //-----------------------------------------------------------------------------
-void joueurData::nextPlayer(joueurData * gamer)
+void handler_players::nextPlayer(handler_players * gamer)
 {
 	playerNext = gamer;
 }
@@ -523,7 +523,7 @@ void joueurData::nextPlayer(joueurData * gamer)
 //-----------------------------------------------------------------------------
 // set previous player
 //-----------------------------------------------------------------------------
-void joueurData::prevPlayer(joueurData * gamer)
+void handler_players::prevPlayer(handler_players * gamer)
 {
 	playerPrev = gamer;
 }
@@ -532,7 +532,7 @@ void joueurData::prevPlayer(joueurData * gamer)
 // return area number
 //	output	<=	areaNumber: 1 to 5
 //-----------------------------------------------------------------------------
-Sint32 joueurData::getareaNum()
+Sint32 handler_players::getareaNum()
 {
 	return areaNumber;
 }
@@ -540,7 +540,7 @@ Sint32 joueurData::getareaNum()
 //-----------------------------------------------------------------------------
 // get pointer to "level_list" of the guards
 //-----------------------------------------------------------------------------
-Sint32 joueurData::getGuardPt()
+Sint32 handler_players::getGuardPt()
 {
 	return guardianPt;
 }
@@ -548,7 +548,7 @@ Sint32 joueurData::getGuardPt()
 //-----------------------------------------------------------------------------
 // set pointer to "level_list" of the guards
 //-----------------------------------------------------------------------------
-void joueurData::setGuardPt(Sint32 grdPt)
+void handler_players::setGuardPt(Sint32 grdPt)
 {
 	guardianPt = grdPt;
 }
@@ -557,7 +557,7 @@ void joueurData::setGuardPt(Sint32 grdPt)
 // extra lifes
 // 	input	=> value: number of life(s)
 //-----------------------------------------------------------------------------
-void joueurData::lifes_plus(Sint32 value)
+void handler_players::lifes_plus(Sint32 value)
 {
 	superLifes += value;
 }
@@ -566,7 +566,7 @@ void joueurData::lifes_plus(Sint32 value)
 // decrease number of life
 // retra: number of life(s)
 //-----------------------------------------------------------------------------
-Sint32 joueurData::lifesMoins(Sint32 retra)
+Sint32 handler_players::lifesMoins(Sint32 retra)
 {
 	superLifes -= retra;
 	if(superLifes > 0)
@@ -580,7 +580,7 @@ Sint32 joueurData::lifesMoins(Sint32 retra)
 //-----------------------------------------------------------------------------
 // reset number of lifes
 //-----------------------------------------------------------------------------
-void joueurData::lifesReset()
+void handler_players::lifesReset()
 {
 	superLifes = 0;
 }
@@ -591,13 +591,13 @@ void joueurData::lifesReset()
 
 //-----------------------------------------------------------------------------
 // static: return next player
-//	input	=> gamer: current "joueurData" object
+//	input	=> gamer: current "handler_players" object
 //			=> rcode: pointer to "end_return"
 //			=> vactu: current phase (1, 2, or 3) 
 //			=> grdNx: pointer to "level_list" of the guards (NULL by default)
-// output <= next "joueurData" object
+// output <= next "handler_players" object
 //-----------------------------------------------------------------------------
-joueurData* joueurData::nextplayer(joueurData* gamer, Sint32* rcode, 
+handler_players* handler_players::nextplayer(handler_players* gamer, Sint32* rcode, 
 	Sint32 vactu, Sint32 grdNx)
 {
 	Sint32 start = gamer->player_num;
@@ -606,7 +606,7 @@ joueurData* joueurData::nextplayer(joueurData* gamer, Sint32* rcode,
 		gamer->next_level(grdNx);
 	for(Sint32 i = 0; i < totalActif; i++)
 	{	if (++index > totalActif) index = 1;
-		joueurData* pPlay = playerlist[index - 1];
+		handler_players* pPlay = playerlist[index - 1];
 		if(pPlay->superLifes > 0)
 		{	*rcode = pPlay->level2jump();
 			if (pPlay->player_num <= start && *rcode == 2 && vactu == 2)
@@ -627,7 +627,7 @@ joueurData* joueurData::nextplayer(joueurData* gamer, Sint32* rcode,
 //-----------------------------------------------------------------------------
 // static: return first player
 //-----------------------------------------------------------------------------
-joueurData *joueurData::firstGamer()
+handler_players *handler_players::firstGamer()
 {
 	return player_one;
 }
@@ -636,22 +636,22 @@ joueurData *joueurData::firstGamer()
 // static: initialize the number maximum of players
 // 	input	=> total: number maximum of players (always 6)
 //-----------------------------------------------------------------------------
-joueurData *joueurData::joueursADD(Sint32 total)
+handler_players *handler_players::joueursADD(Sint32 total)
 {
 	Sint32 t = total;
 	playerlist =
-		(joueurData **)memory->alloc(t * sizeof(joueurData *),
+		(handler_players **)memory->alloc(t * sizeof(handler_players *),
 		0x504C4159);
 	if(!playerlist) return 0;
 	for(Sint32 i = 0; i < t; i++)
-		playerlist[i] = new joueurData();
+		playerlist[i] = new handler_players();
 	return player_one;
 }
 
 //-----------------------------------------------------------------------------
 // static: release all objects players
 //-----------------------------------------------------------------------------
-void joueurData::joueursRAZ()
+void handler_players::joueursRAZ()
 {
 	Sint32 t = totalActif;
 	for(Sint32 i = 0; i < t; i++)

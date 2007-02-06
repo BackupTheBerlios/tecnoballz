@@ -30,7 +30,7 @@ class zeGigaBlit;
 #include "../include/handler_keyboard.h"
 #include "../include/ballDirect.h"
 #include "../include/zeFireBump.h"
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 #include "../include/supervisor_bricks_level.h"
 #include "../include/objects_list.h"
 #include "../include/head_anima.h"

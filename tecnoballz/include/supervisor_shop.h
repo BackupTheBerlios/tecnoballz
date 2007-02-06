@@ -30,7 +30,7 @@ class supervisor_shop;
 #include "../include/sprite_object.h"
 #include "../include/ze_gadgets.h"
 #include "../include/print_text.h"
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 #include "../include/supervisor.h"
 #include "../include/handler_popup_menu.h"
 #include "../include/tiles_background.h"

@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.2 2007/02/05 20:16:33 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.3 2007/02/06 12:26:01 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,8 @@
  */
 #include "../include/supervisor_main_menu.h"
 #include "../include/handler_resources.h"
-#include "../include/joueurData.h"
-#include "../include/zeguardian.h"
+#include "../include/handler_players.h"
+#include "../include/controller_guardians.h"
 
 /** 
  * Create the main menu supervisor 
@@ -242,15 +242,15 @@ supervisor_main_menu::start_new_game ()
                         "is OK; nArea = %i;"
                         "level = %i, hardN = %i\n",
                         &zeAreaCode[0], nArea, level, hardN);
-              grdPt = zeguardian::level2gdpt (nArea, level);
+              grdPt = controller_guardians::level2gdpt (nArea, level);
               goto sortie;
             }
         }
     }
 sortie:
 
-  //nArea = 5; level = 13; grdPt = zeguardian::level2gdpt(nArea, level); //test only
-  //nArea = 4; level = 12; grdPt = zeguardian::level2gdpt(nArea, level); //test only
+  //nArea = 5; level = 13; grdPt = controller_guardians::level2gdpt(nArea, level); //test only
+  //nArea = 4; level = 12; grdPt = controller_guardians::level2gdpt(nArea, level); //test only
   //return 0;
 
   //level = 6;    //test only
@@ -264,21 +264,21 @@ sortie:
       if (birth_flag)
         nlife = nlife + 10;
       if (chaine_cmp
-          (joueurData::playerlist[iplay]->returnName (), "ETB   ", 6))
+          (handler_players::playerlist[iplay]->returnName (), "ETB   ", 6))
         nlife += 5;
       if (chaine_cmp
-          (joueurData::playerlist[iplay]->returnName (), "DJI   ", 6))
+          (handler_players::playerlist[iplay]->returnName (), "DJI   ", 6))
         nlife += 4;
       if (chaine_cmp
-          (joueurData::playerlist[iplay]->returnName (), "JMM   ", 6))
+          (handler_players::playerlist[iplay]->returnName (), "JMM   ", 6))
         nlife += 3;
       if (chaine_cmp
-          (joueurData::playerlist[iplay]->returnName (), "ZBB   ", 6))
+          (handler_players::playerlist[iplay]->returnName (), "ZBB   ", 6))
         nlife += 2;
       if (chaine_cmp
-          (joueurData::playerlist[iplay]->returnName (), "REG   ", 6))
+          (handler_players::playerlist[iplay]->returnName (), "REG   ", 6))
         nlife += 1;
-      joueurData::playerlist[iplay]->initialise (nlife, nArea, level,
+      handler_players::playerlist[iplay]->initialise (nlife, nArea, level,
                                                  600, grdPt);
     }
 
@@ -286,8 +286,8 @@ sortie:
   // initialize disable player(s)
   //###################################################################
   for (Sint32 i = iplay; i < MAX_PLAYER; i++)
-    joueurData::playerlist[i]->initialise (0, 1, 1, 0, 0);
-  joueurGere = joueurData::playerlist[0];
+    handler_players::playerlist[i]->initialise (0, 1, 1, 0, 0);
+  joueurGere = handler_players::playerlist[0];
   Sint32 value = joueurGere->level2jump ();
   if (value == 2)
     value = 1;                  //convert shop code in bricks level code

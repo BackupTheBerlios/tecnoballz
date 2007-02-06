@@ -85,7 +85,7 @@ class ze_gadgets:public objects_list < tecno_gads >
 		void				envoieGads(sprite_ball *pball);
 		void create_shop_sprites_list();
 		void				gadgetShop(Sint32 nuGad);
-		void				gadgetShop(joueurData * gamer);
+		void				gadgetShop(handler_players * gamer);
 		void				bouge_gads();
 		void				bougegads2();
 		void				animations(Sint32 value = 1);

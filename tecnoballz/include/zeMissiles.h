@@ -28,13 +28,13 @@ class zeMissiles;
 #include "../include/list_sprites.h"
 #include "../include/tecno_miss.h"
 #include "../include/objects_list.h"
-#include "../include/tecno_gard.h"
+#include "../include/sprite_guardian.h"
 #include "../include/sprite_paddle.h"
 #include "../include/zexplosion.h"
 
 class zeMissiles:public objects_list < tecno_miss >
 {
-	friend class zeguardian;
+	friend class controller_guardians;
 		
 	private:
 		static const Sint16		tir01_posi[62];
@@ -53,19 +53,19 @@ class zeMissiles:public objects_list < tecno_miss >
 		void					anim_fires();
 		void					bumper_col();
 		tecno_miss*				getWeapOne();
-		void					newMissile(Sint32 nfire, tecno_gard *pgard);
+		void					newMissile(Sint32 nfire, sprite_guardian *pgard);
     
   private:
-		void					tir01_init(tecno_gard *pgard);
-		void					tir02_init(tecno_gard *pgard);
-		void					tir03_init(tecno_gard *pgard);
-		void					tir04_init(tecno_gard *pgard);
-		void					tir05_init(tecno_gard *pgard);
-		void					tir06_init(tecno_gard *pgard);
-		void					tir07_init(tecno_gard *pgard);
-		void					tir08_init(tecno_gard *pgard);
-		void					tir09_init(tecno_gard *pgard);
-		void					tir10_init(tecno_gard *pgard);
-		void					tir11_init(tecno_gard *pgard);
+		void					tir01_init(sprite_guardian *pgard);
+		void					tir02_init(sprite_guardian *pgard);
+		void					tir03_init(sprite_guardian *pgard);
+		void					tir04_init(sprite_guardian *pgard);
+		void					tir05_init(sprite_guardian *pgard);
+		void					tir06_init(sprite_guardian *pgard);
+		void					tir07_init(sprite_guardian *pgard);
+		void					tir08_init(sprite_guardian *pgard);
+		void					tir09_init(sprite_guardian *pgard);
+		void					tir10_init(sprite_guardian *pgard);
+		void					tir11_init(sprite_guardian *pgard);
 };
 #endif

@@ -20,15 +20,16 @@ SOURCES_MAIN = \
 	controller_balls.cc \
 	controller_bricks.cc \
   controller_paddles.cc \
+	controller_guardians.cc \
 	ejectBalls.cc \
   handler_audio.cc \
   handler_display.cc \
 	handler_keyboard.cc \
 	handler_memory.cc \
+	handler_players.cc \
 	handler_popup_menu.cc \
 	handler_resources.cc \
 	head_anima.cc \
-	joueurData.cc \
 	lastScroll.cc \
 	level_data.cc \
 	lispreader.cc \
@@ -47,6 +48,7 @@ SOURCES_MAIN = \
   sprite_mouse_pointer.cc \
   sprite_eye.cc \
   sprite_fonte_menu.cc \
+	sprite_guardian.cc \
   sprite_gem.cc \
   sprite_money.cc \
   sprite_projectile.cc \
@@ -59,7 +61,6 @@ SOURCES_MAIN = \
   supervisor_guards_level.cc \
   supervisor_shop.cc \
 	tecno_gads.cc \
-	tecno_gard.cc \
 	tecno_miss.cc \
 	tecno_text.cc \
   tecnoballz.cc \
@@ -73,7 +74,6 @@ SOURCES_MAIN = \
 	zeGameOver.cc \
 	zeGemstone.cc \
 	zeGigaBlit.cc \
-	zeguardian.cc \
 	ze_magneye.cc \
 	zeMiniMess.cc \
 	zeMissiles.cc \

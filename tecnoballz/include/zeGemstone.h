@@ -29,7 +29,7 @@ class zeGemstone;
 #include "../include/objects_list.h"
 #include "../include/controller_paddles.h"
 #include "../include/sprite_gem.h"
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 #include "../include/printmoney.h"
 //...............................................................................
 
@@ -40,14 +40,14 @@ class zeGemstone:public objects_list < sprite_gem >
 	
 	private:
 		controller_paddles*			ptRaquette;
-		joueurData*			pJoueurDat;
+		handler_players*			pJoueurDat;
 		barreScore*			ptBarScore;
 		printmoney*			ptPrintmon;
 
 	public:
 							zeGemstone();
 							~zeGemstone();
-		Sint32				initialise(joueurData*, barreScore*, 
+		Sint32				initialise(handler_players*, barreScore*, 
 								printmoney*, controller_paddles*);
 		void				sendNewGem(sprite_ball *pball);
 		void				sendNewGem(sprite_projectile *pball);

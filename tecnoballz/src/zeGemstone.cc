@@ -46,7 +46,7 @@ zeGemstone::~zeGemstone()
 //-----------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------
-Sint32	zeGemstone::initialise(joueurData* pjda, barreScore *score, printmoney *money,
+Sint32	zeGemstone::initialise(handler_players* pjda, barreScore *score, printmoney *money,
 	controller_paddles *pbump)
 {
 	pJoueurDat = pjda;

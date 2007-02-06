@@ -53,7 +53,7 @@ barreScore::~barreScore()
 //-------------------------------------------------------------------------------
 // first initialization
 //-------------------------------------------------------------------------------
-Sint32 barreScore::first_init(joueurData * gamer, zeGigaBlit *gblit, controller_balls *balls)
+Sint32 barreScore::first_init(handler_players * gamer, zeGigaBlit *gblit, controller_balls *balls)
 {
 	error_init(initialise());
 	objetGamer = gamer;
@@ -79,7 +79,7 @@ Sint32 barreScore::affiche_me()
 	GFX_Sbarre = new bitmap_data();
 	GFX_Sbarre->load(handler_resources::RESBASCORE);
 	GFX_Sbarre->copyTampon(0, 0, 256 * resolution, 0, 64 * resolution, 240 * resolution);
-	joueurData *gamer = objetGamer;
+	handler_players *gamer = objetGamer;
 	tamponAff1(POSX_AREAN * resolution, POSY_AREAN * resolution,
 		gamer->areaNumber, 10);
 	tamponAff1(POSX_LEVEL * resolution, POSY_LEVEL * resolution,
@@ -108,7 +108,7 @@ Sint32 barreScore::affiche_me()
 //-------------------------------------------------------------------------------
 void barreScore::scoreEcran()
 {
-	joueurData *gamer = objetGamer;
+	handler_players *gamer = objetGamer;
 	affNombre1(scoreAdres, gamer->superScore, 100000);
 	affNombre1(lifesAdres, superBrick, 100);
 	affNombre1(brickAdres, gamer->superLifes, 10);
@@ -136,7 +136,7 @@ void barreScore::lifes_plus(Sint32 ajout)
 //-------------------------------------------------------------------------------
 Sint32 barreScore::lifesMoins(Sint32 retra)
 {
-	joueurData *gamer = objetGamer;
+	handler_players *gamer = objetGamer;
 	gamer->superLifes -= retra;
 	if(gamer->superLifes > 0)
 		return 1;

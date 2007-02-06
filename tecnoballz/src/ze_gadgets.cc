@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-18
 // fonction	: manage gadgets (malus & bonus)
-// id		: $Id: ze_gadgets.cc,v 1.26 2007/02/05 21:02:11 gurumeditation Exp $
+// id		: $Id: ze_gadgets.cc,v 1.27 2007/02/06 12:26:01 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -24,9 +24,9 @@
 #include "../include/ze_gadgets.h"
 #include "../include/handler_display.h"
 #include "../include/handler_keyboard.h"
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 #include "../include/sprite_projectile.h"
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 
 //-----------------------------------------------------------------------------
 // create the object
@@ -264,7 +264,7 @@ void ze_gadgets::gadgetShop(Sint32 nuGad)
 //-------------------------------------------------------------------------------
 // shop : initialize the list of bonus 
 //-------------------------------------------------------------------------------
-void ze_gadgets::gadgetShop(joueurData * gamer)
+void ze_gadgets::gadgetShop(handler_players * gamer)
 {
 	Sint32 t = NB_OPTIONS;
 	tecno_gads **liste = sprites_list;

@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.8 2007/02/05 21:02:11 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.9 2007/02/06 12:26:01 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
  * MA  02110-1301, USA.
  */
 #include "../include/controller_balls.h"
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 #include "../include/handler_memory.h"
 #include "../include/handler_keyboard.h"
 #include "../include/handler_display.h"
@@ -73,7 +73,7 @@ controller_balls::controller_balls (ejectBalls * eject, controller_bricks * bric
 /** 
  * Create the balls controller into guards levels
  */
-controller_balls::controller_balls (zeguardian * pGard, zeCapsules * pCaps,
+controller_balls::controller_balls (controller_guardians * pGard, zeCapsules * pCaps,
                                     ze_gadgets * pGads)
 {
   littleInit ();
@@ -1395,10 +1395,10 @@ controller_balls::vitusGuard ()
   Sint32 u = max_of_sprites;    // number of balls (1 to n)
   sprite_ball **liste = sprites_list;
   Sint32 t = ptguardian->get_max_of_sprites (); // number of guards (1 or 2)
-  tecno_gard **aList = ptguardian->get_sprites_list ();
+  sprite_guardian **aList = ptguardian->get_sprites_list ();
   for (Sint32 j = 0; j < t; j++)
     {
-      tecno_gard *pGard = aList[j];
+      sprite_guardian *pGard = aList[j];
       sprite_ball *balok = NULL;
       if (pGard->is_enabled && pGard->gard_power > 0)
         {

@@ -23,7 +23,7 @@
 #include "../include/score_over.h"
 #include "../include/print_menu.h"
 #include "../include/handler_resources.h"
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 #include "../include/scoretable.h"
 
 //-----------------------------------------------------------------------------

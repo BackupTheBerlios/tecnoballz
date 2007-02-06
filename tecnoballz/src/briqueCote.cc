@@ -22,7 +22,7 @@
 //
 //******************************************************************************
 #include "../include/briqueCote.h"
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 #include "../include/handler_display.h"
 
 //-----------------------------------------------------------------------------

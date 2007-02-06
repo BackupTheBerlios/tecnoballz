@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.h,v 1.8 2007/02/05 20:42:27 gurumeditation Exp $
+ * $Id: sprite_ball.h,v 1.9 2007/02/06 12:26:01 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ class sprite_ball:public sprite_object
   friend class controller_paddles;
   friend class sprite_money;
   friend class sprite_gem;
-  friend class zeguardian;
+  friend class controller_guardians;
   friend class directBall;
 
 public:

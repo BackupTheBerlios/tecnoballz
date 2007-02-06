@@ -26,7 +26,7 @@
 class tecno_miss;
 //...............................................................................
 #include "../include/sprite_object.h"
-#include "../include/tecno_gard.h"
+#include "../include/sprite_guardian.h"
 #include "../include/sprite_paddle.h"
 //...............................................................................
 class tecno_miss:public sprite_object
@@ -45,7 +45,7 @@ class tecno_miss:public sprite_object
 		const short*		tablesinus;
 		const short*		tablecosin;
 		sprite_paddle*			ptbumper01;
-		tecno_gard*			ptguardian;
+		sprite_guardian*			ptguardian;
 		Sint32				tir_maxi_x;
 		Sint32				tir_maxi_y;
 		Sint32				tir_minixy;

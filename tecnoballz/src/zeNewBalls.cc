@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA 021117-1307, USA.
 //******************************************************************************
 #include "../include/controller_balls.h"
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 #include "../include/handler_memory.h"
 #include "../include/handler_keyboard.h"
 #include "../include/handler_display.h"
@@ -66,7 +66,7 @@ controller_balls::controller_balls(ejectBalls *eject, controller_bricks *brick, 
 //-----------------------------------------------------------------------------
 // guards levels: create the object
 //-----------------------------------------------------------------------------
-controller_balls::controller_balls(zeguardian *pGard, zeCapsules *pCaps, ze_gadgets *pGads)
+controller_balls::controller_balls(controller_guardians *pGard, zeCapsules *pCaps, ze_gadgets *pGads)
 {
 	littleInit();
 	num_erreur = 0;
@@ -1228,9 +1228,9 @@ void controller_balls::vitusGuard()
 	Sint32 u = max_of_sprites;					// number of balls (1 to n)
 	sprite_ball **liste = sprites_list;
 	Sint32 t = ptguardian->get_max_of_sprites();	// number of guards (1 or 2)
-	tecno_gard **aList = ptguardian->get_sprites_list();
+	sprite_guardian **aList = ptguardian->get_sprites_list();
 	for(Sint32 j = 0; j < t; j++)
-	{	tecno_gard *pGard = aList[j];
+	{	sprite_guardian *pGard = aList[j];
 		sprite_ball *balok = NULL; 
 		if (pGard->is_enabled && pGard->gard_power > 0) 
 		{	Sint32 grdx1 = pGard->x_coord;

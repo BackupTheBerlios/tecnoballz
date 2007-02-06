@@ -128,7 +128,7 @@ tecno_miss*	zeMissiles::getWeapOne()
 //-----------------------------------------------------------------------------
 // new fire required !
 //-----------------------------------------------------------------------------
-void zeMissiles::newMissile(Sint32 nfire, tecno_gard *pgard)
+void zeMissiles::newMissile(Sint32 nfire, sprite_guardian *pgard)
 { Sint32 i = nfire;
   //printf("zeMissiles::newMissile(() : numero du tir = %ld\n", i);
   switch(i)
@@ -169,7 +169,7 @@ void zeMissiles::newMissile(Sint32 nfire, tecno_gard *pgard)
 }
 
 // *--------------------------- INIT TIR : tir >01< ---------------------------*
-void zeMissiles::tir01_init(tecno_gard *pgard)
+void zeMissiles::tir01_init(sprite_guardian *pgard)
 {
   Sint32 t = max_of_sprites - 1;
   Sint32 gardx = pgard->x_coord + pgard->gard_xcent - (16 * resolution);
@@ -194,7 +194,7 @@ void zeMissiles::tir01_init(tecno_gard *pgard)
   } while ( n > 0 && --t >= 0 );
 }
 // *--------------* tir 02, scie circulaire + support, 10 bobs *---------------*
-void zeMissiles::tir02_init(tecno_gard *pgard)
+void zeMissiles::tir02_init(sprite_guardian *pgard)
 {
   Sint32 t = max_of_sprites - 1;
   Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
@@ -228,7 +228,7 @@ void zeMissiles::tir02_init(tecno_gard *pgard)
 }
 
 // *-----------------------*  TIR 03, xevious, 4 bobs  *-----------------------*
-void zeMissiles::tir03_init(tecno_gard *pgard)
+void zeMissiles::tir03_init(sprite_guardian *pgard)
 {
   Sint32 t = max_of_sprites - 1;
   Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
@@ -273,7 +273,7 @@ void zeMissiles::tir03_init(tecno_gard *pgard)
 }
 
 // *-----------------*TIR 04, scie circulaire II, 7 bobs*----------------------*
-void zeMissiles::tir04_init(tecno_gard *pgard)
+void zeMissiles::tir04_init(sprite_guardian *pgard)
 {
   Sint32 t = max_of_sprites - 1;
   Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
@@ -300,7 +300,7 @@ void zeMissiles::tir04_init(tecno_gard *pgard)
 }
 
 // **--------------------* TIR 05, automatique 9 coups *---------------------**
-void zeMissiles::tir05_init(tecno_gard *pgard)
+void zeMissiles::tir05_init(sprite_guardian *pgard)
 {
   Sint32 t = max_of_sprites - 1;
   Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
@@ -326,7 +326,7 @@ void zeMissiles::tir05_init(tecno_gard *pgard)
 }
 
 // **---------------------* TIR 06, scie circulaire III *---------------------**
-void zeMissiles::tir06_init(tecno_gard *pgard)
+void zeMissiles::tir06_init(sprite_guardian *pgard)
 {
   Sint32 t = max_of_sprites - 1;
   Sint32 s = 0;
@@ -348,7 +348,7 @@ void zeMissiles::tir06_init(tecno_gard *pgard)
 }
 
 // **---------------------* TIR 07, scie circulaire IV *---------------------**
-void zeMissiles::tir07_init(tecno_gard *pgard)
+void zeMissiles::tir07_init(sprite_guardian *pgard)
 {
   Sint32 t = max_of_sprites - 1;
   Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
@@ -373,7 +373,7 @@ void zeMissiles::tir07_init(tecno_gard *pgard)
 }
 
 // **----------------------* TIR 08, scie circulaire V *----------------------**
-void zeMissiles::tir08_init(tecno_gard *pgard)
+void zeMissiles::tir08_init(sprite_guardian *pgard)
 {
   Sint32 t = max_of_sprites - 1;
   Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
@@ -403,7 +403,7 @@ void zeMissiles::tir08_init(tecno_gard *pgard)
 }
 
 // **--------------------------* TIR 09, triangle *----------------------------*
-void zeMissiles::tir09_init(tecno_gard *pgard)
+void zeMissiles::tir09_init(sprite_guardian *pgard)
 {
   Sint32 t = max_of_sprites - 1;
   Sint32 gardx = pgard->x_coord + pgard->gard_xcent;
@@ -437,7 +437,7 @@ void zeMissiles::tir09_init(tecno_gard *pgard)
 
 
 // **---------------------** tir 10, epee de DAMOCLES **----------------------**
-void zeMissiles::tir10_init(tecno_gard *pgard)
+void zeMissiles::tir10_init(sprite_guardian *pgard)
 {
   Sint32 t = max_of_sprites - 1;
   Sint32 gardx = pgard->x_coord + pgard->gard_xcent - (17 * resolution) ;
@@ -456,7 +456,7 @@ void zeMissiles::tir10_init(tecno_gard *pgard)
 }
 
 // *=-----------------------=* TIR 11, triangle II *=-------------------------=*
-void zeMissiles::tir11_init(tecno_gard *pgard)
+void zeMissiles::tir11_init(sprite_guardian *pgard)
 {
 	Sint32 t = max_of_sprites - 1;
 	Sint32 gardx = pgard->x_coord + pgard->gard_xcent;

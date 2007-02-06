@@ -4,11 +4,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.3 2007/02/05 15:44:09 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.4 2007/02/06 12:26:01 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ class supervisor_bricks_level;
 #include "../include/zeCapsules.h"
 #include "../include/ze_gadgets.h"
 #include "../include/zeGigaBlit.h"
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 #include "../include/zeMoveText.h"
 #include "../include/head_anima.h"
 #include "../include/printmoney.h"

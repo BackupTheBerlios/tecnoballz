@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.3 2007/02/05 15:44:09 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.4 2007/02/06 12:26:01 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -368,7 +368,7 @@ supervisor_bricks_level::main_loop ()
       display->unlock_surfaces ();
       display->bufferCTab ();
       if (keyboard->is_left_button () && isgameover > 60)
-        joueurGere = joueurData::nextplayer (joueurGere, &end_return, 1);
+        joueurGere = handler_players::nextplayer (joueurGere, &end_return, 1);
     }
 
   /*
@@ -445,7 +445,7 @@ supervisor_bricks_level::main_loop ()
                   keyboard->key_is_pressed (SDLK_SPACE) || music_finished)
                 {
                   gereBricot->sauve_etat ();
-                  joueurGere = joueurData::nextplayer (joueurGere,
+                  joueurGere = handler_players::nextplayer (joueurGere,
                                                        &end_return, 1);
 #ifndef SOUNDISOFF
                   audio->stop_music ();

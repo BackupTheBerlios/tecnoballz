@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2006-10-02
-// id		: $Id: configfile.cc,v 1.15 2007/01/19 20:35:40 gurumeditation Exp $
+// id		: $Id: configfile.cc,v 1.16 2007/02/06 12:26:01 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -23,7 +23,7 @@
 #include "../include/configfile.h"
 #include "../include/handler_display.h"
 #include "../include/handler_audio.h"
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 
 #include <stdio.h>
 #include <stdlib.h>

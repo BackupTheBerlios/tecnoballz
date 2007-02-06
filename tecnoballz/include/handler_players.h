@@ -1,7 +1,7 @@
 //******************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "joueurData.h"
+// file		: "handler_players.h"
 // created		: ?
 // updates		: 2004-10-09
 // fonction	: handle player (data for every player)
@@ -23,14 +23,14 @@
 //******************************************************************************
 #ifndef __JOUEURDATA__
 #define __JOUEURDATA__
-class joueurData;
+class handler_players;
 
 
 #include "../include/tecnoballz.h"
 #include "../include/ze_gadgets.h"
 //const Sint32 COURSEMAXI = 20;
 
-class joueurData:public virtual tecnoballz
+class handler_players:public virtual tecnoballz
 {
 	friend class barreScore;
 	friend class supervisor_guards_level;
@@ -39,17 +39,17 @@ class joueurData:public virtual tecnoballz
 	friend class scoretable;
 	
 	public:
-		static	joueurData**	playerlist;
+		static	handler_players**	playerlist;
 	
 	private:
 		static Sint32		totalActif;	// Nombre de joueurs actifs
 		static Sint32		joueur_run;	// Numero du joueur en cours
-		static joueurData*	player_one;
+		static handler_players*	player_one;
 		static Sint32		best_score;
 		static char			bestPlayer[6];
 		
-		joueurData*			playerNext;	// Pointeur sur le joueur suivant
-		joueurData*			playerPrev;	// Pointeur sur le joueur precedent
+		handler_players*			playerNext;	// Pointeur sur le joueur suivant
+		handler_players*			playerPrev;	// Pointeur sur le joueur precedent
 		char				nameString[7];	// Nom du Joueur
 		Sint32				player_num;
 	
@@ -78,8 +78,8 @@ class joueurData:public virtual tecnoballz
 		Sint32				guardianPt;                          //pt / level_list of the guards
 
   public:
-							joueurData();
-							~joueurData();
+							handler_players();
+							~handler_players();
 		void				initialise(Sint32 lifes, Sint32 areaN,
   								Sint32 level, Sint32 monay, Sint32 grdPt);
    		void				setNewName(char*);
@@ -128,17 +128,17 @@ class joueurData:public virtual tecnoballz
 		Sint32				getGuardPt();
 		void				setGuardPt(Sint32 grdPt);
 
-		static joueurData*	firstGamer();
+		static handler_players*	firstGamer();
 		static void			joueursRAZ();
-		static joueurData*	joueursADD(Sint32 total);
-		static joueurData*	nextplayer(joueurData*, Sint32*, Sint32, Sint32 grdNx = 0);
+		static handler_players*	joueursADD(Sint32 total);
+		static handler_players*	nextplayer(handler_players*, Sint32*, Sint32, Sint32 grdNx = 0);
 
 
 	private:
-		joueurData*			prevPlayer();
-		joueurData*			nextPlayer();
-		void				nextPlayer(joueurData *gamer);
-		void				prevPlayer(joueurData *gamer);
+		handler_players*			prevPlayer();
+		handler_players*			nextPlayer();
+		void				nextPlayer(handler_players *gamer);
+		void				prevPlayer(handler_players *gamer);
 		void				resetvalue();
 
 

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: supervisor_shop.cc,v 1.2 2007/02/05 20:16:33 gurumeditation Exp $
+// id		: $Id: supervisor_shop.cc,v 1.3 2007/02/06 12:26:01 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -565,7 +565,7 @@ void supervisor_shop::faitcourse(Sint32 gadnu)
 		//###############################################################
 		case GAD_EXITSH:
 			joueurGere->set_Bprice(0);
-				joueurGere = joueurData::nextplayer(joueurGere, &end_return, 2);
+				joueurGere = handler_players::nextplayer(joueurGere, &end_return, 2);
 			break;
 
 		default:

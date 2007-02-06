@@ -27,7 +27,7 @@ class barreScore;
 //-------------------------------------------------------------------------------
 #include "../include/bitmap_data.h"
 #include "../include/print_text.h"
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 #include "../include/handler_keyboard.h"
 #include "../include/zeGigaBlit.h"
 #include "../include/controller_balls.h"
@@ -62,7 +62,7 @@ class barreScore:public print_text
 		Sint32					superBrick;		// number of bricks which remain
 		Sint32					flip_white;
 		bitmap_data*				GFX_Sbarre;		// score panel image bitmap 
-		joueurData*				objetGamer;
+		handler_players*				objetGamer;
 		zeGigaBlit*				ptGigaBlit;
 		controller_balls*				ptNewBalls;
 		char*					scoreAdres;		// buffer address score
@@ -79,7 +79,7 @@ class barreScore:public print_text
 	public:
 								barreScore();
 								~barreScore();
-		Sint32					first_init(joueurData *gamer,  
+		Sint32					first_init(handler_players *gamer,  
 										zeGigaBlit *gblit, controller_balls *balls);
 		Sint32					affiche_me();
 		void					scoreEcran();

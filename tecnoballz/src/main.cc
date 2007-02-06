@@ -2,14 +2,14 @@
  * @file main.cc 
  * @brief The main function is where the program starts execution 
  * @created 2002-08-21 
- * @date 2007-02-04
+ * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.29 2007/02/05 20:42:27 gurumeditation Exp $
+ * $Id: main.cc,v 1.30 2007/02/06 12:26:01 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,7 +123,7 @@ lispreader    =>
 *tecnoDefil  => sprite_fonte_menu
 *tecno_fire  => sprite_projectile
 tecno_gads   => sprite_capsules
-tecno_gard   => sprite_guardian
+*tecno_gard  => sprite_guardian
 tecno_miss   => sprite_bullet
 tecno_text   => sprite_fonte_game
  
@@ -139,7 +139,7 @@ ze_gadgets   => controller_capsules
 zeGameOver   => controller_game_over
 zeGemstone   => controller_gems
 zeGigaBlit   => controller_gigablitz
-zeguardian   => controller_guardians
+*zeguardian  => controller_guardians
 ze_magneye   => controller_magnetic_eyes
 zeMissiles   => controller_bullets
 zeMoveText   => controller_level_fontes
@@ -161,7 +161,7 @@ zexplosion   => controller_explosions
 *RAM_killer   => handler_memory
 *ressources   => handler_resources 
 scoretable   => handler_score_table
-joueurData   => handler_players
+*joueurData  => handler_players
 level_data   => handler_levels 
 print_text   => handler_print_text 
 

@@ -5,11 +5,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.3 2007/02/06 09:46:13 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.4 2007/02/06 12:26:01 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 #include "../include/handler_display.h"
 #include "../include/handler_keyboard.h"
 #include "../include/list_sprites.h"
-#include "../include/joueurData.h"
+#include "../include/handler_players.h"
 #include "../include/supervisor_bricks_level.h"
 #include "../include/supervisor_shop.h"
 #include "../include/supervisor_guards_level.h"
@@ -75,7 +75,7 @@ handler_keyboard *
   tecnoballz::keyboard = NULL;  //keyboard handle
 list_sprites *
   tecnoballz::sprites = NULL;   //sprites handle
-joueurData *
+handler_players *
   tecnoballz::joueurGere = NULL;        //players handle
 Sint16 *
   tecnoballz::table_cosL = NULL;        //cosinus table
@@ -176,7 +176,7 @@ tecnoballz::first_init (configfile * pConf)
 
   ptLev_data = new level_data ();
   //Sint32 Ecode = -1; 
-  joueurGere = joueurData::joueursADD (MAX_PLAYER);
+  joueurGere = handler_players::joueursADD (MAX_PLAYER);
   if (!joueurGere)
     {
       num_erreur = E_GENRIQUE;
@@ -187,19 +187,19 @@ tecnoballz::first_init (configfile * pConf)
   // retrieve user
   //###################################################################
   for (Uint32 i = 0; i < 6; i++)
-    joueurData::playerlist[i]->setNewName (pConf->get_player (i));
+    handler_players::playerlist[i]->setNewName (pConf->get_player (i));
   /*
      char *pUser = getenv("USER");
      if (pUser)
-     joueurData::playerlist[0]->setNewName(pUser);
+     handler_players::playerlist[0]->setNewName(pUser);
      else
-     joueurData::playerlist[0]->setNewName("ALBERT");
+     handler_players::playerlist[0]->setNewName("ALBERT");
 
-     joueurData::playerlist[1]->setNewName("LEON  ");
-     joueurData::playerlist[2]->setNewName("ANDRE ");
-     joueurData::playerlist[3]->setNewName("GERARD");
-     joueurData::playerlist[4]->setNewName("RAOUL ");
-     joueurData::playerlist[5]->setNewName("MARCEL");
+     handler_players::playerlist[1]->setNewName("LEON  ");
+     handler_players::playerlist[2]->setNewName("ANDRE ");
+     handler_players::playerlist[3]->setNewName("GERARD");
+     handler_players::playerlist[4]->setNewName("RAOUL ");
+     handler_players::playerlist[5]->setNewName("MARCEL");
    */
 
   super_jump = 4;               //menu
@@ -410,11 +410,11 @@ tecnoballz::release_all_objects (configfile * pConf)
 {
   //save players names into config file
   for (Uint32 i = 0; i < 6; i++)
-    pConf->set_player (i, joueurData::playerlist[i]->returnName ());
+    pConf->set_player (i, handler_players::playerlist[i]->returnName ());
   if (is_verbose)
     printf ("==1 release_objects \n");
   release_objects ();
-  joueurData::joueursRAZ ();
+  handler_players::joueursRAZ ();
   if (is_verbose)
     printf ("==3 level_data \n");
   delete ptLev_data;
