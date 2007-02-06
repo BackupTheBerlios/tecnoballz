@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.6 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.7 2007/02/06 21:10:08 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,10 +57,10 @@ class supervisor_guards_level:public virtual supervisor
   friend class zeMoveText;
 
 private:
-  controller_gigablitz * ptGigaBlit;
+  controller_gigablitz * gigablitz;
   lastScroll *defilement;
   controller_guardians *guards;
-  controller_bullets *ptMissiles;
+  controller_bullets *bullets;
   controller_paddles *paddles;
   controller_balls *balls;
   ballDirect *ptBaDirect;
@@ -83,7 +83,7 @@ private:
   Sint32 scrolSpeed;            // speed of the scrolling
   zeGameOver *ptGameOver;
   zeCongBall *ptCongBall;
-  Sint32 isgameover;
+  Uint32 gameover_counter;
   Sint32 count_next;            //temporisation before next level 
   Sint32 tecnwinner;            //1 = end of the game
   zeMoveText *ptMoveText;

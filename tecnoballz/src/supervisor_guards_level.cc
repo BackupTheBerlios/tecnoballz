@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.6 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.7 2007/02/06 21:10:08 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,7 +97,7 @@ supervisor_guards_level::first_init ()
 #endif
   sprites->reset ();
   end_return = 0;
-  isgameover = 0;
+  gameover_counter = 0;
   count_next = 0;
   tecnwinner = 0;
   areaNumber = joueurGere->getAreaNum ();
@@ -246,7 +246,7 @@ supervisor_guards_level::main_loop ()
    */
   if (joueurGere->getLifeNum () <= 0)
     {
-      if (!isgameover)
+      if (gameover_counter > 0)
         {
 #ifndef SOUNDISOFF
           audio->disable_sound ();
@@ -267,7 +267,7 @@ supervisor_guards_level::main_loop ()
               scrollTemp = 300;
             }
         }
-      isgameover++;
+      gameover_counter++;
       display->wait_frame ();
       display->lock_surfaces ();
 
@@ -279,7 +279,7 @@ supervisor_guards_level::main_loop ()
       else
         defilement->scrolling1 (scrolSpeed);
 
-      if (isgameover >= 1)
+      if (gameover_counter >= 1)
         {
           ptGameOver->execution1 (tecnwinner);
           if (tecnwinner)
@@ -291,7 +291,7 @@ supervisor_guards_level::main_loop ()
       sprites->draw ();
       display->unlock_surfaces ();
       display->bufferCTab ();
-      if (keyboard->is_left_button () && isgameover > 150)
+      if (keyboard->is_left_button () && gameover_counter > 150)
         {
           joueurGere = handler_players::nextplayer (joueurGere,
                                                     &end_return,
