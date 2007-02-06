@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.h,v 1.2 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: controller_guardians.h,v 1.3 2007/02/06 20:41:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,8 +55,8 @@ gardlevel;
 #include "../include/sprite_guardian.h"
 #include "../include/list_sprites.h"
 #include "../include/objects_list.h"
-#include "../include/zeMissiles.h"
-#include "../include/zeGigaBlit.h"
+#include "../include/controller_bullets.h"
+#include "../include/controller_gigablitz.h"
 #include "../include/zexplosion.h"
 
 class controller_guardians:public objects_list < sprite_guardian >
@@ -69,8 +69,8 @@ private:
 public:
     controller_guardians ();
    ~controller_guardians ();
-  void create_guardians_list (zeMissiles * pMiss, Sint32 grdPt,
-                     zeGigaBlit * pBliz, zexplosion * pExpl);
+  void create_guardians_list (controller_bullets * pMiss, Sint32 grdPt,
+                     controller_gigablitz * pBliz, zexplosion * pExpl);
   void run ();
   void killguards (Sint32 numGa = 0);
   bool is_guardians_destroyed ();
@@ -79,7 +79,7 @@ private:
   Sint32 scrollTemp;          //use for scroll background
   Sint32 offset_ptr;
   unsigned char *displacement_curve;
-  zeGigaBlit *ptGigaBlit;
+  controller_gigablitz *ptGigaBlit;
   zexplosion *pexplosion;
   sprite_object **life_gauges_list;
 

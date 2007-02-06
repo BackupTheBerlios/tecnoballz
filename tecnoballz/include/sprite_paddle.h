@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.8 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.9 2007/02/06 20:41:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ class sprite_paddle;
 #include "../include/zeFireBump.h"
 #include "../include/bitmap_data.h"
 #include "../include/sprite_bullet.h"
-#include "../include/zeGigaBlit.h"
+#include "../include/controller_gigablitz.h"
 class sprite_paddle:public sprite_object
 {
   friend class controller_paddles;
@@ -41,7 +41,7 @@ class sprite_paddle:public sprite_object
   friend class zeFireBump;
   friend class sprite_bullet;
   friend class ballDirect;
-  friend class zeGigaBlit;
+  friend class controller_gigablitz;
 
 private:
   Sint32 bump_actif;          // flag : raquette active

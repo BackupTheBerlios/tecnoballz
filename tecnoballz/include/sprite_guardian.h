@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.h,v 1.2 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: sprite_guardian.h,v 1.3 2007/02/06 20:41:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,15 +32,15 @@ class sprite_guardian;
 #include "../include/sprite_object.h"
 #include "../include/handler_display.h"
 #include "../include/controller_guardians.h"
-#include "../include/zeMissiles.h"
+#include "../include/controller_bullets.h"
 #include "../include/controller_balls.h"
-#include "../include/zeGigaBlit.h"
+#include "../include/controller_gigablitz.h"
 #include "../include/zexplosion.h"
 
 class sprite_guardian:public sprite_object
 {
   friend class controller_guardians;
-  friend class zeMissiles;
+  friend class controller_bullets;
   friend class sprite_bullet;
   friend class controller_balls;
 
@@ -70,8 +70,8 @@ private:
   Sint32 gard_clign;
   unsigned char *ptr_lissa1;
   unsigned char *ptr_lissa2;
-  zeMissiles *ptMissiles;
-  zeGigaBlit *ptGigaBlit;
+  controller_bullets *ptMissiles;
+  controller_gigablitz *ptGigaBlit;
   zexplosion *pExplosion;
   Sint32 hasardval2;
 
@@ -79,7 +79,7 @@ public:
     sprite_guardian ();
    ~sprite_guardian ();
   Sint32 init_guard (gardlevel * guard, unsigned char *ptLis,
-                     zeMissiles * pMiss, zeGigaBlit * pBliz,
+                     controller_bullets * pMiss, controller_gigablitz * pBliz,
                      zexplosion * pexpl);
   void run (Uint32 voffset);
 

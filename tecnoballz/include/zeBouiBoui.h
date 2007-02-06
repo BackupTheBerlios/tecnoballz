@@ -37,14 +37,14 @@ class zeBouiBoui : public objects_list < sprite_ship >
 {	friend class sprite_ship ;
 	private:
 		zeCapsules*		ptCapsules;
-		ze_gadgets*		pt_gadgets;
+		controller_capsules*		pt_gadgets;
 		zeGemstone*		ptGemstone;
 		controller_bricks*		pt_briques;
 		Sint32			apparition[4]; 		
 		Sint32			reappTemps;
 		Sint32			power_init;
 	public:
-						zeBouiBoui(zeCapsules*, ze_gadgets*, zeGemstone*,
+						zeBouiBoui(zeCapsules*, controller_capsules*, zeGemstone*,
 							controller_bricks*);
 						~zeBouiBoui();
 		void			initialise(Sint32 time0, Sint32 time1, Sint32 time2,

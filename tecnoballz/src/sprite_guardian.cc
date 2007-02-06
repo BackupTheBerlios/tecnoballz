@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.cc,v 1.2 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: sprite_guardian.cc,v 1.3 2007/02/06 20:41:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ sprite_guardian::~sprite_guardian ()
 //-----------------------------------------------------------------------------
 Sint32
 sprite_guardian::init_guard (gardlevel * guard, unsigned char *ptLis,
-                             zeMissiles * pMiss, zeGigaBlit * pBliz,
+                             controller_bullets * pMiss, controller_gigablitz * pBliz,
                              zexplosion * pexpl)
 {
   ptGigaBlit = pBliz;

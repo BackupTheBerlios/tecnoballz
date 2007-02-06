@@ -28,7 +28,7 @@ class supervisor_shop;
 #include "../include/list_sprites.h"
 #include "../include/sprite_mouse_pointer.h"
 #include "../include/sprite_object.h"
-#include "../include/ze_gadgets.h"
+#include "../include/controller_capsules.h"
 #include "../include/print_text.h"
 #include "../include/handler_players.h"
 #include "../include/supervisor.h"
@@ -42,7 +42,7 @@ class supervisor_shop:public supervisor
 		tiles_background*			ecranfond4;
 		sprite_mouse_pointer*			mouse_pointer;
 		sprite_object*			BOB_allume;
-		ze_gadgets*			gereGadget;
+		controller_capsules*			gereGadget;
 		print_text*			mega_print;
 		handler_popup_menu*			ptrEscMenu;
 		Sint32				shop_point;	//pointeur

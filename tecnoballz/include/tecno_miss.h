@@ -31,7 +31,7 @@ class tecno_miss;
 //...............................................................................
 class tecno_miss:public sprite_object
 {
-	friend class zeMissiles;
+	friend class controller_bullets;
 
 	private:
 		Sint32				type_depla;

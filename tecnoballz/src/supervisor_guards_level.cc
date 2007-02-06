@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.5 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.6 2007/02/06 20:41:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,14 +41,14 @@ supervisor_guards_level::supervisor_guards_level ()
   ptMoveText = new zeMoveText ();
   pExplosion = new zexplosion ();
   sprite_paddle *pBump = paddles->get_paddle (1);
-  ptMissiles = new zeMissiles (pBump, pExplosion);
+  bullets = new controller_bullets (pBump, pExplosion);
   ptCapsules = new zeCapsules ();
-  pt_gadgets = new ze_gadgets (6);
+  pt_gadgets = new controller_capsules (6);
   balls = new controller_balls (guards, ptCapsules, pt_gadgets);
   ptBaDirect = new ballDirect ();
   ptPrntmney = new printmoney ();
   ptMiniMess = new zeMiniMess ();
-  ptGigaBlit = new zeGigaBlit ();
+  gigablitz = new controller_gigablitz ();
   ptBobMoney = new sprite_object ();
   ptBobLifes = new sprite_capsule ();
   ptGameOver = new zeGameOver ();
@@ -69,14 +69,14 @@ supervisor_guards_level::~supervisor_guards_level ()
   delete ptGameOver;
   delete ptBobLifes;
   delete ptBobMoney;
-  delete ptGigaBlit;
+  delete gigablitz;
   delete ptMiniMess;
   delete ptPrntmney;
   delete ptBaDirect;
   delete balls;
   delete pt_gadgets;
   delete ptCapsules;
-  delete ptMissiles;
+  delete bullets;
   delete pExplosion;
   delete ptMoveText;
   delete paddles;
@@ -111,7 +111,7 @@ supervisor_guards_level::first_init ()
   //###################################################################
   // initialize gigablitz
   //###################################################################
-  error_init (ptGigaBlit->init_liste (paddles, pExplosion));
+  error_init (gigablitz->init_liste (paddles, pExplosion));
   if (erreur_num)
     return erreur_num;
 
@@ -119,8 +119,8 @@ supervisor_guards_level::first_init ()
   // intialize the sprites objects lists
   //###################################################################
   resources->load_sprites_bitmap ();
-  ptMissiles->create_sprites_list ();
-  guards->create_guardians_list (ptMissiles, grdP, ptGigaBlit, pExplosion);
+  bullets->create_sprites_list ();
+  guards->create_guardians_list (bullets, grdP, gigablitz, pExplosion);
   paddles->create_paddles_sprites ();
   balls->create_sprites_list ();
   ptCapsules->create_sprites_list ();
@@ -233,16 +233,17 @@ supervisor_guards_level::first_init ()
   return erreur_num;
 }
 
-//------------------------------------------------------------------------------
-// main loop of the guards's phase
-//------------------------------------------------------------------------------
+/**
+ * The main loop of the guardians phase
+ */
 Sint32
 supervisor_guards_level::main_loop ()
 {
   Sint32 Ecode = -1;
-  //###################################################################   
-  // gameover : the player has no more lives
-  //###################################################################   
+  
+  /*
+   * gameover : the player has no more lives
+   */
   if (joueurGere->getLifeNum () <= 0)
     {
       if (!isgameover)
@@ -255,9 +256,9 @@ supervisor_guards_level::main_loop ()
           ptCapsules->disable_sprites ();
           guards->disable_sprites ();
           pExplosion->disable_sprites ();
-          ptGigaBlit->disable_sprites ();
+          gigablitz->disable_sprites ();
           balls->disable_sprites ();
-          ptMissiles->disable_sprites ();
+          bullets->disable_sprites ();
           if (tecnwinner)
             {
               defilement->swapScroll (2, handler_resources::RESEDMAP02);
@@ -317,21 +318,21 @@ supervisor_guards_level::main_loop ()
           ptBaDirect->execution1 ();    //handle ball viewfinder
           /* moving guards, and fire bullets and gigablitz */
           guards->run ();
-          ptMissiles->execution1 ();    //moving the guards's weapons
-          ptMissiles->bumper_col ();    //collision weapons with the bumper
+          bullets->execution1 ();    //moving the guards's weapons
+          bullets->bumper_col ();    //collision weapons with the bumper
           ptCapsules->bougefric2 ();
           pt_gadgets->bougegads2 ();
           ptMoveText->goMoveText ();
           ptPrntmney->execution2 (joueurGere->creditFric,
                                   joueurGere->superLifes);
-          ptGigaBlit->execution2 ();    //move the Gigablitz from guards
+          gigablitz->execution2 ();    //move the Gigablitz from guards
           pExplosion->execution1 ();    //explosion animations
-          ptMissiles->anim_fires ();    //the animation of the guards's weapons
+          bullets->anim_fires ();    //the animation of the guards's weapons
 
         }
       else
         {
-          ptMissiles->anim_fires ();
+          bullets->anim_fires ();
           defilement->scrolling1 (0);
         }
 
@@ -353,9 +354,9 @@ supervisor_guards_level::main_loop ()
       if (count_next > 0)
         {
           count_next++;
-          ptGigaBlit->disable_sprites ();
+          gigablitz->disable_sprites ();
           balls->disable_sprites ();
-          ptMissiles->disable_sprites ();
+          bullets->disable_sprites ();
           if (count_next > 500 || keyboard->key_is_pressed (SDLK_SPACE))
             {
               tecnwinner = joueurGere->zlastlevel ();
@@ -375,9 +376,9 @@ supervisor_guards_level::main_loop ()
       else
         {
           ptMoveText->activeText ();
-          ptGigaBlit->disable_sprites ();
+          gigablitz->disable_sprites ();
           balls->disable_sprites ();
-          ptMissiles->disable_sprites ();
+          bullets->disable_sprites ();
           count_next = 1;
         }
     }
@@ -429,7 +430,7 @@ supervisor_guards_level::run_scroll ()
       scrolSpeed = 0;
       return;
     }
-  sprite_bullet *weapo = ptMissiles->getWeapOne ();
+  sprite_bullet *weapo = bullets->getWeapOne ();
   sprite_ball *balle = balls->first_ball ();
   scrolSpeed = guards->run_scroll (scrollType, scrolSpeed, balle, weapo);
 }

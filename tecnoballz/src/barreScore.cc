@@ -53,7 +53,7 @@ barreScore::~barreScore()
 //-------------------------------------------------------------------------------
 // first initialization
 //-------------------------------------------------------------------------------
-Sint32 barreScore::first_init(handler_players * gamer, zeGigaBlit *gblit, controller_balls *balls)
+Sint32 barreScore::first_init(handler_players * gamer, controller_gigablitz *gblit, controller_balls *balls)
 {
 	error_init(initialise());
 	objetGamer = gamer;

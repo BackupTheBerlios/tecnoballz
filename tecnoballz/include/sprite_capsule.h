@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.h,v 1.1 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: sprite_capsule.h,v 1.2 2007/02/06 20:41:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ const Sint16 XXX_PROTEC = 19 * XXX_IMAGES;
 
 class sprite_capsule:public sprite_object
 {
-  friend class ze_gadgets;
+  friend class controller_capsules;
   friend class supervisor_shop;
 
 private:

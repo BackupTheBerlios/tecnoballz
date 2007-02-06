@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.h,v 1.2 2007/02/05 15:44:09 gurumeditation Exp $
+ * $Id: controller_paddles.h,v 1.3 2007/02/06 20:41:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ class controller_paddles;
 #include "../include/barreScore.h"
 #include "../include/objects_list.h"
 #include "../include/controller_balls.h"
-#include "../include/zeGigaBlit.h"
+#include "../include/controller_gigablitz.h"
 
 class controller_paddles:public objects_list < sprite_paddle >
 {
@@ -65,7 +65,7 @@ private:
   sprite_paddle *paddle_left;
   sprite_paddle *tec_robot0;
   barreScore *ptBarreScr;
-  zeGigaBlit *ptGigaBlit;
+  controller_gigablitz *ptGigaBlit;
   controller_balls *ptNewBalls;
 
 
@@ -139,7 +139,7 @@ public:
   void free_balls ();
   void bp_deplace ();
   void bp_deplac2 ();
-  void initBumper (barreScore * score, zeGigaBlit * blitz,
+  void initBumper (barreScore * score, controller_gigablitz * blitz,
                    controller_balls * balls);
   void init_robot ();
   void activrobot ();

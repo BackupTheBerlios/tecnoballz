@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.9 2007/02/06 12:26:01 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.10 2007/02/06 20:41:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ controller_balls::controller_balls (ejectBalls * eject, controller_bricks * bric
  * Create the balls controller into guards levels
  */
 controller_balls::controller_balls (controller_guardians * pGard, zeCapsules * pCaps,
-                                    ze_gadgets * pGads)
+                                    controller_capsules * pGads)
 {
   littleInit ();
   num_erreur = 0;

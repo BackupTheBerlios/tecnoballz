@@ -4,11 +4,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.5 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.6 2007/02/06 20:41:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,8 +50,8 @@ class supervisor_bricks_level;
 #include "../include/controller_bricks.h"
 #include "../include/controller_balls.h"
 #include "../include/zeCapsules.h"
-#include "../include/ze_gadgets.h"
-#include "../include/zeGigaBlit.h"
+#include "../include/controller_capsules.h"
+#include "../include/controller_gigablitz.h"
 #include "../include/handler_players.h"
 #include "../include/zeMoveText.h"
 #include "../include/head_anima.h"
@@ -70,7 +70,7 @@ class supervisor_bricks_level:public virtual supervisor
   friend class zeCapsules;
   friend class controller_balls;
   friend class controller_paddles;
-  friend class ze_gadgets;
+  friend class controller_capsules;
   friend class zeMoveText;
   friend class zeBouiBoui;
   friend class sprite_paddle;
@@ -90,10 +90,10 @@ private:
   zeBouiBoui *les_atomes;
   ze_magneye *pt_magneye;
   zeCapsules *gereCapsul;
-  ze_gadgets *gereGadget;
+  controller_capsules *gereGadget;
   zeGemstone *ptGemstone;
   zeMoveText *gere_texte;
-  zeGigaBlit *ptGigaBlit;
+  controller_gigablitz *ptGigaBlit;
   zeGameOver *ptGameOver;
   sprite_object *BottomWall;
   sprite_object *ptBobMoney;

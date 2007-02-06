@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.5 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.6 2007/02/06 20:41:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,15 +35,15 @@ class supervisor_guards_level;
 #include "../include/handler_keyboard.h"
 #include "../include/supervisor.h"
 #include "../include/controller_guardians.h"
-#include "../include/zeMissiles.h"
+#include "../include/controller_bullets.h"
 #include "../include/controller_paddles.h"
 #include "../include/controller_balls.h"
 #include "../include/zeCapsules.h"
-#include "../include/ze_gadgets.h"
+#include "../include/controller_capsules.h"
 #include "../include/printmoney.h"
 #include "../include/zeMiniMess.h"
 #include "../include/zeMiniMess.h"
-#include "../include/zeGigaBlit.h"
+#include "../include/controller_gigablitz.h"
 #include "../include/zexplosion.h"
 #include "../include/ballDirect.h"
 #include "../include/zeGameOver.h"
@@ -57,15 +57,15 @@ class supervisor_guards_level:public virtual supervisor
   friend class zeMoveText;
 
 private:
-  zeGigaBlit * ptGigaBlit;
+  controller_gigablitz * ptGigaBlit;
   lastScroll *defilement;
   controller_guardians *guards;
-  zeMissiles *ptMissiles;
+  controller_bullets *ptMissiles;
   controller_paddles *paddles;
   controller_balls *balls;
   ballDirect *ptBaDirect;
   zeCapsules *ptCapsules;
-  ze_gadgets *pt_gadgets;
+  controller_capsules *pt_gadgets;
   printmoney *ptPrntmney;
   zeMiniMess *ptMiniMess;
   zexplosion *pExplosion;

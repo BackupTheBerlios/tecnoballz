@@ -19,7 +19,10 @@ SOURCES_MAIN = \
 	configfile.cc \
 	controller_balls.cc \
 	controller_bricks.cc \
+  controller_bullets.cc \
+  controller_capsules.cc \
   controller_paddles.cc \
+  controller_gigablitz.cc \
 	controller_guardians.cc \
 	ejectBalls.cc \
   handler_audio.cc \
@@ -70,13 +73,10 @@ SOURCES_MAIN = \
 	zeCongBall.cc \
 	zeDefilTxt.cc \
 	zeFireBump.cc \
-	ze_gadgets.cc \
 	zeGameOver.cc \
 	zeGemstone.cc \
-	zeGigaBlit.cc \
 	ze_magneye.cc \
-	zeMiniMess.cc \
-	zeMissiles.cc \
+  zeMiniMess.cc \
 	zeMoveText.cc \
 	zexplosion.cc \
 	$(NULL)

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: supervisor_shop.cc,v 1.4 2007/02/06 16:28:17 gurumeditation Exp $
+// id		: $Id: supervisor_shop.cc,v 1.5 2007/02/06 20:41:33 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -35,7 +35,7 @@ supervisor_shop::supervisor_shop()
 	ecranfond4 = new tiles_background();
 	mouse_pointer = new sprite_mouse_pointer();
 	BOB_allume = new sprite_object();
-	gereGadget = new ze_gadgets(NB_OPTIONS + 2, 0);
+	gereGadget = new controller_capsules(NB_OPTIONS + 2, 0);
 	mega_print = new print_text();
 	ptrEscMenu = new handler_popup_menu();
 	shop_point = 0;

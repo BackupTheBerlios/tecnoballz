@@ -66,7 +66,7 @@ controller_balls::controller_balls(ejectBalls *eject, controller_bricks *brick, 
 //-----------------------------------------------------------------------------
 // guards levels: create the object
 //-----------------------------------------------------------------------------
-controller_balls::controller_balls(controller_guardians *pGard, zeCapsules *pCaps, ze_gadgets *pGads)
+controller_balls::controller_balls(controller_guardians *pGard, zeCapsules *pCaps, controller_capsules *pGads)
 {
 	littleInit();
 	num_erreur = 0;

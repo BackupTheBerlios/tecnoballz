@@ -5,11 +5,11 @@
  * @date 2007-01-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.3 2007/02/04 17:10:16 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.4 2007/02/06 20:41:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,14 +67,14 @@ brickClear;
 #include "../include/bitmap_data.h"
 #include "../include/barreScore.h"
 #include "../include/zeCapsules.h"
-#include "../include/ze_gadgets.h"
+#include "../include/controller_capsules.h"
 #include "../include/sprite_ship.h"
 //...............................................................................
 class controller_bricks:public objects_list < sprite_object >
 {
   friend class controller_balls;
   friend class sprite_projectile;
-  friend class zeGigaBlit;
+  friend class controller_gigablitz;
   friend class sprite_ship;
 
 public:
@@ -107,7 +107,7 @@ private:
   bitmap_data *bitmap_bricks;
   barreScore *barreObjet;
   zeCapsules *caps_objet;
-  ze_gadgets *gads_objet;
+  controller_capsules *gads_objet;
 
   /** Number of bricks in the current level */
   Sint32 num_of_bricks;
@@ -149,7 +149,7 @@ public:
     controller_bricks ();
    ~controller_bricks ();
   void first_init (barreScore * barre, zeCapsules * capsu,
-                     ze_gadgets * gadge);
+                     controller_capsules * gadge);
   void initialize (Sint32 area_nu, Sint32 level_nu, Sint32 lbrik);
   Sint32 brickRemap ();
   Sint32 get_num_of_bricks ();

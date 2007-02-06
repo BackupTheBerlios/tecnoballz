@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.4 2007/02/06 12:26:01 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.5 2007/02/06 20:41:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -226,7 +226,7 @@ controller_paddles::deactrobot ()
 // bricks levels: intialize bumpers
 //------------------------------------------------------------------------------
 void
-controller_paddles::initBumper (barreScore * score, zeGigaBlit * blitz,
+controller_paddles::initBumper (barreScore * score, controller_gigablitz * blitz,
                                 controller_balls * balls)
 {
   ptBarreScr = score;
