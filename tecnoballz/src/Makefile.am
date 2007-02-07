@@ -33,7 +33,6 @@ SOURCES_MAIN = \
 	handler_popup_menu.cc \
 	handler_resources.cc \
 	head_anima.cc \
-	lastScroll.cc \
 	level_data.cc \
 	lispreader.cc \
   list_sprites.cc \
@@ -68,6 +67,7 @@ SOURCES_MAIN = \
   supervisor_shop.cc \
   tecnoballz.cc \
 	tiles_background.cc \
+	tilesmap_scrolling.cc \
 	zeBouiBoui.cc \
 	zeCapsules.cc \
 	zeCongBall.cc \

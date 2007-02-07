@@ -35,7 +35,7 @@
 supervisor_map_editor::supervisor_map_editor()
 {
 	initialise();
-	defilement = new lastScroll();	// background scrolling
+	defilement = new tilesmap_scrolling();	// background scrolling
 	mouse_pointer = new sprite_mouse_pointer();
 	displayMod = 0;
 	flagSpaceK = 0;
@@ -97,15 +97,14 @@ Sint32 supervisor_map_editor::first_init()
 	resources->release_sprites_bitmap();
 
 	
-	//Sint32	edmap = lastScroll::MAPED_MENU;
-	//Sint32	edmap = lastScroll::MAPED_GARD;
-	Sint32	edmap = lastScroll::MAPED_CONG;
+	//Sint32	edmap = tilesmap_scrolling::MAPED_MENU;
+	//Sint32	edmap = tilesmap_scrolling::MAPED_GARD;
+	Sint32	edmap = tilesmap_scrolling::MAPED_CONG;
 	
-	error_init(defilement->initialise(lastScroll::TECZ_COLOR_MENU, edmap));
-	if(erreur_num) return (erreur_num);
-	ptrGBitMap = defilement->getBitMap();
+	defilement->initialize(tilesmap_scrolling::TILES_COLOR_MENU, edmap);
+	ptrGBitMap = defilement->get_bitmap();
 	
-	tile_width = defilement->tile_width();
+	tile_width = defilement->get_tiles_width();
 	tile_mask1 = 0xffffffff ^ (tile_width - 1);
 	tile_mask2 = ~tile_mask1;
 
@@ -201,17 +200,17 @@ void supervisor_map_editor::maps2brush()
 
 	//Sint32 scrlY = defilement->returnPosy();
 	Sint32 i = pt_select0->box_pos_y1;
-	i = (i / defilement->motifhaute) + 4;
-	i *= lastScroll::CARTELARGE;
-	i += (pt_select0->box_pos_x1 / defilement->motiflarge);
+	i = (i / defilement->tile_height) + 4;
+	i *= tilesmap_scrolling::MAP_WIDTH;
+	i += (pt_select0->box_pos_x1 / defilement->tile_width);
 
-	Uint16* carte = defilement->carteFirst + i;
-	//Uint16* carte = defilement->carteFirst;
+	Uint16* carte = defilement->map_tiles + i;
+	//Uint16* carte = defilement->map_tiles;
 	Uint16* ptBrh = pBrushTile;
 	for (Sint32 y = 0; y < pt_select0->box_height ; y++)
 	{	for (Sint32 x = 0; x < pt_select0->box_widthT; x++)
 			*(ptBrh++) = carte[x];
-		carte += lastScroll::CARTELARGE;
+		carte += tilesmap_scrolling::MAP_WIDTH;
 	}
 	brushAlloc();	
 }
@@ -246,7 +245,7 @@ void supervisor_map_editor::tile2brush()
 		pt_select0->box_pos_x1, pt_select0->box_pos_y1, pt_select0->box_pos_x2, pt_select0->box_pos_y2);
 
 	
-	Sint32 o =  (pt_select0->box_pos_y1 / tile_width) * lastScroll::CARTELARGE +
+	Sint32 o =  (pt_select0->box_pos_y1 / tile_width) * tilesmap_scrolling::MAP_WIDTH +
 		(pt_select0->box_pos_x1 / tile_width);
 
 	//###################################################################
@@ -270,7 +269,7 @@ void supervisor_map_editor::tile2brush()
 			*(ptBrh++) = p;
 			p++;
 		}
-		o += lastScroll::CARTELARGE;
+		o += tilesmap_scrolling::MAP_WIDTH;
 		//printf("\n");
 	}
 	brushAlloc();
@@ -555,8 +554,8 @@ void supervisor_map_editor::brushAlloc()
 	brushHeigh = pt_select0->box_height;
 	
 	Sint32 m1 = pBrush_bob->get_line_modulo(0);
-	Sint32 m2 = (defilement->motifhaute * pBrush_bob->get_row_size()) - defilement->motiflarge;
-	Sint32 m3 = ((defilement->motifhaute - 1) * pBrush_bob->get_row_size());
+	Sint32 m2 = (defilement->tile_height * pBrush_bob->get_row_size()) - defilement->tile_width;
+	Sint32 m3 = ((defilement->tile_height - 1) * pBrush_bob->get_row_size());
 
 	Sint32 n1 = defilement->source_mod;
 	char **mapPT = defilement->mapAddress;	// pointer of each map of the page maps
@@ -566,9 +565,9 @@ void supervisor_map_editor::brushAlloc()
 	if(resolution == 1)
 	{	for(Sint32 y = 0; y < pt_select0->box_height; y++)
 		{	for(Sint32 x = 0; x < pt_select0->box_widthT; x++)
-			{	Sint32 i = *(carte++);
+			{	Uint32 i = *(carte++);
 				Sint32 *s = (Sint32 *) mapPT[i];
-				for(i = 0; i < defilement->motifhaute; i++)
+				for(i = 0; i < defilement->tile_height; i++)
 				{	dt[0] = s[0];
 					dt[1] = s[1];
 					dt[2] = s[2];
@@ -584,9 +583,9 @@ void supervisor_map_editor::brushAlloc()
 	else
 	{	for(Sint32 y = 0; y < pt_select0->box_height; y++)
 		{	for(Sint32 x = 0; x < pt_select0->box_widthT; x++)
-			{	Sint32 i = *(carte++);
+			{	Uint32 i = *(carte++);
 				Sint32 *s = (Sint32 *) mapPT[i];
-				for(i = 0; i < defilement->motifhaute; i++)
+				for(i = 0; i < defilement->tile_height; i++)
 				{	dt[0] = s[0];
 					dt[1] = s[1];
 					dt[2] = s[2];
@@ -644,35 +643,35 @@ void supervisor_map_editor::brush_draw()
 
 
 			printf("supervisor_map_editor::brush_draw() : scrlY:%i /  i :%i motifhaute:%i\n",
-				scrlY, i, defilement->motifhaute);
+				scrlY, i, defilement->tile_height);
 
-			i = (i / defilement->motifhaute) + 4;
-			i *= lastScroll::CARTELARGE;
+			i = (i / defilement->tile_height) + 4;
+			i *= tilesmap_scrolling::MAP_WIDTH;
 			Uint16* brush = pBrushTile; 
-			Uint16* table = defilement->carteFirst + i;
-			Uint16* t_end = defilement->carteFirst + (lastScroll::CARTEHAUTE * lastScroll::CARTELARGE);
-			table += (brush_posx / defilement->motiflarge);
+			Uint16* table = defilement->map_tiles + i;
+			Uint16* t_end = defilement->map_tiles + (tilesmap_scrolling::MAP_HEIGHT * tilesmap_scrolling::MAP_WIDTH);
+			table += (brush_posx / defilement->tile_width);
 
 			printf("supervisor_map_editor::brush_draw() : (table - carteFirst):%i /  i:%i\n",
-				(table - defilement->carteFirst), i);
+				(table - defilement->map_tiles), i);
 			
 			
 			for(i = 0; i < brushHeigh; i++)
 			{	if(table > t_end)
-					table -= (lastScroll::CARTEHAUTE * lastScroll::CARTELARGE);
+					table -= (tilesmap_scrolling::MAP_HEIGHT * tilesmap_scrolling::MAP_WIDTH);
 				
 				for(Sint32 j = 0; j < brushWidth; j++)
 					table[j] = *(brush++);
-				table += lastScroll::CARTELARGE;
+				table += tilesmap_scrolling::MAP_WIDTH;
 			}
 			//###################################################################
 			// copy a height of the screen (for scrolling rotation)
 			//###################################################################
-			table = defilement->carteFirst;
-			i = (lastScroll::CARTEHAUTE * lastScroll::CARTELARGE);
-			Sint32 tsupp = ( display->get_height() / defilement->motifhaute) * 2;
-			for(Sint32 j = 0; j < (tsupp * lastScroll::CARTELARGE); j++)
-				defilement->carteFirst[i++] = table[j];
+			table = defilement->map_tiles;
+			i = (tilesmap_scrolling::MAP_HEIGHT * tilesmap_scrolling::MAP_WIDTH);
+			Sint32 tsupp = ( display->get_height() / defilement->tile_height) * 2;
+			for(Uint32 j = 0; j < (tsupp * tilesmap_scrolling::MAP_WIDTH); j++)
+				defilement->map_tiles[i++] = table[j];
 		}
 	}
 
@@ -684,15 +683,15 @@ void supervisor_map_editor::brush_draw()
 
 Sint32 supervisor_map_editor::saveTheMap()
 {
-	Sint32 zsize = lastScroll::CARTEHAUTE * lastScroll::CARTELARGE;
+	Sint32 zsize = tilesmap_scrolling::MAP_HEIGHT * tilesmap_scrolling::MAP_WIDTH;
 	
 	Sint32 msize = zsize * sizeof(Uint16);
 	Uint16 *carte = (Uint16 *) memory->alloc(msize, 0x54425249);
 	error_init(memory->retour_err());
 	if(erreur_num) return (erreur_num);
 	
-	//unsigned char* ptSrc = (unsigned char *)defilement->carteFirst;
-	Uint16* ptSrc = (Uint16*)defilement->carteFirst;
+	//unsigned char* ptSrc = (unsigned char *)defilement->map_tiles;
+	Uint16* ptSrc = (Uint16*)defilement->map_tiles;
 	unsigned char* ptDes = (unsigned char *)carte;
 	for(Sint32 i = 0; i < zsize; i++)
 	{	

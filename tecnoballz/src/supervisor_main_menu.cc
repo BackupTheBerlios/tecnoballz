@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_main_menu.cc 
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-02-05
+ * @date 2007-02-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.3 2007/02/06 12:26:01 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.4 2007/02/07 17:10:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
 supervisor_main_menu::supervisor_main_menu ()
 {
   initialise ();
-  defilement = new lastScroll ();       // background scrolling
+  tiles_map = new tilesmap_scrolling ();       // background scrolling
   tecnoballz_logo = new sprite_object ();    // big logo "TecnoballZ"
   BOB_defile = new zeDefilTxt ();
   menu_texte = new print_menu ();
@@ -54,7 +54,7 @@ supervisor_main_menu::~supervisor_main_menu ()
   delete menu_texte;
   delete BOB_defile;
   delete tecnoballz_logo;
-  delete defilement;
+  delete tiles_map;
   liberation ();
 }
 
@@ -84,10 +84,8 @@ supervisor_main_menu::first_init ()
   BOB_defile->create_fontes_list ();
   mouse_pointer->create_pointer_sprite (sprites_bitmap);
   resources->release_sprites_bitmap ();
-  error_init (defilement->initialise (lastScroll::TECZ_COLOR_MENU,
-                                      lastScroll::MAPED_MENU));
-  if (erreur_num)
-    return (erreur_num);
+  tiles_map->initialize (tilesmap_scrolling::TILES_COLOR_MENU,
+                         tilesmap_scrolling::MAPED_MENU);
 
   error_init (menu_texte->first_init ());
   keyboard->set_grab_input (false);
@@ -113,7 +111,7 @@ supervisor_main_menu::main_loop ()
   offset_inc ();
   move_tecnoballz_logo ();                //move the TecnoballZ logo
   BOB_defile->move_chars ();    //move the characters (scroll-text)
-  defilement->scrolling1 (-1);  //scrolling of the screen background
+  tiles_map->scrolling1 (-1);  //scrolling of the screen background
   mouse_pointer->move ();
   sprites->draw ();
 

@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-02-06
+ * @date 2007-02-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.7 2007/02/06 21:10:08 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.8 2007/02/07 17:10:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 supervisor_guards_level::supervisor_guards_level ()
 {
   initialise ();
-  defilement = new lastScroll ();
+  tiles_map = new tilesmap_scrolling ();
   guards = new controller_guardians ();
   paddles = new controller_paddles (BOB_BUMPER);
   ptMoveText = new zeMoveText ();
@@ -81,7 +81,7 @@ supervisor_guards_level::~supervisor_guards_level ()
   delete ptMoveText;
   delete paddles;
   delete guards;
-  delete defilement;
+  delete tiles_map;
   liberation ();
 }
 
@@ -167,10 +167,8 @@ supervisor_guards_level::first_init ()
   init_level ();
   display->lock_surfaces ();
 
-  //###################################################################
-  // initialize background vertical scrolling
-  //###################################################################
-  defilement->initialise ();
+  /* initialize background vertical scrolling */
+  tiles_map->initialize ();
 
   //###################################################################
   // initialization balls
@@ -261,7 +259,7 @@ supervisor_guards_level::main_loop ()
           bullets->disable_sprites ();
           if (tecnwinner)
             {
-              defilement->swapScroll (2, handler_resources::RESEDMAP02);
+              tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_CONGRATULATIONS, handler_resources::RESEDMAP02);
               ptCongBall->initialize ();        //congra
               scrolSpeed = 1;
               scrollTemp = 300;
@@ -274,10 +272,10 @@ supervisor_guards_level::main_loop ()
       if (scrollTemp > 0)
         {
           scrollTemp--;
-          defilement->scrolling1 (0);
+          tiles_map->scrolling1 (0);
         }
       else
-        defilement->scrolling1 (scrolSpeed);
+        tiles_map->scrolling1 (scrolSpeed);
 
       if (gameover_counter >= 1)
         {
@@ -311,7 +309,7 @@ supervisor_guards_level::main_loop ()
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
         {
           run_scroll ();
-          defilement->scrolling1 (scrolSpeed);
+          tiles_map->scrolling1 (scrolSpeed);
           paddles->bp_deplac2 ();
           paddles->lacheBall2 ();
           balls->vitusBall2 (); //moving ball(s)
@@ -333,7 +331,7 @@ supervisor_guards_level::main_loop ()
       else
         {
           bullets->anim_fires ();
-          defilement->scrolling1 (0);
+          tiles_map->scrolling1 (0);
         }
 
       //###################################################################

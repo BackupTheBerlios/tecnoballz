@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_main_menu.h
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-02-05
+ * @date 2007-02-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.h,v 1.2 2007/02/05 20:16:33 gurumeditation Exp $
+ * $Id: supervisor_main_menu.h,v 1.3 2007/02/07 17:10:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 #ifndef __SUPERVISOR__MAIN_MENU__
 #define __SUPERVISOR__MAIN_MENU__
 
-#include "../include/lastScroll.h"
+#include "../include/tilesmap_scrolling.h"
 #include "../include/supervisor.h"
 #include "../include/handler_keyboard.h"
 #include "../include/sprite_object.h"
@@ -42,7 +42,7 @@
 class supervisor_main_menu:public virtual supervisor
 {
 private:
-  lastScroll * defilement;
+  tilesmap_scrolling * tiles_map;
   sprite_object *tecnoballz_logo;
   zeDefilTxt *BOB_defile;
   print_menu *menu_texte;

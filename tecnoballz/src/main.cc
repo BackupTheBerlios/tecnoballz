@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.33 2007/02/06 21:10:08 gurumeditation Exp $
+ * $Id: main.cc,v 1.34 2007/02/07 17:10:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,13 +103,13 @@ main (Sint32 nbArg, char **ptArg)
  - ? mode balle Arkanoid ?
 
 main
-mentatCode    => tecnoballz 
-list_sprites  => 
-supervisor    => supervisor
-configfile    => 
-lispreader    =>
+*mentatCode => tecnoballz 
+*liste_BOBs => list_sprites 
+*supervisor => supervisor
+configfile  => 
+lispreader  =>
 *GFX_bitmap 
-*GIF_bitMap    => bitmap_data
+*GIF_bitMap => bitmap_data
  
 *BOB_killer  => sprite_object
 
@@ -167,12 +167,12 @@ level_data   => handler_levels
 print_text   => handler_print_text 
 
 zeMiniMess   => item_small_messages 
-barreScore   => item_score_panel
+barreScore   => score_panel_right
 briqueCote   => items_sides_bricks
 ejectBalls   => items_balls_ejectors
 *fond_ecran   => tiles_background
 head_anima   => item_head_anim
-lastScroll   => item_vertical_scroll
+lastScroll   => tilesmap_scrolling 
 print_menu   => item_menu_text
 score_over   => item_score_table
 

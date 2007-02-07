@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.h
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-02-06
+ * @date 2007-02-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.7 2007/02/06 21:10:08 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.8 2007/02/07 17:10:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #ifndef __SUPERVISOR_GUARDS_LEVEL__
 #define __SUPERVISOR_GUARDS_LEVEL__
 class supervisor_guards_level;
-#include "../include/lastScroll.h"
+#include "../include/tilesmap_scrolling.h"
 #include "../include/sprite_bullet.h"
 #include "../include/handler_display.h"
 #include "../include/handler_keyboard.h"
@@ -58,7 +58,7 @@ class supervisor_guards_level:public virtual supervisor
 
 private:
   controller_gigablitz * gigablitz;
-  lastScroll *defilement;
+  tilesmap_scrolling *tiles_map;
   controller_guardians *guards;
   controller_bullets *bullets;
   controller_paddles *paddles;

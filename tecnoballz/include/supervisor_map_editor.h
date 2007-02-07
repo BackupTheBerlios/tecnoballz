@@ -23,7 +23,7 @@
 #define __SCROLLEDIT__
 
 #include "../include/supervisor.h"
-#include "../include/lastScroll.h"
+#include "../include/tilesmap_scrolling.h"
 #include "../include/sprite_mouse_pointer.h"
 #include "../include/bitmap_data.h"
 
@@ -49,7 +49,7 @@ class supervisor_map_editor:public virtual supervisor
 {
 	private:
 		static const Sint32 YCOORDNULL = -10240;
-		lastScroll*			defilement;
+		tilesmap_scrolling*			defilement;
 		sprite_mouse_pointer*			mouse_pointer;
 		Sint32				screen_height;	//height of the main window
 		Sint32				screen_width;	//weight of the main window

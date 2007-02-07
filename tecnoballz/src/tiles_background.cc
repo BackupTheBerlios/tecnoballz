@@ -4,11 +4,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.7 2007/02/06 09:46:13 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.8 2007/02/07 17:10:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -380,7 +380,7 @@ tiles_background::draw (offscreen_surface *offscreen)
             }
           else
             {
-              rect_src.x = map_tiles[map_index + h];
+              rect_src.x = 0;
               if (h < hcount)
                 {
                   rect_src.w = rect_dst.w = tiles_width;
