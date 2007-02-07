@@ -5,11 +5,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.4 2007/02/06 12:26:01 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.5 2007/02/07 21:05:45 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -276,9 +276,6 @@ tecnoballz::game_begin ()
         case MAP_EDITOR:
           release_objects ();
           map_editor = new supervisor_map_editor ();
-          num_erreur = map_editor->first_init ();
-          if (num_erreur)
-            return num_erreur;
           break;
         }
 

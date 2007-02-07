@@ -5,11 +5,11 @@
  * @date 2007-02-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.h,v 1.1 2007/02/07 17:10:37 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.h,v 1.2 2007/02/07 21:05:45 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,21 +67,11 @@ private:
   Uint32 tile_width;
   Uint32 tile_height;
 
-  Sint32 destinMod1;
-  Sint32 destinMod2;
-  Sint32 destinMod3;
-  Sint32 source_mod;
-  Sint32 *afficheAdr;
-  char **mapAddress;            // adresse des dalles
-
-
   /** Number of tiles per row at screen */
   Uint32 tiles_per_row;
-  /** Number of tiles per colum at screen */
-  Uint32 tiles_per_column;
   
   Sint32 offset_aff;
-  Sint32 largeEcran;
+  
   /** The map of tiles */
   Uint16 *map_tiles;
   /** Fist line visible of the  map of tiles */
@@ -93,6 +83,10 @@ private:
   char *bitmap_adr;
 
   static const unsigned char colors_map[48];
+public:
+  Uint32 source_mod;
+  char ** mapAddress;
+
 
 public:
     tilesmap_scrolling ();
@@ -100,17 +94,16 @@ public:
   bitmap_data *get_bitmap ();
   void initialize (Uint32 color_id = TILES_COLOR_GUARDIANS, Uint32 map_id = 0);
   Uint32 get_tiles_width ();
-  Sint32 returnPosy ();
+  Sint32 get_y_coord ();
   void enable_palette (Uint32 color_id = 0);
   void switch_map (Uint32 color_id, Uint32 map_id);
   void scrolling1 (Sint32 index = 0);
 
+  Sint32 initMapAdr ();
+
+
 private:
   void draw ();
-  void draw_tiles ();
-  void display320 ();
-  void display640 ();
-  Sint32 initMapAdr ();
   void load_map (Uint32 edmap = 0);
 };
 #endif

@@ -5,11 +5,11 @@
  * @date 2007-02-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.cc,v 1.1 2007/02/07 17:10:37 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.cc,v 1.2 2007/02/07 21:05:45 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,6 @@ tilesmap_scrolling::tilesmap_scrolling ()
   object_init ();
   map_tiles = (Uint16 *) NULL;
   tiles_bitmap = (bitmap_data *) NULL;
-  mapAddress = (char **) NULL;
   tile_width = 16 * resolution;
   tile_height = 16 * resolution;
 }
@@ -58,13 +57,8 @@ tilesmap_scrolling::~tilesmap_scrolling ()
       delete[]map_tiles;
       map_tiles = NULL;
     }
-  if (NULL != mapAddress)
-    {
-      memory->release ((char *) mapAddress);
-    }
   tiles_bitmap = (bitmap_data *) NULL;
   map_tiles = (Uint16 *) NULL;
-  mapAddress = (char **) NULL;
   object_free ();
 }
 
@@ -99,24 +93,12 @@ tilesmap_scrolling::initialize (Uint32 pal_id, Uint32 map_id)
   /* load the map file in memory */
   load_map (map_id);
 
-  //###################################################################
-  // calculation the table of the addresses all maps
-  //###################################################################
-  initMapAdr ();
-
-  //###################################################################
-  // calculation certain values for the display loop
-  //###################################################################
-  tiles_per_column = game_screen->get_height () / tile_height;
   /** 20 tiles per row */
   tiles_per_row = game_screen->get_width () / tile_width;
-  afficheAdr = (Sint32 *) game_screen->get_pixel_data ();
-  destinMod1 = game_screen->get_line_modulo (0);
-  largeEcran = game_screen->get_row_size ();
-  afficheAdr = afficheAdr - largeEcran * tile_height;
-  destinMod2 = (tile_height * largeEcran) - tile_width;
-  destinMod3 = (tile_height * largeEcran) - (tile_width * tiles_per_row);
-  source_mod = tiles_bitmap->get_row_size ();
+
+   initMapAdr (); 
+source_mod = tiles_bitmap->get_row_size ();
+
   y_coord = 0;
 
   /* Draw all tiles */
@@ -132,6 +114,34 @@ tilesmap_scrolling::initialize (Uint32 pal_id, Uint32 map_id)
     }
 }
 
+Sint32
+tilesmap_scrolling::initMapAdr ()
+{
+  Sint32 error = 0;
+  /* 320 or 640 pixels width */
+  Uint32 l = tiles_bitmap->get_width ();
+  /* 624 or 1248 lines height */
+  Uint32 h = tiles_bitmap->get_height ();
+  number_of_different_tiles = (l / tile_width) * (h / tile_height);     //780 maps
+  mapAddress = (char **) memory->alloc (number_of_different_tiles * sizeof (char *));
+  if (!mapAddress)
+    return (memory->retour_err ());
+
+  char **m = mapAddress;
+  Sint32 nbMap = 0;
+  for (Uint32 y = 0; y < h; y += tile_height)
+    {
+      for (Uint32 x = 0; x < l; x += tile_width)
+        {
+          char *p = tiles_bitmap->get_pixel_data (x, y);
+          *(m++) = p;
+          nbMap++;
+        }
+    }
+  return error;
+}
+
+
 /**
  * Return width of a tile in pixels
  * @return width of a tile in pixels
@@ -142,11 +152,12 @@ tilesmap_scrolling::get_tiles_width ()
   return tile_width;
 }
 
-//-----------------------------------------------------------------------------
-// get y position
-//-----------------------------------------------------------------------------
+/**
+ * Return y coordinate in the map
+ * @return top left map coordinate
+ */
 Sint32
-tilesmap_scrolling::returnPosy ()
+tilesmap_scrolling::get_y_coord ()
 {
   return y_coord;
 }
@@ -276,20 +287,6 @@ tilesmap_scrolling::scrolling1 (Sint32 index)
 void
 tilesmap_scrolling::draw ()
 {
-  if (resolution == 1)
-    {
-      display320 ();
-    }
-  else
-    {
-      //display640 ();
-      draw_tiles ();
-    }
-}
-
-void
-tilesmap_scrolling::draw_tiles ()
-{
   offscreen_surface *offscreen = game_screen;
   SDL_Surface *screen_surface = offscreen->get_surface ();
   SDL_Surface *tiles_surface = tiles_bitmap->get_surface ();
@@ -344,7 +341,6 @@ tilesmap_scrolling::draw_tiles ()
                 }
             }
         }
-      //printf("**rect_dst.y %i : %i (%i) %i \n", v, rect_dst.y, rect_dst.h, tile_height);
       rect_dst.x = 0;
       for (Uint32 h = 0; h < tiles_per_row; h++)
         {
@@ -352,248 +348,18 @@ tilesmap_scrolling::draw_tiles ()
            rect_src.y = offset / MAP_WIDTH;
            rect_src.x = (offset - rect_src.y * MAP_WIDTH) * tile_width; 
            rect_src.y = rect_src.y * tile_height + yoffset;
-          //printf("1..(%i,%i,%i,%i) (%i,%i,%i,%i) %i \n", rect_src.x, rect_src.y, rect_src.w, rect_src.h, rect_dst.x, rect_dst.y, rect_dst.w, rect_dst.h, h);
           if (SDL_BlitSurface
               (tiles_surface, &rect_src, screen_surface, &rect_dst) < 0)
             {
               std::cerr << "(!)tilesmap_scrolling::draw_tiles() " <<
                 "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
             }
-          //printf("2..(%i,%i,%i,%i) (%i,%i,%i,%i) %i \n", rect_src.x, rect_src.y, rect_src.w, rect_src.h, rect_dst.x, rect_dst.y, rect_dst.w, rect_dst.h, h);
           rect_dst.x += tile_width;
         }
-      //printf("rect_dst.y %i : %i (%i) %i ================= \n", v, rect_dst.y, rect_dst.h, tile_height);
       rect_dst.y += rect_dst.h;
     }
   offscreen->lock_surface ();
   tiles_bitmap->lock_surface ();
-}
-
-
-//------------------------------------------------------------------------------
-// display all maps (320 pixels mode)
-//------------------------------------------------------------------------------
-void
-tilesmap_scrolling::display320 ()
-{
-  Sint32 m1 = destinMod1;
-  Sint32 n1 = source_mod;
-  Sint32 *dt = (Sint32 *) afficheAdr;
-  char **mapPT = mapAddress;    // pointer of each map of the page maps
-  Uint16 *carte = map_top_screen;
-  Sint32 lg = tiles_per_row;
-  Sint32 m2, m3;
-  Sint32 j = offset_aff;
-  j = tile_height - j;
-  m2 = (j * largeEcran) - tile_width;
-  m3 = (j * largeEcran) - (tile_width * tiles_per_row);
-
-  //###################################################################
-  // display the first line (possible to cut)
-  //###################################################################
-  for (Sint32 x = 0; x < lg; x++)
-    {
-      Sint32 i = *(carte++);
-      Sint32 *s = (Sint32 *) mapPT[i];
-      for (i = 0; i < j; i++)
-        {
-          dt[0] = s[0];
-          dt[1] = s[1];
-          dt[2] = s[2];
-          dt[3] = s[3];
-          s = (Sint32 *) ((char *) s + n1);
-          dt = (Sint32 *) ((char *) dt + m1);
-        }
-      dt = (Sint32 *) ((char *) dt - m2);
-    }
-
-  //###################################################################
-  // display the middle lines (always enterly)
-  //###################################################################
-  //(char *)dt += m3;
-  dt = (Sint32 *) ((char *) dt + m3);
-  Sint32 ht = tiles_per_column - 1;
-  m2 = destinMod2;
-  m3 = destinMod3;
-  for (Sint32 y = 0; y < ht; y++)
-    {
-      for (Sint32 x = 0; x < lg; x++)
-        {
-          Uint32 i = *(carte++);
-          Sint32 *s = (Sint32 *) mapPT[i];
-          for (i = 0; i < tile_height; i++)
-            {
-              dt[0] = s[0];
-              dt[1] = s[1];
-              dt[2] = s[2];
-              dt[3] = s[3];
-              s = (Sint32 *) ((char *) s + n1);
-              dt = (Sint32 *) ((char *) dt + m1);
-            }
-          dt = (Sint32 *) ((char *) dt - m2);
-        }
-      dt = (Sint32 *) ((char *) dt + m3);
-    }
-
-  //###################################################################
-  // display the last line (possible to cut)
-  //###################################################################
-  j = offset_aff;
-  if (j)
-    {
-      m2 = (j * largeEcran) - tile_width;
-      m3 = (j * largeEcran) - (tile_width * tiles_per_row);
-      for (Sint32 x = 0; x < lg; x++)
-        {
-          Sint32 i = *(carte++);
-          Sint32 *s = (Sint32 *) mapPT[i];
-          for (i = 0; i < j; i++)
-            {
-              dt[0] = s[0];
-              dt[1] = s[1];
-              dt[2] = s[2];
-              dt[3] = s[3];
-              s = (Sint32 *) ((char *) s + n1);
-              dt = (Sint32 *) ((char *) dt + m1);
-            }
-          dt = (Sint32 *) ((char *) dt - m2);
-        }
-      dt = (Sint32 *) ((char *) dt + m3);
-    }
-}
-
-//------------------------------------------------------------------------------
-// display all maps (640 pixels mode)
-//------------------------------------------------------------------------------
-void
-tilesmap_scrolling::display640 ()
-{
-  Sint32 m1 = destinMod1;
-  Sint32 n1 = source_mod;
-  Sint32 *dt = (Sint32 *) afficheAdr;
-  char **mapPT = mapAddress;    // pointer of each map of the page maps
-  Uint16 *carte = map_top_screen;
-  Sint32 lg = tiles_per_row;
-  Sint32 m2, m3;
-  Sint32 j = offset_aff;
-  j = tile_height - j;
-  m2 = (j * largeEcran) - tile_width;
-  m3 = (j * largeEcran) - (tile_width * tiles_per_row);
-
-  //###################################################################
-  // display the first line (possible to cut)
-  //###################################################################
-  for (Sint32 x = 0; x < lg; x++)
-    {
-      Sint32 i = *(carte++);
-      Sint32 *s = (Sint32 *) mapPT[i];
-      for (i = 0; i < j; i++)
-        {
-          dt[0] = s[0];
-          dt[1] = s[1];
-          dt[2] = s[2];
-          dt[3] = s[3];
-          dt[4] = s[4];
-          dt[5] = s[5];
-          dt[6] = s[6];
-          dt[7] = s[7];
-
-          s = (Sint32 *) ((char *) s + n1);
-          dt = (Sint32 *) ((char *) dt + m1);
-        }
-      dt = (Sint32 *) ((char *) dt - m2);
-    }
-
-  //###################################################################
-  // display the middle lines (always enterly)
-  //###################################################################
-  //(char *)dt += m3;
-  dt = (Sint32 *) ((char *) dt + m3);
-  Sint32 ht = tiles_per_column - 1;
-  m2 = destinMod2;
-  m3 = destinMod3;
-  for (Sint32 y = 0; y < ht; y++)
-    {
-      for (Sint32 x = 0; x < lg; x++)
-        {
-          Uint32 i = *(carte++);
-          Sint32 *s = (Sint32 *) mapPT[i];
-          for (i = 0; i < tile_height; i++)
-            {
-              dt[0] = s[0];
-              dt[1] = s[1];
-              dt[2] = s[2];
-              dt[3] = s[3];
-              dt[4] = s[4];
-              dt[5] = s[5];
-              dt[6] = s[6];
-              dt[7] = s[7];
-              s = (Sint32 *) ((char *) s + n1);
-              dt = (Sint32 *) ((char *) dt + m1);
-            }
-          dt = (Sint32 *) ((char *) dt - m2);
-        }
-      dt = (Sint32 *) ((char *) dt + m3);
-    }
-  //###################################################################
-  // display the last line (possible to cut)
-  //###################################################################
-  j = offset_aff;
-  if (j)
-    {
-      m2 = (j * largeEcran) - tile_width;
-      m3 = (j * largeEcran) - (tile_width * tiles_per_row);
-      for (Sint32 x = 0; x < lg; x++)
-        {
-          Sint32 i = *(carte++);
-          Sint32 *s = (Sint32 *) mapPT[i];
-          for (i = 0; i < j; i++)
-            {
-              dt[0] = s[0];
-              dt[1] = s[1];
-              dt[2] = s[2];
-              dt[3] = s[3];
-              dt[4] = s[4];
-              dt[5] = s[5];
-              dt[6] = s[6];
-              dt[7] = s[7];
-              s = (Sint32 *) ((char *) s + n1);
-              dt = (Sint32 *) ((char *) dt + m1);
-            }
-          dt = (Sint32 *) ((char *) dt - m2);
-        }
-      dt = (Sint32 *) ((char *) dt + m3);
-    }
-}
-
-//------------------------------------------------------------------------------
-// calculation the table of the addresses all maps
-//------------------------------------------------------------------------------
-Sint32
-tilesmap_scrolling::initMapAdr ()
-{
-  Sint32 error = 0;
-  /* 320 or 640 pixels width */
-  Uint32 l = tiles_bitmap->get_width ();
-  /* 624 or 1248 lines height */
-  Uint32 h = tiles_bitmap->get_height ();
-  number_of_different_tiles = (l / tile_width) * (h / tile_height);     //780 maps
-  mapAddress = (char **) memory->alloc (number_of_different_tiles * sizeof (char *));
-  if (!mapAddress)
-    return (memory->retour_err ());
-
-  char **m = mapAddress;
-  Sint32 nbMap = 0;
-  for (Uint32 y = 0; y < h; y += tile_height)
-    {
-      for (Uint32 x = 0; x < l; x += tile_width)
-        {
-          char *p = tiles_bitmap->get_pixel_data (x, y);
-          *(m++) = p;
-          nbMap++;
-        }
-    }
-  return error;
 }
 
 /**
