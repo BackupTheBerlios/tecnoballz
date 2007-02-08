@@ -84,8 +84,8 @@ class barreScore:public print_text
 		Sint32					affiche_me();
 		void					scoreEcran();
 		void					scoreAjout(Sint32 ajout);
-		void					lifes_plus(Sint32 ajout);
-		Sint32					lifesMoins(Sint32 retra);
+		void					add_life(Sint32 ajout);
+		Sint32					remove_life(Sint32 retra);
 		void					brickMoins(Sint32 retra);
 		Sint32					resteBrick();
 		void					scoreBrick(Sint32 value);

@@ -4,11 +4,11 @@
  * @date 2007-01-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.2 2007/02/06 09:46:13 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.3 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -111,6 +111,7 @@ handler_keyboard::destroy_instance ()
 void
 handler_keyboard::set_grab_input (bool mode)
 {
+  return;
   if (mode)
     {
       is_grab_input = true;

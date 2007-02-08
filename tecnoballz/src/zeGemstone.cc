@@ -108,17 +108,21 @@ void zeGemstone::moving_gem()
 					}
 					ptBarScore->scoreAjout(2500);
 					ptPrintmon->creditPlus(500);
-					ptBarScore->lifes_plus(3);
-					ptBarScore->scoreBrick(0);		// next level
-					pJoueurDat->set_bumpOn(2, 3);	// active right bumper
-					pJoueurDat->set_bumpOn(3, 3);	// active top bumper
-					pJoueurDat->set_bumpOn(4, 3);	// active left bumper
+					ptBarScore->add_life(3);
+          /* jump to the next level */
+					ptBarScore->scoreBrick(0);
+          /* enable right paddle */
+					pJoueurDat->set_bumpOn(controller_paddles::RIGHT_PADDLE, 3);
+          /* enable top paddle */
+					pJoueurDat->set_bumpOn(controller_paddles::TOP_PADDLE, 3);
+          /* enable left paddle */
+					pJoueurDat->set_bumpOn(controller_paddles::LEFT_PADDLE, 3);
 					sprite_paddle* pBump;
-					pBump = ptRaquette->get_paddle(2);
+					pBump = ptRaquette->get_paddle(controller_paddles::RIGHT_PADDLE);
 					pBump->enable();
-					pBump = ptRaquette->get_paddle(3);
+					pBump = ptRaquette->get_paddle(controller_paddles::TOP_PADDLE);
 					pBump->enable();
-					pBump = ptRaquette->get_paddle(4);
+					pBump = ptRaquette->get_paddle(controller_paddles::LEFT_PADDLE);
 					pBump->enable();
 					return;
 				}

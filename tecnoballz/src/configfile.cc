@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2006-10-02
-// id		: $Id: configfile.cc,v 1.16 2007/02/06 12:26:01 gurumeditation Exp $
+// id		: $Id: configfile.cc,v 1.17 2007/02/08 17:00:33 gurumeditation Exp $
 //------------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -71,7 +71,7 @@ void	configfile::resetvalue()
 	is_verbose = 0;
 	handler_display::optionfull = 0;
 	hardChoice = 1;	
-	vieInitial = 8;
+	initial_num_of_lifes = 8;
 	nuOfPlayer = 1;
 	char *pUser = getenv("USER");
 	if (!pUser)
@@ -183,9 +183,9 @@ void configfile::loadconfig()
 		bob_ground = false;
 bob_ground = false;
 	//read number of lifes: 1 to 9
-	if (!reader.read_int("lifes", &vieInitial))
-		vieInitial = 8 ;
-	if(vieInitial < 1 || vieInitial > 9) vieInitial = 8;
+	if (!reader.read_int("lifes", &initial_num_of_lifes))
+		initial_num_of_lifes = 8 ;
+	if(initial_num_of_lifes < 1 || initial_num_of_lifes > 9) initial_num_of_lifes = 8;
 	
 	//read difficulty 1 (easy), 2 (hard), 3 (madness) or 4 (suicidal)
 	if (!reader.read_int("difficulty", &hardChoice))
@@ -257,7 +257,7 @@ void configfile::saveconfig()
 		fprintf(config, "\n\t;; difficulty 1 (easy), 2 (hard), 3 (madness) or 4 (suicidal)\n");
       		fprintf(config, "\t(difficulty   %d)\n", hardChoice);
 		fprintf(config, "\n\t;; number of lifes (1 to 9)\n");
-      		fprintf(config, "\t(lifes   %d)\n", vieInitial);
+      		fprintf(config, "\t(lifes   %d)\n", initial_num_of_lifes);
 		fprintf(config, "\n\t;; number of players (1 to 6)\n");
       		fprintf(config, "\t(players   %d)\n", nuOfPlayer);
 		fprintf(config, "\n\t;; players names\n");

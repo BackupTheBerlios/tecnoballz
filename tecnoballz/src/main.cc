@@ -2,14 +2,14 @@
  * @file main.cc 
  * @brief The main function is where the program starts execution 
  * @created 2002-08-21 
- * @date 2007-02-06
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.34 $
+ * @version $Revision: 1.35 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.34 2007/02/07 17:10:37 gurumeditation Exp $
+ * $Id: main.cc,v 1.35 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -128,8 +128,8 @@ lispreader  =>
 *tecno_miss  => sprite_bullet
 *tecno_text  => sprite_fonte_game
  
-ballDirect   => controller_balls
-*lesBriques   => controller_bricks
+*ballDirect  => controller_viewfinders
+*lesBriques  => controller_bricks
 printmoney   => controller_indicators
 zeBouiBoui   => controller_ships
 zeCapsules   => controller_moneys

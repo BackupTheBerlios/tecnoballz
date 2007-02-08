@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.7 2007/02/08 07:33:07 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.8 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
     new controller_balls (gereEjects, bricks, gereBricot, tete_gugus,
                           les_atomes, tecZ_barre, BottomWall, ptMiniMess,
                           pt_magneye);
-  ptBaDirect = new ballDirect ();
+  viewfinders_paddles = new controller_viewfinders ();
   paddles = new controller_paddles ();
   gere_texte = new zeMoveText ();
   ptGigaBlit = new controller_gigablitz ();
@@ -64,8 +64,8 @@ supervisor_bricks_level::supervisor_bricks_level ()
   popup_menu = new handler_popup_menu ();
 
   sprite_projectile::start_list (bricks, les_atomes, tecZ_barre);
-  levelTecno = 1;
-  areaNumber = 1;
+  level_number = 1;
+  area_number = 1;
   next_level = 0;
   isgameover = 0;
   devel_keyw = 0;
@@ -90,7 +90,7 @@ supervisor_bricks_level::~supervisor_bricks_level ()
   delete ptGigaBlit;
   delete gere_texte;
   delete paddles;
-  delete ptBaDirect;
+  delete viewfinders_paddles;
   delete gereBalles;
   delete ptMiniMess;
   delete BottomWall;
@@ -115,11 +115,11 @@ Sint32
 supervisor_bricks_level::first_init ()
 {
   sprites->reset ();
-  areaNumber = current_player->get_area_number ();
-  levelTecno = current_player->get_level_number ();
-  //levelTecno = 5; //test only
+  area_number = current_player->get_area_number ();
+  level_number = current_player->get_level_number ();
+  //level_number = 5; //test only
 #ifndef SOUNDISOFF
-  audio->play_level_music (areaNumber, levelTecno);
+  audio->play_level_music (area_number, level_number);
   audio->enable_sound ();
 #endif
 
@@ -128,8 +128,8 @@ supervisor_bricks_level::first_init ()
   isgameover = 0;
   if (is_verbose)
     {
-      std::cout << "supervisor_bricks_level::first_init() areaNumber:"
-        << areaNumber << "levelTecno:" << levelTecno
+      std::cout << "supervisor_bricks_level::first_init() area_number:"
+        << area_number << "level_number:" << level_number
         << " hardChoice:" << hardChoice << std::endl;
     }
 
@@ -187,7 +187,7 @@ supervisor_bricks_level::first_init ()
   ptBobRever->create_sprite (BOB_GADGET, sprites_bitmap, 0);
   sprites->add (ptBobRever);
   //bumper's viewfinder
-  ptBaDirect->create_sprites_list ();
+  viewfinders_paddles->create_sprites_list ();
   //ESC menu
   popup_menu->first_init (sprites_bitmap, 0, 256 * resolution);
   resources->release_sprites_bitmap ();
@@ -287,14 +287,12 @@ supervisor_bricks_level::first_init ()
   //##############################################################
   // initialize mobiles characters ("LEVEL x COMPLETED")
   //##############################################################
-  gere_texte->initialise (levelTecno);
+  gere_texte->initialise (level_number);
 
   ptPrntmney->initialise (current_player, paddles, ptBobMoney, ptBobRever);
 
 
-  error_init (ptBaDirect->initialize (paddles, 4));
-  if (erreur_num)
-    return (erreur_num);
+  viewfinders_paddles->initialize (paddles, 4);
 
   display->unlock_surfaces ();
   /* copy the background offscreen to the game offscreen */
@@ -312,7 +310,7 @@ supervisor_bricks_level::first_init ()
 void
 supervisor_bricks_level::init_level ()
 {
-  levelParam = ptLev_data->bricklevel (areaNumber, levelTecno);
+  levelParam = ptLev_data->bricklevel (area_number, level_number);
 }
 
 /**
@@ -359,12 +357,12 @@ supervisor_bricks_level::main_loop ()
       if (!bricks->brickRemap () && isgameover < 2) //restore bricks
         isgameover = 2;
       gereBricot->execution1 ();
-      ptBaDirect->execution1 ();        //handle ball viewfinder
+      viewfinders_paddles->run ();
       les_atomes->atom_depla ();
       sprites->draw ();
       tecZ_barre->scoreEcran ();
       tecZ_barre->barreTemoin ();
-      ptPrntmney->execution1 (current_player->creditFric);
+      ptPrntmney->execution1 (current_player->amount_of_money);
       display->unlock_surfaces ();
       display->bufferCTab ();
       if (keyboard->is_left_button () && isgameover > 60)
@@ -400,7 +398,7 @@ supervisor_bricks_level::main_loop ()
             }
           paddles->move_robot ();
           gereBalles->vitusBalle ();    //move balls
-          ptBaDirect->execution1 ();    //handle ball viewfinder
+          viewfinders_paddles->run ();
           sprite_projectile::gestionTir ();
           les_atomes->atom_depla ();
           pt_magneye->execution1 ();
@@ -415,7 +413,7 @@ supervisor_bricks_level::main_loop ()
             BottomWall->thecounter--;
 
           tecZ_barre->barreTemoin ();
-          ptPrntmney->execution1 (current_player->creditFric);
+          ptPrntmney->execution1 (current_player->amount_of_money);
         }
 
       //tiles_ground->draw();
@@ -479,7 +477,7 @@ supervisor_bricks_level::main_loop ()
     end_return = -1;
   if (keyboard->command_is_pressed (handler_keyboard::TOOVERFLAG) ||
       Ecode == handler_popup_menu::GOGAMEOVER)
-    current_player->lifesReset ();
+    current_player->remove_all_lifes ();
   if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
       Ecode == handler_popup_menu::EXITTOMENU)
     end_return = MAIN_MENU;
@@ -584,8 +582,8 @@ supervisor_bricks_level::background (Sint32 nbkdg)
 {
   if (nbkdg == -1)
     {
-      nbkdg = ((areaNumber - 1) * 10) + levelTecno;
-      if (levelTecno > 5)
+      nbkdg = ((area_number - 1) * 10) + level_number;
+      if (level_number > 5)
         nbkdg--;
       if (is_verbose)
         printf ("supervisor_bricks_level::background() : nbkdg = %i\n",
@@ -617,6 +615,6 @@ supervisor_bricks_level::background (Sint32 nbkdg)
   bricks->first_init (tecZ_barre, gereCapsul, gereGadget);
   Sint32 lbrik = current_player->get_lessBk ();
   current_player->set_lessBk (0);
-  bricks->initialize (areaNumber, levelTecno, lbrik);
+  bricks->initialize (area_number, level_number, lbrik);
   return erreur_num;
 }

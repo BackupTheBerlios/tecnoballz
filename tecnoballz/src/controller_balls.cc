@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.11 2007/02/08 07:33:07 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.12 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -129,11 +129,11 @@ controller_balls::init_balle (controller_paddles * raket, Sint32 start, Sint32 g
   tempoVites = speed;
   balle_tilt = tiltC;
   balleVites = sprite_ball::donneSpeed (table);
-  paddle_bottom = raket->get_paddle (1);   // bottom bumper
-  paddle_right = raket->get_paddle (2);   // right bumper
-  paddle_top = raket->get_paddle (3);   // top bumper
-  paddle_left = raket->get_paddle (4);   // left bumper
-  tec_robot0 = raket->get_paddle (5);   // robot bumper
+  paddle_bottom = raket->get_paddle (controller_paddles::BOTTOM_PADDLE);
+  paddle_right = raket->get_paddle (controller_paddles::RIGHT_PADDLE);
+  paddle_top = raket->get_paddle (controller_paddles::TOP_PADDLE);
+  paddle_left = raket->get_paddle (controller_paddles::LEFT_PADDLE);
+  tec_robot0 = raket->get_paddle (controller_paddles::ROBOT_PADDLE);
 
   /* Get the width of a brick in pixels */
   Sint32 w;
@@ -257,7 +257,7 @@ controller_balls::vitus_sort ()
                   balle->reStarting (balle->raket_ball);
                   // start parasite animation head
                   gugusObjet->teteparasi ();
-                  ptBarreScr->lifesMoins (1);
+                  ptBarreScr->remove_life (1);
                   // force the explosion of all the "atoms"
                   ptBouiBoui->atomexplos ();
 #ifndef SOUNDISOFF
@@ -299,7 +299,7 @@ controller_balls::vitussort2 ()
                   raket->attachBall (balle);
                   balle->reStarting (raket);
                   balle->ballPower2 ();
-                  current_player->lifesMoins (1);
+                  current_player->remove_life (1);
 #ifndef SOUNDISOFF
                   audio->play_sound (S_ENLEVVIE);
 #endif

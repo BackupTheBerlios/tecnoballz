@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.h,v 1.3 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: controller_paddles.h,v 1.4 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,9 +123,15 @@ private:
   static const Sint32 *midi4_left[];
   static const Sint32 *midi4Right[];
 
-
-
-
+public:
+  typedef enum {
+    BOTTOM_PADDLE = 1,
+    RIGHT_PADDLE,
+    TOP_PADDLE,
+    LEFT_PADDLE,
+    ROBOT_PADDLE
+  }
+  ENUM_PADDLES;
 
 public:
     controller_paddles ();

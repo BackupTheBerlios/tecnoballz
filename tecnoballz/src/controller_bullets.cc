@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bullets.cc,v 1.2 2007/02/08 07:33:07 gurumeditation Exp $
+ * $Id: controller_bullets.cc,v 1.3 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,7 +122,7 @@ controller_bullets::bumper_col ()
                           if (!ptbumper01->is_invincible ())
                             {
                               ptbumper01->set_invincibility (100);
-                              current_player->lifesMoins (1);
+                              current_player->remove_life (1);
 #ifndef SOUNDISOFF
                               audio->play_sound (S_RAKEXPLO);
                               audio->play_sound (S_ENLEVVIE);

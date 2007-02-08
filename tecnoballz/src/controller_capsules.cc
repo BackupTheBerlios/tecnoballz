@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.2 2007/02/08 07:33:07 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.3 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -485,8 +485,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
       audio->play_sound (S_ENLEVVIE);
 #endif
       ptMiniMess->mesrequest (10);
-      //barre->lifesMoins(1);
-      current_player->lifesMoins (1);
+      current_player->remove_life (1);
       break;
 
       // extra life
@@ -495,8 +494,8 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
       audio->play_sound (S_AJOUTVIE);
 #endif
       ptMiniMess->mesrequest (11);
-      //barre->lifes_plus(1);
-      current_player->lifes_plus (1);
+      //barre->add_life(1);
+      current_player->add_life (1);
       break;
 
       // extra balls
@@ -549,27 +548,27 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
 
       // bottom bumper[1] enable (no gadget)
     case GAD_BUMP01:
-      bumpSelect = oBump->get_paddle (1);
+      bumpSelect = oBump->get_paddle (controller_paddles::BOTTOM_PADDLE);
       break;
 
       // right bumper[2] enable (no gadget)
     case GAD_BUMP02:
       ptMiniMess->mesrequest (26);
-      bumpSelect = oBump->get_paddle (2);
+      bumpSelect = oBump->get_paddle (controller_paddles::RIGHT_PADDLE);
       bumpSelect->enable ();
       break;
 
       // top bumper[3] enable (no gadget)
     case GAD_BUMP03:
       ptMiniMess->mesrequest (27);
-      bumpSelect = oBump->get_paddle (3);
+      bumpSelect = oBump->get_paddle (controller_paddles::TOP_PADDLE);
       bumpSelect->enable ();
       break;
 
       // right bumper[4] enable (no gadget)
     case GAD_BUMP04:
       ptMiniMess->mesrequest (28);
-      bumpSelect = oBump->get_paddle (4);
+      bumpSelect = oBump->get_paddle (controller_paddles::LEFT_PADDLE);
       bumpSelect->enable ();
       break;
 
@@ -694,7 +693,7 @@ controller_capsules::gadgetrun2 (sprite_paddle * raket, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_AJOUTVIE);
 #endif
-      current_player->lifes_plus (1);
+      current_player->add_life (1);
       break;
 
       // multi balls

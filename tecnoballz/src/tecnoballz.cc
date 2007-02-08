@@ -5,11 +5,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.6 2007/02/08 07:33:07 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.7 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,11 +51,11 @@ bool
   tecnoballz::is_verbose = 0;
 Sint32
   tecnoballz::num_erreur = 0;   //error number
-Sint32
+Uint32
   tecnoballz::counterObj = 0;   //number of objects
 Sint32
   tecnoballz::hasard_val = 0;   //random value
-Sint32
+Uint32
   tecnoballz::countframe = 0;
 scoretable *
   tecnoballz::ptScoreTab = NULL;        //manage best scores
@@ -92,7 +92,7 @@ supervisor_map_editor *
 supervisor_main_menu *
   tecnoballz::main_menu = NULL;        //menu handle
 // 1:bricks level / 2:shop / 3:guards level / 4:main menu / 5:scrolling editor
-Sint32
+Uint32
   tecnoballz::super_jump = 1;
 Sint32
   tecnoballz::super_exit = 0;
@@ -107,7 +107,7 @@ Uint32
 Sint32
   tecnoballz::hardChoice = 1;
 Sint32
-  tecnoballz::vieInitial = 8;
+  tecnoballz::initial_num_of_lifes = 8;
 Sint32
   tecnoballz::nuOfPlayer = 1;
 char
@@ -176,12 +176,12 @@ tecnoballz::first_init (configfile * pConf)
 
   ptLev_data = new level_data ();
   //Sint32 Ecode = -1; 
-  current_player = handler_players::init_numof_players (MAX_PLAYER);
+  current_player = handler_players::create_all_players (MAX_PLAYER);
 
   /* retrieve usernames */
   for (Uint32 i = 0; i < 6; i++)
     {
-      handler_players::playerlist[i]->set_name (pConf->get_player (i));
+      handler_players::players_list[i]->set_name (pConf->get_player (i));
     }
   super_jump = 4;               //menu
 
@@ -386,11 +386,15 @@ tecnoballz::release_all_objects (configfile * pConf)
 {
   //save players names into config file
   for (Uint32 i = 0; i < 6; i++)
-    pConf->set_player (i, handler_players::playerlist[i]->returnName ());
+    {
+      pConf->set_player (i, handler_players::players_list[i]->returnName ());
+    }
   if (is_verbose)
-    printf ("==1 release_objects \n");
+    {
+      std::cout << "==1 release_objects()" << std::endl;
+    }
   release_objects ();
-  handler_players::joueursRAZ ();
+  handler_players::release_all_players ();
   if (is_verbose)
     printf ("==3 level_data \n");
   delete ptLev_data;

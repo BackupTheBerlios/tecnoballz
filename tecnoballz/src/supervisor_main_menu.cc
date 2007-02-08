@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_main_menu.cc 
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-02-07
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.5 2007/02/08 07:33:07 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.6 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,9 +58,9 @@ supervisor_main_menu::~supervisor_main_menu ()
   liberation ();
 }
 
-//-----------------------------------------------------------------------------
-//      perform some initializations
-//-----------------------------------------------------------------------------
+/**
+ * Perform some initializations
+ */
 Sint32
 supervisor_main_menu::first_init ()
 {
@@ -138,12 +138,12 @@ supervisor_main_menu::main_loop ()
   //###################################################################
   display->bufferCTab ();
 
-  //###################################################################
-  // go to map editor
-  //###################################################################
+  /* [F5] key jump to map editor */
 #ifdef TU_TRICHES
   if (keyboard->key_is_pressed (SDLK_F5))
-    end_return = 5;
+    {
+      end_return = 5;
+    }
 #endif
   return end_return;
 }
@@ -197,9 +197,9 @@ supervisor_main_menu::start_new_game ()
   Sint32 iplay;
   Uint32 index = 0;
 
-  //###################################################################
-  //check area password validity
-  //###################################################################
+  /*
+   * check area password validity
+   */
   Uint32 aMaxi = 4;
 #ifdef TU_TRICHES
   //allows to jump directly to the last guards with a password 
@@ -258,37 +258,42 @@ sortie:
   //###################################################################
   for (iplay = 0; iplay < nuOfPlayer; iplay++)
     {
-      Uint32 nlife = vieInitial;
+      Uint32 nlife = initial_num_of_lifes;
       if (birth_flag)
         nlife = nlife + 10;
       if (chaine_cmp
-          (handler_players::playerlist[iplay]->returnName (), "ETB   ", 6))
+          (handler_players::players_list[iplay]->returnName (), "ETB   ", 6))
         nlife += 5;
       if (chaine_cmp
-          (handler_players::playerlist[iplay]->returnName (), "DJI   ", 6))
+          (handler_players::players_list[iplay]->returnName (), "DJI   ", 6))
         nlife += 4;
       if (chaine_cmp
-          (handler_players::playerlist[iplay]->returnName (), "JMM   ", 6))
+          (handler_players::players_list[iplay]->returnName (), "JMM   ", 6))
         nlife += 3;
       if (chaine_cmp
-          (handler_players::playerlist[iplay]->returnName (), "ZBB   ", 6))
+          (handler_players::players_list[iplay]->returnName (), "ZBB   ", 6))
         nlife += 2;
       if (chaine_cmp
-          (handler_players::playerlist[iplay]->returnName (), "REG   ", 6))
+          (handler_players::players_list[iplay]->returnName (), "REG   ", 6))
         nlife += 1;
-      handler_players::playerlist[iplay]->initialise (nlife, nArea, level,
+      handler_players::players_list[iplay]->initialize (nlife, nArea, level,
                                                  600, grdPt);
     }
 
-  //###################################################################
-  // initialize disable player(s)
-  //###################################################################
+  
+  /* disable other player(s) */
   for (Sint32 i = iplay; i < MAX_PLAYER; i++)
-    handler_players::playerlist[i]->initialise (0, 1, 1, 0, 0);
-  current_player = handler_players::playerlist[0];
-  Sint32 value = current_player->level2jump ();
-  if (value == 2)
-    value = 1;                  //convert shop code in bricks level code
+    {
+      handler_players::players_list[i]->initialize (0, 1, 1, 0, 0);
+    }
+  
+  current_player = handler_players::players_list[0];
+  
+  Uint32 value = current_player->get_next_phase ();
+  if (value == SHOP)
+    {
+      value = BRICKS_LEVEL;
+    }
   return value;
 }
 

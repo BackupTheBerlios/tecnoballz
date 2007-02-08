@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.19 2007/02/06 12:26:01 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.20 2007/02/08 17:00:33 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -432,27 +432,27 @@ Sint32 print_menu::testLeMenu()
 					// input players names
 					case 6:
 						input_init(24, 6, 6,
-							handler_players::playerlist[0]->returnName());
+							handler_players::players_list[0]->returnName());
 						break;
 					case 7:
 						input_init(24, 7, 6,
-							handler_players::playerlist[1]->returnName());
+							handler_players::players_list[1]->returnName());
 						break;
 					case 8:
 						input_init(24, 8, 6,
-							handler_players::playerlist[2]->returnName());
+							handler_players::players_list[2]->returnName());
 						break;
 					case 9:
 						input_init(24, 9, 6,
-							handler_players::playerlist[3]->returnName());
+							handler_players::players_list[3]->returnName());
 						break;
 					case 10:
 						input_init(24, 10, 6,
-							handler_players::playerlist[4]->returnName());
+							handler_players::players_list[4]->returnName());
 						break;
 					case 11:
 						input_init(24, 11, 6,
-							handler_players::playerlist[5]->returnName());
+							handler_players::players_list[5]->returnName());
 						break;
 
 					//
@@ -468,11 +468,11 @@ Sint32 print_menu::testLeMenu()
 
 					case 13:
 						clear_init(24, 13, 2, 1);
-						vieInitial += incre;
-						if(vieInitial > 9)
-							vieInitial = 1;
-						if(vieInitial < 1)
-							vieInitial = 9;
+						initial_num_of_lifes += incre;
+						if(initial_num_of_lifes > 9)
+							initial_num_of_lifes = 1;
+						if(initial_num_of_lifes < 1)
+							initial_num_of_lifes = 9;
 						mis_a_jour();
 						break;
 						
@@ -541,7 +541,7 @@ void print_menu::mis_a_jour()
 	//###########################################################
 	d = menuTexte1 + (MENU_LARGE * 6) + 24;
 	for(Sint32 i = 0; i < MAX_PLAYER; i++)
-	{	s = handler_players::playerlist[i]->returnName();
+	{	s = handler_players::players_list[i]->returnName();
 		for(Uint32 j = 0; j < 6; j++)
 			d[j] = s[j];
 		d += MENU_LARGE;
@@ -551,12 +551,12 @@ void print_menu::mis_a_jour()
 	for(Sint32 i = 0; i < 4; i++)
 		d[i] = s[i];
 	d = menuTexte1 + (MENU_LARGE * 13) + 24;
-	intToASCII(vieInitial, d, 1);
+	intToASCII(initial_num_of_lifes, d, 1);
 
 	birth_flag = 1;
 	//for(Uint32 i = 0; i < 1; i++) //test only
 	for(Sint32 i = 0; i < MAX_PLAYER; i++)
-	{	s = handler_players::playerlist[i]->returnName();
+	{	s = handler_players::players_list[i]->returnName();
 		if(s[0] != '0' || s[1] != '4' || s[2] != '0' || 
 			s[3] != '6' || s[4] != '7' || s[5] != '0')
 			birth_flag = 0;

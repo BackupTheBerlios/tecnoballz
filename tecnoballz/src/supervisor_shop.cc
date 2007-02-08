@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: supervisor_shop.cc,v 1.6 2007/02/08 07:33:07 gurumeditation Exp $
+// id		: $Id: supervisor_shop.cc,v 1.7 2007/02/08 17:00:33 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -150,7 +150,7 @@ Sint32 supervisor_shop::first_init()
 	// initialize the gadgets
 	//###################################################################
 	gereGadget->create_shop_sprites_list();
-	current_player->RAZ_course();
+	current_player->clear_shopping_cart();
 	Sint32* tp = coursetemp;
 	for(Sint32 i = 0; i < NB_OPTIONS; i++)
 		*(tp++) = 0;

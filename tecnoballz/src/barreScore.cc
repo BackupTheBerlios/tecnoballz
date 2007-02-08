@@ -81,9 +81,9 @@ Sint32 barreScore::affiche_me()
 	GFX_Sbarre->copyTampon(0, 0, 256 * resolution, 0, 64 * resolution, 240 * resolution);
 	handler_players *gamer = objetGamer;
 	tamponAff1(POSX_AREAN * resolution, POSY_AREAN * resolution,
-		gamer->areaNumber, 10);
+		gamer->area_number, 10);
 	tamponAff1(POSX_LEVEL * resolution, POSY_LEVEL * resolution,
-		gamer->levelTecno, 10);
+		gamer->level_number, 10);
 	tamponAff2(POSX_NOMJO * resolution, POSY_NOMJO * resolution,
 		gamer->player_name, 6);
 	/*
@@ -111,7 +111,7 @@ void barreScore::scoreEcran()
 	handler_players *gamer = objetGamer;
 	affNombre1(scoreAdres, gamer->superScore, 100000);
 	affNombre1(lifesAdres, superBrick, 100);
-	affNombre1(brickAdres, gamer->superLifes, 10);
+	affNombre1(brickAdres, gamer->number_of_lifes, 10);
 	//Sint32 nbfps = display->get_framepee();
 	//affNombre1(lifesAdres, nbfps, 100);
 }
@@ -126,22 +126,22 @@ void barreScore::scoreAjout(Sint32 ajout)
 //-------------------------------------------------------------------------------
 // increase the number of lifes
 //-------------------------------------------------------------------------------
-void barreScore::lifes_plus(Sint32 ajout)
+void barreScore::add_life(Sint32 ajout)
 {
-	objetGamer->superLifes += ajout;
+	objetGamer->number_of_lifes += ajout;
 }
 
 //-------------------------------------------------------------------------------
 // decrease the number of lifes
 //-------------------------------------------------------------------------------
-Sint32 barreScore::lifesMoins(Sint32 retra)
+Sint32 barreScore::remove_life(Sint32 retra)
 {
 	handler_players *gamer = objetGamer;
-	gamer->superLifes -= retra;
-	if(gamer->superLifes > 0)
+	gamer->number_of_lifes -= retra;
+	if(gamer->number_of_lifes > 0)
 		return 1;
 	else
-	{	gamer->superLifes = 0;
+	{	gamer->number_of_lifes = 0;
 		return 0;
 	}
 }

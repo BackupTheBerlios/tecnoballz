@@ -4,11 +4,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.6 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.7 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ class supervisor_bricks_level;
 #include "../include/zeMiniMess.h"
 #include "../include/level_data.h"
 #include "../include/zeGemstone.h"
-#include "../include/ballDirect.h"
+#include "../include/controller_viewfinders.h"
 #include "../include/handler_popup_menu.h"
 #include "../include/ze_magneye.h"
 
@@ -84,7 +84,7 @@ private:
   tiles_background *tiles_ground;
   ejectBalls *gereEjects;
   controller_balls *gereBalles;
-  ballDirect *ptBaDirect;
+  controller_viewfinders *viewfinders_paddles;
   controller_paddles *paddles;
   barreScore *tecZ_barre;
   zeBouiBoui *les_atomes;
@@ -100,9 +100,9 @@ private:
   handler_popup_menu *popup_menu;
   sprite_capsule *ptBobRever;
   /** Area number from 1 to 2 */
-  Sint32 areaNumber;
+  Sint32 area_number;
   /** Level number from 1 to 12 */
-  Sint32 levelTecno;
+  Sint32 level_number;
   const amigaLevel *levelParam;
   Sint32 next_level;
   /** Time delay before next level */

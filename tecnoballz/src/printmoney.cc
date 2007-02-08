@@ -222,9 +222,9 @@ void printmoney::exec_money(Sint32 value)
 void printmoney::creditPlus(Sint32 value)
 {
 	money_posy = y_position - 5 * resolution; 
-	ptJoueurDa->creditFric += value;
-	if(ptJoueurDa->areaNumber >= 3)
-		ptJoueurDa->creditFric += value;
-	if(ptJoueurDa->areaNumber >= 5)
-		ptJoueurDa->creditFric += value;
+	ptJoueurDa->amount_of_money += value;
+	if(ptJoueurDa->area_number >= 3)
+		ptJoueurDa->amount_of_money += value;
+	if(ptJoueurDa->area_number >= 5)
+		ptJoueurDa->amount_of_money += value;
 }

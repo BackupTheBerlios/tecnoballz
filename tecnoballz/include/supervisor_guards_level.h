@@ -5,11 +5,11 @@
  * @date 2007-02-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.8 2007/02/07 17:10:37 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.9 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ class supervisor_guards_level;
 #include "../include/zeMiniMess.h"
 #include "../include/controller_gigablitz.h"
 #include "../include/zexplosion.h"
-#include "../include/ballDirect.h"
+#include "../include/controller_viewfinders.h"
 #include "../include/zeGameOver.h"
 #include "../include/zeCongBall.h"
 #include "../include/handler_popup_menu.h"
@@ -63,7 +63,7 @@ private:
   controller_bullets *bullets;
   controller_paddles *paddles;
   controller_balls *balls;
-  ballDirect *ptBaDirect;
+  controller_viewfinders *viewfinders_paddles;
   zeCapsules *ptCapsules;
   controller_capsules *pt_gadgets;
   printmoney *ptPrntmney;
@@ -74,9 +74,9 @@ private:
   sprite_capsule *ptBobLifes;
   handler_popup_menu *popup_menu;
   /** Area number from 1 to 5 */
-  Uint32 areaNumber;
+  Uint32 area_number;
   /** Current level number 6, 12 or 13 */ 
-  Uint32 levelTecno;
+  Uint32 level_number;
   const atariLevel *levelParam;
   Sint32 scrollTemp;            // time before scroll start
   Sint32 scrollType;            // type of background scrolling

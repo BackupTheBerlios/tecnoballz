@@ -2,14 +2,14 @@
  * @file tecnoballz.h
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-02-06
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.6 2007/02/08 07:33:07 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.7 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-02-06)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-02-08)"
 #define TU_TRICHES              //devel only
 /* force bytes copy (SPARC unaligned memory access) */
 #define BYTES_COPY
@@ -94,26 +94,30 @@ const Sint32 E_SDLMIXER = -9;
 const Sint32 SINUS_MASK = 511;
 const Sint32 SINUS_DECA = 7;
 class tecnoballz
-
 {
 public:
-  typedef enum {
+
+  /** Different phases of the game */
+  typedef enum
+  {
     BRICKS_LEVEL = 1,
     SHOP,
     GUARDS_LEVEL,
     MAIN_MENU,
-    MAP_EDITOR,    
+    MAP_EDITOR,
   }
   GAME_PHASE;
 
-
 public:
-  static const Sint32 NB_OPTIONS = 19;  //number maximum of bonus bought
-  static const Uint32 NDIFFICULT = 4;   //4 levels of difficulty
+  /* number maximum of bonus capsules bought */
+  static const Sint32 NB_OPTIONS = 19;
+  /** 4 levels of difficulty */
+  static const Uint32 NDIFFICULT = 4;
   static const Sint32 MAX_PLAYER = 6;
 
 public:
-  static bool is_verbose;       //1 = verbose mode
+  /* True if verbose enable */
+  static bool is_verbose;
   static Sint32 bg4_colors;     //1 = force 4 colors background
   static Sint32 resolution;     //1:320*240 or 2:640*480 pixels
   static bool bob_ground;       //1 = background is sprites 
@@ -121,22 +125,22 @@ public:
   static Sint32 arg_jumper;
 
 protected:
-  Sint32 numero_obj;          //object number
+    Sint32 numero_obj;          //object number
   Sint32 erreur_num;            //error code
 
-  //###############################################################
-  // statics members 
-  //###############################################################
-  static Sint32 counterObj;     //number of objects
+  /*
+   * static members
+   */
+
+  static Uint32 counterObj;     //number of objects
   static Sint32 hasard_val;     //random value
-  static Sint32 countframe;     //frame counter
+  static Uint32 countframe;     //frame counter
   static Sint32 num_erreur;     //error number
 
-  static Sint32 super_jump;     // game phase:
-  // - 0: bricks levels
-  // - 1: shop
-  // - 2: guards levels
-  // - 3: menu
+  /** Current phase of the game
+   * BRICKS_LEVEL, SHOP, GUARDS_LEVEL,
+   * MAIN_MENU, or MAP_EDITOR */
+  static Uint32 super_jump;
 
   static Sint32 hardChoice;     //difficulty
   // -1: easy
@@ -148,7 +152,8 @@ protected:
 
   static Uint32 cheat_flag;     //E + T + B + Return (into shop)
   static Uint32 birth_flag;     //1 = all names is 040670
-  static Sint32 vieInitial;     //nmber of initial lives
+  /** Number of initial lifes */
+  static Sint32 initial_num_of_lifes;
   static Sint32 nuOfPlayer;
   static const char nomprefix[];
   static char chainelog[100];
@@ -174,7 +179,7 @@ protected:
   static supervisor_guards_level *guards_level;
   static supervisor_main_menu *main_menu;
   static supervisor_map_editor *map_editor;
-    /** A bitmap containing the current images of sprites */
+  /** A bitmap containing the current images of sprites */
   static bitmap_data *sprites_bitmap;
   static char zeAreaCode[11];
 

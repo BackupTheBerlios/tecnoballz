@@ -5,11 +5,11 @@
  * @date 2007-02-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.9 2007/02/08 07:33:07 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.10 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ supervisor_guards_level::supervisor_guards_level ()
   ptCapsules = new zeCapsules ();
   pt_gadgets = new controller_capsules (6);
   balls = new controller_balls (guards, ptCapsules, pt_gadgets);
-  ptBaDirect = new ballDirect ();
+  viewfinders_paddles = new controller_viewfinders ();
   ptPrntmney = new printmoney ();
   ptMiniMess = new zeMiniMess ();
   gigablitz = new controller_gigablitz ();
@@ -72,7 +72,7 @@ supervisor_guards_level::~supervisor_guards_level ()
   delete gigablitz;
   delete ptMiniMess;
   delete ptPrntmney;
-  delete ptBaDirect;
+  delete viewfinders_paddles;
   delete balls;
   delete pt_gadgets;
   delete ptCapsules;
@@ -100,13 +100,15 @@ supervisor_guards_level::first_init ()
   gameover_counter = 0;
   count_next = 0;
   tecnwinner = 0;
-  areaNumber = current_player->get_area_number ();
-  levelTecno = current_player->get_level_number ();
+  area_number = current_player->get_area_number ();
+  level_number = current_player->get_level_number ();
   Sint32 grdP = current_player->getGuardPt ();
-  //levelTecno = 6; //test only
   if (is_verbose)
-    printf ("supervisor_guards_level::first_init() : areaNumber=%i, "
-            "levelTecno=%i grdP=%i\n", areaNumber, levelTecno, grdP);
+  {
+    std::cout << ">supervisor_guards_level::first_init() " <<
+      "area_number: " << area_number << "level_number: " << level_number
+      << "grdP: " << grdP << std::endl;
+  }
 
   //###################################################################
   // initialize gigablitz
@@ -136,8 +138,7 @@ supervisor_guards_level::first_init ()
   ptBobLifes->create_sprite (BOB_GADGET, sprites_bitmap, 0);
   sprites->add (ptBobLifes);
 
-  // initialize
-  ptBaDirect->create_sprites_list ();
+  viewfinders_paddles->create_sprites_list ();
 
   //mobile characters at the end of the level
   ptMoveText->create_sprites_list ();
@@ -152,10 +153,6 @@ supervisor_guards_level::first_init ()
                           0,    //don't restaure background where leaves
                           1     //initialize color table
     );
-  std::
-    cout << "supervisor_guards_level::first_init release_sprites_bitmap" <<
-    std::endl;
-
   resources->release_sprites_bitmap ();
 
   //###################################################################
@@ -209,11 +206,9 @@ supervisor_guards_level::first_init ()
   ptPrntmney->init_guard (current_player, paddles, ptBobMoney, ptBobLifes);
 
   //initialize mobile characters at the end of the level
-  ptMoveText->initialise (levelTecno, 32 * resolution);
+  ptMoveText->initialise (level_number, 32 * resolution);
 
-  error_init (ptBaDirect->initialize (paddles, 1));
-  if (erreur_num)
-    return (erreur_num);
+  viewfinders_paddles->initialize (paddles, 1);
 
   display->unlock_surfaces ();
   display->bufferCopy ();       //copy "buffer memory" to "screen memory"
@@ -283,8 +278,8 @@ supervisor_guards_level::main_loop ()
           if (tecnwinner)
             ptCongBall->execution1 ();  //congra
         }
-      ptBaDirect->execution1 ();        //handle ball viewfinder
-      ptPrntmney->execution2 (current_player->creditFric, current_player->superLifes);
+      viewfinders_paddles->run ();
+      ptPrntmney->execution2 (current_player->amount_of_money, current_player->number_of_lifes);
       ptMoveText->goMoveText ();
       sprites->draw ();
       display->unlock_surfaces ();
@@ -313,7 +308,7 @@ supervisor_guards_level::main_loop ()
           paddles->bp_deplac2 ();
           paddles->lacheBall2 ();
           balls->vitusBall2 (); //moving ball(s)
-          ptBaDirect->execution1 ();    //handle ball viewfinder
+          viewfinders_paddles->run ();
           /* moving guards, and fire bullets and gigablitz */
           guards->run ();
           bullets->execution1 ();    //moving the guards's weapons
@@ -321,8 +316,8 @@ supervisor_guards_level::main_loop ()
           ptCapsules->bougefric2 ();
           pt_gadgets->bougegads2 ();
           ptMoveText->goMoveText ();
-          ptPrntmney->execution2 (current_player->creditFric,
-                                  current_player->superLifes);
+          ptPrntmney->execution2 (current_player->amount_of_money,
+                                  current_player->number_of_lifes);
           gigablitz->execution2 ();    //move the Gigablitz from guards
           pExplosion->execution1 ();    //explosion animations
           bullets->anim_fires ();    //the animation of the guards's weapons
@@ -360,7 +355,7 @@ supervisor_guards_level::main_loop ()
               tecnwinner = current_player->zlastlevel ();
               if (tecnwinner)
                 {
-                  current_player->lifesReset ();
+                  current_player->remove_all_lifes ();
                   count_next = 0;
                 }
               else
@@ -394,7 +389,7 @@ supervisor_guards_level::main_loop ()
     end_return = -1;
   if (keyboard->command_is_pressed (handler_keyboard::TOOVERFLAG) ||
       Ecode == handler_popup_menu::GOGAMEOVER)
-    current_player->lifesReset ();
+    current_player->remove_all_lifes ();
   if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
       Ecode == handler_popup_menu::EXITTOMENU)
     end_return = 4;
@@ -410,7 +405,7 @@ supervisor_guards_level::main_loop ()
 void
 supervisor_guards_level::init_level ()
 {
-  levelParam = ptLev_data->guardlevel (areaNumber, levelTecno);
+  levelParam = ptLev_data->guardlevel (area_number, level_number);
   scrollType = levelParam->scrollType;
   scrollTemp = levelParam->scrolCount;
   scrolSpeed = 0;

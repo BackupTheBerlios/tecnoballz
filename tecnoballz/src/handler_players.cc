@@ -1,14 +1,14 @@
 /** 
  * @file handler_players.cc 
  * @brief players handler 
- * @date 2007-02-06
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.3 2007/02/08 07:33:07 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.4 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,87 +30,94 @@
 #include "../include/briqueCote.h"
 #include "../include/zeGemstone.h"
 
-Sint32 handler_players::totalActif = 0;
+Uint32 handler_players::max_of_players = 0;
 Sint32 handler_players::joueur_run = 0;
-handler_players * handler_players::player_one = NULL;
+handler_players * handler_players::first_player = NULL;
 Sint32 handler_players::best_score = 0;
 char handler_players::bestPlayer[6] = { ' ', ' ', ' ', ' ', ' ', ' ' };
-handler_players ** handler_players::playerlist = NULL;
+handler_players ** handler_players::players_list = NULL;
 
 /* 
- * Create the players handler
+ * Create a player object
  */
 handler_players::handler_players ()
 {
-
   object_init ();
 
-  //###################################################################
-  // add a new player
-  //###################################################################
-  if (!totalActif)
+  /* 
+   * add a new player
+   */
+  
+  /* first player */
+  if (0 == max_of_players)
     {
-      player_one = this;
-      playerNext = this;
-      playerPrev = this;
+      first_player = this;
+      next_player = this;
+      previous_player = this;
     }
   else
     {
-      playerNext = player_one;
-      handler_players *avant = player_one->prevPlayer ();
-      playerPrev = avant;
-      player_one->prevPlayer (this);
-      avant->nextPlayer (this);
+      next_player = first_player;
+      handler_players *prev = first_player->get_previous_player ();
+      previous_player = prev;
+      first_player->set_previous_player (this);
+      prev->set_next_player (this);
     }
-  totalActif++;
+  max_of_players++;
 
-  //###################################################################
-  // RAZ members
-  //###################################################################
-  player_num = totalActif;
+  /* 
+   * clear members members
+   */
+  player_num = max_of_players;
   reset_members ();
+  /* clear name of the player */
   Uint32 i;
   for (i = 0; i < 6; i++)
-    player_name[i] = ' ';        //reset name of the player
+    {
+      player_name[i] = ' ';
+    }
   player_name[i] = 0;
 }
 
 /* 
- * Release the players handler
+ * Release a player object
  */
 handler_players::~handler_players ()
 {
-  totalActif--;
-  if (totalActif)
+  max_of_players--;
+  if (max_of_players > 0)
     {
-      playerNext->prevPlayer (playerPrev);
-      playerPrev->nextPlayer (playerNext);
-      if (player_one == this)
-        player_one = playerNext;
+      next_player->set_previous_player (previous_player);
+      previous_player->set_next_player (next_player);
+      if (first_player == this)
+        {
+          first_player = next_player;
+        }
     }
   else
-    player_one = NULL;
+    {
+      first_player = NULL;
+    }
   object_free ();
 }
 
-//-----------------------------------------------------------------------------
-// initialize simple player before a new game
-// input        => lifes: number of lifes 
-//                      => areaN: area number (1 to 5)
-//                      => level: level number (1 to 12)
-//                      => monay: credit
-//                      => grdPt: level_list of the guards
-//-----------------------------------------------------------------------------
+/**
+ * Initialize a player object before a new game
+ * @param lifes number of lifes
+ * @param area area number (1 to 5)
+ * @param level level number in current area (1 to 12)
+ * @param money amount of money
+ * @param grdPt level_list of the guards
+ */
 void
-handler_players::initialise (Sint32 lifes, Sint32 areaN, Sint32 level,
-                             Sint32 monay, Sint32 grdPt)
+handler_players::initialize (Uint32 lifes, Uint32 area, Uint32 level,
+                             Uint32 money, Uint32 grdPt)
 {
   reset_members ();
-  superLifes = lifes;
-  areaNumber = areaN;
-  levelTecno = level;
-  levelTecno = level;
-  creditFric = monay;
+  number_of_lifes = lifes;
+  area_number = area;
+  level_number = level;
+  amount_of_money = money;
   guardianPt = grdPt;
 }
 
@@ -123,25 +130,28 @@ handler_players::reset_members ()
   Uint32 z = 0;
   superScore = z;               //reset score of the player
   score_life = 0;
-  areaNumber = 1;               //area number
-  levelTecno = 1;               //level number into the area
-  superLifes = vieInitial;      //number of lifes
-  activation = 1;               //flag = 1, player's active
-  RAZ_course ();
-  creditFric = 500;             //amount of money 
+  area_number = 1;
+  /* level number into the current area */
+  level_number = 1;
+  number_of_lifes = initial_num_of_lifes;
+  clear_shopping_cart ();
+  amount_of_money = 500;
   for (Uint32 i = 0; i < briqueCote::BRICOTENUM; i++)
     {
       bricotLeft[i] = 1;        //state of the left wall
       bricotRigh[i] = 1;        //state of the right wall
       bricot_top[i] = 1;        //state of the top wall
     }
-  bump2Actif = z;               //right bumper disable
-  bump3Actif = z;               //top bumper disable
-  bump4Actif = z;               //left bumper disable
+  /* disable right, top and left paddles */
+  right_paddle_alive_counter = 0;
+  top_paddle_alive_counter = 0;
+  left_paddle_alive_counter = 0;
   rebuild_ok = z;               //reset flag "rebuild wall" option
   less_brick = z;               //reset flag "less brick" option
   life_bonus = z;               //counter of points giving a free life
-  paddle_length = 32 * resolution;      //width of the bumper
+  /* width of the horizontal paddles
+   * and height of the vertical paddles */
+  paddle_length = 32 * resolution;
   bonusPrice = z;               //reset flag "bonus price" option
   guardianPt = 0;
   RAZgemlist ();
@@ -198,7 +208,7 @@ handler_players::returnName ()
 Uint32
 handler_players::get_area_number ()
 {
-  return areaNumber;
+  return area_number;
 }
 
 /** 
@@ -208,7 +218,7 @@ handler_players::get_area_number ()
 Uint32
 handler_players::get_level_number ()
 {
-  return levelTecno;
+  return level_number;
 }
 
 /**
@@ -218,7 +228,7 @@ handler_players::get_level_number ()
 Sint32
 handler_players::get_num_of_lifes ()
 {
-  return superLifes;
+  return number_of_lifes;
 }
 
 //-----------------------------------------------------------------------------
@@ -245,7 +255,7 @@ handler_players::setLargeur (Sint32 large)
 Sint32
 handler_players::get_credit ()
 {
-  return creditFric;
+  return amount_of_money;
 }
 
 //-----------------------------------------------------------------------------
@@ -254,9 +264,9 @@ handler_players::get_credit ()
 Sint32
 handler_players::sub_credit (Sint32 value)
 {
-  if (value > creditFric)
+  if (value > amount_of_money)
     return 0;
-  creditFric = creditFric - value;
+  amount_of_money = amount_of_money - value;
   return 1;
 }
 
@@ -266,7 +276,7 @@ handler_players::sub_credit (Sint32 value)
 void
 handler_players::add_credit (Sint32 value)
 {
-  creditFric = creditFric + value;
+  amount_of_money = amount_of_money + value;
 }
 
 //-----------------------------------------------------------------------------
@@ -279,16 +289,16 @@ handler_players::add_scores (Sint32 value)
   score_life += value;
   if (score_life > 25000)
     {
-      lifes_plus (1);
+      add_life (1);
       score_life -= 25000;
     }
 }
 
-//-----------------------------------------------------------------------------
-// RAZ the list of bonuses bought
-//-----------------------------------------------------------------------------
+/**
+ * Clear the shopping cart 
+ */
 void
-handler_players::RAZ_course ()
+handler_players::clear_shopping_cart ()
 {
   Sint32 t = NB_OPTIONS;
   Sint32 z = 0;
@@ -375,13 +385,13 @@ handler_players::get_bumpOn (Sint32 bumpN)
   switch (bumpN)
     {
     case 2:
-      return bump2Actif;
+      return right_paddle_alive_counter;
       break;
     case 3:
-      return bump3Actif;
+      return top_paddle_alive_counter;
       break;
     default:
-      return bump4Actif;
+      return left_paddle_alive_counter;
       break;
     }
 }
@@ -397,13 +407,13 @@ handler_players::set_bumpOn (Sint32 bumpN, Sint32 value)
   switch (bumpN)
     {
     case 2:
-      bump2Actif = value;
+      right_paddle_alive_counter = value;
       break;
     case 3:
-      bump3Actif = value;
+      top_paddle_alive_counter = value;
       break;
     case 4:
-      bump4Actif = value;
+      left_paddle_alive_counter = value;
       break;
     }
 }
@@ -497,7 +507,7 @@ handler_players::getBri_top ()
 Sint32
 handler_players::zlastlevel ()
 {
-  if (areaNumber >= 5 && levelTecno >= 13)
+  if (area_number >= 5 && level_number >= 13)
     return 1;
   else
     return 0;
@@ -513,93 +523,108 @@ handler_players::next_level (Sint32 grdNx)
   Sint32 r = 0;
   if (is_verbose)
     printf
-      ("handler_players::next_level() areaNumber=%i, levelTecno=%i grdNx=%i guardianPt =%i\n",
-       areaNumber, levelTecno, grdNx, guardianPt);
-  if (areaNumber == 5 && levelTecno == 13)
+      ("handler_players::next_level() area_number=%i, level_number=%i grdNx=%i guardianPt =%i\n",
+       area_number, level_number, grdNx, guardianPt);
+  if (area_number == 5 && level_number == 13)
     {
-      areaNumber = 1;
-      levelTecno = 1;
+      area_number = 1;
+      level_number = 1;
       r = 1;                    //end of game
       guardianPt = 0;
     }
   else
     {
-      if (areaNumber == 5 && levelTecno == 12)
+      if (area_number == 5 && level_number == 12)
         {
-          levelTecno++;
+          level_number++;
           guardianPt += grdNx;
         }
       else
         {
-          levelTecno++;
-          if (levelTecno == 13)
+          level_number++;
+          if (level_number == 13)
             {
-              areaNumber++;
-              levelTecno = 1;
+              area_number++;
+              level_number = 1;
               guardianPt += grdNx;
             }
-          if (levelTecno == 7)
+          if (level_number == 7)
             guardianPt += grdNx;
         }
     }
   if (is_verbose)
     printf
-      ("handler_players::next_level() areaNumber=%i, levelTecno=%i,  guardianPt=%i\n",
-       areaNumber, levelTecno, guardianPt);
+      ("handler_players::next_level() area_number=%i, level_number=%i,  guardianPt=%i\n",
+       area_number, level_number, guardianPt);
   return r;
 }
 
-//-----------------------------------------------------------------------------
-// 
-//-----------------------------------------------------------------------------
-Sint32
-handler_players::level2jump ()
+/**
+ * Return the phase code
+ * @return the next phase code GUARDS_LEVEL or SHOP
+ */
+Uint32
+handler_players::get_next_phase ()
 {
-  Sint32 rcode = 4;             //menu
-  if (levelTecno == 6 || levelTecno == 12 || levelTecno == 13)
-    rcode = 3;                  //guard level
+  /* MAIN_MENU is a very improbable case */
+  Uint32 phase = MAIN_MENU;
+  /* levels 6, 12 and the level 13 of the area 5 are guardians levels */
+  if (level_number == 6 || level_number == 12 || level_number == 13)
+    {
+      phase = GUARDS_LEVEL;
+    }
   else
     {
-      if (levelTecno > 0 && levelTecno < 12)
-        rcode = 2;              //shop phase
+      /* before a level, there is always the shop,
+       * except for the first level of the first area */
+      if (level_number > 0 && level_number < 12)
+        {
+          phase = SHOP;
+        }
     }
-  return rcode;
+  return phase;
 }
 
-//-----------------------------------------------------------------------------
-// return previous player
-//-----------------------------------------------------------------------------
+/**
+ * Return previous player
+ * @return a pointer to the previous player object
+ */
 handler_players *
-handler_players::prevPlayer ()
+handler_players::get_previous_player ()
 {
-  return playerPrev;
+  return previous_player;
 }
 
-//-----------------------------------------------------------------------------
-// return next player
-//-----------------------------------------------------------------------------
+/**
+ * Return the next player
+ * @return a pointer to the next player object
+ */
+/*
 handler_players *
-handler_players::nextPlayer ()
+handler_players::get_next_player ()
 {
-  return playerNext;
+  return next_player;
+}
+*/
+
+/**
+ * Set the next player 
+ * @param player pointer to a object player
+ */
+void
+handler_players::set_next_player (handler_players * player)
+{
+  next_player = player;
 }
 
-//-----------------------------------------------------------------------------
-// set next player
-//-----------------------------------------------------------------------------
+/**
+ * Get the previous player
+ * @param player pointer to a object player
+ */
 void
-handler_players::nextPlayer (handler_players * gamer)
+handler_players::set_previous_player (handler_players * player)
 {
-  playerNext = gamer;
-}
-
-//-----------------------------------------------------------------------------
-// set previous player
-//-----------------------------------------------------------------------------
-void
-handler_players::prevPlayer (handler_players * gamer)
-{
-  playerPrev = gamer;
+  previous_player = player;
 }
 
 //-----------------------------------------------------------------------------
@@ -620,93 +645,97 @@ handler_players::setGuardPt (Sint32 grdPt)
   guardianPt = grdPt;
 }
 
-//-----------------------------------------------------------------------------
-// extra lifes
-//      input   => value: number of life(s)
-//-----------------------------------------------------------------------------
+/**
+ * Add one or more lifes
+ * @param add number of lifes to add
+ */
 void
-handler_players::lifes_plus (Sint32 value)
+handler_players::add_life (Uint32 add)
 {
-  superLifes += value;
+  number_of_lifes += add;
 }
 
-//-----------------------------------------------------------------------------
-// decrease number of life
-// retra: number of life(s)
-//-----------------------------------------------------------------------------
-Sint32
-handler_players::lifesMoins (Sint32 retra)
+/**
+ * Remove one or more lifes
+ * @param add number of lifes to remove 
+ */
+void
+handler_players::remove_life (Uint32 remove)
 {
-  superLifes -= retra;
-  if (superLifes > 0)
-    return 1;
-  else
+  number_of_lifes -= remove;
+  if (number_of_lifes < 0)
     {
-      superLifes = 0;
-      return 0;
+      number_of_lifes = 0;
     }
 }
 
-//-----------------------------------------------------------------------------
-// reset number of lifes
-//-----------------------------------------------------------------------------
+/**
+ * Remove all lifes, when the game over is forced 
+ */
 void
-handler_players::lifesReset ()
+handler_players::remove_all_lifes ()
 {
-  superLifes = 0;
+  number_of_lifes = 0;
 }
 
-//===============================================================================
-// static methods
-//===============================================================================
+/*
+ * Statics methods
+ */
 
-//-----------------------------------------------------------------------------
-// static: return next player
-//      input   => gamer: current "handler_players" object
-//                      => rcode: pointer to "end_return"
-//                      => vactu: current phase (1, 2, or 3) 
-//                      => grdNx: pointer to "level_list" of the guards (NULL by default)
-// output <= next "handler_players" object
-//-----------------------------------------------------------------------------
+/**
+ * Static method which return next player
+ * @param  player: current "handler_players" object
+ * @param  rcode: pointer to "end_return"
+ * @param  vactu: current phase (1, 2, or 3)
+ * @param  grdNx: pointer to "level_list" of the guards (NULL by default)
+ * @return the new player object
+ */
 handler_players *
-handler_players::nextplayer (handler_players * gamer, Sint32 * rcode,
+handler_players::nextplayer (handler_players * player, Sint32 * rcode,
                              Sint32 vactu, Sint32 grdNx)
 {
-  Sint32 start = gamer->player_num;
-  Sint32 index = start;
+  Uint32 start = player->player_num;
+  Uint32 index = start;
   if (vactu != 2)
-    gamer->next_level (grdNx);
-  for (Sint32 i = 0; i < totalActif; i++)
     {
-      if (++index > totalActif)
-        index = 1;
-      handler_players *pPlay = playerlist[index - 1];
-      if (pPlay->superLifes > 0)
+      player->next_level (grdNx);
+    }
+
+  /* process each player object */
+  for (Uint32 i = 0; i < max_of_players; i++)
+    {
+      if (++index > max_of_players)
         {
-          *rcode = pPlay->level2jump ();
-          if (pPlay->player_num <= start && *rcode == 2 && vactu == 2)
-            *rcode = 1;
+          index = 1;
+        }
+      handler_players *player = players_list[index - 1];
+      if (player->number_of_lifes > 0)
+        {
+          /* get next phase: GUARDS_LEVEL or SHOP */
+          *rcode = player->get_next_phase ();
+
+          /* this player already went to the shop,
+           * he jump to the bricks level */
+          if (player->player_num <= start && *rcode == SHOP && vactu == SHOP)
+            {
+              *rcode = BRICKS_LEVEL;
+             } 
           // - 1: bricks levels
           // - 2: shop
           // - 3: guards levels
           // - 4: menu
-          if (pPlay->player_num > start && vactu != 2)
-            if (*rcode == 2)
-              *rcode = 1;
-          return pPlay;
+          if (player->player_num > start && vactu != SHOP)
+            {
+              if (*rcode == SHOP)
+                {
+                  *rcode = BRICKS_LEVEL;
+                }
+            }
+          return player;
         }
     }
   *rcode = 4;                   //improbable
-  return playerlist[0];
-}
-
-//-----------------------------------------------------------------------------
-// static: return first player
-//-----------------------------------------------------------------------------
-handler_players *
-handler_players::firstGamer ()
-{
-  return player_one;
+  return players_list[0];
 }
 
 /**
@@ -714,12 +743,12 @@ handler_players::firstGamer ()
  * @param numof maximum number of players, always 6
  */
 handler_players *
-handler_players::init_numof_players (Uint32 numof)
+handler_players::create_all_players (Uint32 numof)
 {
 
   try
   {
-    playerlist = new handler_players *[numof];
+    players_list = new handler_players *[numof];
   }
   catch (std::bad_alloc &)
   {
@@ -730,32 +759,27 @@ handler_players::init_numof_players (Uint32 numof)
     throw;
   }
 
-/*
-  Sint32 t = numof;
-  playerlist =
-    (handler_players **) memory->alloc (t * sizeof (handler_players *),
-                                        0x504C4159);
-*/
+  /* create the players objects */
   for (Uint32 i = 0; i < numof; i++)
     {
-      playerlist[i] = new handler_players ();
+      players_list[i] = new handler_players ();
     }
-  return player_one;
+  return first_player;
 }
 
-//-----------------------------------------------------------------------------
-// static: release all objects players
-//-----------------------------------------------------------------------------
+/**
+ * Static method which releases all objects players
+ */
 void
-handler_players::joueursRAZ ()
+handler_players::release_all_players ()
 {
-  Sint32 t = totalActif;
-  for (Sint32 i = 0; i < t; i++)
-    delete player_one;
-  if (playerlist)
+  for (Uint32 i = 0; i < max_of_players; i++)
     {
-      //memory->release ((char *) playerlist);
-      delete[]playerlist;
-      playerlist = NULL;
+      delete first_player;
+    }
+  if (NULL != players_list)
+    {
+      delete[]players_list;
+      players_list = NULL;
     }
 }

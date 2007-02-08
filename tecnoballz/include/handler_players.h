@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.h,v 1.4 2007/02/08 07:33:07 gurumeditation Exp $
+ * $Id: handler_players.h,v 1.5 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,40 +42,51 @@ class handler_players:public virtual tecnoballz
   friend class scoretable;
 
 public:
-  static handler_players **playerlist;
+  /** List of all players object */
+  static handler_players **players_list;
 
 private:
-  static Sint32 totalActif;     // Nombre de joueurs actifs
+  /** Maximum number of playes */
+  static Uint32 max_of_players;
   static Sint32 joueur_run;     // Numero du joueur en cours
-  static handler_players *player_one;
+  static handler_players *first_player;
   static Sint32 best_score;
   static char bestPlayer[6];
-
-  handler_players *playerNext;  // Pointeur sur le joueur suivant
-  handler_players *playerPrev;  // Pointeur sur le joueur precedent
+  
+  /** Pointer to the next player object */
+  handler_players *next_player;
+  /** Pointer to the previsous player object */
+  handler_players *previous_player;
   /** Name of the player */
   char player_name[7];
-  Sint32 player_num;
+  /** Player number from 1 to 6 */
+  Uint32 player_num;
 
   Sint32 superScore;            // Score accumule
   Sint32 score_life;            // Score pour une vie
-  Sint32 areaNumber;            // Numero de l'Area
-  Sint32 levelTecno;            // Niveau dans l'Area
-  Sint32 superLifes;            // Nombre de vies
-  Sint32 activation;            // Flag joueur actif
+  /** Area number from 1 to 5 */
+  Uint32 area_number;
+  Uint32 level_number;            // Niveau dans l'Area
+  /** Number of lifes remaining */
+  Sint32 number_of_lifes;
   Sint32 courseList[NB_OPTIONS + 1];    // Options achetes au magasin
   Sint32 courseNmbr;            // Nombre d'options achetee(s)
-  Sint32 creditFric;            // Credit argent
+  Sint32 amount_of_money;            // Credit argent
   char bricotLeft[12];          // Etat du mur de gauche
   char bricotRigh[12];          // Etat du mur de droite
   char bricot_top[12];          // Etat du mur dy haut
-  Sint32 bump2Actif;            // Etat raquette de droite
-  Sint32 bump3Actif;            // Etat raquette du haut
-  Sint32 bump4Actif;            // Etat raquette de droite
+  /** alive counter of the right paddle, 0 = paddle disabled */ 
+  Uint32 right_paddle_alive_counter;
+  /** Alive counter of the top paddle, 0 = paddle disabled */ 
+  Uint32 top_paddle_alive_counter;
+  /** Alive counter of the left paddle, 0 = paddle disabled */ 
+  Uint32 left_paddle_alive_counter;
   Sint32 rebuild_ok;            // Flag reconstruit les murs
   Sint32 less_brick;            // Flag "less brick"
   Sint32 life_bonus;            // Compteur point une vie gratuite
-  Sint32 paddle_length;         // Largeur des raquettes
+  /** Width of the horizontal paddles
+   * and height of the vertical paddles */
+  Uint32 paddle_length;
   Sint32 bonusPrice;            // Bonus prix du magasin a 1
   char gemmeActif[6];           // Etat des 6 gemmes
   Sint32 gemmeNombr;            // Nombre de gemme(s) ramassee(s)
@@ -85,8 +96,8 @@ private:
     handler_players ();
    ~handler_players ();
 public:
-  void initialise (Sint32 lifes, Sint32 areaN,
-                   Sint32 level, Sint32 monay, Sint32 grdPt);
+  void initialize (Uint32 lifes, Uint32 areaN,
+                   Uint32 level, Uint32 monay, Uint32 grdPt);
   void set_name (char *playername);
   char *returnName ();
   Uint32 get_area_number ();
@@ -99,7 +110,7 @@ public:
   void add_credit (Sint32 value);
 
   void add_scores (Sint32 value);
-  void RAZ_course ();
+  void clear_shopping_cart ();
   Sint32 *get_course ();
   Sint32 get_cou_nb ();
   void set_cou_nb (Sint32 nombr);
@@ -122,27 +133,26 @@ public:
 
   Sint32 zlastlevel ();
   Sint32 next_level (Sint32 grdNx = 0);
-  Sint32 level2jump ();
+  Uint32 get_next_phase ();
 
-  void lifes_plus (Sint32 ajout);
-  Sint32 lifesMoins (Sint32 retra);
-  void lifesReset ();
+  void add_life (Uint32 add);
+  void remove_life (Uint32 remove);
+  void remove_all_lifes ();
 
   Sint32 getGuardPt ();
   void setGuardPt (Sint32 grdPt);
 
-  static handler_players *firstGamer ();
-  static void joueursRAZ ();
-  static handler_players *init_numof_players (Uint32 numof);
+  static void release_all_players ();
+  static handler_players *create_all_players (Uint32 numof);
   static handler_players *nextplayer (handler_players *, Sint32 *, Sint32,
                                       Sint32 grdNx = 0);
 
 
 private:
-    handler_players * prevPlayer ();
-  handler_players *nextPlayer ();
-  void nextPlayer (handler_players * gamer);
-  void prevPlayer (handler_players * gamer);
+  handler_players *get_previous_player ();
+  handler_players *get_next_player ();
+  void set_next_player (handler_players *player);
+  void set_previous_player (handler_players *player);
   void reset_members ();
 
 

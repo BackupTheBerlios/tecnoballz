@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.cc
  * @brief Paddles controller 
- * @date 2007-02-05
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.6 2007/02/08 07:33:07 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.7 2007/02/08 17:00:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -634,15 +634,15 @@ controller_paddles::get_paddle (Uint32 id)
 {
   switch (id)
     {
-    case 1:
+    case BOTTOM_PADDLE:
       return paddle_bottom;
-    case 2:
+    case RIGHT_PADDLE:
       return paddle_right;
-    case 3:
+    case TOP_PADDLE: 
       return paddle_top;
-    case 4:
+    case LEFT_PADDLE:
       return paddle_left;
-    case 5:
+    case ROBOT_PADDLE:
       return tec_robot0;
     }
   return NULL;
