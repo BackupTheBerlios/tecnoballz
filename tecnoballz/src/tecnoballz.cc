@@ -5,11 +5,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.5 2007/02/07 21:05:45 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.6 2007/02/08 07:33:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ handler_keyboard *
 list_sprites *
   tecnoballz::sprites = NULL;   //sprites handle
 handler_players *
-  tecnoballz::joueurGere = NULL;        //players handle
+  tecnoballz::current_player = NULL;
 Sint16 *
   tecnoballz::table_cosL = NULL;        //cosinus table
 Sint16 *
@@ -176,40 +176,19 @@ tecnoballz::first_init (configfile * pConf)
 
   ptLev_data = new level_data ();
   //Sint32 Ecode = -1; 
-  joueurGere = handler_players::joueursADD (MAX_PLAYER);
-  if (!joueurGere)
-    {
-      num_erreur = E_GENRIQUE;
-      return num_erreur;
-    }
+  current_player = handler_players::init_numof_players (MAX_PLAYER);
 
-  //###################################################################
-  // retrieve user
-  //###################################################################
+  /* retrieve usernames */
   for (Uint32 i = 0; i < 6; i++)
-    handler_players::playerlist[i]->setNewName (pConf->get_player (i));
-  /*
-     char *pUser = getenv("USER");
-     if (pUser)
-     handler_players::playerlist[0]->setNewName(pUser);
-     else
-     handler_players::playerlist[0]->setNewName("ALBERT");
-
-     handler_players::playerlist[1]->setNewName("LEON  ");
-     handler_players::playerlist[2]->setNewName("ANDRE ");
-     handler_players::playerlist[3]->setNewName("GERARD");
-     handler_players::playerlist[4]->setNewName("RAOUL ");
-     handler_players::playerlist[5]->setNewName("MARCEL");
-   */
-
+    {
+      handler_players::playerlist[i]->set_name (pConf->get_player (i));
+    }
   super_jump = 4;               //menu
-  //super_jump = 1;               //bricks level (test only)
-  //super_jump = 3;               //guards level (test only)
-  //super_jump = 5;               //scroll editor (test only)
-
 
   if (arg_jumper > 0)
-    super_jump = arg_jumper;
+    {
+      super_jump = arg_jumper;
+    }
   if (is_verbose)
     printf ("tecnoballz::first_init() [STOP]\n");
   return num_erreur;

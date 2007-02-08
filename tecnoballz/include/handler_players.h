@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.h,v 1.3 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: handler_players.h,v 1.4 2007/02/08 07:33:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,8 @@ private:
 
   handler_players *playerNext;  // Pointeur sur le joueur suivant
   handler_players *playerPrev;  // Pointeur sur le joueur precedent
-  char nameString[7];           // Nom du Joueur
+  /** Name of the player */
+  char player_name[7];
   Sint32 player_num;
 
   Sint32 superScore;            // Score accumule
@@ -80,17 +81,18 @@ private:
   Sint32 gemmeNombr;            // Nombre de gemme(s) ramassee(s)
   Sint32 guardianPt;            //pt / level_list of the guards
 
-public:
+private:
     handler_players ();
    ~handler_players ();
+public:
   void initialise (Sint32 lifes, Sint32 areaN,
                    Sint32 level, Sint32 monay, Sint32 grdPt);
-  void setNewName (char *);
+  void set_name (char *playername);
   char *returnName ();
-  Sint32 getAreaNum ();
-  Sint32 getLevelNu ();
-  Sint32 getLifeNum ();
-  Sint32 get_paddle_width ();
+  Uint32 get_area_number ();
+  Uint32 get_level_number ();
+  Sint32 get_num_of_lifes ();
+  Uint32 get_paddle_width ();
   void setLargeur (Sint32 largeur);
   Sint32 get_credit ();
   Sint32 sub_credit (Sint32 value);
@@ -122,8 +124,6 @@ public:
   Sint32 next_level (Sint32 grdNx = 0);
   Sint32 level2jump ();
 
-  Sint32 getareaNum ();
-  Sint32 get_nlifes ();
   void lifes_plus (Sint32 ajout);
   Sint32 lifesMoins (Sint32 retra);
   void lifesReset ();
@@ -133,7 +133,7 @@ public:
 
   static handler_players *firstGamer ();
   static void joueursRAZ ();
-  static handler_players *joueursADD (Sint32 total);
+  static handler_players *init_numof_players (Uint32 numof);
   static handler_players *nextplayer (handler_players *, Sint32 *, Sint32,
                                       Sint32 grdNx = 0);
 
@@ -143,7 +143,7 @@ private:
   handler_players *nextPlayer ();
   void nextPlayer (handler_players * gamer);
   void prevPlayer (handler_players * gamer);
-  void resetvalue ();
+  void reset_members ();
 
 
 };

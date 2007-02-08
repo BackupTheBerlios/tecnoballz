@@ -5,11 +5,11 @@
  * @date 2007-02-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.8 2007/02/07 17:10:37 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.9 2007/02/08 07:33:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,9 +100,9 @@ supervisor_guards_level::first_init ()
   gameover_counter = 0;
   count_next = 0;
   tecnwinner = 0;
-  areaNumber = joueurGere->getAreaNum ();
-  levelTecno = joueurGere->getLevelNu ();
-  Sint32 grdP = joueurGere->getGuardPt ();
+  areaNumber = current_player->get_area_number ();
+  levelTecno = current_player->get_level_number ();
+  Sint32 grdP = current_player->getGuardPt ();
   //levelTecno = 6; //test only
   if (is_verbose)
     printf ("supervisor_guards_level::first_init() : areaNumber=%i, "
@@ -206,7 +206,7 @@ supervisor_guards_level::first_init ()
   //###################################################################
   //
   //###################################################################
-  ptPrntmney->init_guard (joueurGere, paddles, ptBobMoney, ptBobLifes);
+  ptPrntmney->init_guard (current_player, paddles, ptBobMoney, ptBobLifes);
 
   //initialize mobile characters at the end of the level
   ptMoveText->initialise (levelTecno, 32 * resolution);
@@ -221,7 +221,7 @@ supervisor_guards_level::first_init ()
   keyboard->set_grab_input (true);
 
   score_over *pOver = ptGameOver->gtScorOver ();
-  ptBob_name = pOver->string2bob (joueurGere->returnName ());
+  ptBob_name = pOver->string2bob (current_player->returnName ());
   sprites->add (ptBob_name);
   ptBob_name->enable ();
   ptBob_name->
@@ -242,7 +242,7 @@ supervisor_guards_level::main_loop ()
   /*
    * gameover : the player has no more lives
    */
-  if (joueurGere->getLifeNum () <= 0)
+  if (current_player->get_num_of_lifes () <= 0)
     {
       if (gameover_counter > 0)
         {
@@ -284,14 +284,14 @@ supervisor_guards_level::main_loop ()
             ptCongBall->execution1 ();  //congra
         }
       ptBaDirect->execution1 ();        //handle ball viewfinder
-      ptPrntmney->execution2 (joueurGere->creditFric, joueurGere->superLifes);
+      ptPrntmney->execution2 (current_player->creditFric, current_player->superLifes);
       ptMoveText->goMoveText ();
       sprites->draw ();
       display->unlock_surfaces ();
       display->bufferCTab ();
       if (keyboard->is_left_button () && gameover_counter > 150)
         {
-          joueurGere = handler_players::nextplayer (joueurGere,
+          current_player = handler_players::nextplayer (current_player,
                                                     &end_return,
                                                     1,
                                                     guards->
@@ -321,8 +321,8 @@ supervisor_guards_level::main_loop ()
           ptCapsules->bougefric2 ();
           pt_gadgets->bougegads2 ();
           ptMoveText->goMoveText ();
-          ptPrntmney->execution2 (joueurGere->creditFric,
-                                  joueurGere->superLifes);
+          ptPrntmney->execution2 (current_player->creditFric,
+                                  current_player->superLifes);
           gigablitz->execution2 ();    //move the Gigablitz from guards
           pExplosion->execution1 ();    //explosion animations
           bullets->anim_fires ();    //the animation of the guards's weapons
@@ -357,16 +357,16 @@ supervisor_guards_level::main_loop ()
           bullets->disable_sprites ();
           if (count_next > 500 || keyboard->key_is_pressed (SDLK_SPACE))
             {
-              tecnwinner = joueurGere->zlastlevel ();
+              tecnwinner = current_player->zlastlevel ();
               if (tecnwinner)
                 {
-                  joueurGere->lifesReset ();
+                  current_player->lifesReset ();
                   count_next = 0;
                 }
               else
                 {
-                  joueurGere = handler_players::nextplayer
-                    (joueurGere,
+                  current_player = handler_players::nextplayer
+                    (current_player,
                      &end_return, 1, guards->get_max_of_sprites () + 1);
                 }
             }
@@ -394,7 +394,7 @@ supervisor_guards_level::main_loop ()
     end_return = -1;
   if (keyboard->command_is_pressed (handler_keyboard::TOOVERFLAG) ||
       Ecode == handler_popup_menu::GOGAMEOVER)
-    joueurGere->lifesReset ();
+    current_player->lifesReset ();
   if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
       Ecode == handler_popup_menu::EXITTOMENU)
     end_return = 4;

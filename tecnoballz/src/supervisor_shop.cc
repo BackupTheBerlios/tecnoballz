@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2006-10-04
 // fonction	: manage the shop
-// id		: $Id: supervisor_shop.cc,v 1.5 2007/02/06 20:41:33 gurumeditation Exp $
+// id		: $Id: supervisor_shop.cc,v 1.6 2007/02/08 07:33:07 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -95,8 +95,8 @@ supervisor_shop::~supervisor_shop()
 //-------------------------------------------------------------------------------
 Sint32 supervisor_shop::first_init()
 {
-	Sint32 arean = joueurGere->getAreaNum();
-	Sint32 level = joueurGere->getLevelNu();
+	Sint32 arean = current_player->get_area_number();
+	Sint32 level = current_player->get_level_number();
 #ifndef SOUNDISOFF
 	audio->play_level_music (arean, level);
 	audio->play_shop_music (arean);
@@ -108,11 +108,11 @@ Sint32 supervisor_shop::first_init()
 	//###################################################################
 	char *ptDes;
 	const char *ptSrc;
-	ptDes = joueurGere->returnName();
+	ptDes = current_player->returnName();
 	for(Sint32 i = 0; i < 6; i++)
 		shoptext00[8 + i] = ptDes[i];
 	intToASCII(NB_OPTIONS, &shoptext63[48], 1); 	
-	intToASCII(joueurGere->getLifeNum(), &info_text1[STEXTWIDHT * 4 + 5], 1);
+	intToASCII(current_player->get_num_of_lifes(), &info_text1[STEXTWIDHT * 4 + 5], 1);
 
 	if(arean > 1)
 	{	const char* pPass = supervisor_main_menu::getTheCode(arean, hardChoice);
@@ -150,7 +150,7 @@ Sint32 supervisor_shop::first_init()
 	// initialize the gadgets
 	//###################################################################
 	gereGadget->create_shop_sprites_list();
-	joueurGere->RAZ_course();
+	current_player->RAZ_course();
 	Sint32* tp = coursetemp;
 	for(Sint32 i = 0; i < NB_OPTIONS; i++)
 		*(tp++) = 0;
@@ -188,7 +188,7 @@ Sint32 supervisor_shop::first_init()
 
 
 	putthetext(shoptext00);
-	if(joueurGere->get_Bprice())
+	if(current_player->get_Bprice())
 		shop_line3 = &shoptext00[STEXTWIDHT * 3];
 
 	keyboard->set_grab_input (false);
@@ -247,7 +247,7 @@ Sint32 supervisor_shop::main_loop()
 	mega_print->bufferAff1(263 * resolution, 227 * resolution,
 		prixActuel, 100000);
 	mega_print->bufferAff1(263 * resolution, 183 * resolution,
-		joueurGere->get_credit(), 100000);
+		current_player->get_credit(), 100000);
 	mouse_pointer->move();
 	if(cheat_flag)
 		gereGadget->animations(2);
@@ -298,7 +298,7 @@ Sint32 supervisor_shop::main_loop()
 //------------------------------------------------------------------------------
 void supervisor_shop::aff_course()
 {	
-	Sint32 *p = joueurGere->get_course();
+	Sint32 *p = current_player->get_course();
  	sprite_capsule **liste = gereGadget->get_sprites_list();
  	Sint32 pos_y = 4 * resolution;
  	for(Sint32 i = 0; i < NB_OPTIONS; i++)
@@ -359,7 +359,7 @@ Sint32 supervisor_shop::led_moving(Sint32 index)
 		// set LED indicator
 		BOB_allume->enable();
 		BOB_allume->set_coordinates(curseur_x1, curseur_y1);
-		if(joueurGere->get_Bprice())
+		if(current_player->get_Bprice())
 			i = 1;
 		else
 			i = case_price[index];
@@ -486,12 +486,12 @@ void supervisor_shop::faitcourse(Sint32 gadnu)
 		// somes infos
 		//###############################################################
 		case GAD_INFORM:
-		{	Sint32 arean = joueurGere->getAreaNum();
+		{	Sint32 arean = current_player->get_area_number();
 			char *ptSrc = &info_text2[0];
 			char *ptDes= &info_text1[0];
 			for(Sint32 i = 2; i <= 4; i++) 
 			{	char *ptTxt = ptSrc;
-				if(joueurGere->get_bumpOn(i) <= 0)
+				if(current_player->get_bumpOn(i) <= 0)
 				{	ptTxt += STEXTWIDHT;
 					if(arean >= 2 && i == 3)
 						ptTxt += STEXTWIDHT;
@@ -536,12 +536,12 @@ void supervisor_shop::faitcourse(Sint32 gadnu)
 		// rebuild the wall
 		//###############################################################
 		case GAD_REBUIL:
-		if(joueurGere->getAreaNum() < 5) 
+		if(current_player->get_area_number() < 5) 
 			putthetext(shoptext56);
 		else 
-		{	if(joueurGere->getRebuild() <= 0)
+		{	if(current_player->getRebuild() <= 0)
 			{	if(sub_credit(prixActuel))
-				{	joueurGere->setRebuild(1);
+				{	current_player->setRebuild(1);
 					message_ok();
 				}
 			}
@@ -552,9 +552,9 @@ void supervisor_shop::faitcourse(Sint32 gadnu)
 		// less bricks option
 		//###############################################################
 		case GAD_LESSBR:
-			if(joueurGere->get_lessBk() <= 0)
+			if(current_player->get_lessBk() <= 0)
 			{	if(sub_credit(prixActuel))
-				{	joueurGere->set_lessBk(10);
+				{	current_player->set_lessBk(10);
 					message_ok();
 				}
 			}
@@ -564,8 +564,8 @@ void supervisor_shop::faitcourse(Sint32 gadnu)
 		// exit from the shop
 		//###############################################################
 		case GAD_EXITSH:
-			joueurGere->set_Bprice(0);
-				joueurGere = handler_players::nextplayer(joueurGere, &end_return, 2);
+			current_player->set_Bprice(0);
+				current_player = handler_players::nextplayer(current_player, &end_return, 2);
 			break;
 
 		default:
@@ -575,9 +575,9 @@ void supervisor_shop::faitcourse(Sint32 gadnu)
 			//############################################################
 			if(gadnu >= GAD_BUMP02 && gadnu <= GAD_BUMP04)
 			{	Sint32 i = (gadnu - GAD_BUMP02) / 2 + 2;
-				if(joueurGere->get_bumpOn(i) <= 0)
+				if(current_player->get_bumpOn(i) <= 0)
 				{	if(sub_credit(prixActuel))
-					{	joueurGere->set_bumpOn(i, 3);
+					{	current_player->set_bumpOn(i, 3);
 						message_ok();
 					}
 				}
@@ -592,7 +592,7 @@ void supervisor_shop::faitcourse(Sint32 gadnu)
 //------------------------------------------------------------------------------
 Sint32 supervisor_shop::sub_credit(Sint32 value)
 {
-	if(joueurGere->sub_credit(prixActuel))
+	if(current_player->sub_credit(prixActuel))
 		return 1;
 	else
 	{	putthetext(shoptext41);
@@ -614,14 +614,14 @@ void supervisor_shop::achete_gad(Sint32 gadnb)
 	//  purchase is possible ?
 	if(!sub_credit(prixActuel)) return;
 	
-	Sint32 *p = joueurGere->get_course();
+	Sint32 *p = current_player->get_course();
 	p[bonusachat] = gadnb;
 	sh_tablept[bonusachat] = shop_point;
 	sprite_capsule **liste = gereGadget->get_sprites_list();
 	sprite_capsule *gadgt = liste[bonusachat++];
 	gadgt->nouveauGad(gadnb);
 	message_ok();
-	joueurGere->set_cou_nb(bonusachat);
+	current_player->set_cou_nb(bonusachat);
 }
 
 //------------------------------------------------------------------------------
@@ -686,7 +686,7 @@ void supervisor_shop::sh_ballade()
 			if(i >= 0)
 			{	if(i >= bonusachat)
 					i = bonusachat - 1; 
-				Sint32 *p0 = joueurGere->get_course();
+				Sint32 *p0 = current_player->get_course();
 				Sint32 *p1 = courseList;	//source
 				Sint32 *p2 = p0 + i;		//destination 
 				Sint32 *tp = coursetemp;
@@ -716,7 +716,7 @@ void supervisor_shop::sh_ballade()
 					}
 					while(i < NB_OPTIONS);
 					tp = coursetemp;
-					p0 = joueurGere->get_course();
+					p0 = current_player->get_course();
 					for(Sint32 i = 0; i < NB_OPTIONS; i++)
 					{	*(p0++) = *(tp++);
 					}
@@ -732,11 +732,11 @@ void supervisor_shop::sh_ballade()
 					*(p1++) = 0;
 				}
 				bonusachat--;
-				joueurGere->set_cou_nb(bonusachat);
+				current_player->set_cou_nb(bonusachat);
 				
 				//check bonus price
 				Sint32 price = 0;
-				if(joueurGere->get_Bprice())
+				if(current_player->get_Bprice())
 					price = 1;
 				else
 				{	while (case_types[i] != GAD_EXITSH)
@@ -747,7 +747,7 @@ void supervisor_shop::sh_ballade()
 						i++;
 					}
 				}
-				joueurGere->add_credit(price);
+				current_player->add_credit(price);
 			}
 			get_object = -1;
 		}
@@ -762,7 +762,7 @@ void supervisor_shop::sh_ballade()
 		if(keyboard->is_left_button())
 		{	Sint32 i = cadre_offs;
 			if(i >=0) 
-			{	Sint32 *p = joueurGere->get_course();
+			{	Sint32 *p = current_player->get_course();
 				sprite_capsule **liste = gereGadget->get_sprites_list();
 				courseList = p + i;
 				bobclignot = *(liste + i);

@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.2 2007/02/06 16:52:13 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.3 2007/02/08 07:33:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,11 +68,11 @@ handler_players::handler_players ()
   // RAZ members
   //###################################################################
   player_num = totalActif;
-  resetvalue ();
+  reset_members ();
   Uint32 i;
   for (i = 0; i < 6; i++)
-    nameString[i] = ' ';        //reset name of the player
-  nameString[i] = 0;
+    player_name[i] = ' ';        //reset name of the player
+  player_name[i] = 0;
 }
 
 /* 
@@ -105,7 +105,7 @@ void
 handler_players::initialise (Sint32 lifes, Sint32 areaN, Sint32 level,
                              Sint32 monay, Sint32 grdPt)
 {
-  resetvalue ();
+  reset_members ();
   superLifes = lifes;
   areaNumber = areaN;
   levelTecno = level;
@@ -114,11 +114,11 @@ handler_players::initialise (Sint32 lifes, Sint32 areaN, Sint32 level,
   guardianPt = grdPt;
 }
 
-//-----------------------------------------------------------------------------
-// reset some members values
-//-----------------------------------------------------------------------------
+/**
+ * Reset some members values
+ */
 void
-handler_players::resetvalue ()
+handler_players::reset_members ()
 {
   Uint32 z = 0;
   superScore = z;               //reset score of the player
@@ -147,27 +147,38 @@ handler_players::resetvalue ()
   RAZgemlist ();
 }
 
-//-----------------------------------------------------------------------------
-// initialize a new name
-//-----------------------------------------------------------------------------
+/**
+ * Set the player name
+ * @param name the name of the player
+ */
 void
-handler_players::setNewName (char *pName)
+handler_players::set_name (char *name)
 {
   for (Uint32 i = 0; i < 6; i++)
-    nameString[i] = ' ';
+    {
+      player_name[i] = ' ';
+    }
   for (Uint32 i = 0; i < 6; i++)
     {
-      char c = pName[i];
-      if (!c)
-        return;
+      char c = name[i];
+      if (0 == c)
+        {
+          return;
+        }
       if (c >= 'a' && c <= 'z')
-        c = c - ('a' - 'A');
+        {
+          c = c - ('a' - 'A');
+        }
       if ((c >= ' ' && c <= '!') ||
           (c >= '-' && c <= '.') ||
           (c >= '0' && c <= ':') || (c >= 'A' && c <= 'Z') || c == '\'')
-        nameString[i] = c;
+        {
+          player_name[i] = c;
+        }
       else
-        nameString[i] = ' ';
+        {
+          player_name[i] = ' ';
+        }
     }
 }
 
@@ -177,35 +188,35 @@ handler_players::setNewName (char *pName)
 char *
 handler_players::returnName ()
 {
-  return &nameString[0];
+  return &player_name[0];
 }
 
-//-----------------------------------------------------------------------------
-// return area number
-//      output  <= areaNumber: area number (1 to 5)
-//-----------------------------------------------------------------------------
-Sint32
-handler_players::getAreaNum ()
+/**
+ * Return the area number
+ * @raturn area number, from 1 to 5
+ */
+Uint32
+handler_players::get_area_number ()
 {
   return areaNumber;
 }
 
-//-----------------------------------------------------------------------------
-// return level number
-//      output  <= levelTecno: level number (1 to 13)
-//-----------------------------------------------------------------------------
-Sint32
-handler_players::getLevelNu ()
+/** 
+ * Return the level number
+ * @return level number, from 1 to 13
+ */
+Uint32
+handler_players::get_level_number ()
 {
   return levelTecno;
 }
 
-//-----------------------------------------------------------------------------
-// return the number of life(s)
-//      output  <= superLifes: number of life(s)
-//-----------------------------------------------------------------------------
+/**
+ * Return the number of life(s)
+ * @return the number of life(s)
+ */
 Sint32
-handler_players::getLifeNum ()
+handler_players::get_num_of_lifes ()
 {
   return superLifes;
 }
@@ -213,7 +224,7 @@ handler_players::getLifeNum ()
 //-----------------------------------------------------------------------------
 // return bumper width
 //-----------------------------------------------------------------------------
-Sint32
+Uint32
 handler_players::get_paddle_width ()
 {
   return paddle_length;
@@ -592,16 +603,6 @@ handler_players::prevPlayer (handler_players * gamer)
 }
 
 //-----------------------------------------------------------------------------
-// return area number
-//      output  <=      areaNumber: 1 to 5
-//-----------------------------------------------------------------------------
-Sint32
-handler_players::getareaNum ()
-{
-  return areaNumber;
-}
-
-//-----------------------------------------------------------------------------
 // get pointer to "level_list" of the guards
 //-----------------------------------------------------------------------------
 Sint32
@@ -708,21 +709,37 @@ handler_players::firstGamer ()
   return player_one;
 }
 
-//-----------------------------------------------------------------------------
-// static: initialize the number maximum of players
-//      input   => total: number maximum of players (always 6)
-//-----------------------------------------------------------------------------
+/**
+ * Static method which initializes the maximum number of players
+ * @param numof maximum number of players, always 6
+ */
 handler_players *
-handler_players::joueursADD (Sint32 total)
+handler_players::init_numof_players (Uint32 numof)
 {
-  Sint32 t = total;
+
+  try
+  {
+    playerlist = new handler_players *[numof];
+  }
+  catch (std::bad_alloc &)
+  {
+    std::
+      cerr << "(!)handler_players::joueursADD() "
+      "not enough memory to allocate " <<
+      numof << " list elements!" << std::endl;
+    throw;
+  }
+
+/*
+  Sint32 t = numof;
   playerlist =
     (handler_players **) memory->alloc (t * sizeof (handler_players *),
                                         0x504C4159);
-  if (!playerlist)
-    return 0;
-  for (Sint32 i = 0; i < t; i++)
-    playerlist[i] = new handler_players ();
+*/
+  for (Uint32 i = 0; i < numof; i++)
+    {
+      playerlist[i] = new handler_players ();
+    }
   return player_one;
 }
 
@@ -737,7 +754,8 @@ handler_players::joueursRAZ ()
     delete player_one;
   if (playerlist)
     {
-      memory->release ((char *) playerlist);
+      //memory->release ((char *) playerlist);
+      delete[]playerlist;
       playerlist = NULL;
     }
 }

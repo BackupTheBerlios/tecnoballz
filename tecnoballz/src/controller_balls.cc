@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.10 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.11 2007/02/08 07:33:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -299,7 +299,7 @@ controller_balls::vitussort2 ()
                   raket->attachBall (balle);
                   balle->reStarting (raket);
                   balle->ballPower2 ();
-                  joueurGere->lifesMoins (1);
+                  current_player->lifesMoins (1);
 #ifndef SOUNDISOFF
                   audio->play_sound (S_ENLEVVIE);
 #endif

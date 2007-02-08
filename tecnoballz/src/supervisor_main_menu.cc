@@ -4,11 +4,11 @@
  * @date 2007-02-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.4 2007/02/07 17:10:37 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.5 2007/02/08 07:33:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -285,8 +285,8 @@ sortie:
   //###################################################################
   for (Sint32 i = iplay; i < MAX_PLAYER; i++)
     handler_players::playerlist[i]->initialise (0, 1, 1, 0, 0);
-  joueurGere = handler_players::playerlist[0];
-  Sint32 value = joueurGere->level2jump ();
+  current_player = handler_players::playerlist[0];
+  Sint32 value = current_player->level2jump ();
   if (value == 2)
     value = 1;                  //convert shop code in bricks level code
   return value;

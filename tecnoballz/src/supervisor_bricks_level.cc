@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.6 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.7 2007/02/08 07:33:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -115,8 +115,8 @@ Sint32
 supervisor_bricks_level::first_init ()
 {
   sprites->reset ();
-  areaNumber = joueurGere->getAreaNum ();
-  levelTecno = joueurGere->getLevelNu ();
+  areaNumber = current_player->get_area_number ();
+  levelTecno = current_player->get_level_number ();
   //levelTecno = 5; //test only
 #ifndef SOUNDISOFF
   audio->play_level_music (areaNumber, levelTecno);
@@ -154,8 +154,8 @@ supervisor_bricks_level::first_init ()
   BottomWall->set_coordinates (32 * resolution, 232 * resolution);
   //robot bumper
   paddles->init_robot ();
-  Sint32 build = joueurGere->getRebuild ();
-  joueurGere->setRebuild (0);
+  Sint32 build = current_player->getRebuild ();
+  current_player->setRebuild (0);
   error_init (gereBricot->initialise (build));
   if (erreur_num)
     return erreur_num;
@@ -213,7 +213,7 @@ supervisor_bricks_level::first_init ()
   //###################################################################
   // initialize left scores pannel
   //###################################################################
-  error_init (tecZ_barre->first_init (joueurGere, ptGigaBlit, gereBalles));
+  error_init (tecZ_barre->first_init (current_player, ptGigaBlit, gereBalles));
   if (erreur_num)
     return erreur_num;
   error_init (tecZ_barre->affiche_me ());
@@ -253,8 +253,8 @@ supervisor_bricks_level::first_init ()
   //##############################################################
   //Initialize the object which handles gadgets (bonus and malus)
   //##############################################################
-  Sint32 *cours = joueurGere->get_course ();
-  Sint32 counb = joueurGere->get_cou_nb ();
+  Sint32 *cours = current_player->get_course ();
+  Sint32 counb = current_player->get_cou_nb ();
   Sint32 brCnt = bricks->get_num_of_bricks ();
   gereGadget->initialise (
                            //frequency of appearance of malus 
@@ -279,7 +279,7 @@ supervisor_bricks_level::first_init ()
   //##############################################################
   //initialize the gems tones
   //##############################################################
-  error_init (ptGemstone->initialise (joueurGere,
+  error_init (ptGemstone->initialise (current_player,
                                       tecZ_barre, ptPrntmney, paddles));
   if (erreur_num)
     return erreur_num;
@@ -289,7 +289,7 @@ supervisor_bricks_level::first_init ()
   //##############################################################
   gere_texte->initialise (levelTecno);
 
-  ptPrntmney->initialise (joueurGere, paddles, ptBobMoney, ptBobRever);
+  ptPrntmney->initialise (current_player, paddles, ptBobMoney, ptBobRever);
 
 
   error_init (ptBaDirect->initialize (paddles, 4));
@@ -326,7 +326,7 @@ supervisor_bricks_level::main_loop ()
   /*
    * the player has no more lives: Game Over
    */
-  if (joueurGere->getLifeNum () <= 0)
+  if (current_player->get_num_of_lifes () <= 0)
     {
       if (!isgameover)
         {
@@ -364,11 +364,11 @@ supervisor_bricks_level::main_loop ()
       sprites->draw ();
       tecZ_barre->scoreEcran ();
       tecZ_barre->barreTemoin ();
-      ptPrntmney->execution1 (joueurGere->creditFric);
+      ptPrntmney->execution1 (current_player->creditFric);
       display->unlock_surfaces ();
       display->bufferCTab ();
       if (keyboard->is_left_button () && isgameover > 60)
-        joueurGere = handler_players::nextplayer (joueurGere, &end_return, 1);
+        current_player = handler_players::nextplayer (current_player, &end_return, 1);
     }
 
   /*
@@ -415,7 +415,7 @@ supervisor_bricks_level::main_loop ()
             BottomWall->thecounter--;
 
           tecZ_barre->barreTemoin ();
-          ptPrntmney->execution1 (joueurGere->creditFric);
+          ptPrntmney->execution1 (current_player->creditFric);
         }
 
       //tiles_ground->draw();
@@ -445,7 +445,7 @@ supervisor_bricks_level::main_loop ()
                   keyboard->key_is_pressed (SDLK_SPACE) || music_finished)
                 {
                   gereBricot->sauve_etat ();
-                  joueurGere = handler_players::nextplayer (joueurGere,
+                  current_player = handler_players::nextplayer (current_player,
                                                        &end_return, 1);
 #ifndef SOUNDISOFF
                   audio->stop_music ();
@@ -479,7 +479,7 @@ supervisor_bricks_level::main_loop ()
     end_return = -1;
   if (keyboard->command_is_pressed (handler_keyboard::TOOVERFLAG) ||
       Ecode == handler_popup_menu::GOGAMEOVER)
-    joueurGere->lifesReset ();
+    current_player->lifesReset ();
   if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
       Ecode == handler_popup_menu::EXITTOMENU)
     end_return = MAIN_MENU;
@@ -615,8 +615,8 @@ supervisor_bricks_level::background (Sint32 nbkdg)
   // intialize the bricks level
   //###################################################################
   bricks->first_init (tecZ_barre, gereCapsul, gereGadget);
-  Sint32 lbrik = joueurGere->get_lessBk ();
-  joueurGere->set_lessBk (0);
+  Sint32 lbrik = current_player->get_lessBk ();
+  current_player->set_lessBk (0);
   bricks->initialize (areaNumber, levelTecno, lbrik);
   return erreur_num;
 }

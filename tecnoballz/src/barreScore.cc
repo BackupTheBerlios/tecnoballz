@@ -85,7 +85,7 @@ Sint32 barreScore::affiche_me()
 	tamponAff1(POSX_LEVEL * resolution, POSY_LEVEL * resolution,
 		gamer->levelTecno, 10);
 	tamponAff2(POSX_NOMJO * resolution, POSY_NOMJO * resolution,
-		gamer->nameString, 6);
+		gamer->player_name, 6);
 	/*
 	tamponAff1(POSX_BESTS * resolution, POSY_BESTS * resolution,
 		gamer->best_score, 100000);

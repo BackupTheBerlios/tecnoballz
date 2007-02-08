@@ -108,7 +108,7 @@ void zeCapsules::bouge_fric()
 		capsu->play_animation_loop();
 		Sint32 j = capsu->move();
 		if(j)
-		{	joueurGere->add_scores(20);
+		{	current_player->add_scores(20);
 			ptPrntmney->creditPlus(j);
 			//printf("zeCapsules::bouge_fric() : %i\n", j);
 		}
@@ -156,7 +156,7 @@ void zeCapsules::bougefric2()
 		if(j)
 		{	//printf("zeCapsules::bouge_fric2() : %i\n", j);
 			ptPrntmney->creditPlus(j);
-			joueurGere->add_scores(20);
+			current_player->add_scores(20);
 		}
 	}
 }

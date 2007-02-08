@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.5 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.6 2007/02/08 07:33:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -150,7 +150,7 @@ controller_paddles::create_paddles_sprites ()
       // load bumpers graphic page
       Uint32 npage;
       //if((hasard_val & 0x001))
-      if (joueurGere->getAreaNum () > 2)
+      if (current_player->get_area_number () > 2)
         npage = handler_resources::RESBUMPER1;
       else
         npage = handler_resources::RESBUMPER2;
@@ -233,7 +233,7 @@ controller_paddles::initBumper (barreScore * score, controller_gigablitz * blitz
   ptGigaBlit = blitz;
   ptNewBalls = balls;
 
-  paddle_length = joueurGere->get_paddle_width ();
+  paddle_length = current_player->get_paddle_width ();
   Sint32 centre = (bumperMaxi - bumperMini) / 2 - (paddle_length / 2);
 
   /* initialize bottom paddle */ 
@@ -264,7 +264,7 @@ controller_paddles::initBumper (barreScore * score, controller_gigablitz * blitz
   paddle_right->collision_height = paddle_length;
   paddle_right->paddle_number = 2;
   paddle_right->bumperType = 1;
-  paddle_right->bumpActive (is_team_mode, paddle_length, joueurGere->get_bumpOn (2));
+  paddle_right->bumpActive (is_team_mode, paddle_length, current_player->get_bumpOn (2));
   paddle_right->bump_TFIRE = 2;
   paddle_right->bumper_FX0 = -5 * resolution;
   paddle_right->bumper_FY0 = 0;
@@ -281,14 +281,14 @@ controller_paddles::initBumper (barreScore * score, controller_gigablitz * blitz
   paddle_right->direct_tab = ballePets2;
   paddle_right->width_mini = width_mini;
   paddle_right->width_maxi = width_maxi;
-  joueurGere->set_bumpOn (2, paddle_right->bump_actif);
+  current_player->set_bumpOn (2, paddle_right->bump_actif);
 
   /* initialize top paddle */ 
   paddle_top->set_coordinates (centre, bumperYhau);
   paddle_top->collision_width = paddle_length;
   paddle_top->paddle_number = 3;
   paddle_top->bumperType = 0;
-  paddle_top->bumpActive (is_team_mode, paddle_length, joueurGere->get_bumpOn (3));
+  paddle_top->bumpActive (is_team_mode, paddle_length, current_player->get_bumpOn (3));
   paddle_top->bump_TFIRE = 2;
   paddle_top->bumper_FX0 = 0;
   paddle_top->bumper_FY0 = 5 * resolution;
@@ -305,14 +305,14 @@ controller_paddles::initBumper (barreScore * score, controller_gigablitz * blitz
   paddle_top->direct_tab = ballePets3;
   paddle_top->width_mini = width_mini;
   paddle_top->width_maxi = width_maxi;
-  joueurGere->set_bumpOn (3, paddle_top->bump_actif);
+  current_player->set_bumpOn (3, paddle_top->bump_actif);
 
   /* initialize left paddle */ 
   paddle_left->set_coordinates (bumperXgau, centre);
   paddle_left->collision_height = paddle_length;
   paddle_left->paddle_number = 4;
   paddle_left->bumperType = 1;
-  paddle_left->bumpActive (is_team_mode, paddle_length, joueurGere->get_bumpOn (4));
+  paddle_left->bumpActive (is_team_mode, paddle_length, current_player->get_bumpOn (4));
   paddle_left->bump_TFIRE = 2;
   paddle_left->bumper_FX0 = 5 * resolution;
   paddle_left->bumper_FY0 = 0 * resolution;
@@ -329,7 +329,7 @@ controller_paddles::initBumper (barreScore * score, controller_gigablitz * blitz
   paddle_left->direct_tab = ballePets4;
   paddle_left->width_mini = width_mini;
   paddle_left->width_maxi = width_maxi;
-  joueurGere->set_bumpOn (4, paddle_left->bump_actif);
+  current_player->set_bumpOn (4, paddle_left->bump_actif);
 
   // Bumper robot du bas
   tec_robot0->set_coordinates (centre, bumperYbas);
@@ -671,7 +671,7 @@ controller_paddles::maxi_bumps ()
   paddle_right->set_height (paddle_length);
   paddle_top->set_width (paddle_length);
   paddle_left->set_height (paddle_length);
-  joueurGere->setLargeur (paddle_length);
+  current_player->setLargeur (paddle_length);
 
 }
 
@@ -698,7 +698,7 @@ controller_paddles::incremente ()
       paddle_right->set_height (paddle_length);
       paddle_top->set_width (paddle_length);
       paddle_left->set_height (paddle_length);
-      joueurGere->setLargeur (paddle_length);
+      current_player->setLargeur (paddle_length);
     }
 }
 
@@ -715,7 +715,7 @@ controller_paddles::decremente ()
       paddle_right->set_height (paddle_length);
       paddle_top->set_width (paddle_length);
       paddle_left->set_height (paddle_length);
-      joueurGere->setLargeur (paddle_length);
+      current_player->setLargeur (paddle_length);
     }
 }
 

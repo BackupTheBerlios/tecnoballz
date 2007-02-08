@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.cc,v 1.1 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: sprite_capsule.cc,v 1.2 2007/02/08 07:33:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -305,7 +305,7 @@ sprite_capsule::move ()
               if (collision1 (paddle))
                 {
                   is_enabled = false;
-                  joueurGere->add_scores (20);
+                  current_player->add_scores (20);
                   return paddle;
                 }
             }
@@ -321,7 +321,7 @@ sprite_capsule::move ()
               if (collision1 (paddle))
                 {
                   is_enabled = false;
-                  joueurGere->add_scores (20);
+                  current_player->add_scores (20);
                   return paddle;
                 }
             }
@@ -337,7 +337,7 @@ sprite_capsule::move ()
               if (collision1 (paddle))
                 {
                   is_enabled = false;
-                  joueurGere->add_scores (20);
+                  current_player->add_scores (20);
                   return paddle;
                 }
             }
@@ -353,7 +353,7 @@ sprite_capsule::move ()
               if (collision1 (paddle))
                 {
                   is_enabled = false;
-                  joueurGere->add_scores (20);
+                  current_player->add_scores (20);
                   return paddle;
                 }
             }

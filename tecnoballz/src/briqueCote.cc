@@ -118,7 +118,7 @@ Sint32 briqueCote::initialise(Sint32 build)
 	//###################################################################
 	// area 2 to 4; rebuild wall
 	//###################################################################
-	Sint32 area = joueurGere->getareaNum();
+	Sint32 area = current_player->get_area_number();
 	if(area < 5 || build > 0)
 	{	Sint32 k = -1;
 		for(Uint32 i = 0; i < BRICOTENUM; i++)
@@ -132,9 +132,9 @@ Sint32 briqueCote::initialise(Sint32 build)
 	// area 5: recopy the state of the wall of the preceding level
 	//###################################################################
 	else
-	{	char *bleft = joueurGere->getBriLeft();
-		char *brigh = joueurGere->getBriRigh();
-		char *b_top = joueurGere->getBri_top();
+	{	char *bleft = current_player->getBriLeft();
+		char *brigh = current_player->getBriRigh();
+		char *b_top = current_player->getBri_top();
 		for(Uint32 i = 0; i < BRICOTENUM; i++)
 		{	map_gauche[i] = bleft[i];
 			map_duHaut[i] = b_top[i];
@@ -254,9 +254,9 @@ void briqueCote::bobbg_init()
 //-----------------------------------------------------------------------------
 void briqueCote::sauve_etat()
 {	
-	char *bleft = joueurGere->getBriLeft();
-	char *brigh = joueurGere->getBriRigh();
-	char *b_top = joueurGere->getBri_top();
+	char *bleft = current_player->getBriLeft();
+	char *brigh = current_player->getBriRigh();
+	char *b_top = current_player->getBri_top();
 	for(Uint32 i = 0; i < BRICOTENUM; i++)
 	{	bleft[i] = map_gauche[i];
 		brigh[i] = map_droite[i];

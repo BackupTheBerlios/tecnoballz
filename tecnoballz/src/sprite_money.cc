@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.cc,v 1.3 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: sprite_money.cc,v 1.4 2007/02/08 07:33:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ sprite_money::littleInit ()
   //###################################################################
   //initialize multiplier of the value of the capsules of money 
   //###################################################################
-  switch (joueurGere->getAreaNum ())
+  switch (current_player->get_area_number ())
     {
     default:
       area_multi = 1;

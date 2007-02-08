@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.5 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.6 2007/02/08 07:33:07 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,7 +165,7 @@ protected:
   static handler_display *display;
   static handler_keyboard *keyboard;
   static list_sprites *sprites;
-  static handler_players *joueurGere;
+  static handler_players *current_player;
 
   static Sint16 *table_cosL;
   static Sint16 *table_sinL;
