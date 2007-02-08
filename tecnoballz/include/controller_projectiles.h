@@ -1,10 +1,10 @@
 //******************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "zeFireBump.h"
-// created		: ?
-// updates		: 2004-09-04
-// fonction	: manage bumper's fire
+// file         : "controller_projectiles.h"
+// created              : ?
+// updates              : 2004-09-04
+// fonction     : manage bumper's fire
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -25,7 +25,7 @@
 #ifndef __ZEFIREBUMP__
 #define __ZEFIREBUMP__
 
-class zeFireBump;
+class controller_projectiles;
 
 #include "../include/objects_list.h"
 #include "../include/handler_display.h"
@@ -34,43 +34,43 @@ class zeFireBump;
 #include "../include/sprite_paddle.h"
 
 
-class zeFireBump:public objects_list < sprite_projectile >
+class controller_projectiles:public objects_list < sprite_projectile >
 {
-	private:
-		static const Sint32	NUMBERFIRE = 7;
-		static const Sint32	SIZEOFFIRE = 10;
-		static Sint16		bob11_fire[];
-		static const Sint16	scieSin640[];
-		static const Sint16	scieSin320[];
+private:
+  static const Sint32 NUMBERFIRE = 7;
+  static const Sint32 SIZEOFFIRE = 10;
+  static Sint16 bob11_fire[];
+  static const Sint16 scieSin640[];
+  static const Sint16 scieSin320[];
 
-	private:
-		sprite_paddle*			maRaquette;
-		Sint32				countTempo;
-		Sint32				paddle_length;
-		const Sint16*		scie_sinus;
+private:
+    sprite_paddle * maRaquette;
+  Sint32 countTempo;
+  Sint32 paddle_length;
+  const Sint16 *scie_sinus;
 
-	public:
-							zeFireBump();
-							~zeFireBump();
-		void create_projectiles_list (sprite_paddle *paddle);
-		void				disponible();
-		void				nouveauTir();
-		void				init_type1();
-		void				init_type2();
-		void				init_type3();
-		void				init_type4();
-		void				init_type5();
-		void				init_type6();
-		void				init_type7();
-		void				deplaceTir();
-		void				move_type1();
-		void				move_type2();
-		void				move_type3();
-		void				move_type4();
-		void				move_type5();
-		void				move_type6();
-		void				move_type7();
-		void				fire1RunOn();
-		void				fire2RunOn();
+public:
+    controller_projectiles ();
+   ~controller_projectiles ();
+  void create_projectiles_list (sprite_paddle * paddle);
+  void disponible ();
+  void nouveauTir ();
+  void init_type1 ();
+  void init_type2 ();
+  void init_type3 ();
+  void init_type4 ();
+  void init_type5 ();
+  void init_type6 ();
+  void init_type7 ();
+  void deplaceTir ();
+  void move_type1 ();
+  void move_type2 ();
+  void move_type3 ();
+  void move_type4 ();
+  void move_type5 ();
+  void move_type6 ();
+  void move_type7 ();
+  void fire1RunOn ();
+  void fire2RunOn ();
 };
 #endif

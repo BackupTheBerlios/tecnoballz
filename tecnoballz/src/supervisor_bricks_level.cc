@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.8 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.9 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
   gere_texte = new zeMoveText ();
   ptGigaBlit = new controller_gigablitz ();
   ptPrntmney = new printmoney ();
-  ptGameOver = new zeGameOver ();
+  ptGameOver = new controller_game_over ();
 
   ptBobMoney = new sprite_object ();
   ptBobRever = new sprite_capsule ();

@@ -5,11 +5,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.35 $
+ * @version $Revision: 1.36 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.35 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: main.cc,v 1.36 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,9 +135,9 @@ zeBouiBoui   => controller_ships
 zeCapsules   => controller_moneys
 zeCongBall   => controller_spheres
 zeDefilTxt   => controller_scroll_fontes
-zeFireBump   => controller_fires
+controller_projectiles   => controller_fires
 *ze_gadgets  => controller_capsules
-zeGameOver   => controller_game_over
+controller_game_over   => controller_game_over
 zeGemstone   => controller_gems
 *zeGigaBlit  => controller_gigablitz
 *zeguardian  => controller_guardians
@@ -146,7 +146,7 @@ ze_magneye   => controller_magnetic_eyes
 zeMoveText   => controller_level_fontes
 *zeNewBalls  => controller_balls
 *zeRaquette  => controller_paddles
-zexplosion   => controller_explosions
+controller_explosions   => controller_explosions
 
 *tableaux_Z  => supervisor_bricks_level
 *gard_tecno  => supervisor_guards_level

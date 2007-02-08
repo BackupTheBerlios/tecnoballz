@@ -1,15 +1,15 @@
 /** 
- * @file handler_display.cc 
+ * @file bitmap_data.cc 
  * @brief Handle the bitmap 
  * @created 1996-06-29 
- * @date 2007-01-24
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.13 2007/02/02 17:05:53 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.14 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

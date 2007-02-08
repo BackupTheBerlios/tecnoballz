@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.h
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-02-07
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.9 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.10 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,9 +44,9 @@ class supervisor_guards_level;
 #include "../include/zeMiniMess.h"
 #include "../include/zeMiniMess.h"
 #include "../include/controller_gigablitz.h"
-#include "../include/zexplosion.h"
+#include "../include/controller_explosions.h"
 #include "../include/controller_viewfinders.h"
-#include "../include/zeGameOver.h"
+#include "../include/controller_game_over.h"
 #include "../include/zeCongBall.h"
 #include "../include/handler_popup_menu.h"
 #include "../include/zeMoveText.h"
@@ -68,7 +68,7 @@ private:
   controller_capsules *pt_gadgets;
   printmoney *ptPrntmney;
   zeMiniMess *ptMiniMess;
-  zexplosion *pExplosion;
+  controller_explosions *explosions;
   sprite_object *ptBobMoney;
   sprite_object *ptBob_name;
   sprite_capsule *ptBobLifes;
@@ -81,7 +81,7 @@ private:
   Sint32 scrollTemp;            // time before scroll start
   Sint32 scrollType;            // type of background scrolling
   Sint32 scrolSpeed;            // speed of the scrolling
-  zeGameOver *ptGameOver;
+  controller_game_over *game_over;
   zeCongBall *ptCongBall;
   Uint32 gameover_counter;
   Sint32 count_next;            //temporisation before next level 

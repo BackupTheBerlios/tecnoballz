@@ -1,14 +1,14 @@
 /** 
  * @file controller_bullets.cc 
  * @brief Bullets controller 
- * @date 2007-02-06
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bullets.cc,v 1.3 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: controller_bullets.cc,v 1.4 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,14 +34,14 @@
  * @param pexpl
  */
 controller_bullets::controller_bullets (sprite_paddle * paddle,
-                                        zexplosion * pexpl)
+                                        controller_explosions * pexpl)
 {
   littleInit ();
   max_of_sprites = 48;
   sprites_have_shades = false;
   sprite_type_id = BOB_MISSIL;
   ptbumper01 = paddle;
-  pexplosion = pexpl;
+  explosions = pexpl;
 }
 
 /**
@@ -127,7 +127,7 @@ controller_bullets::bumper_col ()
                               audio->play_sound (S_RAKEXPLO);
                               audio->play_sound (S_ENLEVVIE);
 #endif
-                              pexplosion->add_explos
+                              explosions->add
                                 (bumpx + ptbumper01->get_length () / 2,
                                  bumpy +
                                  ptbumper01->get_sprite_height () / 2);

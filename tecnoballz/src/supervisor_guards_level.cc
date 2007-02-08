@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-02-07
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.10 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.11 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,9 +39,9 @@ supervisor_guards_level::supervisor_guards_level ()
   guards = new controller_guardians ();
   paddles = new controller_paddles (BOB_BUMPER);
   ptMoveText = new zeMoveText ();
-  pExplosion = new zexplosion ();
+  explosions = new controller_explosions ();
   sprite_paddle *pBump = paddles->get_paddle (1);
-  bullets = new controller_bullets (pBump, pExplosion);
+  bullets = new controller_bullets (pBump, explosions);
   ptCapsules = new zeCapsules ();
   pt_gadgets = new controller_capsules (6);
   balls = new controller_balls (guards, ptCapsules, pt_gadgets);
@@ -51,7 +51,7 @@ supervisor_guards_level::supervisor_guards_level ()
   gigablitz = new controller_gigablitz ();
   ptBobMoney = new sprite_object ();
   ptBobLifes = new sprite_capsule ();
-  ptGameOver = new zeGameOver ();
+  game_over = new controller_game_over ();
   ptCongBall = new zeCongBall ();
   popup_menu = new handler_popup_menu ();
   ptBob_name = NULL;
@@ -66,7 +66,7 @@ supervisor_guards_level::~supervisor_guards_level ()
     delete ptBob_name;
   delete popup_menu;
   delete ptCongBall;
-  delete ptGameOver;
+  delete game_over;
   delete ptBobLifes;
   delete ptBobMoney;
   delete gigablitz;
@@ -77,7 +77,7 @@ supervisor_guards_level::~supervisor_guards_level ()
   delete pt_gadgets;
   delete ptCapsules;
   delete bullets;
-  delete pExplosion;
+  delete explosions;
   delete ptMoveText;
   delete paddles;
   delete guards;
@@ -113,7 +113,7 @@ supervisor_guards_level::first_init ()
   //###################################################################
   // initialize gigablitz
   //###################################################################
-  error_init (gigablitz->init_liste (paddles, pExplosion));
+  error_init (gigablitz->init_liste (paddles, explosions));
   if (erreur_num)
     return erreur_num;
 
@@ -122,13 +122,13 @@ supervisor_guards_level::first_init ()
   //###################################################################
   resources->load_sprites_bitmap ();
   bullets->create_sprites_list ();
-  guards->create_guardians_list (bullets, grdP, gigablitz, pExplosion);
+  guards->create_guardians_list (bullets, grdP, gigablitz, explosions);
   paddles->create_paddles_sprites ();
   balls->create_sprites_list ();
   ptCapsules->create_sprites_list ();
   pt_gadgets->create_sprites_list ();
   ptPrntmney->create_sprites_list ();
-  pExplosion->create_explosions_list ();
+  explosions->create_explosions_list ();
 
   // Initialize money sprite
   ptBobMoney->create_sprite (BOB_MONEYS, sprites_bitmap, 0);
@@ -143,7 +143,7 @@ supervisor_guards_level::first_init ()
   //mobile characters at the end of the level
   ptMoveText->create_sprites_list ();
 
-  ptGameOver->create_sprites_list ();
+  game_over->create_sprites_list ();
 
   ptCongBall->create_sprites_list ();
 
@@ -158,7 +158,7 @@ supervisor_guards_level::first_init ()
   //###################################################################
   // initialize "Game Over"
   //###################################################################
-  error_init (ptGameOver->first_init (32 * resolution));
+  error_init (game_over->first_init (32 * resolution));
   if (erreur_num)
     return (erreur_num);
   init_level ();
@@ -215,7 +215,7 @@ supervisor_guards_level::first_init ()
   keyboard->clear_command_keys ();
   keyboard->set_grab_input (true);
 
-  score_over *pOver = ptGameOver->gtScorOver ();
+  score_over *pOver = game_over->gtScorOver ();
   ptBob_name = pOver->string2bob (current_player->returnName ());
   sprites->add (ptBob_name);
   ptBob_name->enable ();
@@ -248,7 +248,7 @@ supervisor_guards_level::main_loop ()
           pt_gadgets->disable_sprites ();
           ptCapsules->disable_sprites ();
           guards->disable_sprites ();
-          pExplosion->disable_sprites ();
+          explosions->disable_sprites ();
           gigablitz->disable_sprites ();
           balls->disable_sprites ();
           bullets->disable_sprites ();
@@ -274,7 +274,7 @@ supervisor_guards_level::main_loop ()
 
       if (gameover_counter >= 1)
         {
-          ptGameOver->execution1 (tecnwinner);
+          game_over->execution1 (tecnwinner);
           if (tecnwinner)
             ptCongBall->execution1 ();  //congra
         }
@@ -319,7 +319,7 @@ supervisor_guards_level::main_loop ()
           ptPrntmney->execution2 (current_player->amount_of_money,
                                   current_player->number_of_lifes);
           gigablitz->execution2 ();    //move the Gigablitz from guards
-          pExplosion->execution1 ();    //explosion animations
+          explosions->play_animation ();
           bullets->anim_fires ();    //the animation of the guards's weapons
 
         }

@@ -1,14 +1,14 @@
 /** 
  * @file controller_gigablitz.cc 
  * @brief Gigablitz controller 
- * @date 2007-02-06
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.3 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.4 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -272,9 +272,9 @@ controller_gigablitz::collision1 ()
 //-------------------------------------------------------------------------------
 Sint32
 controller_gigablitz::init_liste (controller_paddles * zeRak,
-                                  zexplosion * pexpl)
+                                  controller_explosions * pexpl)
 {
-  pexplosion = pexpl;
+  explosions = pexpl;
   ptRaquette = zeRak;
   paddle_bottom = ptRaquette->get_paddle (1);   // top bumper
   if (max_of_sprites)
@@ -381,7 +381,7 @@ controller_gigablitz::collision2 ()
           audio->play_sound (S_ENLEVVIE);
 #endif
           current_player->remove_life (1);
-          pexplosion->add_explos (bx + paddle_bottom->get_length () / 2,
+          explosions->add (bx + paddle_bottom->get_length () / 2,
                                   by +
                                   paddle_bottom->get_sprite_height () / 2);
         }

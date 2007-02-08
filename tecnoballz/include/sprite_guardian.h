@@ -2,14 +2,14 @@
  * @file sprite_guardian.h
  * @brief The guardian sprite 
  * @created 2003-01-09 
- * @date 2007-02-06
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.h,v 1.3 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: sprite_guardian.h,v 1.4 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ class sprite_guardian;
 #include "../include/controller_bullets.h"
 #include "../include/controller_balls.h"
 #include "../include/controller_gigablitz.h"
-#include "../include/zexplosion.h"
+#include "../include/controller_explosions.h"
 
 class sprite_guardian:public sprite_object
 {
@@ -72,7 +72,7 @@ private:
   unsigned char *ptr_lissa2;
   controller_bullets *ptMissiles;
   controller_gigablitz *ptGigaBlit;
-  zexplosion *pExplosion;
+  controller_explosions *explosions;
   Sint32 hasardval2;
 
 public:
@@ -80,7 +80,7 @@ public:
    ~sprite_guardian ();
   Sint32 init_guard (gardlevel * guard, unsigned char *ptLis,
                      controller_bullets * pMiss, controller_gigablitz * pBliz,
-                     zexplosion * pexpl);
+                     controller_explosions * pexpl);
   void run (Uint32 voffset);
 
 private:

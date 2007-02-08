@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.5 2007/02/05 21:02:11 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.6 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 /*
  * Create a paddle sprite object
  */
-sprite_paddle::sprite_paddle (zeFireBump * fBump)
+sprite_paddle::sprite_paddle (controller_projectiles * fBump)
 {
   clear_sprite_members ();
   length = 32 * resolution;
@@ -81,7 +81,7 @@ sprite_paddle::fire_projectiles ()
 {
   if (bumperFire != 0)
     {
-      bumperTirs->disponible ();  //zeFireBump::disponible();
+      bumperTirs->disponible ();  //controller_projectiles::disponible();
     }
 }
 
@@ -91,8 +91,8 @@ sprite_paddle::fire_projectiles ()
 void
 sprite_paddle::deplaceTir ()
 {
-  bumperTirs->nouveauTir ();    //zeFireBump::nouveauTir();
-  bumperTirs->deplaceTir ();    //zeFireBump::deplaceTir();
+  bumperTirs->nouveauTir ();    //controller_projectiles::nouveauTir();
+  bumperTirs->deplaceTir ();    //controller_projectiles::deplaceTir();
 }
 
 //------------------------------------------------------------------------------

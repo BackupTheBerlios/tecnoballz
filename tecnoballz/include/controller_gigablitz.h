@@ -1,14 +1,14 @@
 /** 
  * @file controller_gigablitz.h
  * @brief Gigablitz controller 
- * @date 2007-02-06
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.h,v 1.2 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: controller_gigablitz.h,v 1.3 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,13 +34,13 @@ class controller_gigablitz;
 #include "../include/barreScore.h"
 #include "../include/handler_keyboard.h"
 #include "../include/controller_viewfinders.h"
-#include "../include/zeFireBump.h"
+#include "../include/controller_projectiles.h"
 #include "../include/handler_players.h"
 #include "../include/supervisor_bricks_level.h"
 #include "../include/objects_list.h"
 #include "../include/head_anima.h"
 #include "../include/controller_bricks.h"
-#include "../include/zexplosion.h"
+#include "../include/controller_explosions.h"
 
 class controller_gigablitz:public objects_list < sprite_gigablitz >
 {
@@ -53,7 +53,7 @@ private:
   controller_bricks *brickObjet;
   head_anima *gugusObjet;
   controller_paddles *ptRaquette;
-  zexplosion *pexplosion;
+  controller_explosions *explosions;
   sprite_paddle *paddle_bottom;
   sprite_paddle *paddle_top;
   sprite_gigablitz *blitzobjet; //pointer on the current "sprite_gigablitz" 
@@ -76,7 +76,7 @@ public:
   void initDepart ();
   void execution1 ();
   void collision1 ();
-  Sint32 init_liste (controller_paddles * zeRak, zexplosion * pexpl);
+  Sint32 init_liste (controller_paddles * zeRak, controller_explosions * pexpl);
   void execution2 ();
   void collision2 ();
   Sint32 guard_shoot (Sint32 value, Sint32 pos_x, Sint32 pos_y,

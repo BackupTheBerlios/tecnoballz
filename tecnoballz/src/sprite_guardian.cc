@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.cc,v 1.3 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: sprite_guardian.cc,v 1.4 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,10 +67,10 @@ sprite_guardian::~sprite_guardian ()
 Sint32
 sprite_guardian::init_guard (gardlevel * guard, unsigned char *ptLis,
                              controller_bullets * pMiss, controller_gigablitz * pBliz,
-                             zexplosion * pexpl)
+                             controller_explosions * pexpl)
 {
   ptGigaBlit = pBliz;
-  pExplosion = pexpl;
+  explosions = pexpl;
   gard_power = guard->para_power * hardChoice;  //strength 
   gard_xcent = (guard->para_xcent * resolution) - (11 * resolution / 2);        //middle x from where weapons starts 
   gardwaitf1 = guard->para_waitf / hardChoice;  //shoot frequency of gigaBlitz
@@ -155,7 +155,7 @@ sprite_guardian::run (Uint32 voffset)
                 (hasardval2 - explo_time + y_coord) % sprite_height;
               pos_x += val_1;
               pos_y += val_2;
-              pExplosion->add_explos (pos_x, pos_y);
+              explosions->add (pos_x, pos_y);
               hasardval2 = vrand;
             }
           gard_clign = !gard_clign;

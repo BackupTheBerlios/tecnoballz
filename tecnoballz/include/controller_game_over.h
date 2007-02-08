@@ -1,10 +1,10 @@
-//******************************************************************************
+//*****************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "zexplosion.h"
-// created		: 2003-03-02
-// updates		: 2004-06-27
-// fonction	: handle explosions
+// file         : "controller_game_over.h"
+// created              : 2002-12-14
+// updates              : 2004-10-10
+// fonctions    : handle the "Game Over"
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,26 +19,42 @@
 // You should have received a copy of the GNU General Public License along with
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA  02111-1307, USA.
-//******************************************************************************
-#ifndef __ZEXPLOSION__
-#define __ZEXPLOSION__
+//*****************************************************************************
+#ifndef __ZEGAMEOVER__
+#define __ZEGAMEOVER__
 //...............................................................................
-class zexplosion;
+class controller_game_over;
 //...............................................................................
-#include "../include/list_sprites.h"
 #include "../include/sprite_object.h"
 #include "../include/objects_list.h"
+#include "../include/score_over.h"
 //...............................................................................
-class zexplosion:public objects_list < sprite_object >
+class controller_game_over:public objects_list < sprite_object >
 {
-	//friend class sprite_object;
-	public:
-							zexplosion();
-							~zexplosion();
-		void create_explosions_list();
-		void				add_explos(Sint32 pos_x, Sint32 pos_y);
-		void				execution1();
-	private:
-		Uint32				vFrequency;
+private:
+  Sint32 go_deplace;            // step number: 0, 1, 2 or 3
+  Sint32 go_zetempo;            // tempo before next step
+  bitmap_data *ptGfxFonte;
+  score_over *ptScorOver;
+  Sint32 chrOffsetX;
+
+  static const Sint32 SIZETSINUS = 200;
+  static const Sint32 sinus_over[SIZETSINUS];
+  static const Sint32 zeus_over1[];
+
+private:
+  void deplace_01 ();
+  void deplace_02 ();
+  void deplace_03 ();
+  void deplace_04 ();
+
+public:
+    controller_game_over ();
+   ~controller_game_over ();
+  score_over *gtScorOver ();
+  Sint32 first_init (Sint32 offzt = 0);
+  void initialize (Sint32 iswin);
+  void execution1 (Sint32 iswin = 0);
+
 };
 #endif

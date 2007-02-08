@@ -1,14 +1,14 @@
 /** 
- * @file supervisor_bricks_level.cc 
+ * @file supervisor_bricks_level.h 
  * @brief Bricks levels supervisor 
- * @date 2007-02-04
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.7 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.8 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ class supervisor_bricks_level;
 #include "../include/zeMoveText.h"
 #include "../include/head_anima.h"
 #include "../include/printmoney.h"
-#include "../include/zeGameOver.h"
+#include "../include/controller_game_over.h"
 #include "../include/zeMiniMess.h"
 #include "../include/level_data.h"
 #include "../include/zeGemstone.h"
@@ -94,7 +94,7 @@ private:
   zeGemstone *ptGemstone;
   zeMoveText *gere_texte;
   controller_gigablitz *ptGigaBlit;
-  zeGameOver *ptGameOver;
+  controller_game_over *ptGameOver;
   sprite_object *BottomWall;
   sprite_object *ptBobMoney;
   handler_popup_menu *popup_menu;

@@ -4,11 +4,11 @@
  * @date 2007-01-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.h,v 1.5 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: sprite_projectile.h,v 1.6 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ class sprite_projectile;
 //...............................................................................
 class sprite_projectile:public sprite_object
 {
-	friend class zeFireBump;
+	friend class controller_projectiles;
 	friend class sprite_money;	  
 	friend class sprite_capsule;
 	friend class sprite_gem;

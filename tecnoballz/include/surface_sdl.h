@@ -1,15 +1,15 @@
 /** 
- * @file surface_surface.h 
+ * @file surface_sdl.h 
  * @brief an surface drawing surface
  * @created 2007-02-01
- * @date 2007-02-02
+ * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.h,v 1.3 2007/02/04 17:10:16 gurumeditation Exp $
+ * $Id: surface_sdl.h,v 1.4 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

@@ -4,11 +4,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.7 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.8 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 #include "../include/controller_paddles.h"
 #include "../include/handler_resources.h"
 #include "../include/handler_players.h"
-#include "../include/zeFireBump.h"
+#include "../include/controller_projectiles.h"
 #include "../include/handler_keyboard.h"
 
 /** 
@@ -48,13 +48,13 @@ controller_paddles::controller_paddles ()
   is_team_mode = false;
   paddle_length = 64 * resolution;
   rak_invers = 0;
-  zeFireBump *fBump = new zeFireBump ();
+  controller_projectiles *fBump = new controller_projectiles ();
   paddle_bottom = new sprite_paddle (fBump);
-  fBump = new zeFireBump ();
+  fBump = new controller_projectiles ();
   paddle_right = new sprite_paddle (fBump);
-  fBump = new zeFireBump ();
+  fBump = new controller_projectiles ();
   paddle_top = new sprite_paddle (fBump);
-  fBump = new zeFireBump ();
+  fBump = new controller_projectiles ();
   paddle_left = new sprite_paddle (fBump);
   tec_robot0 = new sprite_paddle (NULL);
   bumperMini = 32 * resolution;

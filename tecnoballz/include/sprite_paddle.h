@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.10 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.11 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 class sprite_paddle;
 #include "../include/sprite_object.h"
 #include "../include/sprite_ball.h"
-#include "../include/zeFireBump.h"
+#include "../include/controller_projectiles.h"
 #include "../include/bitmap_data.h"
 #include "../include/sprite_bullet.h"
 #include "../include/controller_gigablitz.h"
@@ -38,7 +38,7 @@ class sprite_paddle:public sprite_object
 {
   friend class controller_paddles;
   friend class controller_balls;
-  friend class zeFireBump;
+  friend class controller_projectiles;
   friend class sprite_bullet;
   friend class controller_viewfinders;
   friend class controller_gigablitz;
@@ -69,7 +69,7 @@ private:
   Sint32 flickerval;            // flag flicker
 
   // weapons's bumper
-  zeFireBump *bumperTirs;       // ptr  : objet tir du Bumper
+  controller_projectiles *bumperTirs;       // ptr  : objet tir du Bumper
   Sint32 bumper_FX0;            // tir inc0. X
   Sint32 bumper_FY0;            // tir inc0. Y
   Sint32 bumper_FX1;            // tir inc1. X
@@ -84,7 +84,7 @@ private:
   Sint32 bump_speed;            // vitesse deplacement (maximum 10)
 
 public:
-    sprite_paddle (zeFireBump * fBump);
+    sprite_paddle (controller_projectiles * fBump);
    ~sprite_paddle ();
   void create_projectiles_list ();
   void fire_projectiles ();

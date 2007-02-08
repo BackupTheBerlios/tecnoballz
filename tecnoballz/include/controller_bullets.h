@@ -1,14 +1,14 @@
 /** 
  * @file controller_bullets.h 
  * @brief Bullets controller 
- * @date 2007-02-06
+ $ @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bullets.h,v 1.1 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: controller_bullets.h,v 1.2 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ class controller_bullets;
 #include "../include/objects_list.h"
 #include "../include/sprite_guardian.h"
 #include "../include/sprite_paddle.h"
-#include "../include/zexplosion.h"
+#include "../include/controller_explosions.h"
 
 class controller_bullets:public objects_list < sprite_bullet >
 {
@@ -47,10 +47,10 @@ private:
   static const Sint16 tir10_posi[12];
   static const Sint16 fire_sinus[60];
   sprite_paddle *ptbumper01;
-  zexplosion *pexplosion;
+  controller_explosions *explosions;
 
 public:
-    controller_bullets (sprite_paddle * pBump, zexplosion * pexpl);
+    controller_bullets (sprite_paddle * pBump, controller_explosions * pexpl);
    ~controller_bullets ();
   void execution1 ();
   void anim_fires ();

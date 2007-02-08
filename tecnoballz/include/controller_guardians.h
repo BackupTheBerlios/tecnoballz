@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.h,v 1.3 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: controller_guardians.h,v 1.4 2007/02/08 20:40:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ gardlevel;
 #include "../include/objects_list.h"
 #include "../include/controller_bullets.h"
 #include "../include/controller_gigablitz.h"
-#include "../include/zexplosion.h"
+#include "../include/controller_explosions.h"
 
 class controller_guardians:public objects_list < sprite_guardian >
 {
@@ -70,7 +70,7 @@ public:
     controller_guardians ();
    ~controller_guardians ();
   void create_guardians_list (controller_bullets * pMiss, Sint32 grdPt,
-                     controller_gigablitz * pBliz, zexplosion * pExpl);
+                     controller_gigablitz * pBliz, controller_explosions * pExpl);
   void run ();
   void killguards (Sint32 numGa = 0);
   bool is_guardians_destroyed ();
@@ -80,7 +80,7 @@ private:
   Sint32 offset_ptr;
   unsigned char *displacement_curve;
   controller_gigablitz *ptGigaBlit;
-  zexplosion *pexplosion;
+  controller_explosions *pexplosion;
   sprite_object **life_gauges_list;
 
 public:
