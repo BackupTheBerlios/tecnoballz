@@ -2,14 +2,14 @@
  * @file controller_guardians.cc 
  * @brief Guardians controller 
  * @created 2003-01-10 
- * @date 2007-02-06
+ * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.cc,v 1.5 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: controller_guardians.cc,v 1.6 2007/02/09 20:35:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,12 +86,23 @@ controller_guardians::create_guardians_list (controller_bullets * pMiss, Sint32 
 
   /* count the number of guardians, 1 or 2 guardians */
   max_of_sprites = -1;
-  Uint32 i;
+  Sint32 i;
   Sint32 j = grdPt;
+  Uint32 free_sprites = sprites->get_sprites_remaining ();
   do
     {
       i = level_list[j++];
       max_of_sprites++;
+      if (max_of_sprites > free_sprites )
+        {
+          std::cerr << "(!)controller_guardians::" << 
+            "create_guardians_list() maximum number of sprites "
+             << "has been reached!";
+          throw std::runtime_error ("(!)controller_guardians::"
+                                   "create_guardians_list() maximum "
+                                   "number of sprites has been "
+                                   "reached!"); 
+        }
     }
   while (i >= 0);
 
@@ -103,7 +114,7 @@ controller_guardians::create_guardians_list (controller_bullets * pMiss, Sint32 
   alloc_sprites_list ();
 
   /* initialize the guardian(s) sprite(s) */
-  for (i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       Sint32 p = level_list[grdPt++];
       sprite_guardian *guard = new sprite_guardian ();
@@ -132,7 +143,7 @@ controller_guardians::create_guardians_list (controller_bullets * pMiss, Sint32 
       max_of_sprites << " list elements!" << std::endl;
     throw;
   }
- for (i = 0; i < max_of_sprites; i++)
+ for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_object *sprite = new sprite_object ();
       life_gauges_list[i] = sprite;

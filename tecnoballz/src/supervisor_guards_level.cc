@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-02-08
+ * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.12 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.13 2007/02/09 20:35:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ supervisor_guards_level::supervisor_guards_level ()
   initialise ();
   tiles_map = new tilesmap_scrolling ();
   guards = new controller_guardians ();
-  paddles = new controller_paddles (BOB_BUMPER);
+  paddles = new controller_paddles (1);
   ptMoveText = new zeMoveText ();
   explosions = new controller_explosions ();
   sprite_paddle *pBump = paddles->get_paddle (1);
@@ -106,25 +106,31 @@ supervisor_guards_level::first_init ()
   if (is_verbose)
   {
     std::cout << ">supervisor_guards_level::first_init() " <<
-      "area_number: " << area_number << "level_number: " << level_number
-      << "grdP: " << grdP << std::endl;
+      "area_number: " << area_number << "; level_number: " <<
+      level_number << "; grdP: " << grdP << std::endl;
   }
 
   /* gigablitz sprites are contained separately and in its own bitmap */
   gigablitz->create_gigablitz_sprites (paddles, explosions);
+  printf("0 supervisor_guards_level::first_init\n");
 
   /* 
    * sprites who are contained into the large bitmap
    */
   resources->load_sprites_bitmap ();
   bullets->create_sprites_list ();
+  printf("1 supervisor_guards_level::first_init\n");
   guards->create_guardians_list (bullets, grdP, gigablitz, explosions);
+  printf("2 supervisor_guards_level::first_init\n");
   paddles->create_paddles_sprites ();
+  printf("3 supervisor_guards_level::first_init\n");
   balls->create_sprites_list ();
   ptCapsules->create_sprites_list ();
   pt_gadgets->create_sprites_list ();
   ptPrntmney->create_sprites_list ();
+  printf("4 supervisor_guards_level::first_init\n");
   explosions->create_explosions_list ();
+  printf("5 supervisor_guards_level::first_init\n");
 
   /* create the money sprite */
   ptBobMoney->create_sprite (BOB_MONEYS, sprites_bitmap, false);
@@ -154,6 +160,7 @@ supervisor_guards_level::first_init ()
   //###################################################################
   // initialize "Game Over"
   //###################################################################
+  printf("10 supervisor_guards_level::first_init\n");
   error_init (game_over->first_init (32 * resolution));
   if (erreur_num)
     return (erreur_num);
@@ -181,6 +188,7 @@ supervisor_guards_level::first_init ()
   // Initialize the object which handles the "capsules of money"
   //###################################################################
   ptCapsules->initialise (3 + hardChoice, ptPrntmney);
+  printf("15 supervisor_guards_level::first_init\n");
 
   //###################################################################
   // Initialize the object which handles gadgets (bonus and malus) 
@@ -219,6 +227,11 @@ supervisor_guards_level::first_init ()
     set_coordinates ((display->get_width () -
                       ptBob_name->get_sprite_width ()) / 2, resolution);
   ptBob_name->set_draw_method (sprite_object::COPY_FROM_BITMAP);
+
+  if (is_verbose)
+  {
+    std::cout << ">supervisor_guards_level::first_init() End!" << std::endl;
+  }
   return erreur_num;
 }
 

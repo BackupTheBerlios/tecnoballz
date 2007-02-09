@@ -1,13 +1,13 @@
 /** 
  * @file list_sprites.h
  * @brief Call the drawing methods of all sprites
- * @date 2007-01-16
+ * @date 2007-02-09
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: list_sprites.h,v 1.2 2007/02/04 17:10:16 gurumeditation Exp $
+ * $Id: list_sprites.h,v 1.3 2007/02/09 20:35:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ class list_sprites;
 #include "../include/sprite_object.h"
 #include "../include/handler_memory.h"
 #include "../include/tecnoballz.h"
-//const Sint32 BOBNumMaxi = 200;
 
 class list_sprites:public tecnoballz
 {
@@ -47,6 +46,7 @@ public:
    ~list_sprites ();
   Sint32 init (Sint32 numof);
   void reset ();
+  Uint32 get_sprites_remaining ();
   void add (sprite_object * sprite);
   void draw ();
   void clear ();

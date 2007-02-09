@@ -3,11 +3,11 @@
  * @brief Call the drawing methods of all sprites
  * @date 2007-02-06
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: list_sprites.cc,v 1.5 2007/02/06 09:46:13 gurumeditation Exp $
+ * $Id: list_sprites.cc,v 1.6 2007/02/09 20:35:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,6 +103,18 @@ list_sprites::reset ()
     }
 }
 
+
+
+/**
+ * Return the number of sprites remaining
+ * @return number of free sprites 
+ */
+Uint32
+list_sprites::get_sprites_remaining ()
+{
+  return max_of_shapes - num_of_shapes;
+}
+
 /**
  * Add a sprite to the display list to draw the sprites
  * @param sprite pointer to a sprite object 
@@ -112,9 +124,10 @@ list_sprites::add (sprite_object * sprite)
 {
   if (num_of_shapes >= max_of_shapes - 1)
     {
-      fprintf (stderr, "list_sprites::ajoute_BOB() "
-               "max. number reached %i\n", num_of_shapes);
-      return;
+      std::cerr << "(!)list_sprites::add maximum number of sprites "
+        << num_of_shapes << "has been reached!";
+      throw std::runtime_error ("(!)list_sprites::add maximum "
+                                "number of sprites has been reached!");
     }
   shapes[num_of_shapes] = sprite;
   num_of_shapes++;
