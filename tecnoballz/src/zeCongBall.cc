@@ -59,7 +59,7 @@ void zeCongBall::initialize()
 {
 	Sint32 offst = 360 / max_of_sprites;
 	Sint32 value = 0;
-	for(Sint32 i = 0; i < max_of_sprites; i++)
+	for(Uint32 i = 0; i < max_of_sprites; i++)
 	{	sprites_list[i]->enable();
 		sprites_list[i]->x_maximum = value;
 		value += offst;
@@ -118,7 +118,7 @@ void zeCongBall::execution1()
 
 	
 	
-	for(Sint32 i = 0; i < max_of_sprites; i++)
+	for(Uint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_object *zebob = sprites_list[i];
 		zebob->x_maximum += sball;
 		//printf("[%i]", zebob->x_maximum);

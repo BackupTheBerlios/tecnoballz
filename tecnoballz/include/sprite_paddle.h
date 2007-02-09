@@ -1,14 +1,14 @@
 /** 
  * @file sprite_paddle.h
  * @brief A paddle sprite 
- * @date 2007-02-05
+ * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.11 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.12 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,13 +27,16 @@
  */
 #ifndef __SPRITE_PADDLE__
 #define __SPRITE_PADDLE__
+
 class sprite_paddle;
+
 #include "../include/sprite_object.h"
 #include "../include/sprite_ball.h"
 #include "../include/controller_projectiles.h"
 #include "../include/bitmap_data.h"
 #include "../include/sprite_bullet.h"
 #include "../include/controller_gigablitz.h"
+
 class sprite_paddle:public sprite_object
 {
   friend class controller_paddles;
@@ -48,7 +51,8 @@ private:
   Sint32 bumperType;            // flag : type 0=horizontal / 1=vertical                
   /** Paddle number from 0 to 5 */
   Uint32 paddle_number;
-  Sint32 length;            //bumper's width (in pixels)
+  /** Paddle length in pixels */
+  Sint32 length;
   Sint32 width_mini;            //bumper mini width (32 or 64)
   Sint32 width_maxi;            //bumper maxi width (64 or 128)
   Sint32 width_deca;            //3 or 4; offset between 2 size (2^3)
@@ -68,8 +72,8 @@ private:
   Sint32 invincible;            // > 0 bumper is invincible (guards phase)
   Sint32 flickerval;            // flag flicker
 
-  // weapons's bumper
-  controller_projectiles *bumperTirs;       // ptr  : objet tir du Bumper
+  /** Used for fire power 1 or fire power 2 */
+  controller_projectiles *projectiles;
   Sint32 bumper_FX0;            // tir inc0. X
   Sint32 bumper_FY0;            // tir inc0. Y
   Sint32 bumper_FX1;            // tir inc1. X
@@ -84,7 +88,8 @@ private:
   Sint32 bump_speed;            // vitesse deplacement (maximum 10)
 
 public:
-    sprite_paddle (controller_projectiles * fBump);
+    //sprite_paddle (controller_projectiles * fBump);
+    sprite_paddle (bool has_projectiles = true);
    ~sprite_paddle ();
   void create_projectiles_list ();
   void fire_projectiles ();
@@ -98,10 +103,10 @@ public:
   void set_glue ();
   void set_fire_1 ();
   void set_fire_2 ();
-  void lacheBalle ();
+  void release_ball ();
   void attachBall (sprite_ball * xBall);
   void directBall ();
-  Sint32 get_length ();
+  Uint32 get_length ();
   bool is_invincible ();
   void set_invincibility (Sint32 delay);
   void flickerRun ();

@@ -1,14 +1,14 @@
 /** 
  * @file controller_gigablitz.cc 
  * @brief Gigablitz controller 
- * @date 2007-02-08
+ * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.4 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.5 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,9 +27,9 @@
  */
 #include "../include/controller_gigablitz.h"
 #include "../include/handler_resources.h"
-//..............................................................................
-Sint32
-  controller_gigablitz::numeroBOBs[NOMBREGIGA] = { BOB_GIGAB7,
+
+Sint32 controller_gigablitz::numeroBOBs[MAX_OF_GIGABLITZ] =
+{ BOB_GIGAB7,
   BOB_GIGAB6,
   BOB_GIGAB5,
   BOB_GIGAB4,
@@ -38,20 +38,16 @@ Sint32
   BOB_GIGAB1
 };
 
-//..............................................................................
-
-//-----------------------------------------------------------------------------
-// create the object
-//-----------------------------------------------------------------------------
+/**
+ * Create the Gigablitz controller
+ */
 controller_gigablitz::controller_gigablitz ()
 {
   littleInit ();
-  max_of_sprites = NOMBREGIGA;  // there are 7 different Gigablitz
-  /* shadow disable */
+  max_of_sprites = MAX_OF_GIGABLITZ;  // there are 7 different Gigablitz
   sprites_have_shades = false;
   brickObjet = (controller_bricks *) NULL;
   gugusObjet = (head_anima *) NULL;
-  ptRaquette = (controller_paddles *) NULL;
   paddle_bottom = (sprite_paddle *) NULL;
   paddle_top = (sprite_paddle *) NULL;
   blitz_posy = 0;
@@ -65,53 +61,48 @@ controller_gigablitz::controller_gigablitz ()
   blitz_colx = 0;
 }
 
-//-------------------------------------------------------------------------------
-// release the object
-//-------------------------------------------------------------------------------
+/**
+ * Release the Gigablitz controller
+ */
 controller_gigablitz::~controller_gigablitz ()
 {
   release_sprites_list ();
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels: perform some initializations of gigablitz
-//-------------------------------------------------------------------------------
-Sint32
-controller_gigablitz::init_liste (controller_paddles * zeRak,
+/**
+ * Create and initialize the sprites of the gigablitz in the bricks levels
+ * @parama paddles a pointer to the paddles controller
+ */
+void
+controller_gigablitz::create_gigablitz_sprites (controller_paddles * paddles,
                                   head_anima * gugus,
                                   controller_bricks * brick)
 {
   gugusObjet = gugus;
-  ptRaquette = zeRak;
   brickObjet = brick;
-  paddle_bottom = ptRaquette->get_paddle (1);   // top bumper
-  paddle_top = ptRaquette->get_paddle (3);      // bottom bumper
+  paddle_bottom = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
+  paddle_top = paddles->get_paddle (controller_paddles::TOP_PADDLE);
 
-  if (max_of_sprites)
-    {
+  alloc_sprites_list ();
+  
+  /* load the bitmap of the different Gigablitz,
+   * in the 'sprites_bitmap' static member */
+  resources->load_sprites_bitmap (handler_resources::RESGIGABLZ);
 
-
-      alloc_sprites_list ();
-      // unpack bitmap of the Gigablitz
-      resources->load_sprites_bitmap (handler_resources::RESGIGABLZ);
-
-      // initialize the objects "sprite_gigablitz"
-      for (Sint32 i = 0; i < max_of_sprites; i++)
-        {
-          sprite_gigablitz *g = new sprite_gigablitz ();
-          g->set_object_pos (i);
-          //g->afflignesF = 1;
-          g->set_draw_method (sprite_object::DRAW_LINE_BY_LINE);
-          Sint32 n = numeroBOBs[i];
-          g->create_sprite (n, sprites_bitmap, 0);
-          sprites->add (g);
-          sprites_list[i] = g;
-        }
-
-      // release the bitmap page of gigablitz
-      resources->release_sprites_bitmap ();
+ /* create and initialize the gigablitz sprites */
+ for (Uint32 i = 0; i < max_of_sprites; i++)
+   {
+     sprite_gigablitz *gigablitz_sprite = new sprite_gigablitz ();
+     gigablitz_sprite->set_object_pos (i);
+     gigablitz_sprite->set_draw_method (sprite_object::DRAW_LINE_BY_LINE);
+     Uint32 id = numeroBOBs[i];
+     gigablitz_sprite->create_sprite (id, sprites_bitmap, false);
+     sprites->add (gigablitz_sprite);
+     sprites_list[i] = gigablitz_sprite;
     }
-  return (erreur_num);
+
+   /* release the bitmap of gigablitz */
+   resources->release_sprites_bitmap ();
 }
 
 //-------------------------------------------------------------------------------
@@ -126,7 +117,7 @@ controller_gigablitz::initDepart ()
       Sint32 l = large;
       l -= paddle_bottom->width_mini;   //smallest bumper is of 16/32 pixels width
       l >>= paddle_bottom->width_deca;  //size of bumper step by 8/16 pixels
-      l = NOMBREGIGA - l - 1;
+      l = MAX_OF_GIGABLITZ - l - 1;
       sprite_gigablitz *g = sprites_list[l];
       blitzobjet = g;
       blitz_haut = g->get_sprite_height ();
@@ -265,42 +256,37 @@ controller_gigablitz::collision1 ()
     }
 }
 
-
-
-//-------------------------------------------------------------------------------
-// guards levels: perform some initializations of gigablitz
-//-------------------------------------------------------------------------------
-Sint32
-controller_gigablitz::init_liste (controller_paddles * zeRak,
-                                  controller_explosions * pexpl)
+/**
+ * Create and initialize the sprites of the gigablitz in the guardians levels
+ * @parama paddles a pointer to the paddles controller
+ */
+void
+controller_gigablitz::create_gigablitz_sprites (controller_paddles * paddles,
+                                  controller_explosions * blast)
 {
-  explosions = pexpl;
-  ptRaquette = zeRak;
-  paddle_bottom = ptRaquette->get_paddle (1);   // top bumper
-  if (max_of_sprites)
-    {
+  explosions = blast;
+  paddle_bottom = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
 
-      alloc_sprites_list ();
-      // unpack bitmap of the Gigablitz
-      resources->load_sprites_bitmap (handler_resources::RESGIGABLZ);
+  alloc_sprites_list ();
+  /* load the bitmap of the different Gigablitz,
+   * in the 'sprites_bitmap' static member */
+  resources->load_sprites_bitmap (handler_resources::RESGIGABLZ);
 
-      // initialize the objects "sprite_gigablitz"
-      for (Sint32 i = 0; i < max_of_sprites; i++)
-        {
-          sprite_gigablitz *g = new sprite_gigablitz ();
-          g->set_object_pos (i);
-          g->mirrorVert = 1;
-          g->set_draw_method (sprite_object::DRAW_LINE_BY_LINE);
-          Sint32 n = numeroBOBs[i];
-          g->create_sprite (n, sprites_bitmap, 0);
-          sprites->add (g);
-          sprites_list[i] = g;
-        }
+ /* create and initialize the gigablitz sprites */
+  for (Uint32 i = 0; i < max_of_sprites; i++)
+  {
+    sprite_gigablitz *gigablitz_sprite = new sprite_gigablitz ();
+    gigablitz_sprite->set_object_pos (i);
+    gigablitz_sprite->mirrorVert = 1;
+    gigablitz_sprite->set_draw_method (sprite_object::DRAW_LINE_BY_LINE);
+    Sint32 n = numeroBOBs[i];
+    gigablitz_sprite->create_sprite (n, sprites_bitmap, 0);
+    sprites->add (gigablitz_sprite);
+    sprites_list[i] = gigablitz_sprite;
+  }
 
-      // release the bitmap page of gigablitz
-      resources->release_sprites_bitmap ();
-    }
-  return (erreur_num);
+  // release the bitmap page of gigablitz
+  resources->release_sprites_bitmap ();
 }
 
 // ------------------------------------------------------------------------------

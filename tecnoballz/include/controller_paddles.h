@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.h
  * @brief Paddles controller 
- * @date 2007-02-05
+ * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.h,v 1.4 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: controller_paddles.h,v 1.5 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,8 @@ private:
   Sint32 rakVgauche;            //vitesse gauche
   Sint32 rakVdroite;            //vitesse droite
   Sint32 balle_glue;            //temps de la colle
-  Sint32 rak_invers;            //if > 0 reverse bumpers
+  /** if > 0 the movements of the paddle(s) are reversed */ 
+  Uint32 reverse_counter;
   sprite_paddle *paddle_bottom;
   sprite_paddle *paddle_right;
   sprite_paddle *paddle_top;
@@ -135,16 +136,16 @@ public:
 
 public:
     controller_paddles ();
-    controller_paddles (Sint32 nBob);
+    controller_paddles (Uint32 numof_paddles);
    ~controller_paddles ();
   void create_projectiles_list ();
   void create_paddles_sprites ();
   void fire_projectiles ();
-  void lacheBalle ();
-  void lacheBall2 ();
-  void free_balls ();
-  void bp_deplace ();
-  void bp_deplac2 ();
+  void check_if_release_balls ();
+  void check_if_release_ball ();
+  void release_all_balls ();
+  void move_paddles ();
+  void move_paddle ();
   void initBumper (barreScore * score, controller_gigablitz * blitz,
                    controller_balls * balls);
   void init_robot ();
@@ -153,10 +154,10 @@ public:
   void move_robot ();
   sprite_paddle *get_paddle (Uint32 id);
   void maxi_bumps ();
-  void incremente ();
-  void decremente ();
-  void initinvers (Sint32);
-  Sint32 get_invers ();
-  void bumpersOff ();
+  void expand_paddles ();
+  void shrink_paddles ();
+  void set_reverse_counter (Uint32 counter);
+  Uint32 get_reverse_counter ();
+  void disable_all_paddles ();
 };
 #endif

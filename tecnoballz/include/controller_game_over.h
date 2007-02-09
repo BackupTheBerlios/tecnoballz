@@ -1,40 +1,45 @@
-//*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file         : "controller_game_over.h"
-// created              : 2002-12-14
-// updates              : 2004-10-10
-// fonctions    : handle the "Game Over"
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA  02111-1307, USA.
-//*****************************************************************************
-#ifndef __ZEGAMEOVER__
-#define __ZEGAMEOVER__
-//...............................................................................
+/** 
+ * @file controller_game_over.h
+ * @brief Game Over controller 
+ * @created 2002-12-14
+ * @date 2007-02-09
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.2 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: controller_game_over.h,v 1.2 2007/02/09 17:05:29 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
+#ifndef __CONTROLLER_GAME_OVER__
+#define __CONTROLLER_GAME_OVER__
+
 class controller_game_over;
-//...............................................................................
+
 #include "../include/sprite_object.h"
 #include "../include/objects_list.h"
 #include "../include/score_over.h"
-//...............................................................................
+
 class controller_game_over:public objects_list < sprite_object >
 {
 private:
-  Sint32 go_deplace;            // step number: 0, 1, 2 or 3
-  Sint32 go_zetempo;            // tempo before next step
-  bitmap_data *ptGfxFonte;
+  Uint32 move_phase;            // step number: 0, 1, 2 or 3
+  Uint32 go_zetempo;            // tempo before next step
   score_over *ptScorOver;
   Sint32 chrOffsetX;
 
@@ -55,6 +60,5 @@ public:
   Sint32 first_init (Sint32 offzt = 0);
   void initialize (Sint32 iswin);
   void execution1 (Sint32 iswin = 0);
-
 };
 #endif

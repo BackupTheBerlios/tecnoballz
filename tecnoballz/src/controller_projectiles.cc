@@ -1,46 +1,55 @@
-//*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file         : "controller_projectiles.cc"
-// created              : ?
-// updates              : 2004-10-23
-// fonction     : manage bumper's fire
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA 02111-1307, USA.
-//******************************************************************************
+/** 
+ * @file controller_projectiles.cc 
+ * @brief Projectiles controller 
+ * @date 2007-02-09
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.2 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: controller_projectiles.cc,v 1.2 2007/02/09 17:05:29 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
 #include "../include/controller_projectiles.h"
 
-//-----------------------------------------------------------------------------
-// create the object
-//-----------------------------------------------------------------------------
+/**
+ * Create the projectiles controller
+ */
 controller_projectiles::controller_projectiles ()
 {
   littleInit ();
   countTempo = 0;
-  max_of_sprites = NUMBERFIRE;
+  max_of_sprites = MAX_OF_PROJECTILES;
   sprites_have_shades = false;
   sprite_type_id = BOB_FIREBP;
   if (resolution == 1)
-    scie_sinus = &scieSin320[0];
+    {
+      scie_sinus = &scieSin320[0];
+    }
   else
-    scie_sinus = &scieSin640[0];
+    {
+      scie_sinus = &scieSin640[0];
+    }
 }
 
-//-----------------------------------------------------------------------------
-// release the object
-//-----------------------------------------------------------------------------
+/**
+ * Release the projectiles controller
+ */
 controller_projectiles::~controller_projectiles ()
 {
   release_sprites_list ();
@@ -53,9 +62,9 @@ void
 controller_projectiles::create_projectiles_list (sprite_paddle * paddle)
 {
   create_sprites_list ();
-  maRaquette = paddle;
+  gun_paddle = paddle;
   sprite_projectile **liste = sprites_list;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_projectile *xFire = *(liste++);
       xFire->littleInit (paddle);
@@ -73,19 +82,19 @@ controller_projectiles::disponible ()
   //###################################################################
   // return if bumper has no fire (bumperFire = 0)
   //###################################################################
-  if (!maRaquette->bumperFire)
+  if (!gun_paddle->bumperFire)
     return;
 
-  Sint32 t = max_of_sprites;
+  Uint32 t = max_of_sprites;
   sprite_projectile **liste = sprites_list;
 
   //###################################################################
   // special fire 7 (circular fire)
   //###################################################################
-  if (maRaquette->length == maRaquette->width_maxi)
+  if (gun_paddle->length == gun_paddle->width_maxi)
     {
       Sint32 j = 1;
-      for (Sint32 i = 0; i < t; i++)
+      for (Uint32 i = 0; i < t; i++)
         {
           sprite_projectile *xFire = *(liste++);
           if (xFire->is_enabled == j)
@@ -98,7 +107,7 @@ controller_projectiles::disponible ()
   //###################################################################
   else
     {
-      for (Sint32 i = 0; i < t; i++)
+      for (Uint32 i = 0; i < t; i++)
         {
           sprite_projectile *xFire = *(liste++);
           if (xFire->is_enabled)
@@ -106,7 +115,7 @@ controller_projectiles::disponible ()
         }
     }
   countTempo = 0;
-  maRaquette->bumperFire = 3;   //fire is requested
+  gun_paddle->bumperFire = 3;   //fire is requested
 #ifndef SOUNDISOFF
   audio->play_sound (S_RAK_TIRS);
 #endif
@@ -118,12 +127,12 @@ controller_projectiles::disponible ()
 void
 controller_projectiles::nouveauTir ()
 {
-  if (maRaquette->bumperFire)
+  if (gun_paddle->bumperFire)
     {
-      Sint32 i = maRaquette->length;
+      Sint32 i = gun_paddle->length;
       paddle_length = i;
-      i -= maRaquette->width_mini;      //smallest bumper is of 16/32 pixels width
-      i >>= maRaquette->width_deca;     //size of bumper step by 8/16 pixels
+      i -= gun_paddle->width_mini;      //smallest bumper is of 16/32 pixels width
+      i >>= gun_paddle->width_deca;     //size of bumper step by 8/16 pixels
       switch (i)
         {
         case 0:
@@ -157,16 +166,16 @@ controller_projectiles::nouveauTir ()
 void
 controller_projectiles::init_type1 ()
 {
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
   if (raket->bumperFire == 3)
     {
       raket->bumperFire = 1;
       Sint32 x = raket->x_coord;
       Sint32 y = raket->y_coord;
       if (raket->bumperType)    //vertical bumper ?
-        y += (paddle_length / 2) - (SIZEOFFIRE / 2);
+        y += (paddle_length / 2) - (SIZE_OF_PROJECTILE / 2);
       else
-        x += (paddle_length / 2) - (SIZEOFFIRE / 2);
+        x += (paddle_length / 2) - (SIZE_OF_PROJECTILE / 2);
       sprite_projectile *xFire = sprites_list[0];
       xFire->is_enabled = 1;
       xFire->x_coord = x;
@@ -180,16 +189,16 @@ controller_projectiles::init_type1 ()
 void
 controller_projectiles::init_type2 ()
 {
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
   if (raket->bumperFire == 3)
     {
       raket->bumperFire = 1;
       Sint32 x = raket->x_coord;
       Sint32 y = raket->y_coord;
       if (raket->bumperType)    //vertical bumper ?
-        y += (paddle_length / 2) - (SIZEOFFIRE / 2);
+        y += (paddle_length / 2) - (SIZE_OF_PROJECTILE / 2);
       else
-        x += (paddle_length / 2) - (SIZEOFFIRE / 2);
+        x += (paddle_length / 2) - (SIZE_OF_PROJECTILE / 2);
       sprite_projectile **liste = sprites_list;
       sprite_projectile *xFire;
       Sint32 f = 1;
@@ -210,16 +219,16 @@ controller_projectiles::init_type2 ()
 void
 controller_projectiles::init_type3 ()
 {
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
   if (raket->bumperFire == 3)
     {
       raket->bumperFire = 1;
       Sint32 x = raket->x_coord;
       Sint32 y = raket->y_coord;
       if (raket->bumperType)    //vertical bumper ?
-        y += (paddle_length / 2) - (SIZEOFFIRE / 2);
+        y += (paddle_length / 2) - (SIZE_OF_PROJECTILE / 2);
       else
-        x += (paddle_length / 2) - (SIZEOFFIRE / 2);
+        x += (paddle_length / 2) - (SIZE_OF_PROJECTILE / 2);
       sprite_projectile **liste = sprites_list;
       sprite_projectile *xFire;
       Sint32 f = 1;
@@ -244,7 +253,7 @@ controller_projectiles::init_type3 ()
 void
 controller_projectiles::init_type4 ()
 {
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
   if (raket->bumperFire == 3)
     {
       raket->bumperFire = 1;
@@ -286,7 +295,7 @@ controller_projectiles::init_type4 ()
 void
 controller_projectiles::init_type5 ()
 {
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
   if (raket->bumperFire == 3)
     {
       raket->bumperFire = 1;
@@ -365,7 +374,7 @@ controller_projectiles::init_type5 ()
 void
 controller_projectiles::init_type6 ()
 {
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
   if (raket->bumperFire == 3)
     {
       raket->bumperFire = 1;
@@ -445,7 +454,7 @@ controller_projectiles::init_type6 ()
 void
 controller_projectiles::init_type7 ()
 {
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
 
   //###################################################################
   // bumper is shotting ?
@@ -502,10 +511,10 @@ controller_projectiles::init_type7 ()
 void
 controller_projectiles::deplaceTir ()
 {
-  Sint32 i = maRaquette->length;
+  Sint32 i = gun_paddle->length;
   paddle_length = i;
-  i -= maRaquette->width_mini;  //smallest bumper is of 16/32 pixels width
-  i >>= maRaquette->width_deca; //size of bumper step by 8/16 pixels
+  i -= gun_paddle->width_mini;  //smallest bumper is of 16/32 pixels width
+  i >>= gun_paddle->width_deca; //size of bumper step by 8/16 pixels
   switch (i)
     {
     case 0:
@@ -539,7 +548,7 @@ void
 controller_projectiles::move_type1 ()
 {
   sprite_projectile *xFire = sprites_list[0];
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
   Sint32 i = raket->bumper_FX0;
   xFire->x_coord += i;
   i = raket->bumper_FY0;
@@ -553,7 +562,7 @@ void
 controller_projectiles::move_type2 ()
 {
   sprite_projectile **liste = sprites_list;
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
   Sint32 a = countTempo;
   Sint32 b, c, d;
   a++;
@@ -590,7 +599,7 @@ void
 controller_projectiles::move_type3 ()
 {
   sprite_projectile **liste = sprites_list;
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
   Sint32 i, j;
   sprite_projectile *xFire;
   xFire = *(liste++);           //shot leaves to the left
@@ -623,7 +632,7 @@ controller_projectiles::move_type4 ()
     i = 0;
   countTempo = i;
   sprite_projectile **liste = sprites_list;
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
   sprite_projectile *xFire;
 
   xFire = *(liste++);           //[1] linar shot
@@ -673,7 +682,7 @@ void
 controller_projectiles::move_type5 ()
 {
   sprite_projectile **liste = sprites_list;
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
   Sint32 x = raket->bumper_FX0;
   Sint32 y = raket->bumper_FY0;
   for (Sint32 i = 0; i < 5; i++)
@@ -698,7 +707,7 @@ controller_projectiles::move_type6 ()
     a = 0;
   countTempo = a;
   sprite_projectile **liste = sprites_list;
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
 
   i = raket->bumper_FX0;
   j = raket->bumper_FY0;
@@ -752,7 +761,7 @@ void
 controller_projectiles::move_type7 ()
 {
   sprite_projectile **liste = sprites_list;
-  sprite_paddle *raket = maRaquette;
+  sprite_paddle *raket = gun_paddle;
   for (Sint32 i = 0; i < 7; i++)
     {
       sprite_projectile *xFire = *(liste++);
@@ -798,8 +807,7 @@ void
 controller_projectiles::fire1RunOn ()
 {
   sprite_projectile **liste = sprites_list;
-  Sint32 t = max_of_sprites;
-  for (Sint32 i = 0; i < t; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_projectile *xFire = *(liste++);
       xFire->firePower1 ();
@@ -813,8 +821,7 @@ void
 controller_projectiles::fire2RunOn ()
 {
   sprite_projectile **liste = sprites_list;
-  Sint32 t = max_of_sprites;
-  for (Sint32 i = 0; i < t; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_projectile *xFire = *(liste++);
       xFire->firePower2 ();

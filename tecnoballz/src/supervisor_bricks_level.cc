@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.9 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.10 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,9 +137,7 @@ supervisor_bricks_level::first_init ()
   paddles->create_paddles_sprites ();
 
   /* generation of gigablitz graphics shapes tables */
-  error_init (ptGigaBlit->init_liste (paddles, tete_gugus, bricks));
-  if (erreur_num)
-    return (erreur_num);
+  ptGigaBlit->create_gigablitz_sprites (paddles, tete_gugus, bricks);
 
   /* load bitmap of sprites in memory (all other sprites) */
   resources->load_sprites_bitmap ();
@@ -332,7 +330,7 @@ supervisor_bricks_level::main_loop ()
           audio->disable_sound ();
           audio->stop_music ();
 #endif
-          paddles->bumpersOff ();
+          paddles->disable_all_paddles ();
           bricks->clr_bricks ();
           gereGadget->disable_sprites ();
           gereCapsul->disable_sprites ();
@@ -390,10 +388,10 @@ supervisor_bricks_level::main_loop ()
           //handle the "less bricks" option
           bricks->less_bricks ();
 
-          paddles->bp_deplace ();    //move bumpers
+          paddles->move_paddles ();
           if (tecZ_barre->resteBrick ())
             {
-              paddles->lacheBalle ();
+              paddles->check_if_release_balls ();
               paddles->fire_projectiles ();
             }
           paddles->move_robot ();
@@ -491,7 +489,7 @@ supervisor_bricks_level::main_loop ()
       phase != audio->get_portion_music_played ())
     {
       ptMiniMess->mesrequest (2);
-      paddles->free_balls ();
+      paddles->release_all_balls ();
     }
 #endif
   return end_return;

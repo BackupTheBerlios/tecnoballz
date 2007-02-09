@@ -1,55 +1,61 @@
-//*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file         : "controller_game_over.cc"
-// created              : 2002-12-14
-// updates              : 2004-10-23
-// fonctions    : handle the "Game Over" (move the 8 letters) 
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA  02111-1307, USA.
-//
-//*****************************************************************************
+/** 
+ * @file controller_game_over.cc 
+ * @brief Game Over controller 
+ * @created 2002-12-14
+ * @date 2007-02-09
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.2 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: controller_game_over.cc,v 1.2 2007/02/09 17:05:29 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
 #include "../include/controller_game_over.h"
 #include "../include/handler_audio.h"
 #include "../include/handler_resources.h"
 #include "../include/scoretable.h"
 
-//-----------------------------------------------------------------------------
-// create the object
-//----------------------------------------------------------------------------- 
+/**
+ * Create the Game Over controller
+ */
 controller_game_over::controller_game_over ()
 {
   littleInit ();
-  max_of_sprites = 8;           //there are 8 letters 
-  sprites_have_shades = true;   //shadow enable
+  /* there are 8 letters */
+  max_of_sprites = 8;
+  sprites_have_shades = true;
   max_of_sprites = 8;
   sprite_type_id = BOB_GAMEOV;
-  go_deplace = 0;
-  ptGfxFonte = (bitmap_data *) NULL;
+  move_phase = 0;
   ptScorOver = (score_over *) NULL;
 }
 
-//-----------------------------------------------------------------------------
-// release the object
-//-----------------------------------------------------------------------------
+/**
+ * Release the Game Over controller
+ */
 controller_game_over::~controller_game_over ()
 {
-  if (ptScorOver)
-    delete ptScorOver;
-  if (ptGfxFonte)
-    delete ptGfxFonte;
+  if (NULL != ptScorOver)
+    {
+      delete ptScorOver;
+      ptScorOver = NULL;
+    }
   release_sprites_list ();
 }
 
@@ -70,15 +76,7 @@ controller_game_over::first_init (Sint32 offzt)
 {
   chrOffsetX = offzt;
 
-  //###################################################################
-  // load the bitmap fontes
-  //###################################################################
-  ptGfxFonte = new bitmap_data ();
-  ptGfxFonte->load (handler_resources::RESFONTSCR);
-
-  //###################################################################
-  //initialize score table 
-  //###################################################################
+  /* initialize score table */ 
   ptScorOver = new score_over ();
   error_init (ptScorOver->first_init (chrOffsetX));
   if (erreur_num)
@@ -95,7 +93,7 @@ controller_game_over::initialize (Sint32 iswin)
   Sint32 x = 100 * resolution;
   Sint32 y = 200 * resolution;
   const Sint32 *p = zeus_over1;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_object *zebob = sprites_list[i];
       zebob->enable ();
@@ -106,7 +104,7 @@ controller_game_over::initialize (Sint32 iswin)
       zebob->x_maximum = x2;
       zebob->y_maximum = y2;
     }
-  go_deplace = 1;
+  move_phase = 1;
   go_zetempo = 50 * 10;
 #ifndef SOUNDISOFF
   Sint32 iscla = ptScoreTab->test_score ();
@@ -131,7 +129,7 @@ controller_game_over::initialize (Sint32 iswin)
 void
 controller_game_over::execution1 (Sint32 iswin)
 {
-  switch (go_deplace)
+  switch (move_phase)
     {
     case 0:
       initialize (iswin);
@@ -166,7 +164,7 @@ controller_game_over::deplace_01 ()
   Sint32 maxi = SIZETSINUS;
   Sint32 decal = 32 * resolution;
   const Sint32 *sinus = sinus_over;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_object *zebob = sprites_list[i];
       if (++zebob->x_maximum >= maxi)
@@ -179,7 +177,9 @@ controller_game_over::deplace_01 ()
       hasard_val += y;
     }
   if (--go_zetempo <= 0)
-    go_deplace = 2;
+    {
+      move_phase = 2;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -191,7 +191,7 @@ controller_game_over::deplace_02 ()
   Sint32 maxi = SIZETSINUS;
   Sint32 decal = 32 * resolution;
   const Sint32 *sinus = sinus_over;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_object *zebob = sprites_list[i];
       if (++zebob->y_maximum >= maxi)
@@ -216,7 +216,7 @@ controller_game_over::deplace_02 ()
 
   // move the letters "O", "V", "E", "R"
   v = 192 * resolution + chrOffsetX;
-  for (Sint32 i = 4; i < max_of_sprites; i++)
+  for (Uint32 i = 4; i < max_of_sprites; i++)
     {
       sprite_object *zebob = sprites_list[i];
       if (zebob->x_coord < v)
@@ -227,7 +227,7 @@ controller_game_over::deplace_02 ()
     }
 
   if (f <= 0)
-    go_deplace = 3;
+    move_phase = 3;
 }
 
 //-----------------------------------------------------------------------------
@@ -261,7 +261,7 @@ controller_game_over::deplace_03 ()
 
   // move the letters "O", "V", "E", "R"
   Sint32 v = 191 * resolution;
-  for (Sint32 i = 4; i < max_of_sprites; i++)
+  for (Uint32 i = 4; i < max_of_sprites; i++)
     {
       sprite_object *zebob = sprites_list[i];
       if (++zebob->y_maximum >= maxi)
@@ -279,7 +279,7 @@ controller_game_over::deplace_03 ()
       hasard_val += zebob->y_maximum;
     }
   if (f == 8)
-    go_deplace = 4;
+    move_phase = 4;
 }
 
 //-----------------------------------------------------------------------------
@@ -309,7 +309,7 @@ controller_game_over::deplace_04 ()
 
   // move the letters "O", "V", "E", "R"
   final = 32 * resolution + chrOffsetX;
-  for (Sint32 i = 4; i < max_of_sprites; i++)
+  for (Uint32 i = 4; i < max_of_sprites; i++)
     {
       sprite_object *zebob = sprites_list[i];
       Sint32 o = final - zebob->x_coord;

@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.7 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.8 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,7 +133,7 @@ class controller_balls:public objects_list < sprite_ball >
 	public:
 		void			enable_balls_control();
 		void			run_2balls();
-		void			run_nballs(Sint32 nball = 0);
+		void			run_nballs(Uint32 nball = 0);
 		void			run_3balls();
 		void			run_power1();
 		void			run_power2();

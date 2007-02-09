@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.3 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.4 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,7 +105,7 @@ controller_capsules::initialise (Sint32 mStep, Sint32 bKauf, Sint32 brCnt,
   bonusTombe = 0;               //number of bonuses dropped 
   ptMiniMess = ptMes;
   sprite_capsule *bonus = sprites_list[0];
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       bonus = sprites_list[i];
       bonus->littleInit ();
@@ -149,7 +149,7 @@ void
 controller_capsules::envoieGads (brickClear * briPT)
 {
   brick_kass++;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_capsule *gadg = sprites_list[i];
       if (!gadg->is_enabled)
@@ -198,7 +198,7 @@ controller_capsules::envoieGads (brickClear * briPT)
 void
 controller_capsules::send_malus (sprite_ball * pball)
 {
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_capsule *gadg = sprites_list[i];
       if (!gadg->is_enabled)
@@ -217,7 +217,7 @@ controller_capsules::send_malus (sprite_ball * pball)
 void
 controller_capsules::send_malus (sprite_projectile * pfire)
 {
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_capsule *gadg = sprites_list[i];
       if (!gadg->is_enabled)
@@ -240,7 +240,7 @@ controller_capsules::envoieGads (sprite_ball * pball)
   malus_step++;
   if (malus_step <= malus_frek)
     return;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_capsule *gadg = sprites_list[i];
       if (!gadg->is_enabled)
@@ -320,7 +320,7 @@ controller_capsules::gadgetShop (handler_players * gamer)
 void
 controller_capsules::bouge_gads ()
 {
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_capsule *bonus = sprites_list[i];
       bonus->play_animation_loop ();
@@ -339,7 +339,7 @@ controller_capsules::bouge_gads ()
 void
 controller_capsules::bougegads2 ()
 {
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_capsule *bonus = sprites_list[i];
       bonus->play_animation_loop ();
@@ -366,7 +366,7 @@ controller_capsules::animations (Sint32 value)
     }
   Sint32 a = frame_index;
   sprite_capsule **liste = sprites_list;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_capsule *bonus = *(liste++);
       Sint32 o = bonus->frame_index_min + a;
@@ -467,7 +467,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
       audio->play_sound (S_TRANSFOR);
 #endif
       ptMiniMess->mesrequest (18);
-      oBump->decremente ();
+      oBump->shrink_paddles ();
       break;
 
       // expand bumper
@@ -476,7 +476,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
       audio->play_sound (S_TRANSFOR);
 #endif
       ptMiniMess->mesrequest (19);
-      oBump->incremente ();
+      oBump->expand_paddles ();
       break;
 
       // lose a life
@@ -537,7 +537,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
       // inverse control
     case GAD_INVERS:
       ptMiniMess->mesrequest (24);
-      oBump->initinvers (50 * 4);
+      oBump->set_reverse_counter (50 * 4);
       break;
 
       // maxi ball speed (no gadget)

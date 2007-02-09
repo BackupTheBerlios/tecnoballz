@@ -4,11 +4,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.8 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.9 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,26 +37,19 @@
 controller_paddles::controller_paddles ()
 {
   littleInit ();
-  paddle_bottom = NULL;
-  paddle_right = NULL;
-  paddle_top = NULL;
-  paddle_left = NULL;
-  tec_robot0 = NULL;
   max_of_sprites = 5;
   sprites_have_shades = true;
   sprite_type_id = BOB_BUMPHR;
   is_team_mode = false;
   paddle_length = 64 * resolution;
-  rak_invers = 0;
-  controller_projectiles *fBump = new controller_projectiles ();
-  paddle_bottom = new sprite_paddle (fBump);
-  fBump = new controller_projectiles ();
-  paddle_right = new sprite_paddle (fBump);
-  fBump = new controller_projectiles ();
-  paddle_top = new sprite_paddle (fBump);
-  fBump = new controller_projectiles ();
-  paddle_left = new sprite_paddle (fBump);
-  tec_robot0 = new sprite_paddle (NULL);
+  reverse_counter = 0;
+
+  paddle_bottom = new sprite_paddle ();
+  paddle_right = new sprite_paddle ();
+  paddle_top = new sprite_paddle ();
+  paddle_left = new sprite_paddle ();
+  tec_robot0 = new sprite_paddle (false);
+
   bumperMini = 32 * resolution;
   bumperMaxi = 224 * resolution;
   bumperYhau = (20 - 8) * resolution;
@@ -69,23 +62,25 @@ controller_paddles::controller_paddles ()
 
 /** 
  * Create the paddles controller in guards levels
+ * @params numof_paddles always 1 
  */
-controller_paddles::controller_paddles (Sint32 nBob)
+controller_paddles::controller_paddles (Uint32 numof_paddles)
 {
   littleInit ();
-  paddle_bottom = NULL;
+  max_of_sprites = numof_paddles;
+  sprites_have_shades = true;
+  is_draw_pixel_by_pixel = false;
+  sprite_type_id = BOB_BUMPER;
+  is_team_mode = false;
+  paddle_length = 32 * resolution;
+  reverse_counter = 0;
+  
+  paddle_bottom = new sprite_paddle (false);
   paddle_right = NULL;
   paddle_top = NULL;
   paddle_left = NULL;
   tec_robot0 = NULL;
-  max_of_sprites = 1;
-  sprites_have_shades = true;
-  is_draw_pixel_by_pixel = false;
-  sprite_type_id = BOB_BUMPER;
-  is_team_mode = 0;
-  paddle_length = 32 * resolution;
-  rak_invers = 0;
-  paddle_bottom = new sprite_paddle (NULL);
+  
   width_maxi = 32 * resolution;
   width_mini = 32 * resolution;
   bumperYbas = (232 - 8) * resolution;
@@ -352,26 +347,26 @@ controller_paddles::initBumper (barreScore * score, controller_gigablitz * blitz
   tec_robot0->direct_tab = ballePets1;  // table direction balle collee
 }
 
-//------------------------------------------------------------------------------
-// drop fires from bumpze
-//------------------------------------------------------------------------------
+/**
+ * Fire the projectiles
+ */
 void
 controller_paddles::fire_projectiles ()
 {
 
-  // Mode  solo
+  /* mode  solo */
   if (!is_team_mode)
     {
       if (keyboard->is_left_button ())
         {
-          paddle_bottom->fire_projectiles ();      //sprite_paddle::fire_projectiles (bumper object)
+          paddle_bottom->fire_projectiles ();
           paddle_right->fire_projectiles ();
           paddle_top->fire_projectiles ();
           paddle_left->fire_projectiles ();
         }
     }
   else
-    // Mode Team (no implemented)
+    /* mode team no implemented */
     {
     }
   paddle_bottom->deplaceTir ();
@@ -380,64 +375,66 @@ controller_paddles::fire_projectiles ()
   paddle_left->deplaceTir ();
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: drop the ball
-//------------------------------------------------------------------------------
+/**
+ * Check if the player release all glued balls in the bricks levels
+ */
 void
-controller_paddles::lacheBalle ()
+controller_paddles::check_if_release_balls ()
 {
-  //###################################################################
-  // release ball
-  //###################################################################
+  /*
+   * mode solo
+   */
   if (!is_team_mode)
     {
       if (keyboard->is_right_button ())
         {
-          paddle_bottom->lacheBalle ();
-          paddle_right->lacheBalle ();
-          paddle_top->lacheBalle ();
-          paddle_left->lacheBalle ();
+          paddle_bottom->release_ball ();
+          paddle_right->release_ball ();
+          paddle_top->release_ball ();
+          paddle_left->release_ball ();
 #ifndef SOUNDISOFF
           audio->stop_lost_music ();
 #endif
         }
     }
-  //###################################################################
-  // Mode Team (not implemented)
-  //###################################################################
+  /*
+   * mode team not implemented
+   */
   /* else
      {
 
      } */
 }
 
-//------------------------------------------------------------------------------
-// guards levels: drop the ball
-//------------------------------------------------------------------------------
+/**
+ * Check if the player release all glued balls in the guards levels
+ */
 void
-controller_paddles::lacheBall2 ()
+controller_paddles::check_if_release_ball ()
 {
   if (keyboard->is_right_button ())
-    paddle_bottom->lacheBalle ();
+    {
+      paddle_bottom->release_ball ();
+    }
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: release all balls
-//------------------------------------------------------------------------------
+/**
+ * Release all balls in bricks levels
+ */
 void
-controller_paddles::free_balls ()
+controller_paddles::release_all_balls ()
 {
-  paddle_bottom->lacheBalle ();
-  paddle_right->lacheBalle ();
-  paddle_top->lacheBalle ();
-  paddle_left->lacheBalle ();
+  paddle_bottom->release_ball ();
+  paddle_right->release_ball ();
+  paddle_top->release_ball ();
+  paddle_left->release_ball ();
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: movement of bumpers
-//------------------------------------------------------------------------------
+/** 
+ * Control the movements of paddle(s) in the bricks levels
+ */
 void
-controller_paddles::bp_deplace ()
+controller_paddles::move_paddles ()
 {
   Sint32 speed = 0;
   const Sint32 **tabB1, **tabB2, **tabB3, **tabB4;
@@ -452,7 +449,7 @@ controller_paddles::bp_deplace ()
 
       if (!keyboard->is_right_left_buttons () && !ptGigaBlit->isactivate ())    //if 2 mouse buttons are pressed or GigaBlitz runn also no test
         {
-          if (rak_invers > 0)
+          if (reverse_counter > 0)
             {
               off_x = -off_x;
             }
@@ -508,11 +505,11 @@ controller_paddles::bp_deplace ()
     }
 }
 
-//------------------------------------------------------------------------------
-// guards levels: bumper moving
-//------------------------------------------------------------------------------
+/** 
+ * Control the movements of paddle in the guardians levels
+ */
 void
-controller_paddles::bp_deplac2 ()
+controller_paddles::move_paddle ()
 {
   Sint32 speed = 0;
   const Sint32 **tabB1;
@@ -524,7 +521,7 @@ controller_paddles::bp_deplac2 ()
       raketDepla = 0;           //no move
       rakVgauche = 0;
       rakVdroite = 0;
-      if (rak_invers > 0)
+      if (reverse_counter > 0)
         off_x = -off_x;
       x += off_x;
       if (off_x < 0)
@@ -675,84 +672,98 @@ controller_paddles::maxi_bumps ()
 
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: increase bumpers's size
-//------------------------------------------------------------------------------
+/**
+ * Expand the size of the paddle(s) in the bricks levels
+ */
 void
-controller_paddles::incremente ()
+controller_paddles::expand_paddles ()
 {
-  if (paddle_length < (64 * resolution))
+  if (paddle_length >= (64 * resolution))
     {
-      paddle_length += (8 * resolution);
-      Sint32 x = paddle_bottom->get_x_coord ();
-      Sint32 i = bumperMaxi - paddle_length;
-      if (x >= i)
-        {
-          x = i;
-          paddle_bottom->set_x_coord (x);
-          paddle_right->set_y_coord (x);
-          paddle_top->set_x_coord (x);
-          paddle_left->set_y_coord (x);
-        }
-      paddle_bottom->set_width (paddle_length);
-      paddle_right->set_height (paddle_length);
-      paddle_top->set_width (paddle_length);
-      paddle_left->set_height (paddle_length);
-      current_player->setLargeur (paddle_length);
+      return;
     }
-}
-
-//------------------------------------------------------------------------------
-// bricks levels: decrease bumpers's size
-//------------------------------------------------------------------------------
-void
-controller_paddles::decremente ()
-{
-  if (paddle_length > (16 * resolution))
+  paddle_length += (8 * resolution);
+  Sint32 x = paddle_bottom->get_x_coord ();
+  Sint32 i = bumperMaxi - paddle_length;
+  if (x >= i)
     {
-      paddle_length -= (8 * resolution);
-      paddle_bottom->set_width (paddle_length);
-      paddle_right->set_height (paddle_length);
-      paddle_top->set_width (paddle_length);
-      paddle_left->set_height (paddle_length);
-      current_player->setLargeur (paddle_length);
+      x = i;
+      paddle_bottom->set_x_coord (x);
+      paddle_right->set_y_coord (x);
+      paddle_top->set_x_coord (x);
+      paddle_left->set_y_coord (x);
     }
+  paddle_bottom->set_width (paddle_length);
+  paddle_right->set_height (paddle_length);
+  paddle_top->set_width (paddle_length);
+  paddle_left->set_height (paddle_length);
+  current_player->setLargeur (paddle_length);
 }
 
-//------------------------------------------------------------------------------
-// initialize bumper reverse
-//------------------------------------------------------------------------------
+/**
+ * Shrink the size of the paddle(s) in the bricks levels
+ */
 void
-controller_paddles::initinvers (Sint32 value)
+controller_paddles::shrink_paddles ()
 {
-  rak_invers = value;
+  if (paddle_length <= (16 * resolution))
+    {
+      return;
+    }
+  paddle_length -= (8 * resolution);
+  paddle_bottom->set_width (paddle_length);
+  paddle_right->set_height (paddle_length);
+  paddle_top->set_width (paddle_length);
+  paddle_left->set_height (paddle_length);
+  current_player->setLargeur (paddle_length);
 }
 
-//------------------------------------------------------------------------------
-// return bumper reverse value
-//------------------------------------------------------------------------------
-Sint32
-controller_paddles::get_invers ()
-{
-  return rak_invers;
-}
-
-//------------------------------------------------------------------------------
-// disable all bumpers (game over)
-//------------------------------------------------------------------------------
+/** 
+ * Enable reverse movements of the paddle
+ * @param counter value of the reverse
+ */
 void
-controller_paddles::bumpersOff ()
+controller_paddles::set_reverse_counter (Uint32 counter)
+{
+  reverse_counter = counter;
+}
+
+/**
+ * Return counter value of the reverse paddle
+ * @return counter value of the reverse
+ */
+Uint32
+controller_paddles::get_reverse_counter ()
+{
+  return reverse_counter;
+}
+
+/**
+ * Disable all paddles during the game over
+ */
+void
+controller_paddles::disable_all_paddles ()
 {
   if (paddle_bottom)
+    {
     paddle_bottom->disable ();
+    }
   if (paddle_right)
+    {
     paddle_right->disable ();
+    }
   if (paddle_top)
+  {
     paddle_top->disable ();
+  }
   if (paddle_left)
+  {
     paddle_left->disable ();
+  }
   if (tec_robot0)
+  {
     tec_robot0->disable ();
+  }
 }
 
 

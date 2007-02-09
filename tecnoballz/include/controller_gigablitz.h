@@ -4,11 +4,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.h,v 1.3 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: controller_gigablitz.h,v 1.4 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,12 +47,12 @@ class controller_gigablitz:public objects_list < sprite_gigablitz >
   friend class sprite_gigablitz;
 
 private:
-  static const Uint32 NOMBREGIGA = 7;
-  static Sint32 numeroBOBs[NOMBREGIGA];
+  static const Uint32 MAX_OF_GIGABLITZ = 7;
+  static Sint32 numeroBOBs[MAX_OF_GIGABLITZ];
 
   controller_bricks *brickObjet;
   head_anima *gugusObjet;
-  controller_paddles *ptRaquette;
+  controller_paddles *paddles;
   controller_explosions *explosions;
   sprite_paddle *paddle_bottom;
   sprite_paddle *paddle_top;
@@ -71,12 +71,12 @@ private:
 public:
     controller_gigablitz ();
    ~controller_gigablitz ();
-  Sint32 init_liste (controller_paddles * zeRak, head_anima * gugus,
+  void create_gigablitz_sprites (controller_paddles * paddles, head_anima * gugus,
                      controller_bricks * brick);
   void initDepart ();
   void execution1 ();
   void collision1 ();
-  Sint32 init_liste (controller_paddles * zeRak, controller_explosions * pexpl);
+  void create_gigablitz_sprites (controller_paddles * paddles, controller_explosions * blast);
   void execution2 ();
   void collision2 ();
   Sint32 guard_shoot (Sint32 value, Sint32 pos_x, Sint32 pos_y,

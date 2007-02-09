@@ -1,14 +1,14 @@
 /** 
  * @file sprite_projectile.h 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-01-25
+ * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.h,v 1.6 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: sprite_projectile.h,v 1.7 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,18 +25,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-#ifndef __TECNO_FIRE__
-#define __TECNO_FIRE__
-//...............................................................................
+#ifndef __SPRITE_PROJECTILE__
+#define __SPRITE_PROJECTILE__
+
 class sprite_projectile;
-//...............................................................................
+
 #include "../include/sprite_object.h"
 #include "../include/sprite_paddle.h"
 #include "../include/controller_bricks.h"
 #include "../include/zeBouiBoui.h"
 #include "../include/sprite_ship.h"
 #include "../include/barreScore.h"
-//...............................................................................
+
 class sprite_projectile:public sprite_object
 {
 	friend class controller_projectiles;
@@ -72,6 +72,5 @@ class sprite_projectile:public sprite_object
 		static void		collision1();
 		static void		collision2();
 		static void		disable_sprites();
-
 };
 #endif

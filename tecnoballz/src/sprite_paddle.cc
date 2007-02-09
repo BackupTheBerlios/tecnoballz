@@ -1,14 +1,14 @@
 /** 
  * @file sprite_paddle.cc 
  * @brief A paddle sprite 
- * @date 2007-02-05
+ * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.6 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.7 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,10 +27,12 @@
  */
 #include "../include/sprite_paddle.h"
 
-/*
+/**
  * Create a paddle sprite object
+ * @param has_projectiles true if the paddle can fire
  */
-sprite_paddle::sprite_paddle (controller_projectiles * fBump)
+//sprite_paddle::sprite_paddle (controller_projectiles * fBump)
+sprite_paddle::sprite_paddle (bool has_projectiles)
 {
   clear_sprite_members ();
   length = 32 * resolution;
@@ -43,25 +45,41 @@ sprite_paddle::sprite_paddle (controller_projectiles * fBump)
   balleTouch = 0;
   paddle_number = 0;
   ball_glued = (sprite_ball *) NULL;
-  bumperTirs = fBump;
+  if (has_projectiles)
+    {
+      projectiles = new controller_projectiles (); 
+    }
+  else
+    {
+      projectiles = NULL;
+    }
   invincible = 0;
   flickerval = 0;
   width_mini = 0;
   width_maxi = 0;
   width_deca = 0;
   if (resolution == 1)
-    width_deca = 3;
+    {
+      width_deca = 3;
+    }
   else
-    width_deca = 4;
+    {
+      width_deca = 4;
+    }
 }
 
-//-----------------------------------------------------------------------------
-// release the object
-//-----------------------------------------------------------------------------
+/**
+ * Release a paddle sprite object
+ */
 sprite_paddle::~sprite_paddle ()
 {
-  if (bumperTirs)               //bumper has fires ? (robot has not fires)
-    bumperTirs->release_sprites_list ();        //release fires
+  printf("sprite_paddle::~sprite_paddle DELETE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+  /* Paddle had projectiles */
+  if (NULL != projectiles)
+    {
+      delete projectiles;
+      projectiles = NULL;
+    }
 }
 
 /**
@@ -70,7 +88,7 @@ sprite_paddle::~sprite_paddle ()
 void
 sprite_paddle::create_projectiles_list ()
 {
-  bumperTirs->create_projectiles_list (this);
+  projectiles->create_projectiles_list (this);
 }
 
 /**
@@ -81,7 +99,7 @@ sprite_paddle::fire_projectiles ()
 {
   if (bumperFire != 0)
     {
-      bumperTirs->disponible ();  //controller_projectiles::disponible();
+      projectiles->disponible ();
     }
 }
 
@@ -91,8 +109,8 @@ sprite_paddle::fire_projectiles ()
 void
 sprite_paddle::deplaceTir ()
 {
-  bumperTirs->nouveauTir ();    //controller_projectiles::nouveauTir();
-  bumperTirs->deplaceTir ();    //controller_projectiles::deplaceTir();
+  projectiles->nouveauTir ();    //controller_projectiles::nouveauTir();
+  projectiles->deplaceTir ();    //controller_projectiles::deplaceTir();
 }
 
 //------------------------------------------------------------------------------
@@ -130,7 +148,7 @@ sprite_paddle::set_width (Sint32 w)
   length = w;
   collision_width = length;
   select_image (length);
-  bumperTirs->disable_sprites ();
+  projectiles->disable_sprites ();
 }
 
 /**
@@ -143,7 +161,7 @@ sprite_paddle::set_height (Sint32 h)
   length = h;
   collision_height = length;
   select_image (length);
-  bumperTirs->disable_sprites ();
+  projectiles->disable_sprites ();
 }
 
 /**
@@ -202,7 +220,7 @@ sprite_paddle::set_fire_1 ()
 {
   bumperFire = 1;
   select_image ();
-  bumperTirs->fire1RunOn ();
+  projectiles->fire1RunOn ();
 }
 
 /**
@@ -213,22 +231,26 @@ sprite_paddle::set_fire_2 ()
 {
   bumperFire = 1;
   select_image ();
-  bumperTirs->fire2RunOn ();
+  projectiles->fire2RunOn ();
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: release the ball (if a ball's glued)
-//------------------------------------------------------------------------------
+/**
+ * Release ball if glued in the bricks levels
+ */
 void
-sprite_paddle::lacheBalle ()
+sprite_paddle::release_ball ()
 {
-  if (is_glue > 1)           //is the ball glued on bumper?
-    is_glue = 1;             //bumper's free 
-  sprite_ball *balle = ball_glued;
-  if (balle)
+  /* is the ball glued on bumper? */
+  if (is_glue > 1)
+    {
+      /* paddle is free */
+      is_glue = 1;
+    }
+  sprite_ball *ball = ball_glued;
+  if (NULL != ball)
     {
       ball_glued = (sprite_ball *) NULL;
-      balle->glueLibere ();
+      ball->glueLibere ();
     }
 }
 
@@ -255,7 +277,7 @@ sprite_paddle::attachBall (sprite_ball * ball)
  * Return paddle's length
  * @return length of the paddle in pixels
  */
-Sint32
+Uint32
 sprite_paddle::get_length ()
 {
   return length;

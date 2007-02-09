@@ -5,11 +5,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_explosions.cc,v 1.1 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: controller_explosions.cc,v 1.2 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ controller_explosions::create_explosions_list ()
   alloc_sprites_list ();
   Sint32 bobn1 = BOB_EXPLO1;
   Sint32 bobn2 = BOB_EXPLO2;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_object *explosion = new sprite_object ();
       explosion->set_object_pos (i);
@@ -80,7 +80,7 @@ controller_explosions::create_explosions_list ()
 void
 controller_explosions::add (Uint32 xcoord, Uint32 ycoord)
 {
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_object *explosion = sprites_list[i];
       if (explosion->is_enabled)
@@ -111,7 +111,7 @@ controller_explosions::add (Uint32 xcoord, Uint32 ycoord)
 void
 controller_explosions::play_animation ()
 {
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_object *explosion = sprites_list[i];
       if (explosion->is_enabled)

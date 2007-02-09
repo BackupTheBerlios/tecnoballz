@@ -53,7 +53,7 @@ Sint32	zeGemstone::initialise(handler_players* pjda, barreScore *score, printmon
 	ptBarScore = score;
 	ptPrintmon = money;
 	ptRaquette = pbump;
-	for(Sint32 i = 0; i < max_of_sprites; i++)
+	for(Uint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_gem *ptGem = sprites_list[i];
 		if (pjda->gem_is_set(i))
 			ptGem->gemcollect(i);
@@ -66,7 +66,7 @@ Sint32	zeGemstone::initialise(handler_players* pjda, barreScore *score, printmon
 //-----------------------------------------------------------------------------
 void zeGemstone::sendNewGem(sprite_ball *pball)
 {
-	for(Sint32 i = 0; i < max_of_sprites; i++)
+	for(Uint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_gem *ptGem = sprites_list[i];
 		if(ptGem->disponible(pball))
 			return;
@@ -78,7 +78,7 @@ void zeGemstone::sendNewGem(sprite_ball *pball)
 //-----------------------------------------------------------------------------
 void zeGemstone::sendNewGem(sprite_projectile *pfire)
 {
-	for(Sint32 i = 0; i < max_of_sprites; i++)
+	for(Uint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_gem *ptGem = sprites_list[i];
 		if(ptGem->disponible(pfire))
 			return;
@@ -91,7 +91,7 @@ void zeGemstone::sendNewGem(sprite_projectile *pfire)
 //-----------------------------------------------------------------------------
 void zeGemstone::moving_gem()
 {
-	for(Sint32 i = 0; i < max_of_sprites; i++)
+	for(Uint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_gem *ptGem = sprites_list[i];
 		Sint32 ztype = ptGem->move();
 		if(ztype >= 0)
@@ -102,7 +102,7 @@ void zeGemstone::moving_gem()
 				{	//###################################################
 					// 6 gems collected
 					//###################################################
-					for(Sint32 k = 0; k < max_of_sprites; k++)
+					for(Uint32 k = 0; k < max_of_sprites; k++)
 					{	sprite_gem *zegem = sprites_list[k];
 						zegem->activBlink();
 					}

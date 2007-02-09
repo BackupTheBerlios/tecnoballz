@@ -4,11 +4,11 @@
  * @date 2007-01-28
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.11 2007/02/06 09:46:13 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.12 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,10 +37,10 @@ template < class X > class objects_list:public virtual tecnoballz
 {
 protected:
   X ** sprites_list;
-  Sint32 max_of_sprites;
-  Sint32 num_of_sprites;
+  Uint32 max_of_sprites;
+  Uint32 num_of_sprites;
   bool sprites_have_shades;
-  Sint32 sprite_type_id;
+  Uint32 sprite_type_id;
   bool is_draw_pixel_by_pixel;
 
 public:
@@ -53,7 +53,7 @@ public:
   void disable_sprites ();
   void enable_sprites ();
   X **get_sprites_list ();
-  Sint32 get_max_of_sprites ();
+  Uint32 get_max_of_sprites ();
   void set_max_of_sprites (Sint32 total);
 };
 
@@ -94,7 +94,7 @@ template < class X > void objects_list < X >::release_sprites_list ()
     {
       return;
     }
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       X *sprite = sprites_list[i];
       if (sprite != NULL)
@@ -121,7 +121,7 @@ template < class X > X ** objects_list < X >::get_sprites_list ()
  * Return the maxium number of sprites objects
  * @return the maxium number of sprites objects
  */
-template < class X > Sint32 objects_list < X >::get_max_of_sprites ()
+template < class X > Uint32 objects_list < X >::get_max_of_sprites ()
 {
   return max_of_sprites;
 }
@@ -140,7 +140,7 @@ template < class X > void objects_list < X >::set_max_of_sprites (Sint32 maxof)
  */
 template < class X > void objects_list < X >::alloc_sprites_list ()
 {
-  if (max_of_sprites <= 0)
+  if (max_of_sprites == 0)
     {
       std::cerr << "(!)objects_list::alloc_sprites_list() " <<
           "Our array should always have at least one element in it!" <<
@@ -159,7 +159,7 @@ template < class X > void objects_list < X >::alloc_sprites_list ()
         max_of_sprites << " elements!" << std::endl;
       throw;
     }
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprites_list[i] = NULL;
     }
@@ -181,7 +181,7 @@ template < class X > void objects_list < X >::create_sprites_list ()
   sprite_template->create_sprite (sprite_type_id, sprites_bitmap, sprites_have_shades, is_draw_pixel_by_pixel);
   sprite_template->set_draw_method (sprite_object::DRAW_WITH_TABLES);
   sprites->add (sprite_template);
-  for (Sint32 i = 1; i < max_of_sprites; i++)
+  for (Uint32 i = 1; i < max_of_sprites; i++)
     {
       X *sprite = new X ();
       sprite->set_object_pos (i);
@@ -198,7 +198,7 @@ template < class X > void objects_list < X >::create_sprites_list ()
  */
 template < class X > void objects_list < X >::enable_sprites ()
 {
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       X *sprite = sprites_list[i];
       sprite->enable ();
@@ -210,7 +210,7 @@ template < class X > void objects_list < X >::enable_sprites ()
  */
 template < class X > void objects_list < X >::disable_sprites ()
 {
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       X *sprite = sprites_list[i];
       sprite->disable ();

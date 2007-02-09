@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.12 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.13 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -146,7 +146,7 @@ controller_balls::init_balle (controller_paddles * raket, Sint32 start, Sint32 g
       w = 16 * resolution;
     }
 
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];
       ball->once_init (start, speed, paddle_bottom, balleVites, w);
@@ -213,7 +213,7 @@ controller_balls::vitus_sort ()
   Sint32 min_y = sprite_ball::MINIMUM_PY * resolution;
   Sint32 max_y = sprite_ball::MAXIMUM_PY * resolution;
 
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
       sprite_paddle *rakPT;
@@ -281,7 +281,7 @@ controller_balls::vitussort2 ()
 {
   Sint32 max_y = sprite_ball::MAXIMUM_PY * resolution;
   sprite_paddle *raket = paddle_bottom;    //pointer to the object "bumper of bottom"
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
       if (balle->is_enabled)
@@ -323,7 +323,7 @@ controller_balls::activate_tilt ()
   Sint32 t = balle_tilt;
   Sint32 rand = hasard_val;
   rand = rand & 15;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];
       if (!ball->is_enabled || ball->tilt_delay < t)
@@ -356,7 +356,7 @@ controller_balls::activate_tilt ()
 void
 controller_balls::accelerate ()
 {
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
       if (balle->is_enabled)
@@ -374,7 +374,7 @@ controller_balls::vitus_move ()
   Sint32 j;
   Sint32 *monPT;
   sprite_paddle *raket;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
       if (balle->is_enabled)
@@ -486,7 +486,7 @@ controller_balls::vitusmove2 ()
   Sint32 j;
   Sint32 *monPT;
   sprite_paddle *raket;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
       if (balle->is_enabled)
@@ -570,7 +570,7 @@ controller_balls::vitus_bump ()
   paddle_right->balleTouch = 0;
   paddle_top->balleTouch = 0;
   paddle_left->balleTouch = 0;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
       if (balle->is_enabled && !balle->colleBallF && balle->directBall < 64)
@@ -727,7 +727,7 @@ controller_balls::vitusbump2 ()
   const Sint32 *monPT;
   sprite_paddle *raket, *bumpX;
   paddle_bottom->balleTouch = 0;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
       if (balle->is_enabled)
@@ -793,7 +793,7 @@ controller_balls::vitusrobot ()
       Sint32 y2 = raket->y_coord + raket->collision_height + 8;
       const Sint32 *monPT;
       Sint32 j;
-      for (Sint32 i = 0; i < max_of_sprites; i++)
+      for (Uint32 i = 0; i < max_of_sprites; i++)
         {
           sprite_ball *balle = sprites_list[i];
           if (balle->is_enabled)
@@ -828,7 +828,7 @@ controller_balls::vitusEject ()
   sprite_object *coin3 = ejectObjet->demandeBOB (3);
   sprite_object *coin4 = ejectObjet->demandeBOB (4);
 
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
       if (balle->is_enabled)
@@ -952,7 +952,7 @@ controller_balls::vitus_cote ()
   Sint32 murHt = bricoObjet->getCollisH ();
   Sint32 murBa = ptBob_wall->get_y_coord ();
   Sint32 fwall = ptBob_wall->is_enable ();
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
       if (balle->is_enabled)
@@ -1024,7 +1024,7 @@ controller_balls::vituscote2 ()
   Sint32 murGa = 16 * resolution;
   Sint32 murDr = 300 * resolution;
   Sint32 murHt = 8 * resolution;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
       if (balle->is_enabled)
@@ -1082,7 +1082,7 @@ controller_balls::vituscote2 ()
 void
 controller_balls::vitusbound ()
 {
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
       if (!balle->is_enabled)
@@ -1117,11 +1117,10 @@ controller_balls::check_bricks_collision ()
   Sint32 indus = bricks->getBkIndus (); //first indestructible brick
 
   sprite_ball **balls = sprites_list;
-  Sint32 t = max_of_sprites;
   brickInfos *tMega = bricks->mega_table;
   Sint32 save = bricks->briqueSave;     // save => offset on "brique_pnt"
   brickClear *briPT = bricks->brique_pnt;       // pointer to structure "brickClear" (display and clear the bricks)
-  for (Sint32 i = 0; i < t; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = *(balls++);
       if (!ball->is_enabled)
@@ -1243,7 +1242,7 @@ controller_balls::vitus_eyes ()
   Sint32 vhypo = pt_magneye->hypotenuse;
   sprite_ball **liste = sprites_list;
   Sint32 nbEye = pt_magneye->get_max_of_sprites ();
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = *(liste++);
       if (!balle->is_enabled)
@@ -1341,10 +1340,10 @@ void
 controller_balls::vitusAtoms ()
 {
   sprite_ball **liste = sprites_list;
-  Sint32 t = ptBouiBoui->get_max_of_sprites ();
+  Uint32 t = ptBouiBoui->get_max_of_sprites ();
   sprite_ship **aList = ptBouiBoui->get_sprites_list ();
   Sint32 nouve = (hasard_val & 0xF) << 2;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = *(liste++);
       if (balle->is_enabled && balle->ClBouiBoui == 0)
@@ -1358,7 +1357,7 @@ controller_balls::vitusAtoms ()
           Sint32 y2 = y1 + h;
           y1 -= 26;
           sprite_ship **monPT = aList;
-          for (Sint32 j = 0; j < t; j++)
+          for (Uint32 j = 0; j < t; j++)
             {
               sprite_ship *atome = *(monPT++);
               if (!atome->atom_actif)
@@ -1386,17 +1385,19 @@ controller_balls::vitusAtoms ()
     }
 }
 
-//----------------------------------------------------------------------
-// guards levels: collision of balls with the guardiens
-//----------------------------------------------------------------------
+/**
+ * Collision of balls with the guardians in the guardians levels
+ */
 void
 controller_balls::vitusGuard ()
 {
-  Sint32 u = max_of_sprites;    // number of balls (1 to n)
+  /* number of balls from 1 to n */
+  Uint32 u = max_of_sprites;
   sprite_ball **liste = sprites_list;
-  Sint32 t = ptguardian->get_max_of_sprites (); // number of guards (1 or 2)
+  /* number of guardians from 1 to 2 */
+  Uint32 t = ptguardian->get_max_of_sprites ();
   sprite_guardian **aList = ptguardian->get_sprites_list ();
-  for (Sint32 j = 0; j < t; j++)
+  for (Uint32 j = 0; j < t; j++)
     {
       sprite_guardian *pGard = aList[j];
       sprite_ball *balok = NULL;
@@ -1408,7 +1409,7 @@ controller_balls::vitusGuard ()
           Sint32 grdy1 = pGard->y_coord;
           Sint32 grdy2 = grdy1 + pGard->gard_coly2;
           grdy1 += pGard->gard_coly1;
-          for (Sint32 i = 0; i < u; i++)
+          for (Uint32 i = 0; i < u; i++)
             {
               sprite_ball *balle = liste[i];
               if (balle->is_enabled)
@@ -1453,21 +1454,23 @@ controller_balls::vitusGuard ()
     }
 }
 
-//----------------------------------------------------------------------
-// return the first enable ball
-//----------------------------------------------------------------------
+/**
+ * Return the first enable ball
+ * @return a pointer to ball sprite
+ */
 sprite_ball *
 controller_balls::first_ball ()
 {
-  sprite_ball **liste = sprites_list;
-  Sint32 t = max_of_sprites;
-  for (Sint32 i = 0; i < t; i++)
+  sprite_ball **balls = sprites_list;
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball *balle = *(liste++);
-      if (balle->is_enabled)
-        return (balle);
+      sprite_ball *ball = *(balls++);
+      if (ball->is_enabled)
+        {
+          return ball;
+        }
     }
-  return (sprites_list[0]);
+  return sprites_list[0];
 }
 
 /**
@@ -1488,86 +1491,93 @@ controller_balls::run_2balls ()
   run_nballs (2);
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels: add n ball(s) into ejectors
-//-------------------------------------------------------------------------------
+/**
+ * Add n ball(s) into the ejector(s) in the bricks levels
+ * @param nball from 1 to n
+ */
 void
-controller_balls::run_nballs (Sint32 nball)
+controller_balls::run_nballs (Uint32 nball)
 {
   if (nball < 1)
-    nball = max_of_sprites;
-  sprite_ball **liste = sprites_list;
-  Sint32 k = 0;
-  Sint32 e = hasard_val & 3;
-  Sint32 t = max_of_sprites;
-  Sint32 otime = 1;
-  for (Sint32 i = 0; i < t && k < nball; i++)
     {
-      sprite_ball *balle = *(liste++);
-      if (!balle->is_enabled)
+      nball = max_of_sprites;
+    }
+  sprite_ball **balls = sprites_list;
+  Uint32 count = 0;
+  Uint32 ejector_id = hasard_val & 3;
+  Uint32 delay = 1;
+  for (Uint32 i = 0; i < max_of_sprites && count < nball; i++)
+    {
+      sprite_ball *ball = *(balls++);
+      if (ball->is_enabled)
         {
-          balle->ball2eject (e++, otime);
-          k++;
-          num_of_sprites++;
-          otime += 2;
+          continue;
         }
+      ball->ball2eject (ejector_id++, delay);
+      count++;
+      num_of_sprites++;
+      delay += 2;
     }
 }
 
-//----------------------------------------------------------------------
-// bricks levels: add 3 balls starting from the first enable ball 
-//----------------------------------------------------------------------
+/** 
+ * Add 3 balls starting from the first enable ball
+ */
 void
 controller_balls::run_3balls ()
 {
   sprite_ball *model = first_ball ();
-  Sint32 j = model->directBall; //direction of the current ball 
-  Sint32 i = 0;
-  Sint32 k = 0;
-  sprite_ball **liste = sprites_list;
-  while (i < max_of_sprites && k < 3)
+  /* direction of the current ball */
+  Uint32 j = model->directBall;
+  Uint32 i = 0;
+  Uint32 count = 0;
+  sprite_ball **balls = sprites_list;
+  while (i < max_of_sprites && count < 3)
     {
-      sprite_ball *balle = *(liste++);
-      if (!balle->is_enabled)
+      sprite_ball *ball = *(balls++);
+      if (!ball->is_enabled)
         {
           j += 8;
           j &= 60;
-          balle->duplicate3 (model, j);
+          ball->duplicate3 (model, j);
           num_of_sprites++;
-          k++;
+          count++;
         }
       i++;
     }
 }
 
-//----------------------------------------------------------------------
-// transform all the enable balls into balls power 1
-//----------------------------------------------------------------------
+/** 
+ * Transform all the enable balls into balls power 1
+ */
 void
 controller_balls::run_power1 ()
 {
-  sprite_ball **liste = sprites_list;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  sprite_ball **balls = sprites_list;
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball *balle = *(liste++);
-      if (balle->is_enabled)
-        balle->ballPower1 ();
+      sprite_ball *ball = *(balls++);
+      if (ball->is_enabled)
+        {
+          ball->ballPower1 ();
+        }
     }
 }
 
-//----------------------------------------------------------------------
-// transform all the enable balls into balls power 2
-//----------------------------------------------------------------------
+/** 
+ * Transform all the enable balls into balls power 2
+ */
 void
 controller_balls::run_power2 ()
 {
-  sprite_ball **liste = sprites_list;
-  Sint32 t = max_of_sprites;
-  for (Sint32 i = 0; i < t; i++)
+  sprite_ball **balls = sprites_list;
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball *balle = *(liste++);
-      if (balle->is_enabled)
-        balle->ballPower2 ();
+      sprite_ball *ball = *(balls++);
+      if (ball->is_enabled)
+        {
+          ball->ballPower2 ();
+        }
     }
 }
 
@@ -1578,7 +1588,7 @@ void
 controller_balls::run_size01 ()
 {
   sprite_ball **balls = sprites_list;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = *(balls++);
       if (ball->is_enabled)
@@ -1595,7 +1605,7 @@ void
 controller_balls::run_size02 ()
 {
   sprite_ball **balls = sprites_list;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = *(balls++);
       if (ball->is_enabled)
@@ -1605,57 +1615,48 @@ controller_balls::run_size02 ()
     }
 }
 
-//----------------------------------------------------------------------
-// increase the speed of the balls to the maximum
-//----------------------------------------------------------------------
+/**
+ * Increase the speed of the balls to the maximum
+ */
 void
 controller_balls::maxi_speed ()
 {
-  sprite_ball **liste = sprites_list;
-  Sint32 t = max_of_sprites;
-  for (Sint32 i = 0; i < t; i++)
+  sprite_ball **balls = sprites_list;
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball *balle = *(liste++);
-      if (balle->is_enabled)
-        balle->very_speed ();
+      sprite_ball *ball = *(balls++);
+      if (ball->is_enabled)
+        {
+          ball->very_speed ();
+        }
     }
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: test if the player can use the tilt 
-//------------------------------------------------------------------------------
+/**
+ * Check if the player can use the tilt in the bricks levels
+ */
 void
 controller_balls::time_2tilt ()
 {
-  Uint32 tilt = 0;
-  sprite_ball **liste = sprites_list;
-  Sint32 t = max_of_sprites;
-  Sint32 v = balle_tilt;
-  for (Sint32 i = 0; i < t; i++)
+  bool tilt = false;
+  sprite_ball **balls = sprites_list;
+  Sint32 delay = balle_tilt;
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball *balle = *(liste++);
-      if (balle->is_enabled)
+      sprite_ball *ball = *(balls++);
+      if (!ball->is_enabled || ball->colleBallF)
         {
-          if (!balle->colleBallF)
-            {
-              if (balle->tilt_delay == v)
-                {
-                  if (!tilt)
-                    {
-                      gugusObjet->tetebaille ();
-#ifndef SOUNDISOFF
-                      audio->play_sound (S_TILTALAR);
-#endif
-                      tilt = 1;
-                    }
-                  balle->tilt_delay++;
-                }
-              else
-                balle->tilt_delay++;
-            }
+          continue;
         }
-      else
-        balle->tilt_delay++;
+      if (ball->tilt_delay  == delay && !tilt)
+        {
+          gugusObjet->tetebaille ();
+#ifndef SOUNDISOFF
+          audio->play_sound (S_TILTALAR);
+#endif
+          tilt = true;
+        }
+      ball->tilt_delay++;
     }
 }
 
@@ -1667,9 +1668,8 @@ controller_balls::time2tilt2 ()
 {
   Uint32 tilt = 0;
   sprite_ball **liste = sprites_list;
-  Sint32 t = max_of_sprites;
   Sint32 v = balle_tilt;
-  for (Sint32 i = 0; i < t; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = *(liste++);
       if (balle->is_enabled)
@@ -1707,7 +1707,7 @@ controller_balls::controll_balls ()
       return;
     }
   sprite_ball **balls = sprites_list;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = *(balls++);
       if (!ball->is_enabled)
@@ -1729,16 +1729,14 @@ controller_balls::controll_balls ()
 //------------------------------------------------------------------------------
 Sint32 controller_balls::least_glue ()
 {
-  sprite_ball **
-    liste = sprites_list;
-  Sint32
-    t = max_of_sprites;
-  for (Sint32 i = 0; i < t; i++)
+  sprite_ball ** balls = sprites_list;
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball *
-        balle = *(liste++);
-      if (balle->colleBallF)
-        return 1;
+      sprite_ball * ball = *(balls++);
+      if (ball->colleBallF)
+        {
+          return 1;
+        }
     }
   return 0;
 }

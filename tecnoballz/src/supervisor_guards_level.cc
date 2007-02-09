@@ -5,11 +5,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.11 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.12 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -110,16 +110,12 @@ supervisor_guards_level::first_init ()
       << "grdP: " << grdP << std::endl;
   }
 
-  //###################################################################
-  // initialize gigablitz
-  //###################################################################
-  error_init (gigablitz->init_liste (paddles, explosions));
-  if (erreur_num)
-    return erreur_num;
+  /* gigablitz sprites are contained separately and in its own bitmap */
+  gigablitz->create_gigablitz_sprites (paddles, explosions);
 
-  //###################################################################
-  // intialize the sprites objects lists
-  //###################################################################
+  /* 
+   * sprites who are contained into the large bitmap
+   */
   resources->load_sprites_bitmap ();
   bullets->create_sprites_list ();
   guards->create_guardians_list (bullets, grdP, gigablitz, explosions);
@@ -130,12 +126,12 @@ supervisor_guards_level::first_init ()
   ptPrntmney->create_sprites_list ();
   explosions->create_explosions_list ();
 
-  // Initialize money sprite
-  ptBobMoney->create_sprite (BOB_MONEYS, sprites_bitmap, 0);
+  /* create the money sprite */
+  ptBobMoney->create_sprite (BOB_MONEYS, sprites_bitmap, false);
   sprites->add (ptBobMoney);
 
-  // Initialize extra life sprite
-  ptBobLifes->create_sprite (BOB_GADGET, sprites_bitmap, 0);
+  /* create the extra-life capsule sprite */
+  ptBobLifes->create_sprite (BOB_GADGET, sprites_bitmap, false);
   sprites->add (ptBobLifes);
 
   viewfinders_paddles->create_sprites_list ();
@@ -244,7 +240,7 @@ supervisor_guards_level::main_loop ()
 #ifndef SOUNDISOFF
           audio->disable_sound ();
 #endif
-          paddles->bumpersOff ();
+          paddles->disable_all_paddles ();
           pt_gadgets->disable_sprites ();
           ptCapsules->disable_sprites ();
           guards->disable_sprites ();
@@ -305,8 +301,8 @@ supervisor_guards_level::main_loop ()
         {
           run_scroll ();
           tiles_map->scrolling1 (scrolSpeed);
-          paddles->bp_deplac2 ();
-          paddles->lacheBall2 ();
+          paddles->move_paddle ();
+          paddles->check_if_release_ball ();
           balls->vitusBall2 (); //moving ball(s)
           viewfinders_paddles->run ();
           /* moving guards, and fire bullets and gigablitz */

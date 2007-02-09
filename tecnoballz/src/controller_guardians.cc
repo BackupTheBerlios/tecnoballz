@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.cc,v 1.4 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: controller_guardians.cc,v 1.5 2007/02/09 17:05:29 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ controller_guardians::~controller_guardians ()
     }
   if (NULL != life_gauges_list)
     {
-      for (Sint32 i = 0; i < max_of_sprites; i++)
+      for (Uint32 i = 0; i < max_of_sprites; i++)
         {
           sprite_object *sprite = life_gauges_list[i];
           if (NULL != sprite)
@@ -86,7 +86,7 @@ controller_guardians::create_guardians_list (controller_bullets * pMiss, Sint32 
 
   /* count the number of guardians, 1 or 2 guardians */
   max_of_sprites = -1;
-  Sint32 i;
+  Uint32 i;
   Sint32 j = grdPt;
   do
     {
@@ -153,7 +153,7 @@ void
 controller_guardians::set_gauge_height ()
 {
   Uint32 y_base = 238 * resolution;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_guardian *guard_sprite = sprites_list[i];
       sprite_object *gauge_sprite = life_gauges_list[i];
@@ -182,7 +182,7 @@ controller_guardians::run ()
   offset_ptr++;
   offset_ptr = offset_ptr & 255;
   Uint32 voffset = offzetbyte[offset_ptr] * resolution;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_guardian *guard_sprite = sprites_list[i];
       guard_sprite->run (voffset);
@@ -198,7 +198,7 @@ bool
 controller_guardians::is_guardians_destroyed ()
 {
   bool is_finished = true;
-  for (Sint32 i = 0; i < max_of_sprites; i++)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_guardian *guard_sprite = sprites_list[i];
       if (guard_sprite->gard_power > 0)

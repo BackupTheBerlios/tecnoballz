@@ -49,7 +49,7 @@ ze_magneye::~ze_magneye()
 //-----------------------------------------------------------------------------
 Sint32 ze_magneye::create_eye()
 {
-	for(Sint32 i = 0; i < max_of_sprites; i++)
+	for(Uint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_eye *ptEye = sprites_list[i];
 		if(ptEye->is_enabled) continue;
 		ptEye->is_enabled = 1;
@@ -65,7 +65,7 @@ void ze_magneye::create_eyes_list()
 {
 	create_sprites_list();
 	Sint32 hval = hasard_val;
-	for(Sint32 i = 0; i < max_of_sprites; i++)
+	for(Uint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_eye *ptEye = sprites_list[i];
 		ptEye->centerPosx = Xcoordinat[hval & 31]  * resolution;
 #if __WORDSIZE == 64
@@ -94,7 +94,7 @@ void ze_magneye::create_eyes_list()
 void ze_magneye::execution1()
 {
 	Sint32 hval = hasard_val;
-	for(Sint32 i = 0; i < max_of_sprites; i++)
+	for(Uint32 i = 0; i < max_of_sprites; i++)
 	{	sprite_eye *ptEye = sprites_list[i];
 		//if(!ptEye->is_enabled) continue;
 		ptEye->play_animation_loop();

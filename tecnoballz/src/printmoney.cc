@@ -141,10 +141,10 @@ void printmoney::execution1(Sint32 value)
 	// display "reverser malus" if enable
 	//###################################################################
 	sprite_object **liste = sprites_list + 6; 
-	Sint32 inves = ptZraquett->get_invers();
+	Sint32 inves = ptZraquett->get_reverse_counter();
 	if(inves > 0)
 	{	inves--;
-		ptZraquett->initinvers(inves);
+		ptZraquett->set_reverse_counter(inves);
 		inves = inves / 2;
 		Sint32 baseN = 10;
 		while (baseN > 0)
