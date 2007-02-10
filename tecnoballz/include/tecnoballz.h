@@ -5,11 +5,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.7 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.8 2007/02/10 17:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-02-08)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-02-10)"
 #define TU_TRICHES              //devel only
 /* force bytes copy (SPARC unaligned memory access) */
 #define BYTES_COPY

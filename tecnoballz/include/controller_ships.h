@@ -1,7 +1,7 @@
 //*****************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "zeBouiBoui.h"
+// file		: "controller_ships.h"
 // created		: ?
 // updates		: 2004-08-29
 // fonction	: manage the BouiBoui
@@ -23,30 +23,30 @@
 //*****************************************************************************
 #ifndef __ZEBOUIBOUI__
 #define __ZEBOUIBOUI__
-class zeBouiBoui ;
+class controller_ships ;
 //...............................................................................
 #include "../include/list_sprites.h"
 #include "../include/sprite_ship.h"
 #include "../include/objects_list.h"
 #include "../include/handler_display.h"
 #include "../include/controller_moneys.h"
-#include "../include/zeGemstone.h"
+#include "../include/controller_gems.h"
 #include "../include/controller_bricks.h"
 //..............................................................................
-class zeBouiBoui : public objects_list < sprite_ship >
+class controller_ships : public objects_list < sprite_ship >
 {	friend class sprite_ship ;
 	private:
 		controller_moneys*		ptCapsules;
 		controller_capsules*		pt_gadgets;
-		zeGemstone*		ptGemstone;
+		controller_gems*		ptGemstone;
 		controller_bricks*		pt_briques;
 		Sint32			apparition[4]; 		
 		Sint32			reappTemps;
 		Sint32			power_init;
 	public:
-						zeBouiBoui(controller_moneys*, controller_capsules*, zeGemstone*,
+						controller_ships(controller_moneys*, controller_capsules*, controller_gems*,
 							controller_bricks*);
-						~zeBouiBoui();
+						~controller_ships();
 		void			initialise(Sint32 time0, Sint32 time1, Sint32 time2,
 							Sint32 time3, Sint32 time4, Sint32 power) ;
 		void			atom_depla();

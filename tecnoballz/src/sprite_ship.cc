@@ -4,11 +4,11 @@
  * @date 2007-01-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ship.cc,v 1.4 2007/02/10 09:57:16 gurumeditation Exp $
+ * $Id: sprite_ship.cc,v 1.5 2007/02/10 17:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -175,14 +175,14 @@ sprite_ship::over_brick (Sint32 pos_x, Sint32 pos_y)
 //                      => offst: number of the image's explosion
 //                      => pCaps: object "controller_moneys"
 //                      => ptGad: object "controller_capsules
-//                      => ptGem: object "zeGemstone
+//                      => ptGem: object "controller_gems
 //                      => pBrik: object "controller_bricks
 //-----------------------------------------------------------------------------
 void
 sprite_ship::littleInit (Sint32 time0, Sint32 appar, Sint32 index,
                          Sint32 power, Sint32 pos_x, Sint32 pos_y,
                          Sint32 offst, controller_moneys * pCaps, controller_capsules * ptGad,
-                         zeGemstone * ptGem, controller_bricks * pBrik)
+                         controller_gems * ptGem, controller_bricks * pBrik)
 {
   ptCapsules = pCaps;
   pt_gadgets = ptGad;

@@ -4,11 +4,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.4 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.5 2007/02/10 17:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,9 @@
  * MA  02110-1301, USA.
  */
 #include "../include/handler_players.h"
-#include "../include/zeGemstone.h"
+#include "../include/controller_gems.h"
 #include "../include/briqueCote.h"
-#include "../include/zeGemstone.h"
+#include "../include/controller_gems.h"
 
 Uint32 handler_players::max_of_players = 0;
 Sint32 handler_players::joueur_run = 0;
@@ -345,7 +345,7 @@ handler_players::set_cou_nb (Sint32 value)
 void
 handler_players::RAZgemlist ()
 {
-  for (Sint32 i = 0; i < zeGemstone::NUMBER_GEM; i++)
+  for (Sint32 i = 0; i < controller_gems::NUMBER_GEM; i++)
     gemmeActif[i] = 0;          //states of the 6 gems
   gemmeNombr = 0;
 }
@@ -357,7 +357,7 @@ Sint32
 handler_players::gem_enable (Sint32 gemNu)
 {
   gemmeActif[gemNu] = 1;
-  for (Sint32 i = 0; i < zeGemstone::NUMBER_GEM; i++)
+  for (Sint32 i = 0; i < controller_gems::NUMBER_GEM; i++)
     if (!gemmeActif[i])
       return 0;
   RAZgemlist ();

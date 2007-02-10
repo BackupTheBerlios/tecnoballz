@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.9 2007/02/10 09:57:15 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.10 2007/02/10 17:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ class controller_balls;
 #include "../include/controller_bricks.h"
 #include "../include/briqueCote.h"
 #include "../include/head_anima.h"
-#include "../include/zeBouiBoui.h"
+#include "../include/controller_ships.h"
 #include "../include/barreScore.h"
 #include "../include/controller_guardians.h"
 #include "../include/controller_moneys.h"
@@ -70,7 +70,7 @@ class controller_balls:public objects_list < sprite_ball >
 		controller_bricks*		bricks;
 		briqueCote*		bricoObjet;
 		head_anima*		gugusObjet;
-		zeBouiBoui*		ptBouiBoui;
+		controller_ships*		ptBouiBoui;
 		barreScore*		ptBarreScr;
 		controller_guardians*		ptguardian;
 		controller_moneys*		ptCapsules;
@@ -98,7 +98,7 @@ class controller_balls:public objects_list < sprite_ball >
 	public:
 						controller_balls(ejectBalls *eject, controller_bricks *brick, 
 									briqueCote *brico, head_anima* gugus, 
-									zeBouiBoui *atoms, barreScore* score,
+									controller_ships *atoms, barreScore* score,
 									sprite_object *pwall, zeMiniMess*,
 									ze_magneye* pEyes);
 						controller_balls(controller_guardians*, controller_moneys*, controller_capsules*);

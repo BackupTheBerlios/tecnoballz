@@ -1,7 +1,7 @@
 //*****************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "zeCongBall.cc
+// file		: "controller_spheres.cc
 // created		: 2004-08-05
 // updates		: 2004-08-05
 // fonctions	: handle the "Techno Balls" (congratulations) 
@@ -21,7 +21,7 @@
 // Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //*****************************************************************************
-#include "../include/zeCongBall.h"
+#include "../include/controller_spheres.h"
 #include "../include/handler_audio.h"
 #include "../include/handler_resources.h"
 #include "../include/scoretable.h"
@@ -31,7 +31,7 @@
 //-----------------------------------------------------------------------------
 // create the object
 //-----------------------------------------------------------------------------	
-zeCongBall::zeCongBall()
+controller_spheres::controller_spheres()
 {
 	littleInit();
 	max_of_sprites = 8;				//there are 8 letters 
@@ -47,7 +47,7 @@ zeCongBall::zeCongBall()
 //-----------------------------------------------------------------------------
 // release the object
 //-----------------------------------------------------------------------------
-zeCongBall::~zeCongBall()
+controller_spheres::~controller_spheres()
 {
 	release_sprites_list();
 }
@@ -55,7 +55,7 @@ zeCongBall::~zeCongBall()
 //-----------------------------------------------------------------------------
 //	perform some initializations
 //-----------------------------------------------------------------------------
-void zeCongBall::initialize()
+void controller_spheres::initialize()
 {
 	Sint32 offst = 360 / max_of_sprites;
 	Sint32 value = 0;
@@ -69,7 +69,7 @@ void zeCongBall::initialize()
 //-----------------------------------------------------------------------------
 // runtime
 //-----------------------------------------------------------------------------
-void zeCongBall::execution1()
+void controller_spheres::execution1()
 {
 	const Sint16 *ptSin = handler_resources::zesinus360;
 	const Sint16 *ptCos = handler_resources::cosinus360;

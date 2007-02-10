@@ -12,54 +12,57 @@ tecnoballz_CXXFLAGS = -DDATADIR=\"$(datadir)/tecnoballz\" -DSCOREFILE=\"$(scored
 tecnoballz_LDADD = @XLIB_LIBS@ @SDL_LIBS@ @MM_LIBS@ @MIKMOD_LIBS@ -L.
 
 SOURCES_MAIN = \
-	barreScore.cc \
-	bitmap_data.cc \
-	briqueCote.cc \
-	configfile.cc \
-	controller_balls.cc \
-	controller_bricks.cc \
+  barreScore.cc \
+  bitmap_data.cc \
+  briqueCote.cc \
+  configfile.cc \
+  controller_balls.cc \
+  controller_bricks.cc \
   controller_bullets.cc \
   controller_capsules.cc \
   controller_explosions.cc \
   controller_game_over.cc \
+  controller_gems.cc \
   controller_gigablitz.cc \
-	controller_guardians.cc \
+  controller_guardians.cc \
   controller_moneys.cc \
   controller_paddles.cc \
   controller_projectiles.cc \
-	controller_viewfinders.cc \
-	ejectBalls.cc \
+  controller_ships.cc \
+  controller_spheres.cc \
+  controller_viewfinders.cc \
+  ejectBalls.cc \
   handler_audio.cc \
   handler_display.cc \
-	handler_keyboard.cc \
-	handler_memory.cc \
-	handler_players.cc \
-	handler_popup_menu.cc \
-	handler_resources.cc \
-	head_anima.cc \
-	level_data.cc \
-	lispreader.cc \
+  handler_keyboard.cc \
+  handler_memory.cc \
+  handler_players.cc \
+  handler_popup_menu.cc \
+  handler_resources.cc \
+  head_anima.cc \
+  level_data.cc \
+  lispreader.cc \
   list_sprites.cc \
-	main.cc \
-	offscreen_surface.cc \
-	print_menu.cc \
-	printmoney.cc \
-	print_text.cc \
-	score_over.cc \
-	scoretable.cc \
-	surface_sdl.cc \
-	sprite_ball.cc \
-	sprite_bullet.cc \
-	sprite_capsule.cc \
+  main.cc \
+  offscreen_surface.cc \
+  print_menu.cc \
+  printmoney.cc \
+  print_text.cc \
+  score_over.cc \
+  scoretable.cc \
+  surface_sdl.cc \
+  sprite_ball.cc \
+  sprite_bullet.cc \
+  sprite_capsule.cc \
   sprite_eye.cc \
-	sprite_fonte_game.cc \
+  sprite_fonte_game.cc \
   sprite_fonte_menu.cc \
   sprite_gem.cc \
   sprite_gigablitz.cc \
-	sprite_guardian.cc \
+  sprite_guardian.cc \
   sprite_money.cc \
   sprite_mouse_pointer.cc \
-	sprite_object.cc \
+  sprite_object.cc \
   sprite_paddle.cc \
   sprite_projectile.cc \
   sprite_ship.cc \
@@ -70,14 +73,11 @@ SOURCES_MAIN = \
   supervisor_guards_level.cc \
   supervisor_shop.cc \
   tecnoballz.cc \
-	tiles_background.cc \
-	tilesmap_scrolling.cc \
-	zeBouiBoui.cc \
-	zeCongBall.cc \
-	zeDefilTxt.cc \
-	zeGemstone.cc \
-	ze_magneye.cc \
+  tiles_background.cc \
+  tilesmap_scrolling.cc \
+  zeDefilTxt.cc \
+  ze_magneye.cc \
   zeMiniMess.cc \
-	zeMoveText.cc \
-	$(NULL)
+  zeMoveText.cc \
+  $(NULL)
 

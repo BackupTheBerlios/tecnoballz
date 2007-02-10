@@ -4,11 +4,11 @@
  * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.h,v 1.7 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: sprite_projectile.h,v 1.8 2007/02/10 17:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ class sprite_projectile;
 #include "../include/sprite_object.h"
 #include "../include/sprite_paddle.h"
 #include "../include/controller_bricks.h"
-#include "../include/zeBouiBoui.h"
+#include "../include/controller_ships.h"
 #include "../include/sprite_ship.h"
 #include "../include/barreScore.h"
 
@@ -49,7 +49,7 @@ class sprite_projectile:public sprite_object
 		static Sint32		total_fire;
 		static sprite_projectile*	list_fires[maxi_fires];
 		static controller_bricks*	brickObjet;
-		static zeBouiBoui*	atomsObjet;
+		static controller_ships*	atomsObjet;
 		static barreScore*	scoreObjet;
 		Sint32				indexSinus;
 		Sint32				fire_Xscie;
@@ -64,7 +64,7 @@ class sprite_projectile:public sprite_object
 		void			littleInit(sprite_paddle * raket);
 		void			firePower1();
 		void			firePower2();
-		static void		start_list (controller_bricks * brick, zeBouiBoui * atoms,
+		static void		start_list (controller_bricks * brick, controller_ships * atoms,
 					barreScore * score);
 		static void		gestionTir();
 		static void		hors_ecran();

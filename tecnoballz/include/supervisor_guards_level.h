@@ -5,11 +5,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.12 2007/02/10 13:22:02 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.13 2007/02/10 17:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ class supervisor_guards_level;
 #include "../include/controller_explosions.h"
 #include "../include/controller_viewfinders.h"
 #include "../include/controller_game_over.h"
-#include "../include/zeCongBall.h"
+#include "../include/controller_spheres.h"
 #include "../include/handler_popup_menu.h"
 #include "../include/zeMoveText.h"
 
@@ -83,7 +83,7 @@ private:
   Sint32 scrollType;            // type of background scrolling
   Sint32 scrolSpeed;            // speed of the scrolling
   controller_game_over *game_over;
-  zeCongBall *ptCongBall;
+  controller_spheres *ptCongBall;
   Uint32 gameover_counter;
   Sint32 count_next;            //temporisation before next level 
   Sint32 tecnwinner;            //1 = end of the game

@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.12 2007/02/10 13:22:03 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.13 2007/02/10 17:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,11 +40,11 @@ supervisor_bricks_level::supervisor_bricks_level ()
   gereEjects = new ejectBalls ();
   money_capsules = new controller_moneys ();
   power_up_capsules = new controller_capsules (6);
-  ptGemstone = new zeGemstone ();
+  ptGemstone = new controller_gems ();
   bricks = new controller_bricks ();
   tete_gugus = new head_anima ();
   les_atomes =
-    new zeBouiBoui (money_capsules, power_up_capsules, ptGemstone, bricks);
+    new controller_ships (money_capsules, power_up_capsules, ptGemstone, bricks);
   pt_magneye = new ze_magneye ();
   BottomWall = new sprite_object ();
   ptMiniMess = new zeMiniMess ();

@@ -29,7 +29,7 @@ class sprite_ship;
 #include "../include/handler_audio.h"
 #include "../include/controller_moneys.h"
 #include "../include/controller_capsules.h"
-#include "../include/zeGemstone.h"
+#include "../include/controller_gems.h"
 #include "../include/sprite_projectile.h"
 #include "../include/sprite_ball.h"
 #include "../include/controller_bricks.h"
@@ -42,7 +42,7 @@ enum
 //.......................................................................
 class sprite_ship:public sprite_object
 {
-  friend class zeBouiBoui;
+  friend class controller_ships;
   friend class sprite_projectile;
   friend class controller_balls;
 
@@ -56,7 +56,7 @@ private:
 private:
     controller_moneys * ptCapsules;
   controller_capsules *pt_gadgets;
-  zeGemstone *ptGemstone;
+  controller_gems *ptGemstone;
   controller_bricks *pt_briques;
   Sint32 atom_power;            // strength
   Sint32 init_power;            // strength
@@ -91,7 +91,7 @@ private:
   void gere_atome ();
   void littleInit (Sint32 time0, Sint32 appar, Sint32 index,
                    Sint32 power, Sint32 pos_x, Sint32 pos_y, Sint32 offst,
-                   controller_moneys *, controller_capsules *, zeGemstone *, controller_bricks *);
+                   controller_moneys *, controller_capsules *, controller_gems *, controller_bricks *);
   void explosion1 (sprite_projectile *);
   void explosion1 (sprite_ball *);
   void explosion2 ();

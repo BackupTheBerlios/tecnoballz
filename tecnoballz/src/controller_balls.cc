@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.14 2007/02/10 09:57:16 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.15 2007/02/10 17:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@
  */
 controller_balls::controller_balls (ejectBalls * eject, controller_bricks * brick,
                                     briqueCote * brico, head_anima * gugus,
-                                    zeBouiBoui * atoms, barreScore * score,
+                                    controller_ships * atoms, barreScore * score,
                                     sprite_object * pwall, zeMiniMess * pMess,
                                     ze_magneye * pEyes)
 {

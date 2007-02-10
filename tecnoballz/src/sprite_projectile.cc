@@ -4,11 +4,11 @@
  * @date 2007-01-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.4 2007/01/30 21:06:04 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.5 2007/02/10 17:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ sprite_projectile::littleInit (sprite_paddle * raket)
 // static method: initialise all bumper's fires before a bricks level
 //-----------------------------------------------------------------------------
 void
-sprite_projectile::start_list (controller_bricks * brick, zeBouiBoui * atoms,
+sprite_projectile::start_list (controller_bricks * brick, controller_ships * atoms,
                          barreScore * score)
 {
   brickObjet = brick;
@@ -349,7 +349,7 @@ sprite_projectile *
   sprite_projectile::list_fires[maxi_fires];
 controller_bricks *
   sprite_projectile::brickObjet;
-zeBouiBoui *
+controller_ships *
   sprite_projectile::atomsObjet;
 barreScore *
   sprite_projectile::scoreObjet;

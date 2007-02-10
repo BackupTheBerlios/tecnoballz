@@ -4,11 +4,11 @@
  * @date 2007-01-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.23 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.24 2007/02/10 17:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,9 +135,9 @@ class sprite_object:public virtual tecnoballz
   friend class controller_game_over;
   friend class controller_explosions;
   friend class controller_guardians;
-  friend class zeGemstone;
+  friend class controller_gems;
   friend class controller_bullets;
-  friend class zeCongBall;
+  friend class controller_spheres;
   friend class print_text;
 
 public:

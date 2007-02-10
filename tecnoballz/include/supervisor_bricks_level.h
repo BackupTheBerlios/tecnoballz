@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.10 2007/02/10 13:22:02 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.11 2007/02/10 17:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ class supervisor_bricks_level;
 #include "../include/handler_memory.h"
 #include "../include/objects_list.h"
 #include "../include/supervisor.h"
-#include "../include/zeBouiBoui.h"
+#include "../include/controller_ships.h"
 #include "../include/sprite_ship.h"
 #include "../include/handler_keyboard.h"
 #include "../include/tiles_background.h"
@@ -59,7 +59,7 @@ class supervisor_bricks_level;
 #include "../include/controller_game_over.h"
 #include "../include/zeMiniMess.h"
 #include "../include/level_data.h"
-#include "../include/zeGemstone.h"
+#include "../include/controller_gems.h"
 #include "../include/controller_viewfinders.h"
 #include "../include/handler_popup_menu.h"
 #include "../include/ze_magneye.h"
@@ -72,7 +72,7 @@ class supervisor_bricks_level:public virtual supervisor
   friend class controller_paddles;
   friend class controller_capsules;
   friend class zeMoveText;
-  friend class zeBouiBoui;
+  friend class controller_ships;
   friend class sprite_paddle;
 
 private:
@@ -87,11 +87,11 @@ private:
   controller_viewfinders *viewfinders_paddles;
   controller_paddles *paddles;
   barreScore *tecZ_barre;
-  zeBouiBoui *les_atomes;
+  controller_ships *les_atomes;
   ze_magneye *pt_magneye;
   controller_moneys *money_capsules;
   controller_capsules *power_up_capsules;
-  zeGemstone *ptGemstone;
+  controller_gems *ptGemstone;
   zeMoveText *gere_texte;
   controller_gigablitz *ptGigaBlit;
   controller_game_over *ptGameOver;

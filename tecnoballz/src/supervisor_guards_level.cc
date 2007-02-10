@@ -5,11 +5,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.15 2007/02/10 13:22:03 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.16 2007/02/10 17:06:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ supervisor_guards_level::supervisor_guards_level ()
   money_indicator = new sprite_object ();
   ptBobLifes = new sprite_capsule ();
   game_over = new controller_game_over ();
-  ptCongBall = new zeCongBall ();
+  ptCongBall = new controller_spheres ();
   popup_menu = new handler_popup_menu ();
   ptBob_name = NULL;
 }

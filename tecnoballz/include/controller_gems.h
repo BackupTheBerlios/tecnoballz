@@ -1,10 +1,10 @@
-//*****************************************************************************
+//******************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "zeCongBall.h"
-// created		: 2004-08-05
-// updates		: 2004-08-05
-// fonctions	: handle the "Techno Balls" (congratulations) 
+// file		: "zeGesmstone.h"
+// created		: 2004-04-12
+// updates		: 2004-05-09
+// fonction	: Manage the gem (bricks levels)
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -19,29 +19,38 @@
 // You should have received a copy of the GNU General Public License along with
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA  02111-1307, USA.
-//*****************************************************************************
-#ifndef __ZECONGBALL__
-#define __ZECONGBALL__
+//
+//******************************************************************************
+#ifndef __ZEGEMSTONE__
+#define __ZEGEMSTONE__
 //...............................................................................
-class zeCongBall;
+class controller_gems;
 //...............................................................................
-#include "../include/sprite_object.h"
 #include "../include/objects_list.h"
-#include "../include/score_over.h"
+#include "../include/controller_paddles.h"
+#include "../include/sprite_gem.h"
+#include "../include/handler_players.h"
+#include "../include/printmoney.h"
 //...............................................................................
-class zeCongBall:public objects_list < sprite_object >
-{	
-	private:
-			Sint32			speed_rad0;
-			Sint32			speed_rad1;
-			Sint32			speed_rad2;
-			Sint32			speed_rad3;
-			Sint32			speed_rad4;
-	public:
-							zeCongBall();
-							~zeCongBall();
-		void				initialize();
-		void				execution1();
 
+class controller_gems:public objects_list < sprite_gem >
+{
+	public:
+		static const Sint32	NUMBER_GEM = 6;
+	
+	private:
+		controller_paddles*			ptRaquette;
+		handler_players*			pJoueurDat;
+		barreScore*			ptBarScore;
+		printmoney*			ptPrintmon;
+
+	public:
+							controller_gems();
+							~controller_gems();
+		Sint32				initialise(handler_players*, barreScore*, 
+								printmoney*, controller_paddles*);
+		void				sendNewGem(sprite_ball *pball);
+		void				sendNewGem(sprite_projectile *pball);
+		void				moving_gem();
 };
 #endif
