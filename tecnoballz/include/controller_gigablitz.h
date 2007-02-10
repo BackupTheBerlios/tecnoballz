@@ -1,14 +1,14 @@
 /** 
  * @file controller_gigablitz.h
  * @brief Gigablitz controller 
- * @date 2007-02-08
+ * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.h,v 1.4 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: controller_gigablitz.h,v 1.5 2007/02/10 20:22:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,14 +31,14 @@ class controller_gigablitz;
 
 #include "../include/sprite_gigablitz.h"
 #include "../include/list_sprites.h"
-#include "../include/barreScore.h"
+#include "../include/right_panel_score.h"
 #include "../include/handler_keyboard.h"
 #include "../include/controller_viewfinders.h"
 #include "../include/controller_projectiles.h"
 #include "../include/handler_players.h"
 #include "../include/supervisor_bricks_level.h"
 #include "../include/objects_list.h"
-#include "../include/head_anima.h"
+#include "../include/head_animation.h"
 #include "../include/controller_bricks.h"
 #include "../include/controller_explosions.h"
 
@@ -50,13 +50,13 @@ private:
   static const Uint32 MAX_OF_GIGABLITZ = 7;
   static Sint32 numeroBOBs[MAX_OF_GIGABLITZ];
 
-  controller_bricks *brickObjet;
-  head_anima *gugusObjet;
+  controller_bricks *bricks;
+  head_animation *head_anim;
   controller_paddles *paddles;
   controller_explosions *explosions;
   sprite_paddle *paddle_bottom;
   sprite_paddle *paddle_top;
-  sprite_gigablitz *blitzobjet; //pointer on the current "sprite_gigablitz" 
+  sprite_gigablitz *current_gigablitz;
   Sint32 blitz_colx;
   Sint32 blitz_posx;
   Sint32 blitz_posy;
@@ -71,7 +71,7 @@ private:
 public:
     controller_gigablitz ();
    ~controller_gigablitz ();
-  void create_gigablitz_sprites (controller_paddles * paddles, head_anima * gugus,
+  void create_gigablitz_sprites (controller_paddles * paddles, head_animation * gugus,
                      controller_bricks * brick);
   void initDepart ();
   void execution1 ();

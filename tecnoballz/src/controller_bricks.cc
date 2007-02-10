@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.7 2007/02/10 09:57:16 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.8 2007/02/10 20:22:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ controller_bricks::~controller_bricks ()
 // first initialization
 //-------------------------------------------------------------------------------
 void
-controller_bricks::first_init (barreScore * barre, controller_moneys * capsu,
+controller_bricks::first_init (right_panel_score * barre, controller_moneys * capsu,
                                controller_capsules * gadge)
 {
   barreObjet = barre;

@@ -4,11 +4,11 @@
  * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_projectiles.h,v 1.2 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: controller_projectiles.h,v 1.3 2007/02/10 20:22:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ class controller_projectiles;
 
 #include "../include/objects_list.h"
 #include "../include/handler_display.h"
-#include "../include/barreScore.h"
+#include "../include/right_panel_score.h"
 #include "../include/sprite_projectile.h"
 #include "../include/sprite_paddle.h"
 

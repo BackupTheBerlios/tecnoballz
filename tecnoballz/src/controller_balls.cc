@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-01-26
+ * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.15 2007/02/10 17:06:04 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.16 2007/02/10 20:22:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,8 +37,8 @@
  * Create the balls controller into bricks levels
  */
 controller_balls::controller_balls (ejectBalls * eject, controller_bricks * brick,
-                                    briqueCote * brico, head_anima * gugus,
-                                    controller_ships * atoms, barreScore * score,
+                                    briqueCote * brico, head_animation * gugus,
+                                    controller_ships * atoms, right_panel_score * score,
                                     sprite_object * pwall, zeMiniMess * pMess,
                                     ze_magneye * pEyes)
 {
@@ -48,7 +48,7 @@ controller_balls::controller_balls (ejectBalls * eject, controller_bricks * bric
   ejectObjet = eject;
   bricks = brick;
   bricoObjet = brico;
-  gugusObjet = gugus;
+  head_anim = gugus;
   ptBouiBoui = atoms;
   ptBarreScr = score;
   ptBob_wall = pwall;
@@ -82,7 +82,7 @@ controller_balls::controller_balls (controller_guardians * pGard, controller_mon
   ejectObjet = NULL;
   bricks = NULL;
   bricoObjet = NULL;
-  gugusObjet = NULL;
+  head_anim = NULL;
   ptBouiBoui = NULL;
   ptBarreScr = NULL;
   ptBob_wall = NULL;
@@ -256,7 +256,7 @@ controller_balls::vitus_sort ()
                   balle->raket_ball->attachBall (balle);
                   balle->reStarting (balle->raket_ball);
                   // start parasite animation head
-                  gugusObjet->teteparasi ();
+                  head_anim->start_interference ();
                   ptBarreScr->remove_life (1);
                   // force the explosion of all the "atoms"
                   ptBouiBoui->atomexplos ();
@@ -1650,7 +1650,7 @@ controller_balls::time_2tilt ()
         }
       if (ball->tilt_delay  == delay && !tilt)
         {
-          gugusObjet->tetebaille ();
+          head_anim->start_yawn ();
 #ifndef SOUNDISOFF
           audio->play_sound (S_TILTALAR);
 #endif

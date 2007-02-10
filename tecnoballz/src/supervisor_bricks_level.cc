@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.14 2007/02/10 18:09:33 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.15 2007/02/10 20:22:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,34 +36,34 @@ supervisor_bricks_level::supervisor_bricks_level ()
   initialise ();
   gereBricot = new briqueCote ();
   tiles_ground = new tiles_background ();
-  tecZ_barre = new barreScore ();
+  panel_score = new right_panel_score ();
   gereEjects = new ejectBalls ();
   money_capsules = new controller_moneys ();
   power_up_capsules = new controller_capsules (6);
   gem_stones = new controller_gems ();
   bricks = new controller_bricks ();
-  tete_gugus = new head_anima ();
-  les_atomes =
+  head_anim = new head_animation ();
+  ships =
     new controller_ships (money_capsules, power_up_capsules, gem_stones, bricks);
   pt_magneye = new ze_magneye ();
   BottomWall = new sprite_object ();
   ptMiniMess = new zeMiniMess ();
-  gereBalles =
-    new controller_balls (gereEjects, bricks, gereBricot, tete_gugus,
-                          les_atomes, tecZ_barre, BottomWall, ptMiniMess,
+  balls =
+    new controller_balls (gereEjects, bricks, gereBricot, head_anim,
+                          ships, panel_score, BottomWall, ptMiniMess,
                           pt_magneye);
   viewfinders_paddles = new controller_viewfinders ();
   paddles = new controller_paddles ();
   gere_texte = new zeMoveText ();
-  ptGigaBlit = new controller_gigablitz ();
+  gigablitz = new controller_gigablitz ();
   ptPrntmney = new printmoney ();
-  ptGameOver = new controller_game_over ();
+  game_over = new controller_game_over ();
 
   money_indicator = new sprite_object ();
   ptBobRever = new sprite_capsule ();
   popup_menu = new handler_popup_menu ();
 
-  sprite_projectile::start_list (bricks, les_atomes, tecZ_barre);
+  sprite_projectile::start_list (bricks, ships, panel_score);
   level_number = 1;
   area_number = 1;
   next_level = 0;
@@ -85,24 +85,24 @@ supervisor_bricks_level::~supervisor_bricks_level ()
   delete popup_menu;
   delete ptBobRever;
   delete money_indicator;
-  delete ptGameOver;
+  delete game_over;
   delete ptPrntmney;
-  delete ptGigaBlit;
+  delete gigablitz;
   delete gere_texte;
   delete paddles;
   delete viewfinders_paddles;
-  delete gereBalles;
+  delete balls;
   delete ptMiniMess;
   delete BottomWall;
   delete pt_magneye;
-  delete les_atomes;
-  delete tete_gugus;
+  delete ships;
+  delete head_anim;
   delete bricks;
   delete gem_stones;
   delete power_up_capsules;
   delete money_capsules;
   delete gereEjects;
-  delete tecZ_barre;
+  delete panel_score;
   delete tiles_ground;
   delete gereBricot;
   liberation ();
@@ -137,7 +137,7 @@ supervisor_bricks_level::first_init ()
   paddles->create_paddles_sprites ();
 
   /* generation of gigablitz graphics shapes tables */
-  ptGigaBlit->create_gigablitz_sprites (paddles, tete_gugus, bricks);
+  gigablitz->create_gigablitz_sprites (paddles, head_anim, bricks);
 
   /* load bitmap of sprites in memory (all other sprites) */
   resources->load_sprites_bitmap ();
@@ -160,9 +160,9 @@ supervisor_bricks_level::first_init ()
   //ejectors 
   gereEjects->initialise ();
   //all balls
-  gereBalles->create_sprites_list ();
+  balls->create_sprites_list ();
   //atoms (aka "bouisbouis")
-  les_atomes->create_sprites_list ();
+  ships->create_sprites_list ();
   //eye magneto 
   pt_magneye->create_eyes_list ();
   money_capsules->create_sprites_list ();
@@ -174,7 +174,7 @@ supervisor_bricks_level::first_init ()
   //credits value (left-bottom)
   ptPrntmney->create_sprites_list ();
   //GAME OVER sprites
-  ptGameOver->create_sprites_list ();
+  game_over->create_sprites_list ();
   //money sprite (left-bottom)
   money_indicator->create_sprite (BOB_MONEYS, sprites_bitmap, 0);
   sprites->add (money_indicator);
@@ -191,16 +191,11 @@ supervisor_bricks_level::first_init ()
   //###################################################################
   // initialize "Game Over"
   //###################################################################
-  error_init (ptGameOver->first_init ());
+  error_init (game_over->first_init ());
   if (erreur_num)
     return (erreur_num);
 
-  //###################################################################
-  // initialize the head animation
-  //###################################################################
-  error_init (tete_gugus->initialise ());
-  if (erreur_num)
-    return (erreur_num);
+  head_anim->load_bitmap ();
 
   init_level ();
 
@@ -208,18 +203,18 @@ supervisor_bricks_level::first_init ()
   //###################################################################
   // initialize left scores pannel
   //###################################################################
-  error_init (tecZ_barre->first_init (current_player, ptGigaBlit, gereBalles));
+  error_init (panel_score->first_init (current_player, gigablitz, balls));
   if (erreur_num)
     return erreur_num;
-  error_init (tecZ_barre->affiche_me ());
+  error_init (panel_score->affiche_me ());
   if (erreur_num)
     return erreur_num;
 
   background ();
-  paddles->initBumper (tecZ_barre, ptGigaBlit, gereBalles);
+  paddles->init_paddles (gigablitz, balls);
 
   /* balls initialization */
-  gereBalles->init_balle (paddles,
+  balls->init_balle (paddles,
                           /* time before the ball leaves paddle (at the game beginning) */
                           levelParam->startCount,
                           //time before the ball leaves (glue option)
@@ -232,7 +227,7 @@ supervisor_bricks_level::first_init ()
   //##############################################################
   // initialization "atoms" (aka "bouibouis") 
   //##############################################################
-  les_atomes->initialise (levelParam->apparition / hardChoice,
+  ships->initialise (levelParam->apparition / hardChoice,
                           levelParam->atom1Count / hardChoice,
                           levelParam->atom2Count / hardChoice,
                           levelParam->atom3Count / hardChoice,
@@ -240,7 +235,7 @@ supervisor_bricks_level::first_init ()
                           levelParam->resistance * hardChoice);
 
   money_capsules->initialize (levelParam->monayCount * hardChoice,
-                          tecZ_barre, ptPrntmney);
+                          panel_score, ptPrntmney);
 
   //##############################################################
   //Initialize the object which handles gadgets (bonus and malus)
@@ -264,11 +259,11 @@ supervisor_bricks_level::first_init ()
                            //the object which handles the bumpers
                            paddles,
                            //the object which handles the balls
-                           gereBalles,
+                           balls,
                            //the object which handles the text on left scores panel
-                           tecZ_barre, BottomWall, pt_magneye);
+                           panel_score, BottomWall, pt_magneye);
 
-  gem_stones->initialize (tecZ_barre, ptPrntmney, paddles);
+  gem_stones->initialize (panel_score, ptPrntmney, paddles);
 
   //##############################################################
   // initialize mobiles characters ("LEVEL x COMPLETED")
@@ -322,7 +317,7 @@ supervisor_bricks_level::main_loop ()
           bricks->clr_bricks ();
           power_up_capsules->disable_sprites ();
           money_capsules->disable_sprites ();
-          gereBalles->disable_sprites ();
+          balls->disable_sprites ();
           sprite_projectile::disable_sprites ();
           ptMiniMess->erase_mess ();
           isgameover++;
@@ -330,24 +325,26 @@ supervisor_bricks_level::main_loop ()
       ptMiniMess->execution1 ();
       display->wait_frame ();
       display->lock_surfaces ();
-      tete_gugus->execution1 ();
-      ptGigaBlit->execution1 ();
+      head_anim->play ();
+      gigablitz->execution1 ();
       sprites->clear ();
       if (!(hasard_val & 0x00f))
-        tete_gugus->teteparasi ();
+        {
+          head_anim->start_interference ();
+        }
       if (isgameover >= 2)
         {
           isgameover++;
-          ptGameOver->execution1 ();
+          game_over->execution1 ();
         }
       if (!bricks->brickRemap () && isgameover < 2) //restore bricks
         isgameover = 2;
       gereBricot->execution1 ();
       viewfinders_paddles->run ();
-      les_atomes->atom_depla ();
+      ships->atom_depla ();
       sprites->draw ();
-      tecZ_barre->scoreEcran ();
-      tecZ_barre->barreTemoin ();
+      panel_score->scoreEcran ();
+      panel_score->barreTemoin ();
       ptPrntmney->execution1 (current_player->amount_of_money);
       display->unlock_surfaces ();
       display->bufferCTab ();
@@ -370,23 +367,23 @@ supervisor_bricks_level::main_loop ()
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
         {
           ptMiniMess->execution1 ();
-          tete_gugus->execution1 ();
-          ptGigaBlit->execution1 ();
+          head_anim->play ();
+          gigablitz->execution1 ();
 
           //handle the "less bricks" option
           bricks->less_bricks ();
 
           paddles->move_paddles ();
-          if (tecZ_barre->resteBrick ())
+          if (panel_score->resteBrick ())
             {
               paddles->check_if_release_balls ();
               paddles->fire_projectiles ();
             }
           paddles->move_robot ();
-          gereBalles->vitusBalle ();    //move balls
+          balls->vitusBalle ();    //move balls
           viewfinders_paddles->run ();
           sprite_projectile::gestionTir ();
-          les_atomes->atom_depla ();
+          ships->atom_depla ();
           pt_magneye->execution1 ();
           money_capsules->move ();
           power_up_capsules->bouge_gads ();    //move bonuses and maluses
@@ -398,13 +395,13 @@ supervisor_bricks_level::main_loop ()
           else
             BottomWall->thecounter--;
 
-          tecZ_barre->barreTemoin ();
+          panel_score->barreTemoin ();
           ptPrntmney->execution1 (current_player->amount_of_money);
         }
 
       //tiles_ground->draw();
       sprites->draw ();
-      tecZ_barre->scoreEcran ();
+      panel_score->scoreEcran ();
       Ecode = popup_menu->execution1 ();
       display->unlock_surfaces ();
       display->bufferCTab ();
@@ -412,7 +409,7 @@ supervisor_bricks_level::main_loop ()
       //###################################################################
       // next level or next player
       //###################################################################
-      if (!tecZ_barre->resteBrick ())
+      if (!panel_score->resteBrick ())
         {
           if (count_next > 0)
             {
@@ -435,14 +432,14 @@ supervisor_bricks_level::main_loop ()
                   audio->stop_music ();
 #endif
                 }
-              gereBalles->disable_sprites ();
+              balls->disable_sprites ();
               sprite_projectile::disable_sprites ();
             }
           else
             {
               gere_texte->activeText ();
               sprite_projectile::disable_sprites ();
-              gereBalles->disable_sprites ();
+              balls->disable_sprites ();
 #ifndef SOUNDISOFF
               audio->play_win_music ();
 #endif
@@ -528,13 +525,13 @@ supervisor_bricks_level::changebkgd ()
     }
 
   if (keyboard->key_is_pressed (SDLK_v))
-    tete_gugus->teterigole ();
+    head_anim->start_yawn ();
   if (keyboard->key_is_pressed (SDLK_b))
-    tete_gugus->tetebaille ();
+    head_anim->start_yawn ();
   if (keyboard->key_is_pressed (SDLK_n))
-    tete_gugus->teteparasi ();
+    head_anim->start_interference ();
   if (keyboard->key_is_pressed (SDLK_g))
-    ptGigaBlit->initDepart ();
+    gigablitz->initDepart ();
 /* 
 
 	if(keyboard->key_is_pressed(SDLK_w))
@@ -598,7 +595,7 @@ supervisor_bricks_level::background (Sint32 nbkdg)
   //###################################################################
   // intialize the bricks level
   //###################################################################
-  bricks->first_init (tecZ_barre, money_capsules, power_up_capsules);
+  bricks->first_init (panel_score, money_capsules, power_up_capsules);
   Sint32 lbrik = current_player->get_lessBk ();
   current_player->set_lessBk (0);
   bricks->initialize (area_number, level_number, lbrik);

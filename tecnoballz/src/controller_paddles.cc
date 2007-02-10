@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.cc
  * @brief Paddles controller 
- * @date 2007-02-08
+ * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.9 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.10 2007/02/10 20:22:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -216,24 +216,24 @@ controller_paddles::deactrobot ()
   tec_robot0->bump_actif = 0;
 }
 
-
-//------------------------------------------------------------------------------
-// bricks levels: intialize bumpers
-//------------------------------------------------------------------------------
+/**
+ * Initialize the four paddles in the bricks levels
+ * @param blitz a pointer to the gigablitz controller
+ * @param ball a pointer to the balls controller
+ */
 void
-controller_paddles::initBumper (barreScore * score, controller_gigablitz * blitz,
-                                controller_balls * balls)
+controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls * ball)
 {
-  ptBarreScr = score;
-  ptGigaBlit = blitz;
-  ptNewBalls = balls;
+  gigablitz = blitz;
+  balls = ball;
 
   paddle_length = current_player->get_paddle_width ();
   Sint32 centre = (bumperMaxi - bumperMini) / 2 - (paddle_length / 2);
 
   /* initialize bottom paddle */ 
   paddle_bottom->set_coordinates (centre, bumperYbas);
-  paddle_bottom->collision_width = paddle_length;     // bumper's width : 8,16,24,32,40,48,56 or 64
+  /* paddles width: 8, 16, 24, 32, 40, 48, 56 or 64 pixels */
+  paddle_bottom->collision_width = paddle_length;
   paddle_bottom->paddle_number = 1;
   paddle_bottom->bumperType = 0;
   paddle_bottom->bumpActive (is_team_mode, paddle_length, 3);
@@ -447,7 +447,7 @@ controller_paddles::move_paddles ()
       rakVgauche = 0;
       rakVdroite = 0;
 
-      if (!keyboard->is_right_left_buttons () && !ptGigaBlit->isactivate ())    //if 2 mouse buttons are pressed or GigaBlitz runn also no test
+      if (!keyboard->is_right_left_buttons () && !gigablitz->isactivate ())    //if 2 mouse buttons are pressed or GigaBlitz runn also no test
         {
           if (reverse_counter > 0)
             {
@@ -569,8 +569,8 @@ controller_paddles::move_robot ()
 {
   if (tec_robot0->bump_actif)
     {
-      Sint32 t = ptNewBalls->get_max_of_sprites ();
-      sprite_ball **aList = ptNewBalls->get_sprites_list ();
+      Sint32 t = balls->get_max_of_sprites ();
+      sprite_ball **aList = balls->get_sprites_list ();
       Sint32 pos_y = 0;
       sprite_ball *balle = 0x0;
       for (Sint32 i = 0; i < t; i++)

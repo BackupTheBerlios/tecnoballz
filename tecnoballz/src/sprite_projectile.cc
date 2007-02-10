@@ -4,11 +4,11 @@
  * @date 2007-01-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.5 2007/02/10 17:06:04 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.6 2007/02/10 20:22:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,7 +99,7 @@ sprite_projectile::littleInit (sprite_paddle * raket)
 //-----------------------------------------------------------------------------
 void
 sprite_projectile::start_list (controller_bricks * brick, controller_ships * atoms,
-                         barreScore * score)
+                         right_panel_score * score)
 {
   brickObjet = brick;
   atomsObjet = atoms;
@@ -351,5 +351,5 @@ controller_bricks *
   sprite_projectile::brickObjet;
 controller_ships *
   sprite_projectile::atomsObjet;
-barreScore *
+right_panel_score *
   sprite_projectile::scoreObjet;

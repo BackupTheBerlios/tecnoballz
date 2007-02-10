@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.h,v 1.1 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: controller_capsules.h,v 1.2 2007/02/10 20:22:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ class controller_capsules;
 #include "../include/zeMiniMess.h"
 #include "../include/controller_paddles.h"
 #include "../include/controller_balls.h"
-#include "../include/barreScore.h"
+#include "../include/right_panel_score.h"
 #include "../include/ze_magneye.h"
 
 class controller_capsules:public objects_list < sprite_capsule >
@@ -50,7 +50,7 @@ private:
   zeMiniMess *ptMiniMess;       //use for display minis messages
   controller_paddles *ptRaquette;
   controller_balls *ptNewBalls;
-  barreScore *ptbarreScr;
+  right_panel_score *ptbarreScr;
   sprite_object *ptBob_wall;
   ze_magneye *pt_magneye;
   Sint32 frame_delay;
@@ -81,7 +81,7 @@ public:
   void initialise (Sint32 mStep, Sint32 mKauf, Sint32 bStep,
                    const Sint16 * table, Sint32 * cours,
                    zeMiniMess * ptMes, controller_paddles * pRaqu,
-                   controller_balls * pBall, barreScore * pScor,
+                   controller_balls * pBall, right_panel_score * pScor,
                    sprite_object *, ze_magneye * ptEye);
   void envoieGads (brickClear * briPT);
   void send_malus (sprite_ball *);

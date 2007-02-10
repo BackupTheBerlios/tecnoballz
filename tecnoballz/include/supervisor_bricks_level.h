@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.12 2007/02/10 18:09:33 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.13 2007/02/10 20:22:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ class supervisor_bricks_level;
 #include "../include/tiles_background.h"
 #include "../include/controller_paddles.h"
 #include "../include/briqueCote.h"
-#include "../include/barreScore.h"
+#include "../include/right_panel_score.h"
 #include "../include/handler_display.h"
 #include "../include/ejectBalls.h"
 #include "../include/controller_bricks.h"
@@ -54,7 +54,7 @@ class supervisor_bricks_level;
 #include "../include/controller_gigablitz.h"
 #include "../include/handler_players.h"
 #include "../include/zeMoveText.h"
-#include "../include/head_anima.h"
+#include "../include/head_animation.h"
 #include "../include/printmoney.h"
 #include "../include/controller_game_over.h"
 #include "../include/zeMiniMess.h"
@@ -79,22 +79,23 @@ private:
   zeMiniMess * ptMiniMess;
   printmoney *ptPrntmney;
   briqueCote *gereBricot;
-  head_anima *tete_gugus;
+  /** Head animation in the right score panel */
+  head_animation *head_anim;
   controller_bricks *bricks;
   tiles_background *tiles_ground;
   ejectBalls *gereEjects;
-  controller_balls *gereBalles;
+  controller_balls *balls;
   controller_viewfinders *viewfinders_paddles;
   controller_paddles *paddles;
-  barreScore *tecZ_barre;
-  controller_ships *les_atomes;
+  right_panel_score *panel_score;
+  controller_ships *ships;
   ze_magneye *pt_magneye;
   controller_moneys *money_capsules;
   controller_capsules *power_up_capsules;
   controller_gems *gem_stones;
   zeMoveText *gere_texte;
-  controller_gigablitz *ptGigaBlit;
-  controller_game_over *ptGameOver;
+  controller_gigablitz *gigablitz;
+  controller_game_over *game_over;
   sprite_object *BottomWall;
   /** Sprite of the money capsule to the left of amount money */
   sprite_object *money_indicator;

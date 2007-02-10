@@ -5,11 +5,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.38 $
+ * @version $Revision: 1.39 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.38 2007/02/10 17:06:04 gurumeditation Exp $
+ * $Id: main.cc,v 1.39 2007/02/10 20:22:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -167,12 +167,12 @@ level_data   => handler_levels
 print_text   => handler_print_text 
 
 zeMiniMess   => item_small_messages 
-barreScore   => score_panel_right
+*barreScore  => right_panel_score 
 briqueCote   => items_sides_bricks
 ejectBalls   => items_balls_ejectors
-*fond_ecran   => tiles_background
-head_anima   => item_head_anim
-lastScroll   => tilesmap_scrolling 
+*fond_ecran  => tiles_background
+*head_anima  => head_animation 
+*lastScroll  => tilesmap_scrolling 
 print_menu   => item_menu_text
 score_over   => item_score_table
 

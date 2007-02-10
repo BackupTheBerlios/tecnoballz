@@ -5,11 +5,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gems.h,v 1.2 2007/02/10 18:09:33 gurumeditation Exp $
+ * $Id: controller_gems.h,v 1.3 2007/02/10 20:22:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,13 +44,13 @@ public:
 
 private:
   controller_paddles * paddles;
-  barreScore *ptBarScore;
+  right_panel_score *ptBarScore;
   printmoney *ptPrintmon;
 
 public:
     controller_gems ();
    ~controller_gems ();
-  void initialize (barreScore *, printmoney *, controller_paddles *);
+  void initialize (right_panel_score *, printmoney *, controller_paddles *);
   void send (sprite_ball * ball);
   void send (sprite_projectile * blast);
   void move ();

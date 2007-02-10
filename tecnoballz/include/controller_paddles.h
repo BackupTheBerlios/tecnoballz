@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.h
  * @brief Paddles controller 
- * @date 2007-02-09
+ * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.h,v 1.5 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: controller_paddles.h,v 1.6 2007/02/10 20:22:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #define __CONTROLLER_PADDLES__
 class controller_paddles;
 #include "../include/sprite_paddle.h"
-#include "../include/barreScore.h"
+#include "../include/right_panel_score.h"
 #include "../include/objects_list.h"
 #include "../include/controller_balls.h"
 #include "../include/controller_gigablitz.h"
@@ -65,9 +65,8 @@ private:
   sprite_paddle *paddle_top;
   sprite_paddle *paddle_left;
   sprite_paddle *tec_robot0;
-  barreScore *ptBarreScr;
-  controller_gigablitz *ptGigaBlit;
-  controller_balls *ptNewBalls;
+  controller_gigablitz *gigablitz;
+  controller_balls *balls;
 
 
   static Sint32 ballePets1[14];
@@ -146,8 +145,7 @@ public:
   void release_all_balls ();
   void move_paddles ();
   void move_paddle ();
-  void initBumper (barreScore * score, controller_gigablitz * blitz,
-                   controller_balls * balls);
+  void init_paddles (controller_gigablitz * blitz, controller_balls * balls);
   void init_robot ();
   void activrobot ();
   void deactrobot ();

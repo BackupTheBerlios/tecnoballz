@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_moneys.cc,v 1.2 2007/02/10 13:22:03 gurumeditation Exp $
+ * $Id: controller_moneys.cc,v 1.3 2007/02/10 20:22:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ controller_moneys::~controller_moneys ()
  * @param money
  */
 void
-controller_moneys::initialize (Uint32 delay, barreScore * score,
+controller_moneys::initialize (Uint32 delay, right_panel_score * score,
                                printmoney * money)
 {
   send_delay = delay;

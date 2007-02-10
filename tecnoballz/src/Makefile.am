@@ -12,7 +12,6 @@ tecnoballz_CXXFLAGS = -DDATADIR=\"$(datadir)/tecnoballz\" -DSCOREFILE=\"$(scored
 tecnoballz_LDADD = @XLIB_LIBS@ @SDL_LIBS@ @MM_LIBS@ @MIKMOD_LIBS@ -L.
 
 SOURCES_MAIN = \
-  barreScore.cc \
   bitmap_data.cc \
   briqueCote.cc \
   configfile.cc \
@@ -39,7 +38,7 @@ SOURCES_MAIN = \
   handler_players.cc \
   handler_popup_menu.cc \
   handler_resources.cc \
-  head_anima.cc \
+  head_animation.cc \
   level_data.cc \
   lispreader.cc \
   list_sprites.cc \
@@ -48,6 +47,7 @@ SOURCES_MAIN = \
   print_menu.cc \
   printmoney.cc \
   print_text.cc \
+  right_panel_score.cc \
   score_over.cc \
   scoretable.cc \
   surface_sdl.cc \
