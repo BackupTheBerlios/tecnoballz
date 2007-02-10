@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.13 2007/02/10 17:06:04 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.14 2007/02/10 18:09:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,11 +40,11 @@ supervisor_bricks_level::supervisor_bricks_level ()
   gereEjects = new ejectBalls ();
   money_capsules = new controller_moneys ();
   power_up_capsules = new controller_capsules (6);
-  ptGemstone = new controller_gems ();
+  gem_stones = new controller_gems ();
   bricks = new controller_bricks ();
   tete_gugus = new head_anima ();
   les_atomes =
-    new controller_ships (money_capsules, power_up_capsules, ptGemstone, bricks);
+    new controller_ships (money_capsules, power_up_capsules, gem_stones, bricks);
   pt_magneye = new ze_magneye ();
   BottomWall = new sprite_object ();
   ptMiniMess = new zeMiniMess ();
@@ -98,7 +98,7 @@ supervisor_bricks_level::~supervisor_bricks_level ()
   delete les_atomes;
   delete tete_gugus;
   delete bricks;
-  delete ptGemstone;
+  delete gem_stones;
   delete power_up_capsules;
   delete money_capsules;
   delete gereEjects;
@@ -167,8 +167,7 @@ supervisor_bricks_level::first_init ()
   pt_magneye->create_eyes_list ();
   money_capsules->create_sprites_list ();
   power_up_capsules->create_sprites_list ();
-  //gems stones
-  ptGemstone->create_sprites_list ();
+  gem_stones->create_sprites_list ();
   //mobiles characters
   gere_texte->create_sprites_list ();
   paddles->create_projectiles_list ();
@@ -269,13 +268,7 @@ supervisor_bricks_level::first_init ()
                            //the object which handles the text on left scores panel
                            tecZ_barre, BottomWall, pt_magneye);
 
-  //##############################################################
-  //initialize the gems tones
-  //##############################################################
-  error_init (ptGemstone->initialise (current_player,
-                                      tecZ_barre, ptPrntmney, paddles));
-  if (erreur_num)
-    return erreur_num;
+  gem_stones->initialize (tecZ_barre, ptPrntmney, paddles);
 
   //##############################################################
   // initialize mobiles characters ("LEVEL x COMPLETED")
@@ -398,7 +391,7 @@ supervisor_bricks_level::main_loop ()
           money_capsules->move ();
           power_up_capsules->bouge_gads ();    //move bonuses and maluses
           power_up_capsules->gadgetKeys ();
-          ptGemstone->moving_gem ();    //move gems
+	  gem_stones->move ();
           gere_texte->goMoveText ();
           if (BottomWall->thecounter < 1)
             BottomWall->disable ();

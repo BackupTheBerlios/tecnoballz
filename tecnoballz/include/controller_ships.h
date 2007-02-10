@@ -1,10 +1,10 @@
 //*****************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "controller_ships.h"
-// created		: ?
-// updates		: 2004-08-29
-// fonction	: manage the BouiBoui
+// file         : "controller_ships.h"
+// created              : ?
+// updates              : 2004-08-29
+// fonction     : manage the BouiBoui
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -23,7 +23,7 @@
 //*****************************************************************************
 #ifndef __ZEBOUIBOUI__
 #define __ZEBOUIBOUI__
-class controller_ships ;
+class controller_ships;
 //...............................................................................
 #include "../include/list_sprites.h"
 #include "../include/sprite_ship.h"
@@ -33,23 +33,24 @@ class controller_ships ;
 #include "../include/controller_gems.h"
 #include "../include/controller_bricks.h"
 //..............................................................................
-class controller_ships : public objects_list < sprite_ship >
-{	friend class sprite_ship ;
-	private:
-		controller_moneys*		ptCapsules;
-		controller_capsules*		pt_gadgets;
-		controller_gems*		ptGemstone;
-		controller_bricks*		pt_briques;
-		Sint32			apparition[4]; 		
-		Sint32			reappTemps;
-		Sint32			power_init;
-	public:
-						controller_ships(controller_moneys*, controller_capsules*, controller_gems*,
-							controller_bricks*);
-						~controller_ships();
-		void			initialise(Sint32 time0, Sint32 time1, Sint32 time2,
-							Sint32 time3, Sint32 time4, Sint32 power) ;
-		void			atom_depla();
-		void			atomexplos();
+class controller_ships:public objects_list < sprite_ship >
+{
+  friend class sprite_ship;
+private:
+    controller_moneys * ptCapsules;
+  controller_capsules *pt_gadgets;
+  controller_gems *ptGemstone;
+  controller_bricks *pt_briques;
+  Sint32 apparition[4];
+  Sint32 reappTemps;
+  Sint32 power_init;
+public:
+    controller_ships (controller_moneys *, controller_capsules *,
+                      controller_gems *, controller_bricks *);
+   ~controller_ships ();
+  void initialise (Sint32 time0, Sint32 time1, Sint32 time2,
+                   Sint32 time3, Sint32 time4, Sint32 power);
+  void atom_depla ();
+  void atomexplos ();
 };
 #endif

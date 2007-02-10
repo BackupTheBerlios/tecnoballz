@@ -4,11 +4,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.5 2007/02/10 17:06:04 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.6 2007/02/10 18:09:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -345,8 +345,11 @@ handler_players::set_cou_nb (Sint32 value)
 void
 handler_players::RAZgemlist ()
 {
-  for (Sint32 i = 0; i < controller_gems::NUMBER_GEM; i++)
-    gemmeActif[i] = 0;          //states of the 6 gems
+  for (Uint32 i = 0; i < controller_gems::MAX_OF_GEMS; i++)
+    {
+      /* states of the 6 gems */
+      gemmeActif[i] = 0;
+    }
   gemmeNombr = 0;
 }
 
@@ -357,9 +360,13 @@ Sint32
 handler_players::gem_enable (Sint32 gemNu)
 {
   gemmeActif[gemNu] = 1;
-  for (Sint32 i = 0; i < controller_gems::NUMBER_GEM; i++)
-    if (!gemmeActif[i])
-      return 0;
+  for (Uint32 i = 0; i < controller_gems::MAX_OF_GEMS; i++)
+    {
+      if (!gemmeActif[i])
+    {
+        return 0;
+    }
+    }
   RAZgemlist ();
   return 1;
 

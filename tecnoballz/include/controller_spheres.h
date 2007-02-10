@@ -1,10 +1,10 @@
 //*****************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "controller_spheres.h"
-// created		: 2004-08-05
-// updates		: 2004-08-05
-// fonctions	: handle the "Techno Balls" (congratulations) 
+// file         : "controller_spheres.h"
+// created              : 2004-08-05
+// updates              : 2004-08-05
+// fonctions    : handle the "Techno Balls" (congratulations) 
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -30,18 +30,18 @@ class controller_spheres;
 #include "../include/score_over.h"
 //...............................................................................
 class controller_spheres:public objects_list < sprite_object >
-{	
-	private:
-			Sint32			speed_rad0;
-			Sint32			speed_rad1;
-			Sint32			speed_rad2;
-			Sint32			speed_rad3;
-			Sint32			speed_rad4;
-	public:
-							controller_spheres();
-							~controller_spheres();
-		void				initialize();
-		void				execution1();
+{
+private:
+  Sint32 speed_rad0;
+  Sint32 speed_rad1;
+  Sint32 speed_rad2;
+  Sint32 speed_rad3;
+  Sint32 speed_rad4;
+public:
+    controller_spheres ();
+   ~controller_spheres ();
+  void initialize ();
+  void execution1 ();
 
 };
 #endif

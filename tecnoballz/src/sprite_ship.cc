@@ -4,11 +4,11 @@
  * @date 2007-01-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ship.cc,v 1.5 2007/02/10 17:06:04 gurumeditation Exp $
+ * $Id: sprite_ship.cc,v 1.6 2007/02/10 18:09:33 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -244,7 +244,7 @@ sprite_ship::explosion1 (sprite_projectile * pFire)
   switch (h)
     {
     case CODE_GEMME:
-      ptGemstone->sendNewGem (pFire);
+      ptGemstone->send (pFire);
       break;
     case CODE_MALUS:
       pt_gadgets->send_malus (pFire);
@@ -269,7 +269,7 @@ sprite_ship::explosion1 (sprite_ball * pBall)
   switch (h)
     {
     case CODE_GEMME:
-      ptGemstone->sendNewGem (pBall);
+      ptGemstone->send (pBall);
       break;
     case CODE_MALUS:
       pt_gadgets->send_malus (pBall);
