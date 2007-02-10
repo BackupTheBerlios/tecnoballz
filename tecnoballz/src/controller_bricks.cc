@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.6 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.7 2007/02/10 09:57:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ controller_bricks::~controller_bricks ()
 // first initialization
 //-------------------------------------------------------------------------------
 void
-controller_bricks::first_init (barreScore * barre, zeCapsules * capsu,
+controller_bricks::first_init (barreScore * barre, controller_moneys * capsu,
                                controller_capsules * gadge)
 {
   barreObjet = barre;
@@ -594,7 +594,7 @@ controller_bricks::brickRemap ()
 #endif
             if (briPT->balle_posX != 512)
               {
-                caps_objet->envoieFric (briPT);
+                caps_objet->send_money_from_brick (briPT);
                 gads_objet->envoieGads (briPT);
               }
           }
@@ -613,7 +613,7 @@ controller_bricks::brickRemap ()
 #ifndef SOUNDISOFF
         audio->play_sound (S_TOUBRIK1);
 #endif
-        caps_objet->envoieFric (briPT);
+        caps_objet->send_money_from_brick (briPT);
       }
   }                             // (adresseAff!=0)
   return 1;

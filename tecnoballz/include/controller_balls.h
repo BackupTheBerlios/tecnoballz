@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.8 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.9 2007/02/10 09:57:15 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ class controller_balls;
 #include "../include/zeBouiBoui.h"
 #include "../include/barreScore.h"
 #include "../include/controller_guardians.h"
-#include "../include/zeCapsules.h"
+#include "../include/controller_moneys.h"
 #include "../include/controller_capsules.h"
 #include "../include/zeMiniMess.h"
 #include "../include/controller_paddles.h"
@@ -73,7 +73,7 @@ class controller_balls:public objects_list < sprite_ball >
 		zeBouiBoui*		ptBouiBoui;
 		barreScore*		ptBarreScr;
 		controller_guardians*		ptguardian;
-		zeCapsules*		ptCapsules;
+		controller_moneys*		ptCapsules;
 		controller_capsules*		pt_gadgets;
 		sprite_object*		ptBob_wall;
 		zeMiniMess*		ptMiniMess;
@@ -101,7 +101,7 @@ class controller_balls:public objects_list < sprite_ball >
 									zeBouiBoui *atoms, barreScore* score,
 									sprite_object *pwall, zeMiniMess*,
 									ze_magneye* pEyes);
-						controller_balls(controller_guardians*, zeCapsules*, controller_capsules*);
+						controller_balls(controller_guardians*, controller_moneys*, controller_capsules*);
 						~controller_balls();
 		void			init_balle(controller_paddles *raket, Sint32 start, Sint32 glueC, 
 							Sint32 speed, Sint32 tiltC, Sint32 table);

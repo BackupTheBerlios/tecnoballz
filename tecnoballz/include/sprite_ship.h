@@ -27,7 +27,7 @@ class sprite_ship;
 //.......................................................................
 #include "../include/sprite_object.h"
 #include "../include/handler_audio.h"
-#include "../include/zeCapsules.h"
+#include "../include/controller_moneys.h"
 #include "../include/controller_capsules.h"
 #include "../include/zeGemstone.h"
 #include "../include/sprite_projectile.h"
@@ -54,7 +54,7 @@ private:
   static const Sint32 ATOM_ANIMA = 8;
 
 private:
-    zeCapsules * ptCapsules;
+    controller_moneys * ptCapsules;
   controller_capsules *pt_gadgets;
   zeGemstone *ptGemstone;
   controller_bricks *pt_briques;
@@ -91,7 +91,7 @@ private:
   void gere_atome ();
   void littleInit (Sint32 time0, Sint32 appar, Sint32 index,
                    Sint32 power, Sint32 pos_x, Sint32 pos_y, Sint32 offst,
-                   zeCapsules *, controller_capsules *, zeGemstone *, controller_bricks *);
+                   controller_moneys *, controller_capsules *, zeGemstone *, controller_bricks *);
   void explosion1 (sprite_projectile *);
   void explosion1 (sprite_ball *);
   void explosion2 ();

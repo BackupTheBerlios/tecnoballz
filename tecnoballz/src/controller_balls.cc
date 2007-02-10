@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.13 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.14 2007/02/10 09:57:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ controller_balls::controller_balls (ejectBalls * eject, controller_bricks * bric
 /** 
  * Create the balls controller into guards levels
  */
-controller_balls::controller_balls (controller_guardians * pGard, zeCapsules * pCaps,
+controller_balls::controller_balls (controller_guardians * pGard, controller_moneys * pCaps,
                                     controller_capsules * pGads)
 {
   littleInit ();
@@ -1447,7 +1447,7 @@ controller_balls::vitusGuard ()
             }
           if (balok)
             {
-              ptCapsules->envoieFric (balok);
+              ptCapsules->send_money_from_guardian (balok);
               pt_gadgets->envoieGads (balok);
             }
         }

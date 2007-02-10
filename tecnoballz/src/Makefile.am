@@ -24,6 +24,7 @@ SOURCES_MAIN = \
   controller_game_over.cc \
   controller_gigablitz.cc \
 	controller_guardians.cc \
+  controller_moneys.cc \
   controller_paddles.cc \
   controller_projectiles.cc \
 	controller_viewfinders.cc \
@@ -72,7 +73,6 @@ SOURCES_MAIN = \
 	tiles_background.cc \
 	tilesmap_scrolling.cc \
 	zeBouiBoui.cc \
-	zeCapsules.cc \
 	zeCongBall.cc \
 	zeDefilTxt.cc \
 	zeGemstone.cc \

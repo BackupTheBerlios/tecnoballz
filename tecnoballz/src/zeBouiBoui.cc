@@ -25,7 +25,7 @@
 //-----------------------------------------------------------------------------
 // create the object
 //-----------------------------------------------------------------------------
-zeBouiBoui::zeBouiBoui(zeCapsules* pCaps, controller_capsules* ptGad, zeGemstone* ptGem,
+zeBouiBoui::zeBouiBoui(controller_moneys* pCaps, controller_capsules* ptGad, zeGemstone* ptGem,
 						controller_bricks* pBrik)
 {
 	ptCapsules = pCaps;
@@ -81,7 +81,7 @@ void zeBouiBoui::initialise(Sint32 time0, Sint32 time1, Sint32 time2, Sint32 tim
 			x + (i * 16 * resolution),	//absciss
 			y + (i * 16 * resolution),	//ordinate
 			offs1,						//number of the image's explosion
-			ptCapsules,					//object "zeCapsules"
+			ptCapsules,					//object "controller_moneys"
 			pt_gadgets,					//object "controller_capsules"
 			ptGemstone,					//object "zeGemstone"
 			pt_briques);				//object "controller_bricks

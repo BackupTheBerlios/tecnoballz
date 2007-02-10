@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.h,v 1.2 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: sprite_money.h,v 1.3 2007/02/10 09:57:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ class sprite_money;
 
 class sprite_money:public sprite_object
 {
-  friend class zeCapsules;
+  friend class controller_moneys;
 
 private:
   Sint32 directionX;

@@ -5,11 +5,11 @@
  * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.13 2007/02/09 20:35:12 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.14 2007/02/10 09:57:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ supervisor_guards_level::supervisor_guards_level ()
   explosions = new controller_explosions ();
   sprite_paddle *pBump = paddles->get_paddle (1);
   bullets = new controller_bullets (pBump, explosions);
-  ptCapsules = new zeCapsules ();
+  ptCapsules = new controller_moneys ();
   pt_gadgets = new controller_capsules (6);
   balls = new controller_balls (guards, ptCapsules, pt_gadgets);
   viewfinders_paddles = new controller_viewfinders ();

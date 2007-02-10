@@ -1,0 +1,65 @@
+/** 
+ * @file controller_moneys.h
+ * @brief Moneys controller 
+ * @date 2007-02-10
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.1 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: controller_moneys.h,v 1.1 2007/02/10 09:57:16 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
+#ifndef __CONTROLLER_MONEYS__
+#define __CONTROLLER_MONEYS__
+
+class controller_moneys;
+
+#include "../include/list_sprites.h"
+#include "../include/objects_list.h"
+#include "../include/handler_display.h"
+#include "../include/barreScore.h"
+#include "../include/sprite_money.h"
+#include "../include/barreScore.h"
+#include "../include/supervisor_bricks_level.h"
+#include "../include/printmoney.h"
+#include "../include/sprite_ball.h"
+
+class controller_moneys:public objects_list < sprite_money >
+{
+private:
+  /** time delay before sending a new money capsule */
+  Uint32 send_delay;
+  /** delay counter before sending a new money capsule */
+  Uint32 delay_count;
+  barreScore *ptbarreScr;
+  printmoney *ptPrntmney;
+
+public:
+    controller_moneys ();
+   ~controller_moneys ();
+  void initialise (Uint32 delay, barreScore * score, printmoney * money);
+  void initialise (Uint32 delay, printmoney * money);
+  void send_money_from_brick (brickClear * briPT);
+  void send_money (sprite_ball * ball);
+  void send_money (sprite_projectile * blast);
+  void send_money_from_guardian (sprite_ball * ball);
+  void bouge_fric ();
+  void bougefric2 ();
+};
+#endif

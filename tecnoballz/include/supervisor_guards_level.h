@@ -5,11 +5,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.10 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.11 2007/02/10 09:57:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ class supervisor_guards_level;
 #include "../include/controller_bullets.h"
 #include "../include/controller_paddles.h"
 #include "../include/controller_balls.h"
-#include "../include/zeCapsules.h"
+#include "../include/controller_moneys.h"
 #include "../include/controller_capsules.h"
 #include "../include/printmoney.h"
 #include "../include/zeMiniMess.h"
@@ -64,7 +64,7 @@ private:
   controller_paddles *paddles;
   controller_balls *balls;
   controller_viewfinders *viewfinders_paddles;
-  zeCapsules *ptCapsules;
+  controller_moneys *ptCapsules;
   controller_capsules *pt_gadgets;
   printmoney *ptPrntmney;
   zeMiniMess *ptMiniMess;
