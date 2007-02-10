@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.h 
  * @brief Bricks levels supervisor 
- * @date 2007-02-08
+ * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.9 2007/02/10 09:57:16 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.10 2007/02/10 13:22:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,14 +89,15 @@ private:
   barreScore *tecZ_barre;
   zeBouiBoui *les_atomes;
   ze_magneye *pt_magneye;
-  controller_moneys *gereCapsul;
-  controller_capsules *gereGadget;
+  controller_moneys *money_capsules;
+  controller_capsules *power_up_capsules;
   zeGemstone *ptGemstone;
   zeMoveText *gere_texte;
   controller_gigablitz *ptGigaBlit;
   controller_game_over *ptGameOver;
   sprite_object *BottomWall;
-  sprite_object *ptBobMoney;
+  /** Sprite of the money capsule to the left of amount money */
+  sprite_object *money_indicator;
   handler_popup_menu *popup_menu;
   sprite_capsule *ptBobRever;
   /** Area number from 1 to 2 */

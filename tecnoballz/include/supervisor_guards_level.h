@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.h
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-02-08
+ * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.11 2007/02/10 09:57:16 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.12 2007/02/10 13:22:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,12 +64,13 @@ private:
   controller_paddles *paddles;
   controller_balls *balls;
   controller_viewfinders *viewfinders_paddles;
-  controller_moneys *ptCapsules;
-  controller_capsules *pt_gadgets;
+  controller_moneys *money_capsules;
+  controller_capsules *power_up_capsules;
   printmoney *ptPrntmney;
   zeMiniMess *ptMiniMess;
   controller_explosions *explosions;
-  sprite_object *ptBobMoney;
+  /** Sprite of the money capsule to the left of amount money */
+  sprite_object *money_indicator;
   sprite_object *ptBob_name;
   sprite_capsule *ptBobLifes;
   handler_popup_menu *popup_menu;

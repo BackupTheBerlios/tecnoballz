@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_moneys.cc,v 1.1 2007/02/10 09:57:16 gurumeditation Exp $
+ * $Id: controller_moneys.cc,v 1.2 2007/02/10 13:22:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ controller_moneys::~controller_moneys ()
  * @param money
  */
 void
-controller_moneys::initialise (Uint32 delay, barreScore * score,
+controller_moneys::initialize (Uint32 delay, barreScore * score,
                                printmoney * money)
 {
   send_delay = delay;
@@ -62,8 +62,8 @@ controller_moneys::initialise (Uint32 delay, barreScore * score,
   ptPrntmney = money;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_money *capsu = sprites_list[i];
-      capsu->littleInit ();
+      sprite_money *money = sprites_list[i];
+      money->littleInit ();
     }
 }
 
@@ -74,63 +74,71 @@ controller_moneys::initialise (Uint32 delay, barreScore * score,
 void
 controller_moneys::send_money_from_brick (brickClear * briPT)
 {
-  delay_count++;
-  if (delay_count > send_delay)
+  if (++delay_count <= send_delay)
     {
-      delay_count = 0;
-      for (Uint32 i = 0; i < max_of_sprites; i++)
+      return;
+    }
+  delay_count = 0;
+  for (Uint32 i = 0; i < max_of_sprites; i++)
+    {
+      sprite_money *money = sprites_list[i];
+      if (money->disponible (briPT))
         {
-          sprite_money *capsu = sprites_list[i];
-          if (capsu->disponible (briPT))
-            return;
+          return;
         }
     }
 }
 
-//-----------------------------------------------------------------------------
-// bricks levels: send a capsule of money from BouiBoui
-//-----------------------------------------------------------------------------
+/**
+ * Send a money capsule from a destroyed flying enemy ship
+ * @param ball a pointer to the ball sprite which destroyed the enemy ship
+ */
 void
-controller_moneys::send_money (sprite_ball * pball)
+controller_moneys::send_money (sprite_ball * ball)
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_money *capsu = sprites_list[i];
-      if (capsu->disponible (pball))
-        return;
+      sprite_money *money = sprites_list[i];
+      if (money->disponible (ball))
+        {
+          return;
+        }
     }
 }
 
-//-----------------------------------------------------------------------------
-// bricks levels: send a capsule of money from BouiBoui
-//-----------------------------------------------------------------------------
+/**
+ * Send a money capsule from a destroyed flying enemy ship
+ * @param blast a pointer to the projectile sprite which
+ *        destroyed the enemy ship
+ */
 void
-controller_moneys::send_money (sprite_projectile * pfire)
+controller_moneys::send_money (sprite_projectile * blast)
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_money *capsu = sprites_list[i];
-      if (capsu->disponible (pfire))
-        return;
+      sprite_money *money = sprites_list[i];
+      if (money->disponible (blast))
+        {
+          return;
+        }
     }
 }
 
-//-----------------------------------------------------------------------------
-// bricks levels: move capsule of money and collision with bumpers
-//-----------------------------------------------------------------------------
+/** 
+ * Move money capsules and check collision with the paddles in bricks levels 
+ */
 void
-controller_moneys::bouge_fric ()
+controller_moneys::move ()
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_money *capsu = sprites_list[i];
-      capsu->play_animation_loop ();
-      Sint32 j = capsu->move ();
+      sprite_money *money = sprites_list[i];
+      money->play_animation_loop ();
+      Sint32 j = money->move ();
       if (j)
         {
           current_player->add_scores (20);
           ptPrntmney->creditPlus (j);
-          //printf("controller_moneys::bouge_fric() : %i\n", j);
         }
     }
 }
@@ -140,7 +148,7 @@ controller_moneys::bouge_fric ()
  * @param delay time delay before sending a new money capsule 
  */
 void
-controller_moneys::initialise (Uint32 delay, printmoney * money)
+controller_moneys::initialize (Uint32 delay, printmoney * money)
 {
   send_delay = delay;
   ptPrntmney = money;
@@ -169,23 +177,23 @@ controller_moneys::send_money_from_guardian (sprite_ball * ball)
       if (money->disponible (ball))
         {
           return;
-	}
+        }
     }
 }
 
-//-----------------------------------------------------------------------------
-// guards levels: move capsule of money and collision with bumper
-//-----------------------------------------------------------------------------
+/** 
+ * Move money capsules and check collision with the paddle in guardians levels 
+ */
 void
-controller_moneys::bougefric2 ()
+controller_moneys::move_bottom ()
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_money *capsu = sprites_list[i];
-      capsu->play_animation_loop ();
-      Sint32 j = capsu->deplaceMe2 ();
+      sprite_money *money = sprites_list[i];
+      money->play_animation_loop ();
+      Sint32 j = money->deplaceMe2 ();
       if (j)
-        {                       //printf("controller_moneys::bouge_fric2() : %i\n", j);
+        {
           ptPrntmney->creditPlus (j);
           current_player->add_scores (20);
         }

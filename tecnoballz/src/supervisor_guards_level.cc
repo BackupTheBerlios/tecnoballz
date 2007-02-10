@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-02-09
+ * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.14 2007/02/10 09:57:16 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.15 2007/02/10 13:22:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,16 +40,16 @@ supervisor_guards_level::supervisor_guards_level ()
   paddles = new controller_paddles (1);
   ptMoveText = new zeMoveText ();
   explosions = new controller_explosions ();
-  sprite_paddle *pBump = paddles->get_paddle (1);
-  bullets = new controller_bullets (pBump, explosions);
-  ptCapsules = new controller_moneys ();
-  pt_gadgets = new controller_capsules (6);
-  balls = new controller_balls (guards, ptCapsules, pt_gadgets);
+  sprite_paddle *paddle = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
+  bullets = new controller_bullets (paddle, explosions);
+  money_capsules = new controller_moneys ();
+  power_up_capsules = new controller_capsules (6);
+  balls = new controller_balls (guards, money_capsules, power_up_capsules);
   viewfinders_paddles = new controller_viewfinders ();
   ptPrntmney = new printmoney ();
   ptMiniMess = new zeMiniMess ();
   gigablitz = new controller_gigablitz ();
-  ptBobMoney = new sprite_object ();
+  money_indicator = new sprite_object ();
   ptBobLifes = new sprite_capsule ();
   game_over = new controller_game_over ();
   ptCongBall = new zeCongBall ();
@@ -68,14 +68,14 @@ supervisor_guards_level::~supervisor_guards_level ()
   delete ptCongBall;
   delete game_over;
   delete ptBobLifes;
-  delete ptBobMoney;
+  delete money_indicator;
   delete gigablitz;
   delete ptMiniMess;
   delete ptPrntmney;
   delete viewfinders_paddles;
   delete balls;
-  delete pt_gadgets;
-  delete ptCapsules;
+  delete power_up_capsules;
+  delete money_capsules;
   delete bullets;
   delete explosions;
   delete ptMoveText;
@@ -112,29 +112,23 @@ supervisor_guards_level::first_init ()
 
   /* gigablitz sprites are contained separately and in its own bitmap */
   gigablitz->create_gigablitz_sprites (paddles, explosions);
-  printf("0 supervisor_guards_level::first_init\n");
 
   /* 
    * sprites who are contained into the large bitmap
    */
   resources->load_sprites_bitmap ();
   bullets->create_sprites_list ();
-  printf("1 supervisor_guards_level::first_init\n");
   guards->create_guardians_list (bullets, grdP, gigablitz, explosions);
-  printf("2 supervisor_guards_level::first_init\n");
   paddles->create_paddles_sprites ();
-  printf("3 supervisor_guards_level::first_init\n");
   balls->create_sprites_list ();
-  ptCapsules->create_sprites_list ();
-  pt_gadgets->create_sprites_list ();
+  money_capsules->create_sprites_list ();
+  power_up_capsules->create_sprites_list ();
   ptPrntmney->create_sprites_list ();
-  printf("4 supervisor_guards_level::first_init\n");
   explosions->create_explosions_list ();
-  printf("5 supervisor_guards_level::first_init\n");
 
   /* create the money sprite */
-  ptBobMoney->create_sprite (BOB_MONEYS, sprites_bitmap, false);
-  sprites->add (ptBobMoney);
+  money_indicator->create_sprite (BOB_MONEYS, sprites_bitmap, false);
+  sprites->add (money_indicator);
 
   /* create the extra-life capsule sprite */
   ptBobLifes->create_sprite (BOB_GADGET, sprites_bitmap, false);
@@ -160,7 +154,6 @@ supervisor_guards_level::first_init ()
   //###################################################################
   // initialize "Game Over"
   //###################################################################
-  printf("10 supervisor_guards_level::first_init\n");
   error_init (game_over->first_init (32 * resolution));
   if (erreur_num)
     return (erreur_num);
@@ -184,30 +177,31 @@ supervisor_guards_level::first_init ()
   //###################################################################
   balls->run_power2 ();
 
-  //###################################################################
-  // Initialize the object which handles the "capsules of money"
-  //###################################################################
-  ptCapsules->initialise (3 + hardChoice, ptPrntmney);
-  printf("15 supervisor_guards_level::first_init\n");
+  money_capsules->initialize (3 + hardChoice, ptPrntmney);
 
-  //###################################################################
-  // Initialize the object which handles gadgets (bonus and malus) 
-  //###################################################################
-  pt_gadgets->initialise (levelParam->malusCount * hardChoice,  //frequency of appearance of malus 
-                          0,    //number of bonus bought in the shop (not applicable)   
-                          0,    //number of bricks which it is necessary to break (not applicable)
-                          levelParam->malusListe,       //the list of malus
-                          NULL, //the list of bonus bought in the shop (not applicable)
-                          NULL, //object which displays the small messages (not applicable)
-                          paddles,      //object which handles the bumpers
-                          balls,        //object which handles the balls
-                          NULL, //object which handles the display of the text (not applicable)
+  /* initialize le capsules controller */
+  power_up_capsules->initialise (
+                          /* delay of appearance of a penalty capsule */
+                          levelParam->malusCount * hardChoice,
+                          /* number of bonus bought in the shop (not * applicable) */
+                          0,
+                          /* number of bricks which it is necessary to break * (not applicable) */
+                          0,
+                          /* list of penalties capsules */ 
+                          levelParam->malusListe,
+                          /* list of bonus bought in the shop (not applicable) * */
+                          NULL,
+                          /* object which displays the small messages (not * applicable) */
+                          NULL,
+                          /* object which control the paddles */
+                          paddles,
+                          /* object which control the balls */
+                          balls,
+                          /* object which handles the display of the text (not * applicable) */
+                          NULL,
                           NULL, NULL);
 
-  //###################################################################
-  //
-  //###################################################################
-  ptPrntmney->init_guard (current_player, paddles, ptBobMoney, ptBobLifes);
+  ptPrntmney->init_guard (current_player, paddles, money_indicator, ptBobLifes);
 
   //initialize mobile characters at the end of the level
   ptMoveText->initialise (level_number, 32 * resolution);
@@ -254,8 +248,8 @@ supervisor_guards_level::main_loop ()
           audio->disable_sound ();
 #endif
           paddles->disable_all_paddles ();
-          pt_gadgets->disable_sprites ();
-          ptCapsules->disable_sprites ();
+          power_up_capsules->disable_sprites ();
+          money_capsules->disable_sprites ();
           guards->disable_sprites ();
           explosions->disable_sprites ();
           gigablitz->disable_sprites ();
@@ -322,8 +316,8 @@ supervisor_guards_level::main_loop ()
           guards->run ();
           bullets->execution1 ();    //moving the guards's weapons
           bullets->bumper_col ();    //collision weapons with the bumper
-          ptCapsules->bougefric2 ();
-          pt_gadgets->bougegads2 ();
+          money_capsules->move_bottom ();
+          power_up_capsules->bougegads2 ();
           ptMoveText->goMoveText ();
           ptPrntmney->execution2 (current_player->amount_of_money,
                                   current_player->number_of_lifes);

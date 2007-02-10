@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-02-05
+ * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.11 2007/02/10 09:57:16 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.12 2007/02/10 13:22:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,13 +38,13 @@ supervisor_bricks_level::supervisor_bricks_level ()
   tiles_ground = new tiles_background ();
   tecZ_barre = new barreScore ();
   gereEjects = new ejectBalls ();
-  gereCapsul = new controller_moneys ();
-  gereGadget = new controller_capsules (6);
+  money_capsules = new controller_moneys ();
+  power_up_capsules = new controller_capsules (6);
   ptGemstone = new zeGemstone ();
   bricks = new controller_bricks ();
   tete_gugus = new head_anima ();
   les_atomes =
-    new zeBouiBoui (gereCapsul, gereGadget, ptGemstone, bricks);
+    new zeBouiBoui (money_capsules, power_up_capsules, ptGemstone, bricks);
   pt_magneye = new ze_magneye ();
   BottomWall = new sprite_object ();
   ptMiniMess = new zeMiniMess ();
@@ -59,7 +59,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
   ptPrntmney = new printmoney ();
   ptGameOver = new controller_game_over ();
 
-  ptBobMoney = new sprite_object ();
+  money_indicator = new sprite_object ();
   ptBobRever = new sprite_capsule ();
   popup_menu = new handler_popup_menu ();
 
@@ -84,7 +84,7 @@ supervisor_bricks_level::~supervisor_bricks_level ()
     }
   delete popup_menu;
   delete ptBobRever;
-  delete ptBobMoney;
+  delete money_indicator;
   delete ptGameOver;
   delete ptPrntmney;
   delete ptGigaBlit;
@@ -99,8 +99,8 @@ supervisor_bricks_level::~supervisor_bricks_level ()
   delete tete_gugus;
   delete bricks;
   delete ptGemstone;
-  delete gereGadget;
-  delete gereCapsul;
+  delete power_up_capsules;
+  delete money_capsules;
   delete gereEjects;
   delete tecZ_barre;
   delete tiles_ground;
@@ -165,10 +165,8 @@ supervisor_bricks_level::first_init ()
   les_atomes->create_sprites_list ();
   //eye magneto 
   pt_magneye->create_eyes_list ();
-  //capsules of money
-  gereCapsul->create_sprites_list ();
-  //gadgets (bonuses and maluses)
-  gereGadget->create_sprites_list ();
+  money_capsules->create_sprites_list ();
+  power_up_capsules->create_sprites_list ();
   //gems stones
   ptGemstone->create_sprites_list ();
   //mobiles characters
@@ -179,8 +177,8 @@ supervisor_bricks_level::first_init ()
   //GAME OVER sprites
   ptGameOver->create_sprites_list ();
   //money sprite (left-bottom)
-  ptBobMoney->create_sprite (BOB_MONEYS, sprites_bitmap, 0);
-  sprites->add (ptBobMoney);
+  money_indicator->create_sprite (BOB_MONEYS, sprites_bitmap, 0);
+  sprites->add (money_indicator);
   //reverser sprite (right-bottom)
   ptBobRever->create_sprite (BOB_GADGET, sprites_bitmap, 0);
   sprites->add (ptBobRever);
@@ -242,10 +240,7 @@ supervisor_bricks_level::first_init ()
                           levelParam->atom4Count / hardChoice,
                           levelParam->resistance * hardChoice);
 
-  //##############################################################
-  //initialize capsules of money
-  //##############################################################
-  gereCapsul->initialise (levelParam->monayCount * hardChoice,
+  money_capsules->initialize (levelParam->monayCount * hardChoice,
                           tecZ_barre, ptPrntmney);
 
   //##############################################################
@@ -254,7 +249,7 @@ supervisor_bricks_level::first_init ()
   Sint32 *cours = current_player->get_course ();
   Sint32 counb = current_player->get_cou_nb ();
   Sint32 brCnt = bricks->get_num_of_bricks ();
-  gereGadget->initialise (
+  power_up_capsules->initialise (
                            //frequency of appearance of malus 
                            levelParam->malusCount * hardChoice,
                            //number of bonus bought in the shop
@@ -287,7 +282,7 @@ supervisor_bricks_level::first_init ()
   //##############################################################
   gere_texte->initialise (level_number);
 
-  ptPrntmney->initialise (current_player, paddles, ptBobMoney, ptBobRever);
+  ptPrntmney->initialise (current_player, paddles, money_indicator, ptBobRever);
 
 
   viewfinders_paddles->initialize (paddles, 4);
@@ -332,8 +327,8 @@ supervisor_bricks_level::main_loop ()
 #endif
           paddles->disable_all_paddles ();
           bricks->clr_bricks ();
-          gereGadget->disable_sprites ();
-          gereCapsul->disable_sprites ();
+          power_up_capsules->disable_sprites ();
+          money_capsules->disable_sprites ();
           gereBalles->disable_sprites ();
           sprite_projectile::disable_sprites ();
           ptMiniMess->erase_mess ();
@@ -400,9 +395,9 @@ supervisor_bricks_level::main_loop ()
           sprite_projectile::gestionTir ();
           les_atomes->atom_depla ();
           pt_magneye->execution1 ();
-          gereCapsul->bouge_fric ();    //move capsules of money
-          gereGadget->bouge_gads ();    //move bonuses and maluses
-          gereGadget->gadgetKeys ();
+          money_capsules->move ();
+          power_up_capsules->bouge_gads ();    //move bonuses and maluses
+          power_up_capsules->gadgetKeys ();
           ptGemstone->moving_gem ();    //move gems
           gere_texte->goMoveText ();
           if (BottomWall->thecounter < 1)
@@ -610,7 +605,7 @@ supervisor_bricks_level::background (Sint32 nbkdg)
   //###################################################################
   // intialize the bricks level
   //###################################################################
-  bricks->first_init (tecZ_barre, gereCapsul, gereGadget);
+  bricks->first_init (tecZ_barre, money_capsules, power_up_capsules);
   Sint32 lbrik = current_player->get_lessBk ();
   current_player->set_lessBk (0);
   bricks->initialize (area_number, level_number, lbrik);
