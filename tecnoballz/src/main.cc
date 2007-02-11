@@ -2,14 +2,14 @@
  * @file main.cc 
  * @brief The main function is where the program starts execution 
  * @created 2002-08-21 
- * @date 2007-02-10
+ * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.39 $
+ * @version $Revision: 1.40 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.39 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: main.cc,v 1.40 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -130,20 +130,20 @@ lispreader  =>
  
 *ballDirect  => controller_viewfinders
 *lesBriques  => controller_bricks
-printmoney   => controller_indicators
+ *printmoney   => controller_indicators
 *zeBouiBoui  => controller_ships
 *zeCapsules  => controller_moneys
 *zeCongBall  => controller_spheres
-zeDefilTxt   => controller_scroll_fontes
+ *zeDefilTxt  => controller_fontes_menu
 *zeFireBump  => controller_fires
 *ze_gadgets  => controller_capsules
 *zeGameOver  => controller_game_over
 *zeGemstone  => controller_gems
 *zeGigaBlit  => controller_gigablitz
 *zeguardian  => controller_guardians
-ze_magneye   => controller_magnetic_eyes
+ *ze_magneye  => controller_magnetic_eyes
 *zeMissiles  => controller_bullets
-zeMoveText   => controller_level_fontes
+ *zeMoveText  => controller_fontes_game
 *zeNewBalls  => controller_balls
 *zeRaquette  => controller_paddles
 *zexplosion  => controller_explosions

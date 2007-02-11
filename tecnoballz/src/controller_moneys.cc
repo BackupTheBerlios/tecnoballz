@@ -1,14 +1,14 @@
 /** 
  * @file controller_moneys.cc 
  * @brief Moneys controller 
- * @date 2007-02-10
+ * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_moneys.cc,v 1.4 2007/02/11 10:37:50 gurumeditation Exp $
+ * $Id: controller_moneys.cc,v 1.5 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ controller_moneys::~controller_moneys ()
  */
 void
 controller_moneys::initialize (Uint32 delay, right_panel_score * score,
-                               printmoney * money)
+                               controller_indicators * money)
 {
   send_delay = delay;
   ptbarreScr = score;
@@ -63,7 +63,7 @@ controller_moneys::initialize (Uint32 delay, right_panel_score * score,
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_money *money = sprites_list[i];
-      money->littleInit ();
+      money->init_members ();
     }
 }
 
@@ -82,7 +82,7 @@ controller_moneys::send_money_from_brick (brickClear * briPT)
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_money *money = sprites_list[i];
-      if (money->disponible (briPT))
+      if (money->enable_if_available (briPT))
         {
           return;
         }
@@ -99,7 +99,7 @@ controller_moneys::send_money (sprite_ball * ball)
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_money *money = sprites_list[i];
-      if (money->disponible (ball))
+      if (money->enable_if_available (ball))
         {
           return;
         }
@@ -117,7 +117,7 @@ controller_moneys::send_money (sprite_projectile * blast)
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_money *money = sprites_list[i];
-      if (money->disponible (blast))
+      if (money->enable_if_available (blast))
         {
           return;
         }
@@ -134,11 +134,11 @@ controller_moneys::move ()
     {
       sprite_money *money = sprites_list[i];
       money->play_animation_loop ();
-      Sint32 j = money->move ();
-      if (j)
+      Uint32 amount = money->move ();
+      if (amount > 0)
         {
           current_player->add_scores (20);
-          ptPrntmney->creditPlus (j);
+          ptPrntmney->increase_money_amount (amount);
         }
     }
 }
@@ -148,14 +148,14 @@ controller_moneys::move ()
  * @param delay time delay before sending a new money capsule 
  */
 void
-controller_moneys::initialize (Uint32 delay, printmoney * money)
+controller_moneys::initialize (Uint32 delay, controller_indicators * money)
 {
   send_delay = delay;
   ptPrntmney = money;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_money *money = sprites_list[i];
-      money->littleInit ();
+      money->init_members ();
     }
 }
 
@@ -174,7 +174,7 @@ controller_moneys::send_money_from_guardian (sprite_ball * ball)
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_money *money = sprites_list[i];
-      if (money->disponible (ball))
+      if (money->enable_if_available (ball))
         {
           return;
         }
@@ -194,7 +194,7 @@ controller_moneys::move_bottom ()
       Uint32 amount  = money->move_bottom ();
       if (amount > 0)
         {
-          ptPrntmney->creditPlus (amount);
+          ptPrntmney->increase_money_amount (amount);
           current_player->add_scores (20);
         }
     }

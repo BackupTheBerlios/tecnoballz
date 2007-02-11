@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-02-10
+ * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.16 2007/02/10 17:06:04 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.17 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ supervisor_guards_level::supervisor_guards_level ()
   tiles_map = new tilesmap_scrolling ();
   guards = new controller_guardians ();
   paddles = new controller_paddles (1);
-  ptMoveText = new zeMoveText ();
+  ptMoveText = new controller_fontes_game ();
   explosions = new controller_explosions ();
   sprite_paddle *paddle = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
   bullets = new controller_bullets (paddle, explosions);
@@ -46,11 +46,9 @@ supervisor_guards_level::supervisor_guards_level ()
   power_up_capsules = new controller_capsules (6);
   balls = new controller_balls (guards, money_capsules, power_up_capsules);
   viewfinders_paddles = new controller_viewfinders ();
-  ptPrntmney = new printmoney ();
+  player_indicators = new controller_indicators ();
   ptMiniMess = new zeMiniMess ();
   gigablitz = new controller_gigablitz ();
-  money_indicator = new sprite_object ();
-  ptBobLifes = new sprite_capsule ();
   game_over = new controller_game_over ();
   ptCongBall = new controller_spheres ();
   popup_menu = new handler_popup_menu ();
@@ -67,11 +65,9 @@ supervisor_guards_level::~supervisor_guards_level ()
   delete popup_menu;
   delete ptCongBall;
   delete game_over;
-  delete ptBobLifes;
-  delete money_indicator;
   delete gigablitz;
   delete ptMiniMess;
-  delete ptPrntmney;
+  delete player_indicators;
   delete viewfinders_paddles;
   delete balls;
   delete power_up_capsules;
@@ -123,16 +119,17 @@ supervisor_guards_level::first_init ()
   balls->create_sprites_list ();
   money_capsules->create_sprites_list ();
   power_up_capsules->create_sprites_list ();
-  ptPrntmney->create_sprites_list ();
+  //player_indicators->create_sprites_list ();
+  player_indicators->create_indicators_sprites (paddles, money_capsules->get_first_sprite (), NULL, power_up_capsules->get_first_sprite ());
   explosions->create_explosions_list ();
 
   /* create the money sprite */
-  money_indicator->create_sprite (BOB_MONEYS, sprites_bitmap, false);
-  sprites->add (money_indicator);
+  //money_indicator->create_sprite (BOB_MONEYS, sprites_bitmap, false);
+  //sprites->add (money_indicator);
 
   /* create the extra-life capsule sprite */
-  ptBobLifes->create_sprite (BOB_GADGET, sprites_bitmap, false);
-  sprites->add (ptBobLifes);
+  //ptBobLifes->create_sprite (BOB_GADGET, sprites_bitmap, false);
+  //sprites->add (ptBobLifes);
 
   viewfinders_paddles->create_sprites_list ();
 
@@ -177,7 +174,7 @@ supervisor_guards_level::first_init ()
   //###################################################################
   balls->run_power2 ();
 
-  money_capsules->initialize (3 + hardChoice, ptPrntmney);
+  money_capsules->initialize (3 + hardChoice, player_indicators);
 
   /* initialize le capsules controller */
   power_up_capsules->initialise (
@@ -201,7 +198,7 @@ supervisor_guards_level::first_init ()
                           NULL,
                           NULL, NULL);
 
-  ptPrntmney->init_guard (current_player, paddles, money_indicator, ptBobLifes);
+  //player_indicators->init_guard (paddles, money_indicator, ptBobLifes);
 
   //initialize mobile characters at the end of the level
   ptMoveText->initialise (level_number, 32 * resolution);
@@ -282,7 +279,7 @@ supervisor_guards_level::main_loop ()
             ptCongBall->execution1 ();  //congra
         }
       viewfinders_paddles->run ();
-      ptPrntmney->execution2 (current_player->amount_of_money, current_player->number_of_lifes);
+      player_indicators->execution2 (current_player->amount_of_money, current_player->number_of_lifes);
       ptMoveText->goMoveText ();
       sprites->draw ();
       display->unlock_surfaces ();
@@ -319,7 +316,7 @@ supervisor_guards_level::main_loop ()
           money_capsules->move_bottom ();
           power_up_capsules->bougegads2 ();
           ptMoveText->goMoveText ();
-          ptPrntmney->execution2 (current_player->amount_of_money,
+          player_indicators->execution2 (current_player->amount_of_money,
                                   current_player->number_of_lifes);
           gigablitz->execution2 ();    //move the Gigablitz from guards
           explosions->play_animation ();

@@ -1,10 +1,11 @@
 //*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
+// copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "ze_magneye.h"
-// created		: 2004-09-17
-// updates		: 2004-09-17
-// function	: manage eye magneto (only bricks levels)
+// file         : "controller_fontes_game.h"
+// created      : ?
+// updates      : 2005-01-23
+// fonction     : manage mobiles characters ("LEVEL x COMPLETED")
+// id           : $Id: controller_fontes_game.h,v 1.1 2007/02/11 16:04:44 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -20,31 +21,32 @@
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
-#ifndef __ZE_MAGNEYE__
-#define __ZE_MAGNEYE__
-class ze_magneye ;
+#ifndef __ZEMOVETEXT__
+#define __ZEMOVETEXT__
 //...............................................................................
-#include "../include/list_sprites.h"
-#include "../include/sprite_eye.h"
+class controller_fontes_game;
+//...............................................................................
 #include "../include/objects_list.h"
-//..............................................................................
-class ze_magneye : public objects_list < sprite_eye >
-{	friend class sprite_eye ;
+#include "../include/sprite_fonte_game.h"
+//...............................................................................
+class controller_fontes_game:public objects_list < sprite_fonte_game >
+{
+private:
+  Sint32 size_line1;
+  Sint32 size_line2;
+  Sint32 size_total;
+  Sint32 horz_large;
+  Sint32 chrOffsetX;
+  static char ze_bobText[];
+  static char ze_endText[];
 
-	private:
-		static const Uint16	Xcoordinat[32];
-		static const Uint16	Ycoordinat[32];
-
-	public:
-		Sint32			hypotenuse;
-		Sint32			eyeCenterX;
-		Sint32			eyeCenterY;
-	
-	public:
-						ze_magneye();
-						~ze_magneye();
-		Sint32			create_eye();
-		void create_eyes_list();
-		void			execution1();
+public:
+    controller_fontes_game ();
+   ~controller_fontes_game ();
+  void initialise (Sint32 level, Sint32 offzt = 0);
+  Sint32 startValue (Sint32 n, Sint32 a, Sint32 j, Sint32 y,
+                     Sint32 i3, Sint32 y3);
+  void goMoveText ();
+  void activeText ();
 };
 #endif

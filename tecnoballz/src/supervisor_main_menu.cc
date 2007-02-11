@@ -4,11 +4,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.6 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.7 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ supervisor_main_menu::supervisor_main_menu ()
   initialise ();
   tiles_map = new tilesmap_scrolling ();       // background scrolling
   tecnoballz_logo = new sprite_object ();    // big logo "TecnoballZ"
-  BOB_defile = new zeDefilTxt ();
+  BOB_defile = new controller_fontes_menu ();
   menu_texte = new print_menu ();
   mouse_pointer = new sprite_mouse_pointer ();
   offset_xx1 = 0;

@@ -1,15 +1,15 @@
 /** 
  * @file supervisor_guards_level.h
  * @brief Guardians level supervisor 
- * @created 2003-01-09
+ * @created 2003-01-11
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.13 2007/02/10 17:06:04 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.14 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ class supervisor_guards_level;
 #include "../include/controller_balls.h"
 #include "../include/controller_moneys.h"
 #include "../include/controller_capsules.h"
-#include "../include/printmoney.h"
+#include "../include/controller_indicators.h"
 #include "../include/zeMiniMess.h"
 #include "../include/zeMiniMess.h"
 #include "../include/controller_gigablitz.h"
@@ -49,12 +49,12 @@ class supervisor_guards_level;
 #include "../include/controller_game_over.h"
 #include "../include/controller_spheres.h"
 #include "../include/handler_popup_menu.h"
-#include "../include/zeMoveText.h"
+#include "../include/controller_fontes_game.h"
 
 
 class supervisor_guards_level:public virtual supervisor
 {
-  friend class zeMoveText;
+  friend class controller_fontes_game;
 
 private:
   controller_gigablitz * gigablitz;
@@ -66,7 +66,7 @@ private:
   controller_viewfinders *viewfinders_paddles;
   controller_moneys *money_capsules;
   controller_capsules *power_up_capsules;
-  printmoney *ptPrntmney;
+  controller_indicators *player_indicators;
   zeMiniMess *ptMiniMess;
   controller_explosions *explosions;
   /** Sprite of the money capsule to the left of amount money */
@@ -87,7 +87,7 @@ private:
   Uint32 gameover_counter;
   Sint32 count_next;            //temporisation before next level 
   Sint32 tecnwinner;            //1 = end of the game
-  zeMoveText *ptMoveText;
+  controller_fontes_game *ptMoveText;
 
 private:
   void init_level ();

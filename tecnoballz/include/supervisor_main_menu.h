@@ -4,11 +4,11 @@
  * @date 2007-02-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.h,v 1.3 2007/02/07 17:10:37 gurumeditation Exp $
+ * $Id: supervisor_main_menu.h,v 1.4 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 #include "../include/handler_keyboard.h"
 #include "../include/sprite_object.h"
 #include "../include/list_sprites.h"
-#include "../include/zeDefilTxt.h"
+#include "../include/controller_fontes_menu.h"
 #include "../include/print_text.h"
 #include "../include/print_menu.h"
 #include "../include/sprite_mouse_pointer.h"
@@ -44,7 +44,7 @@ class supervisor_main_menu:public virtual supervisor
 private:
   tilesmap_scrolling * tiles_map;
   sprite_object *tecnoballz_logo;
-  zeDefilTxt *BOB_defile;
+  controller_fontes_menu *BOB_defile;
   print_menu *menu_texte;
   Sint32 offset_xx1;
   sprite_mouse_pointer *mouse_pointer;

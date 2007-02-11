@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.5 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.6 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,7 +88,7 @@ controller_capsules::initialise (Sint32 mStep, Sint32 bKauf, Sint32 brCnt,
                                  zeMiniMess * ptMes,
                                  controller_paddles * pRaqu,
                                  controller_balls * pBall, right_panel_score * pScor,
-                                 sprite_object * pWall, ze_magneye * ptEye)
+                                 sprite_object * pWall, controller_magnetic_eyes * ptEye)
 {
   ptRaquette = pRaqu;
   ptNewBalls = pBall;

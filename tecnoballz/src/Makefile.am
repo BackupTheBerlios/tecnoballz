@@ -20,10 +20,14 @@ SOURCES_MAIN = \
   controller_bullets.cc \
   controller_capsules.cc \
   controller_explosions.cc \
+  controller_fontes_game.cc \
+  controller_fontes_menu.cc \
   controller_game_over.cc \
   controller_gems.cc \
   controller_gigablitz.cc \
   controller_guardians.cc \
+  controller_indicators.cc \
+  controller_magnetic_eyes.cc \
   controller_moneys.cc \
   controller_paddles.cc \
   controller_projectiles.cc \
@@ -45,7 +49,6 @@ SOURCES_MAIN = \
   main.cc \
   offscreen_surface.cc \
   print_menu.cc \
-  printmoney.cc \
   print_text.cc \
   right_panel_score.cc \
   score_over.cc \
@@ -75,9 +78,6 @@ SOURCES_MAIN = \
   tecnoballz.cc \
   tiles_background.cc \
   tilesmap_scrolling.cc \
-  zeDefilTxt.cc \
-  ze_magneye.cc \
   zeMiniMess.cc \
-  zeMoveText.cc \
   $(NULL)
 

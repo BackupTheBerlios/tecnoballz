@@ -1,10 +1,10 @@
 //*****************************************************************************
 // copyright (c) 1991-2004 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "printmoney.h"
-// created		: 2002-11-28
-// updates		: 2004-04-18
-// fonction	: print credit of money and reverser malus
+// file         : "controller_magnetic_eyes.h"
+// created              : 2004-09-17
+// updates              : 2004-09-17
+// function     : manage eye magneto (only bricks levels)
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -20,41 +20,32 @@
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
-#ifndef __PRINTMONEY__
-#define __PRINTMONEY__
-class printmoney;
+#ifndef __ZE_MAGNEYE__
+#define __ZE_MAGNEYE__
+class controller_magnetic_eyes;
 //...............................................................................
+#include "../include/list_sprites.h"
+#include "../include/sprite_eye.h"
 #include "../include/objects_list.h"
-#include "../include/handler_players.h"
-#include "../include/controller_paddles.h"
-#include "../include/sprite_capsule.h"
-//...............................................................................
-class printmoney:public objects_list < sprite_object >
+//..............................................................................
+class controller_magnetic_eyes:public objects_list < sprite_eye >
 {
-	private:
-		static const Sint32	YINVERSEUR = 232;
-		Sint32				y_position;
-		handler_players*			ptJoueurDa;
-		controller_paddles*			ptZraquett;
-		Sint32				money_posy;
-		sprite_object*			ptBobMoney;
-		sprite_capsule*			ptBobRever;
-		sprite_capsule*			ptBobLifes;
-		//Sint32				flag_level;	// 0 = "bricks" / 1 = "guards"
+  friend class sprite_eye;
 
-	public:
-							printmoney();
-							~printmoney();
-		void				initialise(handler_players*, controller_paddles*, sprite_object*, 
-									sprite_capsule*);
-		void				init_guard(handler_players*, controller_paddles*, sprite_object*, 
-									sprite_capsule*);
-		void				execution1(Sint32 value);
-		void				execution2(Sint32, Sint32);
-		void				creditPlus(Sint32 value);
-	
-	private:
-		void				init_money();
-		void				exec_money(Sint32);
+private:
+  static const Uint16 Xcoordinat[32];
+  static const Uint16 Ycoordinat[32];
+
+public:
+    Sint32 hypotenuse;
+  Sint32 eyeCenterX;
+  Sint32 eyeCenterY;
+
+public:
+    controller_magnetic_eyes ();
+   ~controller_magnetic_eyes ();
+  Sint32 create_eye ();
+  void create_eyes_list ();
+  void execution1 ();
 };
 #endif

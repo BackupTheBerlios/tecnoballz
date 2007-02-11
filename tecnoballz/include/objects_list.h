@@ -1,14 +1,14 @@
 /** 
  * @file objects_list.h 
  * @brief Template of management of objects list 
- * @date 2007-01-28
+ * @date 2007-02-11
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.12 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.13 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,7 @@ public:
   void disable_sprites ();
   void enable_sprites ();
   X **get_sprites_list ();
+  X *get_first_sprite ();
   Uint32 get_max_of_sprites ();
   void set_max_of_sprites (Sint32 total);
 };
@@ -97,7 +98,7 @@ template < class X > void objects_list < X >::release_sprites_list ()
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       X *sprite = sprites_list[i];
-      if (sprite != NULL)
+      if (NULL != sprite)
         {
           delete sprite;
         }
@@ -115,6 +116,19 @@ template < class X > void objects_list < X >::release_sprites_list ()
 template < class X > X ** objects_list < X >::get_sprites_list ()
 {
   return sprites_list;
+}
+
+/**
+ * Return first sprite of the list 
+ * @return pointer to the first sprite object of the list
+ */
+template < class X > X * objects_list < X >::get_first_sprite ()
+{
+  if (NULL == sprites_list)
+    {
+      return NULL;
+    }
+  return sprites_list[0];
 }
 
 /**

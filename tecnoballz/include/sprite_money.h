@@ -4,11 +4,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.h,v 1.6 2007/02/11 12:35:11 gurumeditation Exp $
+ * $Id: sprite_money.h,v 1.7 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,26 +42,28 @@ class sprite_money:public sprite_object
   friend class controller_moneys;
 
 private:
-  Sint32 directionX;
-  /** */
+  /** Toward bottom, right, top, left */
+  Uint32 towards;
+  /** Amount of money contained in this capsule */
   Uint32 money_amount;
+  /** Moving speed in pixels of the money capsule */
   Uint32 speed_of_moving;
+  /** Paddle sprite which goes the money caspule */
   sprite_paddle *paddle;
-  /** multiply the amount of money collected in the capsule
+  /** Multiply the amount of money collected in the capsule
    * by the paddle */ 
   Uint32 money_multiplier;
 
 public:
     sprite_money ();
    ~sprite_money ();
-  void littleInit ();
-  bool disponible (brickClear * briPT);
-  bool disponible (sprite_ball * pball);
-  bool disponible (sprite_projectile * pfire);
-
-  void init_money (Uint32 xcoord, Uint32 ycoord, sprite_paddle * raket);
-
+  void init_members ();
+  bool enable_if_available (brickClear * briPT);
+  bool enable_if_available (sprite_ball * pball);
+  bool enable_if_available (sprite_projectile * pfire);
   Uint32 move ();
   Uint32 move_bottom ();
+private:
+  void init_money (Uint32 xcoord, Uint32 ycoord, sprite_paddle * pad);
 };
 #endif

@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.h,v 1.2 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: controller_capsules.h,v 1.3 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ class controller_capsules;
 #include "../include/controller_paddles.h"
 #include "../include/controller_balls.h"
 #include "../include/right_panel_score.h"
-#include "../include/ze_magneye.h"
+#include "../include/controller_magnetic_eyes.h"
 
 class controller_capsules:public objects_list < sprite_capsule >
 {
@@ -52,7 +52,7 @@ private:
   controller_balls *ptNewBalls;
   right_panel_score *ptbarreScr;
   sprite_object *ptBob_wall;
-  ze_magneye *pt_magneye;
+  controller_magnetic_eyes *pt_magneye;
   Sint32 frame_delay;
   Sint32 frame_period;
   Sint32 frame_index;
@@ -82,7 +82,7 @@ public:
                    const Sint16 * table, Sint32 * cours,
                    zeMiniMess * ptMes, controller_paddles * pRaqu,
                    controller_balls * pBall, right_panel_score * pScor,
-                   sprite_object *, ze_magneye * ptEye);
+                   sprite_object *, controller_magnetic_eyes * ptEye);
   void envoieGads (brickClear * briPT);
   void send_malus (sprite_ball *);
   void send_malus (sprite_projectile *);

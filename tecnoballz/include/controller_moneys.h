@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_moneys.h,v 1.3 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: controller_moneys.h,v 1.4 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ class controller_moneys;
 #include "../include/sprite_money.h"
 #include "../include/right_panel_score.h"
 #include "../include/supervisor_bricks_level.h"
-#include "../include/printmoney.h"
+#include "../include/controller_indicators.h"
 #include "../include/sprite_ball.h"
 
 class controller_moneys:public objects_list < sprite_money >
@@ -48,13 +48,13 @@ private:
   /** delay counter before sending a new money capsule */
   Uint32 delay_count;
   right_panel_score *ptbarreScr;
-  printmoney *ptPrntmney;
+  controller_indicators *ptPrntmney;
 
 public:
     controller_moneys ();
    ~controller_moneys ();
-  void initialize (Uint32 delay, right_panel_score * score, printmoney * money);
-  void initialize (Uint32 delay, printmoney * money);
+  void initialize (Uint32 delay, right_panel_score * score, controller_indicators * money);
+  void initialize (Uint32 delay, controller_indicators * money);
   void send_money_from_brick (brickClear * briPT);
   void send_money (sprite_ball * ball);
   void send_money (sprite_projectile * blast);

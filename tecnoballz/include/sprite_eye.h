@@ -29,12 +29,12 @@ class sprite_eye;
 #include "../include/sprite_ball.h"
 #include "../include/controller_bricks.h"
 #include "../include/controller_balls.h"
-#include "../include/ze_magneye.h"
+#include "../include/controller_magnetic_eyes.h"
 //.......................................................................
 class sprite_eye:public sprite_object
 {
   friend class controller_balls;
-  friend class ze_magneye;
+  friend class controller_magnetic_eyes;
 
 private:
     Sint32 finishPosx;

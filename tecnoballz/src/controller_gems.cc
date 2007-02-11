@@ -5,11 +5,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gems.cc,v 1.3 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: controller_gems.cc,v 1.4 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ controller_gems::~controller_gems ()
  */
 void
 controller_gems::initialize (right_panel_score * score,
-                             printmoney * coins, controller_paddles * pad)
+                             controller_indicators * coins, controller_paddles * pad)
 {
   ptBarScore = score;
   ptPrintmon = coins;
@@ -130,7 +130,7 @@ controller_gems::move ()
                       zegem->activBlink ();
                     }
                   ptBarScore->scoreAjout (2500);
-                  ptPrintmon->creditPlus (500);
+                  ptPrintmon->increase_money_amount (500);
                   ptBarScore->add_life (3);
                   /* jump to the next level */
                   ptBarScore->scoreBrick (0);

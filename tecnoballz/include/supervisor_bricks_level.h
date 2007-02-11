@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.h 
  * @brief Bricks levels supervisor 
- * @date 2007-02-10
+ * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.13 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.14 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,16 +53,16 @@ class supervisor_bricks_level;
 #include "../include/controller_capsules.h"
 #include "../include/controller_gigablitz.h"
 #include "../include/handler_players.h"
-#include "../include/zeMoveText.h"
+#include "../include/controller_fontes_game.h"
 #include "../include/head_animation.h"
-#include "../include/printmoney.h"
+#include "../include/controller_indicators.h"
 #include "../include/controller_game_over.h"
 #include "../include/zeMiniMess.h"
 #include "../include/level_data.h"
 #include "../include/controller_gems.h"
 #include "../include/controller_viewfinders.h"
 #include "../include/handler_popup_menu.h"
-#include "../include/ze_magneye.h"
+#include "../include/controller_magnetic_eyes.h"
 
 class supervisor_bricks_level:public virtual supervisor
 {
@@ -71,13 +71,13 @@ class supervisor_bricks_level:public virtual supervisor
   friend class controller_balls;
   friend class controller_paddles;
   friend class controller_capsules;
-  friend class zeMoveText;
+  friend class controller_fontes_game;
   friend class controller_ships;
   friend class sprite_paddle;
 
 private:
   zeMiniMess * ptMiniMess;
-  printmoney *ptPrntmney;
+  controller_indicators *player_indicators;
   briqueCote *gereBricot;
   /** Head animation in the right score panel */
   head_animation *head_anim;
@@ -89,18 +89,16 @@ private:
   controller_paddles *paddles;
   right_panel_score *panel_score;
   controller_ships *ships;
-  ze_magneye *pt_magneye;
+  controller_magnetic_eyes *pt_magneye;
   controller_moneys *money_capsules;
   controller_capsules *power_up_capsules;
   controller_gems *gem_stones;
-  zeMoveText *gere_texte;
+  controller_fontes_game *gere_texte;
   controller_gigablitz *gigablitz;
   controller_game_over *game_over;
   sprite_object *BottomWall;
-  /** Sprite of the money capsule to the left of amount money */
   sprite_object *money_indicator;
   handler_popup_menu *popup_menu;
-  sprite_capsule *ptBobRever;
   /** Area number from 1 to 2 */
   Sint32 area_number;
   /** Level number from 1 to 12 */

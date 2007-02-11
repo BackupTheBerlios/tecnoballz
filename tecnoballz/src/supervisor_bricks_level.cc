@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-02-10
+ * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.15 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.16 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
   head_anim = new head_animation ();
   ships =
     new controller_ships (money_capsules, power_up_capsules, gem_stones, bricks);
-  pt_magneye = new ze_magneye ();
+  pt_magneye = new controller_magnetic_eyes ();
   BottomWall = new sprite_object ();
   ptMiniMess = new zeMiniMess ();
   balls =
@@ -54,13 +54,11 @@ supervisor_bricks_level::supervisor_bricks_level ()
                           pt_magneye);
   viewfinders_paddles = new controller_viewfinders ();
   paddles = new controller_paddles ();
-  gere_texte = new zeMoveText ();
+  gere_texte = new controller_fontes_game ();
   gigablitz = new controller_gigablitz ();
-  ptPrntmney = new printmoney ();
+  player_indicators = new controller_indicators ();
   game_over = new controller_game_over ();
 
-  money_indicator = new sprite_object ();
-  ptBobRever = new sprite_capsule ();
   popup_menu = new handler_popup_menu ();
 
   sprite_projectile::start_list (bricks, ships, panel_score);
@@ -83,10 +81,8 @@ supervisor_bricks_level::~supervisor_bricks_level ()
       BottomWall = (sprite_object *) NULL;
     }
   delete popup_menu;
-  delete ptBobRever;
-  delete money_indicator;
   delete game_over;
-  delete ptPrntmney;
+  delete player_indicators;
   delete gigablitz;
   delete gere_texte;
   delete paddles;
@@ -171,19 +167,9 @@ supervisor_bricks_level::first_init ()
   //mobiles characters
   gere_texte->create_sprites_list ();
   paddles->create_projectiles_list ();
-  //credits value (left-bottom)
-  ptPrntmney->create_sprites_list ();
-  //GAME OVER sprites
+  player_indicators->create_indicators_sprites (paddles, money_capsules->get_first_sprite (), power_up_capsules->get_first_sprite (), NULL);
   game_over->create_sprites_list ();
-  //money sprite (left-bottom)
-  money_indicator->create_sprite (BOB_MONEYS, sprites_bitmap, 0);
-  sprites->add (money_indicator);
-  //reverser sprite (right-bottom)
-  ptBobRever->create_sprite (BOB_GADGET, sprites_bitmap, 0);
-  sprites->add (ptBobRever);
-  //bumper's viewfinder
   viewfinders_paddles->create_sprites_list ();
-  //ESC menu
   popup_menu->first_init (sprites_bitmap, 0, 256 * resolution);
   resources->release_sprites_bitmap ();
   display->lock_surfaces ();
@@ -235,7 +221,7 @@ supervisor_bricks_level::first_init ()
                           levelParam->resistance * hardChoice);
 
   money_capsules->initialize (levelParam->monayCount * hardChoice,
-                          panel_score, ptPrntmney);
+                          panel_score, player_indicators);
 
   //##############################################################
   //Initialize the object which handles gadgets (bonus and malus)
@@ -263,14 +249,14 @@ supervisor_bricks_level::first_init ()
                            //the object which handles the text on left scores panel
                            panel_score, BottomWall, pt_magneye);
 
-  gem_stones->initialize (panel_score, ptPrntmney, paddles);
+  gem_stones->initialize (panel_score, player_indicators, paddles);
 
   //##############################################################
   // initialize mobiles characters ("LEVEL x COMPLETED")
   //##############################################################
   gere_texte->initialise (level_number);
 
-  ptPrntmney->initialise (current_player, paddles, money_indicator, ptBobRever);
+  //player_indicators->initialise (paddles, money_indicator, ptBobRever);
 
 
   viewfinders_paddles->initialize (paddles, 4);
@@ -345,7 +331,7 @@ supervisor_bricks_level::main_loop ()
       sprites->draw ();
       panel_score->scoreEcran ();
       panel_score->barreTemoin ();
-      ptPrntmney->execution1 (current_player->amount_of_money);
+      player_indicators->execution1 (current_player->amount_of_money);
       display->unlock_surfaces ();
       display->bufferCTab ();
       if (keyboard->is_left_button () && isgameover > 60)
@@ -396,7 +382,7 @@ supervisor_bricks_level::main_loop ()
             BottomWall->thecounter--;
 
           panel_score->barreTemoin ();
-          ptPrntmney->execution1 (current_player->amount_of_money);
+          player_indicators->execution1 (current_player->amount_of_money);
         }
 
       //tiles_ground->draw();

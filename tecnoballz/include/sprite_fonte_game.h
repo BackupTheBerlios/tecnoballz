@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_fonte_game.h,v 1.1 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: sprite_fonte_game.h,v 1.2 2007/02/11 16:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ class sprite_fonte_game;
 
 class sprite_fonte_game:public sprite_object
 {
-  friend class zeMoveText;
+  friend class controller_fontes_game;
 
 private:
    Sint32 angleValue;          //radius value 0 to 511
