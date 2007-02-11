@@ -4,11 +4,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.16 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.17 2007/02/11 17:43:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -186,15 +186,8 @@ supervisor_bricks_level::first_init ()
   init_level ();
 
 
-  //###################################################################
-  // initialize left scores pannel
-  //###################################################################
-  error_init (panel_score->first_init (current_player, gigablitz, balls));
-  if (erreur_num)
-    return erreur_num;
-  error_init (panel_score->affiche_me ());
-  if (erreur_num)
-    return erreur_num;
+  panel_score->first_init (gigablitz, balls);
+  //panel_score->affiche_me ();
 
   background ();
   paddles->init_paddles (gigablitz, balls);

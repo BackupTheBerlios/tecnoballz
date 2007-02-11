@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.17 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.18 2007/02/11 17:43:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -257,7 +257,8 @@ controller_balls::vitus_sort ()
                   balle->reStarting (balle->raket_ball);
                   // start parasite animation head
                   head_anim->start_interference ();
-                  ptBarreScr->remove_life (1);
+                  //ptBarreScr->remove_life (1);
+                  current_player->remove_life (1);
                   // force the explosion of all the "atoms"
                   ptBouiBoui->atomexplos ();
 #ifndef SOUNDISOFF

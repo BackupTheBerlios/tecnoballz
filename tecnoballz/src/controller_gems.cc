@@ -2,14 +2,14 @@
  * @file controller_gems.cc 
  * @brief The gems controller 
  * @created 2004-04-12 
- * @date 2007-02-10
+ * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gems.cc,v 1.4 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: controller_gems.cc,v 1.5 2007/02/11 17:43:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,8 @@ controller_gems::~controller_gems ()
  */
 void
 controller_gems::initialize (right_panel_score * score,
-                             controller_indicators * coins, controller_paddles * pad)
+                             controller_indicators * coins,
+                             controller_paddles * pad)
 {
   ptBarScore = score;
   ptPrintmon = coins;
@@ -114,43 +115,52 @@ controller_gems::move ()
     {
       sprite_gem *gem = sprites_list[i];
       Sint32 ztype = gem->move ();
-      if (ztype >= 0)
+      if (ztype < 0)
         {
-          if (!current_player->gem_is_set (ztype))
-            {
-              ptBarScore->scoreAjout (500);     // one gem collected
-              gem->gemcollect (ztype);
-              if (current_player->gem_enable (ztype))
-                {               //###################################################
-                  // 6 gems collected
-                  //###################################################
-                  for (Uint32 k = 0; k < max_of_sprites; k++)
-                    {
-                      sprite_gem *zegem = sprites_list[k];
-                      zegem->activBlink ();
-                    }
-                  ptBarScore->scoreAjout (2500);
-                  ptPrintmon->increase_money_amount (500);
-                  ptBarScore->add_life (3);
-                  /* jump to the next level */
-                  ptBarScore->scoreBrick (0);
-                  /* enable right paddle */
-                  current_player->set_bumpOn (controller_paddles::RIGHT_PADDLE,
-                                          3);
-                  /* enable top paddle */
-                  current_player->set_bumpOn (controller_paddles::TOP_PADDLE, 3);
-                  /* enable left paddle */
-                  current_player->set_bumpOn (controller_paddles::LEFT_PADDLE, 3);
-                  sprite_paddle *paddle;
-                  paddle = paddles->get_paddle (controller_paddles::RIGHT_PADDLE);
-                  paddle->enable ();
-                  paddle = paddles->get_paddle (controller_paddles::TOP_PADDLE);
-                  paddle->enable ();
-                  paddle = paddles->get_paddle (controller_paddles::LEFT_PADDLE);
-                  paddle->enable ();
-                  return;
-                }
-            }
+          /* this gem is disabled or was not collected by a paddle  */
+          continue;
         }
+      if (current_player->gem_is_set (ztype))
+        {
+          /* this gem was already collected */
+          continue;
+        }
+      //ptBarScore->scoreAjout (500);
+      current_player->add_scores (500);
+      gem->gemcollect (ztype);
+      if (!current_player->gem_enable (ztype))
+        {
+          /* the six gems were not collected yet */
+          continue;
+        }
+      /*
+       * the six gems were collected!
+       */
+      for (Uint32 k = 0; k < max_of_sprites; k++)
+        {
+          sprite_gem *zegem = sprites_list[k];
+          zegem->activBlink ();
+        }
+      //ptBarScore->scoreAjout (2500);
+      current_player->add_scores (2500);
+      ptPrintmon->increase_money_amount (500);
+      //ptBarScore->add_life (3);
+      current_player->add_life (3);
+      /* jump to the next level */
+      ptBarScore->scoreBrick (0);
+      /* enable right paddle */
+      current_player->set_bumpOn (controller_paddles::RIGHT_PADDLE, 3);
+      /* enable top paddle */
+      current_player->set_bumpOn (controller_paddles::TOP_PADDLE, 3);
+      /* enable left paddle */
+      current_player->set_bumpOn (controller_paddles::LEFT_PADDLE, 3);
+      sprite_paddle *paddle;
+      paddle = paddles->get_paddle (controller_paddles::RIGHT_PADDLE);
+      paddle->enable ();
+      paddle = paddles->get_paddle (controller_paddles::TOP_PADDLE);
+      paddle->enable ();
+      paddle = paddles->get_paddle (controller_paddles::LEFT_PADDLE);
+      paddle->enable ();
+      return;
     }
 }

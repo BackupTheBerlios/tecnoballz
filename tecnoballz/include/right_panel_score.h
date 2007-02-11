@@ -1,37 +1,42 @@
-//*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file         : "right_panel_score.h"
-// created              : ?
-// updates              : 2004-10-10
-// fonction     : manage right score panel (bricks levels only)
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA  02111-1307, USA.
-//
-//******************************************************************************
-#ifndef __BARRESCORE__
-#define __BARRESCORE__
+/** 
+ * @file right_panel_score.h
+ * @brief The right panel score in the bricks levels 
+ * @date 2007-02-11
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.2 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: right_panel_score.h,v 1.2 2007/02/11 17:43:33 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
+#ifndef __RIGHT_SCORE_PANEL__
+#define __RIGHT_SCORE_PANEL__
+
 class right_panel_score;
-//-------------------------------------------------------------------------------
+
 #include "../include/bitmap_data.h"
 #include "../include/print_text.h"
 #include "../include/handler_players.h"
 #include "../include/handler_keyboard.h"
 #include "../include/controller_gigablitz.h"
 #include "../include/controller_balls.h"
-//-------------------------------------------------------------------------------
+
 class right_panel_score:public print_text
 {
 private:
@@ -62,9 +67,8 @@ private:
   Sint32 superBrick;            // number of bricks which remain
   Sint32 flip_white;
   bitmap_data *GFX_Sbarre;      // score panel image bitmap 
-  handler_players *objetGamer;
-  controller_gigablitz *ptGigaBlit;
-  controller_balls *ptNewBalls;
+  controller_gigablitz *gigablitz;
+  controller_balls *balls;
   char *scoreAdres;             // buffer address score
   char *lifesAdres;             // buffer address lifes
   char *brickAdres;             // buffer address number bricks
@@ -79,17 +83,18 @@ private:
 public:
     right_panel_score ();
    ~right_panel_score ();
-  Sint32 first_init (handler_players * gamer,
-                     controller_gigablitz * gblit, controller_balls * balls);
-  Sint32 affiche_me ();
+  void first_init (controller_gigablitz * blitz, controller_balls * b);
   void scoreEcran ();
   void scoreAjout (Sint32 ajout);
-  void add_life (Sint32 ajout);
-  Sint32 remove_life (Sint32 retra);
+  //void add_life (Sint32 ajout);
+  //Sint32 remove_life (Sint32 retra);
   void brickMoins (Sint32 retra);
   Sint32 resteBrick ();
   void scoreBrick (Sint32 value);
   void barreTemoin ();
   void resetemoin ();
+private:
+  void draw_background ();
+
 };
 #endif

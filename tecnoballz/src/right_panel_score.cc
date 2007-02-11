@@ -1,33 +1,37 @@
-//*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file         : "right_panel_score.cc"
-// created              : ?
-// updates              : 2004-10-10
-// fonction     : manage right score panel (bricks levels only)
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA  02111-1307, USA.
-//
-//******************************************************************************
+/** 
+ * @file right_panel_score.cc 
+ * @brief The right panel score in the bricks levels 
+ * @date 2007-02-11
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.2 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: right_panel_score.cc,v 1.2 2007/02/11 17:43:34 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
 #include "../include/right_panel_score.h"
 #include "../include/handler_resources.h"
 #include "../include/scoretable.h"
 
-//-----------------------------------------------------------------------------
-// create the object
-//-----------------------------------------------------------------------------
+/**
+ * Create the right panel score
+ */
 right_panel_score::right_panel_score ()
 {
   GFX_Sbarre = (bitmap_data *) NULL;
@@ -38,12 +42,12 @@ right_panel_score::right_panel_score ()
   flip_white = 0;
 }
 
-//-------------------------------------------------------------------------------
-// release the object
-//-------------------------------------------------------------------------------
+/**
+ * Release the right panel score
+ */
 right_panel_score::~right_panel_score ()
 {
-  if (GFX_Sbarre)
+  if (NULL != GFX_Sbarre)
     {
       delete GFX_Sbarre;
       GFX_Sbarre = (bitmap_data *) NULL;
@@ -54,17 +58,13 @@ right_panel_score::~right_panel_score ()
 //-------------------------------------------------------------------------------
 // first initialization
 //-------------------------------------------------------------------------------
-Sint32
-right_panel_score::first_init (handler_players * gamer,
-                               controller_gigablitz * gblit,
-                               controller_balls * balls)
+void
+right_panel_score::first_init (controller_gigablitz * blitz,
+                               controller_balls * b)
 {
   error_init (initialise ());
-  objetGamer = gamer;
-  ptGigaBlit = gblit;
-  ptNewBalls = balls;
-  if (erreur_num)
-    return (erreur_num);
+  gigablitz = blitz;
+  balls = b;
   scoreAdres = game_screen->get_pixel_data
     (POSX_SCORE * resolution, POSY_SCORE * resolution);
   lifesAdres = game_screen->get_pixel_data
@@ -73,32 +73,25 @@ right_panel_score::first_init (handler_players * gamer,
     (POSX_BRICK * resolution, POSY_BRICK * resolution);
   temoinAdrs = game_screen->get_pixel_data
     (TEMOINPOSX * resolution, TEMOINPOSY * resolution);
-  return (erreur_num);
+  draw_background ();
 }
 
-//-------------------------------------------------------------------------------
-// initialization before a level
-//-------------------------------------------------------------------------------
-Sint32
-right_panel_score::affiche_me ()
+/**
+ * Draw the background of the panel score
+ */
+void
+right_panel_score::draw_background ()
 {
   GFX_Sbarre = new bitmap_data ();
   GFX_Sbarre->load (handler_resources::RESBASCORE);
   GFX_Sbarre->copyTampon (0, 0, 256 * resolution, 0, 64 * resolution,
                           240 * resolution);
-  handler_players *gamer = objetGamer;
   tamponAff1 (POSX_AREAN * resolution, POSY_AREAN * resolution,
-              gamer->area_number, 10);
+              current_player->area_number, 10);
   tamponAff1 (POSX_LEVEL * resolution, POSY_LEVEL * resolution,
-              gamer->level_number, 10);
+              current_player->level_number, 10);
   tamponAff2 (POSX_NOMJO * resolution, POSY_NOMJO * resolution,
-              gamer->player_name, 6);
-  /*
-     tamponAff1(POSX_BESTS * resolution, POSY_BESTS * resolution,
-     gamer->best_score, 100000);
-     tamponAff2(POSX_BESTN * resolution, POSY_BESTN * resolution,
-     gamer->bestPlayer, 6);
-   */
+              current_player->player_name, 6);
   tamponAff1 (POSX_BESTS * resolution, POSY_BESTS * resolution,
               ptScoreTab->best_score (), 100000);
   tamponAff2 (POSX_BESTN * resolution, POSY_BESTN * resolution,
@@ -107,7 +100,6 @@ right_panel_score::affiche_me ()
   barreTemoin ();
   delete GFX_Sbarre;
   GFX_Sbarre = (bitmap_data *) NULL;
-  return erreur_num;
 }
 
 //-------------------------------------------------------------------------------
@@ -116,12 +108,9 @@ right_panel_score::affiche_me ()
 void
 right_panel_score::scoreEcran ()
 {
-  handler_players *gamer = objetGamer;
-  affNombre1 (scoreAdres, gamer->superScore, 100000);
+  affNombre1 (scoreAdres, current_player->superScore, 100000);
   affNombre1 (lifesAdres, superBrick, 100);
-  affNombre1 (brickAdres, gamer->number_of_lifes, 10);
-  //Sint32 nbfps = display->get_framepee();
-  //affNombre1(lifesAdres, nbfps, 100);
+  affNombre1 (brickAdres, current_player->number_of_lifes, 10);
 }
 
 //-------------------------------------------------------------------------------
@@ -130,16 +119,17 @@ right_panel_score::scoreEcran ()
 void
 right_panel_score::scoreAjout (Sint32 ajout)
 {
-  objetGamer->add_scores (ajout);
+  current_player->add_scores (ajout);
 }
 
+/*
 //-------------------------------------------------------------------------------
 // increase the number of lifes
 //-------------------------------------------------------------------------------
 void
 right_panel_score::add_life (Sint32 ajout)
 {
-  objetGamer->number_of_lifes += ajout;
+  current_player->number_of_lifes += ajout;
 }
 
 //-------------------------------------------------------------------------------
@@ -148,16 +138,16 @@ right_panel_score::add_life (Sint32 ajout)
 Sint32
 right_panel_score::remove_life (Sint32 retra)
 {
-  handler_players *gamer = objetGamer;
-  gamer->number_of_lifes -= retra;
-  if (gamer->number_of_lifes > 0)
+  current_player->number_of_lifes -= retra;
+  if (current_player->number_of_lifes > 0)
     return 1;
   else
     {
-      gamer->number_of_lifes = 0;
+      current_player->number_of_lifes = 0;
       return 0;
     }
 }
+*/
 
 //-------------------------------------------------------------------------------
 // decrease the number of bricks
@@ -194,8 +184,8 @@ right_panel_score::scoreBrick (Sint32 value)
 void
 right_panel_score::barreTemoin ()
 {
-  if (keyboard->is_right_left_buttons () && !ptGigaBlit->isactivate () &&
-      !ptNewBalls->least_glue ())
+  if (keyboard->is_right_left_buttons () && !gigablitz->isactivate () &&
+      !balls->least_glue ())
     {
       if (--blitztempo <= 0)
         {
@@ -204,7 +194,7 @@ right_panel_score::barreTemoin ()
               blitztempo = TEMPOBLITZ;
               blitzcount = blitzcount - resolution;
               if (blitzcount == 0)      // indicator is highest?
-                ptGigaBlit->initDepart ();      // yes, launch the gigablitz!
+                gigablitz->initDepart ();      // yes, launch the gigablitz!
             }
         }
     }
