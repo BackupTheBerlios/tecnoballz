@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_moneys.cc,v 1.3 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: controller_moneys.cc,v 1.4 2007/02/11 10:37:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -191,10 +191,10 @@ controller_moneys::move_bottom ()
     {
       sprite_money *money = sprites_list[i];
       money->play_animation_loop ();
-      Sint32 j = money->deplaceMe2 ();
-      if (j)
+      Uint32 amount  = money->move_bottom ();
+      if (amount > 0)
         {
-          ptPrntmney->creditPlus (j);
+          ptPrntmney->creditPlus (amount);
           current_player->add_scores (20);
         }
     }

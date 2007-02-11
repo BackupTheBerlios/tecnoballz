@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.cc,v 1.4 2007/02/08 07:33:07 gurumeditation Exp $
+ * $Id: sprite_money.cc,v 1.5 2007/02/11 10:37:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,9 +34,9 @@ sprite_money::sprite_money ()
 {
   clear_sprite_members ();
   directionX = 0;
-  valeurFric = 0;
-  la_vitesse = 0;
-  raquettePT = (sprite_paddle *) NULL;
+  money_amount = 0;
+  speed_of_moving = 0;
+  paddle = (sprite_paddle *) NULL;
 }
 
 /**
@@ -65,14 +65,14 @@ sprite_money::littleInit ()
   switch (current_player->get_area_number ())
     {
     default:
-      area_multi = 1;
+      money_multiplier = 1;
       break;
     case 3:
     case 4:
-      area_multi = 2;
+      money_multiplier = 2;
       break;
     case 5:
-      area_multi = 4;
+      money_multiplier = 4;
       break;
     }
 }
@@ -80,95 +80,95 @@ sprite_money::littleInit ()
 //-----------------------------------------------------------------------------
 // initialize a new capsule of money from a bricks
 //-----------------------------------------------------------------------------
-Sint32
+bool
 sprite_money::disponible (brickClear * briPT)
 {
   if (is_enabled)
-    return 0;
+    {
+      return false;
+    }
   init_money (briPT->balle_posX, briPT->balle_posY, briPT->raquettePT);
-  return 1;
-
+  return true;
 }
 
 //-----------------------------------------------------------------------------
 // initialize a new capsule of money from a Bouiboui or Gards
 //-----------------------------------------------------------------------------
-Sint32
+bool
 sprite_money::disponible (sprite_ball * pball)
 {
   if (is_enabled)
-    return 0;
+    {
+      return false;
+    }
   init_money (pball->x_coord, pball->y_coord, pball->raket_ball);
-  return 1;
+  return true;
 }
 
 //-----------------------------------------------------------------------------
 // initialize a new capsule of money from a Bouiboui 
 //-----------------------------------------------------------------------------
-Sint32
+bool
 sprite_money::disponible (sprite_projectile * pfire)
 {
   if (is_enabled)
-    return 0;
+    {
+      return false;
+    }
   init_money (pfire->x_coord, pfire->y_coord, pfire->raquettePT);
-  return 1;
+  return true;
 }
 
 //-----------------------------------------------------------------------------
 // initialize a new capsule of money
 //-----------------------------------------------------------------------------
 void
-sprite_money::init_money (Sint32 pos_x, Sint32 pos_y, sprite_paddle * raket)
+sprite_money::init_money (Uint32 xcoord, Uint32 ycoord, sprite_paddle * raket)
 {
   is_enabled = 1;
-  x_coord = pos_x;
-  y_coord = pos_y;
-  raquettePT = raket;
-  Sint32 i = hasard_val;
-  i = i & 0x003;
-  hasard_val += i;
+  x_coord = xcoord;
+  y_coord = ycoord;
+  paddle = raket;
+  Uint32 value = hasard_val & 0x003;
+  hasard_val += value;
   directionX = raket->get_paddle_number ();
-  switch (i)
+  switch (value)
     {
     case 0:
-      //printf("sprite_money::init_money(): 10 * %i\n", area_multi);
-      valeurFric = 10 * area_multi;
-      la_vitesse = resolution;
+      money_amount = 10 * money_multiplier;
+      speed_of_moving = resolution;
       break;
     case 1:
-      //printf("sprite_money::init_money(): 20 * %i\n", area_multi);
-      valeurFric = 20 * area_multi;
-      la_vitesse = resolution * 2;
+      money_amount = 20 * money_multiplier;
+      speed_of_moving = resolution * 2;
       break;
     case 2:
-      //printf("sprite_money::init_money(): 30 * %i\n", area_multi);
-      valeurFric = 30 * area_multi;
-      la_vitesse = resolution * 3;
+      money_amount = 30 * money_multiplier;
+      speed_of_moving = resolution * 3;
       break;
     default:
-      //printf("sprite_money::init_money(): 20 * %i\n", area_multi);
-      valeurFric = 20 * area_multi;
-      la_vitesse = resolution * 2;
+      money_amount = 20 * money_multiplier;
+      speed_of_moving = resolution * 2;
       break;
     }
 }
 
-//-----------------------------------------------------------------------------
-// bricks level: displacement and collision of the money
-//-----------------------------------------------------------------------------
-Sint32
+/**
+ * Displacement and collision of the money in the bricks levels
+ * @return the money amount collected
+ */
+Uint32
 sprite_money::move ()
 {
-  if (is_enabled)
+  if (!is_enabled)
     {
-      Sint32 i = la_vitesse;
-      sprite_paddle *raket = raquettePT;
+      return 0;
+    }
+      Sint32 i = speed_of_moving;
+      sprite_paddle *raket = paddle;
       switch (directionX)
         {
-          //###########################################################
-          // bottom bumper
-          //###########################################################
-        case 1:
+        case controller_paddles::BOTTOM_PADDLE:
           y_coord += i;
           if (y_coord < y_maximum)
             {
@@ -178,17 +178,14 @@ sprite_money::move ()
 #ifndef SOUNDISOFF
                   audio->play_sound (S_MONNAIES);
 #endif
-                  return (valeurFric);
+                  return (money_amount);
                 }
             }
           else
             is_enabled = 0;
           break;
 
-          //###########################################################
-          // right bumper          
-          //###########################################################
-        case 2:
+        case controller_paddles::RIGHT_PADDLE:
           x_coord += i;
           if (x_coord < x_maximum)
             {
@@ -198,17 +195,14 @@ sprite_money::move ()
 #ifndef SOUNDISOFF
                   audio->play_sound (S_MONNAIES);
 #endif
-                  return (valeurFric);
+                  return (money_amount);
                 }
             }
           else
             is_enabled = 0;
           break;
 
-          //###########################################################
-          // top bumper
-          //###########################################################
-        case 3:
+        case controller_paddles::TOP_PADDLE:
           y_coord -= i;
           if (y_coord > y_minimum)
             {
@@ -218,17 +212,14 @@ sprite_money::move ()
 #ifndef SOUNDISOFF
                   audio->play_sound (S_MONNAIES);
 #endif
-                  return (valeurFric);
+                  return (money_amount);
                 }
             }
           else
             is_enabled = 0;
           break;
 
-          //###########################################################
-          // left bumper
-          //###########################################################
-        case 4:
+        case controller_paddles::LEFT_PADDLE:
           x_coord -= i;
           if (x_coord > x_minimum)
             {
@@ -238,41 +229,40 @@ sprite_money::move ()
 #ifndef SOUNDISOFF
                   audio->play_sound (S_MONNAIES);
 #endif
-                  return (valeurFric);
+                  return (money_amount);
                 }
             }
           else
             is_enabled = 0;
           break;
         }
-    }
-  return (0);
+  return 0;
 }
 
-//-----------------------------------------------------------------------------
-// guards level: displacement and collision of the money
-//-----------------------------------------------------------------------------
-Sint32
-sprite_money::deplaceMe2 ()
+/**
+ * Displacement and collision of the money in the guards levels
+ * @return the money amount collected
+ */
+Uint32
+sprite_money::move_bottom ()
 {
-  if (is_enabled)
+  if (!is_enabled)
     {
-      Sint32 i = la_vitesse;
-      sprite_paddle *raket = raquettePT;
-      y_coord += i;
-      if (y_coord < y_maximum)
-        {
-          if (collision1 (raket))
-            {
-              is_enabled = 0;
-#ifndef SOUNDISOFF
-              audio->play_sound (S_MONNAIES);
-#endif
-              return valeurFric;
-            }
-        }
-      else
-        is_enabled = 0;
+      return 0;
     }
-  return 0;
+  y_coord += speed_of_moving;
+  if (y_coord >= y_maximum)
+    {
+      is_enabled = false;
+      return 0;
+    }
+  if (!collision1 (paddle))
+    {
+      return 0;
+    }
+  is_enabled = false;
+#ifndef SOUNDISOFF
+  audio->play_sound (S_MONNAIES);
+#endif
+  return money_amount;
 }

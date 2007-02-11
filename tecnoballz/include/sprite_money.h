@@ -1,14 +1,14 @@
 /** 
  * @file sprite_money.h
  * @brief The money sprite 
- * @date 2007-02-05
+ * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.h,v 1.4 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: sprite_money.h,v 1.5 2007/02/11 10:37:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,22 +43,24 @@ class sprite_money:public sprite_object
 
 private:
   Sint32 directionX;
-  Sint32 valeurFric;
-  Sint32 la_vitesse;
-  sprite_paddle *raquettePT;
-  Sint32 area_multi;
+  Uint32 money_amount;
+  Uint32 speed_of_moving;
+  sprite_paddle *paddle;
+  /** multiply the amount of money collected in the capsule
+   * by the paddle */ 
+  Uint32 money_multiplier;
 
 public:
     sprite_money ();
    ~sprite_money ();
   void littleInit ();
-  Sint32 disponible (brickClear * briPT);
-  Sint32 disponible (sprite_ball * pball);
-  Sint32 disponible (sprite_projectile * pfire);
+  bool disponible (brickClear * briPT);
+  bool disponible (sprite_ball * pball);
+  bool disponible (sprite_projectile * pfire);
 
-  void init_money (Sint32 pos_x, Sint32 pos_y, sprite_paddle * raket);
+  void init_money (Uint32 xcoord, Uint32 ycoord, sprite_paddle * raket);
 
-  Sint32 move ();
-  Sint32 deplaceMe2 ();
+  Uint32 move ();
+  Uint32 move_bottom ();
 };
 #endif
