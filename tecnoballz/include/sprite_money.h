@@ -4,11 +4,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.h,v 1.5 2007/02/11 10:37:50 gurumeditation Exp $
+ * $Id: sprite_money.h,v 1.6 2007/02/11 12:35:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ class sprite_money:public sprite_object
 
 private:
   Sint32 directionX;
+  /** */
   Uint32 money_amount;
   Uint32 speed_of_moving;
   sprite_paddle *paddle;
