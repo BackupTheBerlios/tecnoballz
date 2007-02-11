@@ -1,14 +1,14 @@
 /** 
  * @file sprite_projectile.h 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-02-09
+ * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.h,v 1.9 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: sprite_projectile.h,v 1.10 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,6 @@ class sprite_projectile:public sprite_object
 		static sprite_projectile*	list_fires[maxi_fires];
 		static controller_bricks*	brickObjet;
 		static controller_ships*	atomsObjet;
-		static right_panel_score*	scoreObjet;
 		Sint32				indexSinus;
 		Sint32				fire_Xscie;
 		Sint32				fire_Yscie;                          
@@ -64,8 +63,7 @@ class sprite_projectile:public sprite_object
 		void			littleInit(sprite_paddle * raket);
 		void			firePower1();
 		void			firePower2();
-		static void		start_list (controller_bricks * brick, controller_ships * atoms,
-					right_panel_score * score);
+		static void		start_list (controller_bricks * brick, controller_ships * atoms);
 		static void		gestionTir();
 		static void		hors_ecran();
 		static void		anim_fires();

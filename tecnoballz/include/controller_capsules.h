@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.h,v 1.3 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: controller_capsules.h,v 1.4 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ public:
   void envoieGads (sprite_ball * pball);
   void create_shop_sprites_list ();
   void gadgetShop (Sint32 nuGad);
-  void gadgetShop (handler_players * gamer);
+  //void gadgetShop (handler_players * gamer);
   void bouge_gads ();
   void bougegads2 ();
   void animations (Sint32 value = 1);

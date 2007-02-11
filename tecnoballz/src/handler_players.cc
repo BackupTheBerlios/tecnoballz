@@ -4,11 +4,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.6 2007/02/10 18:09:33 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.7 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -192,11 +192,12 @@ handler_players::set_name (char *name)
     }
 }
 
-//-----------------------------------------------------------------------------
-// return current name
-//-----------------------------------------------------------------------------
+/**
+ * Return the current player name
+ * @return the current name the player
+ */
 char *
-handler_players::returnName ()
+handler_players::get_name ()
 {
   return &player_name[0];
 }
@@ -231,59 +232,68 @@ handler_players::get_num_of_lifes ()
   return number_of_lifes;
 }
 
-//-----------------------------------------------------------------------------
-// return bumper width
-//-----------------------------------------------------------------------------
+/**
+ * return the paddle's length
+ * @return the length of the paddle in pixels
+ */
 Uint32
-handler_players::get_paddle_width ()
+handler_players::get_paddle_length ()
 {
   return paddle_length;
 }
 
-//-----------------------------------------------------------------------------
-// initialize bumper width
-//-----------------------------------------------------------------------------
+/**
+ * Initialize paddle's length
+ * @param length the length of the paddle in pixels
+ */
 void
-handler_players::setLargeur (Sint32 large)
+handler_players::set_paddle_length (Uint32 length)
 {
-  paddle_length = large;
+  paddle_length = length;
 }
 
-//-----------------------------------------------------------------------------
-// return credit value
-//-----------------------------------------------------------------------------
-Sint32
-handler_players::get_credit ()
+/**
+ * Return the current amount of money
+ * @return the amount of money
+ */
+Uint32
+handler_players::get_money_amount ()
 {
   return amount_of_money;
 }
 
-//-----------------------------------------------------------------------------
-// decrease credit
-//-----------------------------------------------------------------------------
-Sint32
-handler_players::sub_credit (Sint32 value)
+/**
+ * Decrease the amount of money
+ * @param value money amount
+ * @return true if the money amount could be descreased 
+ */
+bool
+handler_players::decrease_money_amount (Uint32 value)
 {
   if (value > amount_of_money)
-    return 0;
-  amount_of_money = amount_of_money - value;
-  return 1;
+    {
+      return false;
+    }
+  amount_of_money -= value;
+  return true;
 }
 
-//-----------------------------------------------------------------------------
-// increase credit
-//-----------------------------------------------------------------------------
+/**
+ * Increase the amount of money
+ * @param value money amount
+ */
 void
-handler_players::add_credit (Sint32 value)
+handler_players::increase_money_amount (Uint32 value)
 {
-  amount_of_money = amount_of_money + value;
+  amount_of_money += value;
 }
 
-//-----------------------------------------------------------------------------
-// increase score
-//-----------------------------------------------------------------------------
+/**
+ * Increase the score
+ * @param value is the number of points to increase the score by
+ */
 void
-handler_players::add_scores (Sint32 value)
+handler_players::add_score (Uint32 value)
 {
   superScore += value;
   score_life += value;
@@ -300,33 +310,35 @@ handler_players::add_scores (Sint32 value)
 void
 handler_players::clear_shopping_cart ()
 {
-  Sint32 t = NB_OPTIONS;
-  Sint32 z = 0;
-  Sint32 *p = courseList;
-  for (Sint32 i = 0; i < t; i++)
-    *(p++) = z;
-  courseNmbr = z;               // 0 = number of bonuses bought
-  *p = -1;                      // end of list
+  Sint32 *cart = shopping_cart;
+  for (Sint32 i = 0; i < NB_OPTIONS; i++)
+    {
+      *(cart++) = 0;
+    }
+  /* clear the number of items bought */
+  shopping_cart_items = 0;
+  /* end of the shopping cart */
+  *cart = -1;
 }
 
-//-----------------------------------------------------------------------------
-// return memory pointer to the list of bonuses bought
-// output       <= pointer to the start of list
-//-----------------------------------------------------------------------------
+/**
+ * Return the list of items bought in th shop
+ * @return a pointer to the list of itemps bought in th shop
+ */
 Sint32 *
-handler_players::get_course ()
+handler_players::get_shopping_cart ()
 {
-  return courseList;
+  return shopping_cart;
 }
 
-//-----------------------------------------------------------------------------
-// return number of bonuses bought
-// output       <= number of bonuses
-//-----------------------------------------------------------------------------
-Sint32
+/** 
+ * Return the number of itemp bought in th shop
+ * @return the number of items bought in th shop
+ */
+Uint32
 handler_players::get_cou_nb ()
 {
-  return courseNmbr;
+  return shopping_cart_items;
 }
 
 //-----------------------------------------------------------------------------
@@ -336,7 +348,7 @@ handler_players::get_cou_nb ()
 void
 handler_players::set_cou_nb (Sint32 value)
 {
-  courseNmbr = value;
+  shopping_cart_items = value;
 }
 
 //-----------------------------------------------------------------------------
@@ -348,7 +360,7 @@ handler_players::RAZgemlist ()
   for (Uint32 i = 0; i < controller_gems::MAX_OF_GEMS; i++)
     {
       /* states of the 6 gems */
-      gemmeActif[i] = 0;
+      gemmeActif[i] = false;
     }
   gemmeNombr = 0;
 }
@@ -359,7 +371,7 @@ handler_players::RAZgemlist ()
 Sint32
 handler_players::gem_enable (Sint32 gemNu)
 {
-  gemmeActif[gemNu] = 1;
+  gemmeActif[gemNu] = true;
   for (Uint32 i = 0; i < controller_gems::MAX_OF_GEMS; i++)
     {
       if (!gemmeActif[i])

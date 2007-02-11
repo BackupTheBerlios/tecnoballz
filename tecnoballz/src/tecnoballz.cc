@@ -5,11 +5,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.7 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.8 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -387,7 +387,7 @@ tecnoballz::release_all_objects (configfile * pConf)
   //save players names into config file
   for (Uint32 i = 0; i < 6; i++)
     {
-      pConf->set_player (i, handler_players::players_list[i]->returnName ());
+      pConf->set_player (i, handler_players::players_list[i]->get_name ());
     }
   if (is_verbose)
     {

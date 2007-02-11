@@ -4,11 +4,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.7 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.8 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -262,19 +262,19 @@ sortie:
       if (birth_flag)
         nlife = nlife + 10;
       if (chaine_cmp
-          (handler_players::players_list[iplay]->returnName (), "ETB   ", 6))
+          (handler_players::players_list[iplay]->get_name (), "ETB   ", 6))
         nlife += 5;
       if (chaine_cmp
-          (handler_players::players_list[iplay]->returnName (), "DJI   ", 6))
+          (handler_players::players_list[iplay]->get_name (), "DJI   ", 6))
         nlife += 4;
       if (chaine_cmp
-          (handler_players::players_list[iplay]->returnName (), "JMM   ", 6))
+          (handler_players::players_list[iplay]->get_name (), "JMM   ", 6))
         nlife += 3;
       if (chaine_cmp
-          (handler_players::players_list[iplay]->returnName (), "ZBB   ", 6))
+          (handler_players::players_list[iplay]->get_name (), "ZBB   ", 6))
         nlife += 2;
       if (chaine_cmp
-          (handler_players::players_list[iplay]->returnName (), "REG   ", 6))
+          (handler_players::players_list[iplay]->get_name (), "REG   ", 6))
         nlife += 1;
       handler_players::players_list[iplay]->initialize (nlife, nArea, level,
                                                  600, grdPt);

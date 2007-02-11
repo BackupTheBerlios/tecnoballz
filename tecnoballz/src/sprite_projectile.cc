@@ -1,14 +1,14 @@
 /** 
  * @file sprite_projectile.cc 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-01-25
+ * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.6 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.7 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,12 +98,10 @@ sprite_projectile::littleInit (sprite_paddle * raket)
 // static method: initialise all bumper's fires before a bricks level
 //-----------------------------------------------------------------------------
 void
-sprite_projectile::start_list (controller_bricks * brick, controller_ships * atoms,
-                         right_panel_score * score)
+sprite_projectile::start_list (controller_bricks * brick, controller_ships * atoms)
 {
   brickObjet = brick;
   atomsObjet = atoms;
-  scoreObjet = score;
   total_fire = 0;
   sprite_projectile **liste = list_fires;
   Sint32 t = maxi_fires;
@@ -319,7 +317,7 @@ sprite_projectile::collision2 ()
             {
               xFire->is_enabled = 0;
             }
-          scoreObjet->scoreAjout (100);
+          current_player->add_score (100);
           k = xFire->firePowerX;
           atome->atom_power -= k;
           if (atome->atom_power < 1)
@@ -351,5 +349,3 @@ controller_bricks *
   sprite_projectile::brickObjet;
 controller_ships *
   sprite_projectile::atomsObjet;
-right_panel_score *
-  sprite_projectile::scoreObjet;

@@ -1,14 +1,14 @@
 /** 
  * @file handler_keyboard.cc 
  * @brief Handler of the keyboard and mouse
- * @date 2007-01-18
+ * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.3 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.4 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -111,7 +111,10 @@ handler_keyboard::destroy_instance ()
 void
 handler_keyboard::set_grab_input (bool mode)
 {
+  
+#ifdef TU_TRICHES
   return;
+#else
   if (mode)
     {
       is_grab_input = true;
@@ -123,6 +126,7 @@ handler_keyboard::set_grab_input (bool mode)
       is_grab_input = false;
       SDL_WM_GrabInput (SDL_GRAB_OFF);
     }
+#endif
 }
 
 /**

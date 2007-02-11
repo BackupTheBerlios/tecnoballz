@@ -4,11 +4,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.17 2007/02/11 17:43:34 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.18 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
 
   popup_menu = new handler_popup_menu ();
 
-  sprite_projectile::start_list (bricks, ships, panel_score);
+  sprite_projectile::start_list (bricks, ships);
   level_number = 1;
   area_number = 1;
   next_level = 0;
@@ -219,7 +219,7 @@ supervisor_bricks_level::first_init ()
   //##############################################################
   //Initialize the object which handles gadgets (bonus and malus)
   //##############################################################
-  Sint32 *cours = current_player->get_course ();
+  Sint32 *cours = current_player->get_shopping_cart ();
   Sint32 counb = current_player->get_cou_nb ();
   Sint32 brCnt = bricks->get_num_of_bricks ();
   power_up_capsules->initialise (

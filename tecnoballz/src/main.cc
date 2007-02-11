@@ -5,11 +5,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.40 $
+ * @version $Revision: 1.41 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.40 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: main.cc,v 1.41 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,6 +86,7 @@ main (Sint32 nbArg, char **ptArg)
  
  a faire
  ** bug tir raquette, un tir de la raquette du bas n'est pas anime comme les autres
+ ** desactiver le tilt pour les balles controles
  - utiliser les tilemaps de 16x16 originales dans le definlement menu/gardiens pour eviter
    d'utiliser les tilemaps 32x32 (qui ont ete doubles avec GIMP) refaire donc un mapeditor
    special pour le 640x480

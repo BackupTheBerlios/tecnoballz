@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-02-10
+ * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.18 2007/02/11 17:43:34 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.19 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -257,7 +257,6 @@ controller_balls::vitus_sort ()
                   balle->reStarting (balle->raket_ball);
                   // start parasite animation head
                   head_anim->start_interference ();
-                  //ptBarreScr->remove_life (1);
                   current_player->remove_life (1);
                   // force the explosion of all the "atoms"
                   ptBouiBoui->atomexplos ();
@@ -890,7 +889,7 @@ controller_balls::vitusEject ()
                   balle->aspire_BOB (coin1, 10 * resolution, 10 * resolution);
                   balle->eject_ball[0] = 1;
                   balle->directBall = 64;
-                  ptBarreScr->scoreAjout (10);
+                  current_player->add_score (10);
 #ifndef SOUNDISOFF
                   audio->play_sound (S_COINASPI);
 #endif
@@ -903,7 +902,7 @@ controller_balls::vitusEject ()
                                          10 * resolution);
                       balle->eject_ball[3] = 1;
                       balle->directBall = 64;
-                      ptBarreScr->scoreAjout (10);
+                      current_player->add_score (10);
 #ifndef SOUNDISOFF
                       audio->play_sound (S_COINASPI);
 #endif
@@ -916,7 +915,7 @@ controller_balls::vitusEject ()
                                              5 * resolution);
                           balle->eject_ball[2] = 1;
                           balle->directBall = 64;
-                          ptBarreScr->scoreAjout (10);
+                          current_player->add_score (10);
 #ifndef SOUNDISOFF
                           audio->play_sound (S_COINASPI);
 #endif
@@ -929,7 +928,7 @@ controller_balls::vitusEject ()
                                                  5 * resolution);
                               balle->eject_ball[1] = 1;
                               balle->directBall = 64;
-                              ptBarreScr->scoreAjout (10);
+                              current_player->add_score (10);
 #ifndef SOUNDISOFF
                               audio->play_sound (S_COINASPI);
 #endif
@@ -1369,7 +1368,7 @@ controller_balls::vitusAtoms ()
                       k = atome->x_coord;
                       if (k < x2 && k > x1)
                         {
-                          ptBarreScr->scoreAjout (100);
+                          current_player->add_score (100);
 #ifndef SOUNDISOFF
                           audio->play_sound (S_TO_ATOMS);
 #endif

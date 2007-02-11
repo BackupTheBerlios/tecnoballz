@@ -5,11 +5,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_indicators.cc,v 1.1 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: controller_indicators.cc,v 1.2 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,9 @@ controller_indicators::controller_indicators ()
   y_position = YINVERSEUR * resolution;
   sprite_type_id = BOB_MONEY0;
   money_posy = y_position;
+  life_sprite = NULL;
+  reverse_sprite = NULL;
+  money_sprite = NULL;
 }
 
 /**

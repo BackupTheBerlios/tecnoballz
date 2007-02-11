@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.h,v 1.7 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: handler_players.h,v 1.8 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,13 +69,16 @@ private:
   Uint32 level_number;            // Niveau dans l'Area
   /** Number of lifes remaining */
   Sint32 number_of_lifes;
-  Sint32 courseList[NB_OPTIONS + 1];    // Options achetes au magasin
-  Sint32 courseNmbr;            // Nombre d'options achetee(s)
-  Sint32 amount_of_money;            // Credit argent
+  /** List ot the items bought in the shop */
+  Sint32 shopping_cart[NB_OPTIONS + 1];
+  /** The number of items in the shopping cart */
+  Uint32 shopping_cart_items;
+  /** Amount of money available to be spend in the shop */
+  Uint32 amount_of_money;
   char bricotLeft[12];          // Etat du mur de gauche
   char bricotRigh[12];          // Etat du mur de droite
   char bricot_top[12];          // Etat du mur dy haut
-  /** alive counter of the right paddle, 0 = paddle disabled */ 
+  /** Alive counter of the right paddle, 0 = paddle disabled */ 
   Uint32 right_paddle_alive_counter;
   /** Alive counter of the top paddle, 0 = paddle disabled */ 
   Uint32 top_paddle_alive_counter;
@@ -88,7 +91,7 @@ private:
    * and height of the vertical paddles */
   Uint32 paddle_length;
   Sint32 bonusPrice;            // Bonus prix du magasin a 1
-  char gemmeActif[6];           // Etat des 6 gemmes
+  bool gemmeActif[6];           // Etat des 6 gemmes
   Sint32 gemmeNombr;            // Nombre de gemme(s) ramassee(s)
   Sint32 guardianPt;            //pt / level_list of the guards
 
@@ -99,20 +102,20 @@ public:
   void initialize (Uint32 lifes, Uint32 areaN,
                    Uint32 level, Uint32 monay, Uint32 grdPt);
   void set_name (char *playername);
-  char *returnName ();
+  char *get_name ();
   Uint32 get_area_number ();
   Uint32 get_level_number ();
   Sint32 get_num_of_lifes ();
-  Uint32 get_paddle_width ();
-  void setLargeur (Sint32 largeur);
-  Sint32 get_credit ();
-  Sint32 sub_credit (Sint32 value);
-  void add_credit (Sint32 value);
+  Uint32 get_paddle_length ();
+  void set_paddle_length (Uint32 length);
+  Uint32 get_money_amount ();
+  bool decrease_money_amount (Uint32 value);
+  void increase_money_amount (Uint32 value);
 
-  void add_scores (Sint32 value);
+  void add_score (Uint32 value);
   void clear_shopping_cart ();
-  Sint32 *get_course ();
-  Sint32 get_cou_nb ();
+  Sint32 *get_shopping_cart ();
+  Uint32 get_cou_nb ();
   void set_cou_nb (Sint32 nombr);
 
   void RAZgemlist ();

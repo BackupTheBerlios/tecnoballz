@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-01-31
+ * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.8 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.9 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -580,14 +580,14 @@ controller_bricks::brickRemap ()
         // destroyed indestructible brick
         if (briPT->balle_posX < 0)
           {
-            barreObjet->scoreAjout (100);
+            current_player->add_score (100);
 #ifndef SOUNDISOFF
             audio->play_sound (S_CASSEIND);
 #endif
           }
         else
           {
-            barreObjet->scoreAjout (20);
+            current_player->add_score (20);
             barreObjet->brickMoins (1);
 #ifndef SOUNDISOFF
             audio->play_sound (S_TOUBRIK1);
@@ -609,7 +609,7 @@ controller_bricks::brickRemap ()
         char *gfxad = bitmap_bricks->get_pixel_data ();
         brickInfos *megaT = briPT->adresseTab;
         draw_brick (gfxad + briPT->brique_num, adres, megaT->brickcolor);
-        barreObjet->scoreAjout (10);
+        current_player->add_score (10);
 #ifndef SOUNDISOFF
         audio->play_sound (S_TOUBRIK1);
 #endif

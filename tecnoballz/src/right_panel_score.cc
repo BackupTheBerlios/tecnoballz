@@ -4,11 +4,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.2 2007/02/11 17:43:34 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.3 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -113,14 +113,13 @@ right_panel_score::scoreEcran ()
   affNombre1 (brickAdres, current_player->number_of_lifes, 10);
 }
 
-//-------------------------------------------------------------------------------
-// increase the score
-//-------------------------------------------------------------------------------
+/*
 void
 right_panel_score::scoreAjout (Sint32 ajout)
 {
   current_player->add_scores (ajout);
 }
+*/
 
 /*
 //-------------------------------------------------------------------------------

@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.10 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.11 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -227,7 +227,7 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   gigablitz = blitz;
   balls = ball;
 
-  paddle_length = current_player->get_paddle_width ();
+  paddle_length = current_player->get_paddle_length ();
   Sint32 centre = (bumperMaxi - bumperMini) / 2 - (paddle_length / 2);
 
   /* initialize bottom paddle */ 
@@ -668,7 +668,7 @@ controller_paddles::maxi_bumps ()
   paddle_right->set_height (paddle_length);
   paddle_top->set_width (paddle_length);
   paddle_left->set_height (paddle_length);
-  current_player->setLargeur (paddle_length);
+  current_player->set_paddle_length (paddle_length);
 
 }
 
@@ -697,7 +697,7 @@ controller_paddles::expand_paddles ()
   paddle_right->set_height (paddle_length);
   paddle_top->set_width (paddle_length);
   paddle_left->set_height (paddle_length);
-  current_player->setLargeur (paddle_length);
+  current_player->set_paddle_length (paddle_length);
 }
 
 /**
@@ -715,7 +715,7 @@ controller_paddles::shrink_paddles ()
   paddle_right->set_height (paddle_length);
   paddle_top->set_width (paddle_length);
   paddle_left->set_height (paddle_length);
-  current_player->setLargeur (paddle_length);
+  current_player->set_paddle_length (paddle_length);
 }
 
 /** 

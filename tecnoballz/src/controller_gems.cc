@@ -5,11 +5,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gems.cc,v 1.5 2007/02/11 17:43:34 gurumeditation Exp $
+ * $Id: controller_gems.cc,v 1.6 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -125,8 +125,7 @@ controller_gems::move ()
           /* this gem was already collected */
           continue;
         }
-      //ptBarScore->scoreAjout (500);
-      current_player->add_scores (500);
+      current_player->add_score (500);
       gem->gemcollect (ztype);
       if (!current_player->gem_enable (ztype))
         {
@@ -141,10 +140,8 @@ controller_gems::move ()
           sprite_gem *zegem = sprites_list[k];
           zegem->activBlink ();
         }
-      //ptBarScore->scoreAjout (2500);
-      current_player->add_scores (2500);
+      current_player->add_score (2500);
       ptPrintmon->increase_money_amount (500);
-      //ptBarScore->add_life (3);
       current_player->add_life (3);
       /* jump to the next level */
       ptBarScore->scoreBrick (0);

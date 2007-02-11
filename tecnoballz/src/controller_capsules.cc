@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.6 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.7 2007/02/11 21:03:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -300,12 +300,13 @@ controller_capsules::gadgetShop (Sint32 nuGad)
 //-------------------------------------------------------------------------------
 // shop : initialize the list of bonus 
 //-------------------------------------------------------------------------------
+/*
 void
 controller_capsules::gadgetShop (handler_players * gamer)
 {
   Sint32 t = NB_OPTIONS;
   sprite_capsule **liste = sprites_list;
-  Sint32 *cours = gamer->get_course ();
+  Sint32 *cours = gamer->get_shopping_cart ();
   for (Sint32 i = 0; i < t; i++)
     {
       sprite_capsule *bonus = *(liste++);
@@ -313,6 +314,7 @@ controller_capsules::gadgetShop (handler_players * gamer)
       bonus->nouveauGad (n);
     }
 }
+*/
 
 //-------------------------------------------------------------------------------
 // bricks levels: move gadgets (bonus or malus) and collision with bumpers
