@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.cc 
  * @brief Capsules controller 
- * @date 2007-02-06
+ * @date 2007-02-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.7 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.8 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ controller_capsules::initialise (Sint32 mStep, Sint32 bKauf, Sint32 brCnt,
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       bonus = sprites_list[i];
-      bonus->littleInit ();
+      bonus->init_members ();
     }
   frame_period = bonus->frame_period;
 

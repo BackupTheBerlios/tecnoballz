@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.cc 
  * @brief Draw sprites on the screen 
- * @date 2007-01-28
+ * @date 2007-01-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.24 2007/02/06 09:46:13 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.25 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -172,105 +172,52 @@ sprite_object::clear_sprite_members ()
   is_release_pixel_data = false;
 }
 
-sprite_object & sprite_object::operator= (const sprite_object & sprite)
-{
-  if (this == &sprite)
-    {
-      return *this;
-    }
-
-  printf ("sprite_object: %i = %i \n", object_pos, sprite.object_pos);
-
-  pixel_data = sprite.pixel_data;
-  images_pixel_data = sprite.images_pixel_data;
-  screen_ptr = sprite.screen_ptr;
-  adresseEC2 = sprite.adresseEC2;
-  frame_delay = sprite.frame_delay;
-  max_of_images = sprite.max_of_images;
-  frame_index = sprite.frame_index;
-  is_enabled = sprite.is_enabled;
-  sprite_height = sprite.sprite_height;
-  sprite_width = sprite.sprite_width;
-  drawing_values = sprite.drawing_values;
-  drawing_data = sprite.drawing_data;
-  drawing_pixels = sprite.drawing_pixels;
-  collision_height = sprite.collision_height;
-  collision_width = sprite.collision_width;
-  screen_height = sprite.screen_height;
-  screen_width = sprite.screen_width;
-  frame_period = sprite.frame_period;
-  x_coord = sprite.x_coord;
-  y_coord = sprite.y_coord;
-  display_pos = sprite.display_pos;
-  x_maximum = sprite.x_maximum;
-  y_maximum = sprite.y_maximum;
-  frame_index_max = sprite.frame_index_max;
-  x_minimum = sprite.x_minimum;
-  y_minimum = sprite.y_minimum;
-  frame_index_min = sprite.frame_index_min;
-  offsetSrce = sprite.offsetSrce;
-  offsetDest = sprite.offsetDest;
-  current_drawing_values = sprite.current_drawing_values;
-  current_drawing_data = sprite.current_drawing_data;
-  current_drawing_pixels = sprite.current_drawing_pixels;
-  sprite_has_shadow = sprite.sprite_has_shadow;
-  sprite_type_id = sprite.sprite_type_id;
-  srceNextLn = sprite.srceNextLn;
-  destNextLn = sprite.destNextLn;
-  draw_method = sprite.draw_method;
-  is_draw_pixel_by_pixel = sprite.is_draw_pixel_by_pixel;
-  has_allocated_memory = false;
-  return *this;
-}
-
-
-
-
-//-----------------------------------------------------------------------------
-// copy sprite in another 
-//-----------------------------------------------------------------------------
+/**
+ * Copy sprite members to anotger sprite
+ * @param bobPt destination sprite object
+ */
 void
-sprite_object::duplicaBOB (sprite_object * bobPT)
+sprite_object::duplicate_to (sprite_object * sprite_dest)
 {
-  bobPT->pixel_data = pixel_data;
-  bobPT->images_pixel_data = images_pixel_data;
-  bobPT->screen_ptr = screen_ptr;
-  bobPT->adresseEC2 = adresseEC2;
-  bobPT->frame_delay = frame_delay;
-  bobPT->max_of_images = max_of_images;
-  bobPT->frame_index = frame_index;
-  bobPT->is_enabled = is_enabled;
-  bobPT->sprite_height = sprite_height;
-  bobPT->sprite_width = sprite_width;
-  bobPT->drawing_values = drawing_values;
-  bobPT->drawing_data = drawing_data;
-  bobPT->drawing_pixels = drawing_pixels;
-  bobPT->collision_height = collision_height;
-  bobPT->collision_width = collision_width;
-  bobPT->screen_height = screen_height;
-  bobPT->screen_width = screen_width;
-  bobPT->frame_period = frame_period;
-  bobPT->x_coord = x_coord;
-  bobPT->y_coord = y_coord;
-  bobPT->display_pos = display_pos;
-  bobPT->x_maximum = x_maximum;
-  bobPT->y_maximum = y_maximum;
-  bobPT->frame_index_max = frame_index_max;
-  bobPT->x_minimum = x_minimum;
-  bobPT->y_minimum = y_minimum;
-  bobPT->frame_index_min = frame_index_min;
-  bobPT->offsetSrce = offsetSrce;
-  bobPT->offsetDest = offsetDest;
-  bobPT->current_drawing_values = current_drawing_values;
-  bobPT->current_drawing_data = current_drawing_data;
-  bobPT->current_drawing_pixels = current_drawing_pixels;
-  bobPT->sprite_has_shadow = sprite_has_shadow;
-  bobPT->sprite_type_id = sprite_type_id;
-  bobPT->srceNextLn = srceNextLn;
-  bobPT->destNextLn = destNextLn;
-  bobPT->draw_method = draw_method;
-  bobPT->is_draw_pixel_by_pixel = is_draw_pixel_by_pixel;
-  bobPT->has_allocated_memory = false;
+  sprite_dest->pixel_data = pixel_data;
+  sprite_dest->images_pixel_data = images_pixel_data;
+  sprite_dest->screen_ptr = screen_ptr;
+  sprite_dest->adresseEC2 = adresseEC2;
+  sprite_dest->frame_delay = frame_delay;
+  sprite_dest->max_of_images = max_of_images;
+  sprite_dest->frame_index = frame_index;
+  sprite_dest->is_enabled = is_enabled;
+  sprite_dest->sprite_height = sprite_height;
+  sprite_dest->sprite_width = sprite_width;
+  sprite_dest->drawing_values = drawing_values;
+  sprite_dest->drawing_data = drawing_data;
+  sprite_dest->drawing_pixels = drawing_pixels;
+  sprite_dest->collision_height = collision_height;
+  sprite_dest->collision_width = collision_width;
+  sprite_dest->screen_height = screen_height;
+  sprite_dest->screen_width = screen_width;
+  sprite_dest->frame_period = frame_period;
+  sprite_dest->x_coord = x_coord;
+  sprite_dest->y_coord = y_coord;
+  sprite_dest->display_pos = display_pos;
+  sprite_dest->x_maximum = x_maximum;
+  sprite_dest->y_maximum = y_maximum;
+  sprite_dest->frame_index_max = frame_index_max;
+  sprite_dest->x_minimum = x_minimum;
+  sprite_dest->y_minimum = y_minimum;
+  sprite_dest->frame_index_min = frame_index_min;
+  sprite_dest->offsetSrce = offsetSrce;
+  sprite_dest->offsetDest = offsetDest;
+  sprite_dest->current_drawing_values = current_drawing_values;
+  sprite_dest->current_drawing_data = current_drawing_data;
+  sprite_dest->current_drawing_pixels = current_drawing_pixels;
+  sprite_dest->sprite_has_shadow = sprite_has_shadow;
+  sprite_dest->sprite_type_id = sprite_type_id;
+  sprite_dest->srceNextLn = srceNextLn;
+  sprite_dest->destNextLn = destNextLn;
+  sprite_dest->draw_method = draw_method;
+  sprite_dest->is_draw_pixel_by_pixel = is_draw_pixel_by_pixel;
+  sprite_dest->has_allocated_memory = false;
 }
 
 

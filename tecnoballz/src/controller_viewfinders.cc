@@ -1,14 +1,14 @@
 /** 
  * @file controller_viewfinders.cc 
  * @brief Paddles viewfinders controller 
- * @date 2007-02-08
+ * @date 2007-02-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_viewfinders.cc,v 1.1 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: controller_viewfinders.cc,v 1.2 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ controller_viewfinders::~controller_viewfinders ()
 {
   if (NULL != paddles_list)
     {
-      memory->release ((char *) paddles_list);
+      delete[]paddles_list;
       paddles_list = (sprite_paddle **) NULL;
     }
   release_sprites_list ();

@@ -1,10 +1,10 @@
 //******************************************************************************
 // copyright (c) 1991-2002 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file		: "ejectBalls.h"
-// created		: ?
-// updates		: 2004-05-21
-// fonction	: manage ejectors objects 
+// file         : "controller_ejectors.h"
+// created              : ?
+// updates              : 2004-05-21
+// fonction     : manage ejectors objects 
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -23,42 +23,42 @@
 #ifndef __EJECTBALLS__
 #define __EJECTBALLS__
 //...............................................................................
-class ejectBalls;
+class controller_ejectors;
 //...............................................................................
 #include "../include/sprite_object.h"
 #include "../include/tecnoballz.h"
 #include "../include/sprite_ball.h"
 //...............................................................................
-class ejectBalls:public virtual tecnoballz
+class controller_ejectors:public virtual tecnoballz
 {
-	private:
-		static const Sint32	EJECT_POS1 = 16;
-		static const Sint32	EJECT_POS2 = 224;
+private:
+  static const Sint32 EJECT_POS1 = 16;
+  static const Sint32 EJECT_POS2 = 224;
 
-	private:
-		static Uint32		balPosFlag;	
-	
-		sprite_object*			ejector_01;
-		sprite_object*			ejector_02;
-		sprite_object*			ejector_03;
-		sprite_object*			ejector_04;
-	
-		Sint32				eject1PosX;
-		Sint32				eject1PosY;
-		Sint32				eject2PosX;
-		Sint32				eject2PosY;
-		Sint32				eject3PosX;
-		Sint32				eject3PosY;
-		Sint32				eject4PosX;
-		Sint32				eject4PosY;
+private:
+  static Uint32 balPosFlag;
 
-	public:
-							ejectBalls();
-							~ejectBalls();
-		void				initialise();
-		void				afficheSha();
-		void				afficheGfx();
-		sprite_object*			demandeBOB(Sint32 eject);
-		void				ballPosIni(furaxEject *table);
+  sprite_object *ejector_01;
+  sprite_object *ejector_02;
+  sprite_object *ejector_03;
+  sprite_object *ejector_04;
+
+  Sint32 eject1PosX;
+  Sint32 eject1PosY;
+  Sint32 eject2PosX;
+  Sint32 eject2PosY;
+  Sint32 eject3PosX;
+  Sint32 eject3PosY;
+  Sint32 eject4PosX;
+  Sint32 eject4PosY;
+
+public:
+    controller_ejectors ();
+   ~controller_ejectors ();
+  void initialise ();
+  void afficheSha ();
+  void afficheGfx ();
+  sprite_object *demandeBOB (Sint32 eject);
+  void ballPosIni (furaxEject * table);
 };
 #endif

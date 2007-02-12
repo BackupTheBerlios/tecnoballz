@@ -5,11 +5,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_indicators.cc,v 1.2 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: controller_indicators.cc,v 1.3 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,17 +74,17 @@ controller_indicators::create_indicators_sprites (controller_paddles * pads, spr
   create_sprites_list ();
 
   money_sprite = new sprite_money ();
-  money->duplicaBOB (money_sprite);
+  money->duplicate_to (money_sprite);
   sprites->add (money_sprite);
   init_money ();
-
+  
   /*
    * reverse sprite is only enable in the bricks levels
    */
   if (NULL != reverse)
     {
       reverse_sprite = new sprite_capsule ();
-      reverse->duplicaBOB (reverse_sprite);
+      reverse->duplicate_to (reverse_sprite);
       sprites->add (reverse_sprite);
 
       Sint32 x = 215 * resolution;
@@ -106,7 +106,7 @@ controller_indicators::create_indicators_sprites (controller_paddles * pads, spr
   if (NULL != life)
     {
       life_sprite = new sprite_capsule ();
-      life->duplicaBOB (life_sprite);
+      life->duplicate_to (life_sprite);
       sprites->add (life_sprite);
       Sint32 x = 264 * resolution;
       life_sprite->new_gadget (GAD_LIFE_P);

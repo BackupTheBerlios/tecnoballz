@@ -5,11 +5,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.8 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.9 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -147,7 +147,9 @@ tecnoballz::first_init (configfile * pConf)
   resources = new handler_resources ();
 
   ptScoreTab = new scoretable ();
+  printf("B =====\n");
   num_erreur = ptScoreTab->first_init ();
+  printf("C =====\n");
   if (num_erreur)
     return num_erreur;
 

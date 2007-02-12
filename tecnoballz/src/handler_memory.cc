@@ -5,11 +5,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_memory.cc,v 1.3 2007/02/06 09:46:13 gurumeditation Exp $
+ * $Id: handler_memory.cc,v 1.4 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -160,11 +160,11 @@ handler_memory::release (char *addr)
     {
       free_fail_count++;
 #if __WORDSIZE == 64
-      fprintf (stderr, "(!)handler_memory::free() "
+      fprintf (stderr, "(!!!!!!!!!!!!!!!!!!)handler_memory::free() "
                "%i) address %x not found!\n",
                free_fail_count, (long) addr);
 #else
-      fprintf (stderr, "(!)handler_memory::free() "
+      fprintf (stderr, "(!!!!!!!!!!!!!!!!!!!!!!)handler_memory::free() "
                "%i) address %x not found!\n",
                free_fail_count, (Sint32) addr);
 #endif

@@ -5,11 +5,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_gem.h,v 1.3 2007/02/10 09:57:16 gurumeditation Exp $
+ * $Id: sprite_gem.h,v 1.4 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ private:
 public:
     sprite_gem ();
    ~sprite_gem ();
-  void littleInit ();
+  void init_members ();
   Sint32 disponible (sprite_ball * pball);
   Sint32 disponible (sprite_projectile * pfire);
   void initialGem (Sint32 pos_x, Sint32 pos_y, sprite_paddle * raket);

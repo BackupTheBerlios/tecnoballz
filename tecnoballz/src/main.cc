@@ -2,14 +2,14 @@
  * @file main.cc 
  * @brief The main function is where the program starts execution 
  * @created 2002-08-21 
- * @date 2007-02-11
+ * @date 2007-02-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.41 $
+ * @version $Revision: 1.42 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.41 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: main.cc,v 1.42 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -131,20 +131,20 @@ lispreader  =>
  
 *ballDirect  => controller_viewfinders
 *lesBriques  => controller_bricks
- *printmoney   => controller_indicators
+*printmoney  => controller_indicators
 *zeBouiBoui  => controller_ships
 *zeCapsules  => controller_moneys
 *zeCongBall  => controller_spheres
- *zeDefilTxt  => controller_fontes_menu
+*zeDefilTxt  => controller_fontes_menu
 *zeFireBump  => controller_fires
 *ze_gadgets  => controller_capsules
 *zeGameOver  => controller_game_over
 *zeGemstone  => controller_gems
 *zeGigaBlit  => controller_gigablitz
 *zeguardian  => controller_guardians
- *ze_magneye  => controller_magnetic_eyes
+*ze_magneye  => controller_magnetic_eyes
 *zeMissiles  => controller_bullets
- *zeMoveText  => controller_fontes_game
+*zeMoveText  => controller_fontes_game
 *zeNewBalls  => controller_balls
 *zeRaquette  => controller_paddles
 *zexplosion  => controller_explosions
@@ -169,8 +169,8 @@ print_text   => handler_print_text
 
 zeMiniMess   => item_small_messages 
 *barreScore  => right_panel_score 
-briqueCote   => items_sides_bricks
-ejectBalls   => items_balls_ejectors
+ * briqueCote  => controller_sides_bricks
+ * ejectBalls  => controller_ejectors
 *fond_ecran  => tiles_background
 *head_anima  => head_animation 
 *lastScroll  => tilesmap_scrolling 

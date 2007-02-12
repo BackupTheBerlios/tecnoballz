@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.h
  * @brief Control the balls. Move and collisions 
- * @date 2007-02-10
+ * @date 2007-02-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.12 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.13 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,9 +33,9 @@ class controller_balls;
 #include "../include/sprite_ball.h"
 #include "../include/objects_list.h"
 #include "../include/sprite_paddle.h"
-#include "../include/ejectBalls.h"
+#include "../include/controller_ejectors.h"
 #include "../include/controller_bricks.h"
-#include "../include/briqueCote.h"
+#include "../include/controller_sides_bricks.h"
 #include "../include/head_animation.h"
 #include "../include/controller_ships.h"
 #include "../include/right_panel_score.h"
@@ -49,7 +49,7 @@ class controller_balls;
 
 class controller_balls:public objects_list < sprite_ball >
 {
-  friend class ejectBalls;
+  friend class controller_ejectors;
   friend class sprite_ball;
 
 private:
@@ -66,9 +66,9 @@ private:
   sprite_paddle *paddle_top;
   sprite_paddle *paddle_left;
   sprite_paddle *tec_robot0;
-  ejectBalls *ejectObjet;
+  controller_ejectors *ejectObjet;
   controller_bricks *bricks;
-  briqueCote *bricoObjet;
+  controller_sides_bricks *sides_bricks;
   head_animation *head_anim;
   controller_ships *ptBouiBoui;
   right_panel_score *ptBarreScr;
@@ -96,8 +96,8 @@ private:
   static Sint32 *brick_jump[15];
 
 public:
-    controller_balls (ejectBalls * eject, controller_bricks * brick,
-                      briqueCote * brico, head_animation * gugus,
+    controller_balls (controller_ejectors * eject, controller_bricks * brick,
+                      controller_sides_bricks * brico, head_animation * gugus,
                       controller_ships * atoms, right_panel_score * score,
                       sprite_object * pwall, zeMiniMess *,
                       controller_magnetic_eyes * pEyes);
@@ -121,7 +121,7 @@ private:
   void vitusbump2 ();
   void vitusrobot ();
   void vitusEject ();
-  void vitus_cote ();
+  void collision_with_walls ();
   void vituscote2 ();
   void vitusbound ();
   void check_bricks_collision ();

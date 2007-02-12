@@ -4,11 +4,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.cc,v 1.3 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: sprite_capsule.cc,v 1.4 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,11 +47,11 @@ sprite_capsule::~sprite_capsule ()
 {
 }
 
-//-----------------------------------------------------------------------------
-// perform some initializations
-//-----------------------------------------------------------------------------
+/**
+ * Perform some initializations
+ */
 void
-sprite_capsule::littleInit ()
+sprite_capsule::init_members ()
 {
   x_maximum = screen_width - ((64 + 16) * resolution);
   x_minimum = 3 * resolution;

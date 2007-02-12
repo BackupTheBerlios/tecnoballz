@@ -1,14 +1,14 @@
 /** 
  * @file sprite_capsule.h
  * @brief The capsule sprite which contains a bonus or a penalty 
- * @date 2007-02-11
+ * @date 2007-02-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.h,v 1.4 2007/02/11 12:35:11 gurumeditation Exp $
+ * $Id: sprite_capsule.h,v 1.5 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -107,7 +107,7 @@ private:
 public:
     sprite_capsule ();
    ~sprite_capsule ();
-  void littleInit ();
+  void init_members ();
   void new_gadget (Sint32 nuGad);
   void nouveauGad (brickClear * briPT, Sint32 nuGad);
   void nouveauGad (sprite_ball * balle, Sint32 nuGad);

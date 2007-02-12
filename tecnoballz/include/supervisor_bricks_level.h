@@ -4,11 +4,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.14 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.15 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,10 +43,10 @@ class supervisor_bricks_level;
 #include "../include/handler_keyboard.h"
 #include "../include/tiles_background.h"
 #include "../include/controller_paddles.h"
-#include "../include/briqueCote.h"
+#include "../include/controller_sides_bricks.h"
 #include "../include/right_panel_score.h"
 #include "../include/handler_display.h"
-#include "../include/ejectBalls.h"
+#include "../include/controller_ejectors.h"
 #include "../include/controller_bricks.h"
 #include "../include/controller_balls.h"
 #include "../include/controller_moneys.h"
@@ -78,12 +78,12 @@ class supervisor_bricks_level:public virtual supervisor
 private:
   zeMiniMess * ptMiniMess;
   controller_indicators *player_indicators;
-  briqueCote *gereBricot;
+  controller_sides_bricks *sides_bricks;
   /** Head animation in the right score panel */
   head_animation *head_anim;
   controller_bricks *bricks;
   tiles_background *tiles_ground;
-  ejectBalls *gereEjects;
+  controller_ejectors *gereEjects;
   controller_balls *balls;
   controller_viewfinders *viewfinders_paddles;
   controller_paddles *paddles;

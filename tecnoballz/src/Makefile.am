@@ -13,12 +13,12 @@ tecnoballz_LDADD = @XLIB_LIBS@ @SDL_LIBS@ @MM_LIBS@ @MIKMOD_LIBS@ -L.
 
 SOURCES_MAIN = \
   bitmap_data.cc \
-  briqueCote.cc \
   configfile.cc \
   controller_balls.cc \
   controller_bricks.cc \
   controller_bullets.cc \
   controller_capsules.cc \
+	controller_ejectors.cc \
   controller_explosions.cc \
   controller_fontes_game.cc \
   controller_fontes_menu.cc \
@@ -32,9 +32,9 @@ SOURCES_MAIN = \
   controller_paddles.cc \
   controller_projectiles.cc \
   controller_ships.cc \
+	controller_sides_bricks.cc \
   controller_spheres.cc \
   controller_viewfinders.cc \
-  ejectBalls.cc \
   handler_audio.cc \
   handler_display.cc \
   handler_keyboard.cc \

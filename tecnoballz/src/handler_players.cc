@@ -4,11 +4,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.7 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.8 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
  */
 #include "../include/handler_players.h"
 #include "../include/controller_gems.h"
-#include "../include/briqueCote.h"
+#include "../include/controller_sides_bricks.h"
 #include "../include/controller_gems.h"
 
 Uint32 handler_players::max_of_players = 0;
@@ -136,7 +136,7 @@ handler_players::reset_members ()
   number_of_lifes = initial_num_of_lifes;
   clear_shopping_cart ();
   amount_of_money = 500;
-  for (Uint32 i = 0; i < briqueCote::BRICOTENUM; i++)
+  for (Uint32 i = 0; i < controller_sides_bricks::MAX_OF_SIDES_BRICKS; i++)
     {
       bricotLeft[i] = 1;        //state of the left wall
       bricotRigh[i] = 1;        //state of the right wall

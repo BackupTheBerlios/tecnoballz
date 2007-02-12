@@ -4,11 +4,11 @@
  * @date 2007-02-11
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.13 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.14 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -199,7 +199,7 @@ template < class X > void objects_list < X >::create_sprites_list ()
     {
       X *sprite = new X ();
       sprite->set_object_pos (i);
-      sprite_template->duplicaBOB (sprite);
+      sprite_template->duplicate_to (sprite);
       //sprite = sprite_template;
 
       sprites_list[i] = sprite;

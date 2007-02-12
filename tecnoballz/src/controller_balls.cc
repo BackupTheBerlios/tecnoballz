@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-02-11
+ * @date 2007-02-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.19 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.20 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,9 +36,12 @@
 /** 
  * Create the balls controller into bricks levels
  */
-controller_balls::controller_balls (ejectBalls * eject, controller_bricks * brick,
-                                    briqueCote * brico, head_animation * gugus,
-                                    controller_ships * atoms, right_panel_score * score,
+controller_balls::controller_balls (controller_ejectors * eject,
+                                    controller_bricks * brick,
+                                    controller_sides_bricks * brico,
+                                    head_animation * gugus,
+                                    controller_ships * atoms,
+                                    right_panel_score * score,
                                     sprite_object * pwall, zeMiniMess * pMess,
                                     controller_magnetic_eyes * pEyes)
 {
@@ -47,7 +50,7 @@ controller_balls::controller_balls (ejectBalls * eject, controller_bricks * bric
 
   ejectObjet = eject;
   bricks = brick;
-  bricoObjet = brico;
+  sides_bricks = brico;
   head_anim = gugus;
   ptBouiBoui = atoms;
   ptBarreScr = score;
@@ -73,7 +76,8 @@ controller_balls::controller_balls (ejectBalls * eject, controller_bricks * bric
 /** 
  * Create the balls controller into guards levels
  */
-controller_balls::controller_balls (controller_guardians * pGard, controller_moneys * pCaps,
+controller_balls::controller_balls (controller_guardians * pGard,
+                                    controller_moneys * pCaps,
                                     controller_capsules * pGads)
 {
   littleInit ();
@@ -81,7 +85,7 @@ controller_balls::controller_balls (controller_guardians * pGard, controller_mon
 
   ejectObjet = NULL;
   bricks = NULL;
-  bricoObjet = NULL;
+  sides_bricks = NULL;
   head_anim = NULL;
   ptBouiBoui = NULL;
   ptBarreScr = NULL;
@@ -121,8 +125,9 @@ controller_balls::~controller_balls ()
  * @param table speed ball (1 to 4)
  */
 void
-controller_balls::init_balle (controller_paddles * raket, Sint32 start, Sint32 glueC,
-                              Sint32 speed, Sint32 tiltC, Sint32 table)
+controller_balls::init_balle (controller_paddles * raket, Sint32 start,
+                              Sint32 glueC, Sint32 speed, Sint32 tiltC,
+                              Sint32 table)
 {
   startCount = start;
   balle_glue = glueC;
@@ -173,7 +178,7 @@ controller_balls::vitusBalle ()
   vitus_move ();                //move the balls
   vitus_bump ();                //collisions balls and bumpers
   vitusrobot ();
-  vitus_cote ();                //collisions balls and walls
+  collision_with_walls ();                //collisions balls and walls
   vitusEject ();                //collisions balls and ejectors
   vitusAtoms ();
   vitus_eyes ();
@@ -280,7 +285,7 @@ void
 controller_balls::vitussort2 ()
 {
   Sint32 max_y = sprite_ball::MAXIMUM_PY * resolution;
-  sprite_paddle *raket = paddle_bottom;    //pointer to the object "bumper of bottom"
+  sprite_paddle *raket = paddle_bottom; //pointer to the object "bumper of bottom"
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
@@ -941,76 +946,72 @@ controller_balls::vitusEject ()
     }
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: handle the collision with the 3 walls
-//------------------------------------------------------------------------------
+/**
+ * Collisions of the balls with the 4 walls in the bricks levels
+ */
 void
-controller_balls::vitus_cote ()
+controller_balls::collision_with_walls ()
 {
-  Sint32 murGa = bricoObjet->getCollisG ();
-  Sint32 murDr = bricoObjet->getCollisD ();
-  Sint32 murHt = bricoObjet->getCollisH ();
+  Sint32 murGa = sides_bricks->getCollisG ();
+  Sint32 murDr = sides_bricks->getCollisD ();
+  Sint32 murHt = sides_bricks->getCollisH ();
   Sint32 murBa = ptBob_wall->get_y_coord ();
   Sint32 fwall = ptBob_wall->is_enable ();
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball *balle = sprites_list[i];
-      if (balle->is_enabled)
+      sprite_ball *ball = sprites_list[i];
+      if (!ball->is_enabled)
         {
-          Sint32 x = balle->x_coord;
-          Sint32 y = balle->y_coord;
-          Sint32 *monPT = NULL;
+          continue;
+        }
+      Sint32 x = ball->x_coord;
+      Sint32 y = ball->y_coord;
+      Sint32 *monPT = NULL;
 
-          //###########################################################
-          // collision with the bottom wall (if it's enable)
-          //###########################################################
-          if (fwall && y > (murBa - balle->collision_height))
+      /* collision with the bottom wall, if it's enable */
+      if (fwall && y > (murBa - ball->collision_height))
+        {
+          monPT = rb7;
+        }
+      else
+        {
+          /* collision with the left wall */
+          if (x < murGa)
             {
-              monPT = rb7;
+              if (sides_bricks->collision_with_left_wall (y))
+                {
+                  monPT = rb5;
+                }
             }
           else
-            {                   //########################################################
-              // collision with the left wall
-              //########################################################
-              if (x < murGa)
+            {
+              /* collision with the right wall */
+              x += ball->collision_width;
+              if (x > murDr)
                 {
-                  if (bricoObjet->collGauche (y) != 0)
-                    monPT = rb5;
+                  if (sides_bricks->collision_with_right_wall (y))
+                    monPT = rb1;
                 }
               else
-                {               //####################################################
-                  // collision with the right wall
-                  //####################################################
-                  x += balle->collision_width;
-                  if (x > murDr)
+                {
+                  /* collision with the up wall */
+                  if (y < murHt)
                     {
-                      if (bricoObjet->collDroite (y) != 0)
-                        monPT = rb1;
-                    }
-                  else
-                    {           //#################################################
-                      // collision with the up wall 
-                      //#################################################
-                      if (y < murHt)
-                        {
-                          if (bricoObjet->coll_haute (x) != 0)
-                            monPT = rb3;
-                        }
+                      if (sides_bricks->collision_with_top_wall (x))
+                        monPT = rb3;
                     }
                 }
             }
+        }
 
-          //###########################################################
-          // collision dectected
-          //###########################################################
-          if (monPT)
-            {                   //(char *)monPT += balle->directBall;
-              monPT = (Sint32 *) ((char *) monPT + balle->directBall);
-              balle->directBall = *monPT;
+      /* collision dectected */
+      if (NULL != monPT)
+        {
+          monPT = (Sint32 *) ((char *) monPT + ball->directBall);
+          ball->directBall = *monPT;
 #ifndef SOUNDISOFF
-              audio->play_sound (S_BRICOTES);
+          audio->play_sound (S_BRICOTES);
 #endif
-            }
         }
     }
 }
@@ -1112,7 +1113,7 @@ controller_balls::vitusbound ()
 void
 controller_balls::check_bricks_collision ()
 {
-  Sint32 bwght = bricks->get_brick_width (); //brick's width in pixels
+  Sint32 bwght = bricks->get_brick_width ();    //brick's width in pixels
   Sint32 byoff = bricks->getYOffset (); //y-offset between 2 bricks
   Sint32 indus = bricks->getBkIndus (); //first indestructible brick
 
@@ -1648,7 +1649,7 @@ controller_balls::time_2tilt ()
         {
           continue;
         }
-      if (ball->tilt_delay  == delay && !tilt)
+      if (ball->tilt_delay == delay && !tilt)
         {
           head_anim->start_yawn ();
 #ifndef SOUNDISOFF
@@ -1729,10 +1730,12 @@ controller_balls::controll_balls ()
 //------------------------------------------------------------------------------
 Sint32 controller_balls::least_glue ()
 {
-  sprite_ball ** balls = sprites_list;
+  sprite_ball **
+    balls = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball * ball = *(balls++);
+      sprite_ball *
+        ball = *(balls++);
       if (ball->colleBallF)
         {
           return 1;

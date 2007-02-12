@@ -2,14 +2,14 @@
  * @file handler_resources.cc 
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-01-30
+ * @date 2007-02-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.5 2007/01/30 16:37:21 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.6 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -144,7 +144,7 @@ handler_resources::~handler_resources ()
 {
   if (table_cosL != NULL)
     {
-      memory->release ((char *) table_cosL);
+      delete[](char *)table_cosL;
       table_cosL = (Sint16 *) NULL;
     }
   release_sprites_bitmap ();

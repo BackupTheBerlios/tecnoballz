@@ -4,11 +4,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.18 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.19 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,10 +34,10 @@
 supervisor_bricks_level::supervisor_bricks_level ()
 {
   initialise ();
-  gereBricot = new briqueCote ();
+  sides_bricks = new controller_sides_bricks ();
   tiles_ground = new tiles_background ();
   panel_score = new right_panel_score ();
-  gereEjects = new ejectBalls ();
+  gereEjects = new controller_ejectors ();
   money_capsules = new controller_moneys ();
   power_up_capsules = new controller_capsules (6);
   gem_stones = new controller_gems ();
@@ -49,7 +49,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
   BottomWall = new sprite_object ();
   ptMiniMess = new zeMiniMess ();
   balls =
-    new controller_balls (gereEjects, bricks, gereBricot, head_anim,
+    new controller_balls (gereEjects, bricks, sides_bricks, head_anim,
                           ships, panel_score, BottomWall, ptMiniMess,
                           pt_magneye);
   viewfinders_paddles = new controller_viewfinders ();
@@ -100,7 +100,7 @@ supervisor_bricks_level::~supervisor_bricks_level ()
   delete gereEjects;
   delete panel_score;
   delete tiles_ground;
-  delete gereBricot;
+  delete sides_bricks;
   liberation ();
 }
 
@@ -150,7 +150,7 @@ supervisor_bricks_level::first_init ()
   paddles->init_robot ();
   Sint32 build = current_player->getRebuild ();
   current_player->setRebuild (0);
-  error_init (gereBricot->initialise (build));
+  error_init (sides_bricks->initialise (build));
   if (erreur_num)
     return erreur_num;
   //ejectors 
@@ -318,7 +318,7 @@ supervisor_bricks_level::main_loop ()
         }
       if (!bricks->brickRemap () && isgameover < 2) //restore bricks
         isgameover = 2;
-      gereBricot->execution1 ();
+      sides_bricks->execution1 ();
       viewfinders_paddles->run ();
       ships->atom_depla ();
       sprites->draw ();
@@ -340,7 +340,7 @@ supervisor_bricks_level::main_loop ()
       display->lock_surfaces ();
       sprites->clear ();
       bricks->brickRemap ();        //restore bricks
-      gereBricot->execution1 ();        //restore bricks on side
+      sides_bricks->execution1 ();        //restore bricks on side
       changebkgd ();
 
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
@@ -404,7 +404,7 @@ supervisor_bricks_level::main_loop ()
               if (count_next > 20000000 ||
                   keyboard->key_is_pressed (SDLK_SPACE) || music_finished)
                 {
-                  gereBricot->sauve_etat ();
+                  sides_bricks->sauve_etat ();
                   current_player = handler_players::nextplayer (current_player,
                                                        &end_return, 1);
 #ifndef SOUNDISOFF
@@ -566,9 +566,9 @@ supervisor_bricks_level::background (Sint32 nbkdg)
   // display the ejectors and small bricks
   //###################################################################
   gereEjects->afficheSha ();    //display ejectors shadows
-  gereBricot->sauveFond ();     //save background under small bricks
-  gereBricot->afficheSha ();    //display small bricks shadows
-  gereBricot->afficheGfx ();    //display small bricks of the three walls
+  sides_bricks->sauveFond ();     //save background under small bricks
+  sides_bricks->afficheSha ();    //display small bricks shadows
+  sides_bricks->afficheGfx ();    //display small bricks of the three walls
   gereEjects->afficheGfx ();    //display ejectors
 
   //###################################################################

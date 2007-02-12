@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.11 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.12 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -142,36 +142,38 @@ controller_paddles::create_paddles_sprites ()
       /**
        * create 4 paddles sprites
        */
-      // load bumpers graphic page
-      Uint32 npage;
-      //if((hasard_val & 0x001))
+      Uint32 id;
       if (current_player->get_area_number () > 2)
-        npage = handler_resources::RESBUMPER1;
+        {
+          id = handler_resources::RESBUMPER1;
+        }
       else
-        npage = handler_resources::RESBUMPER2;
-      resources->load_sprites_bitmap (npage);
+        {
+          id = handler_resources::RESBUMPER2;
+        }
+      resources->load_sprites_bitmap (id);
 
       /* create bottom paddle sprite */
       paddle_bottom->set_object_pos (0);
-      paddle_bottom->create_sprite (BOB_BUMPHR, sprites_bitmap, 1, 0);
+      paddle_bottom->create_sprite (BOB_BUMPHR, sprites_bitmap, true, 0);
       sprites->add (paddle_bottom);
       sprites_list[0] = paddle_bottom;
 
       /* create left paddle sprite */
       paddle_right->set_object_pos (1);
-      paddle_right->create_sprite (BOB_BUMPVT, sprites_bitmap, 1, 0);
+      paddle_right->create_sprite (BOB_BUMPVT, sprites_bitmap, true, 0);
       sprites->add (paddle_right);
       sprites_list[1] = paddle_right;
 
       /* create top paddle sprite */
       paddle_top->set_object_pos (2);
-      paddle_bottom->duplicaBOB (paddle_top);
+      paddle_bottom->duplicate_to (paddle_top);
       sprites->add (paddle_top);
       sprites_list[2] = paddle_top;
 
       /* create right bumper sprite */
       paddle_left->set_object_pos (3);
-      paddle_right->duplicaBOB (paddle_left);
+      paddle_right->duplicate_to (paddle_left);
       sprites->add (paddle_left);
       sprites_list[3] = paddle_left;
 

@@ -5,11 +5,11 @@
  * @date 2007-02-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.13 2007/02/02 17:05:53 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.14 2007/02/12 16:28:19 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -130,8 +130,10 @@ handler_display::set_video_mode ()
   window_height = 240 * resolution;
   offsetplus = 64 * resolution;
   if (is_verbose)
-    fprintf (stdout, "handler_display::set_video_mode() %i * %i \n",
-             window_width, window_height);
+    {
+      std::cout << ">handler_display::set_video_mode() " << window_width
+        << "x" << window_height << std::endl;
+  }
 
   /* initializes SDL */
   if (SDL_Init (SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE | SDL_INIT_AUDIO) < 0)
