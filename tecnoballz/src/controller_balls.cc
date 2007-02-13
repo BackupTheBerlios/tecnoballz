@@ -4,11 +4,11 @@
  * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.21 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.22 2007/02/13 20:55:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -155,7 +155,7 @@ controller_balls::init (Sint32 start,
 }
 
 /**
- * Move the balls and check the collisions
+ * Move the balls and check the collisions in the bricks levels
  */
 void
 controller_balls::run_in_bricks_levels ()
@@ -175,9 +175,9 @@ controller_balls::run_in_bricks_levels ()
   accelerate ();
 }
 
-//-------------------------------------------------------------------------------
-// guards levels: balls moves and collisions
-//-------------------------------------------------------------------------------
+/**
+ * Move the balls and check the collisions in the guardians levels
+ */
 void
 controller_balls::vitusBall2 ()
 {
@@ -247,8 +247,8 @@ controller_balls::vitus_sort ()
                   num_of_sprites = 1;
                   //raket->attachBall(balle);
                   //balle->reStarting(raket);
-                  balle->raket_ball->attachBall (balle);
-                  balle->reStarting (balle->raket_ball);
+                  balle->paddle_touched->attachBall (balle);
+                  balle->reStarting (balle->paddle_touched);
                   // start parasite animation head
                   head_anim->start_interference ();
                   current_player->remove_life (1);
@@ -266,39 +266,42 @@ controller_balls::vitus_sort ()
     }
 }
 
-//------------------------------------------------------------------------------
-// guards levels: test if balls go out of the screen of game
-//------------------------------------------------------------------------------
+/**
+ * Check if balls go out of the screen of game
+ */
 void
 controller_balls::vitussort2 ()
 {
   Sint32 max_y = sprite_ball::MAXIMUM_PY * resolution;
-  sprite_paddle *raket = paddle_bottom; //pointer to the object "bumper of bottom"
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball *balle = sprites_list[i];
-      if (balle->is_enabled)
+      sprite_ball *ball = sprites_list[i];
+      if (!ball->is_enabled)
         {
-          Sint32 j = balle->y_coord;
-          if (j > max_y)
-            {
-              if ((--num_of_sprites) > 0)
-                balle->goSleeping (raket);
-              else
-                {               //###################################################
-                  // the player lost a life
-                  //###################################################
-                  num_of_sprites = 1;   //rest one ball
-                  raket->attachBall (balle);
-                  balle->reStarting (raket);
-                  balle->ballPower2 ();
-                  current_player->remove_life (1);
-#ifndef SOUNDISOFF
-                  audio->play_sound (S_ENLEVVIE);
-#endif
-                }
-            }
+          continue;
         }
+      if (ball->y_coord <= max_y)
+        {
+          continue;
+        }
+      if (--num_of_sprites > 0)
+        {
+          ball->goSleeping (paddle_bottom);
+          continue;
+        }
+      
+      /*
+       * the player loses a life 
+       */
+      /* one starts again with only one ball */ 
+      num_of_sprites = 1;
+      paddle_bottom->attachBall (ball);
+      ball->reStarting (paddle_bottom);
+      ball->set_power_2 ();
+      current_player->remove_life (1);
+#ifndef SOUNDISOFF
+      audio->play_sound (S_ENLEVVIE);
+#endif
     }
 }
 
@@ -346,6 +349,9 @@ controller_balls::activate_tilt ()
 //-------------------------------------------------------------------------------
 // ball accelerates
 //-------------------------------------------------------------------------------
+/**
+ * handle the acceleration of the balls 
+ */
 void
 controller_balls::accelerate ()
 {
@@ -378,7 +384,7 @@ controller_balls::vitus_move ()
           //###########################################################
           if (balle->colleBallF)
             {
-              raket = balle->raket_ball;
+              raket = balle->paddle_touched;
               if (!(--balle->startCount))
                 {
                   balle->colleBallF = 0;
@@ -437,7 +443,7 @@ controller_balls::vitus_move ()
                       balle->tempo_rota = 8;
                       if (++balle->balle_rota > 13)
                         balle->balle_rota = 0;
-                      raket = balle->raket_ball;
+                      raket = balle->paddle_touched;
                       monPT = raket->direct_tab + balle->balle_rota;
                       balle->directBall = *monPT;
                     }
@@ -490,7 +496,7 @@ controller_balls::vitusmove2 ()
           //###########################################################
           if (balle->colleBallF)
             {
-              raket = balle->raket_ball;
+              raket = balle->paddle_touched;
               if (!(--balle->startCount))
                 {
                   balle->colleBallF = 0;
@@ -517,7 +523,7 @@ controller_balls::vitusmove2 ()
                       balle->tempo_rota = 8;
                       if (++balle->balle_rota > 13)
                         balle->balle_rota = 0;
-                      raket = balle->raket_ball;
+                      raket = balle->paddle_touched;
                       monPT = raket->direct_tab + balle->balle_rota;
                       balle->directBall = *monPT;
                     }
@@ -660,7 +666,7 @@ controller_balls::vitus_bump ()
 #ifndef SOUNDISOFF
               audio->play_sound (S_TOUCHRAK);
 #endif
-              balle->raket_ball = bumpX;
+              balle->paddle_touched = bumpX;
               balle->tilt_delay = 0;
               j = balle->directBall;
               if (j > 64)
@@ -750,7 +756,7 @@ controller_balls::vitusbump2 ()
 #ifndef SOUNDISOFF
               audio->play_sound (S_TOUCHRAK);
 #endif
-              balle->raket_ball = bumpX;
+              balle->paddle_touched = bumpX;
               balle->tilt_delay = 0;
               j = balle->directBall;
               monPT = bumpX->rebonds_GD;
@@ -1142,7 +1148,7 @@ controller_balls::check_bricks_collision ()
             {
               continue;
             }
-          briP2->raquettePT = ball->raket_ball;
+          briP2->raquettePT = ball->paddle_touched;
 
           x = x - indus;
           if (x >= 0)
@@ -1514,7 +1520,7 @@ controller_balls::run_nballs (Uint32 nball)
         {
           continue;
         }
-      ball->ball2eject (ejector_id++, delay);
+      ball->enbale_on_ejector (ejector_id++, delay);
       count++;
       num_of_sprites++;
       delay += 2;
@@ -1540,7 +1546,7 @@ controller_balls::run_3balls ()
         {
           j += 8;
           j &= 60;
-          ball->duplicate3 (model, j);
+          ball->duplicate_from (model, j);
           num_of_sprites++;
           count++;
         }
@@ -1560,7 +1566,7 @@ controller_balls::run_power1 ()
       sprite_ball *ball = *(balls++);
       if (ball->is_enabled)
         {
-          ball->ballPower1 ();
+          ball->set_power_1 ();
         }
     }
 }
@@ -1577,7 +1583,7 @@ controller_balls::run_power2 ()
       sprite_ball *ball = *(balls++);
       if (ball->is_enabled)
         {
-          ball->ballPower2 ();
+          ball->set_power_2 ();
         }
     }
 }
@@ -1594,7 +1600,7 @@ controller_balls::run_size01 ()
       sprite_ball *ball = *(balls++);
       if (ball->is_enabled)
         {
-          ball->ball_size2 ();
+          ball->set_size_2 ();
         }
     }
 }
@@ -1611,7 +1617,7 @@ controller_balls::run_size02 ()
       sprite_ball *ball = *(balls++);
       if (ball->is_enabled)
         {
-          ball->ball_size3 ();
+          ball->set_size_3 ();
         }
     }
 }
@@ -1628,7 +1634,7 @@ controller_balls::maxi_speed ()
       sprite_ball *ball = *(balls++);
       if (ball->is_enabled)
         {
-          ball->very_speed ();
+          ball->set_maximum_speed ();
         }
     }
 }

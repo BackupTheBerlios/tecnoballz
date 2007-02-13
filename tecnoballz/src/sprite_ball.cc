@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.10 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.11 2007/02/13 20:55:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,7 +105,7 @@ sprite_ball::set_initial_values (sprite_paddle * paddle)
   directBall = 0;
   save_Dball = 0;
   countDball = 0;
-  raket_ball = paddle;
+  paddle_touched = paddle;
   raket_glue = paddle;
   speedBallT = speedBallZ;
   collisionT = brikPoint1;
@@ -168,66 +168,69 @@ sprite_ball::donneSpeed (Sint32 speed)
   return ballSpeed1;
 }
 
-//-------------------------------------------------------------------------------
-// return the last touched bumper
-//-------------------------------------------------------------------------------
+/**
+ * Return the last touched paddle
+ * @return a pointer to a paddle sprite
+ */
 sprite_paddle *
-sprite_ball::donne_bump ()
+sprite_ball::get_last_paddle_touched ()
 {
-  return (raket_ball);
+  return paddle_touched;
 }
 
-//-------------------------------------------------------------------------------
-// clone ball
-//-------------------------------------------------------------------------------
+/**
+ * Duplicate this ball from another ball
+ * @param ball ball template
+ * @param angle angle from 0 to 63
+ */
 void
-sprite_ball::duplicate3 (sprite_ball * balle, Sint32 angle)
+sprite_ball::duplicate_from (sprite_ball * ball, Uint32 angle)
 {
-  is_enabled = 1;
-  x_coord = balle->x_coord;
-  y_coord = balle->y_coord;
+  is_enabled = true;
+  x_coord = ball->x_coord;
+  y_coord = ball->y_coord;
   directBall = angle;
   colleBallF = 0;
   tilt_delay = 0;
-  ball_sizeX = balle->ball_sizeX;
-  ballPowerX = balle->ballPowerX;
-  collision_width = balle->collision_width;
-  collision_height = balle->collision_height;
-  raket_ball = balle->raket_ball;
-  raket_glue = balle->raket_glue;
-  speedBallT = balle->speedBallT;
-  collisionT = balle->collisionT;
-  powerBall1 = balle->powerBall1;
-  powerBall2 = balle->powerBall2;
+  ball_sizeX = ball->ball_sizeX;
+  ballPowerX = ball->ballPowerX;
+  collision_width = ball->collision_width;
+  collision_height = ball->collision_height;
+  paddle_touched = ball->paddle_touched;
+  raket_glue = ball->raket_glue;
+  speedBallT = ball->speedBallT;
+  collisionT = ball->collisionT;
+  powerBall1 = ball->powerBall1;
+  powerBall2 = ball->powerBall2;
   oeilRotate = 0;
   select_image ();
 }
 
-//-------------------------------------------------------------------------------
-// enable the ball power 1
-//-------------------------------------------------------------------------------
+/**
+ * Enable the ball power 1
+ */
 void
-sprite_ball::ballPower1 ()
+sprite_ball::set_power_1 ()
 {
   ballPowerX = BALLPOWER1;
   select_image ();
 }
 
-//-------------------------------------------------------------------------------
-// enable the ball power 2
-//-------------------------------------------------------------------------------
+/**
+ * Enable the ball power 2
+ */
 void
-sprite_ball::ballPower2 ()
+sprite_ball::set_power_2 ()
 {
   ballPowerX = BALLPOWER2;
   select_image ();
 }
 
-//-------------------------------------------------------------------------------
-// enable the ball size 2
-//-------------------------------------------------------------------------------
+/**
+ * Enable the ball size 
+ */
 void
-sprite_ball::ball_size2 ()
+sprite_ball::set_size_2 ()
 {
   powerBall1 = 2;
   powerBall2 = brick_width * 2;
@@ -238,11 +241,11 @@ sprite_ball::ball_size2 ()
   select_image ();
 }
 
-//-------------------------------------------------------------------------------
-// enable the ball size 3
-//-------------------------------------------------------------------------------
+/**
+ * Enable the ball size 3
+ */
 void
-sprite_ball::ball_size3 ()
+sprite_ball::set_size_3 ()
 {
   powerBall1 = 3;
   powerBall2 = brick_width * 3;
@@ -253,40 +256,58 @@ sprite_ball::ball_size3 ()
   select_image ();
 }
 
-//-------------------------------------------------------------------------------
-// set the fastest speed 
-//-------------------------------------------------------------------------------
+/**
+ * Set the fastest speed
+ */
 void
-sprite_ball::very_speed ()
+sprite_ball::set_maximum_speed ()
 {
   speedBallT = ballSpeed3;
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels: enable the ball in a ejector 
-//-------------------------------------------------------------------------------
+/**
+ * Enable a ball on a ejector
+ * @param ejector_id ejector identifier from 0 to 3
+ * @param delay before the ejection of the ball
+ */
 void
-sprite_ball::ball2eject (Sint32 index, Sint32 otime)
+sprite_ball::enbale_on_ejector (Uint32 ejector_id, Uint32 delay)
 {
-  is_enabled = 1;
-  index &= 3;
-  furaxEject *monPT = furaxTable + index;
+  is_enabled = true;
+  ejector_id &= 3;
+  furaxEject *monPT = furaxTable + ejector_id;
   if (monPT->ejectBall1)
-    eject_ball[0] = otime;
+    {
+      eject_ball[0] = delay;
+    }
   else
-    eject_ball[0] = 0;
+    {
+      eject_ball[0] = 0;
+    }
   if (monPT->ejectBall2)
-    eject_ball[1] = otime;
+    {
+      eject_ball[1] = delay;
+    }
   else
-    eject_ball[1] = 0;
+    {
+      eject_ball[1] = 0;
+    }
   if (monPT->ejectBall3)
-    eject_ball[2] = otime;
+    {
+      eject_ball[2] = delay;
+    }
   else
-    eject_ball[2] = 0;
+    {
+      eject_ball[2] = 0;
+    }
   if (monPT->ejectBall4)
-    eject_ball[3] = otime;
+    {
+      eject_ball[3] = delay;
+    }
   else
-    eject_ball[3] = 0;
+    {
+      eject_ball[3] = 0;
+    }
   x_coord = monPT->x_coord;
   y_coord = monPT->y_coord;
   directBall = 64;              //the ball's motionless 

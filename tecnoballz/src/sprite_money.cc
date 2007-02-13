@@ -4,11 +4,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.cc,v 1.6 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: sprite_money.cc,v 1.7 2007/02/13 20:55:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,7 +102,7 @@ bool sprite_money::enable_if_available (sprite_ball * ball)
     {
       return false;
     }
-  init_money (ball->x_coord, ball->y_coord, ball->raket_ball);
+  init_money (ball->x_coord, ball->y_coord, ball->paddle_touched);
   return true;
 }
 

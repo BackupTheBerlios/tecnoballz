@@ -5,11 +5,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_gem.cc,v 1.4 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: sprite_gem.cc,v 1.5 2007/02/13 20:55:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ sprite_gem::disponible (sprite_ball * pball)
     {
       return 0;
     }
-  initialGem (pball->x_coord, pball->y_coord, pball->raket_ball);
+  initialGem (pball->x_coord, pball->y_coord, pball->paddle_touched);
   return 1;
 }
 

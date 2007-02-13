@@ -1,14 +1,14 @@
 /** 
  * @file sprite_ball.h
  * @brief The ball sprite
- * @date 2007-01-26
+ * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.h,v 1.12 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: sprite_ball.h,v 1.13 2007/02/13 20:55:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -82,7 +82,8 @@ private:
   Sint32 directBall;          //ball direction (0 to 56 step 4)
   Sint32 save_Dball;            //last directBall (0 to 56 step 4)
   Sint32 countDball;            //counter before rebound forcing
-  sprite_paddle *raket_ball;    //pointer to the bumper touched
+  /** The last paddle touched by the ball */
+  sprite_paddle *paddle_touched;
   sprite_paddle *raket_glue;    //pointer to the bumper sticked
   Sint16 *speedBallT;           //pt/speed table
   Sint16 *speedBallZ;           //pt/speed table
@@ -123,16 +124,15 @@ public:
   void reStarting (sprite_paddle * raket);
   void goSleeping (sprite_paddle * raket);
   void startBalle (Sint32 large);
-  //void                          razingBall(sprite_paddle *raket);
-  void duplicate3 (sprite_ball * balle, Sint32 angle);
+  void duplicate_from (sprite_ball * ball, Uint32 angle);
   static short *donneSpeed (Sint32 speed);
-  sprite_paddle *donne_bump ();
-  void ballPower1 ();
-  void ballPower2 ();
-  void ball_size2 ();
-  void ball_size3 ();
-  void very_speed ();
-  void ball2eject (Sint32 index, Sint32 otime = 1);
+  sprite_paddle *get_last_paddle_touched ();
+  void set_power_1 ();
+  void set_power_2 ();
+  void set_size_2 ();
+  void set_size_3 ();
+  void set_maximum_speed ();
+  void enbale_on_ejector (Uint32 eject_id, Uint32 otime = 1);
   void glueLibere ();
   void accelerate ();
 

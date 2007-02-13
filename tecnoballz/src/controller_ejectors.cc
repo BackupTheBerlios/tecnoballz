@@ -4,11 +4,11 @@
  * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_ejectors.cc,v 1.2 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_ejectors.cc,v 1.3 2007/02/13 20:55:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,9 +46,9 @@ controller_ejectors::~controller_ejectors ()
   release_sprites_list ();
 }
 
-//-----------------------------------------------------------------------------
-// perform some initializations
-//-----------------------------------------------------------------------------
+/**
+ * Create the ejectors sprites
+ */
 void
 controller_ejectors::create_ejectors_sprites ()
 {
@@ -60,35 +60,51 @@ controller_ejectors::create_ejectors_sprites ()
   sprites_list[BOTTOM_LEFT_EJECTOR] = new sprite_object ();
   sprites_list[BOTTOM_RIGHT_EJECTOR] = new sprite_object ();
 
-  // top-left (1)
-  sprites_list[TOP_LEFT_EJECTOR]->create_sprite (BOB_EJECT1, sprites_bitmap, 1);
-  eject1PosX = EJECT_POS1 * resolution;
-  eject1PosY =
-    (EJECT_POS1 * resolution) - sprites_list[TOP_LEFT_EJECTOR]->get_sprite_height () / 2;
-  sprites_list[TOP_LEFT_EJECTOR]->set_coordinates (eject1PosX, eject1PosY);
+  sprites_list[TOP_LEFT_EJECTOR]->create_sprite (BOB_EJECT1, sprites_bitmap,
+                                                 1);
+  sprites_list[TOP_LEFT_EJECTOR]->set_coordinates (COORD_EJECTOR_1 *
+                                                   resolution,
+                                                   (COORD_EJECTOR_1 *
+                                                    resolution) -
+                                                   sprites_list
+                                                   [TOP_LEFT_EJECTOR]->
+                                                   get_sprite_height () / 2);
 
-  // top-right (2)
-  sprites_list[TOP_RIGHT_EJECTOR]->create_sprite (BOB_EJECT4, sprites_bitmap, 1);
-  eject2PosX = EJECT_POS2 * resolution;
-  eject2PosY =
-    (EJECT_POS1 * resolution) - sprites_list[TOP_RIGHT_EJECTOR]->get_sprite_height () / 2;
-  sprites_list[TOP_RIGHT_EJECTOR]->set_coordinates (eject2PosX, eject2PosY);
+  sprites_list[TOP_RIGHT_EJECTOR]->create_sprite (BOB_EJECT4, sprites_bitmap,
+                                                  1);
+  sprites_list[TOP_RIGHT_EJECTOR]->set_coordinates (COORD_EJECTOR_2 *
+                                                    resolution,
+                                                    (COORD_EJECTOR_1 *
+                                                     resolution) -
+                                                    sprites_list
+                                                    [TOP_RIGHT_EJECTOR]->
+                                                    get_sprite_height () / 2);
 
-  // bottom-left (3)
-  sprites_list[BOTTOM_LEFT_EJECTOR]->create_sprite (BOB_EJECT2, sprites_bitmap, 1);
-  eject3PosX = EJECT_POS1 * resolution;
-  eject3PosY =
-    (EJECT_POS2 * resolution) - sprites_list[BOTTOM_LEFT_EJECTOR]->get_sprite_height () / 2;
-  sprites_list[BOTTOM_LEFT_EJECTOR]->set_coordinates (eject3PosX, eject3PosY);
+  sprites_list[BOTTOM_LEFT_EJECTOR]->create_sprite (BOB_EJECT2,
+                                                    sprites_bitmap, 1);
 
-  // bottom-right(4)
-  sprites_list[BOTTOM_RIGHT_EJECTOR]->create_sprite (BOB_EJECT3, sprites_bitmap, 1);
-  eject4PosX = EJECT_POS2 * resolution;
-  eject4PosY =
-    (EJECT_POS2 * resolution) - sprites_list[BOTTOM_RIGHT_EJECTOR]->get_sprite_height () / 2;
-  sprites_list[BOTTOM_RIGHT_EJECTOR]->set_coordinates (eject4PosX, eject4PosY);
+  sprites_list[BOTTOM_LEFT_EJECTOR]->set_coordinates (COORD_EJECTOR_1 *
+                                                      resolution,
+                                                      (COORD_EJECTOR_2 *
+                                                       resolution) -
+                                                      sprites_list
+                                                      [BOTTOM_LEFT_EJECTOR]->
+                                                      get_sprite_height () /
+                                                      2);
 
-  // bob_ground = 1: ejectors are managed like sprites  
+  sprites_list[BOTTOM_RIGHT_EJECTOR]->create_sprite (BOB_EJECT3,
+                                                     sprites_bitmap, 1);
+
+  sprites_list[BOTTOM_RIGHT_EJECTOR]->set_coordinates (COORD_EJECTOR_2 *
+                                                       resolution,
+                                                       (COORD_EJECTOR_2 *
+                                                        resolution) -
+                                                       sprites_list
+                                                       [BOTTOM_RIGHT_EJECTOR]->
+                                                       get_sprite_height () /
+                                                       2);
+
+  /* bob_ground = 1: ejectors are managed like sprites */  
   if (bob_ground)
     {
       sprites->add (sprites_list[TOP_LEFT_EJECTOR]);
@@ -148,7 +164,7 @@ controller_ejectors::get_ejector (Uint32 id)
       return sprites_list[TOP_LEFT_EJECTOR];
     case TOP_RIGHT_EJECTOR:
       return sprites_list[TOP_RIGHT_EJECTOR];
-    case BOTTOM_LEFT_EJECTOR: 
+    case BOTTOM_LEFT_EJECTOR:
       return sprites_list[BOTTOM_LEFT_EJECTOR];
     case BOTTOM_RIGHT_EJECTOR:
       return sprites_list[BOTTOM_RIGHT_EJECTOR];
@@ -156,31 +172,27 @@ controller_ejectors::get_ejector (Uint32 id)
   return NULL;
 }
 
-//-----------------------------------------------------------------------------
-// initialize the positions of the balls in the ejectors 
-//-----------------------------------------------------------------------------
-Uint32
-  controller_ejectors::balPosFlag = 0;
+/**
+ * Initialize the table of the positions of the balls on the ejectors. 
+ */
+bool
+  controller_ejectors::is_pos_ball_initialized = false;
 void
 controller_ejectors::ballPosIni (furaxEject * table)
 {
-  if (balPosFlag)
-    return;
-  balPosFlag = 1;
-  furaxEject *eject = table;
-  eject->x_coord = (eject->x_coord * resolution) + eject1PosX;
-  eject->y_coord = (eject->y_coord * resolution) + eject1PosY;
+  /* is the position of the balls already initialized? */
+  if (is_pos_ball_initialized)
+    {
+      return;
+    }
+  is_pos_ball_initialized = true;
 
-  eject = table + 1;
-  eject->x_coord = (eject->x_coord * resolution) + eject3PosX;
-  eject->y_coord = (eject->y_coord * resolution) + eject3PosY;
-
-  eject = table + 2;
-  eject->x_coord = (eject->x_coord * resolution) + eject4PosX;
-  eject->y_coord = (eject->y_coord * resolution) + eject4PosY;
-
-  eject = table + 3;
-  eject->x_coord = (eject->x_coord * resolution) + eject2PosX;
-  eject->y_coord = (eject->y_coord * resolution) + eject2PosY;
-
+  for (Uint32 i = 0; i < max_of_sprites; i++)
+    {
+      table->x_coord =
+        (table->x_coord * resolution) + sprites_list[i]->get_x_coord ();
+      table->y_coord =
+        (table->y_coord * resolution) + sprites_list[i]->get_y_coord ();
+      table++;
+    }
 }

@@ -1,14 +1,14 @@
 /** 
  * @file sprite_capsule.cc
  * @brief The capsule sprite which contains a bonus or a penalty 
- * @date 2007-02-11
+ * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.cc,v 1.4 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: sprite_capsule.cc,v 1.5 2007/02/13 20:55:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,7 +140,7 @@ sprite_capsule::nouveauGad (sprite_ball * balle, Sint32 nuGad)
   gadget_num = nuGad;
   x_coord = balle->get_x_coord ();
   y_coord = balle->get_y_coord ();
-  sprite_paddle *raket = balle->donne_bump ();
+  sprite_paddle *raket = balle->get_last_paddle_touched ();
   raquettePT = raket;
   directionX = raket->get_paddle_number ();
   nuGad = nuGad >> 1;
@@ -211,7 +211,7 @@ sprite_capsule::new_gadget (sprite_ball * balle, Sint32 nuGad)
   gadget_num = nuGad;
   x_coord = balle->get_x_coord ();
   y_coord = balle->get_y_coord ();
-  sprite_paddle *raket = balle->donne_bump ();
+  sprite_paddle *raket = balle->get_last_paddle_touched ();
   raquettePT = raket;
   directionX = raket->get_paddle_number ();
   nuGad = nuGad >> 1;
