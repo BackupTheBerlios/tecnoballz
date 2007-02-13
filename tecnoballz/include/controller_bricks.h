@@ -5,11 +5,11 @@
  * @date 2007-01-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.6 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.7 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ brickClear;
 #include "../include/controller_capsules.h"
 #include "../include/sprite_ship.h"
 //...............................................................................
-class controller_bricks:public objects_list < sprite_object >
+class controller_bricks:public objects_list < sprite_object, controller_bricks >
 {
   friend class controller_balls;
   friend class sprite_projectile;

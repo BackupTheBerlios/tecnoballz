@@ -4,11 +4,11 @@
  * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_projectiles.h,v 1.3 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: controller_projectiles.h,v 1.4 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ class controller_projectiles;
 #include "../include/sprite_paddle.h"
 
 
-class controller_projectiles:public objects_list < sprite_projectile >
+class controller_projectiles:public objects_list < sprite_projectile, controller_projectiles >
 {
 private:
   static const Uint32 MAX_OF_PROJECTILES = 7;

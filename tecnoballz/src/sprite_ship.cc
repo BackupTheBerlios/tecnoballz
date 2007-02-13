@@ -1,14 +1,14 @@
 /** 
  * @file sprite_ship.cc 
  * @brief A flying enemy ships sprite 
- * @date 2007-01-27
+ * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ship.cc,v 1.6 2007/02/10 18:09:33 gurumeditation Exp $
+ * $Id: sprite_ship.cc,v 1.7 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,12 +37,12 @@ sprite_ship::sprite_ship ()
   atom_ymini = ATOM_YMINI * resolution;
   atom_ymaxi = ATOM_YMAXI * resolution;
   clear_sprite_members ();
-  littleInit (0, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL);
+  littleInit (0, 0, 0, 0, 0, 0, 0);
 }
 
-//-----------------------------------------------------------------------------
-// release the object
-//-----------------------------------------------------------------------------
+/**
+ * Release the flying enemy ships sprite
+ */
 sprite_ship::~sprite_ship ()
 {
 }
@@ -68,7 +68,7 @@ sprite_ship::gere_atome ()
         {
           if (!(--atom_actif))
             {
-              if (!over_brick (x_coord, y_coord))
+              if (!is_collisions_with_bricks (x_coord, y_coord))
                 {
                   is_enabled = 1;
                   Sint32 *monPT = ghost_bobs + (hasard_val & 31);
@@ -130,7 +130,7 @@ sprite_ship::gere_atome ()
         y = atom_ymini;
       else if (y > atom_ymaxi)
         y = atom_ymaxi;
-      if (!over_brick (x, y) || atom_actif)
+      if (!is_collisions_with_bricks (x, y) || atom_actif)
         {
           x_coord = x;
           y_coord = y;
@@ -138,20 +138,24 @@ sprite_ship::gere_atome ()
     }
 }
 
-//-----------------------------------------------------------------------------
-// test collision "Bouiboui" and bricks
-//-----------------------------------------------------------------------------
-Sint32
-sprite_ship::over_brick (Sint32 pos_x, Sint32 pos_y)
+/**
+ * Check collisions between a ship and bricks
+ * @param xcoord x coordinate of the ship
+ * @param ycoord y coordinate of the ship
+ * @return true if collision detected, otherwise false
+ */
+bool
+sprite_ship::is_collisions_with_bricks (Uint32 xcoord, Uint32 ycoord)
 {
-  Sint32 bwght = pt_briques->get_brick_width ();     //brick's width in pixels
-  Sint32 byoff = pt_briques->getYOffset ();     //y-offset between 2 bricks
-  brickInfos *tMega = pt_briques->mega_table;
+  controller_bricks* bricks = controller_bricks::get_instance ();
+  Sint32 bwght = bricks->get_brick_width ();     //brick's width in pixels
+  Sint32 byoff = bricks->getYOffset ();     //y-offset between 2 bricks
+  brickInfos *tMega = bricks->mega_table;
   Sint32 c = 0;
   for (Sint32 i = 0; i < 4; i++)
     {
-      Sint32 x = pos_x + collisionT[c++];
-      Sint32 y = pos_y + collisionT[c++];
+      Sint32 x = xcoord + collisionT[c++];
+      Sint32 y = ycoord + collisionT[c++];
       x /= bwght;               // /32
       y /= byoff;               // /16
       y *= controller_bricks::NB_BRICKSH;
@@ -159,9 +163,11 @@ sprite_ship::over_brick (Sint32 pos_x, Sint32 pos_y)
       brickInfos *megaT = (tMega + x);
       x = megaT->brique_rel;
       if (x)
-        return 1;
+        {
+          return true;
+        }
     }
-  return 0;
+  return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -173,21 +179,12 @@ sprite_ship::over_brick (Sint32 pos_x, Sint32 pos_y)
 //                      => pos_x: absciss 
 //                      => pos_y: ordinate
 //                      => offst: number of the image's explosion
-//                      => pCaps: object "controller_moneys"
-//                      => ptGad: object "controller_capsules
-//                      => ptGem: object "controller_gems
-//                      => pBrik: object "controller_bricks
 //-----------------------------------------------------------------------------
 void
 sprite_ship::littleInit (Sint32 time0, Sint32 appar, Sint32 index,
                          Sint32 power, Sint32 pos_x, Sint32 pos_y,
-                         Sint32 offst, controller_moneys * pCaps, controller_capsules * ptGad,
-                         controller_gems * ptGem, controller_bricks * pBrik)
+                         Sint32 offst)
 {
-  ptCapsules = pCaps;
-  pt_gadgets = ptGad;
-  ptGemstone = ptGem;
-  pt_briques = pBrik;
   atom_actif = appar;           //time before activation
   apparition = time0;
   tableGhost = ghost_wait[index];       //table of the 16 standby values 
@@ -230,11 +227,12 @@ sprite_ship::littleInit (Sint32 time0, Sint32 appar, Sint32 index,
 
 }
 
-//-----------------------------------------------------------------------------
-// explosion of a BouiBoui by a bumper's fire and send gem, money or malus
-//-----------------------------------------------------------------------------
+/**
+ * Ship destroyed by a projectile: send gem, money or malus
+ * @param blast a pointer to a prjectile sprite
+ */
 void
-sprite_ship::explosion1 (sprite_projectile * pFire)
+sprite_ship::explosion1 (sprite_projectile * blast)
 {
   if (atom_actif > 0)
     return;
@@ -244,38 +242,59 @@ sprite_ship::explosion1 (sprite_projectile * pFire)
   switch (h)
     {
     case CODE_GEMME:
-      ptGemstone->send (pFire);
+      {
+        controller_gems* gems = controller_gems::get_instance ();
+        gems->send (blast);
+      }
       break;
     case CODE_MALUS:
-      pt_gadgets->send_malus (pFire);
+      {
+        controller_capsules* capsules = controller_capsules::get_instance ();
+        capsules->send_malus (blast);
+      }
       break;
     case CODE_MONEY:
-      ptCapsules->send_money (pFire);
+      { 
+        controller_moneys* moneys = controller_moneys::get_instance ();
+        moneys->send_money (blast);
+      }
       break;
     }
 }
 
-//-----------------------------------------------------------------------------
-// explosion of a BouiBoui by a ball and send gem, money or malus
-//-----------------------------------------------------------------------------
+/**
+ * Ship destroyed by a ball: send gem, money or malus
+ * @param ball a pointer to a balll sprite
+ */
 void
-sprite_ship::explosion1 (sprite_ball * pBall)
+sprite_ship::explosion1 (sprite_ball * ball)
 {
   if (atom_actif > 0)
-    return;
+    {
+      return;
+    }
   explosion2 ();
-  Sint32 h = codeBounty[hasard_val & 0xF];
+  Uint32 h = codeBounty[hasard_val & 0xF];
   //h = CODE_GEMME; //test only
   switch (h)
     {
     case CODE_GEMME:
-      ptGemstone->send (pBall);
+      {
+        controller_gems* gems = controller_gems::get_instance ();
+        gems->send (ball);
+      }
       break;
     case CODE_MALUS:
-      pt_gadgets->send_malus (pBall);
+      {
+        controller_capsules* capsules = controller_capsules::get_instance ();
+        capsules->send_malus (ball);
+      }
       break;
     case CODE_MONEY:
-      ptCapsules->send_money (pBall);
+      { 
+        controller_moneys* moneys = controller_moneys::get_instance ();
+        moneys->send_money (ball);
+      }
       break;
     }
 }

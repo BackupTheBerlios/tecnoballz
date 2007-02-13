@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.h,v 1.5 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: controller_gigablitz.h,v 1.6 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ class controller_gigablitz;
 #include "../include/controller_bricks.h"
 #include "../include/controller_explosions.h"
 
-class controller_gigablitz:public objects_list < sprite_gigablitz >
+class controller_gigablitz:public objects_list < sprite_gigablitz, controller_gigablitz >
 {
   friend class sprite_gigablitz;
 

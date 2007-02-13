@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-02-11
+ * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.19 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.20 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,27 +37,25 @@ supervisor_bricks_level::supervisor_bricks_level ()
   sides_bricks = new controller_sides_bricks ();
   tiles_ground = new tiles_background ();
   panel_score = new right_panel_score ();
-  gereEjects = new controller_ejectors ();
-  money_capsules = new controller_moneys ();
-  power_up_capsules = new controller_capsules (6);
-  gem_stones = new controller_gems ();
-  bricks = new controller_bricks ();
+  ejectors_corners = new controller_ejectors ();
+  money_capsules = controller_moneys::get_instance ();
+  power_up_capsules = controller_capsules::get_instance ();
+  gem_stones = controller_gems::get_instance ();
+  bricks = controller_bricks::get_instance ();
   head_anim = new head_animation ();
-  ships =
-    new controller_ships (money_capsules, power_up_capsules, gem_stones, bricks);
-  pt_magneye = new controller_magnetic_eyes ();
+  ships = controller_ships::get_instance ();
+  magnetic_eyes = controller_magnetic_eyes::get_instance ();
   BottomWall = new sprite_object ();
   ptMiniMess = new zeMiniMess ();
   balls =
-    new controller_balls (gereEjects, bricks, sides_bricks, head_anim,
-                          ships, panel_score, BottomWall, ptMiniMess,
-                          pt_magneye);
+    new controller_balls (ejectors_corners, sides_bricks, head_anim,
+                          panel_score, BottomWall, ptMiniMess);
   viewfinders_paddles = new controller_viewfinders ();
-  paddles = new controller_paddles ();
+  paddles = controller_paddles::get_instance ();
   gere_texte = new controller_fontes_game ();
-  gigablitz = new controller_gigablitz ();
+  gigablitz = controller_gigablitz::get_instance ();
   player_indicators = new controller_indicators ();
-  game_over = new controller_game_over ();
+  game_over = controller_game_over::get_instance ();
 
   popup_menu = new handler_popup_menu ();
 
@@ -90,14 +88,14 @@ supervisor_bricks_level::~supervisor_bricks_level ()
   delete balls;
   delete ptMiniMess;
   delete BottomWall;
-  delete pt_magneye;
+  delete magnetic_eyes;
   delete ships;
   delete head_anim;
   delete bricks;
   delete gem_stones;
   delete power_up_capsules;
   delete money_capsules;
-  delete gereEjects;
+  delete ejectors_corners;
   delete panel_score;
   delete tiles_ground;
   delete sides_bricks;
@@ -138,10 +136,9 @@ supervisor_bricks_level::first_init ()
   /* load bitmap of sprites in memory (all other sprites) */
   resources->load_sprites_bitmap ();
 
-  //###################################################################
-  // generation of graphics shapes tables
-  //###################################################################
-
+  /*
+   * generate the data of the spites
+   */
   //wall of bottom 
   BottomWall->create_sprite (BOB_WALLBO, sprites_bitmap, 0);
   sprites->add (BottomWall);
@@ -154,17 +151,13 @@ supervisor_bricks_level::first_init ()
   if (erreur_num)
     return erreur_num;
   //ejectors 
-  gereEjects->initialise ();
-  //all balls
+  ejectors_corners->create_ejectors_sprites ();
   balls->create_sprites_list ();
-  //atoms (aka "bouisbouis")
   ships->create_sprites_list ();
-  //eye magneto 
-  pt_magneye->create_eyes_list ();
+  magnetic_eyes->create_eyes_list ();
   money_capsules->create_sprites_list ();
-  power_up_capsules->create_sprites_list ();
+  power_up_capsules->create_sprites_list (6);
   gem_stones->create_sprites_list ();
-  //mobiles characters
   gere_texte->create_sprites_list ();
   paddles->create_projectiles_list ();
   player_indicators->create_indicators_sprites (paddles, money_capsules->get_first_sprite (), power_up_capsules->get_first_sprite (), NULL);
@@ -187,25 +180,21 @@ supervisor_bricks_level::first_init ()
 
 
   panel_score->first_init (gigablitz, balls);
-  //panel_score->affiche_me ();
 
   background ();
   paddles->init_paddles (gigablitz, balls);
 
   /* balls initialization */
-  balls->init_balle (paddles,
-                          /* time before the ball leaves paddle (at the game beginning) */
-                          levelParam->startCount,
-                          //time before the ball leaves (glue option)
-                          levelParam->glue_count / hardChoice,
-                          //time before the ball accelerates
-                          levelParam->speedCount / hardChoice,
-                          //time before "tilt" is available
-                          levelParam->tilt_count, levelParam->speedBall1);
+  balls->init (
+      /* time before the ball leaves paddle (at the game beginning) */
+      levelParam->startCount,
+      //time before the ball leaves (glue option)
+      levelParam->glue_count / hardChoice,
+      //time before the ball accelerates
+      levelParam->speedCount / hardChoice,
+      //time before "tilt" is available
+      levelParam->tilt_count, levelParam->speedBall1);
 
-  //##############################################################
-  // initialization "atoms" (aka "bouibouis") 
-  //##############################################################
   ships->initialise (levelParam->apparition / hardChoice,
                           levelParam->atom1Count / hardChoice,
                           levelParam->atom2Count / hardChoice,
@@ -240,7 +229,7 @@ supervisor_bricks_level::first_init ()
                            //the object which handles the balls
                            balls,
                            //the object which handles the text on left scores panel
-                           panel_score, BottomWall, pt_magneye);
+                           panel_score, BottomWall, magnetic_eyes);
 
   gem_stones->initialize (panel_score, player_indicators, paddles);
 
@@ -320,7 +309,7 @@ supervisor_bricks_level::main_loop ()
         isgameover = 2;
       sides_bricks->execution1 ();
       viewfinders_paddles->run ();
-      ships->atom_depla ();
+      ships->move ();
       sprites->draw ();
       panel_score->scoreEcran ();
       panel_score->barreTemoin ();
@@ -359,11 +348,11 @@ supervisor_bricks_level::main_loop ()
               paddles->fire_projectiles ();
             }
           paddles->move_robot ();
-          balls->vitusBalle ();    //move balls
+          balls->run_in_bricks_levels ();
           viewfinders_paddles->run ();
           sprite_projectile::gestionTir ();
-          ships->atom_depla ();
-          pt_magneye->execution1 ();
+          ships->move ();
+          magnetic_eyes->execution1 ();
           money_capsules->move ();
           power_up_capsules->bouge_gads ();    //move bonuses and maluses
           power_up_capsules->gadgetKeys ();
@@ -565,11 +554,11 @@ supervisor_bricks_level::background (Sint32 nbkdg)
   //###################################################################
   // display the ejectors and small bricks
   //###################################################################
-  gereEjects->afficheSha ();    //display ejectors shadows
+  ejectors_corners->draw_shadow ();
   sides_bricks->sauveFond ();     //save background under small bricks
   sides_bricks->afficheSha ();    //display small bricks shadows
   sides_bricks->afficheGfx ();    //display small bricks of the three walls
-  gereEjects->afficheGfx ();    //display ejectors
+  ejectors_corners->draw ();
 
   //###################################################################
   // intialize the bricks level

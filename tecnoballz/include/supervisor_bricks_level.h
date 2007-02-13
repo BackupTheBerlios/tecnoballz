@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.h 
  * @brief Bricks levels supervisor 
- * @date 2007-02-11
+ * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.15 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.16 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,13 +83,13 @@ private:
   head_animation *head_anim;
   controller_bricks *bricks;
   tiles_background *tiles_ground;
-  controller_ejectors *gereEjects;
+  controller_ejectors *ejectors_corners;
   controller_balls *balls;
   controller_viewfinders *viewfinders_paddles;
   controller_paddles *paddles;
   right_panel_score *panel_score;
   controller_ships *ships;
-  controller_magnetic_eyes *pt_magneye;
+  controller_magnetic_eyes *magnetic_eyes;
   controller_moneys *money_capsules;
   controller_capsules *power_up_capsules;
   controller_gems *gem_stones;

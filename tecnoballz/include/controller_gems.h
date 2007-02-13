@@ -5,11 +5,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gems.h,v 1.4 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: controller_gems.h,v 1.5 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ class controller_gems;
 #include "../include/handler_players.h"
 #include "../include/controller_indicators.h"
 
-class controller_gems:public objects_list < sprite_gem >
+class controller_gems:public objects_list < sprite_gem, controller_gems >
 {
 public:
   static const Uint32 MAX_OF_GEMS = 6;

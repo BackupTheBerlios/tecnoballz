@@ -5,11 +5,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.18 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.19 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,15 +36,15 @@ supervisor_guards_level::supervisor_guards_level ()
 {
   initialise ();
   tiles_map = new tilesmap_scrolling ();
-  guards = new controller_guardians ();
-  paddles = new controller_paddles (1);
+  guards = controller_guardians::get_instance ();
+  paddles = controller_paddles::get_instance ();
   ptMoveText = new controller_fontes_game ();
   explosions = new controller_explosions ();
   sprite_paddle *paddle = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
   bullets = new controller_bullets (paddle, explosions);
-  money_capsules = new controller_moneys ();
-  power_up_capsules = new controller_capsules (6);
-  balls = new controller_balls (guards, money_capsules, power_up_capsules);
+  money_capsules = controller_moneys::get_instance ();
+  power_up_capsules = controller_capsules::get_instance ();
+  balls = new controller_balls ();
   viewfinders_paddles = new controller_viewfinders ();
   player_indicators = new controller_indicators ();
   ptMiniMess = new zeMiniMess ();
@@ -118,7 +118,7 @@ supervisor_guards_level::first_init ()
   paddles->create_paddles_sprites ();
   balls->create_sprites_list ();
   money_capsules->create_sprites_list ();
-  power_up_capsules->create_sprites_list ();
+  power_up_capsules->create_sprites_list (6);
   //player_indicators->create_sprites_list ();
   player_indicators->create_indicators_sprites (paddles, money_capsules->get_first_sprite (), NULL, power_up_capsules->get_first_sprite ());
   explosions->create_explosions_list ();
@@ -163,11 +163,16 @@ supervisor_guards_level::first_init ()
   //###################################################################
   // initialization balls
   //###################################################################
-  balls->init_balle (paddles, levelParam->startCount,   //time before ball leaves bumper
-                     0,         //(not applicable)
-                     50 * 99,   //time before ball accelerates
-                     levelParam->tilt_count,    //time before "tilt"  available
-                     levelParam->speedBall1);   //speed ball (3 or 4)
+  balls->init (
+    /* time delay before ball leaves paddle */
+    levelParam->startCount,
+    0,
+    /* time delay before ball accelerates */
+    50 * 99,
+   /* time delay before titl available */
+   levelParam->tilt_count,
+   /* ball speed 3 or 4 */
+   levelParam->speedBall1);
 
   //###################################################################
   // force "powerball 2" (guards levels only)

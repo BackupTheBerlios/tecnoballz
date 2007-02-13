@@ -25,7 +25,7 @@
 
 #include "../include/objects_list.h"
 #include "../include/sprite_fonte_menu.h"
-class controller_fontes_menu:public objects_list < sprite_fonte_menu >
+class controller_fontes_menu:public objects_list < sprite_fonte_menu, controller_fontes_menu >
 {
 private:
   static const Sint32 DEFINUMBER = 14;  //numbers maximum characters

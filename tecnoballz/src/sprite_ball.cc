@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.9 2007/02/05 21:02:11 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.10 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,7 +116,6 @@ sprite_ball::set_initial_values (sprite_paddle * paddle)
   eject_ball[2] = 0;
   eject_ball[3] = 0;
   tilt_delay = 0;
-  ClBouiBoui = 0;
   balle_rota = 1;
   tempo_rota = 1;
   ball_sizeX = BALL_SIZE1;

@@ -5,7 +5,7 @@
 // created      : ?
 // updates      : 2005-01-23
 // fonction     : manage mobiles characters ("LEVEL x COMPLETED")
-// id           : $Id: controller_fontes_game.h,v 1.1 2007/02/11 16:04:44 gurumeditation Exp $
+// id           : $Id: controller_fontes_game.h,v 1.2 2007/02/13 17:11:02 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -29,7 +29,7 @@ class controller_fontes_game;
 #include "../include/objects_list.h"
 #include "../include/sprite_fonte_game.h"
 //...............................................................................
-class controller_fontes_game:public objects_list < sprite_fonte_game >
+class controller_fontes_game:public objects_list < sprite_fonte_game, controller_fontes_game >
 {
 private:
   Sint32 size_line1;

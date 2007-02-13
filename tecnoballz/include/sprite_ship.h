@@ -1,30 +1,35 @@
-//*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file         : "sprite_ship.h"
-// created              : ?
-// updates              : 2004-08-29
-// function     : handle BouiBoui (only bricks levels)
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA 02111-1307, USA.
-//*****************************************************************************
-#ifndef __TECNO_BOUI__
-#define __TECNO_BOUI__
-//.......................................................................
+/** 
+ * @file sprite_ship.cc 
+ * @brief A flying enemy ships sprite 
+ * @date 2007-02-13
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.6 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: sprite_ship.h,v 1.6 2007/02/13 17:11:02 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
+#ifndef __SPRITE_SHIP__
+#define __SPRITE_SHIP__
+
 class sprite_ship;
-//.......................................................................
+
 #include "../include/sprite_object.h"
 #include "../include/handler_audio.h"
 #include "../include/controller_moneys.h"
@@ -33,13 +38,13 @@ class sprite_ship;
 #include "../include/sprite_projectile.h"
 #include "../include/sprite_ball.h"
 #include "../include/controller_bricks.h"
-//.......................................................................
+
 enum
 { CODE_GEMME,
   CODE_MALUS,
   CODE_MONEY
 };
-//.......................................................................
+
 class sprite_ship:public sprite_object
 {
   friend class controller_ships;
@@ -54,10 +59,6 @@ private:
   static const Sint32 ATOM_ANIMA = 8;
 
 private:
-    controller_moneys * ptCapsules;
-  controller_capsules *pt_gadgets;
-  controller_gems *ptGemstone;
-  controller_bricks *pt_briques;
   Sint32 atom_power;            // strength
   Sint32 init_power;            // strength
   Sint32 atom_deplX;            // offset X
@@ -85,15 +86,19 @@ private:
   static Sint32 ghost_bobs[32]; // index animations images of sprites
   static Sint32 codeBounty[16];
 
-    public:sprite_ship ();
+public:
+  sprite_ship ();
    ~sprite_ship ();
-  Sint32 over_brick (Sint32 pos_x, Sint32 pos_y);
   void gere_atome ();
   void littleInit (Sint32 time0, Sint32 appar, Sint32 index,
-                   Sint32 power, Sint32 pos_x, Sint32 pos_y, Sint32 offst,
-                   controller_moneys *, controller_capsules *, controller_gems *, controller_bricks *);
+                   Sint32 power, Sint32 pos_x, Sint32 pos_y, Sint32 offst);
   void explosion1 (sprite_projectile *);
   void explosion1 (sprite_ball *);
   void explosion2 ();
+
+private:
+  bool is_collisions_with_bricks (Uint32 xcoord, Uint32 ycoord);
+
+
 };
 #endif

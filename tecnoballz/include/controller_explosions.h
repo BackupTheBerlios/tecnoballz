@@ -5,11 +5,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_explosions.h,v 1.1 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: controller_explosions.h,v 1.2 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ class controller_explosions;
 #include "../include/sprite_object.h"
 #include "../include/objects_list.h"
 
-class controller_explosions:public objects_list < sprite_object >
+class controller_explosions:public objects_list < sprite_object, controller_explosions >
 {
 
 public:

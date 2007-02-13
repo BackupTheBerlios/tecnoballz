@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.h,v 1.4 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: controller_capsules.h,v 1.5 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ class controller_capsules;
 #include "../include/right_panel_score.h"
 #include "../include/controller_magnetic_eyes.h"
 
-class controller_capsules:public objects_list < sprite_capsule >
+class controller_capsules:public objects_list < sprite_capsule, controller_capsules >
 {
 public:
   static const Sint32 SGADGET_X1 = 146; //abscissa of the first bonus
@@ -76,7 +76,7 @@ private:
   static const Uint16 randomlist[128];
 
 public:
-    controller_capsules (Sint32 total, Sint32 vShad = 1);
+    controller_capsules ();
    ~controller_capsules ();
   void initialise (Sint32 mStep, Sint32 mKauf, Sint32 bStep,
                    const Sint16 * table, Sint32 * cours,

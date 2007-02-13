@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.h
  * @brief Control the balls. Move and collisions 
- * @date 2007-02-12
+ * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.13 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.14 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ class controller_balls;
 #include "../include/controller_magnetic_eyes.h"
 #include "../include/sprite_eye.h"
 
-class controller_balls:public objects_list < sprite_ball >
+class controller_balls:public objects_list < sprite_ball, controller_balls >
 {
   friend class controller_ejectors;
   friend class sprite_ball;
@@ -67,17 +67,11 @@ private:
   sprite_paddle *paddle_left;
   sprite_paddle *tec_robot0;
   controller_ejectors *ejectObjet;
-  controller_bricks *bricks;
   controller_sides_bricks *sides_bricks;
   head_animation *head_anim;
-  controller_ships *ptBouiBoui;
   right_panel_score *ptBarreScr;
-  controller_guardians *ptguardian;
-  controller_moneys *ptCapsules;
-  controller_capsules *pt_gadgets;
   sprite_object *ptBob_wall;
   zeMiniMess *ptMiniMess;
-  controller_magnetic_eyes *pt_magneye;
 
 private:
   static Sint32 ballEject1[];
@@ -96,17 +90,15 @@ private:
   static Sint32 *brick_jump[15];
 
 public:
-    controller_balls (controller_ejectors * eject, controller_bricks * brick,
+    controller_balls (controller_ejectors * eject,
                       controller_sides_bricks * brico, head_animation * gugus,
-                      controller_ships * atoms, right_panel_score * score,
-                      sprite_object * pwall, zeMiniMess *,
-                      controller_magnetic_eyes * pEyes);
-    controller_balls (controller_guardians *, controller_moneys *,
-                      controller_capsules *);
+                      right_panel_score * score,
+                      sprite_object * pwall, zeMiniMess *);
+    controller_balls ();
    ~controller_balls ();
-  void init_balle (controller_paddles * raket, Sint32 start, Sint32 glueC,
+  void init (Sint32 start, Sint32 glueC,
                    Sint32 speed, Sint32 tiltC, Sint32 table);
-  void vitusBalle ();
+  void run_in_bricks_levels ();
   void vitusBall2 ();
   sprite_ball *first_ball ();
 
@@ -125,7 +117,7 @@ private:
   void vituscote2 ();
   void vitusbound ();
   void check_bricks_collision ();
-  void vitusAtoms ();
+  void check_collisions_with_ships ();
   void vitus_eyes ();
   void vitusGuard ();
   void controll_balls ();

@@ -2,14 +2,14 @@
  * @file main.cc 
  * @brief The main function is where the program starts execution 
  * @created 2002-08-21 
- * @date 2007-02-12
+ * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.42 $
+ * @version $Revision: 1.43 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.42 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: main.cc,v 1.43 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

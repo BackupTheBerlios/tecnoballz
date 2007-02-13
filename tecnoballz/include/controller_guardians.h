@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.h,v 1.4 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: controller_guardians.h,v 1.5 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ gardlevel;
 #include "../include/controller_gigablitz.h"
 #include "../include/controller_explosions.h"
 
-class controller_guardians:public objects_list < sprite_guardian >
+class controller_guardians:public objects_list < sprite_guardian, controller_guardians >
 {
   friend class sprite_guardian;
 

@@ -4,11 +4,11 @@
  * @date 2007-02-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.8 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.9 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,10 +34,9 @@
 
 /**
  * Create the capsules controller
- * @param total
  * @param vShad
  */
-controller_capsules::controller_capsules (Sint32 total, Sint32 vShad)
+controller_capsules::controller_capsules ()
 {
   littleInit ();
   Sint16 *monPT;
@@ -58,8 +57,8 @@ controller_capsules::controller_capsules (Sint32 total, Sint32 vShad)
   bonusTombe = 0;
   bonus_step = 0;
   course_ptr = 0;
-  max_of_sprites = 6;
-  sprites_have_shades = vShad;
+  max_of_sprites = 0;
+  sprites_have_shades = false;
   /* additional table to drawing pixel by pixel is required
    * for color cycling of the chance capsule */
   is_draw_pixel_by_pixel = true;
@@ -260,8 +259,8 @@ controller_capsules::envoieGads (sprite_ball * pball)
 void
 controller_capsules::create_shop_sprites_list ()
 {
-  set_max_of_sprites (NB_OPTIONS + 2);
-  create_sprites_list ();
+  //set_max_of_sprites (NB_OPTIONS + 2);
+  create_sprites_list (NB_OPTIONS + 2 ,0);
   Sint32 t = NB_OPTIONS;
   sprite_capsule **liste = sprites_list;
   sprite_capsule *bonus = *liste;

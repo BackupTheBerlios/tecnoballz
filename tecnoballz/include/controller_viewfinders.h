@@ -4,11 +4,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_viewfinders.h,v 1.1 2007/02/08 17:00:33 gurumeditation Exp $
+ * $Id: controller_viewfinders.h,v 1.2 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ class controller_viewfinders;
 #include "../include/sprite_paddle.h"
 #include "../include/controller_paddles.h"
 
-class controller_viewfinders:public objects_list < sprite_object >
+class controller_viewfinders:public objects_list < sprite_object, controller_viewfinders >
 {
 private:
   /** List of the paddles */

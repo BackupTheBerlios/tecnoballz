@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.h,v 1.6 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: controller_paddles.h,v 1.7 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ class controller_paddles;
 #include "../include/controller_balls.h"
 #include "../include/controller_gigablitz.h"
 
-class controller_paddles:public objects_list < sprite_paddle >
+class controller_paddles:public objects_list < sprite_paddle, controller_paddles >
 {
   friend class sprite_paddle;
 
@@ -135,7 +135,6 @@ public:
 
 public:
     controller_paddles ();
-    controller_paddles (Uint32 numof_paddles);
    ~controller_paddles ();
   void create_projectiles_list ();
   void create_paddles_sprites ();

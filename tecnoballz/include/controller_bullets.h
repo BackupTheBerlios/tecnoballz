@@ -4,11 +4,11 @@
  $ @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bullets.h,v 1.2 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: controller_bullets.h,v 1.3 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ class controller_bullets;
 #include "../include/sprite_paddle.h"
 #include "../include/controller_explosions.h"
 
-class controller_bullets:public objects_list < sprite_bullet >
+class controller_bullets:public objects_list < sprite_bullet, controller_bullets >
 {
   friend class controller_guardians;
 

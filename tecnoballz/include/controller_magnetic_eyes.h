@@ -28,7 +28,7 @@ class controller_magnetic_eyes;
 #include "../include/sprite_eye.h"
 #include "../include/objects_list.h"
 //..............................................................................
-class controller_magnetic_eyes:public objects_list < sprite_eye >
+class controller_magnetic_eyes:public objects_list < sprite_eye, controller_magnetic_eyes >
 {
   friend class sprite_eye;
 

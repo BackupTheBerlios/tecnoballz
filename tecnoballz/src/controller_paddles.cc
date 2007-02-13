@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.12 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.13 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,55 +37,50 @@
 controller_paddles::controller_paddles ()
 {
   littleInit ();
-  max_of_sprites = 5;
-  sprites_have_shades = true;
-  sprite_type_id = BOB_BUMPHR;
-  is_team_mode = false;
-  paddle_length = 64 * resolution;
-  reverse_counter = 0;
-
-  paddle_bottom = new sprite_paddle ();
-  paddle_right = new sprite_paddle ();
-  paddle_top = new sprite_paddle ();
-  paddle_left = new sprite_paddle ();
-  tec_robot0 = new sprite_paddle (false);
-
-  bumperMini = 32 * resolution;
-  bumperMaxi = 224 * resolution;
-  bumperYhau = (20 - 8) * resolution;
-  bumperYbas = (232 - 8) * resolution;
-  bumperXgau = 20 * resolution;
-  bumperXdro = 228 * resolution;
-  width_maxi = 64 * resolution;
-  width_mini = 16 * resolution;
-}
-
-/** 
- * Create the paddles controller in guards levels
- * @params numof_paddles always 1 
- */
-controller_paddles::controller_paddles (Uint32 numof_paddles)
-{
-  littleInit ();
-  max_of_sprites = numof_paddles;
   sprites_have_shades = true;
   is_draw_pixel_by_pixel = false;
-  sprite_type_id = BOB_BUMPER;
   is_team_mode = false;
-  paddle_length = 32 * resolution;
-  reverse_counter = 0;
   
-  paddle_bottom = new sprite_paddle (false);
-  paddle_right = NULL;
-  paddle_top = NULL;
-  paddle_left = NULL;
-  tec_robot0 = NULL;
-  
-  width_maxi = 32 * resolution;
-  width_mini = 32 * resolution;
-  bumperYbas = (232 - 8) * resolution;
-  bumperMini = 16 * resolution;
-  bumperMaxi = 300 * resolution;
+  if (super_jump == GUARDS_LEVEL)
+    {
+      max_of_sprites = 1;
+      sprite_type_id = BOB_BUMPER;
+      paddle_length = 32 * resolution;
+      reverse_counter = 0;
+
+      paddle_bottom = new sprite_paddle (false);
+      paddle_right = NULL;
+      paddle_top = NULL;
+      paddle_left = NULL;
+      tec_robot0 = NULL;
+
+      width_maxi = 32 * resolution;
+      width_mini = 32 * resolution;
+      bumperYbas = (232 - 8) * resolution;
+      bumperMini = 16 * resolution;
+      bumperMaxi = 300 * resolution;
+    }
+ else
+    {
+      max_of_sprites = 5;
+      sprite_type_id = BOB_BUMPHR;
+      paddle_length = 64 * resolution;
+      paddle_bottom = new sprite_paddle ();
+      paddle_right = new sprite_paddle ();
+      paddle_top = new sprite_paddle ();
+      paddle_left = new sprite_paddle ();
+      tec_robot0 = new sprite_paddle (false);
+
+      bumperMini = 32 * resolution;
+      bumperMaxi = 224 * resolution;
+      bumperYhau = (20 - 8) * resolution;
+      bumperYbas = (232 - 8) * resolution;
+      bumperXgau = 20 * resolution;
+      bumperXdro = 228 * resolution;
+      width_maxi = 64 * resolution;
+      width_mini = 16 * resolution;
+      reverse_counter = 0;
+    }
 }
 
 /** 

@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.cc 
  * @brief Shop supervisor 
- * @date 2007-02-11
+ * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.8 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.9 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ supervisor_shop::supervisor_shop ()
   ecranfond4 = new tiles_background ();
   mouse_pointer = new sprite_mouse_pointer ();
   led_indicator = new sprite_object ();
-  gereGadget = new controller_capsules (NB_OPTIONS + 2, 0);
+  power_up_capsules = controller_capsules::get_instance ();
   mega_print = new print_text ();
   ptrEscMenu = new handler_popup_menu ();
   shop_point = 0;
@@ -84,7 +84,7 @@ supervisor_shop::~supervisor_shop ()
 {
   delete ptrEscMenu;
   delete mega_print;
-  delete gereGadget;
+  delete power_up_capsules;
   if (NULL != led_indicator)
     {
       delete led_indicator;
@@ -159,12 +159,12 @@ supervisor_shop::first_init ()
   //###################################################################
   // initialize the gadgets
   //###################################################################
-  gereGadget->create_shop_sprites_list ();
+  power_up_capsules->create_shop_sprites_list ();
   current_player->clear_shopping_cart ();
   Sint32 *tp = coursetemp;
   for (Sint32 i = 0; i < NB_OPTIONS; i++)
     *(tp++) = 0;
-  sprite_capsule **liste = gereGadget->get_sprites_list ();
+  sprite_capsule **liste = power_up_capsules->get_sprites_list ();
   bob_volant = liste[(NB_OPTIONS + 2) - 1 - 1];
 
   /* initialize the mouse pointer */
@@ -268,9 +268,9 @@ supervisor_shop::main_loop ()
                           current_player->get_money_amount (), 100000);
   mouse_pointer->move ();
   if (cheat_flag)
-    gereGadget->animations (2);
+    power_up_capsules->animations (2);
   else
-    gereGadget->animations (1);
+    power_up_capsules->animations (1);
 
   //###################################################################
   // display the 3 lines of text 
@@ -318,7 +318,7 @@ void
 supervisor_shop::aff_course ()
 {
   Sint32 *p = current_player->get_shopping_cart ();
-  sprite_capsule **liste = gereGadget->get_sprites_list ();
+  sprite_capsule **liste = power_up_capsules->get_sprites_list ();
   Sint32 pos_y = 4 * resolution;
   for (Sint32 i = 0; i < NB_OPTIONS; i++)
     {
@@ -371,14 +371,14 @@ supervisor_shop::led_moving (Sint32 index)
     {
       led_indicator->disable ();
       Sint32 i = 0;
-      gereGadget->gadgetShop (0);
+      power_up_capsules->gadgetShop (0);
       return i;
     }
   else
     {
       // set gadget indicator
       Sint32 i = case_types[index];
-      gereGadget->gadgetShop (i);
+      power_up_capsules->gadgetShop (i);
 
       // set LED indicator
       led_indicator->enable ();
@@ -666,7 +666,7 @@ supervisor_shop::achete_gad (Sint32 gadnb)
   Sint32 *p = current_player->get_shopping_cart ();
   p[bonusachat] = gadnb;
   sh_tablept[bonusachat] = shop_point;
-  sprite_capsule **liste = gereGadget->get_sprites_list ();
+  sprite_capsule **liste = power_up_capsules->get_sprites_list ();
   sprite_capsule *gadgt = liste[bonusachat++];
   gadgt->nouveauGad (gadnb);
   message_ok ();
@@ -838,7 +838,7 @@ supervisor_shop::sh_ballade ()
           if (i >= 0)
             {
               Sint32 *p = current_player->get_shopping_cart ();
-              sprite_capsule **liste = gereGadget->get_sprites_list ();
+              sprite_capsule **liste = power_up_capsules->get_sprites_list ();
               courseList = p + i;
               bobclignot = *(liste + i);
               get_object = *(sh_tablept + i);

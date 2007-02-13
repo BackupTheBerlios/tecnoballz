@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-02-12
+ * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.20 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.21 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,29 +37,20 @@
  * Create the balls controller into bricks levels
  */
 controller_balls::controller_balls (controller_ejectors * eject,
-                                    controller_bricks * brick,
                                     controller_sides_bricks * brico,
                                     head_animation * gugus,
-                                    controller_ships * atoms,
                                     right_panel_score * score,
-                                    sprite_object * pwall, zeMiniMess * pMess,
-                                    controller_magnetic_eyes * pEyes)
+                                    sprite_object * pwall, zeMiniMess * pMess)
 {
   littleInit ();
   num_erreur = 0;
 
   ejectObjet = eject;
-  bricks = brick;
   sides_bricks = brico;
   head_anim = gugus;
-  ptBouiBoui = atoms;
   ptBarreScr = score;
   ptBob_wall = pwall;
   ptMiniMess = pMess;
-  pt_magneye = pEyes;
-  ptCapsules = NULL;
-  ptguardian = NULL;
-  pt_gadgets = NULL;
 
   balle_glue = 4 * 60;
   startCount = 60;
@@ -76,24 +67,17 @@ controller_balls::controller_balls (controller_ejectors * eject,
 /** 
  * Create the balls controller into guards levels
  */
-controller_balls::controller_balls (controller_guardians * pGard,
-                                    controller_moneys * pCaps,
-                                    controller_capsules * pGads)
+controller_balls::controller_balls ()
 {
   littleInit ();
   num_erreur = 0;
 
   ejectObjet = NULL;
-  bricks = NULL;
   sides_bricks = NULL;
   head_anim = NULL;
-  ptBouiBoui = NULL;
   ptBarreScr = NULL;
   ptBob_wall = NULL;
   ptMiniMess = NULL;
-  ptCapsules = pCaps;
-  ptguardian = pGard;
-  pt_gadgets = pGads;
 
   balle_glue = 4 * 60;
   startCount = 60;
@@ -117,7 +101,6 @@ controller_balls::~controller_balls ()
 
 /**
  * Initialize the balls before one level
- * @param raket pointer to a paddle sprite
  * @param start time delay before the ball leaves the bumper (first time)
  * @param glueC time delay before the ball leaves (glue option)
  * @param speed time delay before the ball accelerates
@@ -125,30 +108,34 @@ controller_balls::~controller_balls ()
  * @param table speed ball (1 to 4)
  */
 void
-controller_balls::init_balle (controller_paddles * raket, Sint32 start,
-                              Sint32 glueC, Sint32 speed, Sint32 tiltC,
-                              Sint32 table)
+controller_balls::init (Sint32 start,
+                        Sint32 glueC, Sint32 speed, Sint32 tiltC,
+                        Sint32 table)
 {
+
+  controller_paddles *paddles = controller_paddles::get_instance (); 
+
   startCount = start;
   balle_glue = glueC;
   tempoVites = speed;
   balle_tilt = tiltC;
   balleVites = sprite_ball::donneSpeed (table);
-  paddle_bottom = raket->get_paddle (controller_paddles::BOTTOM_PADDLE);
-  paddle_right = raket->get_paddle (controller_paddles::RIGHT_PADDLE);
-  paddle_top = raket->get_paddle (controller_paddles::TOP_PADDLE);
-  paddle_left = raket->get_paddle (controller_paddles::LEFT_PADDLE);
-  tec_robot0 = raket->get_paddle (controller_paddles::ROBOT_PADDLE);
+  paddle_bottom = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
 
-  /* Get the width of a brick in pixels */
   Sint32 w;
-  if (bricks != NULL)
+  if (super_jump == GUARDS_LEVEL)
     {
-      w = bricks->get_brick_width ();
+      /* the width of a brick in pixels */
+      w = 16 * resolution;
     }
   else
     {
-      w = 16 * resolution;
+      paddle_right = paddles->get_paddle (controller_paddles::RIGHT_PADDLE);
+      paddle_top = paddles->get_paddle (controller_paddles::TOP_PADDLE);
+      paddle_left = paddles->get_paddle (controller_paddles::LEFT_PADDLE);
+      tec_robot0 = paddles->get_paddle (controller_paddles::ROBOT_PADDLE);
+      controller_bricks* bricks = controller_bricks::get_instance ();
+      w = bricks->get_brick_width ();
     }
 
   for (Uint32 i = 0; i < max_of_sprites; i++)
@@ -161,16 +148,17 @@ controller_balls::init_balle (controller_paddles * raket, Sint32 start,
   sprite_ball *balle = sprites_list[0];
   paddle_bottom->ball_glued = balle;
   balle->startBalle (paddle_bottom->collision_width);
-  num_of_sprites = 1;           // one ball to screen
+  /* one ball on the screen */
+  num_of_sprites = 1;
   if (ejectObjet)
     ejectObjet->ballPosIni (&sprite_ball::furaxTable[0]);
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels: balls moves and collisions
-//-------------------------------------------------------------------------------
+/**
+ * Move the balls and check the collisions
+ */
 void
-controller_balls::vitusBalle ()
+controller_balls::run_in_bricks_levels ()
 {
   vitus_sort ();                //test if balls go out of the screen
   activate_tilt ();
@@ -180,7 +168,7 @@ controller_balls::vitusBalle ()
   vitusrobot ();
   collision_with_walls ();                //collisions balls and walls
   vitusEject ();                //collisions balls and ejectors
-  vitusAtoms ();
+  check_collisions_with_ships ();
   vitus_eyes ();
   controll_balls ();            //control ball with the left mouse button
   time_2tilt ();
@@ -217,6 +205,7 @@ controller_balls::vitus_sort ()
   Sint32 max_x = sprite_ball::MAXIMUM_PX * resolution;
   Sint32 min_y = sprite_ball::MINIMUM_PY * resolution;
   Sint32 max_y = sprite_ball::MAXIMUM_PY * resolution;
+  controller_ships* ships = controller_ships::get_instance ();
 
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
@@ -263,8 +252,7 @@ controller_balls::vitus_sort ()
                   // start parasite animation head
                   head_anim->start_interference ();
                   current_player->remove_life (1);
-                  // force the explosion of all the "atoms"
-                  ptBouiBoui->atomexplos ();
+                  ships->force_explosion ();
 #ifndef SOUNDISOFF
                   audio->play_lost_music ();
                   audio->play_sound (S_ENLEVVIE);
@@ -828,10 +816,10 @@ controller_balls::vitusrobot ()
 void
 controller_balls::vitusEject ()
 {
-  sprite_object *coin1 = ejectObjet->demandeBOB (1);
-  sprite_object *coin2 = ejectObjet->demandeBOB (2);
-  sprite_object *coin3 = ejectObjet->demandeBOB (3);
-  sprite_object *coin4 = ejectObjet->demandeBOB (4);
+  sprite_object *coin1 = ejectObjet->get_ejector (controller_ejectors::TOP_LEFT_EJECTOR);
+  sprite_object *coin2 = ejectObjet->get_ejector (controller_ejectors::TOP_RIGHT_EJECTOR);
+  sprite_object *coin3 = ejectObjet->get_ejector (controller_ejectors::BOTTOM_LEFT_EJECTOR);
+  sprite_object *coin4 = ejectObjet->get_ejector (controller_ejectors::BOTTOM_RIGHT_EJECTOR);
 
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
@@ -1113,6 +1101,8 @@ controller_balls::vitusbound ()
 void
 controller_balls::check_bricks_collision ()
 {
+  controller_bricks * bricks = controller_bricks::get_instance ();
+
   Sint32 bwght = bricks->get_brick_width ();    //brick's width in pixels
   Sint32 byoff = bricks->getYOffset (); //y-offset between 2 bricks
   Sint32 indus = bricks->getBkIndus (); //first indestructible brick
@@ -1240,22 +1230,24 @@ controller_balls::check_bricks_collision ()
 void
 controller_balls::vitus_eyes ()
 {
-  Sint32 vhypo = pt_magneye->hypotenuse;
+
+  controller_magnetic_eyes *eyes = controller_magnetic_eyes::get_instance ();
+  Sint32 vhypo = eyes->hypotenuse;
   sprite_ball **liste = sprites_list;
-  Sint32 nbEye = pt_magneye->get_max_of_sprites ();
+  Sint32 nbEye = eyes->get_max_of_sprites ();
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = *(liste++);
       if (!balle->is_enabled)
         continue;
-      sprite_eye **pEyes = pt_magneye->get_sprites_list ();
+      sprite_eye **pEyes = eyes->get_sprites_list ();
       for (Sint32 j = 0; j < nbEye; j++)
         {
           sprite_eye *ptEye = *(pEyes++);
           if (!ptEye->is_enabled)
             continue;
-          Sint32 centX = ptEye->x_coord + pt_magneye->eyeCenterX;
-          Sint32 centY = ptEye->y_coord + pt_magneye->eyeCenterY;
+          Sint32 centX = ptEye->x_coord + eyes->eyeCenterX;
+          Sint32 centY = ptEye->y_coord + eyes->eyeCenterY;
 
           Sint32 deltX =
             balle->x_coord + (balle->collision_width / 2) - centX;
@@ -1333,56 +1325,59 @@ controller_balls::vitus_eyes ()
     }
 }
 
-
-//----------------------------------------------------------------------
-// bricks levels: collision of balls with Bouibouis
-//----------------------------------------------------------------------
+/**
+ * Collisions between balls and ships
+ */
 void
-controller_balls::vitusAtoms ()
+controller_balls::check_collisions_with_ships ()
 {
-  sprite_ball **liste = sprites_list;
-  Uint32 t = ptBouiBoui->get_max_of_sprites ();
-  sprite_ship **aList = ptBouiBoui->get_sprites_list ();
+  controller_ships* ships = controller_ships::get_instance ();
+  sprite_ball **balls = sprites_list;
+  Uint32 t = ships->get_max_of_sprites ();
+  sprite_ship **ships_list = ships->get_sprites_list ();
   Sint32 nouve = (hasard_val & 0xF) << 2;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball *balle = *(liste++);
-      if (balle->is_enabled && balle->ClBouiBoui == 0)
+      sprite_ball *ball = *(balls++);
+      if (!ball->is_enabled)
         {
-          Sint32 h = balle->collision_width;
+          continue;
+        }
+          Sint32 h = ball->collision_width;
           h = h - 2;
-          Sint32 x1 = balle->x_coord;
+          Sint32 x1 = ball->x_coord;
           Sint32 x2 = x1 + h;
           x1 -= 20;
-          Sint32 y1 = balle->y_coord;
+          Sint32 y1 = ball->y_coord;
           Sint32 y2 = y1 + h;
           y1 -= 26;
-          sprite_ship **monPT = aList;
+          sprite_ship **ships = ships_list;
           for (Uint32 j = 0; j < t; j++)
             {
-              sprite_ship *atome = *(monPT++);
-              if (!atome->atom_actif)
-                {
-                  Sint32 k = atome->y_coord;
+              sprite_ship *ship = *(ships++);
+              if (ship->atom_actif > 0)
+                { 
+                  continue;
+                }
+
+                  Sint32 k = ship->y_coord;
                   if (k < y2 && k > y1)
                     {
-                      k = atome->x_coord;
+                      k = ship->x_coord;
                       if (k < x2 && k > x1)
                         {
                           current_player->add_score (100);
 #ifndef SOUNDISOFF
                           audio->play_sound (S_TO_ATOMS);
 #endif
-                          k = (balle->ballPowerX + 1) * 4;
-                          atome->atom_power -= k;
-                          if (atome->atom_power < 1)
-                            atome->explosion1 (balle);
-                          balle->directBall = nouve;
+                          k = (ball->ballPowerX + 1) * 4;
+                          ship->atom_power -= k;
+                          if (ship->atom_power < 1)
+                            ship->explosion1 (ball);
+                          ball->directBall = nouve;
                         }
                     }
-                }
             }
-        }
     }
 }
 
@@ -1392,12 +1387,16 @@ controller_balls::vitusAtoms ()
 void
 controller_balls::vitusGuard ()
 {
+  controller_guardians* guards = controller_guardians::get_instance ();
+  controller_capsules* capsules = controller_capsules::get_instance ();
+  controller_moneys* moneys = controller_moneys::get_instance ();
+   
   /* number of balls from 1 to n */
   Uint32 u = max_of_sprites;
   sprite_ball **liste = sprites_list;
   /* number of guardians from 1 to 2 */
-  Uint32 t = ptguardian->get_max_of_sprites ();
-  sprite_guardian **aList = ptguardian->get_sprites_list ();
+  Uint32 t = guards->get_max_of_sprites ();
+  sprite_guardian **aList = guards->get_sprites_list ();
   for (Uint32 j = 0; j < t; j++)
     {
       sprite_guardian *pGard = aList[j];
@@ -1448,8 +1447,9 @@ controller_balls::vitusGuard ()
             }
           if (balok)
             {
-              ptCapsules->send_money_from_guardian (balok);
-              pt_gadgets->envoieGads (balok);
+
+              moneys->send_money_from_guardian (balok);
+              capsules->envoieGads (balok);
             }
         }
     }

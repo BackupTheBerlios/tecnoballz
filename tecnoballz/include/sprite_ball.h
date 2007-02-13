@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.h,v 1.11 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: sprite_ball.h,v 1.12 2007/02/13 17:11:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,7 +92,6 @@ private:
   Sint32 eject_ball[4];         //flag pour coins haut-gauche/bas-gauche/bas_droite/haut-droite
   Sint32 colleBallF;            //sticky ball flag
   Sint32 tilt_delay;            //counter before a tilt is possible 
-  Sint32 ClBouiBoui;            //0=no bouibouis collisions
   Sint32 speedCount;            //temps que dure la vitesse
   Sint32 speed_init;            //temps que dure la vitesse (valeur initiale)
   Sint32 startCount;            //temps avant que la balle parte

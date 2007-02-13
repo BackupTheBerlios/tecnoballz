@@ -29,7 +29,7 @@ class controller_spheres;
 #include "../include/objects_list.h"
 #include "../include/score_over.h"
 //...............................................................................
-class controller_spheres:public objects_list < sprite_object >
+class controller_spheres:public objects_list < sprite_object, controller_spheres >
 {
 private:
   Sint32 speed_rad0;

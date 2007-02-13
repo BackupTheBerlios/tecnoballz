@@ -1,68 +1,64 @@
-//*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file         : "controller_ships.cc"
-// created              : ?
-// updates              : 2004-10-13
-// function     : manage the BouiBoui
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA 02111-1307, USA.
-//*****************************************************************************
+/** 
+ * @file controller_ships.cc 
+ * @brief Ship controller 
+ * @date 2007-02-13
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.3 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: controller_ships.cc,v 1.3 2007/02/13 17:11:02 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
 #include "../include/controller_ships.h"
 
-//-----------------------------------------------------------------------------
-// create the object
-//-----------------------------------------------------------------------------
-controller_ships::controller_ships (controller_moneys * pCaps,
-                                    controller_capsules * ptGad,
-                                    controller_gems * ptGem,
-                                    controller_bricks * pBrik)
+/**
+ * Create a ships controller
+ */
+controller_ships::controller_ships ()
 {
-  ptCapsules = pCaps;
-  pt_gadgets = ptGad;
-  ptGemstone = ptGem;
-  pt_briques = pBrik;
   littleInit ();
   max_of_sprites = 8;
   sprites_have_shades = true;
   sprite_type_id = BOB_ATOMES;
 }
 
-//-----------------------------------------------------------------------------
-// release the object
-//-----------------------------------------------------------------------------
+/**
+ * Release a ships controller
+ */
 controller_ships::~controller_ships ()
 {
   release_sprites_list ();
 }
 
-//-------------------------------------------------------------------------------
-// Initialize the BouiBoui
-// input        => time0: time before apparition
-//                      => time1: time before the first apparition
-//                      => time2: time before the first apparition
-//                      => time3: time before the first apparition
-//                      => time4: time before the first apparition
-//                      => power: strength
-//-------------------------------------------------------------------------------
+/**
+ * Initialize the ships
+ * @param time0 time delay before the first apparition 
+ * @param time1 time delay before the first apparition 
+ * @param time2 time delay before the first apparition
+ * @param time3 time delay before the first apparition
+ * @param time4 time delay before the first apparition
+ * @param power strength
+ */
 void
 controller_ships::initialise (Sint32 time0, Sint32 time1, Sint32 time2,
                               Sint32 time3, Sint32 time4, Sint32 power)
 {
-  //time0 = time1 = time2 = time3 = time4 = 10;   //test only
-
   reappTemps = time0;
   apparition[0] = time1;
   apparition[1] = time2;
@@ -76,18 +72,22 @@ controller_ships::initialise (Sint32 time0, Sint32 time1, Sint32 time2,
   Sint32 offs2 = 21 * sprite_ship::ATOM_ANIMA;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ship *atome = sprites_list[i];
-      atome->littleInit (time0, //time before activation
-                         apparition[j] + i,     //time before first activation  
-                         j,     //number of the table of standby values (0 to 3)
-                         power, //strength
-                         x + (i * 16 * resolution),     //absciss
-                         y + (i * 16 * resolution),     //ordinate
-                         offs1, //number of the image's explosion
-                         ptCapsules,    //object "controller_moneys"
-                         pt_gadgets,    //object "controller_capsules"
-                         ptGemstone,    //object "controller_gems"
-                         pt_briques);   //object "controller_bricks
+      sprite_ship *ship = sprites_list[i];
+      ship->littleInit (
+        /* time delay before activation */
+        time0,
+        /* time delay before first activation */
+        apparition[j] + i,
+        /* table number of standby values, from 0 to 3 */
+        j,
+        /* strength */
+        power,
+        /* x coordinate */
+        x + (i * 16 * resolution),
+        /* y coordinate */
+        y + (i * 16 * resolution),
+        /* image number of the explosion */
+        offs1);
       j++;
       j &= 3;
       Sint32 k = offs2;
@@ -100,7 +100,7 @@ controller_ships::initialise (Sint32 time0, Sint32 time1, Sint32 time2,
 // move all BouiBoui
 //-------------------------------------------------------------------------------
 void
-controller_ships::atom_depla ()
+controller_ships::move ()
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
@@ -110,11 +110,11 @@ controller_ships::atom_depla ()
     }
 }
 
-//-------------------------------------------------------------------------------
-// force the explosion of all BouiBoui
-//-------------------------------------------------------------------------------
+/**
+ * Force the explosion of all ships
+ */
 void
-controller_ships::atomexplos ()
+controller_ships::force_explosion ()
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
