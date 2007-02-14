@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-02-13
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.22 2007/02/13 20:55:27 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.23 2007/02/14 20:00:08 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -259,7 +259,7 @@ controller_balls::vitus_sort ()
 #endif
                   ptMiniMess->mesrequest (10);
                   ptMiniMess->mesrequest (1);
-                  ptBarreScr->resetemoin ();
+                  ptBarreScr->reset_gigablitz_countdown ();
                 }
             }
         }
@@ -590,7 +590,7 @@ controller_balls::vitus_bump ()
                 {
                   balle->y_coord = y - balle->collision_height;
                   bumpX = raket;
-                  ptBarreScr->resetemoin ();
+                  ptBarreScr->reset_gigablitz_countdown ();
                 }
             }
 

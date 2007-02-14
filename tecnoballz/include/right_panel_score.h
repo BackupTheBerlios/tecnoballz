@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.h,v 1.3 2007/02/14 19:49:46 gurumeditation Exp $
+ * $Id: right_panel_score.h,v 1.4 2007/02/14 20:00:08 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,11 +42,11 @@ class right_panel_score:public print_text
 private:
   static right_panel_score* panel_score_singleton;
 
-  static const Sint32 TEMPOBLITZ = 10;
-  static const Sint32 TEMOINHAUT = 27;
-  static const Sint32 TEMOINPOSX = 526 / 2;
-  static const Sint32 TEMOINPOSY = 420 / 2;
-  static const Sint32 TEMOINLARG = 10 / 2;
+  static const Uint32 DELAY_GIGABLITZ_COUNTDOWN = 10;
+  static const Uint32 GAUGE_HEIGHT = 27;
+  static const Uint32 GAUGE_XCOORD = 526 / 2;
+  static const Uint32 GAUGE_YCOORD = 420 / 2;
+  static const Uint32 TEMOINLARG = 10 / 2;
   static const Sint32 POSX_AREAN = 528 / 2;
   static const Sint32 POSY_AREAN = 306 / 2;
   static const Sint32 POSX_LEVEL = 592 / 2;
@@ -69,17 +69,18 @@ private:
   /** The number of bricks which remain */
   Uint32 bricks_counter;
   Sint32 flip_white;
-  bitmap_data *GFX_Sbarre;      // score panel image bitmap 
   controller_balls *balls;
   char *scoreAdres;             // buffer address score
   char *lifesAdres;             // buffer address lifes
   char *brickAdres;             // buffer address number bricks
   char *temoinAdrs;             // buffer address indicator blitz
-  Sint32 blitzcount;            // high of indicator blitz
-  Sint32 blitztempo;
-  Sint32 temoinhaut;
-  static unsigned char temoinCol1[TEMOINHAUT];
-  static unsigned char temoinCol2[TEMOINHAUT * 2];
+  /** Countdown berfore Gigablitz launch */ 
+  Uint32 gigablitz_countdown;
+  Uint32 delay_gigablitz_countdown;
+  /** Height of the gigablitz gauge in pixels */
+  Uint32 gauge_height;
+  static unsigned char temoinCol1[GAUGE_HEIGHT];
+  static unsigned char temoinCol2[GAUGE_HEIGHT * 2];
 
 
 private:
@@ -93,7 +94,7 @@ public:
   Uint32 get_bricks_counter ();
   void set_bricks_counter  (Uint32 counter);
   void draw_gigablizt_gauge ();
-  void resetemoin ();
+  void reset_gigablitz_countdown ();
 private:
   void draw_background ();
 

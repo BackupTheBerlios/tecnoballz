@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.4 2007/02/14 17:04:44 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.5 2007/02/14 20:00:08 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,11 +36,10 @@ right_panel_score * right_panel_score::panel_score_singleton = NULL;
  */
 right_panel_score::right_panel_score ()
 {
-  GFX_Sbarre = (bitmap_data *) NULL;
   initial_me ();
-  temoinhaut = TEMOINHAUT * resolution;
-  blitzcount = temoinhaut;
-  blitztempo = TEMPOBLITZ;
+  gauge_height = GAUGE_HEIGHT * resolution;
+  gigablitz_countdown = gauge_height;
+  delay_gigablitz_countdown = 0; 
   flip_white = 0;
 }
 
@@ -49,12 +48,7 @@ right_panel_score::right_panel_score ()
  */
 right_panel_score::~right_panel_score ()
 {
-  if (NULL != GFX_Sbarre)
-    {
-      delete GFX_Sbarre;
-      GFX_Sbarre = (bitmap_data *) NULL;
-    }
-  destroy_me ();
+   destroy_me ();
 }
 
 /**
@@ -87,7 +81,7 @@ right_panel_score::first_init (controller_balls* b)
   brickAdres = game_screen->get_pixel_data
     (POSX_BRICK * resolution, POSY_BRICK * resolution);
   temoinAdrs = game_screen->get_pixel_data
-    (TEMOINPOSX * resolution, TEMOINPOSY * resolution);
+    (GAUGE_XCOORD * resolution, GAUGE_YCOORD * resolution);
   draw_background ();
 }
 
@@ -97,9 +91,10 @@ right_panel_score::first_init (controller_balls* b)
 void
 right_panel_score::draw_background ()
 {
-  GFX_Sbarre = new bitmap_data ();
-  GFX_Sbarre->load (handler_resources::RESBASCORE);
-  GFX_Sbarre->copyTampon (0, 0, 256 * resolution, 0, 64 * resolution,
+  bitmap_data *bmp = new bitmap_data ();
+
+  bmp->load (handler_resources::RESBASCORE);
+  bmp->copyTampon (0, 0, 256 * resolution, 0, 64 * resolution,
                           240 * resolution);
   tamponAff1 (POSX_AREAN * resolution, POSY_AREAN * resolution,
               current_player->area_number, 10);
@@ -113,8 +108,8 @@ right_panel_score::draw_background ()
               ptScoreTab->bestPlayer (), 6);
 
   draw_gigablizt_gauge ();
-  delete GFX_Sbarre;
-  GFX_Sbarre = (bitmap_data *) NULL;
+  delete bmp;
+  bmp = (bitmap_data *) NULL;
 }
 
 /**
@@ -172,29 +167,30 @@ void
 right_panel_score::draw_gigablizt_gauge ()
 {
   controller_gigablitz *gigablitz = controller_gigablitz::get_instance ();
-
-
-
   if (keyboard->is_right_left_buttons () && !gigablitz->isactivate () &&
       !balls->least_glue ())
     {
-      if (--blitztempo <= 0)
+      if (++delay_gigablitz_countdown >= DELAY_GIGABLITZ_COUNTDOWN)
         {
-          if (blitzcount > 0)
+          if (gigablitz_countdown > 0)
             {
-              blitztempo = TEMPOBLITZ;
-              blitzcount = blitzcount - resolution;
-              if (blitzcount == 0)      // indicator is highest?
-                gigablitz->initDepart ();      // yes, launch the gigablitz!
+              delay_gigablitz_countdown = 0;
+              gigablitz_countdown = gigablitz_countdown - resolution;
+              /* gauge maximum height reached? */ 
+              if (gigablitz_countdown == 0)
+                {
+                  /* yes, launch the gigablitz!*/
+                  gigablitz->initDepart ();
+                }
             }
         }
     }
   else
     {
-      if (blitzcount < (temoinhaut))
+      if (gigablitz_countdown < gauge_height)
         {
-          blitztempo = TEMPOBLITZ;
-          blitzcount = blitzcount + resolution;
+          delay_gigablitz_countdown = 0;
+          gigablitz_countdown = gigablitz_countdown + resolution;
         }
     }
 
@@ -205,7 +201,7 @@ right_panel_score::draw_gigablizt_gauge ()
 
   if (resolution == 1)
     {
-      for (Sint32 i = 0; i < blitzcount; i++)
+      for (Sint32 i = 0; i < gigablitz_countdown; i++)
         {
           d[0] = p;
           d[1] = p;
@@ -217,7 +213,7 @@ right_panel_score::draw_gigablizt_gauge ()
     }
   else
     {
-      for (Sint32 i = 0; i < blitzcount; i++)
+      for (Sint32 i = 0; i < gigablitz_countdown; i++)
         {
           d[0] = p;
           d[1] = p;
@@ -235,7 +231,7 @@ right_panel_score::draw_gigablizt_gauge ()
 
 
 
-  Sint32 h = (temoinhaut) - blitzcount;
+  Sint32 h = (gauge_height) - gigablitz_countdown;
 
   flip_white = ~flip_white;
   if (flip_white)
@@ -312,20 +308,19 @@ right_panel_score::draw_gigablizt_gauge ()
     }
 }
 
-//-------------------------------------------------------------------------------
-// RAZ indicator bar of gigablitz
-//-------------------------------------------------------------------------------
+/**
+ * Reset the countdown of the Gigablitz
+ */
 void
-right_panel_score::resetemoin ()
+right_panel_score::reset_gigablitz_countdown ()
 {
-  blitzcount = temoinhaut;
+  gigablitz_countdown = gauge_height;
 }
 
-//-------------------------------------------------------------------------------
-// list of 54 couleurs from gigablitz
-//-------------------------------------------------------------------------------
-unsigned char
-  right_panel_score::temoinCol1[TEMOINHAUT] = { 255,
+/** List of 54 couleurs from gigablitz */
+unsigned char right_panel_score::temoinCol1[GAUGE_HEIGHT] =
+{ 
+  255,
   255,
   254,
   254,
@@ -354,8 +349,8 @@ unsigned char
   239
 };
 
-unsigned char
-  right_panel_score::temoinCol2[TEMOINHAUT * 2] = { 255,
+unsigned char right_panel_score::temoinCol2[GAUGE_HEIGHT * 2] =
+{ 255,
   255,
   255,
   255,
