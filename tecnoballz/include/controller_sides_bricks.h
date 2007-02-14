@@ -2,14 +2,14 @@
  * @file controller_sides_bricks.h
  * @brief Sides bricks controller. The small bricks on the side, the walls top
  *        left and right
- * @date 2007-02-12
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.h,v 1.1 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: controller_sides_bricks.h,v 1.2 2007/02/14 07:15:30 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 
 class controller_sides_bricks;
 
+#include "../include/objects_list.h"
 #include "../include/sprite_object.h"
 #include "../include/tecnoballz.h"
 //...............................................................................
@@ -44,7 +45,8 @@ typedef struct
   Sint32 iMapOffset;            //pointer to the background buffer
 } coteStruct;
 
-class controller_sides_bricks:public tecnoballz
+class controller_sides_bricks:public objects_list < sprite_object,
+  controller_sides_bricks >
 {
 public:
   /** Maximum number of bricks per wall */

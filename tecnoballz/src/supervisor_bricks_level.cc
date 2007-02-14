@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-02-13
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.20 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.21 2007/02/14 07:15:30 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
   sides_bricks = new controller_sides_bricks ();
   tiles_ground = new tiles_background ();
   panel_score = new right_panel_score ();
-  ejectors_corners = new controller_ejectors ();
+  ejectors_corners = controller_ejectors::get_instance ();
   money_capsules = controller_moneys::get_instance ();
   power_up_capsules = controller_capsules::get_instance ();
   gem_stones = controller_gems::get_instance ();
@@ -50,11 +50,11 @@ supervisor_bricks_level::supervisor_bricks_level ()
   balls =
     new controller_balls (ejectors_corners, sides_bricks, head_anim,
                           panel_score, BottomWall, ptMiniMess);
-  viewfinders_paddles = new controller_viewfinders ();
+  viewfinders_paddles = controller_viewfinders::get_instance ();
   paddles = controller_paddles::get_instance ();
-  gere_texte = new controller_fontes_game ();
+  gere_texte = controller_fontes_game::get_instance ();
   gigablitz = controller_gigablitz::get_instance ();
-  player_indicators = new controller_indicators ();
+  player_indicators = controller_indicators::get_instance ();
   game_over = controller_game_over::get_instance ();
 
   popup_menu = new handler_popup_menu ();
@@ -111,7 +111,6 @@ supervisor_bricks_level::first_init ()
   sprites->reset ();
   area_number = current_player->get_area_number ();
   level_number = current_player->get_level_number ();
-  //level_number = 5; //test only
 #ifndef SOUNDISOFF
   audio->play_level_music (area_number, level_number);
   audio->enable_sound ();
@@ -150,7 +149,6 @@ supervisor_bricks_level::first_init ()
   error_init (sides_bricks->initialise (build));
   if (erreur_num)
     return erreur_num;
-  //ejectors 
   ejectors_corners->create_ejectors_sprites ();
   balls->create_sprites_list ();
   ships->create_sprites_list ();

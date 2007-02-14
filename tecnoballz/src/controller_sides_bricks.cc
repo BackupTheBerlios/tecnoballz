@@ -2,14 +2,14 @@
  * @file controller_sides_bricks.cc 
  * @brief Sides bricks controller. The small bricks on the side, the walls top
  *        left and right
- * @date 2007-02-12
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.cc,v 1.1 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: controller_sides_bricks.cc,v 1.2 2007/02/14 07:15:30 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,9 +35,19 @@
  */
 controller_sides_bricks::controller_sides_bricks ()
 {
-  object_init ();
-  horizontal_brick = (sprite_object *) NULL;  //sprite object (small horizontal bricks)
-  vertical_brick = (sprite_object *) NULL;  //sprite object (small vertical bricks)
+  littleInit ();
+  if (bob_ground)
+    {
+      max_of_sprites = (MAX_OF_SIDES_BRICKS + 4) * 3;
+    }
+  else
+    {
+      max_of_sprites = 2;
+    }
+  sprites_have_shades = true;
+  
+  horizontal_brick = (sprite_object *) NULL;
+  vertical_brick = (sprite_object *) NULL;
   is_top_wall_breakable = false;
   is_right_wall_breakable = false;
   is_left_wall_breakable = false;
@@ -105,6 +115,7 @@ controller_sides_bricks::~controller_sides_bricks ()
         }
     }
   object_free ();
+  release_sprites_list ();
 }
 
 //-----------------------------------------------------------------------------
