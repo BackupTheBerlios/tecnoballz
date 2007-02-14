@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.cc 
  * @brief Shop supervisor 
- * @date 2007-02-13
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.9 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.10 2007/02/14 13:39:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -585,11 +585,11 @@ supervisor_shop::faitcourse (Sint32 gadnu)
       // less bricks option
       //###############################################################
     case GAD_LESSBR:
-      if (current_player->get_lessBk () <= 0)
+      if (current_player->get_less_bricks () <= 0)
         {
           if (decrease_money_amount ())
             {
-              current_player->set_lessBk (10);
+              current_player->set_less_bricks (10);
               message_ok ();
             }
         }

@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.21 2007/02/14 07:15:30 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.22 2007/02/14 13:39:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -561,9 +561,7 @@ supervisor_bricks_level::background (Sint32 nbkdg)
   //###################################################################
   // intialize the bricks level
   //###################################################################
-  bricks->first_init (panel_score, money_capsules, power_up_capsules);
-  Sint32 lbrik = current_player->get_lessBk ();
-  current_player->set_lessBk (0);
-  bricks->initialize (area_number, level_number, lbrik);
+  bricks->first_init (panel_score);
+  bricks->initialize ();
   return erreur_num;
 }

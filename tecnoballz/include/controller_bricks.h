@@ -2,14 +2,14 @@
  * @file controller_bricks.h
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-01-30
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.7 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.8 2007/02/14 13:39:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@ class controller_bricks;
 class sprite_paddle;
 #include "../include/tecnoballz.h"
 
-//-----------------------------------------------------------------------------
-// structure of one simple bricks into current level
-//-----------------------------------------------------------------------------
+/**
+ * Structure of one simple bricks into current level
+ */
 typedef struct
 {
   Sint32 brique_rel;            // adresse source relative Gfx de la brique (collision)
@@ -48,9 +48,9 @@ typedef struct
 }
 brickInfos;                     // used into "mega_table"
 
-//-----------------------------------------------------------------------------
-// structure for draw brick / restaure background
-//-----------------------------------------------------------------------------
+/**
+ * Structure for draw brick or restore the background
+ */
 typedef struct
 {
   Sint32 balle_posX;            // ball screen X-coordinate 
@@ -62,14 +62,14 @@ typedef struct
   brickInfos *adresseTab;       // adresse de la brique dans "mega_table"
 }
 brickClear;
-//...............................................................................
+
 #include "../include/sprite_paddle.h"
 #include "../include/bitmap_data.h"
 #include "../include/right_panel_score.h"
 #include "../include/controller_moneys.h"
 #include "../include/controller_capsules.h"
 #include "../include/sprite_ship.h"
-//...............................................................................
+
 class controller_bricks:public objects_list < sprite_object, controller_bricks >
 {
   friend class controller_balls;
@@ -106,11 +106,9 @@ private:
   /** Bitmap of the set of current bricks */
   bitmap_data *bitmap_bricks;
   right_panel_score *barreObjet;
-  controller_moneys *caps_objet;
-  controller_capsules *gads_objet;
 
   /** Number of bricks in the current level */
-  Sint32 num_of_bricks;
+  Uint32 num_of_bricks;
   /** Less bricks counter */
   Sint32 less_bricks_count;
   /** Time delay for the "less bricks" option */
@@ -148,11 +146,10 @@ protected:
 public:
     controller_bricks ();
    ~controller_bricks ();
-  void first_init (right_panel_score * barre, controller_moneys * capsu,
-                     controller_capsules * gadge);
-  void initialize (Sint32 area_nu, Sint32 level_nu, Sint32 lbrik);
+  void first_init (right_panel_score * barre);
+  void initialize ();
   Sint32 brickRemap ();
-  Sint32 get_num_of_bricks ();
+  Uint32 get_num_of_bricks ();
   void less_bricks ();
   void draw_brick (char *srcPT, Sint32 adres, Sint32 colbr);
   void initpalett ();

@@ -1,14 +1,14 @@
 /** 
  * @file handler_players.cc 
  * @brief players handler 
- * @date 2007-02-08
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.8 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.9 2007/02/14 13:39:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -437,20 +437,22 @@ handler_players::set_bumpOn (Sint32 bumpN, Sint32 value)
     }
 }
 
-//-----------------------------------------------------------------------------
-// initialize state "less bricks" option
-//-----------------------------------------------------------------------------
+/**
+ * Initialize less bricks option
+ * @param count number of bricks in less
+ */
 void
-handler_players::set_lessBk (Sint32 value)
+handler_players::set_less_bricks (Uint32 count)
 {
-  less_brick = value;
+  less_brick = count;
 }
 
-//-----------------------------------------------------------------------------
-// return state "less bricks" option
-//-----------------------------------------------------------------------------
-Sint32
-handler_players::get_lessBk ()
+/**
+ * Return number of bricks in less
+ * @return number of bricks in less
+ */
+Uint32
+handler_players::get_less_bricks ()
 {
   return less_brick;
 }

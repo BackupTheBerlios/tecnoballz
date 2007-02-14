@@ -1,14 +1,14 @@
 /** 
  * @file handler_players.h
  * @brief players handler 
- * @date 2007-02-06
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.h,v 1.8 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: handler_players.h,v 1.9 2007/02/14 13:39:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -124,8 +124,8 @@ public:
 
   Sint32 get_bumpOn (Sint32 bumpN);
   void set_bumpOn (Sint32 bumpN, Sint32 value);
-  void set_lessBk (Sint32 value);
-  Sint32 get_lessBk ();
+  void set_less_bricks (Uint32 count);
+  Uint32 get_less_bricks ();
   void setRebuild (Sint32 build);
   Sint32 getRebuild ();
   void set_Bprice (Sint32 value);

@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-02-11
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.9 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.10 2007/02/14 13:39:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,12 +100,9 @@ controller_bricks::~controller_bricks ()
 // first initialization
 //-------------------------------------------------------------------------------
 void
-controller_bricks::first_init (right_panel_score * barre, controller_moneys * capsu,
-                               controller_capsules * gadge)
+controller_bricks::first_init (right_panel_score * barre)
 {
   barreObjet = barre;
-  caps_objet = capsu;
-  gads_objet = gadge;
 
   /* allocate memory for the redraw bricks table */
   if (NULL == brique_pnt)
@@ -133,7 +130,7 @@ controller_bricks::first_init (right_panel_score * barre, controller_moneys * ca
  * @param lbrik true if "less bricks" bonus bought into the shop 
  */
 void
-controller_bricks::initialize (Sint32 areaN, Sint32 tablo, Sint32 lbrik)
+controller_bricks::initialize ()
 {
 
   if (bob_ground)
@@ -141,9 +138,11 @@ controller_bricks::initialize (Sint32 areaN, Sint32 tablo, Sint32 lbrik)
       alloc_sprites_list ();
     }
 
+
   if (NULL == bitmap_bricks)
     {
-      less_bricks_count = lbrik;
+      less_bricks_count = current_player->get_less_bricks ();
+      current_player->set_less_bricks (0);
 
       /* clear restauration list */
       briqueSave = 0;
@@ -203,8 +202,8 @@ controller_bricks::initialize (Sint32 areaN, Sint32 tablo, Sint32 lbrik)
         }
       bposx = i * 112 * resolution;
 
-      bposx = 0 * 112 * resolution;     //test only
-      bposy = 1 * 63 * resolution;      //test only
+      //bposx = 0 * 112 * resolution;     //test only
+      //bposy = 1 * 63 * resolution;      //test only
 
       if (is_verbose)
         printf ("controller_bricks::initialise()  bposx=%i / bposy=%i \n",
@@ -213,7 +212,9 @@ controller_bricks::initialize (Sint32 areaN, Sint32 tablo, Sint32 lbrik)
       delete bmp_bricks;
 
       /* load one bricks level from the file "tableau.data" */
-      load_level (areaN, tablo);
+      Uint32 area_num = current_player->get_area_number (); 
+      Uint32 level_num = current_player->get_level_number (); 
+      load_level (area_num, level_num);
 
       /* read somes values for the graphic routine */
       offsSource = bitmap_bricks->get_line_modulo (brick_width);
@@ -233,7 +234,7 @@ controller_bricks::initialize (Sint32 areaN, Sint32 tablo, Sint32 lbrik)
  * Return the number of bricks in the current level
  * @return number of bricks
  */
-Sint32
+Uint32
 controller_bricks::get_num_of_bricks ()
 {
   return num_of_bricks;
@@ -490,6 +491,11 @@ controller_bricks::less_bricks ()
 Sint32
 controller_bricks::brickRemap ()
 {
+
+  controller_capsules *capsules = controller_capsules::get_instance ();
+  controller_moneys *moneys = controller_moneys::get_instance ();
+
+
   brickClear *briPT = brique_pnt + brique_clr;
   Sint32 adres = briPT->adresseAff;     // adresse affichage relative
   if (!adres)
@@ -594,8 +600,8 @@ controller_bricks::brickRemap ()
 #endif
             if (briPT->balle_posX != 512)
               {
-                caps_objet->send_money_from_brick (briPT);
-                gads_objet->envoieGads (briPT);
+                moneys->send_money_from_brick (briPT);
+                capsules->envoieGads (briPT);
               }
           }
 
@@ -613,7 +619,7 @@ controller_bricks::brickRemap ()
 #ifndef SOUNDISOFF
         audio->play_sound (S_TOUBRIK1);
 #endif
-        caps_objet->send_money_from_brick (briPT);
+        moneys->send_money_from_brick (briPT);
       }
   }                             // (adresseAff!=0)
   return 1;
