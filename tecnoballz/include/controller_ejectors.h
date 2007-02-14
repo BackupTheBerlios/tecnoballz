@@ -4,11 +4,11 @@
  * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_ejectors.h,v 1.3 2007/02/13 20:55:27 gurumeditation Exp $
+ * $Id: controller_ejectors.h,v 1.4 2007/02/14 19:49:46 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,6 @@ private:
   static const Uint32 COORD_EJECTOR_1 = 16;
   static const Uint32 COORD_EJECTOR_2 = 224;
   static bool is_pos_ball_initialized;
-
 
 public:
     controller_ejectors ();

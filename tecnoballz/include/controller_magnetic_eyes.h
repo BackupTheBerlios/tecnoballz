@@ -37,7 +37,7 @@ private:
   static const Uint16 Ycoordinat[32];
 
 public:
-    Sint32 hypotenuse;
+  Sint32 hypotenuse;
   Sint32 eyeCenterX;
   Sint32 eyeCenterY;
 

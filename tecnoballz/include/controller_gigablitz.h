@@ -1,14 +1,14 @@
 /** 
  * @file controller_gigablitz.h
  * @brief Gigablitz controller 
- * @date 2007-02-10
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.h,v 1.6 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_gigablitz.h,v 1.7 2007/02/14 19:49:46 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

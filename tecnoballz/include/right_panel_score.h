@@ -1,14 +1,14 @@
 /** 
  * @file right_panel_score.h
  * @brief The right panel score in the bricks levels 
- * @date 2007-02-11
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.h,v 1.2 2007/02/11 17:43:33 gurumeditation Exp $
+ * $Id: right_panel_score.h,v 1.3 2007/02/14 19:49:46 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,8 @@ class right_panel_score;
 class right_panel_score:public print_text
 {
 private:
+  static right_panel_score* panel_score_singleton;
+
   static const Sint32 TEMPOBLITZ = 10;
   static const Sint32 TEMOINHAUT = 27;
   static const Sint32 TEMOINPOSX = 526 / 2;
@@ -64,10 +66,10 @@ private:
   static const Sint32 POSY_LIFES = 152 / 2;
   static const Sint32 POSX_BRICK = 592 / 2;
   static const Sint32 POSY_BRICK = 152 / 2;
-  Sint32 superBrick;            // number of bricks which remain
+  /** The number of bricks which remain */
+  Uint32 bricks_counter;
   Sint32 flip_white;
   bitmap_data *GFX_Sbarre;      // score panel image bitmap 
-  controller_gigablitz *gigablitz;
   controller_balls *balls;
   char *scoreAdres;             // buffer address score
   char *lifesAdres;             // buffer address lifes
@@ -80,18 +82,17 @@ private:
   static unsigned char temoinCol2[TEMOINHAUT * 2];
 
 
-public:
+private:
     right_panel_score ();
+public:
    ~right_panel_score ();
-  void first_init (controller_gigablitz * blitz, controller_balls * b);
-  void scoreEcran ();
-  void scoreAjout (Sint32 ajout);
-  //void add_life (Sint32 ajout);
-  //Sint32 remove_life (Sint32 retra);
-  void brickMoins (Sint32 retra);
-  Sint32 resteBrick ();
-  void scoreBrick (Sint32 value);
-  void barreTemoin ();
+  static right_panel_score *get_instance ();
+  void first_init (controller_balls *b);
+  void text_refresh ();
+  void decrease_bricks_counter (Uint32 dec);
+  Uint32 get_bricks_counter ();
+  void set_bricks_counter  (Uint32 counter);
+  void draw_gigablizt_gauge ();
   void resetemoin ();
 private:
   void draw_background ();
