@@ -4,11 +4,11 @@
  * @date 2007-02-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.9 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.10 2007/02/14 17:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -441,7 +441,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
       // next level
     case GAD_NEXTLV:
       ptMiniMess->mesrequest (17);
-      barre->scoreBrick (0);
+      barre->set_bricks_counter (0);
       break;
 
       // fire power 1

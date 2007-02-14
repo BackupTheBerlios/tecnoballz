@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.22 2007/02/14 13:39:20 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.23 2007/02/14 17:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
   initialise ();
   sides_bricks = new controller_sides_bricks ();
   tiles_ground = new tiles_background ();
-  panel_score = new right_panel_score ();
+  panel_score = right_panel_score::get_instance ();
   ejectors_corners = controller_ejectors::get_instance ();
   money_capsules = controller_moneys::get_instance ();
   power_up_capsules = controller_capsules::get_instance ();
@@ -177,7 +177,7 @@ supervisor_bricks_level::first_init ()
   init_level ();
 
 
-  panel_score->first_init (gigablitz, balls);
+  panel_score->first_init (balls);
 
   background ();
   paddles->init_paddles (gigablitz, balls);
@@ -309,8 +309,8 @@ supervisor_bricks_level::main_loop ()
       viewfinders_paddles->run ();
       ships->move ();
       sprites->draw ();
-      panel_score->scoreEcran ();
-      panel_score->barreTemoin ();
+      panel_score->text_refresh ();
+      panel_score->draw_gigablizt_gauge ();
       player_indicators->execution1 (current_player->amount_of_money);
       display->unlock_surfaces ();
       display->bufferCTab ();
@@ -340,7 +340,7 @@ supervisor_bricks_level::main_loop ()
           bricks->less_bricks ();
 
           paddles->move_paddles ();
-          if (panel_score->resteBrick ())
+          if (panel_score->get_bricks_counter () > 0)
             {
               paddles->check_if_release_balls ();
               paddles->fire_projectiles ();
@@ -354,20 +354,20 @@ supervisor_bricks_level::main_loop ()
           money_capsules->move ();
           power_up_capsules->bouge_gads ();    //move bonuses and maluses
           power_up_capsules->gadgetKeys ();
-	  gem_stones->move ();
+          gem_stones->move ();
           gere_texte->goMoveText ();
           if (BottomWall->thecounter < 1)
             BottomWall->disable ();
           else
             BottomWall->thecounter--;
 
-          panel_score->barreTemoin ();
+          panel_score->draw_gigablizt_gauge ();
           player_indicators->execution1 (current_player->amount_of_money);
         }
 
       //tiles_ground->draw();
       sprites->draw ();
-      panel_score->scoreEcran ();
+      panel_score->text_refresh ();
       Ecode = popup_menu->execution1 ();
       display->unlock_surfaces ();
       display->bufferCTab ();
@@ -375,7 +375,7 @@ supervisor_bricks_level::main_loop ()
       //###################################################################
       // next level or next player
       //###################################################################
-      if (!panel_score->resteBrick ())
+      if (panel_score->get_bricks_counter () == 0)
         {
           if (count_next > 0)
             {
@@ -446,9 +446,9 @@ supervisor_bricks_level::main_loop ()
   return end_return;
 }
 
-//-------------------------------------------------------------------------------
-//
-//-------------------------------------------------------------------------------
+/**
+ * Change the tiles background
+ */
 void
 supervisor_bricks_level::changebkgd ()
 {

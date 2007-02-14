@@ -5,11 +5,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gems.cc,v 1.6 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: controller_gems.cc,v 1.7 2007/02/14 17:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -144,7 +144,7 @@ controller_gems::move ()
       ptPrintmon->increase_money_amount (500);
       current_player->add_life (3);
       /* jump to the next level */
-      ptBarScore->scoreBrick (0);
+      ptBarScore->set_bricks_counter (0);
       /* enable right paddle */
       current_player->set_bumpOn (controller_paddles::RIGHT_PADDLE, 3);
       /* enable top paddle */

@@ -5,11 +5,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.10 2007/02/14 13:39:20 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.11 2007/02/14 17:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -323,7 +323,7 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
     }
 
   /* Initialize the number of total bricks to destroy */
-  barreObjet->scoreBrick (num_of_bricks);
+  barreObjet->set_bricks_counter (num_of_bricks);
 }
 
 /**
@@ -479,7 +479,7 @@ controller_bricks::less_bricks ()
     }
   less_bricks_delay = 10;
   less_bricks_count--;
-  barreObjet->brickMoins (1);
+  barreObjet->decrease_bricks_counter (1);
 #ifndef SOUNDISOFF
   audio->play_sound (S_TOUBRIK1);
 #endif
@@ -594,7 +594,7 @@ controller_bricks::brickRemap ()
         else
           {
             current_player->add_score (20);
-            barreObjet->brickMoins (1);
+            barreObjet->decrease_bricks_counter (1);
 #ifndef SOUNDISOFF
             audio->play_sound (S_TOUBRIK1);
 #endif

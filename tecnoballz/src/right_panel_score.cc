@@ -1,14 +1,14 @@
 /** 
  * @file right_panel_score.cc 
  * @brief The right panel score in the bricks levels 
- * @date 2007-02-11
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.3 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.4 2007/02/14 17:04:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@
 #include "../include/right_panel_score.h"
 #include "../include/handler_resources.h"
 #include "../include/scoretable.h"
+
+right_panel_score * right_panel_score::panel_score_singleton = NULL;
 
 /**
  * Create the right panel score
@@ -55,15 +57,28 @@ right_panel_score::~right_panel_score ()
   destroy_me ();
 }
 
+/**
+ * Get the object instance
+ * right_panel_score is a singleton
+ * @return the right_panel_score object 
+ */
+right_panel_score *
+right_panel_score::get_instance ()
+{
+  if (NULL == panel_score_singleton)
+    {
+      panel_score_singleton = new right_panel_score ();
+    }
+  return panel_score_singleton;
+}
+
 //-------------------------------------------------------------------------------
 // first initialization
 //-------------------------------------------------------------------------------
 void
-right_panel_score::first_init (controller_gigablitz * blitz,
-                               controller_balls * b)
+right_panel_score::first_init (controller_balls* b)
 {
   error_init (initialise ());
-  gigablitz = blitz;
   balls = b;
   scoreAdres = game_screen->get_pixel_data
     (POSX_SCORE * resolution, POSY_SCORE * resolution);
@@ -97,92 +112,69 @@ right_panel_score::draw_background ()
   tamponAff2 (POSX_BESTN * resolution, POSY_BESTN * resolution,
               ptScoreTab->bestPlayer (), 6);
 
-  barreTemoin ();
+  draw_gigablizt_gauge ();
   delete GFX_Sbarre;
   GFX_Sbarre = (bitmap_data *) NULL;
 }
 
-//-------------------------------------------------------------------------------
-// display sore, number of lifes, number of bricks
-//-------------------------------------------------------------------------------
+/**
+ * Display score, number of lifes and number of bricks
+ */
 void
-right_panel_score::scoreEcran ()
+right_panel_score::text_refresh ()
 {
   affNombre1 (scoreAdres, current_player->superScore, 100000);
-  affNombre1 (lifesAdres, superBrick, 100);
+  affNombre1 (lifesAdres, bricks_counter, 100);
   affNombre1 (brickAdres, current_player->number_of_lifes, 10);
 }
 
-/*
+/**
+ * Decrease the number of bricks
+ * @param dec number to substract
+ */
 void
-right_panel_score::scoreAjout (Sint32 ajout)
+right_panel_score::decrease_bricks_counter (Uint32 dec)
 {
-  current_player->add_scores (ajout);
-}
-*/
-
-/*
-//-------------------------------------------------------------------------------
-// increase the number of lifes
-//-------------------------------------------------------------------------------
-void
-right_panel_score::add_life (Sint32 ajout)
-{
-  current_player->number_of_lifes += ajout;
-}
-
-//-------------------------------------------------------------------------------
-// decrease the number of lifes
-//-------------------------------------------------------------------------------
-Sint32
-right_panel_score::remove_life (Sint32 retra)
-{
-  current_player->number_of_lifes -= retra;
-  if (current_player->number_of_lifes > 0)
-    return 1;
+  if (dec >= bricks_counter)
+    {
+      bricks_counter = 0;
+    }
   else
     {
-      current_player->number_of_lifes = 0;
-      return 0;
+      bricks_counter -= dec;
     }
 }
-*/
 
-//-------------------------------------------------------------------------------
-// decrease the number of bricks
-//-------------------------------------------------------------------------------
-void
-right_panel_score::brickMoins (Sint32 retra)
+/**
+ * Return the number of bricks
+ * @return the number of bricks
+ */
+Uint32
+right_panel_score::get_bricks_counter ()
 {
-  superBrick -= retra;
-  if (superBrick < 1)
-    superBrick = 0;
+  return bricks_counter;
 }
 
-//-------------------------------------------------------------------------------
-// return the number of bricks
-//-------------------------------------------------------------------------------
-Sint32
-right_panel_score::resteBrick ()
+/** 
+ * Intialize the bricks counter
+ * @param counter the number of bricks
+ */
+void
+right_panel_score::set_bricks_counter (Uint32 counter)
 {
-  return (superBrick);
+  bricks_counter = counter;
 }
 
-//-------------------------------------------------------------------------------
-// intialize the number of bricks
-//-------------------------------------------------------------------------------
+/**
+ * Draw the gauge of the Gigablitz
+ */
 void
-right_panel_score::scoreBrick (Sint32 value)
+right_panel_score::draw_gigablizt_gauge ()
 {
-  superBrick = value;
-}
+  controller_gigablitz *gigablitz = controller_gigablitz::get_instance ();
 
-//-------------------------------------------------------------------------------
-// display indicator bar of gigablitz
-//-------------------------------------------------------------------------------
-void
-right_panel_score::barreTemoin ()
-{
+
+
   if (keyboard->is_right_left_buttons () && !gigablitz->isactivate () &&
       !balls->least_glue ())
     {
