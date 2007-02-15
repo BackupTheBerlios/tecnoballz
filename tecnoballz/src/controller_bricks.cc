@@ -5,11 +5,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.11 2007/02/14 17:04:44 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.12 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -188,7 +188,7 @@ controller_bricks::initialize ()
       /* load the 10 sets of bricks */
       bitmap_data* bmp_bricks = new bitmap_data ();
       bmp_bricks->load (handler_resources::RESZEBRICK);
-      Sint32 i = hasard_val & 0x0F;
+      Sint32 i = random_counter & 0x0F;
       if (i >= 10)
         {
           i = i - 10;
@@ -269,7 +269,7 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
 
   /* Select a level at random.
    * Two different levels are possible for a level */
-  if ((hasard_val & 0x001))
+  if ((random_counter & 0x001))
     {
       tabPT = tabPT + LEVEL_SIZE * 2 * 50;
     }
@@ -412,11 +412,11 @@ controller_bricks::draw_brick (char *pixels, Sint32 offset, Sint32 color)
 void
 controller_bricks::initpalett ()
 {
-  SDL_Color *palPT = display->paletteAdr ();
+  SDL_Color *palPT = display->get_palette ();
   SDL_Color *palP1 = palPT + 239;
-  Sint32 i = hasard_val;
+  Sint32 i = random_counter;
   i &= 0x0f;
-  //Sint32 i = hasard_val & 0x0F;
+  //Sint32 i = random_counter & 0x0F;
   if (i >= 10)
     i = i - 10;
   const Uint32 *ptpal = (handler_resources::tabledegas + i * 18);

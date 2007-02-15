@@ -2,14 +2,14 @@
  * @file offscreen_surface.h 
  * @brief an offscreen drawing surface
  * @created 2007-01-31
- * @date 2007-02-02
+ * @date 2007-02-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: offscreen_surface.h,v 1.7 2007/02/04 17:10:16 gurumeditation Exp $
+ * $Id: offscreen_surface.h,v 1.8 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,9 +42,10 @@ public:
   Uint32 get_vertical_offset ();
   void clear (Uint32 color = 0);
   void clear (Uint32 color, Uint32 xcoord, Uint32 ycoord, Uint32 w, Uint32 height);
-  void blit_surface (offscreen_surface *offscreen);
-  void blit_surface (offscreen_surface *offscreen, Uint32 xcoord, Uint32 ycoord, Uint32 width, Uint32 height);
-  void blit_surface (offscreen_surface *offscreen, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h);
+  void blit_to_surface (offscreen_surface *offscreen);
+  void blit_to_surface (offscreen_surface *offscreen, Uint32 xcoord, Uint32 ycoord, Uint32 width, Uint32 height);
+  void blit_to_surface (offscreen_surface *offscreen, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h);
+  void blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h);
 };
 
 

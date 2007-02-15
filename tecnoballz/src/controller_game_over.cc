@@ -5,11 +5,11 @@
  * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_game_over.cc,v 1.2 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: controller_game_over.cc,v 1.3 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -174,7 +174,7 @@ controller_game_over::deplace_01 ()
       Sint32 x = chrOffsetX + decal + sinus[zebob->x_maximum] * resolution;
       Sint32 y = decal + sinus[zebob->y_maximum] * resolution;
       zebob->set_coordinates (x, y);
-      hasard_val += y;
+      random_counter += y;
     }
   if (--go_zetempo <= 0)
     {
@@ -198,7 +198,7 @@ controller_game_over::deplace_02 ()
         zebob->y_maximum = 0;
       Sint32 y = decal + sinus[zebob->y_maximum] * resolution;
       zebob->set_y_coord (y);
-      hasard_val += y;
+      random_counter += y;
     }
 
   // move the letters "G", "A", "M", "E"
@@ -256,7 +256,7 @@ controller_game_over::deplace_03 ()
           Sint32 y = decal + sinus[zebob->y_maximum] * resolution;
           zebob->set_y_coord (y);
         }
-      hasard_val += zebob->y_maximum;
+      random_counter += zebob->y_maximum;
     }
 
   // move the letters "O", "V", "E", "R"
@@ -276,7 +276,7 @@ controller_game_over::deplace_03 ()
           Sint32 y = decal + sinus[zebob->y_maximum] * resolution;
           zebob->set_y_coord (y);
         }
-      hasard_val += zebob->y_maximum;
+      random_counter += zebob->y_maximum;
     }
   if (f == 8)
     move_phase = 4;
@@ -304,7 +304,7 @@ controller_game_over::deplace_04 ()
         }
       zebob->x_coord += o;
       final = final + 54 * resolution;
-      hasard_val += zebob->x_coord;
+      random_counter += zebob->x_coord;
     }
 
   // move the letters "O", "V", "E", "R"
@@ -322,7 +322,7 @@ controller_game_over::deplace_04 ()
         }
       zebob->x_coord += o;
       final = final + 54 * resolution;
-      hasard_val += zebob->x_coord;
+      random_counter += zebob->x_coord;
     }
 }
 

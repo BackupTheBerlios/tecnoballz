@@ -84,7 +84,7 @@ controller_spheres::execution1 ()
   Sint32 centy = (120 * resolution) - (sprites_list[0]->sprite_height / 2);
 
   // varie vitesse des boulles
-  speed_rad4 = speed_rad4 + (hasard_val & 3);
+  speed_rad4 = speed_rad4 + (random_counter & 3);
   if (speed_rad4 >= r_max)
     speed_rad4 -= r_max;
   Sint32 h = (ptSin[speed_rad4] * 2) >> 7;
@@ -94,7 +94,7 @@ controller_spheres::execution1 ()
     sball = 1;
 
   // varie pointeur
-  speed_rad3 = speed_rad3 + (hasard_val & 7);
+  speed_rad3 = speed_rad3 + (random_counter & 7);
   if (speed_rad3 >= r_max)
     speed_rad3 -= r_max;
   h = (ptSin[speed_rad3] * 3) >> 7;

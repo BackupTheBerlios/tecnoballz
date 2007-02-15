@@ -4,11 +4,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_mouse_pointer.cc,v 1.1 2007/02/05 20:16:33 gurumeditation Exp $
+ * $Id: sprite_mouse_pointer.cc,v 1.2 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ void
 sprite_mouse_pointer::create_pointer_sprite (bitmap_data * bmp)
 {
   Uint32 id;
-  if (hasard_val & 1)
+  if (random_counter & 1)
     {
       id = BOB_MOUSE1;
     }

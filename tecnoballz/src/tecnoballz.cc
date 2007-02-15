@@ -2,14 +2,14 @@
  * @file tecnoballz.cc 
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-02-04
+ * @date 2007-02-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.9 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.10 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,89 +42,7 @@
 #include "../include/handler_resources.h"
 #include "../include/scoretable.h"
 #include "../include/supervisor_map_editor.h"
-//.............................................................................
-Sint32
-  tecnoballz::arg_jumper = -1;
-Sint32
-  tecnoballz::bg4_colors = 0;   //force 4 colors background
-bool
-  tecnoballz::is_verbose = 0;
-Sint32
-  tecnoballz::num_erreur = 0;   //error number
-Uint32
-  tecnoballz::counterObj = 0;   //number of objects
-Sint32
-  tecnoballz::hasard_val = 0;   //random value
-Uint32
-  tecnoballz::countframe = 0;
-scoretable *
-  tecnoballz::ptScoreTab = NULL;        //manage best scores
-handler_resources *
-  tecnoballz::resources = NULL; //manage resources
-level_data *
-  tecnoballz::ptLev_data = NULL;        //manage levels
-handler_memory *
-  tecnoballz::memory = NULL;    //manage memory allocation  
-#ifndef SOUNDISOFF
-handler_audio *
-  tecnoballz::audio = NULL;     //manage sound      
-#endif
-handler_display *
-  tecnoballz::display = NULL;   //manage screen
-handler_keyboard *
-  tecnoballz::keyboard = NULL;  //keyboard handle
-list_sprites *
-  tecnoballz::sprites = NULL;   //sprites handle
-handler_players *
-  tecnoballz::current_player = NULL;
-Sint16 *
-  tecnoballz::table_cosL = NULL;        //cosinus table
-Sint16 *
-  tecnoballz::table_sinL = NULL;        //sinus table
-supervisor_bricks_level *
-  tecnoballz::bricks_level = NULL;        //bricks levels handle
-supervisor_shop *
-  tecnoballz::shop = NULL;        //shop handle
-supervisor_guards_level *
-  tecnoballz::guards_level = NULL;        //guard handle
-supervisor_map_editor *
-  tecnoballz::map_editor = NULL;        //scroll editor handle
-supervisor_main_menu *
-  tecnoballz::main_menu = NULL;        //menu handle
-// 1:bricks level / 2:shop / 3:guards level / 4:main menu / 5:scrolling editor
-Uint32
-  tecnoballz::super_jump = 1;
-Sint32
-  tecnoballz::super_exit = 0;
-bitmap_data *
-  tecnoballz::sprites_bitmap = 0;
-Uint32
-  tecnoballz::cheat_flag = 0;
-Uint32
-  tecnoballz::birth_flag = 0;   //all name are "040670"
-Uint32
-  tecnoballz::double_mem = 1;   //2=double all allocations
-Sint32
-  tecnoballz::hardChoice = 1;
-Sint32
-  tecnoballz::initial_num_of_lifes = 8;
-Sint32
-  tecnoballz::nuOfPlayer = 1;
-char
-  tecnoballz::chainelog[100];
-const char
-  tecnoballz::nomprefix[] = PREFIX;
-Sint32
-  tecnoballz::resolution = 2;
-bool
-  tecnoballz::bob_ground = false;
-char
-  tecnoballz::zeAreaCode[11] = "          ";
 
-offscreen_surface *
-  tecnoballz::game_screen = NULL;
-offscreen_surface *
-  tecnoballz::background_screen = NULL;
 
 /**
  * Once initialization, create persistent objects
@@ -134,12 +52,12 @@ tecnoballz::first_init (configfile * pConf)
 {
   if (is_verbose)
     {
-      std::cout << "tecnoballz::first_init() start!" << std::endl;
+      std::cout << ">tecnoballz::first_init() start!" << std::endl;
     }
 #if __WORDSIZE == 64
-  hasard_val = (long) first_init;
+  random_counter = (long) first_init;
 #else
-  hasard_val = (Sint32) first_init;
+  random_counter = (Sint32) first_init;
 #endif
   memory = new handler_memory ();
   memory->init (17000);
@@ -147,9 +65,7 @@ tecnoballz::first_init (configfile * pConf)
   resources = new handler_resources ();
 
   ptScoreTab = new scoretable ();
-  printf("B =====\n");
   num_erreur = ptScoreTab->first_init ();
-  printf("C =====\n");
   if (num_erreur)
     return num_erreur;
 
@@ -214,10 +130,10 @@ tecnoballz::game_begin ()
         {
           // exit of game
         case -1:
-          super_exit = 1;
+          is_exit_game = 1;
           break;
 
-          // initialize bricks level
+          /* initialize a bricks level */
         case BRICKS_LEVEL:
           release_objects ();
           bricks_level = new supervisor_bricks_level ();
@@ -226,7 +142,7 @@ tecnoballz::game_begin ()
             return num_erreur;
           break;
 
-          // initialize the shop
+          /* initialize a shop */
         case SHOP:
           release_objects ();
           shop = new supervisor_shop ();
@@ -235,7 +151,7 @@ tecnoballz::game_begin ()
             return num_erreur;
           break;
 
-          // initialize guards level
+          /* initialize a guardian level */
         case GUARDS_LEVEL:
           release_objects ();
           guards_level = new supervisor_guards_level ();
@@ -244,7 +160,7 @@ tecnoballz::game_begin ()
             return num_erreur;
           break;
 
-          // initialize menu
+          /* initialize the main menu */
         case MAIN_MENU:
           release_objects ();
           main_menu = new supervisor_main_menu ();
@@ -253,7 +169,7 @@ tecnoballz::game_begin ()
             return num_erreur;
           break;
 
-          // initialize scrolling editor (menu and guards)
+         /* initialize the map editor */
         case MAP_EDITOR:
           release_objects ();
           map_editor = new supervisor_map_editor ();
@@ -318,7 +234,7 @@ tecnoballz::game_begin ()
 
         }
     }
-  while (!super_exit);
+  while (!is_exit_game);
   return num_erreur;
 }
 
@@ -579,3 +495,49 @@ tecnoballz::bigendianr (Uint32 * ptsrc, Uint32 * ptdes)
   d[0] = s[3];
 #endif
 }
+
+
+Sint32 tecnoballz::arg_jumper = -1;
+Sint32 tecnoballz::bg4_colors = 0;
+bool tecnoballz::is_verbose = false;
+Sint32 tecnoballz::num_erreur = 0;
+Uint32 tecnoballz::counterObj = 0;
+Sint32 tecnoballz::random_counter = 0;
+Uint32 tecnoballz::frame_counter = 0;
+scoretable * tecnoballz::ptScoreTab = NULL;
+handler_resources * tecnoballz::resources = NULL;
+level_data * tecnoballz::ptLev_data = NULL;
+handler_memory * tecnoballz::memory = NULL;
+#ifndef SOUNDISOFF
+handler_audio * tecnoballz::audio = NULL;
+#endif
+handler_display * tecnoballz::display = NULL;
+handler_keyboard * tecnoballz::keyboard = NULL;
+list_sprites * tecnoballz::sprites = NULL;
+handler_players * tecnoballz::current_player = NULL;
+Sint16 * tecnoballz::table_cosL = NULL;
+Sint16 * tecnoballz::table_sinL = NULL;
+
+/* Objects supervising the various phases of the game */
+supervisor_bricks_level * tecnoballz::bricks_level = NULL;
+supervisor_shop * tecnoballz::shop = NULL;
+supervisor_guards_level * tecnoballz::guards_level = NULL;
+supervisor_map_editor * tecnoballz::map_editor = NULL;
+supervisor_main_menu * tecnoballz::main_menu = NULL;
+
+Uint32 tecnoballz::super_jump = BRICKS_LEVEL;
+bool tecnoballz::is_exit_game = false;
+bitmap_data * tecnoballz::sprites_bitmap = 0;
+Uint32 tecnoballz::cheat_flag = 0;
+Uint32 tecnoballz::birth_flag = 0;
+Uint32 tecnoballz::double_mem = 1;
+Sint32 tecnoballz::difficulty_level = 1;
+Sint32 tecnoballz::initial_num_of_lifes = 8;
+Sint32 tecnoballz::number_of_players = 1;
+char tecnoballz::chainelog[100];
+const char tecnoballz::nomprefix[] = PREFIX;
+Sint32 tecnoballz::resolution = 2;
+bool tecnoballz::bob_ground = false;
+char tecnoballz::zeAreaCode[11] = "          ";
+offscreen_surface * tecnoballz::game_screen = NULL;
+offscreen_surface * tecnoballz::background_screen = NULL;

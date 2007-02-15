@@ -68,7 +68,7 @@ void
 controller_magnetic_eyes::create_eyes_list ()
 {
   create_sprites_list ();
-  Sint32 hval = hasard_val;
+  Sint32 hval = random_counter;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_eye *ptEye = sprites_list[i];
@@ -99,7 +99,7 @@ controller_magnetic_eyes::create_eyes_list ()
 void
 controller_magnetic_eyes::execution1 ()
 {
-  Sint32 hval = hasard_val;
+  Sint32 hval = random_counter;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_eye *ptEye = sprites_list[i];

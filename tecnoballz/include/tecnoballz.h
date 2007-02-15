@@ -2,14 +2,14 @@
  * @file tecnoballz.h
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-02-08
+ * @date 2007-02-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.8 2007/02/10 17:06:04 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.9 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,9 +50,10 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-02-10)"
-#define TU_TRICHES              //devel only
-/* force bytes copy (SPARC unaligned memory access) */
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-02-15)"
+/** To define only under development  */
+#define UNDER_DEVELOPMENT
+/** Force bytes copy (SPARC unaligned memory access) */
 #define BYTES_COPY
 #ifndef SCOREFILE
 #define SCOREFILE "tecnoball"
@@ -116,7 +117,7 @@ public:
   static const Sint32 MAX_PLAYER = 6;
 
 public:
-  /* True if verbose enable */
+  /** True if verbose enable */
   static bool is_verbose;
   static Sint32 bg4_colors;     //1 = force 4 colors background
   static Sint32 resolution;     //1:320*240 or 2:640*480 pixels
@@ -125,7 +126,7 @@ public:
   static Sint32 arg_jumper;
 
 protected:
-    Sint32 numero_obj;          //object number
+  Sint32 numero_obj;          //object number
   Sint32 erreur_num;            //error code
 
   /*
@@ -133,34 +134,33 @@ protected:
    */
 
   static Uint32 counterObj;     //number of objects
-  static Sint32 hasard_val;     //random value
-  static Uint32 countframe;     //frame counter
+  /** Counter the number of frames */
+  static Uint32 frame_counter;
   static Sint32 num_erreur;     //error number
-
+  /** Random counting variable */
+  static Sint32 random_counter;
   /** Current phase of the game
    * BRICKS_LEVEL, SHOP, GUARDS_LEVEL,
    * MAIN_MENU, or MAP_EDITOR */
   static Uint32 super_jump;
-
-  static Sint32 hardChoice;     //difficulty
-  // -1: easy
-  // -2: hardChoice
-  // -3: mad
-  // -4: dead
-
-  static Sint32 super_exit;     //1: game exit
+  /** Difficulty with which an average player may complete a game
+   * 1: easy; 2:normal 3:medium; 4:hard */
+  static Sint32 difficulty_level;
+  /** If true then leaves the game definitively */
+  static bool is_exit_game;
 
   static Uint32 cheat_flag;     //E + T + B + Return (into shop)
   static Uint32 birth_flag;     //1 = all names is 040670
   /** Number of initial lifes */
   static Sint32 initial_num_of_lifes;
-  static Sint32 nuOfPlayer;
+  /** Number of players from 1 to 6 */
+  static Sint32 number_of_players;
   static const char nomprefix[];
   static char chainelog[100];
   static const Uint32 LEVEL_AREA = 12;
 
   static scoretable *ptScoreTab;
-    /** Handler of the files resources */
+  /** Handler of the files resources */
   static handler_resources *resources;
   static level_data *ptLev_data;
   static handler_memory *memory;

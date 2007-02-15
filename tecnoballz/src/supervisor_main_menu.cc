@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_main_menu.cc 
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-02-08
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.8 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.9 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,8 +36,10 @@
 supervisor_main_menu::supervisor_main_menu ()
 {
   initialise ();
-  tiles_map = new tilesmap_scrolling ();       // background scrolling
-  tecnoballz_logo = new sprite_object ();    // big logo "TecnoballZ"
+  /* vertical background scrolling */
+  tiles_map = new tilesmap_scrolling ();
+  /*  big logo "TecnoballZ" */
+  tecnoballz_logo = new sprite_object ();
   BOB_defile = new controller_fontes_menu ();
   menu_texte = new print_menu ();
   mouse_pointer = new sprite_mouse_pointer ();
@@ -107,11 +109,13 @@ supervisor_main_menu::main_loop ()
 {
 
   display->wait_frame ();
+  /* vertical scrolling of the screen background */
+  tiles_map->scrolling1 (-1);
   display->lock_surfaces ();
   offset_inc ();
-  move_tecnoballz_logo ();                //move the TecnoballZ logo
-  BOB_defile->move_chars ();    //move the characters (scroll-text)
-  tiles_map->scrolling1 (-1);  //scrolling of the screen background
+  move_tecnoballz_logo ();
+  /* scroll text of the menu */
+  BOB_defile->move_chars ();
   mouse_pointer->move ();
   sprites->draw ();
 
@@ -139,7 +143,7 @@ supervisor_main_menu::main_loop ()
   display->bufferCTab ();
 
   /* [F5] key jump to map editor */
-#ifdef TU_TRICHES
+#ifdef UNDER_DEVELOPMENT
   if (keyboard->key_is_pressed (SDLK_F5))
     {
       end_return = 5;
@@ -188,75 +192,53 @@ Sint32
 supervisor_main_menu::start_new_game ()
 {
   cheat_flag = 0;
-#ifdef TU_TRICHES
+#ifdef UNDER_DEVELOPMENT
   cheat_flag = 1;
 #endif
-  Uint32 nArea = 1;
-  Uint32 level = 1;
-  Uint32 grdPt = 0;
   Sint32 iplay;
-  Uint32 index = 0;
-
+  
   /*
    * check area password validity
    */
-  Uint32 aMaxi = 4;
-#ifdef TU_TRICHES
-  //allows to jump directly to the last guards with a password 
-  aMaxi = 6;
-#else
-  if (birth_flag)
-    aMaxi = 6;
-#endif
-  for (Uint32 areaN = 1; areaN <= aMaxi; areaN++)
+  Uint32 nArea;
+  Uint32 level;
+  Uint32 grdPt;
+  Uint32 area_count = check_area_password ();
+  if (area_count == 0)
     {
-      for (Uint32 hardN = 1; hardN <= 4; hardN++)
-        {
-          Uint32 f = 1;
-          for (Uint32 i = 0; i < 10; i++)
-            {
-              if (zeAreaCode[i] != codesarea[index + i])
-                {
-                  f = 0;
-                  break;
-                }
-            }
-          index += 10;
-          if (f)
-            {
-              if (areaN == 6)
-                {
-                  nArea = 5;
-                  level = 13;
-                }
-              else
-                {
-                  nArea = areaN;
-                  level = 12;
-                }
-              hardChoice = hardN;
-              if (is_verbose)
-                printf ("supervisor_main_menu::start_new_game() %s "
-                        "is OK; nArea = %i;"
-                        "level = %i, hardN = %i\n",
-                        &zeAreaCode[0], nArea, level, hardN);
-              grdPt = controller_guardians::level2gdpt (nArea, level);
-              goto sortie;
-            }
-        }
+      nArea = 1;
+      level = 1;
+      grdPt = 0;
     }
-sortie:
+  else
+    {
+      if (area_count == 6)
+      {
+        nArea = 5;
+        level = 13;
+      }
+      else
+      {
+        nArea = area_count;
+        level = 12;
+      }
+      if (is_verbose)
+      {
+        std::cout << "*supervisor_main_menu::start_new_game() " <<
+          "password is valid! Password: " << &zeAreaCode[0] <<
+          "; area number:" << nArea << "; level number:" << level << 
+          "; difficulty level: " << difficulty_level << std::endl;
 
-  //nArea = 5; level = 13; grdPt = controller_guardians::level2gdpt(nArea, level); //test only
-  //nArea = 4; level = 12; grdPt = controller_guardians::level2gdpt(nArea, level); //test only
-  //return 0;
+    }
+        grdPt = controller_guardians::level2gdpt (nArea, level);
+    }
+ 
 
-  //level = 6;    //test only
 
   //###################################################################
   // initialize enable player(s)
   //###################################################################
-  for (iplay = 0; iplay < nuOfPlayer; iplay++)
+  for (iplay = 0; iplay < number_of_players; iplay++)
     {
       Uint32 nlife = initial_num_of_lifes;
       if (birth_flag)
@@ -296,6 +278,55 @@ sortie:
     }
   return value;
 }
+
+
+/**
+ * Check area password validity
+ * @return if the password is valid return the area number from 1 to 5 
+ *         or 6 for the very last guardian of the area 5. 
+ *         Return 0 if password is not valid
+ */
+Uint32
+supervisor_main_menu::check_area_password ()
+{
+  Uint32 area_max = 4;
+  Uint32 index = 0;
+#ifdef UNDER_DEVELOPMENT
+  /* The number of zones really goes from 1 to 5.  
+   * The value 6 makes it possible to jump directly to the
+   * very last guardian of the area 5 */ 
+  area_max = 6;
+#else
+  if (birth_flag)
+    {
+      area_max = 6;
+    }
+#endif
+  for (Uint32 area_count = 1; area_count <= area_max; area_count++)
+    {
+      printf("%i\n", area_count);
+      for (Uint32 difficulty_count = 1; difficulty_count <= 4; difficulty_count++)
+        {
+          bool is_valid = true;
+          for (Uint32 i = 0; i < 10; i++)
+            {
+              if (zeAreaCode[i] != codesarea[index + i])
+                {
+                  is_valid = false;
+                  break;
+                }
+            }
+          index += 10;
+          if (is_valid)
+            {
+              difficulty_level = difficulty_count;
+              return area_count;
+            }
+        }
+    }
+  return 0;
+} 
+
 
 //------------------------------------------------------------------------------
 //

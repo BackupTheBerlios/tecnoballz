@@ -5,11 +5,11 @@
  * @date 2007-02-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.1 2007/02/02 19:50:45 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.2 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,9 +75,9 @@ handler_popup_menu::first_init (bitmap_data * bmp, Uint32 menu_num,
   /* initialize palette color chars, if necessary (shop only) */
   if (is_palette)
     {
-      SDL_Color *palPT = display->paletteAdr ();
+      SDL_Color *palPT = display->get_palette ();
       SDL_Color *palP1 = palPT + 239;
-      Sint32 i = hasard_val & 0x0F;
+      Sint32 i = random_counter & 0x0F;
       if (i >= 10)
         i = i - 10;
       const Uint32 *ptpal = (handler_resources::tabledegas + i * 18);

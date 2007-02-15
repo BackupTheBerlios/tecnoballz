@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-15
 // fonctions	: display of the text of the menu in the menu principal
-// id		: $Id: print_menu.cc,v 1.21 2007/02/11 21:03:24 gurumeditation Exp $
+// id		: $Id: print_menu.cc,v 1.22 2007/02/15 17:12:24 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -91,9 +91,9 @@ Sint32 print_menu::first_init()
 	//###################################################################
 	// initialize palette color chars
 	//###################################################################
-	SDL_Color *palPT = display->paletteAdr();
+	SDL_Color *palPT = display->get_palette();
 	SDL_Color *palP1 = palPT + 239;
-	Sint32 i = hasard_val & 0x0F;
+	Sint32 i = random_counter & 0x0F;
 	if(i >= 10)
 		i = i - 10;
 	const Uint32 *ptpal = (handler_resources::tabledegas + i * 18);
@@ -425,8 +425,8 @@ Sint32 print_menu::testLeMenu()
 				{	
 					case 5:
 						clear_init(24, 5, 1, 1);
-						if(++nuOfPlayer > MAX_PLAYER)
-							nuOfPlayer = 1;
+						if(++number_of_players > MAX_PLAYER)
+							number_of_players = 1;
 						break;
 				
 					// input players names
@@ -458,11 +458,11 @@ Sint32 print_menu::testLeMenu()
 					//
 					case 12:
 						clear_init(24, 12, 4, 1);
-						hardChoice += incre;
-						if(hardChoice > 4)
-							hardChoice = 1;
-						if(hardChoice < 1)
-							hardChoice = 4;
+						difficulty_level += incre;
+						if(difficulty_level > 4)
+							difficulty_level = 1;
+						if(difficulty_level < 1)
+							difficulty_level = 4;
 						mis_a_jour();
 						break;
 
@@ -534,7 +534,7 @@ void print_menu::mis_a_jour()
 	// number of players
 	//###########################################################
 	d = menuTexte1 + (MENU_LARGE * 5) + 24;
-	intToASCII(nuOfPlayer, d, 0);
+	intToASCII(number_of_players, d, 0);
 	
 	//###########################################################
 	// copy playes names
@@ -546,7 +546,7 @@ void print_menu::mis_a_jour()
 			d[j] = s[j];
 		d += MENU_LARGE;
 	}
-	s = &difficulte[(hardChoice - 1) * 4];
+	s = &difficulte[(difficulty_level - 1) * 4];
 	d = menuTexte1 + (MENU_LARGE * 12) + 24;
 	for(Sint32 i = 0; i < 4; i++)
 		d[i] = s[i];

@@ -5,11 +5,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.cc,v 1.4 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: sprite_guardian.cc,v 1.5 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ sprite_guardian::sprite_guardian ()
   gardptfire = 0;
   gard_touch = 0;
   gard_clign = 0;
-  hasardval2 = hasard_val;
+  hasardval2 = random_counter;
   if (hasardval2 < 0)
     hasardval2 = -hasardval2;
 }
@@ -71,20 +71,20 @@ sprite_guardian::init_guard (gardlevel * guard, unsigned char *ptLis,
 {
   ptGigaBlit = pBliz;
   explosions = pexpl;
-  gard_power = guard->para_power * hardChoice;  //strength 
+  gard_power = guard->para_power * difficulty_level;  //strength 
   gard_xcent = (guard->para_xcent * resolution) - (11 * resolution / 2);        //middle x from where weapons starts 
-  gardwaitf1 = guard->para_waitf / hardChoice;  //shoot frequency of gigaBlitz
-  gardwaitf2 = gardwaitf1 / hardChoice; //shoot frequency of gigaBlitz
+  gardwaitf1 = guard->para_waitf / difficulty_level;  //shoot frequency of gigaBlitz
+  gardwaitf2 = gardwaitf1 / difficulty_level; //shoot frequency of gigaBlitz
   gard_speed = guard->para_speed;       //speed of moving
-  if (hardChoice == 4)
+  if (difficulty_level == 4)
     gard_speed *= 2;
   gard_colx1 = guard->para_colx1 * resolution;
   gard_coly1 = guard->para_coly1 * resolution;
   gard_colx2 = guard->para_colx2 * resolution;
   gard_coly2 = guard->para_coly2 * resolution;
   gard_ycent = (guard->para_ycent * resolution) - (11 * resolution / 2);
-  gard_wait1 = guard->para_wait2 / hardChoice;
-  gard_wait2 = guard->para_wait2 / hardChoice;
+  gard_wait1 = guard->para_wait2 / difficulty_level;
+  gard_wait2 = guard->para_wait2 / difficulty_level;
   gard_tfire = &guard->para_tfire[0];
   ptr_lissa1 = ptLis;
   ptr_lissa2 = ptLis;
@@ -146,8 +146,8 @@ sprite_guardian::run (Uint32 voffset)
             {
               Sint32 pos_x = x_coord;
               Sint32 pos_y = y_coord;
-              hasard_val += pos_x;
-              Sint32 vrand = hasard_val;
+              random_counter += pos_x;
+              Sint32 vrand = random_counter;
               if (vrand < 0)
                 vrand = -vrand;
               Sint32 val_1 = (vrand + explo_time - y_coord) % sprite_width;
@@ -206,7 +206,7 @@ sprite_guardian::startBlitz ()
 {
   if (gardwaitf1-- <= 0)
     {
-      Sint32 v = hasard_val & 7;
+      Sint32 v = random_counter & 7;
       //v = 7;        //test only
       if (sprite_width > (32 * resolution))
         v = table_gga1[v];

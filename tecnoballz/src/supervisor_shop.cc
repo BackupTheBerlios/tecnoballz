@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.10 2007/02/14 13:39:20 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.11 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -124,7 +124,7 @@ supervisor_shop::first_init ()
   if (arean > 1)
     {
       const char *pPass =
-        supervisor_main_menu::getTheCode (arean, hardChoice);
+        supervisor_main_menu::getTheCode (arean, difficulty_level);
       ptDes = &info_text3[1 * STEXTWIDHT + 10];
       for (Sint32 i = 0; i < 10; i++)
         ptDes[i] = pPass[i];
@@ -139,7 +139,7 @@ supervisor_shop::first_init ()
     ptDes[i] = ptSrc[i];
 
 
-  ptSrc = &print_menu::difficulte[(hardChoice - 1) * 4];
+  ptSrc = &print_menu::difficulte[(difficulty_level - 1) * 4];
   ptDes = &info_text1[8 * STEXTWIDHT + 16];
   for (Sint32 i = 0; i < 4; i++)
     ptDes[i] = ptSrc[i];
@@ -192,7 +192,7 @@ supervisor_shop::first_init ()
   gfxPT->copyTampon ();
   delete gfxPT;
 
-  background_screen->blit_surface (game_screen);
+  background_screen->blit_to_surface (game_screen);
   display->bufferCopy ();       //copy buffer memory into the screen
 
 
@@ -215,7 +215,7 @@ supervisor_shop::main_loop ()
   display->wait_frame ();
 
   /* copy the background offscreen to the game offscreen */
-  background_screen->blit_surface (game_screen, 290 * resolution,
+  background_screen->blit_to_surface (game_screen, 290 * resolution,
                                    3 * resolution, 26 * resolution,
                                    180 * resolution);
   display->lock_surfaces ();

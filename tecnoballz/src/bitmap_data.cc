@@ -5,11 +5,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.14 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.15 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -373,7 +373,7 @@ bitmap_data::cut_to_surface (Sint32 xcoord, Sint32 ycoord, Sint32 l, Sint32 h)
     }
   if (SDL_BlitSurface (surface, &rect, surface_dest, NULL) < 0)
     {
-      std::cerr << "offscreen_surface::blit_surface() " <<
+      std::cerr << "offscreen_surface::blit_to_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
   return bmp;

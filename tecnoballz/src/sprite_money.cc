@@ -4,11 +4,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.cc,v 1.7 2007/02/13 20:55:27 gurumeditation Exp $
+ * $Id: sprite_money.cc,v 1.8 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,8 +135,8 @@ sprite_money::init_money (Uint32 xcoord, Uint32 ycoord, sprite_paddle * pad)
   x_coord = xcoord;
   y_coord = ycoord;
   paddle = pad;
-  Uint32 value = hasard_val & 0x003;
-  hasard_val += value;
+  Uint32 value = random_counter & 0x003;
+  random_counter += value;
   towards = paddle->get_paddle_number ();
   switch (value)
     {

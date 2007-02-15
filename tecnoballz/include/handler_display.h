@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.h,v 1.7 2007/02/04 17:10:16 gurumeditation Exp $
+ * $Id: handler_display.h,v 1.8 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,17 +43,13 @@ public:
 
 
 private:
-  //Uint32                        keyfscreen;     // 1 = full screen mode
-
   static const Uint32 bitspixels = 8;
+  static const Uint32 DELAY_CHANGE_MAX = 10;
   Sint32 offsetplus;
 
-  SDL_Surface *sdl_screen;      // main window
-  SDL_Surface *bufSurface;      // surface where all is display
-  SDL_Surface *tamSurface;      // surface from restauring
 
-  Uint32 window_width;
-  Uint32 window_height;
+  SDL_Surface *bufSurface;
+  SDL_Surface *tamSurface;
 
   Uint32 bufLargeur;
   Uint32 bufHauteur;
@@ -63,61 +59,49 @@ private:
   Sint32 tam_nextLn;
   char *tamAdresse;
 
-  Uint32 dateactuel;
-  Uint32 datepreced;
+  /** Main window surface */
+  SDL_Surface *sdl_screen;
+  /** The width of our main window in pixels */
+  Uint32 window_width;
+  /** The height of our main window in pixels */
+  Uint32 window_height;
+  /** The number of milliseconds since the SDL library initialization */
+  Uint32 previous_sdl_ticks;
+  /** Current frames per seconde or frames frequency */
+  Uint32 frames_per_second;
+  /** Amount of ticks for calculate the number of frames per second */
+  Uint32 sdl_ticks_amount;
+  /** Counter of frame modulo 100 */
+  Uint32 frames_counter_modulo;
+  /** Number of frame during the "delay_value" is used */
+  Sint32 delay_change_counter;
+  /** Delay value for SDL_delay() */
+  Sint32 delay_value;
+  /** game speed, the desired frames per second 20 <=> 50 fps */
+  Uint32 game_speed;
+  /** Amount of ticks for calculate "delay_value" */
+  Uint32 delay_ticks_amount;
+  /** The window tile and icon name */
+  static char window_title[25];
 
-  Sint32 framepeers;
-  Sint32 fps_totale;
-  Sint32 fpscounter;
-  //Sint32                                wait_diffv;
-  Sint32 wait_count;            // number of frame since "wait_value" is used
-  Sint32 wait_value;            // wait value speed_game - x
-  Sint32 speed_game;            // 20  (1000 / 20 = 50 fps)
-  Sint32 wait_total;
-  Sint32 wait_inter;
-
-  Uint32 VBL_switch;
-  /* 
-     float gameSpeed;
-     Sint32 gameFrame;
-     Uint32 last_time;
-     float fps;
-     float targetAdj;
-   */
-
-
-
-  SDL_Color palette_tz[256];
   SDL_Color ze_palette[256];
-  static char nomfenetre[25];
-  Sint32 tiltoffset;
+  /** */
+  Uint32 tilt_offset;
 
 public:
     handler_display ();
    ~handler_display ();
   Sint32 initialize ();
-  Sint32 set_video_mode ();
-  Sint32 get_width ();
-  Sint32 get_height ();
+  Uint32 get_width ();
+  Uint32 get_height ();
   void lock_surfaces ();
   void unlock_surfaces ();
   Uint32 get_bits_per_pixel ();
   Sint32 SDL_informations ();
-  Sint32 synchro_CalculDifference ();
-  Sint32 synchro_processusPause (Sint32 _iTemps);
-  void fullscreen ();
   void wait_frame ();
-  void waitVBLchr ();
-  void waitVBLtec ();
-  Sint32 retour_temps ();
-  Sint32 get_framepee ();
-  void mise_a_zero_timer ();
+  Uint32 get_frames_per_second ();
 
   Sint32 ecran_next (Sint32 zbase, Sint32 offsx, Sint32 offsy);
-  //void tamponBuff ();
-  //void tamponBuff (Sint32 pos_x, Sint32 pos_y, Sint32 large, Sint32 haute);
-
-
 
   // gestion des buffers & des tampons
   void aff_buff32 (char *src, char *dest, Sint32 offs, Sint32 offd);
@@ -126,12 +110,9 @@ public:
   void buf_clr64 (char *desPT);
   void enable_palette (unsigned char *adrPal);
   void enable_palette (SDL_Color * adrPal);
-  void paletteAff ();
   void bufferCopy ();           // copie normale du Buffer
   void bufferCTab ();           // copie des 512 pixels gauche du Buffer
-  void bufferCTab (Sint32 xpos1, Sint32 ypos1, Sint32 xpos2, Sint32 ypos2);
-  void buffer_640 ();           // copie du Buffer optimise pour 640 pixels de large
-  SDL_Color *paletteAdr ();     // retourne l'adresse de la palette
+  SDL_Color *get_palette ();
   void rectShadow (Sint32 pos_x, Sint32 pos_y, Sint32 large, Sint32 haute);
   void clr_shadow (Sint32 offst, Sint32 large, Sint32 haute);
   void clr_shadow (Sint32 _iPosX, Sint32 _iPosY, Sint32 _iLarg,
@@ -139,7 +120,11 @@ public:
   void set_shadow (Sint32 offst, Sint32 large, Sint32 haute);
   void genericGFX (char *sAdre, Sint32 sLarg, Sint32 sHaut, Sint32 sNext,
                    char *dAdre, Sint32 dLarg, Sint32 dHaut, Sint32 dNext);
-  void tiltscreen ();
+  void tilt_screen ();
   void gradation1 ();
+private:
+  Sint32 set_video_mode ();
+  void check_if_toggle_fullscreen ();
+
 };
 #endif

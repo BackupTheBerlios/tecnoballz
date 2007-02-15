@@ -4,11 +4,11 @@
  * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.cc,v 1.5 2007/02/13 20:55:27 gurumeditation Exp $
+ * $Id: sprite_capsule.cc,v 1.6 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ sprite_capsule::new_gadget (Sint32 nuGad)
     set_draw_method (sprite_object::DRAW_WITH_TABLES);
   gadget_num = nuGad;
   nuGad = nuGad >> 1;
-  hasard_val += nuGad;
+  random_counter += nuGad;
   const Sint16 *p = gagdetBrik + nuGad;
   if (*p < 0)
     {
@@ -108,7 +108,7 @@ sprite_capsule::nouveauGad (brickClear * briPT, Sint32 nuGad)
   raquettePT = raket;
   directionX = raket->get_paddle_number ();
   nuGad = nuGad >> 1;
-  hasard_val += nuGad;
+  random_counter += nuGad;
   const Sint16 *p = gagdetBrik + nuGad;
   if (*p < 0)
     {
@@ -144,7 +144,7 @@ sprite_capsule::nouveauGad (sprite_ball * balle, Sint32 nuGad)
   raquettePT = raket;
   directionX = raket->get_paddle_number ();
   nuGad = nuGad >> 1;
-  hasard_val += nuGad;
+  random_counter += nuGad;
   const Sint16 *p = gagdetBrik + nuGad;
   if (*p < 0)
     {
@@ -179,7 +179,7 @@ sprite_capsule::nouveauGad (sprite_projectile * pfire, Sint32 nuGad)
   raquettePT = raket;
   directionX = raket->get_paddle_number ();
   nuGad = nuGad >> 1;
-  hasard_val += nuGad;
+  random_counter += nuGad;
   const Sint16 *p = gagdetBrik + nuGad;
   if (*p < 0)
     {
@@ -215,7 +215,7 @@ sprite_capsule::new_gadget (sprite_ball * balle, Sint32 nuGad)
   raquettePT = raket;
   directionX = raket->get_paddle_number ();
   nuGad = nuGad >> 1;
-  hasard_val += nuGad;
+  random_counter += nuGad;
   const Sint16 *p = gagdetGuar + nuGad;
   if (*p < 0)
     {
@@ -243,7 +243,7 @@ sprite_capsule::nouveauGad (Sint32 nuGad)
     {
       gadget_num = nuGad;
       nuGad = nuGad >> 1;
-      hasard_val += nuGad;
+      random_counter += nuGad;
       Sint32 i = gagdetBrik[nuGad];
       if (i == XXX_VIDE00)      // empty code, no gaget code ?
         is_enabled = false;         // disable the objet

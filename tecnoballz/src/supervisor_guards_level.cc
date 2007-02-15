@@ -5,11 +5,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.19 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.20 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -179,12 +179,12 @@ supervisor_guards_level::first_init ()
   //###################################################################
   balls->run_power2 ();
 
-  money_capsules->initialize (3 + hardChoice, player_indicators);
+  money_capsules->initialize (3 + difficulty_level, player_indicators);
 
   /* initialize le capsules controller */
   power_up_capsules->initialise (
                           /* delay of appearance of a penalty capsule */
-                          levelParam->malusCount * hardChoice,
+                          levelParam->malusCount * difficulty_level,
                           /* number of bonus bought in the shop (not * applicable) */
                           0,
                           /* number of bricks which it is necessary to break * (not applicable) */
@@ -267,7 +267,6 @@ supervisor_guards_level::main_loop ()
         }
       gameover_counter++;
       display->wait_frame ();
-      display->lock_surfaces ();
 
       if (scrollTemp > 0)
         {
@@ -276,6 +275,8 @@ supervisor_guards_level::main_loop ()
         }
       else
         tiles_map->scrolling1 (scrolSpeed);
+      
+      display->lock_surfaces ();
 
       if (gameover_counter >= 1)
         {
@@ -305,11 +306,11 @@ supervisor_guards_level::main_loop ()
       // game running !
       //######################################################
       display->wait_frame ();
-      display->lock_surfaces ();
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
         {
           run_scroll ();
           tiles_map->scrolling1 (scrolSpeed);
+          display->lock_surfaces ();
           paddles->move_paddle ();
           paddles->check_if_release_ball ();
           balls->vitusBall2 (); //moving ball(s)
@@ -332,6 +333,7 @@ supervisor_guards_level::main_loop ()
         {
           bullets->anim_fires ();
           tiles_map->scrolling1 (0);
+          display->lock_surfaces ();
         }
 
       //###################################################################

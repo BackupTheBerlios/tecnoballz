@@ -4,11 +4,11 @@
  * @date 2007-02-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.10 2007/02/14 17:04:44 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.11 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -158,7 +158,7 @@ controller_capsules::envoieGads (brickClear * briPT)
           malus_step++;
           if (malus_step > malus_frek)
             {
-              Sint16 j = hasard_val & 0x3F;     //value 0 to 63 
+              Sint16 j = random_counter & 0x3F;     //value 0 to 63 
               j = *(malusTable + j);
               malus_step = 0;
               //j = GAD_MEGA00;       //test only
@@ -202,7 +202,7 @@ controller_capsules::send_malus (sprite_ball * pball)
       sprite_capsule *gadg = sprites_list[i];
       if (!gadg->is_enabled)
         {
-          Sint16 j = hasard_val & 0x1F; //value 0 to 31 
+          Sint16 j = random_counter & 0x1F; //value 0 to 31 
           j = *(malusTable + j);
           gadg->nouveauGad (pball, j);
           return;
@@ -221,7 +221,7 @@ controller_capsules::send_malus (sprite_projectile * pfire)
       sprite_capsule *gadg = sprites_list[i];
       if (!gadg->is_enabled)
         {
-          Sint16 j = hasard_val & 0x1F; //value 0 to 31 
+          Sint16 j = random_counter & 0x1F; //value 0 to 31 
           j = *(malusTable + j);
           gadg->nouveauGad (pfire, j);
           return;
@@ -244,7 +244,7 @@ controller_capsules::envoieGads (sprite_ball * pball)
       sprite_capsule *gadg = sprites_list[i];
       if (!gadg->is_enabled)
         {
-          Sint16 j = hasard_val & 0x1F; //value 0 to 31 
+          Sint16 j = random_counter & 0x1F; //value 0 to 31 
           j = *(malusTable + j);
           malus_step = 0;
           gadg->new_gadget (pball, j);
@@ -386,7 +386,7 @@ controller_capsules::gadgetKeys ()
   if (keyboard->key_is_pressed (SDLK_LSHIFT) ||
       keyboard->key_is_pressed (SDLK_LCTRL) ||
       keyboard->key_is_pressed (SDLK_RALT) ||
-#ifndef TU_TRICHES
+#ifndef UNDER_DEVELOPMENT
       !keyboard->key_is_pressed (SDLK_RSHIFT) ||
       !keyboard->key_is_pressed (SDLK_RCTRL) ||
 #else
@@ -423,7 +423,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
 
   if (nuGad == GAD_RANDOM)
     {
-      nuGad = randomlist[hasard_val & 127];
+      nuGad = randomlist[random_counter & 127];
     }
 
   switch (nuGad)

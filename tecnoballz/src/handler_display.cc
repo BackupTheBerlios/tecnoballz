@@ -2,14 +2,14 @@
  * @file handler_display.cc 
  * @briefi Handle displaying and updating with SDL 
  * @created 2002-08-17 
- * @date 2007-02-02
+ * @date 2007-02-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.14 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.15 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,38 +31,26 @@
 #include "../include/handler_audio.h"
 #include "../include/handler_resources.h"
 
-char
-  handler_display::nomfenetre[25] = "TecnoballZ by TLK Games\0";
-bool
-  handler_display::optionfull = false;
-bool
-  handler_display::optionsync = true;
+char handler_display::window_title[25] = "TecnoballZ by TLK Games\0";
+bool handler_display::optionfull = false;
+bool handler_display::optionsync = true;
 
 /**
  * Create the object
  */
 handler_display::handler_display ()
 {
-  sdl_screen = (SDL_Surface *) NULL;    // pointer to a SDL surface, the main screen
-  bufSurface = (SDL_Surface *) NULL;    // pointer to the surface for display
-  tamSurface = (SDL_Surface *) NULL;    // pointer to the surface for restaure 
-  fps_totale = 0;
-  fpscounter = 0;
-  tiltoffset = 0;
-  speed_game = 20;              //1000 / 50
-  //speed_game = 17;      //1000 / 60
-  //speed_game = 12;      //1000 / 85
-  wait_inter = 10;              // interval
-  wait_count = 0;
-  wait_total = 0;
-  VBL_switch = 0;
-
-/*
-gameSpeed = 0.5;
-last_time = 0;
-fps = 50.0;
-targetAdj = 1.0;
-*/
+  sdl_screen = (SDL_Surface *) NULL;
+  bufSurface = (SDL_Surface *) NULL;
+  tamSurface = (SDL_Surface *) NULL;
+  sdl_ticks_amount = 0;
+  frames_counter_modulo = 0;
+  tilt_offset = 0;
+  game_speed = 20;              //1000 / 50
+  //game_speed = 17;      //1000 / 60
+  //game_speed = 12;      //1000 / 85
+  delay_change_counter = 0;
+  delay_ticks_amount = 0;
 }
 
 /**
@@ -115,8 +103,8 @@ handler_display::initialize ()
   tam_nextLn = tamSurface->pitch;
   tamAdresse = (char *) tamSurface->pixels + tam_nextLn * offsetplus;
 
-  datepreced = SDL_GetTicks ();
-  dateactuel = SDL_GetTicks ();
+  previous_sdl_ticks = SDL_GetTicks ();
+  delay_value = 0;
   return 0;
 }
 
@@ -165,9 +153,9 @@ handler_display::set_video_mode ()
                "SDL_SetVideoMode() return %s\n", SDL_GetError ());
       return (erreur_num = E_SDLERROR);
     }
-  SDL_WM_SetCaption (nomfenetre, nomfenetre);
+  SDL_WM_SetCaption (window_title, window_title);
 
-#ifdef TU_TRICHES
+#ifdef UNDER_DEVELOPMENT
   SDL_ShowCursor (SDL_ENABLE);
 #else
   SDL_ShowCursor (SDL_DISABLE);
@@ -180,7 +168,7 @@ handler_display::set_video_mode ()
  * Return the screen's width 
  * @return the width of the screen in pixels
  */
-Sint32
+Uint32
 handler_display::get_width ()
 {
   return (Sint32) (sdl_screen->w);
@@ -190,7 +178,7 @@ handler_display::get_width ()
  * Return the screen's height
  * @return the height of the screen in lines
  */
-Sint32
+Uint32
 handler_display::get_height ()
 {
   return (Sint32) (sdl_screen->h);
@@ -207,7 +195,7 @@ handler_display::lock_surfaces ()
 }
 
 /**
- * unlock surfaces of the game offscreen and background offscreen
+ * Unlock surfaces of the game offscreen and background offscreen
  */
 void
 handler_display::unlock_surfaces ()
@@ -297,7 +285,7 @@ handler_display::SDL_informations ()
  * Switch to fullscreen or windows mode
  */
 void
-handler_display::fullscreen ()
+handler_display::check_if_toggle_fullscreen ()
 {
   if (keyboard->command_is_pressed (handler_keyboard::FULLSCFLAG) &&
       keyboard->get_input_cursor_pos () < 0)
@@ -315,185 +303,71 @@ handler_display::fullscreen ()
     }
 }
 
-//-------------------------------------------------------------------------------
-//
-//-------------------------------------------------------------------------------
+/**
+ * Synchronize the game's speed to the machine it's running on
+ */
 void
 handler_display::wait_frame ()
 {
-/*
-	if(keyboard->command_is_pressed(handler_keyboard::WAITVBLOFF))
-	{
-		VBL_switch++;
-		if(VBL_switch > 2) VBL_switch = 0;
-	}
-*/
-  waitVBLtec ();
-/*
-	switch(VBL_switch)
-	{
-		case 0:
-			waitVBLchr();
-			break;
-		case 1:
-			waitVBLtec();
-			break;
-		default:
-			break;
-	}
-*/
-}
 
-//-------------------------------------------------------------------------------
-//
-//-------------------------------------------------------------------------------
-void
-handler_display::waitVBLchr ()
-{
-/*
-	keyboard->read_events();
-	fullscreen();
-#ifndef SOUNDISOFF
-	audio->run();
-#endif
-	gameFrame++;
-	Uint32 delay = 32-(int)(24.0 * gameSpeed);
-	SDL_Delay(delay);
-	printf("waitVBLchr %i\n", delay);
-	if(!(gameFrame%10)) return;
-	Uint32 now_time = SDL_GetTicks();
-	if(last_time)
-		fps = (10.0/(now_time - last_time))*1000.0;
-	last_time = now_time;
-	if(gameFrame >= 400) return;
-	if(fps < 48.0 && gameSpeed < 1.0)
-		gameSpeed += 0.02;
-	else if(gameFrame > 20)
-	{	float tmp = 50.0 / fps;
-		tmp = 0.8*targetAdj + 0.2*tmp;
-		targetAdj = floor(100.0*(tmp+0.005))/100.0;
-	}
-	return;
-*/
-}
+  frame_counter++;
 
-//-------------------------------------------------------------------------------
-// 
-//-------------------------------------------------------------------------------
-void
-handler_display::waitVBLtec ()
-{
-  Uint32 durat = 0;
-  countframe++;
-  durat = SDL_GetTicks () - datepreced;
+  /* Get the number of milliseconds since the SDL library initialization */
+  Uint32 sdl_ticks = SDL_GetTicks () - previous_sdl_ticks;
   optionsync = true;
   if (optionsync)
     {
-      wait_total += durat;
-      if (--wait_count <= 0)
-        {                       //wait_diffv = durat;
-          wait_value = ((speed_game * wait_inter) - wait_total) / wait_inter;
-          wait_count = wait_inter;
-          wait_total = 0;
-          if (wait_value <= 0)
-            wait_value = 1;
+      delay_ticks_amount += sdl_ticks;
+      if (--delay_change_counter <= 0)
+        {
+          delay_value = ((game_speed * DELAY_CHANGE_MAX) - delay_ticks_amount) / DELAY_CHANGE_MAX;
+          delay_change_counter = DELAY_CHANGE_MAX;
+          delay_ticks_amount = 0;
+          if (delay_value <= 0)
+            {
+              delay_value = 1;
+            }
+          printf("delay_value:%i \n", delay_value);
         }
-      if (wait_value > 0)
-        {                       //fprintf(stdout, "waitVBLtec %i\n", wait_value);
-          SDL_Delay (wait_value);
+      if (delay_value > 0)
+        {
+          SDL_Delay (delay_value);
         }
     }
-  fpscounter++;
-  fps_totale = fps_totale + durat;
-  if (fpscounter >= 100)
+  previous_sdl_ticks = SDL_GetTicks ();
+  
+  /** Calculate the number of frames per second */
+  sdl_ticks_amount += sdl_ticks;
+  if (++frames_counter_modulo >= 100)
     {
-      if (fps_totale != 0)
-        {                       // fix crash : divide by zero !
-          framepeers = 1000 * fpscounter / fps_totale;
+      if (0 != sdl_ticks_amount)
+        {
+          frames_per_second = 1000 * frames_counter_modulo / sdl_ticks_amount;
         }
-      fpscounter = 0;
-      fps_totale = 0;
+      frames_counter_modulo = 0;
+      sdl_ticks_amount = 0;
     }
-  datepreced = SDL_GetTicks ();
+
   keyboard->read_events ();
-  fullscreen ();
+  check_if_toggle_fullscreen ();
 #ifndef SOUNDISOFF
   audio->run ();
 #endif
   return;
 }
 
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
-Sint32
-handler_display::get_framepee ()
+/**
+ * Return tne number of frames per second 
+ * @return the frame frequency
+ */
+Uint32
+handler_display::get_frames_per_second ()
 {
-  return framepeers;
+  return frames_per_second;
 }
 
 
-//------------------------------------------------------------------------------
-// get time since last call
-//------------------------------------------------------------------------------
-inline Sint32
-handler_display::retour_temps ()
-{
-  Sint32 d;
-  dateactuel = SDL_GetTicks (); //Get the number of milliseconds since the SDL library initialization.
-  if (dateactuel == datepreced)
-    SDL_Delay (1);
-  dateactuel = SDL_GetTicks ();
-  d = dateactuel - datepreced;
-  datepreced = dateactuel;
-  return d;
-}
 
-//------------------------------------------------------------------------------
-// reset the timer
-//------------------------------------------------------------------------------
-inline void
-handler_display::mise_a_zero_timer ()
-{
-  datepreced = SDL_GetTicks ();
-}
-
-
-//------------------------------------------------------------------------------
-// copy a part of the "tampon" in the "buffer"
-//      input   => pos_x: x coordinate
-//                      => pos_y: y coordinate
-//                      => large: width
-//                      => haute: height
-//------------------------------------------------------------------------------
-/*
-void
-handler_display::tamponBuff (Sint32 pos_x, Sint32 pos_y, Sint32 large,
-                             Sint32 haute)
-{
-#ifndef BYTES_COPY
-  Sint32 *s = (Sint32 *) (tamAdresse + (pos_y * tam_nextLn + pos_x));
-  Sint32 *d = (Sint32 *) (bufAdresse + (pos_y * buf_nextLn + pos_x));
-  Sint32 n = tam_nextLn >> 2;
-  Sint32 o = buf_nextLn >> 2;
-  Sint32 l = large >> 2;
-#else
-  char *s = tamAdresse + (pos_y * tam_nextLn + pos_x);
-  char *d = bufAdresse + (pos_y * buf_nextLn + pos_x);
-  Sint32 n = tam_nextLn;
-  Sint32 o = buf_nextLn;
-  Sint32 l = large;
-#endif
-  Sint32 h = haute;
-  for (Sint32 j = 0; j < h; j++)
-    {
-      for (Sint32 i = 0; i < l; i++)
-        d[i] = s[i];
-      s = s + n;
-      d = d + o;
-    }
-}
-*/
 
 //------------------------------------------------------------------------------
 // buffer & tampon: convert (x,y) to offset
@@ -507,9 +381,10 @@ handler_display::ecran_next (Sint32 zbase, Sint32 offsx, Sint32 offsy)
   return (zbase + offsy * buf_nextLn + offsx);
 }
 
-//-------------------------------------------------------------------------------
-// initialize color palette for the current screen
-//-------------------------------------------------------------------------------
+/**
+ * Initialize color palette for the current screen
+ * @param palPT
+ */
 void
 handler_display::enable_palette (unsigned char *palPT)
 {
@@ -540,13 +415,14 @@ handler_display::enable_palette (SDL_Color * palPT)
   SDL_SetPalette (sdl_screen, SDL_LOGPAL | SDL_PHYSPAL, palPT, 0, 256);
 }
 
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
+/**
+ * Return the current SDL palette
+ * @return a pointer to a SDL_Color structure 
+ */
 SDL_Color *
-handler_display::paletteAdr ()
+handler_display::get_palette ()
 {
-  return (ze_palette);
+  return ze_palette;
 }
 
 //------------------------------------------------------------------------------
@@ -574,9 +450,9 @@ handler_display::bufferCTab ()
 {
   SDL_Rect rsour;
   rsour.x = 0;
-  rsour.y = offsetplus + tiltoffset;
+  rsour.y = offsetplus + tilt_offset;
   rsour.w = 640;
-  rsour.h = offsetplus + 480 + tiltoffset;
+  rsour.h = offsetplus + 480 + tilt_offset;
 
   SDL_Rect rdest;
   rdest.x = 0;
@@ -590,28 +466,8 @@ handler_display::bufferCTab ()
              "handler_display::bufferCTab() : BlitSurface error: %s\n",
              SDL_GetError ());
   SDL_UpdateRect (sdl_screen, 0, 0, sdl_screen->w, sdl_screen->h);
-  if (tiltoffset > 0)
-    tiltoffset--;
-}
-
-//-----------------------------------------------------------------------------
-// buffer memory: copy a rectangular zone to screen
-//------------------------------------------------------------------------------
-void
-handler_display::bufferCTab (Sint32 xpos1, Sint32 ypos1, Sint32 xpos2,
-                             Sint32 ypos2)
-{
-  SDL_Rect r;
-  r.x = xpos1;
-  r.y = ypos1;
-  r.w = xpos2;
-  r.h = ypos2;
-  Sint32 v = SDL_BlitSurface (bufSurface, &r, sdl_screen, &r);
-  if (v < 0)
-    fprintf (stderr,
-             "handler_display::bufferCTab() BlitSurface error: %s\n",
-             SDL_GetError ());
-  SDL_UpdateRect (sdl_screen, 0, 0, sdl_screen->w, sdl_screen->h);
+  if (tilt_offset > 0)
+    tilt_offset--;
 }
 
 //-------------------------------------------------------------------------------
@@ -805,13 +661,13 @@ handler_display::genericGFX (char *sAdre, Sint32 sLarg, Sint32 sHaut,
     }
 }
 
-//------------------------------------------------------------------------------
-// shift the screen of 10 or 20 pixels upwards
-//------------------------------------------------------------------------------
+/**
+ * Tilt the screen 10 or 20 pixels upwards
+ */
 void
-handler_display::tiltscreen ()
+handler_display::tilt_screen ()
 {
-  tiltoffset = 10 * resolution;
+  tilt_offset = 10 * resolution;
 }
 
 //------------------------------------------------------------------------------
@@ -820,9 +676,9 @@ handler_display::tiltscreen ()
 void
 handler_display::gradation1 ()
 {
-  SDL_Color *palPT = display->paletteAdr ();
+  SDL_Color *palPT = display->get_palette ();
   SDL_Color *palP1 = palPT + 239;
-  Sint32 i = hasard_val & 0x0F;
+  Sint32 i = random_counter & 0x0F;
   if (i >= 10)
     i = i - 10;
   const Uint32 *ptpal = (handler_resources::tabledegas + i * 18);

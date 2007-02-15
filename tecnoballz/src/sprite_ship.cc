@@ -4,11 +4,11 @@
  * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ship.cc,v 1.7 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: sprite_ship.cc,v 1.8 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,11 +71,11 @@ sprite_ship::gere_atome ()
               if (!is_collisions_with_bricks (x_coord, y_coord))
                 {
                   is_enabled = 1;
-                  Sint32 *monPT = ghost_bobs + (hasard_val & 31);
+                  Sint32 *monPT = ghost_bobs + (random_counter & 31);
 #if __WORDSIZE == 64
-                  hasard_val += (long) this;
+                  random_counter += (long) this;
 #else
-                  hasard_val += (Sint32) this;
+                  random_counter += (Sint32) this;
 #endif
                   Sint32 k = *monPT;
                   frame_index_min = k;
@@ -197,7 +197,7 @@ sprite_ship::littleInit (Sint32 time0, Sint32 appar, Sint32 index,
   atom_ghost = 0;               //pointer on "tableGhost"
   atom_deplX = 0;               //offset X
   atom_deplY = 0;               //offset Y
-  Sint32 i = hasard_val & 15;
+  Sint32 i = random_counter & 15;
   i++;
   i *= object_pos;
   atom_count = i;               //trajectory change counter 
@@ -207,9 +207,9 @@ sprite_ship::littleInit (Sint32 time0, Sint32 appar, Sint32 index,
   i &= 31;
   atom_traje = i;
 #if __WORDSIZE == 64
-  hasard_val += (long) this;
+  random_counter += (long) this;
 #else
-  hasard_val += (Sint32) this;
+  random_counter += (Sint32) this;
 #endif
   i = 4 * resolution;
 
@@ -237,7 +237,7 @@ sprite_ship::explosion1 (sprite_projectile * blast)
   if (atom_actif > 0)
     return;
   explosion2 ();
-  Sint32 h = codeBounty[hasard_val & 0xF];
+  Sint32 h = codeBounty[random_counter & 0xF];
   //h = CODE_GEMME; //test only
   switch (h)
     {
@@ -274,7 +274,7 @@ sprite_ship::explosion1 (sprite_ball * ball)
       return;
     }
   explosion2 ();
-  Uint32 h = codeBounty[hasard_val & 0xF];
+  Uint32 h = codeBounty[random_counter & 0xF];
   //h = CODE_GEMME; //test only
   switch (h)
     {
@@ -306,10 +306,10 @@ void
 sprite_ship::explosion2 ()
 {
   sprite_has_shadow = 0;        // no shadow
-  hasard_val = hasard_val + frame_index;
+  random_counter = random_counter + frame_index;
   atom_explo = 1;
   atom_power = init_power;      // strength
-  atom_actif = apparition + (hasard_val & 63);  // time before activation
+  atom_actif = apparition + (random_counter & 63);  // time before activation
   frame_index = atom_oexpl;
   frame_index_min = atom_oexpl;
   frame_index_max = atom_oexpl + ATOM_ANIMA - 1;

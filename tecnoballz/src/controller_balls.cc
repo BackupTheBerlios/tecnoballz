@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.23 2007/02/14 20:00:08 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.24 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -317,7 +317,7 @@ controller_balls::activate_tilt ()
     }
   bool ftilt = false;
   Sint32 t = balle_tilt;
-  Sint32 rand = hasard_val;
+  Sint32 rand = random_counter;
   rand = rand & 15;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
@@ -342,7 +342,7 @@ controller_balls::activate_tilt ()
     }
   if (ftilt)
     {
-      display->tiltscreen ();
+      display->tilt_screen ();
     }
 }
 
@@ -864,7 +864,7 @@ controller_balls::vitusEject ()
               Sint32 j = ++(*(--monPT));
               if (j == 160)     // time before ejection
                 {
-                  Sint32 j = hasard_val & 0xF;
+                  Sint32 j = random_counter & 0xF;
                   table += j;
                   balle->directBall = *table;
 #ifndef SOUNDISOFF
@@ -1341,7 +1341,7 @@ controller_balls::check_collisions_with_ships ()
   sprite_ball **balls = sprites_list;
   Uint32 t = ships->get_max_of_sprites ();
   sprite_ship **ships_list = ships->get_sprites_list ();
-  Sint32 nouve = (hasard_val & 0xF) << 2;
+  Sint32 nouve = (random_counter & 0xF) << 2;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = *(balls++);
@@ -1432,7 +1432,7 @@ controller_balls::vitusGuard ()
                               y += balle->collision_width;
                               if (y > grdy1)
                                 {
-                                  x = ((hasard_val + i) & 0xF) << 2;
+                                  x = ((random_counter + i) & 0xF) << 2;
 #ifndef SOUNDISOFF
                                   audio->play_sound (S_GARDIENT);
 #endif
@@ -1511,7 +1511,7 @@ controller_balls::run_nballs (Uint32 nball)
     }
   sprite_ball **balls = sprites_list;
   Uint32 count = 0;
-  Uint32 ejector_id = hasard_val & 3;
+  Uint32 ejector_id = random_counter & 3;
   Uint32 delay = 1;
   for (Uint32 i = 0; i < max_of_sprites && count < nball; i++)
     {

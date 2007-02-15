@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.5 2007/02/14 20:00:08 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.6 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,8 @@ right_panel_score::right_panel_score ()
  */
 right_panel_score::~right_panel_score ()
 {
-   destroy_me ();
+  printf("right_panel_score::~right_panel_score() DESTROY!!!!\n");
+  destroy_me ();
 }
 
 /**
@@ -72,8 +73,10 @@ right_panel_score::get_instance ()
 void
 right_panel_score::first_init (controller_balls* b)
 {
+  printf("======> right_panel_score::first_init 1\n");
   error_init (initialise ());
   balls = b;
+  printf("======> right_panel_score::first_init 2\n");
   scoreAdres = game_screen->get_pixel_data
     (POSX_SCORE * resolution, POSY_SCORE * resolution);
   lifesAdres = game_screen->get_pixel_data
@@ -82,6 +85,7 @@ right_panel_score::first_init (controller_balls* b)
     (POSX_BRICK * resolution, POSY_BRICK * resolution);
   temoinAdrs = game_screen->get_pixel_data
     (GAUGE_XCOORD * resolution, GAUGE_YCOORD * resolution);
+  printf("======> right_panel_score::first_init 3\n");
   draw_background ();
 }
 

@@ -5,7 +5,7 @@
 // created	: ?
 // updates	: 2005-01-10
 // fonction	: display chars
-// id		: $Id: print_text.cc,v 1.16 2007/02/06 09:46:13 gurumeditation Exp $
+// id		: $Id: print_text.cc,v 1.17 2007/02/15 17:12:24 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -85,13 +85,17 @@ Uint32 print_text::getCharHgt()
 //------------------------------------------------------------------------------
 Sint32 print_text::init_print(Sint32 ident)
 {
+  printf("print_text::init_print 1\n");
 	GFX_fontes = new bitmap_data();
+  printf("print_text::init_print 2\n");
 	GFX_fontes->load(ident);
+  printf("print_text::init_print 3\n");
 	fontes_adr = GFX_fontes->get_pixel_data(216 * resolution, 0);	//characters '0' to '9'
 	caract_adr = GFX_fontes->get_pixel_data(0, 0);					//characters 'A' to 'Z'
 	off_desti1 = game_screen->get_row_size();							//modulo destination
 	off_source = GFX_fontes->get_row_size();						//modulo source
 	charHeight = GFX_fontes->get_height(); 
+  printf("print_text::init_print 4\n");
 	return erreur_num;
 }
 

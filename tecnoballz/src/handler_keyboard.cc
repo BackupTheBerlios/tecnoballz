@@ -4,11 +4,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.4 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.5 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,7 +112,7 @@ void
 handler_keyboard::set_grab_input (bool mode)
 {
   
-#ifdef TU_TRICHES
+#ifdef UNDER_DEVELOPMENT
   return;
 #else
   if (mode)
@@ -366,8 +366,8 @@ handler_keyboard::read_events ()
           break;
         }
     }
-  hasard_val += mouse_x_coord;
-  hasard_val += mouse_y_coord;
+  random_counter += mouse_x_coord;
+  random_counter += mouse_y_coord;
   input_string ();
 }
 
@@ -526,8 +526,8 @@ Sint32 handler_keyboard::get_mouse_x_offset ()
   mouse_y_offset = mouse_y_coord - previous_mouse_y_coord;
   previous_mouse_x_coord = mouse_x_coord;
   previous_mouse_y_coord = mouse_y_coord;
-  hasard_val += previous_mouse_x_coord;
-  hasard_val += previous_mouse_y_coord;
+  random_counter += previous_mouse_x_coord;
+  random_counter += previous_mouse_y_coord;
   return mouse_x_offset;
 }
 

@@ -1,15 +1,15 @@
 /** 
  * @file offscreen_surface.cc 
  * @brief an offscreen drawing surface
- * @created 2007-01-31
+ * @created 2007-02-15
  * @date 2007-02-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: offscreen_surface.cc,v 1.7 2007/02/04 17:10:17 gurumeditation Exp $
+ * $Id: offscreen_surface.cc,v 1.8 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,14 +69,14 @@ offscreen_surface::get_vertical_offset ()
  * @param offscreen pointer to a offscreen surface object
  */
 void
-offscreen_surface::blit_surface (offscreen_surface * offscreen)
+offscreen_surface::blit_to_surface (offscreen_surface * offscreen)
 {
   SDL_Surface *surface_dest = offscreen->get_surface ();
   SDL_Rect rect =
     { 0, vertical_offset, surface->w, surface->h - vertical_offset };
   if (SDL_BlitSurface (surface, &rect, surface_dest, &rect) < 0)
     {
-      std::cerr << "offscreen_surface::blit_surface() " <<
+      std::cerr << "offscreen_surface::blit_to_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
 }
@@ -86,14 +86,14 @@ offscreen_surface::blit_surface (offscreen_surface * offscreen)
  * @param offscreen pointer to a offscreen surface object
  */
 void
-offscreen_surface::blit_surface (offscreen_surface * offscreen, Uint32 xcoord,
+offscreen_surface::blit_to_surface (offscreen_surface * offscreen, Uint32 xcoord,
                                  Uint32 ycoord, Uint32 width, Uint32 height)
 {
   SDL_Surface *surface_dest = offscreen->get_surface ();
   SDL_Rect rect = { xcoord, ycoord + vertical_offset, width, height };
   if (SDL_BlitSurface (surface, &rect, surface_dest, &rect) < 0)
     {
-      std::cerr << "offscreen_surface::blit_surface() " <<
+      std::cerr << "offscreen_surface::blit_to_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
 }
@@ -109,9 +109,9 @@ offscreen_surface::blit_surface (offscreen_surface * offscreen, Uint32 xcoord,
  * @param h the height in pixels to copy
  */
 void
-offscreen_surface::blit_surface (offscreen_surface * offscreen, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h)
+offscreen_surface::blit_to_surface (offscreen_surface * offscreen, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h)
 {
-  dynamic_cast < surface_sdl * >(this)->blit_surface (offscreen,
+  dynamic_cast < surface_sdl * >(this)->blit_to_surface (offscreen,
                                                       x1, y1,
                                                       x2,
                                                       y2 + vertical_offset,
@@ -145,5 +145,33 @@ offscreen_surface::clear (Uint32 color, Uint32 xcoord, Uint32 ycoord,
   dynamic_cast < surface_sdl * >(this)->clear (color, xcoord,
                                                ycoord + vertical_offset, w,
                                                h);
-
 }
+
+/**
+ * Perform a blit from the source surface to the destination surface
+ * @param source pointer to a source surface object
+ * @param x1 source x coordinate in the source and destination
+ * @param y1 source y coordinate in the source and destination
+ * @param x2 destination x coordinate in the source and destination
+ * @param y2 destination y coordinate in the source and destination
+ * @param w the width in pixels to copy 
+ * @param h the height in pixels to copy
+ */
+void
+offscreen_surface::blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h)
+{
+   dynamic_cast < surface_sdl * >(this)->blit_surface (dest, x1, y1, x2, y2 + vertical_offset, w, h);
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+

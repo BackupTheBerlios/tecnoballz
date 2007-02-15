@@ -5,11 +5,11 @@
  * @date 2007-02-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_explosions.cc,v 1.2 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: controller_explosions.cc,v 1.3 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ controller_explosions::add (Uint32 xcoord, Uint32 ycoord)
           explosion->x_coord = xcoord - (explosion->sprite_width / 2);
           explosion->y_coord = ycoord - (explosion->sprite_height / 2);
           explosion->frame_index = explosion->frame_index_min;
-          explosion->frame_period = 4 + (hasard_val & 7);
+          explosion->frame_period = 4 + (random_counter & 7);
           explosion->frame_delay = explosion->frame_period;
           explosion->set_image ();
           return;

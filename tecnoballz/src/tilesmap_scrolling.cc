@@ -5,11 +5,11 @@
  * @date 2007-02-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.cc,v 1.3 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.cc,v 1.4 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -193,7 +193,7 @@ tilesmap_scrolling::switch_map (Uint32 pal_id, Uint32 map_id)
 void
 tilesmap_scrolling::enable_palette (Uint32 pal_id)
 {
-  SDL_Color *palPT = display->paletteAdr ();
+  SDL_Color *palPT = display->get_palette ();
   SDL_Color *palP1 = palPT;
   SDL_Color *palP2 = palP1 + 128;
   const unsigned char *colPT = colors_map;
@@ -297,9 +297,12 @@ tilesmap_scrolling::draw ()
   SDL_Surface *tiles_surface = tiles_bitmap->get_surface ();
   Uint32 voffset = offscreen->get_vertical_offset ();
   Uint32 height_box = offscreen->get_height () - voffset * 2;
+  
+  /*
   offscreen->unlock_surface ();
   offscreen->unlock_surface ();
   tiles_bitmap->unlock_surface ();
+  */
   
   /* calculate the height of the tiles of the first line */
   Uint32 modulo_y = y_coord % tile_height;
@@ -363,8 +366,8 @@ tilesmap_scrolling::draw ()
         }
       rect_dst.y += rect_dst.h;
     }
-  offscreen->lock_surface ();
-  tiles_bitmap->lock_surface ();
+  //offscreen->lock_surface ();
+  //tiles_bitmap->lock_surface ();
 }
 
 /**

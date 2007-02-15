@@ -5,11 +5,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: configfile.cc,v 1.18 2007/02/14 13:39:20 gurumeditation Exp $
+ * $Id: configfile.cc,v 1.19 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,9 +78,9 @@ configfile::resetvalue ()
   bob_ground = true;
   is_verbose = 0;
   handler_display::optionfull = 0;
-  hardChoice = 1;
+  difficulty_level = 1;
   initial_num_of_lifes = 8;
-  nuOfPlayer = 1;
+  number_of_players = 1;
   char *pUser = getenv ("USER");
   if (!pUser)
     pUser = stringname;
@@ -102,9 +102,9 @@ configfile::configinfo ()
 #endif
   fprintf (stdout, "  <config info>\n"
            "- optionfull : %i\n- is_audio_enable: %i\n- resolution:%i\n"
-           "- is_verbose: %i\n hardChoice : %i\n",
+           "- is_verbose: %i\n difficulty_level : %i\n",
            handler_display::optionfull, audio, resolution,
-           is_verbose, hardChoice);
+           is_verbose, difficulty_level);
 }
 
 //------------------------------------------------------------------------------
@@ -200,7 +200,7 @@ configfile::loadconfig ()
     bob_ground = true;
   else
     bob_ground = false;
-//bob_ground = false;
+bob_ground = false;
   //read number of lifes: 1 to 9
   if (!reader.read_int ("lifes", &initial_num_of_lifes))
     initial_num_of_lifes = 8;
@@ -208,16 +208,16 @@ configfile::loadconfig ()
     initial_num_of_lifes = 8;
 
   //read difficulty 1 (easy), 2 (hard), 3 (madness) or 4 (suicidal)
-  if (!reader.read_int ("difficulty", &hardChoice))
-    hardChoice = 1;
-  if (hardChoice < 1 || hardChoice > 4)
-    hardChoice = 1;
+  if (!reader.read_int ("difficulty", &difficulty_level))
+    difficulty_level = 1;
+  if (difficulty_level < 1 || difficulty_level > 4)
+    difficulty_level = 1;
 
   //read number of players: 1 to 6
-  if (!reader.read_int ("players", &nuOfPlayer))
-    nuOfPlayer = 1;
-  if (nuOfPlayer < 1 || nuOfPlayer > 6)
-    nuOfPlayer = 1;
+  if (!reader.read_int ("players", &number_of_players))
+    number_of_players = 1;
+  if (number_of_players < 1 || number_of_players > 6)
+    number_of_players = 1;
 
   //read players names
   std::string sName (6, ' ');
@@ -286,11 +286,11 @@ configfile::saveconfig ()
       fprintf (config, "\t(resolution  %d)\n", resolution);
       fprintf (config,
                "\n\t;; difficulty 1 (easy), 2 (hard), 3 (madness) or 4 (suicidal)\n");
-      fprintf (config, "\t(difficulty   %d)\n", hardChoice);
+      fprintf (config, "\t(difficulty   %d)\n", difficulty_level);
       fprintf (config, "\n\t;; number of lifes (1 to 9)\n");
       fprintf (config, "\t(lifes   %d)\n", initial_num_of_lifes);
       fprintf (config, "\n\t;; number of players (1 to 6)\n");
-      fprintf (config, "\t(players   %d)\n", nuOfPlayer);
+      fprintf (config, "\t(players   %d)\n", number_of_players);
       fprintf (config, "\n\t;; players names\n");
       for (Uint32 i = 0; i < 6; i++)
         fprintf (config, "\t(player%i      \"%s\")\n", i + 1, thePlayers[i]);

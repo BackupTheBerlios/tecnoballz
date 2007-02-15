@@ -1,15 +1,15 @@
 /** 
  * @file surface_sdl.cc 
  * @brief an drawing surface
- * @created 2007-02-01
+ * @created 2007-02-15
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.cc,v 1.5 2007/02/06 09:46:13 gurumeditation Exp $
+ * $Id: surface_sdl.cc,v 1.6 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -229,13 +229,13 @@ surface_sdl::unlock_surface ()
  * @param surface pointer to a surface surface object
  */
 void
-surface_sdl::blit_surface (surface_sdl *dest)
+surface_sdl::blit_to_surface (surface_sdl *dest)
 {
   SDL_Surface* surface_dest = dest->get_surface ();
   SDL_Rect rect = {0, 0, surface->w, surface->h};
   if (SDL_BlitSurface (surface, &rect, surface_dest, &rect) < 0)
     {
-      std::cerr << "surface_sdl::blit_surface() " <<
+      std::cerr << "surface_sdl::blit_to_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
 }
@@ -249,13 +249,13 @@ surface_sdl::blit_surface (surface_sdl *dest)
  * @param h the height in pixels to copy
  */
 void
-surface_sdl::blit_surface (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, Uint32 w, Uint32 h)
+surface_sdl::blit_to_surface (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, Uint32 w, Uint32 h)
 {
   SDL_Surface* surface_dest = dest->get_surface ();
   SDL_Rect rect = {xcoord, ycoord, w, h};
   if (SDL_BlitSurface (surface, &rect, surface_dest, &rect) < 0)
     {
-      std::cerr << "surface_sdl::blit_surface() " <<
+      std::cerr << "surface_sdl::blit_to_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
 }
@@ -271,10 +271,10 @@ surface_sdl::blit_surface (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, Uint
  * @param h the height in pixels to copy
  */
 void
-surface_sdl::blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h)
+surface_sdl::blit_to_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h)
 {
   /*
-  std::cout << "surface_sdl::blit_surface() source(" << x1 << ", " << y1
+  std::cout << "surface_sdl::blit_to_surface() source(" << x1 << ", " << y1
     << ") dest(" << x2 << "," << y2 << ") size(" << w << ", " << h << ")" << std::endl;
   */
   SDL_Surface* dest_surface = dest->get_surface ();
@@ -282,7 +282,7 @@ surface_sdl::blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, U
   SDL_Rect dest_rect = {x2, y2, w, h};
   if (SDL_BlitSurface (surface, &src_rect, dest_surface, &dest_rect) < 0)
     {
-      std::cerr << "surface_sdl::blit_surface() " <<
+      std::cerr << "surface_sdl::blit_to_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
 }
@@ -323,8 +323,29 @@ surface_sdl::set_palette (surface_sdl *dest)
    }
 }
 
-
-
-
-
-
+/**
+ * Perform a blit from the source surface to the destination surface
+ * @param source pointer to a source surface object
+ * @param x1 source x coordinate in the source and destination
+ * @param y1 source y coordinate in the source and destination
+ * @param x2 destination x coordinate in the source and destination
+ * @param y2 destination y coordinate in the source and destination
+ * @param w the width in pixels to copy 
+ * @param h the height in pixels to copy
+ */
+void
+surface_sdl::blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h)
+{
+  /*
+  std::cout << "surface_sdl::blit_to_surface() source(" << x1 << ", " << y1
+    << ") dest(" << x2 << "," << y2 << ") size(" << w << ", " << h << ")" << std::endl;
+  */
+  SDL_Surface* source_surface = dest->get_surface ();
+  SDL_Rect src_rect = {x1, y1, w, h};
+  SDL_Rect dest_rect = {x2, y2, w, h};
+  if (SDL_BlitSurface (source_surface, &src_rect, surface, &dest_rect) < 0)
+    {
+      std::cerr << "surface_sdl::blit_to_surface() " <<
+        "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+    }
+}

@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: head_animation.h,v 1.1 2007/02/10 20:25:56 gurumeditation Exp $
+ * $Id: head_animation.h,v 1.2 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,8 @@ private:
   char *adr_destin;             //buffer memory address
   /** Height of the head in pixels */
   Uint32 head_height;
+  /** Width of the head in pixels */
+  Uint32 head_width;
   /** Bitmap which contains all head images */
   bitmap_data *head_bitmap;
   /** Time delay before next image of the animation */
@@ -60,7 +62,8 @@ private:
       YAWN_START = 4,
       YAWN_STOP = 8,
       LAUGH_START = 9,
-      LAUGH_STOP = 13
+      LAUGH_STOP = 13,
+      MAX_OF_IMAGES
     }
     HEAD_FRAMES;
 

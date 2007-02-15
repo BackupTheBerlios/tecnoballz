@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_main_menu.h
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-02-07
+ * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.h,v 1.4 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: supervisor_main_menu.h,v 1.5 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,5 +61,6 @@ private:
   void offset_inc ();
   void move_tecnoballz_logo ();
   Sint32 start_new_game ();
+  Uint32 check_area_password ();
 };
 #endif

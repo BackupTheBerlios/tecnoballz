@@ -5,7 +5,7 @@
 // created	: 2004-04-30
 // updates	: 2005-01-11
 // fonction	: display score table (game over and menu)
-// id		: $Id: scoretable.cc,v 1.10 2007/02/12 16:28:19 gurumeditation Exp $
+// id		: $Id: scoretable.cc,v 1.11 2007/02/15 17:12:24 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -212,7 +212,7 @@ Sint32 scoretable::test_score()
 		current_player->level_number,
 		current_player->area_number);
 	if(fhigh)
-	{	sort_score(hardChoice);
+	{	sort_score(difficulty_level);
 		saveScores();
 	}
 	return fhigh;
@@ -236,7 +236,7 @@ Sint32 scoretable::test_score(char *pName, Uint32 vScre, Uint32 nLevl, Uint32 nA
 	//###################################################################
 	// verify if the name exists
 	//###################################################################
-	score_list* score = the_scores[hardChoice - 1];
+	score_list* score = the_scores[difficulty_level - 1];
 	for(Uint32 i = 0; i < NUMBSCORES; i++)
 	{	if(chaine_cmp(pName, score[i].playerName, 6))
 		{	if(vScre > score[i].scoreValue)
@@ -309,7 +309,7 @@ void scoretable::sort_score(Uint32 nHard)
 //------------------------------------------------------------------------------
 score_list* scoretable::getScrList()
 {
-	return the_scores[hardChoice - 1];
+	return the_scores[difficulty_level - 1];
 }
 
 //------------------------------------------------------------------------------
@@ -317,7 +317,7 @@ score_list* scoretable::getScrList()
 //------------------------------------------------------------------------------
 char* scoretable::bestPlayer()
 {
-	score_list* score = the_scores[hardChoice - 1];
+	score_list* score = the_scores[difficulty_level - 1];
 	return &score[0].playerName[0];
 }
 
@@ -326,6 +326,6 @@ char* scoretable::bestPlayer()
 //------------------------------------------------------------------------------
 Uint32 scoretable::best_score()
 {
-	score_list* score = the_scores[hardChoice - 1];
+	score_list* score = the_scores[difficulty_level - 1];
 	return score[0].scoreValue; 	
 }

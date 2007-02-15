@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.23 2007/02/14 17:04:44 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.24 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,7 +123,7 @@ supervisor_bricks_level::first_init ()
     {
       std::cout << "supervisor_bricks_level::first_init() area_number:"
         << area_number << "level_number:" << level_number
-        << " hardChoice:" << hardChoice << std::endl;
+        << " difficulty_level:" << difficulty_level << std::endl;
     }
 
   /* generation of paddles graphics shapes tables */
@@ -187,20 +187,20 @@ supervisor_bricks_level::first_init ()
       /* time before the ball leaves paddle (at the game beginning) */
       levelParam->startCount,
       //time before the ball leaves (glue option)
-      levelParam->glue_count / hardChoice,
+      levelParam->glue_count / difficulty_level,
       //time before the ball accelerates
-      levelParam->speedCount / hardChoice,
+      levelParam->speedCount / difficulty_level,
       //time before "tilt" is available
       levelParam->tilt_count, levelParam->speedBall1);
 
-  ships->initialise (levelParam->apparition / hardChoice,
-                          levelParam->atom1Count / hardChoice,
-                          levelParam->atom2Count / hardChoice,
-                          levelParam->atom3Count / hardChoice,
-                          levelParam->atom4Count / hardChoice,
-                          levelParam->resistance * hardChoice);
+  ships->initialise (levelParam->apparition / difficulty_level,
+                          levelParam->atom1Count / difficulty_level,
+                          levelParam->atom2Count / difficulty_level,
+                          levelParam->atom3Count / difficulty_level,
+                          levelParam->atom4Count / difficulty_level,
+                          levelParam->resistance * difficulty_level);
 
-  money_capsules->initialize (levelParam->monayCount * hardChoice,
+  money_capsules->initialize (levelParam->monayCount * difficulty_level,
                           panel_score, player_indicators);
 
   //##############################################################
@@ -211,7 +211,7 @@ supervisor_bricks_level::first_init ()
   Sint32 brCnt = bricks->get_num_of_bricks ();
   power_up_capsules->initialise (
                            //frequency of appearance of malus 
-                           levelParam->malusCount * hardChoice,
+                           levelParam->malusCount * difficulty_level,
                            //number of bonus bought in the shop
                            counb,
                            //number of bricks which it is necessary to break
@@ -243,7 +243,7 @@ supervisor_bricks_level::first_init ()
 
   display->unlock_surfaces ();
   /* copy the background offscreen to the game offscreen */
-  background_screen->blit_surface (game_screen);
+  background_screen->blit_to_surface (game_screen);
 
   keyboard->clear_command_keys ();
   keyboard->set_grab_input (true);
@@ -290,11 +290,11 @@ supervisor_bricks_level::main_loop ()
         }
       ptMiniMess->execution1 ();
       display->wait_frame ();
-      display->lock_surfaces ();
       head_anim->play ();
+      display->lock_surfaces ();
       gigablitz->execution1 ();
       sprites->clear ();
-      if (!(hasard_val & 0x00f))
+      if (!(random_counter & 0x00f))
         {
           head_anim->start_interference ();
         }
@@ -324,6 +324,10 @@ supervisor_bricks_level::main_loop ()
   else
     {
       display->wait_frame ();
+      if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
+        {
+          head_anim->play ();
+        }
       display->lock_surfaces ();
       sprites->clear ();
       bricks->brickRemap ();        //restore bricks
@@ -333,7 +337,6 @@ supervisor_bricks_level::main_loop ()
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
         {
           ptMiniMess->execution1 ();
-          head_anim->play ();
           gigablitz->execution1 ();
 
           //handle the "less bricks" option
@@ -452,7 +455,7 @@ supervisor_bricks_level::main_loop ()
 void
 supervisor_bricks_level::changebkgd ()
 {
-#ifdef TU_TRICHES
+#ifdef UNDER_DEVELOPMENT
   if (keyboard->key_is_pressed (SDLK_RSHIFT) ||
       keyboard->key_is_pressed (SDLK_LSHIFT) ||
       keyboard->key_is_pressed (SDLK_RCTRL) ||
@@ -487,7 +490,7 @@ supervisor_bricks_level::changebkgd ()
         printf ("supervisor_bricks_level::background() : changebkgd:%i\n",
                 indexbgrnd);
       background (indexbgrnd);
-      background_screen->blit_surface (game_screen);
+      background_screen->blit_to_surface (game_screen);
     }
 
   if (keyboard->key_is_pressed (SDLK_v))

@@ -4,11 +4,11 @@
  * @date 2007-02-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: head_animation.cc,v 1.1 2007/02/10 20:25:56 gurumeditation Exp $
+ * $Id: head_animation.cc,v 1.2 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ head_animation::~head_animation ()
 void
 head_animation::load_bitmap ()
 {
-  bitmap_data *head_bitmap = new bitmap_data ();
+  head_bitmap = new bitmap_data ();
   head_bitmap->load (handler_resources::RESHEADANI);
   off_source = head_bitmap->get_row_size ();
   off_destin = game_screen->get_width ();
@@ -68,6 +68,9 @@ head_animation::load_bitmap ()
   adr_destin =
     game_screen->get_pixel_data (272 * resolution, 106 * resolution);
   head_height = head_bitmap->get_height ();
+  head_width = head_bitmap->get_width () / MAX_OF_IMAGES;
+  printf("head_width ===============> %i\n",head_width);
+
 }
 
 /**
@@ -76,6 +79,13 @@ head_animation::load_bitmap ()
 void
 head_animation::draw ()
 {
+  
+  Uint32 xcoord = frame_index * head_width;
+  //game_screen->blit_surface (head_bitmap, xcoord, 0, 272 * resolution, 106 * resolution, head_width, head_height);
+
+  return;
+
+
   Sint32 *desti = (Sint32 *) adr_destin;
   Sint32 *surce = (Sint32 *) (adr_source + (frame_index * 32 * resolution));
   Sint32 off_s = off_source;

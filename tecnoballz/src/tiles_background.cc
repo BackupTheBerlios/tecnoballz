@@ -4,11 +4,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.8 2007/02/07 17:10:37 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.9 2007/02/15 17:12:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -110,7 +110,7 @@ tiles_background::setup (Uint32 tiles_num)
         /* select one of the 60 backgrounds */
         /* value from 0 to 63 */
         Uint32 x;
-        Uint32 y = hasard_val & 0x3F;
+        Uint32 y = random_counter & 0x3F;
         if (y >= 60)
           {
             y -= 60;
@@ -137,7 +137,7 @@ tiles_background::setup (Uint32 tiles_num)
       {
         if (tiles_num < 1)
           {
-            tiles_num = (hasard_val & 127) + 1;
+            tiles_num = (random_counter & 127) + 1;
           }
         if (tiles_num > 77)
           {
@@ -173,8 +173,8 @@ tiles_background::setup (Uint32 tiles_num)
   generate_map ();
 
   /* draw the tiles in background offscreen */
-  map_xcoord = hasard_val % map_xmax;
-  map_ycoord = hasard_val * countframe % map_ymax;
+  map_xcoord = random_counter % map_xmax;
+  map_ycoord = random_counter * frame_counter % map_ymax;
   draw (background_screen);
 
   /* draw top shadow */
@@ -257,11 +257,11 @@ tiles_background::generate_map ()
     {
       for (Uint32 h = 0; h < map_width; h++)
         {
-          hasard_val = hasard_val + rand1 + rand2 + 1 + keyboard->get_mouse_x ();
-          rand1 = rand1 + countframe + v;
-          rand2 = rand2 + display->get_framepee ();
+          random_counter = random_counter + rand1 + rand2 + 1 + keyboard->get_mouse_x ();
+          rand1 = rand1 + frame_counter + v;
+          rand2 = rand2 + display->get_frames_per_second ();
           
-          Uint32 x = hasard_val;
+          Uint32 x = random_counter;
           /* table index, from 0 to  15 */
           x &= 0x0f;
           /* position source, from 0 to 4 */
@@ -308,6 +308,7 @@ tiles_background::draw ()
 void
 tiles_background::draw (offscreen_surface *offscreen)
 {
+  return;
   map_xcoord = map_xcoord % map_xmax;
   map_ycoord = map_ycoord % map_ymax;
   
@@ -437,7 +438,7 @@ tiles_background::set_palette ()
     case TILES_64x64_WITH_16_COLORS:
     default:
       unsigned char *colPT = current_tiles->get_palette ();
-      SDL_Color *palPT = display->paletteAdr ();
+      SDL_Color *palPT = display->get_palette ();
       SDL_Color *palP1 = palPT;
       SDL_Color *palP2 = palP1 + 128;
       unsigned char pixel;
@@ -472,7 +473,7 @@ tiles_background::set_palette ()
 void
 tiles_background::set_4_color_palette ()
 {
-  Sint32 j = hasard_val & 0x1ff;
+  Sint32 j = random_counter & 0x1ff;
   if (j >= 448)
     {
       /* 112 preset 4 color palettes */
@@ -520,7 +521,7 @@ tiles_background::set_4_color_palette (Uint32 pal_index)
   palette_index = pal_index;
   char *color = &couleurs[0];
   unsigned char *colPT = (unsigned char *) (color) + pal_index;
-  SDL_Color *palPT = display->paletteAdr ();
+  SDL_Color *palPT = display->get_palette ();
   SDL_Color *palP1 = palPT + 1;
   SDL_Color *palP2 = palP1 + 128;
   for (Sint32 i = 0; i < 4; i++)
