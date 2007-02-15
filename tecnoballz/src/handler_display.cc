@@ -5,11 +5,11 @@
  * @date 2007-02-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.15 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.16 2007/02/15 20:52:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,6 +51,7 @@ handler_display::handler_display ()
   //game_speed = 12;      //1000 / 85
   delay_change_counter = 0;
   delay_ticks_amount = 0;
+  delay_change_counter = DELAY_CHANGE_MAX;
 }
 
 /**
@@ -320,6 +321,7 @@ handler_display::wait_frame ()
       delay_ticks_amount += sdl_ticks;
       if (--delay_change_counter <= 0)
         {
+          //printf("((%i * %i) - %i) / %i)\n", game_speed, DELAY_CHANGE_MAX, delay_ticks_amount, DELAY_CHANGE_MAX);
           delay_value = ((game_speed * DELAY_CHANGE_MAX) - delay_ticks_amount) / DELAY_CHANGE_MAX;
           delay_change_counter = DELAY_CHANGE_MAX;
           delay_ticks_amount = 0;
@@ -327,7 +329,7 @@ handler_display::wait_frame ()
             {
               delay_value = 1;
             }
-          printf("delay_value:%i \n", delay_value);
+          //printf("delay_value:%i \n", delay_value);
         }
       if (delay_value > 0)
         {

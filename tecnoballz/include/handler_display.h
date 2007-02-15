@@ -5,11 +5,11 @@
  * @date 2007-01-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.h,v 1.8 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: handler_display.h,v 1.9 2007/02/15 20:52:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ public:
 
 private:
   static const Uint32 bitspixels = 8;
-  static const Uint32 DELAY_CHANGE_MAX = 10;
+  static const Sint32 DELAY_CHANGE_MAX = 10;
   Sint32 offsetplus;
 
 
@@ -78,9 +78,9 @@ private:
   /** Delay value for SDL_delay() */
   Sint32 delay_value;
   /** game speed, the desired frames per second 20 <=> 50 fps */
-  Uint32 game_speed;
+  Sint32 game_speed;
   /** Amount of ticks for calculate "delay_value" */
-  Uint32 delay_ticks_amount;
+  Sint32 delay_ticks_amount;
   /** The window tile and icon name */
   static char window_title[25];
 

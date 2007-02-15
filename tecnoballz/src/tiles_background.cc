@@ -1,14 +1,14 @@
 /** 
  * @file tiles_background.cc 
  * @brief Draw tiles background in bricks levels 
- * @date 2007-02-04
+ * @date 2007-02-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.9 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.10 2007/02/15 20:52:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ tiles_background::~tiles_background ()
     }
   if (NULL != map_tiles)
     {
-      delete map_tiles;
+      delete[] map_tiles;
       map_tiles = NULL;
     }
   object_free ();
@@ -308,7 +308,6 @@ tiles_background::draw ()
 void
 tiles_background::draw (offscreen_surface *offscreen)
 {
-  return;
   map_xcoord = map_xcoord % map_xmax;
   map_ycoord = map_ycoord % map_ymax;
   

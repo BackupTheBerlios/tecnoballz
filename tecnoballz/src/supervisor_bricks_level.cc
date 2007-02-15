@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.24 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.25 2007/02/15 20:52:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
   power_up_capsules = controller_capsules::get_instance ();
   gem_stones = controller_gems::get_instance ();
   bricks = controller_bricks::get_instance ();
-  head_anim = new head_animation ();
+  head_anim = head_animation::get_instance ();
   ships = controller_ships::get_instance ();
   magnetic_eyes = controller_magnetic_eyes::get_instance ();
   BottomWall = new sprite_object ();

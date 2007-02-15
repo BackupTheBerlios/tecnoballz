@@ -1,32 +1,38 @@
-//*****************************************************************************
-// copyright (c) 1991-2005 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file         : "controller_magnetic_eyes.cc"
-// created      : 2004-09-17
-// updates      : 2005-07-17
-// function     : manage eye magneto (only bricks levels)
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA 02111-1307, USA.
-//*****************************************************************************
+/** 
+ * @file controller_magnetic_eyes.cc 
+ * @brief Magectic eyes controller 
+ * @created 2004-09-17 
+ * @date 2007-02-15
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.3 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: controller_magnetic_eyes.cc,v 1.3 2007/02/15 20:52:43 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
 #include "../include/controller_magnetic_eyes.h"
 #include "../include/handler_keyboard.h"
 #include "../include/handler_resources.h"
 
-//-----------------------------------------------------------------------------
-// create the object
-//-----------------------------------------------------------------------------
+/**
+ * Create the magectic eyes controller
+ */
 controller_magnetic_eyes::controller_magnetic_eyes ()
 {
   littleInit ();
@@ -35,9 +41,9 @@ controller_magnetic_eyes::controller_magnetic_eyes ()
   sprite_type_id = BOB_MAGEYE;
 }
 
-//-----------------------------------------------------------------------------
-// release the object
-//-----------------------------------------------------------------------------
+/**
+ * Release the magectic eyes controller
+ */
 controller_magnetic_eyes::~controller_magnetic_eyes ()
 {
   release_sprites_list ();

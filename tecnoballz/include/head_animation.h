@@ -1,14 +1,14 @@
 /** 
- * @file head_animation.cc 
+ * @file head_animation.h
  * @brief Animate the head in the right score panel 
- * @date 2007-02-10
+ * @date 2007-02-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: head_animation.h,v 1.2 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: head_animation.h,v 1.3 2007/02/15 20:52:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,10 +36,8 @@ class head_animation;
 class head_animation:public virtual tecnoballz
 {
 private:
-  Sint32 off_source;            //modulo source
-  Sint32 off_destin;            //modulo destination
-  char *adr_source;             //graphic page memory address
-  char *adr_destin;             //buffer memory address
+  static head_animation* head_anim_singleton;
+
   /** Height of the head in pixels */
   Uint32 head_height;
   /** Width of the head in pixels */
@@ -71,9 +69,11 @@ private:
   static const Uint32 FRAME_PERIOD_1 = 5;
   static const Uint32 FRAME_PERIOD_2 = 20;
 
-public:
+private:
     head_animation ();
+public:
    ~head_animation ();
+  static head_animation * get_instance ();
   void load_bitmap ();
   void play ();
   void start_yawn ();

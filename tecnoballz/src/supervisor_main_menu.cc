@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_main_menu.cc 
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-02-14
+ * @date 2007-02-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.9 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.10 2007/02/15 20:52:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -304,7 +304,6 @@ supervisor_main_menu::check_area_password ()
 #endif
   for (Uint32 area_count = 1; area_count <= area_max; area_count++)
     {
-      printf("%i\n", area_count);
       for (Uint32 difficulty_count = 1; difficulty_count <= 4; difficulty_count++)
         {
           bool is_valid = true;

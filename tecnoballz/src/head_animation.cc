@@ -1,14 +1,14 @@
 /** 
  * @file head_animation.cc 
  * @brief Animate the head in the right score panel 
- * @date 2007-02-10
+ * @date 2007-02-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: head_animation.cc,v 1.2 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: head_animation.cc,v 1.3 2007/02/15 20:52:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@
  */
 #include "../include/head_animation.h"
 #include "../include/handler_resources.h"
+
+head_animation * head_animation::head_anim_singleton = NULL;
 
 /**
  * Create the head animation object
@@ -52,7 +54,25 @@ head_animation::~head_animation ()
       delete head_bitmap;
       head_bitmap = (bitmap_data *) NULL;
     }
+  head_anim_singleton = NULL;
 }
+
+/**
+ * Get the object instance
+ * head_animation is a singleton
+ * @return the head_animation object 
+ */
+head_animation *
+head_animation::get_instance ()
+{
+  if (NULL == head_anim_singleton)
+    {
+      head_anim_singleton = new head_animation ();
+    }
+  return head_anim_singleton;
+}
+
+
 
 /** 
  * Load the bitmap of the head animation
@@ -62,15 +82,8 @@ head_animation::load_bitmap ()
 {
   head_bitmap = new bitmap_data ();
   head_bitmap->load (handler_resources::RESHEADANI);
-  off_source = head_bitmap->get_row_size ();
-  off_destin = game_screen->get_width ();
-  adr_source = head_bitmap->get_pixel_data ();
-  adr_destin =
-    game_screen->get_pixel_data (272 * resolution, 106 * resolution);
   head_height = head_bitmap->get_height ();
   head_width = head_bitmap->get_width () / MAX_OF_IMAGES;
-  printf("head_width ===============> %i\n",head_width);
-
 }
 
 /**
@@ -81,56 +94,7 @@ head_animation::draw ()
 {
   
   Uint32 xcoord = frame_index * head_width;
-  //game_screen->blit_surface (head_bitmap, xcoord, 0, 272 * resolution, 106 * resolution, head_width, head_height);
-
-  return;
-
-
-  Sint32 *desti = (Sint32 *) adr_destin;
-  Sint32 *surce = (Sint32 *) (adr_source + (frame_index * 32 * resolution));
-  Sint32 off_s = off_source;
-  Sint32 off_d = off_destin;
-  Sint32 j = head_height;
-  if (resolution == 1)
-    {
-      for (Sint32 i = 0; i < j; i++)
-        {
-          desti[0] = surce[0];
-          desti[1] = surce[1];
-          desti[2] = surce[2];
-          desti[3] = surce[3];
-          desti[4] = surce[4];
-          desti[5] = surce[5];
-          desti[6] = surce[6];
-          desti[7] = surce[7];
-          surce = (Sint32 *) ((char *) surce + off_s);
-          desti = (Sint32 *) ((char *) desti + off_d);
-        }
-    }
-  else
-    {
-      for (Sint32 i = 0; i < j; i++)
-        {
-          desti[0] = surce[0];
-          desti[1] = surce[1];
-          desti[2] = surce[2];
-          desti[3] = surce[3];
-          desti[4] = surce[4];
-          desti[5] = surce[5];
-          desti[6] = surce[6];
-          desti[7] = surce[7];
-          desti[8] = surce[8];
-          desti[9] = surce[9];
-          desti[10] = surce[10];
-          desti[11] = surce[11];
-          desti[12] = surce[12];
-          desti[13] = surce[13];
-          desti[14] = surce[14];
-          desti[15] = surce[15];
-          surce = (Sint32 *) ((char *) surce + off_s);
-          desti = (Sint32 *) ((char *) desti + off_d);
-        }
-    }
+  game_screen->blit_surface (head_bitmap, xcoord, 0, 272 * resolution, 106 * resolution, head_width, head_height);
 }
 
 /**
