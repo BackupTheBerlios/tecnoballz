@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.11 2007/02/13 20:55:27 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.12 2007/02/16 16:53:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,11 +79,11 @@ sprite_ball::reStarting (sprite_paddle * paddle)
   select_image ();
 }
 
-//-----------------------------------------------------------------------------
-// disable the ball
-//-----------------------------------------------------------------------------
+/**
+ * Remove the ball
+ */
 void
-sprite_ball::goSleeping (sprite_paddle * paddle)
+sprite_ball::remove (sprite_paddle * paddle)
 {
   disable ();
   colleBallF = 0;

@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.h
  * @brief Shop supervisor 
- * @date 2007-02-13
+ * @date 2007-02-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.8 2007/02/16 12:38:24 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.9 2007/02/16 16:53:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,12 +44,12 @@ class supervisor_shop:public supervisor
 {
 private:
   static const Sint32 STEXTWIDHT = 22;  //largeur d'une ligne texte en caracteres
-  tiles_background *ecranfond4;
+  tiles_background *tiles_ground;
   sprite_mouse_pointer *mouse_pointer;
   sprite_object *led_indicator;
   controller_capsules *power_up_capsules;
-  display_text_bitmap *mega_print;
-  handler_popup_menu *ptrEscMenu;
+  display_text_bitmap *display_text;
+  handler_popup_menu *popup_menu;
   Sint32 shop_point;            //pointeur
   Sint32 shoppoint3;            //pointeur
 
@@ -122,7 +122,7 @@ public:
 private:
   bool decrease_money_amount ();
   void putthetext (char *ligne);
-  void affichtext ();
+  void display_box_text ();
   void sh_ballade ();
   Sint32 collisions ();
   void pos_select ();

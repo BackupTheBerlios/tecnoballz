@@ -4,11 +4,11 @@
  * @date 2007-02-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: display_text_bitmap.cc,v 1.1 2007/02/16 12:38:24 gurumeditation Exp $
+ * $Id: display_text_bitmap.cc,v 1.2 2007/02/16 16:53:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ void
 display_text_bitmap::initial_me ()
 {
   object_init ();
-  GFX_fontes = (bitmap_data *) NULL;
+  bitmap_fonts = (bitmap_data *) NULL;
   off_source = 0;
   off_desti1 = 0;
 }
@@ -63,45 +63,52 @@ display_text_bitmap::initial_me ()
 void
 display_text_bitmap::destroy_me ()
 {
-  if (GFX_fontes)
-    delete GFX_fontes;
-  GFX_fontes = (bitmap_data *) NULL;
+  if (bitmap_fonts)
+    delete bitmap_fonts;
+  bitmap_fonts = (bitmap_data *) NULL;
   object_free ();
 }
 
-
-//------------------------------------------------------------------------------
-// initialization (load fontes bitmap)
-//------------------------------------------------------------------------------
-Sint32
-display_text_bitmap::initialise ()
+/**
+ * Load fontes used in the shop and the right panel
+ */
+void
+display_text_bitmap::initialize ()
 {
-  return (init_print (handler_resources::RESFONTGAM));
+  load_bitmap_fonts (handler_resources::RESFONTGAM);
 }
 
-//------------------------------------------------------------------------------
-// return height of chars in pixels
-//------------------------------------------------------------------------------
+/**
+ * Return height of chars in pixels
+ * @return height of the chars in pixels 
+ */
 Uint32
-display_text_bitmap::getCharHgt ()
+display_text_bitmap::get_char_height ()
 {
-  return charHeight;
+  return char_height;
 }
 
-//------------------------------------------------------------------------------
-// initialization (load fontes bitmap)
-//------------------------------------------------------------------------------
-Sint32
-display_text_bitmap::init_print (Sint32 ident)
+/**
+ * Load bitmap fontes and initialize the object
+ * @param resource_id bitmap fonts resource identifier
+ */
+void
+display_text_bitmap::load_bitmap_fonts (Uint32 resource_id)
 {
-  GFX_fontes = new bitmap_data ();
-  GFX_fontes->load (ident);
-  fontes_adr = GFX_fontes->get_pixel_data (216 * resolution, 0);        //characters '0' to '9'
-  caract_adr = GFX_fontes->get_pixel_data (0, 0);       //characters 'A' to 'Z'
+  bitmap_fonts = new bitmap_data ();
+  bitmap_fonts->load (resource_id);
+  surface_fonts = bitmap_fonts->get_surface ();
+  fontes_adr = bitmap_fonts->get_pixel_data (216 * resolution, 0);        //characters '0' to '9'
+  caract_adr = bitmap_fonts->get_pixel_data (0, 0);       //characters 'A' to 'Z'
   off_desti1 = game_screen->get_row_size ();    //modulo destination
-  off_source = GFX_fontes->get_row_size ();     //modulo source
-  charHeight = GFX_fontes->get_height ();
-  return erreur_num;
+  off_source = bitmap_fonts->get_row_size ();     //modulo source
+  
+  char_width = CHAR_WIDTH * resolution;
+  char_height = bitmap_fonts->get_height ();
+
+  rect_fonts.y = 0; 
+  rect_fonts.w = rect_destination.w = char_width;
+  rect_destination.h = rect_fonts.h = char_height;
 }
 
 // -----------------------------------------------------------------------------
@@ -271,6 +278,39 @@ display_text_bitmap::affNombre1 (char *desP1, Sint32 value, Sint32 baseN)
 #endif
 }
 
+void
+display_text_bitmap::draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 length)
+{
+
+  SDL_Surface *surface_dest = dest->get_surface ();
+  rect_destination.x = xcoord;
+  rect_destination.y = ycoord;
+
+  if (0 == length) 
+    {
+      length = strlen(str);
+    }
+
+
+  for (Uint32 i = 0; i < length; i++, rect_destination.x += char_width)
+    {
+      Uint32 x = str[i] - 32;
+      if (x == 0) 
+        {  
+           continue;
+        }
+       rect_fonts.x = ascii2code[x] * char_width;
+       if (SDL_BlitSurface
+           (surface_fonts, &rect_fonts, surface_dest, &rect_destination) < 0)
+       {
+         std::cerr << "(!)display_text_bitmap::draw() " <<
+           "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+         break;
+       }
+    }
+}
+
+
 // -----------------------------------------------------------------------------
 // display string into the "buffer" memory or the "tampon" memory 
 //              input   => desP1        : pointer to the buffer or the tampon
@@ -366,6 +406,9 @@ display_text_bitmap::bufferAff2 (Sint32 x, Sint32 y, char *chain,
   aff_texte1 (desP1, chain, total);
 }
 
+
+
+
 //------------------------------------------------------------------------------
 // create a BOB to display string (used into guards levels)
 //------------------------------------------------------------------------------
@@ -374,8 +417,8 @@ display_text_bitmap::string2bob (const char *ptStr)
 {
   Sint32 numch = strlen (ptStr);
   bitmap_data *pBmap = new bitmap_data ();
-  //pBmap->create(numch * charHeight, charHeight, 1);
-  pBmap->create_surface (numch * charHeight, charHeight);
+  //pBmap->create(numch * char_height, char_height, 1);
+  pBmap->create_surface (numch * char_height, char_height);
   Sint32 *basPT = (Sint32 *) caract_adr;
   char *desP1 = pBmap->get_pixel_data ();
   Sint32 offSc = off_source;

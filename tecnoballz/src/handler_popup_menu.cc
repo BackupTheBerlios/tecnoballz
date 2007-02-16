@@ -5,11 +5,11 @@
  * @date 2007-02-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.2 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.3 2007/02/16 16:53:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,9 +49,9 @@ handler_popup_menu::~handler_popup_menu ()
 {
   if (graphTexte)
     delete graphTexte;
-  if (GFX_fontes)
-    delete GFX_fontes;
-  GFX_fontes = (bitmap_data *) NULL;
+  if (bitmap_fonts)
+    delete bitmap_fonts;
+  bitmap_fonts = (bitmap_data *) NULL;
   graphTexte = (bitmap_data *) NULL;
 }
 
@@ -108,7 +108,7 @@ handler_popup_menu::first_init (bitmap_data * bmp, Uint32 menu_num,
     }
 
   /* load fontes bitmap files and perform some initializations */
-  init_print (handler_resources::RESFONTMEN);
+  load_bitmap_fonts (handler_resources::RESFONTMEN);
 
   /* determine height of the menu box */
   menu_number = menu_num;
@@ -125,8 +125,8 @@ handler_popup_menu::first_init (bitmap_data * bmp, Uint32 menu_num,
 
   /* allocate graphic buffer of menu box */ 
   graphTexte = new bitmap_data ();
-  //graphTexte->create ((num_of_columns + 2) * charHeight, numof_lines * vertical_space, 1);
-  graphTexte->create_surface ((num_of_columns + 2) * charHeight, numof_lines * vertical_space);
+  //graphTexte->create ((num_of_columns + 2) * char_height, numof_lines * vertical_space, 1);
+  graphTexte->create_surface ((num_of_columns + 2) * char_height, numof_lines * vertical_space);
   graphTexte->clear ();
 
   /* save coordinates of the sprites */
@@ -316,10 +316,10 @@ void
 handler_popup_menu::display640 ()
 {
   Sint32 color = menu_color;
-  char *desP1 = pixel_data + charHeight + srceNextLn * vertical_space;
+  char *desP1 = pixel_data + char_height + srceNextLn * vertical_space;
   Sint32 offSc = off_source;
   Sint32 offDs = srceNextLn;
-  Sint32 offD2 = srceNextLn * (vertical_space - 1) + (charHeight * 2);
+  Sint32 offD2 = srceNextLn * (vertical_space - 1) + (char_height * 2);
   Sint32 *basPT = (Sint32 *) caract_adr;
   const char *p = menu_texts[menu_number];
   char *c = ascii2code;
@@ -406,10 +406,10 @@ void
 handler_popup_menu::display320 ()
 {
   Sint32 color = menu_color;
-  char *desP1 = pixel_data + charHeight + srceNextLn * vertical_space;
+  char *desP1 = pixel_data + char_height + srceNextLn * vertical_space;
   Sint32 offSc = off_source;
   Sint32 offDs = srceNextLn;
-  Sint32 offD2 = srceNextLn * (vertical_space - 1) + (charHeight * 2);
+  Sint32 offD2 = srceNextLn * (vertical_space - 1) + (char_height * 2);
   Sint32 *basPT = (Sint32 *) caract_adr;
   const char *p = menu_texts[menu_number];
   char *c = ascii2code;

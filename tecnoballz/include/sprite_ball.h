@@ -4,11 +4,11 @@
  * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.h,v 1.13 2007/02/13 20:55:27 gurumeditation Exp $
+ * $Id: sprite_ball.h,v 1.14 2007/02/16 16:53:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,7 +122,7 @@ public:
   void once_init (Sint32 start, Sint32 speed,
                    sprite_paddle * raket, Sint16 * table, Sint32 bwght);
   void reStarting (sprite_paddle * raket);
-  void goSleeping (sprite_paddle * raket);
+  void remove (sprite_paddle * raket);
   void startBalle (Sint32 large);
   void duplicate_from (sprite_ball * ball, Uint32 angle);
   static short *donneSpeed (Sint32 speed);

@@ -5,11 +5,11 @@
  * @date 2007-02-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_scores.cc,v 1.1 2007/02/16 12:38:24 gurumeditation Exp $
+ * $Id: sprite_display_scores.cc,v 1.2 2007/02/16 16:53:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,9 +56,9 @@ sprite_display_scores::~sprite_display_scores ()
 {
   if (graphTexte)
     delete graphTexte;
-  if (GFX_fontes)
-    delete GFX_fontes;
-  GFX_fontes = (bitmap_data *) NULL;
+  if (bitmap_fonts)
+    delete bitmap_fonts;
+  bitmap_fonts = (bitmap_data *) NULL;
   graphTexte = (bitmap_data *) NULL;
 }
 
@@ -69,9 +69,7 @@ Sint32
 sprite_display_scores::first_init (Sint32 offzt)
 {
 
-  error_init (init_print (handler_resources::RESFONTSCR));
-  if (erreur_num)
-    return (erreur_num);
+  load_bitmap_fonts (handler_resources::RESFONTSCR);
 
   //###################################################################
   // allocate 512 * 323 pixels buffer for text menu 

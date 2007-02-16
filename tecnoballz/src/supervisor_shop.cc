@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.cc 
  * @brief Shop supervisor 
- * @date 2007-02-14
+ * @date 2007-02-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.12 2007/02/16 12:38:24 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.13 2007/02/16 16:53:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,12 +36,12 @@
 supervisor_shop::supervisor_shop ()
 {
   initialise ();
-  ecranfond4 = new tiles_background ();
+  tiles_ground = new tiles_background ();
   mouse_pointer = new sprite_mouse_pointer ();
   led_indicator = new sprite_object ();
   power_up_capsules = controller_capsules::get_instance ();
-  mega_print = new display_text_bitmap ();
-  ptrEscMenu = new handler_popup_menu ();
+  display_text = new display_text_bitmap ();
+  popup_menu = new handler_popup_menu ();
   shop_point = 0;
   optioninfo = 0;
   infodejavu = 0;
@@ -82,8 +82,8 @@ supervisor_shop::supervisor_shop ()
  */
 supervisor_shop::~supervisor_shop ()
 {
-  delete ptrEscMenu;
-  delete mega_print;
+  delete popup_menu;
+  delete display_text;
   delete power_up_capsules;
   if (NULL != led_indicator)
     {
@@ -91,7 +91,7 @@ supervisor_shop::~supervisor_shop ()
       led_indicator = (sprite_object *) NULL;
     }
   delete mouse_pointer;
-  delete ecranfond4;
+  delete tiles_ground;
   liberation ();
 }
 
@@ -146,24 +146,26 @@ supervisor_shop::first_init ()
 
   resources->load_sprites_bitmap ();
 
-  //###################################################################
-  // Initialize LED 
-  //###################################################################
+  /* initialize the led indicator */ 
   if (resolution == 1)
-    led_indicator->create_sprite (BOB_LEDSHP, sprites_bitmap, 0);
+    {
+      led_indicator->create_sprite (BOB_LEDSHP, sprites_bitmap, false);
+    }
   else
-    led_indicator->create_sprite (BOB_LEDSH2, sprites_bitmap, 0);
+    {
+      led_indicator->create_sprite (BOB_LEDSH2, sprites_bitmap, false);
+    }
   sprites->add (led_indicator);
   led_indicator->enable ();
 
-  //###################################################################
-  // initialize the gadgets
-  //###################################################################
+  /* initialize the power-up capsules  */
   power_up_capsules->create_shop_sprites_list ();
   current_player->clear_shopping_cart ();
   Sint32 *tp = coursetemp;
   for (Sint32 i = 0; i < NB_OPTIONS; i++)
-    *(tp++) = 0;
+    {
+      *(tp++) = 0;
+    }
   sprite_capsule **liste = power_up_capsules->get_sprites_list ();
   bob_volant = liste[(NB_OPTIONS + 2) - 1 - 1];
 
@@ -173,24 +175,20 @@ supervisor_shop::first_init ()
   //###################################################################
   // intialize the "escape menu"
   //###################################################################
-  ptrEscMenu->first_init (sprites_bitmap, 1,    //menu number
+  popup_menu->first_init (sprites_bitmap, 1,    //menu number
                           320 * resolution,     //width of screen (center)
                           1,    //restaure background where leaves
                           1     //initialize color table
     );
 
   resources->release_sprites_bitmap ();
-  error_init (mega_print->initialise ());
-  if (erreur_num)
-    return erreur_num;
+  display_text->initialize ();
 
-  //###################################################################
-  // load bitmap background of the shop
-  //###################################################################
-  bitmap_data *gfxPT = new bitmap_data ();
-  gfxPT->load (handler_resources::RESNEWSHOP);
-  gfxPT->copyTampon ();
-  delete gfxPT;
+  /* load bitmap background of the shop */
+  bitmap_data *bmp = new bitmap_data ();
+  bmp->load (handler_resources::RESNEWSHOP);
+  bmp->copyTampon ();
+  delete bmp;
 
   background_screen->blit_to_surface (game_screen);
   display->bufferCopy ();       //copy buffer memory into the screen
@@ -201,7 +199,7 @@ supervisor_shop::first_init ()
     shop_line3 = &shoptext00[STEXTWIDHT * 3];
 
   keyboard->set_grab_input (false);
-  ecranfond4->set_4_color_palette ();
+  tiles_ground->set_4_color_palette ();
   return erreur_num;
 }
 
@@ -218,12 +216,30 @@ supervisor_shop::main_loop ()
   background_screen->blit_to_surface (game_screen, 290 * resolution,
                                    3 * resolution, 26 * resolution,
                                    180 * resolution);
+
+  display_text->draw (game_screen, 32, 350, "JE VAIS BIEN!");
+  
+  /* display the 3 lines of text  */
+  display_box_text ();
+
   display->lock_surfaces ();
+  
+  /* display current price and credit */
+  display_text->bufferAff1 (263 * resolution, 227 * resolution,
+                          prixActuel, 100000);
+  display_text->bufferAff1 (263 * resolution, 183 * resolution,
+                          current_player->get_money_amount (), 100000);
+
+
+  
+  
+  
+  
   end_return = 0;
   sprites->clear ();
 
 
-  if (!ptrEscMenu->is_enable ())
+  if (!popup_menu->is_enable ())
     {
       pos_select ();
       Sint32 x = mouse_pointer->get_x_coord ();
@@ -259,23 +275,12 @@ supervisor_shop::main_loop ()
       sh_ballade ();
     }
 
-  //###################################################################
-  // display price and credit
-  //###################################################################
-  mega_print->bufferAff1 (263 * resolution, 227 * resolution,
-                          prixActuel, 100000);
-  mega_print->bufferAff1 (263 * resolution, 183 * resolution,
-                          current_player->get_money_amount (), 100000);
   mouse_pointer->move ();
   if (cheat_flag)
     power_up_capsules->animations (2);
   else
     power_up_capsules->animations (1);
 
-  //###################################################################
-  // display the 3 lines of text 
-  //###################################################################
-  affichtext ();
 
   //###################################################################
   // display the cursor of the bonus selected in the list on the right 
@@ -288,7 +293,7 @@ supervisor_shop::main_loop ()
   sprites->draw ();
   aff_course ();
 
-  Ecode = ptrEscMenu->execution1 ();
+  Ecode = popup_menu->execution1 ();
 
   //###################################################################
   // copy buffer surface to screen surface
@@ -698,20 +703,28 @@ supervisor_shop::putthetext (char *ligne)
   shop_line3 = ligne;
 }
 
-//-------------------------------------------------------------------------------
-// display the three lines of text in the box in bottom
-//-------------------------------------------------------------------------------
+/**
+ * Display the three lines of text in the box in bottom
+ */
 void
-supervisor_shop::affichtext ()
+supervisor_shop::display_box_text ()
 {
-  Uint32 charH = mega_print->getCharHgt ();
+  Uint32 height = display_text->get_char_height ();
+  Uint32 voffset = game_screen->get_vertical_offset ();
   Sint32 x_pos = 60 * resolution;
   Sint32 y_pos = 180 * resolution;
-  Sint32 yspac = charH + resolution;
+  Sint32 yspac = height + resolution;
   game_screen->clear (0, x_pos, y_pos, 22 * 8 * resolution, 3 * yspac);
-  mega_print->bufferAff2 (x_pos, y_pos, shop_line1, 22);
-  mega_print->bufferAff2 (x_pos, y_pos + yspac, shop_line2, 22);
-  mega_print->bufferAff2 (x_pos, y_pos + yspac * 2, shop_line3, 22);
+
+  y_pos += voffset;
+
+  display_text->draw (game_screen, x_pos, y_pos, shop_line1, 22);
+  display_text->draw (game_screen, x_pos, y_pos + yspac ,shop_line2, 22);
+  display_text->draw (game_screen, x_pos, y_pos + yspac * 2, shop_line3, 22);
+
+  //display_text->bufferAff2 (x_pos, y_pos, shop_line1, 22);
+  //display_text->bufferAff2 (x_pos, y_pos + yspac, shop_line2, 22);
+  //display_text->bufferAff2 (x_pos, y_pos + yspac * 2, shop_line3, 22);
 }
 
 //-------------------------------------------------------------------------------

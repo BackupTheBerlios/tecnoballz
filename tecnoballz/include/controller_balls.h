@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.h
  * @brief Control the balls. Move and collisions 
- * @date 2007-02-13
+ * @date 2007-02-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.14 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.15 2007/02/16 16:53:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,6 @@ private:
   controller_ejectors *ejectObjet;
   controller_sides_bricks *sides_bricks;
   head_animation *head_anim;
-  right_panel_score *ptBarreScr;
   sprite_object *ptBob_wall;
   zeMiniMess *ptMiniMess;
 
@@ -91,8 +90,7 @@ private:
 
 public:
     controller_balls (controller_ejectors * eject,
-                      controller_sides_bricks * brico, head_animation * gugus,
-                      right_panel_score * score,
+                      controller_sides_bricks * brico, 
                       sprite_object * pwall, zeMiniMess *);
     controller_balls ();
    ~controller_balls ();
@@ -103,7 +101,7 @@ public:
   sprite_ball *first_ball ();
 
 private:
-  void vitus_sort ();
+  void check_outside_balls ();
   void vitussort2 ();
   void activate_tilt ();
   void vitus_move ();

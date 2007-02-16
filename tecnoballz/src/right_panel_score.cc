@@ -4,11 +4,11 @@
  * @date 2007-02-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.7 2007/02/15 20:52:43 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.8 2007/02/16 16:53:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ right_panel_score::get_instance ()
 void
 right_panel_score::first_init (controller_balls* b)
 {
-  error_init (initialise ());
+  initialize ();
   balls = b;
   scoreAdres = game_screen->get_pixel_data
     (POSX_SCORE * resolution, POSY_SCORE * resolution);
@@ -202,7 +202,7 @@ right_panel_score::draw_gigablizt_gauge ()
 
   if (resolution == 1)
     {
-      for (Sint32 i = 0; i < gigablitz_countdown; i++)
+      for (Uint32 i = 0; i < gigablitz_countdown; i++)
         {
           d[0] = p;
           d[1] = p;
@@ -214,7 +214,7 @@ right_panel_score::draw_gigablizt_gauge ()
     }
   else
     {
-      for (Sint32 i = 0; i < gigablitz_countdown; i++)
+      for (Uint32 i = 0; i < gigablitz_countdown; i++)
         {
           d[0] = p;
           d[1] = p;

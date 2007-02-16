@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.25 2007/02/15 20:52:43 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.26 2007/02/16 16:53:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,8 +48,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
   BottomWall = new sprite_object ();
   ptMiniMess = new zeMiniMess ();
   balls =
-    new controller_balls (ejectors_corners, sides_bricks, head_anim,
-                          panel_score, BottomWall, ptMiniMess);
+    new controller_balls (ejectors_corners, sides_bricks, BottomWall, ptMiniMess);
   viewfinders_paddles = controller_viewfinders::get_instance ();
   paddles = controller_paddles::get_instance ();
   gere_texte = controller_fontes_game::get_instance ();
