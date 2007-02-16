@@ -5,11 +5,11 @@
  * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_game_over.cc,v 1.3 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: controller_game_over.cc,v 1.4 2007/02/16 12:38:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ controller_game_over::controller_game_over ()
   max_of_sprites = 8;
   sprite_type_id = BOB_GAMEOV;
   move_phase = 0;
-  ptScorOver = (score_over *) NULL;
+  ptScorOver = (sprite_display_scores *) NULL;
 }
 
 /**
@@ -60,9 +60,9 @@ controller_game_over::~controller_game_over ()
 }
 
 //-----------------------------------------------------------------------------
-// rerturn pointer to the "score_over" object
+// rerturn pointer to the "sprite_display_scores" object
 //-----------------------------------------------------------------------------
-score_over *
+sprite_display_scores *
 controller_game_over::gtScorOver ()
 {
   return ptScorOver;
@@ -77,7 +77,7 @@ controller_game_over::first_init (Sint32 offzt)
   chrOffsetX = offzt;
 
   /* initialize score table */ 
-  ptScorOver = new score_over ();
+  ptScorOver = new sprite_display_scores ();
   error_init (ptScorOver->first_init (chrOffsetX));
   if (erreur_num)
     return erreur_num;

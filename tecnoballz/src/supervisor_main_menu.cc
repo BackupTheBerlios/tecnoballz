@@ -4,11 +4,11 @@
  * @date 2007-02-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.10 2007/02/15 20:52:43 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.11 2007/02/16 12:38:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ supervisor_main_menu::supervisor_main_menu ()
   /*  big logo "TecnoballZ" */
   tecnoballz_logo = new sprite_object ();
   BOB_defile = new controller_fontes_menu ();
-  menu_texte = new print_menu ();
+  menu_texte = new sprite_display_menu ();
   mouse_pointer = new sprite_mouse_pointer ();
   offset_xx1 = 0;
 }

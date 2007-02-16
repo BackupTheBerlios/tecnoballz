@@ -35,6 +35,7 @@ SOURCES_MAIN = \
 	controller_sides_bricks.cc \
   controller_spheres.cc \
   controller_viewfinders.cc \
+	display_text_bitmap.cc \
   handler_audio.cc \
   handler_display.cc \
   handler_keyboard.cc \
@@ -48,15 +49,14 @@ SOURCES_MAIN = \
   list_sprites.cc \
   main.cc \
   offscreen_surface.cc \
-  print_menu.cc \
-  print_text.cc \
   right_panel_score.cc \
-  score_over.cc \
   scoretable.cc \
   surface_sdl.cc \
   sprite_ball.cc \
   sprite_bullet.cc \
   sprite_capsule.cc \
+	sprite_display_menu.cc \
+	sprite_display_scores.cc \
   sprite_eye.cc \
   sprite_fonte_game.cc \
   sprite_fonte_menu.cc \

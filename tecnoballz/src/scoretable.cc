@@ -5,7 +5,7 @@
 // created	: 2004-04-30
 // updates	: 2005-01-11
 // fonction	: display score table (game over and menu)
-// id		: $Id: scoretable.cc,v 1.11 2007/02/15 17:12:24 gurumeditation Exp $
+// id		: $Id: scoretable.cc,v 1.12 2007/02/16 12:38:24 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
 #include "../include/scoretable.h"
-#include "../include/print_menu.h"
+#include "../include/sprite_display_menu.h"
 #include "../include/handler_resources.h"
 #include "../include/handler_players.h"
 

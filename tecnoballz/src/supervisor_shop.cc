@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.11 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.12 2007/02/16 12:38:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 #include "../include/supervisor_shop.h"
 #include "../include/handler_resources.h"
 #include "../include/supervisor_main_menu.h"
-#include "../include/print_menu.h"
+#include "../include/sprite_display_menu.h"
 
 /**
  * Create the shop supervisor
@@ -40,7 +40,7 @@ supervisor_shop::supervisor_shop ()
   mouse_pointer = new sprite_mouse_pointer ();
   led_indicator = new sprite_object ();
   power_up_capsules = controller_capsules::get_instance ();
-  mega_print = new print_text ();
+  mega_print = new display_text_bitmap ();
   ptrEscMenu = new handler_popup_menu ();
   shop_point = 0;
   optioninfo = 0;
@@ -139,7 +139,7 @@ supervisor_shop::first_init ()
     ptDes[i] = ptSrc[i];
 
 
-  ptSrc = &print_menu::difficulte[(difficulty_level - 1) * 4];
+  ptSrc = &sprite_display_menu::difficulte[(difficulty_level - 1) * 4];
   ptDes = &info_text1[8 * STEXTWIDHT + 16];
   for (Sint32 i = 0; i < 4; i++)
     ptDes[i] = ptSrc[i];

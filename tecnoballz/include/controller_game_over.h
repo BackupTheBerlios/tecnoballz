@@ -5,11 +5,11 @@
  * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_game_over.h,v 1.3 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_game_over.h,v 1.4 2007/02/16 12:38:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,14 +33,14 @@ class controller_game_over;
 
 #include "../include/sprite_object.h"
 #include "../include/objects_list.h"
-#include "../include/score_over.h"
+#include "../include/sprite_display_scores.h"
 
 class controller_game_over:public objects_list < sprite_object, controller_game_over >
 {
 private:
   Uint32 move_phase;            // step number: 0, 1, 2 or 3
   Uint32 go_zetempo;            // tempo before next step
-  score_over *ptScorOver;
+  sprite_display_scores *ptScorOver;
   Sint32 chrOffsetX;
 
   static const Sint32 SIZETSINUS = 200;
@@ -56,7 +56,7 @@ private:
 public:
     controller_game_over ();
    ~controller_game_over ();
-  score_over *gtScorOver ();
+  sprite_display_scores *gtScorOver ();
   Sint32 first_init (Sint32 offzt = 0);
   void initialize (Sint32 iswin);
   void execution1 (Sint32 iswin = 0);

@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.h,v 1.5 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: supervisor_main_menu.h,v 1.6 2007/02/16 12:38:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@
 #include "../include/sprite_object.h"
 #include "../include/list_sprites.h"
 #include "../include/controller_fontes_menu.h"
-#include "../include/print_text.h"
-#include "../include/print_menu.h"
+#include "../include/display_text_bitmap.h"
+#include "../include/sprite_display_menu.h"
 #include "../include/sprite_mouse_pointer.h"
 #include "../include/handler_audio.h"
 
@@ -45,7 +45,7 @@ private:
   tilesmap_scrolling * tiles_map;
   sprite_object *tecnoballz_logo;
   controller_fontes_menu *BOB_defile;
-  print_menu *menu_texte;
+  sprite_display_menu *menu_texte;
   Sint32 offset_xx1;
   sprite_mouse_pointer *mouse_pointer;
   static const char codesarea[241];

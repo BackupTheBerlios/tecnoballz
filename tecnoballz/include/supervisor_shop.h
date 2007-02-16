@@ -4,11 +4,11 @@
  * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.7 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.8 2007/02/16 12:38:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ class supervisor_shop;
 #include "../include/sprite_mouse_pointer.h"
 #include "../include/sprite_object.h"
 #include "../include/controller_capsules.h"
-#include "../include/print_text.h"
+#include "../include/display_text_bitmap.h"
 #include "../include/handler_players.h"
 #include "../include/supervisor.h"
 #include "../include/handler_popup_menu.h"
@@ -48,7 +48,7 @@ private:
   sprite_mouse_pointer *mouse_pointer;
   sprite_object *led_indicator;
   controller_capsules *power_up_capsules;
-  print_text *mega_print;
+  display_text_bitmap *mega_print;
   handler_popup_menu *ptrEscMenu;
   Sint32 shop_point;            //pointeur
   Sint32 shoppoint3;            //pointeur

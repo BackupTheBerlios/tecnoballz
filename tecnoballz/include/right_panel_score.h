@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.h,v 1.4 2007/02/14 20:00:08 gurumeditation Exp $
+ * $Id: right_panel_score.h,v 1.5 2007/02/16 12:38:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,13 +31,13 @@
 class right_panel_score;
 
 #include "../include/bitmap_data.h"
-#include "../include/print_text.h"
+#include "../include/display_text_bitmap.h"
 #include "../include/handler_players.h"
 #include "../include/handler_keyboard.h"
 #include "../include/controller_gigablitz.h"
 #include "../include/controller_balls.h"
 
-class right_panel_score:public print_text
+class right_panel_score:public display_text_bitmap
 {
 private:
   static right_panel_score* panel_score_singleton;

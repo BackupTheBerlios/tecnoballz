@@ -2,14 +2,14 @@
  * @file main.cc 
  * @brief The main function is where the program starts execution 
  * @created 2002-08-21 
- * @date 2007-02-13
+ * @date 2007-02-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.43 $
+ * @version $Revision: 1.44 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.43 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: main.cc,v 1.44 2007/02/16 12:38:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,17 +165,17 @@ lispreader  =>
 scoretable   => handler_score_table
 *joueurData  => handler_players
 level_data   => handler_levels 
-print_text   => handler_print_text 
+ *print_text  => display_text_bitmap 
 
 zeMiniMess   => item_small_messages 
 *barreScore  => right_panel_score 
- * briqueCote  => controller_sides_bricks
- * ejectBalls  => controller_ejectors
+*briqueCote  => controller_sides_bricks
+*ejectBalls  => controller_ejectors
 *fond_ecran  => tiles_background
 *head_anima  => head_animation 
 *lastScroll  => tilesmap_scrolling 
-print_menu   => item_menu_text
-score_over   => item_score_table
+* print_menu   => sprite_display_menu 
+* score_over   => sprite_display_scores
 
 
 */

@@ -4,11 +4,11 @@
  * @date 2007-01-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.25 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.26 2007/02/16 12:38:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ class sprite_object;
 #include "../include/bitmap_data.h"
 #include "../include/handler_memory.h"
 #include "../include/tecnoballz.h"
-#include "../include/print_text.h"
+#include "../include/display_text_bitmap.h"
 
 /*
  * sprite's ID
@@ -138,7 +138,7 @@ class sprite_object:public virtual tecnoballz
   friend class controller_gems;
   friend class controller_bullets;
   friend class controller_spheres;
-  friend class print_text;
+  friend class display_text_bitmap;
 
 public:
 

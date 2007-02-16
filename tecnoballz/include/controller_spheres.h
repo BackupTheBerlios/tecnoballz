@@ -27,7 +27,7 @@ class controller_spheres;
 //...............................................................................
 #include "../include/sprite_object.h"
 #include "../include/objects_list.h"
-#include "../include/score_over.h"
+#include "../include/sprite_display_scores.h"
 //...............................................................................
 class controller_spheres:public objects_list < sprite_object, controller_spheres >
 {

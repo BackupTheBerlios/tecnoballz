@@ -5,11 +5,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.20 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.21 2007/02/16 12:38:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -215,7 +215,7 @@ supervisor_guards_level::first_init ()
   keyboard->clear_command_keys ();
   keyboard->set_grab_input (true);
 
-  score_over *pOver = game_over->gtScorOver ();
+  sprite_display_scores *pOver = game_over->gtScorOver ();
   ptBob_name = pOver->string2bob (current_player->get_name ());
   sprites->add (ptBob_name);
   ptBob_name->enable ();
