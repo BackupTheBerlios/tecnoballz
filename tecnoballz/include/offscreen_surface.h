@@ -2,14 +2,14 @@
  * @file offscreen_surface.h 
  * @brief an offscreen drawing surface
  * @created 2007-01-31
- * @date 2007-02-15
+ * @date 2007-02-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: offscreen_surface.h,v 1.8 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: offscreen_surface.h,v 1.9 2007/02/16 20:46:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #define __OFFSCREEN_SURFACE__
 #include "../include/tecnoballz.h"
 #include "../include/surface_sdl.h"
+#include "../include/display_text_bitmap.h"
 
 class offscreen_surface:public virtual surface_sdl 
 {
@@ -46,6 +47,7 @@ public:
   void blit_to_surface (offscreen_surface *offscreen, Uint32 xcoord, Uint32 ycoord, Uint32 width, Uint32 height);
   void blit_to_surface (offscreen_surface *offscreen, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h);
   void blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h);
+  void draw_text (display_text_bitmap* display_text, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 lentgh);
 };
 
 

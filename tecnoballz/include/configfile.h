@@ -4,7 +4,7 @@
 // file         : "configfile.cpp"
 // created      : 2005-01-19
 // updates      : 2005-01-19
-// id		: $Id: configfile.h,v 1.5 2007/02/04 17:10:16 gurumeditation Exp $
+// id		: $Id: configfile.h,v 1.6 2007/02/16 20:46:24 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -59,6 +59,16 @@ class configfile:public virtual tecnoballz
 		Uint32		difficulty;*/	
 	
 	private:
+    typedef enum
+
+{
+  LANGUAGE_EN,
+  LANGUAGE_FR,
+}
+LANGUAGES_ENUM;
+
+
+    Uint32 language;
 		static char	stringname[7];
 		char		config_dir[512]; 
 		char		configname[512];

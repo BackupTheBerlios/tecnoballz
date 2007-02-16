@@ -4,11 +4,11 @@
  * @date 2007-02-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.13 2007/02/16 16:53:52 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.14 2007/02/16 20:46:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -710,21 +710,15 @@ void
 supervisor_shop::display_box_text ()
 {
   Uint32 height = display_text->get_char_height ();
-  Uint32 voffset = game_screen->get_vertical_offset ();
-  Sint32 x_pos = 60 * resolution;
-  Sint32 y_pos = 180 * resolution;
-  Sint32 yspac = height + resolution;
+  Uint32 x_pos = 60 * resolution;
+  Uint32 y_pos = 180 * resolution;
+  Uint32 yspac = height + resolution;
   game_screen->clear (0, x_pos, y_pos, 22 * 8 * resolution, 3 * yspac);
 
-  y_pos += voffset;
 
-  display_text->draw (game_screen, x_pos, y_pos, shop_line1, 22);
-  display_text->draw (game_screen, x_pos, y_pos + yspac ,shop_line2, 22);
-  display_text->draw (game_screen, x_pos, y_pos + yspac * 2, shop_line3, 22);
-
-  //display_text->bufferAff2 (x_pos, y_pos, shop_line1, 22);
-  //display_text->bufferAff2 (x_pos, y_pos + yspac, shop_line2, 22);
-  //display_text->bufferAff2 (x_pos, y_pos + yspac * 2, shop_line3, 22);
+  game_screen->draw_text (display_text, x_pos, y_pos, shop_line1, 22);
+  game_screen->draw_text (display_text, x_pos, y_pos + yspac ,shop_line2, 22);
+  game_screen->draw_text (display_text, x_pos, y_pos + yspac * 2, shop_line3, 22);
 }
 
 //-------------------------------------------------------------------------------

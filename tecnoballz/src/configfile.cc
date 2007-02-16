@@ -2,14 +2,14 @@
  * @file configfile.cc 
  * @brief Config file handler 
  * @created 2005-01-19 
- * @date 2007-02-14
+ * @date 2007-02-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: configfile.cc,v 1.19 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: configfile.cc,v 1.20 2007/02/16 20:46:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,6 +86,7 @@ configfile::resetvalue ()
     pUser = stringname;
   for (Uint32 i = 0; i < 6; i++)
     strncpy (thePlayers[i], pUser, 6);
+  language = LANGUAGE_EN;
 }
 
 //------------------------------------------------------------------------------
@@ -140,7 +141,7 @@ configfile::tocheckdir ()
 }
 
 //------------------------------------------------------------------------------
-// load config file "~/.tlkgames/powermanga.conf"
+// load config file "~/.tlkgames/tecnoballz.conf"
 //------------------------------------------------------------------------------
 void
 configfile::loadconfig ()
@@ -182,6 +183,20 @@ configfile::loadconfig ()
       return;
     }
   LispReader reader (lisp_cdr (root_obj));
+
+  std::string ptStr;
+  if (!reader.read_string ("lang", &ptStr))
+    language = LANGUAGE_EN;
+  else
+    {
+      if (ptStr == "fr")
+        language = LANGUAGE_FR;
+      else
+        language = LANGUAGE_EN;
+    }
+ 
+
+
   if (!reader.read_bool ("fullscreen", &handler_display::optionfull))
     handler_display::optionfull = -1;
 #ifndef SOUNDISOFF
@@ -259,7 +274,7 @@ configfile::set_player (Uint32 nplay, char *pChar)
 }
 
 //------------------------------------------------------------------------------
-// save config file "~/.tlkgames/powermanga.conf"
+// save config file "~/.tlkgames/tecnoballz.conf"
 //------------------------------------------------------------------------------
 void
 configfile::saveconfig ()

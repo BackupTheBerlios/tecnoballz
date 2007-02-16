@@ -2,14 +2,14 @@
  * @file offscreen_surface.cc 
  * @brief an offscreen drawing surface
  * @created 2007-02-15
- * @date 2007-02-01
+ * @date 2007-02-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: offscreen_surface.cc,v 1.8 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: offscreen_surface.cc,v 1.9 2007/02/16 20:46:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,9 +39,11 @@
 offscreen_surface::offscreen_surface (Uint32 w, Uint32 h, Uint32 depth,
                                       Uint32 voffset)
 {
+ /*
   std::
     cout << "offscreen_surface() w=" << w << " h=" << h << " d=" << depth <<
     std::endl;
+    */
   vertical_offset = voffset;
   create_surface (w, h, depth);
   pixel_data = (char *) surface->pixels + surface->pitch * vertical_offset;
@@ -58,8 +60,7 @@ offscreen_surface::~offscreen_surface ()
  * Get the vertical offset
  * @return vertical offset
  */
-Uint32
-offscreen_surface::get_vertical_offset ()
+Uint32 offscreen_surface::get_vertical_offset ()
 {
   return vertical_offset;
 }
@@ -86,8 +87,9 @@ offscreen_surface::blit_to_surface (offscreen_surface * offscreen)
  * @param offscreen pointer to a offscreen surface object
  */
 void
-offscreen_surface::blit_to_surface (offscreen_surface * offscreen, Uint32 xcoord,
-                                 Uint32 ycoord, Uint32 width, Uint32 height)
+offscreen_surface::blit_to_surface (offscreen_surface * offscreen,
+                                    Uint32 xcoord, Uint32 ycoord,
+                                    Uint32 width, Uint32 height)
 {
   SDL_Surface *surface_dest = offscreen->get_surface ();
   SDL_Rect rect = { xcoord, ycoord + vertical_offset, width, height };
@@ -109,13 +111,15 @@ offscreen_surface::blit_to_surface (offscreen_surface * offscreen, Uint32 xcoord
  * @param h the height in pixels to copy
  */
 void
-offscreen_surface::blit_to_surface (offscreen_surface * offscreen, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h)
+offscreen_surface::blit_to_surface (offscreen_surface * offscreen, Uint32 x1,
+                                    Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w,
+                                    Uint32 h)
 {
   dynamic_cast < surface_sdl * >(this)->blit_to_surface (offscreen,
-                                                      x1, y1,
-                                                      x2,
-                                                      y2 + vertical_offset,
-                                                      w, h);
+                                                         x1, y1,
+                                                         x2,
+                                                         y2 + vertical_offset,
+                                                         w, h);
 }
 
 /**
@@ -158,20 +162,21 @@ offscreen_surface::clear (Uint32 color, Uint32 xcoord, Uint32 ycoord,
  * @param h the height in pixels to copy
  */
 void
-offscreen_surface::blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h)
+offscreen_surface::blit_surface (surface_sdl * dest, Uint32 x1, Uint32 y1,
+                                 Uint32 x2, Uint32 y2, Uint32 w, Uint32 h)
 {
-   dynamic_cast < surface_sdl * >(this)->blit_surface (dest, x1, y1, x2, y2 + vertical_offset, w, h);
-} 
+  dynamic_cast < surface_sdl * >(this)->blit_surface (dest, x1, y1, x2,
+                                                      y2 + vertical_offset, w,
+                                                      h);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * Draw a string into the offscreen
+ */
+void
+offscreen_surface::draw_text (display_text_bitmap * display_text,
+                              Uint32 xcoord, Uint32 ycoord, const char *str,
+                              Uint32 length)
+{
+  display_text->draw (this, xcoord, ycoord + vertical_offset, str, length);
+}
