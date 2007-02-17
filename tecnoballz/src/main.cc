@@ -5,11 +5,11 @@
  * @date 2007-02-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.44 $
+ * @version $Revision: 1.45 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.44 2007/02/16 12:38:24 gurumeditation Exp $
+ * $Id: main.cc,v 1.45 2007/02/17 16:56:08 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 #include "../include/handler_display.h"
 #include "../include/handler_audio.h"
 #include "../include/configfile.h"
-configfile oConfigure;
+configfile configuration;
 
 /**
  *  The main function is where the program starts execution
@@ -38,8 +38,8 @@ configfile oConfigure;
 Sint32
 main (Sint32 nbArg, char **ptArg)
 {
-  oConfigure.loadconfig ();
-  if (!oConfigure.scanZeArgs (nbArg, ptArg))
+  configuration.loadconfig ();
+  if (!configuration.scanZeArgs (nbArg, ptArg))
     return 0;
   if (tecnoballz::is_verbose)
     {
@@ -50,7 +50,7 @@ main (Sint32 nbArg, char **ptArg)
   Sint32 error = 0;
   try
     {
-      error = tecnoballz::first_init (&oConfigure);
+      error = tecnoballz::first_init (&configuration);
       if (error)
         return error;
       error = tecnoballz::game_begin ();
@@ -65,19 +65,19 @@ main (Sint32 nbArg, char **ptArg)
   catch (...)
     {
       std::cerr << "fatal error" << std::endl;
-      tecnoballz::release_all_objects (&oConfigure);
+      tecnoballz::release_all_objects (&configuration);
       throw;
     }
   if (tecnoballz::is_verbose)
     {
       std::cout << "================================" << std::endl;
     }
-  tecnoballz::release_all_objects (&oConfigure);
+  tecnoballz::release_all_objects (&configuration);
   if (tecnoballz::is_verbose)
     {
       std::cout << "TecnoballZ is finished! ========" << std::endl;
     }
-  oConfigure.saveconfig ();
+  configuration.saveconfig ();
   return error;
 }
 

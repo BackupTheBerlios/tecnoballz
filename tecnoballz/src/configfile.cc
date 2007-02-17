@@ -2,14 +2,14 @@
  * @file configfile.cc 
  * @brief Config file handler 
  * @created 2005-01-19 
- * @date 2007-02-16
+ * @date 2007-02-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: configfile.cc,v 1.20 2007/02/16 20:46:24 gurumeditation Exp $
+ * $Id: configfile.cc,v 1.21 2007/02/17 16:56:08 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+const char *
+configfile::language_to_string[MAX_OF_LANGUAGES] =
+{
+  "en",
+  "fr"
+};
+
+
 
 //..............................................................................
 
@@ -272,6 +281,18 @@ configfile::set_player (Uint32 nplay, char *pChar)
     nplay = 6 - 1;
   strncpy (thePlayers[nplay], pChar, 6);
 }
+
+/*
+ * Return current language
+ * @return "en" or fr
+ */
+const char *
+configfile::get_language ()
+{
+    return language_to_string[language];
+}
+
+
 
 //------------------------------------------------------------------------------
 // save config file "~/.tlkgames/tecnoballz.conf"

@@ -1,13 +1,13 @@
 /** 
  * @file list_sprites.cc 
  * @brief Call the drawing methods of all sprites
- * @date 2007-02-06
+ * @date 2007-02-17
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: list_sprites.cc,v 1.6 2007/02/09 20:35:12 gurumeditation Exp $
+ * $Id: list_sprites.cc,v 1.7 2007/02/17 16:56:08 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,8 +61,8 @@ list_sprites::~list_sprites ()
  * Allocate memory for the list of shapes and shadow
  * @params numof max numbers of shapes 
  */
-Sint32
-list_sprites::init (Sint32 numof)
+void
+list_sprites::init (Uint32 numof)
 {
   try
   {
@@ -85,7 +85,6 @@ list_sprites::init (Sint32 numof)
     throw;
   }
   reset ();
-  return 0;
 }
 
 /**

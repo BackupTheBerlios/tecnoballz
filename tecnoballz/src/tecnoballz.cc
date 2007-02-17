@@ -2,14 +2,14 @@
  * @file tecnoballz.cc 
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-02-15
+ * @date 2007-02-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.10 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.11 2007/02/17 16:56:08 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@
 Sint32
 tecnoballz::first_init (configfile * pConf)
 {
+  config_file = pConf;
   if (is_verbose)
     {
       std::cout << ">tecnoballz::first_init() start!" << std::endl;
@@ -75,10 +76,6 @@ tecnoballz::first_init (configfile * pConf)
 #ifndef SOUNDISOFF
   audio = handler_audio::get_instance ();
 #endif
-  if (is_verbose)
-    {
-      printf ("tecnoballz::first_init() [handler_display::initialize]\n");
-    }
   display = new handler_display ();
   num_erreur = display->initialize ();
   if (num_erreur)
@@ -86,51 +83,51 @@ tecnoballz::first_init (configfile * pConf)
 
   keyboard = handler_keyboard::get_instance ();
   sprites = new list_sprites ();
-  num_erreur = sprites->init (400);
-  if (num_erreur)
-    return num_erreur;
-
-
+  sprites->init (400);
 
   ptLev_data = new level_data ();
-  //Sint32 Ecode = -1; 
   current_player = handler_players::create_all_players (MAX_PLAYER);
 
-  /* retrieve usernames */
+  /* retrieve player names */
   for (Uint32 i = 0; i < 6; i++)
     {
       handler_players::players_list[i]->set_name (pConf->get_player (i));
     }
-  super_jump = 4;               //menu
+  super_jump = MAIN_MENU;
 
   if (arg_jumper > 0)
     {
       super_jump = arg_jumper;
     }
   if (is_verbose)
-    printf ("tecnoballz::first_init() [STOP]\n");
+    {
+      std::cout << ">tecnoballz::first_init() stop!" << std::endl;
+    }
   return num_erreur;
 }
 
-//------------------------------------------------------------------------------
-// main loop of the game
-//------------------------------------------------------------------------------
+/**
+ * main loop of the game
+ */
 Sint32
 tecnoballz::game_begin ()
 {
   do
     {
       if (is_verbose)
-        printf ("tecnoballz::game_begin: game phase=%i (super_jump) \n",
-                super_jump);
-      //###############################################################
-      // initialize
-      //###############################################################
+        {
+          std::cout << ">tecnoballz::game_begin() phase:" << super_jump
+            << std::endl;
+        }
+      
+      /*
+       * initialize
+       */
       switch (super_jump)
         {
           // exit of game
         case -1:
-          is_exit_game = 1;
+          is_exit_game = true;
           break;
 
           /* initialize a bricks level */
@@ -541,3 +538,4 @@ bool tecnoballz::bob_ground = false;
 char tecnoballz::zeAreaCode[11] = "          ";
 offscreen_surface * tecnoballz::game_screen = NULL;
 offscreen_surface * tecnoballz::background_screen = NULL;
+configfile *tecnoballz::config_file;

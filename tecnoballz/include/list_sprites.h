@@ -1,13 +1,13 @@
 /** 
  * @file list_sprites.h
  * @brief Call the drawing methods of all sprites
- * @date 2007-02-09
+ * @date 2007-02-17
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: list_sprites.h,v 1.3 2007/02/09 20:35:12 gurumeditation Exp $
+ * $Id: list_sprites.h,v 1.4 2007/02/17 16:56:08 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ private:
 public:
     list_sprites ();
    ~list_sprites ();
-  Sint32 init (Sint32 numof);
+  void init (Uint32 numof);
   void reset ();
   Uint32 get_sprites_remaining ();
   void add (sprite_object * sprite);

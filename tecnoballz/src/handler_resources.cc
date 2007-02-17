@@ -5,11 +5,11 @@
  * @date 2007-02-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.6 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.7 2007/02/17 16:56:08 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -384,6 +384,37 @@ handler_resources::release_sprites_bitmap ()
       delete sprites_bitmap;
     }
   sprites_bitmap = (bitmap_data *) NULL;
+}
+
+
+/**
+ * Allocate memory and load a file (filename with a language code)
+ * @param filename specified by path
+ * @param fsize pointer on the size of file which will be loaded 
+ * @return a pointer to the file data
+ */
+char *
+handler_resources::loadfile_with_lang (const char *const filename, Uint32 * const fsize)
+{
+  if(filename == NULL || strlen (filename) == 0)
+    {
+      std::cerr << "(!)handler_resources::loadfile_with_lang() " <<
+        "NULL string!" << std::endl; 
+      throw std::ios_base::failure ("(!)handler_resources::loadfile_with_lang() "
+                                    "can't open a file!");
+    }
+  char* fname = new char[strlen (filename) + 1];
+  strcpy (fname, filename);
+  const char* lang = config_file->get_language ();
+  sprintf (fname, filename, lang);
+  if (is_verbose)
+    {
+      std::cout << "handler_resources::loadfile_with_lang() " <<
+        "file " << fname << "was loaded in memory" << std::endl;
+    }
+  char* data = load_file (fname, fsize);
+  delete[]fname; 
+  return data;
 }
 
 /**
