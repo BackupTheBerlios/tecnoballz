@@ -5,11 +5,11 @@
  * @date 2007-02-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.17 2007/02/18 11:03:52 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.18 2007/02/18 12:47:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -420,10 +420,11 @@ handler_display::enable_palette (SDL_Color * pal)
   SDL_SetPalette (sdl_screen, SDL_LOGPAL | SDL_PHYSPAL, pal, 0, 256);
   for (Uint32 i = 0; i < 256; i++)
     {
-      printf("%03d:%x-%x-%x; ", i, pal[i].r, pal[i].g, pal[i].b); 
-      if(i % 16 == 0)
+      printf("%03d:%x%x%x; ", i, pal[i].r, pal[i].g, pal[i].b); 
+      if(i % 11 == 0)
 	printf("\n");
     }
+   printf("\n");
 }
 
 /**

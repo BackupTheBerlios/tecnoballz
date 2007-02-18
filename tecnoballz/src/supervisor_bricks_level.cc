@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.27 2007/02/18 11:03:52 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.28 2007/02/18 12:47:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,10 +72,6 @@ supervisor_bricks_level::supervisor_bricks_level ()
  */
 supervisor_bricks_level::~supervisor_bricks_level ()
 {
-  if (NULL != bottom_wall)
-    {
-      bottom_wall->release_sprite ();
-    }
   delete popup_menu;
   delete game_over;
   delete player_indicators;
