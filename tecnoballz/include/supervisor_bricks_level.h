@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.h 
  * @brief Bricks levels supervisor 
- * @date 2007-02-13
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.16 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.17 2007/02/18 11:03:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,7 +96,7 @@ private:
   controller_fontes_game *gere_texte;
   controller_gigablitz *gigablitz;
   controller_game_over *game_over;
-  sprite_object *BottomWall;
+  sprite_object *bottom_wall;
   sprite_object *money_indicator;
   handler_popup_menu *popup_menu;
   /** Area number from 1 to 2 */

@@ -1,14 +1,14 @@
 /** 
  * @file tiles_background.cc 
  * @brief Draw tiles background in bricks levels 
- * @date 2007-02-15
+ * @date 2007-02-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.10 2007/02/15 20:52:43 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.11 2007/02/18 11:03:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -462,6 +462,7 @@ tiles_background::set_palette ()
           palP2++;
         }
       display->enable_palette (palPT);
+      break;
     }
 }
 
@@ -517,34 +518,47 @@ tiles_background::prev_4_color_palette ()
 void
 tiles_background::set_4_color_palette (Uint32 pal_index)
 {
+  if (is_verbose)
+    {
+      std::cout << "tiles_background::set_4_color_palette() " << 
+	"pal_index:" << pal_index << std::endl;
+
+    }
   palette_index = pal_index;
   char *color = &couleurs[0];
   unsigned char *colPT = (unsigned char *) (color) + pal_index;
-  SDL_Color *palPT = display->get_palette ();
-  SDL_Color *palP1 = palPT + 1;
-  SDL_Color *palP2 = palP1 + 128;
-  for (Sint32 i = 0; i < 4; i++)
+  SDL_Color *pal = display->get_palette ();
+  SDL_Color *lighted = pal + 1;
+  SDL_Color *dark = lighted + 128;
+  for (Uint32 i = 0; i < 4; i++)
     {
       unsigned char pixel = *(colPT++);
       /* red */
       pixel = *(colPT++);
-      palP1->r = pixel;
+      printf("%i", pixel);
+      lighted->r = pixel;
       pixel >>= 1;
-      palP2->r = pixel;
+      printf("/%i; ", pixel);
+      dark->r = pixel;
       /* green */
       pixel = *(colPT++);
-      palP1->g = pixel;
+      printf("%i", pixel);
+      lighted->g = pixel;
       pixel >>= 1;
-      palP2->g = pixel;
+      printf("/%i; ", pixel);
+      dark->g = pixel;
       /* blue */
       pixel = *(colPT++);
-      palP1->b = pixel;
+      printf("%i", pixel);
+      lighted->b = pixel;
       pixel >>= 1;
-      palP2->b = pixel;
-      palP1++;
-      palP2++;
+      printf("/%i; ", pixel);
+      dark->b = pixel;
+      lighted++;
+      dark++;
     }
-  display->enable_palette (palPT);
+  printf("\n");
+  display->enable_palette (pal);
 }
 
 /**

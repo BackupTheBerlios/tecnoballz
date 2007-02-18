@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-02-14
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.26 2007/02/16 16:53:52 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.27 2007/02/18 11:03:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,10 +45,10 @@ supervisor_bricks_level::supervisor_bricks_level ()
   head_anim = head_animation::get_instance ();
   ships = controller_ships::get_instance ();
   magnetic_eyes = controller_magnetic_eyes::get_instance ();
-  BottomWall = new sprite_object ();
+  bottom_wall = new sprite_object ();
   ptMiniMess = new zeMiniMess ();
   balls =
-    new controller_balls (ejectors_corners, sides_bricks, BottomWall, ptMiniMess);
+    new controller_balls (ejectors_corners, sides_bricks, bottom_wall, ptMiniMess);
   viewfinders_paddles = controller_viewfinders::get_instance ();
   paddles = controller_paddles::get_instance ();
   gere_texte = controller_fontes_game::get_instance ();
@@ -72,10 +72,9 @@ supervisor_bricks_level::supervisor_bricks_level ()
  */
 supervisor_bricks_level::~supervisor_bricks_level ()
 {
-  if (NULL != BottomWall)
+  if (NULL != bottom_wall)
     {
-      BottomWall->release_sprite ();
-      BottomWall = (sprite_object *) NULL;
+      bottom_wall->release_sprite ();
     }
   delete popup_menu;
   delete game_over;
@@ -86,7 +85,7 @@ supervisor_bricks_level::~supervisor_bricks_level ()
   delete viewfinders_paddles;
   delete balls;
   delete ptMiniMess;
-  delete BottomWall;
+  delete bottom_wall;
   delete magnetic_eyes;
   delete ships;
   delete head_anim;
@@ -138,9 +137,9 @@ supervisor_bricks_level::first_init ()
    * generate the data of the spites
    */
   //wall of bottom 
-  BottomWall->create_sprite (BOB_WALLBO, sprites_bitmap, 0);
-  sprites->add (BottomWall);
-  BottomWall->set_coordinates (32 * resolution, 232 * resolution);
+  bottom_wall->create_sprite (BOB_WALLBO, sprites_bitmap, 0);
+  sprites->add (bottom_wall);
+  bottom_wall->set_coordinates (32 * resolution, 232 * resolution);
   //robot bumper
   paddles->init_robot ();
   Sint32 build = current_player->getRebuild ();
@@ -226,7 +225,7 @@ supervisor_bricks_level::first_init ()
                            //the object which handles the balls
                            balls,
                            //the object which handles the text on left scores panel
-                           panel_score, BottomWall, magnetic_eyes);
+                           panel_score, bottom_wall, magnetic_eyes);
 
   gem_stones->initialize (panel_score, player_indicators, paddles);
 
@@ -302,7 +301,7 @@ supervisor_bricks_level::main_loop ()
           isgameover++;
           game_over->execution1 ();
         }
-      if (!bricks->brickRemap () && isgameover < 2) //restore bricks
+      if (!bricks->update () && isgameover < 2) //restore bricks
         isgameover = 2;
       sides_bricks->execution1 ();
       viewfinders_paddles->run ();
@@ -329,7 +328,7 @@ supervisor_bricks_level::main_loop ()
         }
       display->lock_surfaces ();
       sprites->clear ();
-      bricks->brickRemap ();        //restore bricks
+      bricks->update ();        //restore bricks
       sides_bricks->execution1 ();        //restore bricks on side
       changebkgd ();
 
@@ -358,10 +357,10 @@ supervisor_bricks_level::main_loop ()
           power_up_capsules->gadgetKeys ();
           gem_stones->move ();
           gere_texte->goMoveText ();
-          if (BottomWall->thecounter < 1)
-            BottomWall->disable ();
+          if (bottom_wall->thecounter < 1)
+            bottom_wall->disable ();
           else
-            BottomWall->thecounter--;
+            bottom_wall->thecounter--;
 
           panel_score->draw_gigablizt_gauge ();
           player_indicators->execution1 (current_player->amount_of_money);
@@ -560,10 +559,8 @@ supervisor_bricks_level::background (Sint32 nbkdg)
   sides_bricks->afficheGfx ();    //display small bricks of the three walls
   ejectors_corners->draw ();
 
-  //###################################################################
-  // intialize the bricks level
-  //###################################################################
-  bricks->first_init (panel_score);
+  /* intialize the bricks level */
+  bricks->first_init ();
   bricks->initialize ();
   return erreur_num;
 }

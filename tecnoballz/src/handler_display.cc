@@ -2,14 +2,14 @@
  * @file handler_display.cc 
  * @briefi Handle displaying and updating with SDL 
  * @created 2002-08-17 
- * @date 2007-02-15
+ * @date 2007-02-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.16 2007/02/15 20:52:43 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.17 2007/02/18 11:03:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -385,15 +385,16 @@ handler_display::ecran_next (Sint32 zbase, Sint32 offsx, Sint32 offsy)
 
 /**
  * Initialize color palette for the current screen
- * @param palPT
+ * @param pal pointer to color components 
  */
 void
-handler_display::enable_palette (unsigned char *palPT)
+handler_display::enable_palette (unsigned char *pal)
 {
-  unsigned char *p = palPT;
+  printf(">>>>>>>>>> handler_display::enable_palette \n");
+  unsigned char *p = pal;
   SDL_Color *color = &ze_palette[0];
   Uint32 k = 0;
-  for (Sint32 i = 0; i < 256; i++)
+  for (Uint32 i = 0; i < 256; i++)
     {
       color->r = p[k++];
       color->g = p[k++];
@@ -406,15 +407,23 @@ handler_display::enable_palette (unsigned char *palPT)
   SDL_SetPalette (sdl_screen, SDL_LOGPAL | SDL_PHYSPAL, ze_palette, 0, 256);
 }
 
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
+/**
+ * Initialize color palette for the current screen
+ * @param pal pointer to color components of a SDL_Color structure
+ */
 void
-handler_display::enable_palette (SDL_Color * palPT)
+handler_display::enable_palette (SDL_Color * pal)
 {
-  game_screen->set_palette (ze_palette);
-  background_screen->set_palette (ze_palette);
-  SDL_SetPalette (sdl_screen, SDL_LOGPAL | SDL_PHYSPAL, palPT, 0, 256);
+  printf("===============> handler_display::enable_palette *SDL* \n");
+  game_screen->set_palette (pal);
+  background_screen->set_palette (pal);
+  SDL_SetPalette (sdl_screen, SDL_LOGPAL | SDL_PHYSPAL, pal, 0, 256);
+  for (Uint32 i = 0; i < 256; i++)
+    {
+      printf("%03d:%x-%x-%x; ", i, pal[i].r, pal[i].g, pal[i].b); 
+      if(i % 16 == 0)
+	printf("\n");
+    }
 }
 
 /**

@@ -2,14 +2,14 @@
  * @file controller_bricks.h
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-02-14
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.8 2007/02/14 13:39:20 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.9 2007/02/18 11:03:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,8 +105,6 @@ private:
 private:
   /** Bitmap of the set of current bricks */
   bitmap_data *bitmap_bricks;
-  right_panel_score *barreObjet;
-
   /** Number of bricks in the current level */
   Uint32 num_of_bricks;
   /** Less bricks counter */
@@ -116,15 +114,15 @@ private:
   brickInfos *mega_table;       // tableau de 16*30
 
   /** Width in pixels of a set of bricks */
-  Sint32 bricks_height;
+  Uint32 bricks_height;
   /** Height in pixels of a set of bricks */
-  Sint32 bricks_width;
+  Uint32 bricks_width;
   /** Brick's width in pixels */
-  Sint32 brick_width;
+  Uint32 brick_width;
   /** Brick's height in pixels */
-  Sint32 brick_height;
+  Uint32 brick_height;
   /** Brick's size in bytes */
-  Sint32 brick_size;
+  Uint32 brick_size;
   Sint32 brickIndus;            //first indestructible brick
   Sint32 brkyoffset;            //y-offset between 2 bricks 
   Sint32 ombre_deca;            //size of shadow in pixels (3 or 6)
@@ -146,13 +144,12 @@ protected:
 public:
     controller_bricks ();
    ~controller_bricks ();
-  void first_init (right_panel_score * barre);
+  void first_init ();
   void initialize ();
-  Sint32 brickRemap ();
+  bool update ();
   Uint32 get_num_of_bricks ();
   void less_bricks ();
   void draw_brick (char *srcPT, Sint32 adres, Sint32 colbr);
-  void initpalett ();
   void clr_bricks ();
 
 
@@ -164,7 +161,8 @@ private:
   void load_level (Sint32 area_nu, Sint32 level_nu);
   void draw_bricks_shadows ();
   void draw_bricks ();
-  void sauve_fond ();           // save background under bricks
+  void set_bricks_palette ();
+  void save_background ();           // save background under bricks
 };
 #endif
 
