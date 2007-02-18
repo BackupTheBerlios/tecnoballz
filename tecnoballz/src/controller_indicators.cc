@@ -2,14 +2,14 @@
  * @file controller_indicators.cc 
  * @brief Controller of money amount, reverse penalty   
  * @created 2002-11-28 
- * @date 2007-02-11
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_indicators.cc,v 1.3 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: controller_indicators.cc,v 1.4 2007/02/18 21:07:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ controller_indicators::controller_indicators ()
   littleInit ();
   max_of_sprites = 8;
   sprites_have_shades = false;
-  y_position = YINVERSEUR * resolution;
+  y_position = YCOORD_INDICATORS * resolution;
   sprite_type_id = BOB_MONEY0;
   money_posy = y_position;
   life_sprite = NULL;
@@ -68,11 +68,16 @@ controller_indicators::~controller_indicators ()
 }
 
 void
-controller_indicators::create_indicators_sprites (controller_paddles * pads, sprite_money *money, sprite_capsule *reverse, sprite_capsule *life)
+controller_indicators::create_indicators_sprites ()
 {
-  ptZraquett = pads;
+
   create_sprites_list ();
 
+  /*
+   * money sprite indicator
+   */
+  controller_moneys *moneys = controller_moneys::get_instance ();
+  sprite_money *money = moneys->get_first_sprite ();
   money_sprite = new sprite_money ();
   money->duplicate_to (money_sprite);
   sprites->add (money_sprite);
@@ -81,10 +86,12 @@ controller_indicators::create_indicators_sprites (controller_paddles * pads, spr
   /*
    * reverse sprite is only enable in the bricks levels
    */
-  if (NULL != reverse)
+  controller_capsules *capsules = controller_capsules::get_instance ();
+  sprite_capsule *caps = capsules->get_first_sprite ();
+  if (super_jump == BRICKS_LEVEL)
     {
       reverse_sprite = new sprite_capsule ();
-      reverse->duplicate_to (reverse_sprite);
+      caps->duplicate_to (reverse_sprite);
       sprites->add (reverse_sprite);
 
       Sint32 x = 215 * resolution;
@@ -103,10 +110,10 @@ controller_indicators::create_indicators_sprites (controller_paddles * pads, spr
   /*
    * life sprite is only enable in the guards levels
    */
-  if (NULL != life)
+  if (super_jump == GUARDS_LEVEL)
     {
       life_sprite = new sprite_capsule ();
-      life->duplicate_to (life_sprite);
+      caps->duplicate_to (life_sprite);
       sprites->add (life_sprite);
       Sint32 x = 264 * resolution;
       life_sprite->new_gadget (GAD_LIFE_P);
@@ -125,91 +132,19 @@ controller_indicators::create_indicators_sprites (controller_paddles * pads, spr
 }
 
 
-//-----------------------------------------------------------------------------
-// bricks levels: perform some initializations
-// input        => gamer:
-//                      => raket:
-//                      => money:
-//                      => rever:
-//-----------------------------------------------------------------------------
-/*
-void
-controller_indicators::initialise (controller_paddles * raket,
-                                   sprite_object * money,
-                                   sprite_capsule * rever)
-{
-  ptZraquett = raket;
-  //money_sprite = money;
-  reverse_sprite = rever;
-
-  // credit of money sprites
-  init_money ();
-
-  // initialize "reverser malus" sprites
-  Sint32 x = 215 * resolution;
-  reverse_sprite->new_gadget (GAD_INVERS);
-  reverse_sprite->set_coordinates (x, money_posy);
-  reverse_sprite->set_frame_delay (5);
-  x += reverse_sprite->get_sprite_width ();
-  sprite_object **liste = sprites_list + 6;
-  for (Sint32 i = 0; i < 2; i++)
-    {
-      sprite_object *x_bob = *(liste++);
-      x_bob->set_coordinates (x, money_posy);
-      x += 8 * resolution;
-    }
-}
-
-//-----------------------------------------------------------------------------
-// guard levels: perform some initializations
-// input        => gamer:
-//                      => raket:
-//                      => money:
-//                      => lifes:
-//-----------------------------------------------------------------------------
-void
-controller_indicators::init_guard (
-                                   controller_paddles * raket,
-                                   sprite_object * money,
-                                   sprite_capsule * lifes)
-{
-  ptZraquett = raket;
-  //money_sprite = money;
-  life_sprite = lifes;
-
-  // credit of money sprites
-  init_money ();
-
-  // extra life sprites
-  Sint32 x = 264 * resolution;
-  life_sprite->new_gadget (GAD_LIFE_P);
-  life_sprite->set_coordinates (x, money_posy);
-  life_sprite->set_frame_delay (5);
-  x += life_sprite->get_sprite_width ();
-  sprite_object **liste = sprites_list + 6;
-  for (Sint32 i = 0; i < 2; i++)
-    {
-      sprite_object *x_bob = *(liste++);
-      x_bob->set_coordinates (x, money_posy);
-      x += 8 * resolution;
-      x_bob->enable ();
-    }
-}
-*/
-//-----------------------------------------------------------------------------
-// initialize credit of money sprites
-//-----------------------------------------------------------------------------
+/**
+ * initialize credit of money sprites
+ */
 void
 controller_indicators::init_money ()
 {
-  // gadget sprite
-  Sint32 x = 24 * resolution;
+  Uint32 x = 24 * resolution;
   money_sprite->set_coordinates (x, money_posy);
   money_sprite->set_frame_delay (5);
   money_sprite->enable ();
   x += money_sprite->get_sprite_width ();
 
-  // characters sprites
+  /* chars sprites */
   sprite_object **liste = sprites_list;
   for (Sint32 i = 0; i < 6; i++)
     {
@@ -220,37 +155,36 @@ controller_indicators::init_money ()
     }
 }
 
-//-----------------------------------------------------------------------------
-// display credit of money and "reverser malus"
-//-----------------------------------------------------------------------------
+/**
+ * Display amount of money and reverse penalty
+ */
 void
-controller_indicators::execution1 (Sint32 value)
+controller_indicators::display_money_and_reverse ()
 {
-  exec_money (value);
+  display_money_amount ();
+  controller_paddles* paddles = controller_paddles::get_instance ();
 
-  //###################################################################
-  // display "reverser malus" if enable
-  //###################################################################
-  sprite_object **liste = sprites_list + 6;
-  Sint32 inves = ptZraquett->get_reverse_counter ();
-  if (inves > 0)
+  /* display reverse penalty if enable */
+  sprite_object **chars = sprites_list + 6;
+  Uint32 counter = paddles->get_reverse_counter ();
+  if (counter > 0)
     {
-      inves--;
-      ptZraquett->set_reverse_counter (inves);
-      inves = inves / 2;
-      Sint32 baseN = 10;
-      while (baseN > 0)
+      counter--;
+      paddles->set_reverse_counter (counter);
+      counter = counter / 2;
+      Uint32 digits = 10;
+      while (digits > 0)
         {
-          Sint32 i = 0;
-          while (inves >= baseN)
+          Uint32 i = 0;
+          while (counter >= digits)
             {
-              inves -= baseN;
+              counter -= digits;
               i++;
             }
-          baseN /= 10;
-          sprite_object *x_bob = *(liste++);
-          x_bob->set_image (i);
-          x_bob->enable ();
+          digits /= 10;
+          sprite_object *character = *(chars++);
+          character->set_image (i);
+          character->enable ();
         }
       reverse_sprite->enable ();
       reverse_sprite->play_animation_loop ();
@@ -259,62 +193,66 @@ controller_indicators::execution1 (Sint32 value)
     {
       for (Sint32 i = 0; i < 2; i++)
         {
-          sprite_object *x_bob = *(liste++);
-          x_bob->disable ();
+          sprite_object *character = *(chars++);
+          character->disable ();
         }
       reverse_sprite->disable ();
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+/**
+ * Display amount of money and number of lifes 
+ */
 void
-controller_indicators::execution2 (Sint32 value, Sint32 lifes)
+controller_indicators::display_money_and_lifes ()
 {
-  exec_money (value);
-  Sint32 baseN = 10;
-  sprite_object **liste = sprites_list + 6;
-  while (baseN > 0)
+  display_money_amount ();
+  Uint32 lifes = current_player->number_of_lifes;
+  Uint32 digits = 10;
+  sprite_object **chars = sprites_list + 6;
+  while (digits > 0)
     {
       Sint32 i = 0;
-      while (lifes >= baseN)
+      while (lifes >= digits)
         {
-          lifes -= baseN;
+          lifes -= digits;
           i++;
         }
-      baseN /= 10;
-      sprite_object *x_bob = *(liste++);
-      x_bob->set_image (i);
+      digits /= 10;
+      sprite_object *character = *(chars++);
+      character->set_image (i);
     }
   life_sprite->play_animation_loop ();
 }
 
-//-----------------------------------------------------------------------------
-// display credit of money
-//-----------------------------------------------------------------------------
+/**
+ * Display amount of money
+ */
 void
-controller_indicators::exec_money (Sint32 value)
+controller_indicators::display_money_amount ()
 {
-  Sint32 baseN = 100000;
-  sprite_object **liste = sprites_list;
-  while (baseN > 0)
+  Uint32 amount = current_player->amount_of_money;
+  Uint32 digits = 100000;
+  sprite_object **chars = sprites_list;
+  while (digits > 0)
     {
-      Sint32 i = 0;
-      while (value >= baseN)
+      Uint32 i = 0;
+      while (amount >= digits)
         {
-          value -= baseN;
+          amount -= digits;
           i++;
         }
-      baseN /= 10;
-      sprite_object *x_bob = *(liste++);
-      x_bob->set_y_coord (money_posy);
-      x_bob->set_image (i);
+      digits /= 10;
+      sprite_object *character = *(chars++);
+      character->set_y_coord (money_posy);
+      character->set_image (i);
     }
   money_sprite->set_y_coord (money_posy);
   money_sprite->play_animation_loop ();
   if (money_posy < y_position)
-    money_posy += resolution;
+    {
+      money_posy += resolution;
+    }
 }
 
 /**

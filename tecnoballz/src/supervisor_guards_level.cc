@@ -5,11 +5,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.22 2007/02/18 15:13:25 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.23 2007/02/18 21:07:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ supervisor_guards_level::first_init ()
   end_return = 0;
   gameover_counter = 0;
   count_next = 0;
-  tecnwinner = 0;
+  is_victory = false;
   area_number = current_player->get_area_number ();
   level_number = current_player->get_level_number ();
   Sint32 grdP = current_player->getGuardPt ();
@@ -119,8 +119,7 @@ supervisor_guards_level::first_init ()
   balls->create_sprites_list ();
   money_capsules->create_sprites_list ();
   power_up_capsules->create_sprites_list (6);
-  //player_indicators->create_sprites_list ();
-  player_indicators->create_indicators_sprites (paddles, money_capsules->get_first_sprite (), NULL, power_up_capsules->get_first_sprite ());
+  player_indicators->create_indicators_sprites ();
   explosions->create_explosions_list ();
 
   viewfinders_paddles->create_sprites_list ();
@@ -140,23 +139,18 @@ supervisor_guards_level::first_init ()
     );
   resources->release_sprites_bitmap ();
 
-  //###################################################################
-  // initialize "Game Over"
-  //###################################################################
-  error_init (game_over->first_init (32 * resolution));
-  if (erreur_num)
-    return (erreur_num);
+ /* initialize controller of the big letters animated composing the word
+  * "game over"  */
+  game_over->first_init (32 * resolution);
   init_level ();
   
   /* initialize background vertical scrolling */
   tiles_map->initialize ();
-  
   display->lock_surfaces ();
 
-
-  //###################################################################
-  // initialization balls
-  //###################################################################
+  /*
+   * initialize the balls controller *
+   */
   balls->init (
     /* time delay before ball leaves paddle */
     levelParam->startCount,
@@ -167,16 +161,13 @@ supervisor_guards_level::first_init ()
    levelParam->tilt_count,
    /* ball speed 3 or 4 */
    levelParam->speedBall1);
-
-  //###################################################################
-  // force "powerball 2" (guards levels only)
-  //###################################################################
-  balls->run_power2 ();
+  /* in the guardians levels, the balls are always forced to power 2 */
+  balls->set_power_2 ();
 
   money_capsules->initialize (3 + difficulty_level, player_indicators);
 
   /* initialize le capsules controller */
-  power_up_capsules->initialise (
+  power_up_capsules->initialize (
                           /* delay of appearance of a penalty capsule */
                           levelParam->malusCount * difficulty_level,
                           /* number of bonus bought in the shop (not * applicable) */
@@ -189,26 +180,22 @@ supervisor_guards_level::first_init ()
                           NULL,
                           /* object which displays the small messages (not * applicable) */
                           NULL,
-                          /* object which control the paddles */
-                          paddles,
                           /* object which control the balls */
                           balls,
                           /* object which handles the display of the text (not * applicable) */
-                          NULL,
-                          NULL, NULL);
+                          NULL);
 
   //player_indicators->init_guard (paddles, money_indicator, ptBobLifes);
 
   //initialize mobile characters at the end of the level
   ptMoveText->initialise (level_number, 32 * resolution);
 
-  viewfinders_paddles->initialize (paddles, 1);
+  viewfinders_paddles->initialize ();
 
   display->unlock_surfaces ();
 
 
 
-  //display->bufferCopy ();       //copy "buffer memory" to "screen memory"
   keyboard->clear_command_keys ();
   keyboard->set_grab_input (true);
 
@@ -254,7 +241,7 @@ supervisor_guards_level::main_loop ()
           gigablitz->disable_sprites ();
           balls->disable_sprites ();
           bullets->disable_sprites ();
-          if (tecnwinner)
+          if (is_victory)
             {
               tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_CONGRATULATIONS, handler_resources::RESEDMAP02);
               ptCongBall->initialize ();        //congra
@@ -277,12 +264,14 @@ supervisor_guards_level::main_loop ()
 
       if (gameover_counter >= 1)
         {
-          game_over->execution1 (tecnwinner);
-          if (tecnwinner)
-            ptCongBall->execution1 ();  //congra
+          game_over->execution1 (is_victory);
+          if (is_victory)
+            {
+              ptCongBall->execution1 ();  //congra
+            }
         }
       viewfinders_paddles->run ();
-      player_indicators->execution2 (current_player->amount_of_money, current_player->number_of_lifes);
+      player_indicators->display_money_and_lifes ();
       ptMoveText->goMoveText ();
       sprites->draw ();
       display->unlock_surfaces ();
@@ -317,10 +306,9 @@ supervisor_guards_level::main_loop ()
           bullets->execution1 ();    //moving the guards's weapons
           bullets->bumper_col ();    //collision weapons with the bumper
           money_capsules->move_bottom ();
-          power_up_capsules->bougegads2 ();
+          power_up_capsules->move_in_guardians_levels ();
           ptMoveText->goMoveText ();
-          player_indicators->execution2 (current_player->amount_of_money,
-                                  current_player->number_of_lifes);
+          player_indicators->display_money_and_lifes ();
           gigablitz->execution2 ();    //move the Gigablitz from guards
           explosions->play_animation ();
           bullets->anim_fires ();    //the animation of the guards's weapons
@@ -346,7 +334,7 @@ supervisor_guards_level::main_loop ()
   //##############################################################
   // next levels
   //##############################################################
-  if (guards->is_guardians_destroyed () && !tecnwinner)
+  if (guards->is_guardians_destroyed () && !is_victory)
     {
       if (count_next > 0)
         {
@@ -356,8 +344,8 @@ supervisor_guards_level::main_loop ()
           bullets->disable_sprites ();
           if (count_next > 500 || keyboard->key_is_pressed (SDLK_SPACE))
             {
-              tecnwinner = current_player->zlastlevel ();
-              if (tecnwinner)
+              is_victory = current_player->zlastlevel ();
+              if (is_victory)
                 {
                   current_player->remove_all_lifes ();
                   count_next = 0;

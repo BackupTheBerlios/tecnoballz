@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.cc
  * @brief Paddles controller 
- * @date 2007-02-10
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.13 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.14 2007/02/18 21:07:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -741,28 +741,12 @@ controller_paddles::get_reverse_counter ()
 void
 controller_paddles::disable_all_paddles ()
 {
-  if (paddle_bottom)
+  for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-    paddle_bottom->disable ();
+      sprite_paddle * paddle= sprites_list[i];
+      paddle->disable ();
     }
-  if (paddle_right)
-    {
-    paddle_right->disable ();
-    }
-  if (paddle_top)
-  {
-    paddle_top->disable ();
-  }
-  if (paddle_left)
-  {
-    paddle_left->disable ();
-  }
-  if (tec_robot0)
-  {
-    tec_robot0->disable ();
-  }
 }
-
 
 Sint32
   controller_paddles::ballePets1[14] = { 4, 8, 12, 16, 20, 24, 28,

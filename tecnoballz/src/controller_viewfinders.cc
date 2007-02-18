@@ -1,14 +1,14 @@
 /** 
  * @file controller_viewfinders.cc 
  * @brief Paddles viewfinders controller 
- * @date 2007-02-12
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_viewfinders.cc,v 1.2 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: controller_viewfinders.cc,v 1.3 2007/02/18 21:07:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,18 +55,24 @@ controller_viewfinders::~controller_viewfinders ()
 
 /**
  * Perform some initializations
- * @param paddles pointer to the balls controller object
- * @param numof_paddles number of paddles managed
  */
 void
-controller_viewfinders::initialize (controller_paddles * paddles, Uint32 numof_paddles)
+controller_viewfinders::initialize ()
 {
-  if (numof_paddles == 0)
+  controller_paddles *paddles = controller_paddles::get_instance ();
+  num_of_paddles = paddles->get_max_of_sprites ();
+  if (num_of_paddles > 1)
+    {
+      /* the robot paddle does not have a viewfinder */
+      num_of_paddles--;
+    }
+  printf("num_of_paddles: %i\n", num_of_paddles);
+
+  if (num_of_paddles == 0)
     {
       throw std::runtime_error ("(!)controller_viewfinders::initialize() "
           "failed! Number of paddles must be higher than 0!");
     }
-  num_of_paddles = numof_paddles;
 
   try 
   {
@@ -80,7 +86,7 @@ controller_viewfinders::initialize (controller_paddles * paddles, Uint32 numof_p
       num_of_paddles << " list elements!" << std::endl;
     throw;
   }
-  for (Uint32 i = 0; i < numof_paddles; i++)
+  for (Uint32 i = 0; i < num_of_paddles; i++)
     {
       paddles_list[i] = paddles->get_paddle (i + 1);
     }

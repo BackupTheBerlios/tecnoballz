@@ -2,14 +2,14 @@
  * @file sprite_display_scores.cc 
  * @brief Sprite wich display text of the score table 
  * @created 2003-04-30 
- * @date 2007-02-16
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_scores.cc,v 1.2 2007/02/16 16:53:52 gurumeditation Exp $
+ * $Id: sprite_display_scores.cc,v 1.3 2007/02/18 21:07:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@
 sprite_display_scores::sprite_display_scores ()
 {
   clear_sprite_members ();
-  graphTexte = (bitmap_data *) NULL;
+  offscreen_text = (bitmap_data *) NULL;
   width_font = 8 * resolution;
   heightfont = 8 * resolution;
   if (resolution == 2)
@@ -54,41 +54,33 @@ sprite_display_scores::sprite_display_scores ()
  */
 sprite_display_scores::~sprite_display_scores ()
 {
-  if (graphTexte)
-    delete graphTexte;
+  if (offscreen_text)
+    delete offscreen_text;
   if (bitmap_fonts)
     delete bitmap_fonts;
   bitmap_fonts = (bitmap_data *) NULL;
-  graphTexte = (bitmap_data *) NULL;
+  offscreen_text = (bitmap_data *) NULL;
 }
 
-//-----------------------------------------------------------------------------
-//      perform some initializations
-//-----------------------------------------------------------------------------
-Sint32
-sprite_display_scores::first_init (Sint32 offzt)
+/**
+ * Perform some initializations
+ */
+void
+sprite_display_scores::first_init (Uint32 x_offset)
 {
 
   load_bitmap_fonts (handler_resources::RESFONTSCR);
 
-  //###################################################################
-  // allocate 512 * 323 pixels buffer for text menu 
-  //###################################################################
-  graphTexte = new bitmap_data ();
-  //graphTexte->create(TEXT_LARGE * width_font, TEXT_HAUTE * space2next , 1);
-  graphTexte->create_surface (TEXT_LARGE * width_font,
+/* allocate 512 * 323 pixels buffer for scores text */ 
+  offscreen_text = new bitmap_data ();
+  offscreen_text->create_surface (TEXT_LARGE * width_font,
                               TEXT_HAUTE * space2next);
 
-  //###################################################################
-  // initialize sprite object
-  //###################################################################
-  make_sprite (graphTexte);
+  /* initialize sprite object */
+  make_sprite (offscreen_text);
   enable ();
-  set_coordinates (32 * resolution + offzt, 80 * resolution);
-
+  set_coordinates (32 * resolution + x_offset, 80 * resolution);
   copyToText ();
-
-  return erreur_num;
 }
 
 //------------------------------------------------------------------------------

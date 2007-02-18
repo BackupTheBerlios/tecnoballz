@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.h
  * @brief Guardians level supervisor 
  * @created 2003-01-11
- * @date 2007-02-10
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.14 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.15 2007/02/18 21:07:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,7 +86,8 @@ private:
   controller_spheres *ptCongBall;
   Uint32 gameover_counter;
   Sint32 count_next;            //temporisation before next level 
-  Sint32 tecnwinner;            //1 = end of the game
+  /** If true game is finished, play game over with congratulations */
+  bool is_victory; 
   controller_fontes_game *ptMoveText;
 
 private:

@@ -2,14 +2,14 @@
  * @file controller_game_over.h
  * @brief Game Over controller 
  * @created 2002-12-14
- * @date 2007-02-09
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_game_over.h,v 1.4 2007/02/16 12:38:23 gurumeditation Exp $
+ * $Id: controller_game_over.h,v 1.5 2007/02/18 21:07:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,8 +57,8 @@ public:
     controller_game_over ();
    ~controller_game_over ();
   sprite_display_scores *gtScorOver ();
-  Sint32 first_init (Sint32 offzt = 0);
-  void initialize (Sint32 iswin);
-  void execution1 (Sint32 iswin = 0);
+  void first_init (Uint32 x_offset = 0);
+  void enable_game_over (bool is_victory);
+  void execution1 (bool is_victory = 0);
 };
 #endif

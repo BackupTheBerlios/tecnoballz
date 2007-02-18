@@ -1,14 +1,14 @@
 /** 
  * @file controller_viewfinders.h
  * @brief Paddles viewfinders controller 
- * @date 2007-02-08
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_viewfinders.h,v 1.2 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_viewfinders.h,v 1.3 2007/02/18 21:07:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ private:
 public:
     controller_viewfinders ();
    ~controller_viewfinders ();
-  void initialize (controller_paddles * paddles, Uint32 numof_paddles);
+  void initialize ();
   void run ();
 };
 

@@ -2,14 +2,14 @@
  * @file sprite_display_scores.h 
  * @brief Sprite wich display text of the score table 
  * @created 2003-04-30 
- * @date 2007-02-16
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_scores.h,v 1.1 2007/02/16 12:38:24 gurumeditation Exp $
+ * $Id: sprite_display_scores.h,v 1.2 2007/02/18 21:07:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,14 +48,14 @@ private:
   Sint32 width_font;            //fonte's width font 8 or 16
   Sint32 heightfont;            //fonte's height
   Sint32 space2next;            //number of lines to next fonte 9 or 18
-  bitmap_data *graphTexte;
+  bitmap_data *offscreen_text;
   Sint32 run_offset;
   Sint32 max_offset;
 
 public:
     sprite_display_scores ();
    ~sprite_display_scores ();
-  Sint32 first_init (Sint32 offz = 0);
+  void first_init (Uint32 x_offset = 0);
   void copyToText ();
   Sint32 displayTxt ();
 };

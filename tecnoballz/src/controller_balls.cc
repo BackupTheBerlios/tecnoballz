@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-02-16
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.25 2007/02/16 16:53:52 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.26 2007/02/18 21:07:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,15 +36,11 @@
 /** 
  * Create the balls controller into bricks levels
  */
-controller_balls::controller_balls (controller_ejectors * eject,
-                                    controller_sides_bricks * brico,
-                                    sprite_object * pwall, zeMiniMess * pMess)
+controller_balls::controller_balls (sprite_object * pwall, zeMiniMess * pMess)
 {
   littleInit ();
   num_erreur = 0;
 
-  ejectObjet = eject;
-  sides_bricks = brico;
   ptBob_wall = pwall;
   ptMiniMess = pMess;
 
@@ -68,8 +64,6 @@ controller_balls::controller_balls ()
   littleInit ();
   num_erreur = 0;
 
-  ejectObjet = NULL;
-  sides_bricks = NULL;
   ptBob_wall = NULL;
   ptMiniMess = NULL;
 
@@ -102,9 +96,9 @@ controller_balls::~controller_balls ()
  * @param table speed ball (1 to 4)
  */
 void
-controller_balls::init (Sint32 start,
-                        Sint32 glueC, Sint32 speed, Sint32 tiltC,
-                        Sint32 table)
+controller_balls::init (Uint32 start,
+                        Uint32 glueC, Uint32 speed, Uint32 tiltC,
+                        Uint32 table)
 {
 
   controller_paddles *paddles = controller_paddles::get_instance ();
@@ -144,8 +138,11 @@ controller_balls::init (Sint32 start,
   balle->startBalle (paddle_bottom->collision_width);
   /* one ball on the screen */
   num_of_sprites = 1;
-  if (ejectObjet)
-    ejectObjet->ballPosIni (&sprite_ball::furaxTable[0]);
+  if (super_jump == BRICKS_LEVEL)
+    {
+      controller_ejectors* ejectors = controller_ejectors::get_instance ();
+      ejectors->ballPosIni (&sprite_ball::furaxTable[0]);
+    }
 }
 
 /**
@@ -198,7 +195,7 @@ controller_balls::check_outside_balls ()
   Sint32 max_y = sprite_ball::MAXIMUM_PY * resolution;
   controller_ships *ships = controller_ships::get_instance ();
   right_panel_score *panel = right_panel_score::get_instance ();
-  head_anim = head_animation::get_instance ();
+  head_animation *head_anim = head_animation::get_instance ();
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];
@@ -823,14 +820,15 @@ controller_balls::vitusrobot ()
 void
 controller_balls::vitusEject ()
 {
+  controller_ejectors* ejectors = controller_ejectors::get_instance ();
   sprite_object *coin1 =
-    ejectObjet->get_ejector (controller_ejectors::TOP_LEFT_EJECTOR);
+    ejectors->get_ejector (controller_ejectors::TOP_LEFT_EJECTOR);
   sprite_object *coin2 =
-    ejectObjet->get_ejector (controller_ejectors::TOP_RIGHT_EJECTOR);
+    ejectors->get_ejector (controller_ejectors::TOP_RIGHT_EJECTOR);
   sprite_object *coin3 =
-    ejectObjet->get_ejector (controller_ejectors::BOTTOM_LEFT_EJECTOR);
+    ejectors->get_ejector (controller_ejectors::BOTTOM_LEFT_EJECTOR);
   sprite_object *coin4 =
-    ejectObjet->get_ejector (controller_ejectors::BOTTOM_RIGHT_EJECTOR);
+    ejectors->get_ejector (controller_ejectors::BOTTOM_RIGHT_EJECTOR);
 
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
@@ -951,6 +949,7 @@ controller_balls::vitusEject ()
 void
 controller_balls::collision_with_walls ()
 {
+  controller_sides_bricks* sides_bricks = controller_sides_bricks::get_instance ();
   Sint32 murGa = sides_bricks->getCollisG ();
   Sint32 murDr = sides_bricks->getCollisD ();
   Sint32 murHt = sides_bricks->getCollisH ();
@@ -1563,7 +1562,7 @@ controller_balls::run_3balls ()
  * Transform all the enable balls into balls power 1
  */
 void
-controller_balls::run_power1 ()
+controller_balls::set_power_1 ()
 {
   sprite_ball **balls = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
@@ -1580,7 +1579,7 @@ controller_balls::run_power1 ()
  * Transform all the enable balls into balls power 2
  */
 void
-controller_balls::run_power2 ()
+controller_balls::set_power_2 ()
 {
   sprite_ball **balls = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
@@ -1597,7 +1596,7 @@ controller_balls::run_power2 ()
  * Transform all the enable balls into balls size 2 (7*7 or 14*14)
  */
 void
-controller_balls::run_size01 ()
+controller_balls::set_size_2 ()
 {
   sprite_ball **balls = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
@@ -1614,7 +1613,7 @@ controller_balls::run_size01 ()
  * Transform all the enable balls into balls size 3 (10*10 or 20*20)
  */
 void
-controller_balls::run_size02 ()
+controller_balls::set_size_3 ()
 {
   sprite_ball **balls = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
@@ -1651,7 +1650,7 @@ void
 controller_balls::time_2tilt ()
 {
   bool tilt = false;
-  head_anim = head_animation::get_instance ();
+  head_animation* head_anim = head_animation::get_instance ();
   sprite_ball **balls = sprites_list;
   Sint32 delay = balle_tilt;
   for (Uint32 i = 0; i < max_of_sprites; i++)

@@ -2,14 +2,14 @@
  * @file controller_game_over.cc 
  * @brief Game Over controller 
  * @created 2002-12-14
- * @date 2007-02-09
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_game_over.cc,v 1.4 2007/02/16 12:38:24 gurumeditation Exp $
+ * $Id: controller_game_over.cc,v 1.5 2007/02/18 21:07:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,54 +68,57 @@ controller_game_over::gtScorOver ()
   return ptScorOver;
 }
 
-//-----------------------------------------------------------------------------
-//      perform some initializations
-//-----------------------------------------------------------------------------
-Sint32
-controller_game_over::first_init (Sint32 offzt)
+/**
+ * Perform some initializations
+ */
+void
+controller_game_over::first_init (Uint32 x_offset)
 {
-  chrOffsetX = offzt;
+  chrOffsetX = x_offset;
 
-  /* initialize score table */ 
+  /* enable_game_over score table */ 
   ptScorOver = new sprite_display_scores ();
-  error_init (ptScorOver->first_init (chrOffsetX));
-  if (erreur_num)
-    return erreur_num;
-  return erreur_num;
+  ptScorOver->first_init (chrOffsetX);
 }
 
-//-----------------------------------------------------------------------------
-//      perform some initializations
-//-----------------------------------------------------------------------------
+/**
+ * Enable the Game Over
+ */
 void
-controller_game_over::initialize (Sint32 iswin)
+controller_game_over::enable_game_over (bool is_victory)
 {
   Sint32 x = 100 * resolution;
   Sint32 y = 200 * resolution;
   const Sint32 *p = zeus_over1;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_object *zebob = sprites_list[i];
-      zebob->enable ();
-      zebob->set_coordinates (x, y);
-      zebob->set_image (i);
+      sprite_object *sprite = sprites_list[i];
+      sprite->enable ();
+      sprite->set_coordinates (x, y);
+      sprite->set_image (i);
       Sint32 x2 = *(p++);
       Sint32 y2 = *(p++);
-      zebob->x_maximum = x2;
-      zebob->y_maximum = y2;
+      sprite->x_maximum = x2;
+      sprite->y_maximum = y2;
     }
   move_phase = 1;
   go_zetempo = 50 * 10;
 #ifndef SOUNDISOFF
   Sint32 iscla = ptScoreTab->test_score ();
-  if (iswin)
-    audio->play_music (MUSICCONGR);
+  if (is_victory)
+    {
+      audio->play_music (MUSICCONGR);
+    }
   else
     {
       if (iscla)
-        audio->play_music (MUSICSCORE);
+        {
+          audio->play_music (MUSICSCORE);
+        }
       else
-        audio->play_music (MUSICGOVER);
+        {
+          audio->play_music (MUSICGOVER);
+        }
     }
 #else
   ptScoreTab->test_score ();
@@ -127,12 +130,12 @@ controller_game_over::initialize (Sint32 iswin)
 // runtime
 //-----------------------------------------------------------------------------
 void
-controller_game_over::execution1 (Sint32 iswin)
+controller_game_over::execution1 (bool is_victory)
 {
   switch (move_phase)
     {
     case 0:
-      initialize (iswin);
+      enable_game_over (is_victory);
       break;
 
     case 1:

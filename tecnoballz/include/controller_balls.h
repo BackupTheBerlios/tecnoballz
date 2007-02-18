@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.h
  * @brief Control the balls. Move and collisions 
- * @date 2007-02-16
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.15 2007/02/16 16:53:52 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.16 2007/02/18 21:07:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,10 +33,7 @@ class controller_balls;
 #include "../include/sprite_ball.h"
 #include "../include/objects_list.h"
 #include "../include/sprite_paddle.h"
-#include "../include/controller_ejectors.h"
 #include "../include/controller_bricks.h"
-#include "../include/controller_sides_bricks.h"
-#include "../include/head_animation.h"
 #include "../include/controller_ships.h"
 #include "../include/right_panel_score.h"
 #include "../include/controller_guardians.h"
@@ -66,9 +63,6 @@ private:
   sprite_paddle *paddle_top;
   sprite_paddle *paddle_left;
   sprite_paddle *tec_robot0;
-  controller_ejectors *ejectObjet;
-  controller_sides_bricks *sides_bricks;
-  head_animation *head_anim;
   sprite_object *ptBob_wall;
   zeMiniMess *ptMiniMess;
 
@@ -89,13 +83,11 @@ private:
   static Sint32 *brick_jump[15];
 
 public:
-    controller_balls (controller_ejectors * eject,
-                      controller_sides_bricks * brico, 
-                      sprite_object * pwall, zeMiniMess *);
+    controller_balls (sprite_object * pwall, zeMiniMess *);
     controller_balls ();
    ~controller_balls ();
-  void init (Sint32 start, Sint32 glueC,
-                   Sint32 speed, Sint32 tiltC, Sint32 table);
+  void init (Uint32 start, Uint32 glueC,
+                   Uint32 speed, Uint32 tiltC, Uint32 table);
   void run_in_bricks_levels ();
   void vitusBall2 ();
   sprite_ball *first_ball ();
@@ -126,10 +118,10 @@ public:
   void run_2balls ();
   void run_nballs (Uint32 nball = 0);
   void run_3balls ();
-  void run_power1 ();
-  void run_power2 ();
-  void run_size01 ();
-  void run_size02 ();
+  void set_power_1 ();
+  void set_power_2 ();
+  void set_size_2 ();
+  void set_size_3 ();
   void maxi_speed ();
   void time_2tilt ();
   void time2tilt2 ();

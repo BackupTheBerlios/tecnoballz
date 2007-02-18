@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.cc 
  * @brief Capsules controller 
- * @date 2007-02-12
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.11 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.12 2007/02/18 21:07:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,14 +34,13 @@
 
 /**
  * Create the capsules controller
- * @param vShad
  */
 controller_capsules::controller_capsules ()
 {
   littleInit ();
   Sint16 *monPT;
   monPT = courseList;
-  // clear the list of bonuses bought in shop
+  /* clear the list of bonus capsules bought in shop */
   for (Sint32 i = 0; i < NB_OPTIONS; i++)
     {
       *(monPT++) = 0;
@@ -82,19 +81,16 @@ controller_capsules::~controller_capsules ()
  * @param cours pointer to list of capsules bought in shop
  */
 void
-controller_capsules::initialise (Sint32 mStep, Sint32 bKauf, Sint32 brCnt,
+controller_capsules::initialize (Sint32 mStep, Sint32 bKauf, Sint32 brCnt,
                                  const Sint16 * table, Sint32 * cours,
                                  zeMiniMess * ptMes,
-                                 controller_paddles * pRaqu,
-                                 controller_balls * pBall, right_panel_score * pScor,
-                                 sprite_object * pWall, controller_magnetic_eyes * ptEye)
+                                 controller_balls * pBall,
+                                 sprite_object * pWall)
 {
-  ptRaquette = pRaqu;
   ptNewBalls = pBall;
-  ptbarreScr = pScor;
   ptBob_wall = pWall;
-  pt_magneye = ptEye;
-  bumpSelect = ptRaquette->get_paddle (1);
+  controller_paddles* paddles = controller_paddles::get_instance ();
+  paddle_selected = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
   malus_frek = mStep;
   bonusAchet = bKauf;
   bonus_step = 0;
@@ -111,12 +107,13 @@ controller_capsules::initialise (Sint32 mStep, Sint32 bKauf, Sint32 brCnt,
     }
   frame_period = bonus->frame_period;
 
-  //###################################################################
-  // reset list of bonuses bought in the shop
-  //###################################################################
-  for (Sint32 i = 0; i < NB_OPTIONS; i++)
-    courseList[i] = 0;
-  courseList[NB_OPTIONS] = -1;  //end of the table
+  /* clear the list of bonuses bought in the shop */
+  for (Uint32 i = 0; i < NB_OPTIONS; i++)
+    {
+      courseList[i] = 0;
+    }
+  /* mark the end of the list */
+  courseList[NB_OPTIONS] = -1;
 
   //###################################################################
   // copy list of bonuses bought in the shop
@@ -296,59 +293,40 @@ controller_capsules::gadgetShop (Sint32 nuGad)
   temoin_gad->nouveauGad (nuGad);
 }
 
-//-------------------------------------------------------------------------------
-// shop : initialize the list of bonus 
-//-------------------------------------------------------------------------------
-/*
+/**
+ *  Move and collision with paddles in bricks levels
+ */
 void
-controller_capsules::gadgetShop (handler_players * gamer)
-{
-  Sint32 t = NB_OPTIONS;
-  sprite_capsule **liste = sprites_list;
-  Sint32 *cours = gamer->get_shopping_cart ();
-  for (Sint32 i = 0; i < t; i++)
-    {
-      sprite_capsule *bonus = *(liste++);
-      Sint32 n = *(cours++);
-      bonus->nouveauGad (n);
-    }
-}
-*/
-
-//-------------------------------------------------------------------------------
-// bricks levels: move gadgets (bonus or malus) and collision with bumpers
-//-------------------------------------------------------------------------------
-void
-controller_capsules::bouge_gads ()
+controller_capsules::move_in_bricks_levels ()
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_capsule *bonus = sprites_list[i];
-      bonus->play_animation_loop ();
-      sprite_paddle *raket = bonus->move ();
-      if (raket)
+      sprite_capsule *capsule = sprites_list[i];
+      capsule->play_animation_loop ();
+      sprite_paddle *paddle = capsule->move ();
+      if (NULL != paddle)
         {
-          Sint32 g = bonus->get_gadget ();
-          gadget_run (raket, g);
+          Sint32 g = capsule->get_gadget ();
+          gadget_run (paddle, g);
         }
     }
 }
 
-//-------------------------------------------------------------------------------
-// gards levels: move gadgets (bonus or malus) and collision with bumper
-//-------------------------------------------------------------------------------
+/**
+ * Move and collision with paddle in guardians levels
+ */
 void
-controller_capsules::bougegads2 ()
+controller_capsules::move_in_guardians_levels ()
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_capsule *bonus = sprites_list[i];
-      bonus->play_animation_loop ();
-      sprite_paddle *raket = bonus->move ();
-      if (raket)
+      sprite_capsule *capsule = sprites_list[i];
+      capsule->play_animation_loop ();
+      sprite_paddle *paddle = capsule->move ();
+      if (NULL != paddle)
         {
-          Sint32 g = bonus->get_gadget ();
-          gadgetrun2 (raket, g);
+          Sint32 g = capsule->get_gadget ();
+          gadgetrun2 (paddle, g);
         }
     }
 }
@@ -375,14 +353,16 @@ controller_capsules::animations (Sint32 value)
     }
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels: active a bonus or malus with keyboard (cheat mode)
-//-------------------------------------------------------------------------------
+/**
+ * Enable a bonus or a penalty with the keyboard
+ */
 void
-controller_capsules::gadgetKeys ()
+controller_capsules::cheat_keys ()
 {
   if (!cheat_flag)
-    return;
+    {
+      return;
+    }
   if (keyboard->key_is_pressed (SDLK_LSHIFT) ||
       keyboard->key_is_pressed (SDLK_LCTRL) ||
       keyboard->key_is_pressed (SDLK_RALT) ||
@@ -394,7 +374,9 @@ controller_capsules::gadgetKeys ()
       keyboard->key_is_pressed (SDLK_RCTRL) ||
 #endif
       keyboard->key_is_pressed (SDLK_LALT))
-    return;
+    {
+      return;
+    }
   Sint16 *liste = keysTriche;
   while (Sint16 k = *(liste++)) //k = SDL key code
     {
@@ -404,7 +386,7 @@ controller_capsules::gadgetKeys ()
       else
         {
           if (*liste)
-            gadget_run (bumpSelect, g);
+            gadget_run (paddle_selected, g);
           *(liste++) = 0;
         }
     }
@@ -414,11 +396,10 @@ controller_capsules::gadgetKeys ()
 // bricks levels: active a gadget (bonus or malus)
 //-------------------------------------------------------------------------------
 void
-controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
+controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 {
-  bumpSelect = raket;
-  right_panel_score *barre = ptbarreScr;
-  controller_paddles *oBump = ptRaquette;
+  paddle_selected = paddle;
+  controller_paddles* paddles = controller_paddles::get_instance ();
   controller_balls *oBall = ptNewBalls;
 
   if (nuGad == GAD_RANDOM)
@@ -429,19 +410,22 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
   switch (nuGad)
     {
 
-      // bumper glue
+      /* glue paddle */
     case GAD_GLUE00:
 #ifndef SOUNDISOFF
       audio->play_sound (S_TRANSFOR);
 #endif
       ptMiniMess->mesrequest (16);
-      raket->set_glue ();
+      paddle->set_glue ();
       break;
 
-      // next level
+      /* next level */
     case GAD_NEXTLV:
-      ptMiniMess->mesrequest (17);
-      barre->set_bricks_counter (0);
+      {
+        ptMiniMess->mesrequest (17);
+        right_panel_score* panel = right_panel_score::get_instance ();
+        panel->set_bricks_counter (0);
+      }
       break;
 
       // fire power 1
@@ -450,7 +434,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
       audio->play_sound (S_TRANSFOR);
 #endif
       ptMiniMess->mesrequest (4);
-      raket->set_fire_1 ();
+      paddle->set_fire_1 ();
       break;
 
       // fire power 2
@@ -459,7 +443,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
       audio->play_sound (S_TRANSFOR);
 #endif
       ptMiniMess->mesrequest (5);
-      raket->set_fire_2 ();
+      paddle->set_fire_2 ();
       break;
 
       // shrink bumper
@@ -468,7 +452,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
       audio->play_sound (S_TRANSFOR);
 #endif
       ptMiniMess->mesrequest (18);
-      oBump->shrink_paddles ();
+      paddles->shrink_paddles ();
       break;
 
       // expand bumper
@@ -477,7 +461,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
       audio->play_sound (S_TRANSFOR);
 #endif
       ptMiniMess->mesrequest (19);
-      oBump->expand_paddles ();
+      paddles->expand_paddles ();
       break;
 
       // lose a life
@@ -495,7 +479,6 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
       audio->play_sound (S_AJOUTVIE);
 #endif
       ptMiniMess->mesrequest (11);
-      //barre->add_life(1);
       current_player->add_life (1);
       break;
 
@@ -523,7 +506,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      oBall->run_power1 ();
+      oBall->set_power_1 ();
       break;
 
       // power ball 2
@@ -532,13 +515,13 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      oBall->run_power2 ();
+      oBall->set_power_2 ();
       break;
 
       // inverse control
     case GAD_INVERS:
       ptMiniMess->mesrequest (24);
-      oBump->set_reverse_counter (50 * 4);
+      paddles->set_reverse_counter (50 * 4);
       break;
 
       // maxi ball speed (no gadget)
@@ -549,28 +532,28 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
 
       // bottom bumper[1] enable (no gadget)
     case GAD_BUMP01:
-      bumpSelect = oBump->get_paddle (controller_paddles::BOTTOM_PADDLE);
+      paddle_selected = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
       break;
 
       // right bumper[2] enable (no gadget)
     case GAD_BUMP02:
       ptMiniMess->mesrequest (26);
-      bumpSelect = oBump->get_paddle (controller_paddles::RIGHT_PADDLE);
-      bumpSelect->enable ();
+      paddle_selected = paddles->get_paddle (controller_paddles::RIGHT_PADDLE);
+      paddle_selected->enable ();
       break;
 
       // top bumper[3] enable (no gadget)
     case GAD_BUMP03:
       ptMiniMess->mesrequest (27);
-      bumpSelect = oBump->get_paddle (controller_paddles::TOP_PADDLE);
-      bumpSelect->enable ();
+      paddle_selected = paddles->get_paddle (controller_paddles::TOP_PADDLE);
+      paddle_selected->enable ();
       break;
 
       // right bumper[4] enable (no gadget)
     case GAD_BUMP04:
       ptMiniMess->mesrequest (28);
-      bumpSelect = oBump->get_paddle (controller_paddles::LEFT_PADDLE);
-      bumpSelect->enable ();
+      paddle_selected = paddles->get_paddle (controller_paddles::LEFT_PADDLE);
+      paddle_selected->enable ();
       break;
 
       // ball size 2
@@ -579,7 +562,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      oBall->run_size01 ();
+      oBall->set_size_2 ();
       break;
 
       // ball size 3
@@ -588,7 +571,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      oBall->run_size02 ();
+      oBall->set_size_3 ();
       break;
 
       // random
@@ -601,28 +584,28 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      oBump->maxi_bumps ();
+      paddles->maxi_bumps ();
       oBall->run_nballs ();
-      oBall->run_power2 ();
-      oBall->run_size02 ();
+      oBall->set_power_2 ();
+      oBall->set_size_3 ();
 
-      raket->set_glue ();
-      raket->set_fire_2 ();
+      paddle->set_glue ();
+      paddle->set_fire_2 ();
 
-      bumpSelect = oBump->get_paddle (2);
-      bumpSelect->enable ();
-      bumpSelect->set_glue ();
-      bumpSelect->set_fire_2 ();
+      paddle_selected = paddles->get_paddle (2);
+      paddle_selected->enable ();
+      paddle_selected->set_glue ();
+      paddle_selected->set_fire_2 ();
 
-      bumpSelect = oBump->get_paddle (3);
-      bumpSelect->enable ();
-      bumpSelect->set_glue ();
-      bumpSelect->set_fire_2 ();
+      paddle_selected = paddles->get_paddle (3);
+      paddle_selected->enable ();
+      paddle_selected->set_glue ();
+      paddle_selected->set_fire_2 ();
 
-      bumpSelect = oBump->get_paddle (4);
-      bumpSelect->enable ();
-      bumpSelect->set_glue ();
-      bumpSelect->set_fire_2 ();
+      paddle_selected = paddles->get_paddle (4);
+      paddle_selected->enable ();
+      paddle_selected->set_glue ();
+      paddle_selected->set_fire_2 ();
       break;
 
       // Bonus price (shop's price at 1 in the shop) (no gadget)
@@ -642,7 +625,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
 #endif
       ptBob_wall->enable ();
       ptBob_wall->thecounter += 500;
-      oBump->deactrobot ();
+      paddles->deactrobot ();
       break;
 
       // robot bumper enable
@@ -651,7 +634,7 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      oBump->activrobot ();
+      paddles->activrobot ();
       ptBob_wall->disable ();
       ptBob_wall->thecounter = 0;
       break;
@@ -667,7 +650,10 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
 
       // enable eye (no gadget)
     case GAD_OEIL00:
-      pt_magneye->create_eye ();
+      {
+        controller_magnetic_eyes* eyes = controller_magnetic_eyes::get_instance ();
+        eyes->create_eye ();
+      }
       break;
     }
 }
@@ -678,14 +664,13 @@ controller_capsules::gadget_run (sprite_paddle * raket, Sint32 nuGad)
 void
 controller_capsules::gadgetrun2 (sprite_paddle * raket, Sint32 nuGad)
 {
-  bumpSelect = raket;
+  paddle_selected = raket;
   controller_balls *oBall = ptNewBalls;
   switch (nuGad)
     {
 
       // bumper protect
     case GAD_PROTEC:
-      //ptbumper01 = PtRaquette->get_paddle(1);
       raket->set_invincibility (200);
       break;
 
@@ -710,7 +695,7 @@ controller_capsules::gadgetrun2 (sprite_paddle * raket, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      oBall->run_size01 ();
+      oBall->set_size_2 ();
       break;
 
       // power ball 2 (ball size 3)
@@ -718,7 +703,7 @@ controller_capsules::gadgetrun2 (sprite_paddle * raket, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      oBall->run_size02 ();
+      oBall->set_size_3 ();
       break;
     }
 }
