@@ -2,14 +2,14 @@
  * @file surface_sdl.cc 
  * @brief an drawing surface
  * @created 2007-02-15
- * @date 2007-02-06
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.cc,v 1.6 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: surface_sdl.cc,v 1.7 2007/02/18 15:13:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
  */
 #include "../include/tecnoballz.h"
 #include "../include/surface_sdl.h"
+#include "../include/handler_display.h"
 
 /**
  * Create the surface surface object
@@ -349,3 +350,28 @@ surface_sdl::blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, U
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
 }
+
+/**
+ * Fill a shadow rectangle
+ * @param xcoord x coordinate the upper-left corner of the rectangle
+ * @param ycoord y coordinate the upper-left corner of the rectangle
+ * @param w width of the rectangle
+ * @param h height of the rectangle
+ */
+void
+surface_sdl::fill_shadow_rect (Uint32 xcoord, Uint32 ycoord, Uint32 w,
+                             Uint32 h)
+{
+  char k = (char) handler_display::SHADOW_PIX;
+  Uint32 length = w;
+  Uint32 ymax = ycoord + h;
+  for (Uint32 y = ycoord; y < ymax; y++)
+    {
+      char *data = get_pixel_data (xcoord, y);
+      for (Uint32 i = 0; i < length; i++)
+        {
+          *(data)++ |= k;
+        }
+    }
+}
+

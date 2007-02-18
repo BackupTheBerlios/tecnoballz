@@ -5,11 +5,11 @@
  * @date 2007-02-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.11 2007/02/17 16:56:08 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.12 2007/02/18 15:13:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,9 +77,7 @@ tecnoballz::first_init (configfile * pConf)
   audio = handler_audio::get_instance ();
 #endif
   display = new handler_display ();
-  num_erreur = display->initialize ();
-  if (num_erreur)
-    return (num_erreur);
+  display->initialize ();
 
   keyboard = handler_keyboard::get_instance ();
   sprites = new list_sprites ();

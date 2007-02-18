@@ -4,11 +4,11 @@
  * @date 2007-02-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.11 2007/02/18 11:03:52 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.12 2007/02/18 15:13:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -535,30 +535,27 @@ tiles_background::set_4_color_palette (Uint32 pal_index)
       unsigned char pixel = *(colPT++);
       /* red */
       pixel = *(colPT++);
-      printf("%i", pixel);
       lighted->r = pixel;
       pixel >>= 1;
-      printf("/%i; ", pixel);
       dark->r = pixel;
       /* green */
       pixel = *(colPT++);
-      printf("%i", pixel);
       lighted->g = pixel;
       pixel >>= 1;
-      printf("/%i; ", pixel);
       dark->g = pixel;
       /* blue */
       pixel = *(colPT++);
-      printf("%i", pixel);
       lighted->b = pixel;
       pixel >>= 1;
-      printf("/%i; ", pixel);
       dark->b = pixel;
       lighted++;
       dark++;
     }
-  printf("\n");
   display->enable_palette (pal);
+  if (NULL != current_tiles)
+    {
+      current_tiles->set_palette (pal);
+    }
 }
 
 /**

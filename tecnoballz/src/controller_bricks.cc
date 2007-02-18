@@ -5,11 +5,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.13 2007/02/18 11:03:52 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.14 2007/02/18 15:13:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -251,8 +251,7 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
       std::cout << "controller_bricks::load_level() area_nu: " <<
         area_nu << "level_nu: " << level_nu << std::endl;
     }
-  // un tableau fait 17 lignes sur 10 colonnes = 170 * 2 = 340 octets  
-  // a table makes 17 lines out of 10 columns 
+  /* a table has 17 lines of 10 columns, 172 * 2 = 340 bytes */ 
   /* clear he number of bricks of the level */
   num_of_bricks = 0;
 
@@ -331,15 +330,21 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
 void
 controller_bricks::draw_bricks_shadows ()
 {
+  if (bob_ground)
+    {
+      return;
+    }
   brickInfos *megaT = mega_table;
+  Sint32 xmax = NB_BRICKSH * brick_width - ombre_deca;
   for (Sint32 j = ombre_deca; j < NB_BRICKSV * brkyoffset + ombre_deca;
        j += brkyoffset)
     {
-      for (Uint32 i = -ombre_deca; i < NB_BRICKSH * brick_width - ombre_deca;
-           i += brick_width)
+      for (Sint32 i = -ombre_deca; i < xmax; i += brick_width)
         {
           if (megaT->brique_rel)
-            display->rectShadow (i, j, brick_width, brick_height);
+            {
+               background_screen->fill_shadow_rect (i, j, brick_width, brick_height);
+            }
           megaT++;
         }
     }

@@ -2,14 +2,14 @@
  * @file surface_sdl.h 
  * @brief an surface drawing surface
  * @created 2007-02-15
- * @date 2007-02-08
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.h,v 1.5 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: surface_sdl.h,v 1.6 2007/02/18 15:13:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,6 +62,7 @@ public:
   void set_palette (SDL_Color *colors);
   void set_palette (surface_sdl *dest);
   void blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h);
+  void fill_shadow_rect (Uint32 xcoord, Uint32 ycoord, Uint32 w, Uint32 h);
 
 public:
   void create_surface (Uint32 w, Uint32 h, Sint32 depth, Uint32 flags = SDL_ANYFORMAT, Uint32 red_mask = 0xf00, Uint32 green_mask = 0x0f0, Uint32 blue_mask = 0x00f, Uint32 alpha_mask = 0x00);

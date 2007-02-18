@@ -2,14 +2,14 @@
  * @file handler_display.cc 
  * @briefi Handle displaying and updating with SDL 
  * @created 2002-08-17 
- * @date 2007-01-31
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.h,v 1.9 2007/02/15 20:52:43 gurumeditation Exp $
+ * $Id: handler_display.h,v 1.10 2007/02/18 15:13:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,9 +38,10 @@ public:
   static const Sint32 SHADOWOFFY = 4;
   static const unsigned char SHADOW_PIX = 0x80;
   static const Uint32 SHADOWLONG = 0x80808080;
-  static bool optionfull;       // 1 = full screen mode
-  static bool optionsync;       // 1 = no synchronisation
-
+  /** True if full screen mode */
+  static bool optionfull;
+  /** True if synchronisation */
+  static bool optionsync;
 
 private:
   static const Uint32 bitspixels = 8;
@@ -84,20 +85,19 @@ private:
   /** The window tile and icon name */
   static char window_title[25];
 
-  SDL_Color ze_palette[256];
+  SDL_Color sdl_palette[256];
   /** */
   Uint32 tilt_offset;
 
 public:
     handler_display ();
    ~handler_display ();
-  Sint32 initialize ();
+  void initialize ();
   Uint32 get_width ();
   Uint32 get_height ();
   void lock_surfaces ();
   void unlock_surfaces ();
   Uint32 get_bits_per_pixel ();
-  Sint32 SDL_informations ();
   void wait_frame ();
   Uint32 get_frames_per_second ();
 
@@ -113,7 +113,6 @@ public:
   void bufferCopy ();           // copie normale du Buffer
   void bufferCTab ();           // copie des 512 pixels gauche du Buffer
   SDL_Color *get_palette ();
-  void rectShadow (Sint32 pos_x, Sint32 pos_y, Sint32 large, Sint32 haute);
   void clr_shadow (Sint32 offst, Sint32 large, Sint32 haute);
   void clr_shadow (Sint32 _iPosX, Sint32 _iPosY, Sint32 _iLarg,
                    Sint32 _iHaut);
@@ -123,7 +122,8 @@ public:
   void tilt_screen ();
   void gradation1 ();
 private:
-  Sint32 set_video_mode ();
+  void get_info ();
+  void set_video_mode ();
   void check_if_toggle_fullscreen ();
 
 };

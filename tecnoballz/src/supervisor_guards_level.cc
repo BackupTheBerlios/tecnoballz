@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-02-11
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.21 2007/02/16 12:38:24 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.22 2007/02/18 15:13:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,14 +123,6 @@ supervisor_guards_level::first_init ()
   player_indicators->create_indicators_sprites (paddles, money_capsules->get_first_sprite (), NULL, power_up_capsules->get_first_sprite ());
   explosions->create_explosions_list ();
 
-  /* create the money sprite */
-  //money_indicator->create_sprite (BOB_MONEYS, sprites_bitmap, false);
-  //sprites->add (money_indicator);
-
-  /* create the extra-life capsule sprite */
-  //ptBobLifes->create_sprite (BOB_GADGET, sprites_bitmap, false);
-  //sprites->add (ptBobLifes);
-
   viewfinders_paddles->create_sprites_list ();
 
   //mobile characters at the end of the level
@@ -155,10 +147,12 @@ supervisor_guards_level::first_init ()
   if (erreur_num)
     return (erreur_num);
   init_level ();
-  display->lock_surfaces ();
-
+  
   /* initialize background vertical scrolling */
   tiles_map->initialize ();
+  
+  display->lock_surfaces ();
+
 
   //###################################################################
   // initialization balls
@@ -211,7 +205,10 @@ supervisor_guards_level::first_init ()
   viewfinders_paddles->initialize (paddles, 1);
 
   display->unlock_surfaces ();
-  display->bufferCopy ();       //copy "buffer memory" to "screen memory"
+
+
+
+  //display->bufferCopy ();       //copy "buffer memory" to "screen memory"
   keyboard->clear_command_keys ();
   keyboard->set_grab_input (true);
 

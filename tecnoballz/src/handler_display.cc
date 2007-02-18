@@ -5,11 +5,11 @@
  * @date 2007-02-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.18 2007/02/18 12:47:23 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.19 2007/02/18 15:13:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,14 +75,11 @@ handler_display::~handler_display ()
 /**
  * Initialize the SDL display and allocate surfaces
  */
-Sint32
+void
 handler_display::initialize ()
 {
 
-  if (set_video_mode () != E_NO_ERROR)
-    {
-      return E_SDLERROR;
-    }
+  set_video_mode (); 
 
   /* allocate "buffer" surface */
   bufLargeur = window_width;
@@ -106,13 +103,12 @@ handler_display::initialize ()
 
   previous_sdl_ticks = SDL_GetTicks ();
   delay_value = 0;
-  return 0;
 }
 
 /**
  * Initializes the video with SDL
  */
-Sint32
+void
 handler_display::set_video_mode ()
 {
   window_width = 320 * resolution;
@@ -122,14 +118,15 @@ handler_display::set_video_mode ()
     {
       std::cout << ">handler_display::set_video_mode() " << window_width
         << "x" << window_height << std::endl;
-  }
+    }
 
   /* initializes SDL */
   if (SDL_Init (SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE | SDL_INIT_AUDIO) < 0)
     {
-      fprintf (stderr, "handler_display::initialize() : sdl_init: %s",
-               SDL_GetError ());
-      return (erreur_num = E_SDLERROR);
+      std::cerr << "!handler_display::set_video_mode() " <<
+        "SDL_Init() return " << SDL_GetError () << std::endl;
+      throw std::runtime_error ("!handler_display::set_video_mode() "
+                                "SDL_Init() failed!");
     }
 
   /* test if the video mode is available */
@@ -139,20 +136,23 @@ handler_display::set_video_mode ()
       flag = flag | SDL_FULLSCREEN;
     }
   Uint32 bpp = SDL_VideoModeOK (window_width, window_height, bitspixels, flag);
-  if (bpp == 0)
+  if (0 == bpp)
     {
-      fprintf (stderr, "(!)handler_display::set_video_mode() "
-               "SDL_VideoModeOK() Mode not available: %s", SDL_GetError ());
-      return (erreur_num = E_SDLERROR);
+      std::cerr << "!handler_display::set_video_mode() " <<
+        "SDL_VideoModeOK() " << "return " << SDL_GetError () << std::endl;
+      throw std::runtime_error ("!handler_display::set_video_mode() "
+                                "SDL_VideoModeOK() failed!");
     }
 
   /* initialize the video mode */
   sdl_screen = SDL_SetVideoMode (window_width, window_height, bitspixels, flag);
-  if (sdl_screen == NULL)
-    {
-      fprintf (stderr, "(!)handler_display::set_video_mode()" 
-               "SDL_SetVideoMode() return %s\n", SDL_GetError ());
-      return (erreur_num = E_SDLERROR);
+  if (NULL == sdl_screen)
+{
+      std::cerr << "!handler_display::set_video_mode() " << 
+        "SDL_SetVideoMode() " << "return " << SDL_GetError ()
+        << std::endl;
+      throw std::runtime_error ("!handler_display::set_video_mode() "
+                                "SDL_SetVideoMode() failed!");
     }
   SDL_WM_SetCaption (window_title, window_title);
 
@@ -162,7 +162,6 @@ handler_display::set_video_mode ()
   SDL_ShowCursor (SDL_DISABLE);
 #endif
   SDL_EnableUNICODE (1);
-  return E_NO_ERROR;
 }
 
 /**
@@ -172,7 +171,7 @@ handler_display::set_video_mode ()
 Uint32
 handler_display::get_width ()
 {
-  return (Sint32) (sdl_screen->w);
+  return sdl_screen->w;
 }
 
 /**
@@ -182,7 +181,7 @@ handler_display::get_width ()
 Uint32
 handler_display::get_height ()
 {
-  return (Sint32) (sdl_screen->h);
+  return sdl_screen->h;
 }
 
 /**
@@ -214,11 +213,11 @@ handler_display::get_bits_per_pixel ()
   return bitspixels;
 }
 
-// -----------------------------------------------------------------------------
-// affiche des informations sur SDL
-// -----------------------------------------------------------------------------
-Sint32
-handler_display::SDL_informations ()
+/**
+ * Display some SDL infos
+ */
+void
+handler_display::get_info ()
 {
   const SDL_VideoInfo *vi;
   char namebuf[32] = { "123456789012345678901234567890\0" };
@@ -228,7 +227,7 @@ handler_display::SDL_informations ()
   if (modes == (SDL_Rect **) 0)
     {
       printf ("No modes available!\n");
-      return 1;
+      return;
     }
   if (modes == (SDL_Rect **) - 1)
     printf ("All resolutions available.\n");
@@ -278,7 +277,6 @@ handler_display::SDL_informations ()
           vi->video_mem);
   char *c = SDL_VideoDriverName (namebuf, 32);
   printf ("the name of the video driver=%s\n", c);
-  return 0;
 }
 
 
@@ -300,7 +298,7 @@ handler_display::check_if_toggle_fullscreen ()
           optionfull = true;
         }
       display->set_video_mode ();
-      display->enable_palette (ze_palette);
+      display->enable_palette (sdl_palette);
     }
 }
 
@@ -321,7 +319,6 @@ handler_display::wait_frame ()
       delay_ticks_amount += sdl_ticks;
       if (--delay_change_counter <= 0)
         {
-          //printf("((%i * %i) - %i) / %i)\n", game_speed, DELAY_CHANGE_MAX, delay_ticks_amount, DELAY_CHANGE_MAX);
           delay_value = ((game_speed * DELAY_CHANGE_MAX) - delay_ticks_amount) / DELAY_CHANGE_MAX;
           delay_change_counter = DELAY_CHANGE_MAX;
           delay_ticks_amount = 0;
@@ -329,7 +326,6 @@ handler_display::wait_frame ()
             {
               delay_value = 1;
             }
-          //printf("delay_value:%i \n", delay_value);
         }
       if (delay_value > 0)
         {
@@ -390,9 +386,12 @@ handler_display::ecran_next (Sint32 zbase, Sint32 offsx, Sint32 offsy)
 void
 handler_display::enable_palette (unsigned char *pal)
 {
-  printf(">>>>>>>>>> handler_display::enable_palette \n");
+  if (is_verbose)
+    {
+      std::cout << "handler_display::enable_palette() " << std::endl;
+    }
   unsigned char *p = pal;
-  SDL_Color *color = &ze_palette[0];
+  SDL_Color *color = &sdl_palette[0];
   Uint32 k = 0;
   for (Uint32 i = 0; i < 256; i++)
     {
@@ -402,9 +401,9 @@ handler_display::enable_palette (unsigned char *pal)
       color++;
     }
 
-  game_screen->set_palette (ze_palette);
-  background_screen->set_palette (ze_palette);
-  SDL_SetPalette (sdl_screen, SDL_LOGPAL | SDL_PHYSPAL, ze_palette, 0, 256);
+  game_screen->set_palette (sdl_palette);
+  background_screen->set_palette (sdl_palette);
+  SDL_SetPalette (sdl_screen, SDL_LOGPAL | SDL_PHYSPAL, sdl_palette, 0, 256);
 }
 
 /**
@@ -414,17 +413,13 @@ handler_display::enable_palette (unsigned char *pal)
 void
 handler_display::enable_palette (SDL_Color * pal)
 {
-  printf("===============> handler_display::enable_palette *SDL* \n");
+  if (is_verbose)
+    {
+      std::cout << "handler_display::enable_palette(SLD) " << std::endl;
+    }
   game_screen->set_palette (pal);
   background_screen->set_palette (pal);
   SDL_SetPalette (sdl_screen, SDL_LOGPAL | SDL_PHYSPAL, pal, 0, 256);
-  for (Uint32 i = 0; i < 256; i++)
-    {
-      printf("%03d:%x%x%x; ", i, pal[i].r, pal[i].g, pal[i].b); 
-      if(i % 11 == 0)
-	printf("\n");
-    }
-   printf("\n");
 }
 
 /**
@@ -434,7 +429,7 @@ handler_display::enable_palette (SDL_Color * pal)
 SDL_Color *
 handler_display::get_palette ()
 {
-  return ze_palette;
+  return sdl_palette;
 }
 
 //------------------------------------------------------------------------------
@@ -480,25 +475,6 @@ handler_display::bufferCTab ()
   SDL_UpdateRect (sdl_screen, 0, 0, sdl_screen->w, sdl_screen->h);
   if (tilt_offset > 0)
     tilt_offset--;
-}
-
-//-------------------------------------------------------------------------------
-// tampon memory: display shadow box
-//-------------------------------------------------------------------------------
-void
-handler_display::rectShadow (Sint32 pos_x, Sint32 pos_y, Sint32 width,
-                             Sint32 heigh)
-{
-  char k = (char) (0x80);
-  Sint32 l = width;
-  Sint32 m = pos_y + heigh;
-  for (Sint32 j = pos_y; j < m; j++)
-    {
-      //char *monPT = tampon_pos (pos_x, j);
-      char *monPT = background_screen->get_pixel_data (pos_x, j);
-      for (Sint32 i = 0; i < l; i++)
-        *(monPT)++ |= k;
-    }
 }
 
 //-------------------------------------------------------------------------------
