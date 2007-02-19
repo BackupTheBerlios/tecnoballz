@@ -1,14 +1,14 @@
 /** 
  * @file sprite_bullet.h
  * @brief The bullet sprite from a guardian 
- * @date 2007-02-06
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_bullet.h,v 1.2 2007/02/06 20:41:33 gurumeditation Exp $
+ * $Id: sprite_bullet.h,v 1.3 2007/02/19 21:03:35 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,21 +58,21 @@ private:
 public:
     sprite_bullet ();
    ~sprite_bullet ();
-  void execution1 ();
+  void move ();
 
 private:
-  void dmissile01 ();
-  void dmissile02 ();
-  void dmissile03 ();
-  void dmissile04 ();
-  void dmissile05 ();
-  void dmissile06 ();
-  void dmissile07 ();
-  void dmissile08 ();
-  void dmissile09 ();
-  void dmissile10 ();
-  void dmissile11 ();
-  void dmissile12 ();
+  void trajectory_01 ();
+  void trajectory_02 ();
+  void trajectory_03 ();
+  void trajectory_04 ();
+  void trajectory_05 ();
+  void trajectory_06 ();
+  void trajectory_07 ();
+  void trajectory_08 ();
+  void trajectory_09 ();
+  void trajectory_10 ();
+  void trajectory_11 ();
+  void trajectory_12 ();
   void screenOver (Sint32 xmini);
   void screenStop (Sint32 vmini);
 };

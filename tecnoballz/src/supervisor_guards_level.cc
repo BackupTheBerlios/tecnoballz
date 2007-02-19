@@ -5,11 +5,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.24 2007/02/19 15:40:27 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.25 2007/02/19 21:03:35 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,13 +40,12 @@ supervisor_guards_level::supervisor_guards_level ()
   paddles = controller_paddles::get_instance ();
   ptMoveText = new controller_fontes_game ();
   explosions = controller_explosions::get_instance ();
-  sprite_paddle *paddle = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
-  bullets = new controller_bullets (paddle, explosions);
+  bullets = controller_bullets::get_instance ();
   money_capsules = controller_moneys::get_instance ();
   power_up_capsules = controller_capsules::get_instance ();
   balls = new controller_balls ();
-  viewfinders_paddles = new controller_viewfinders ();
-  player_indicators = new controller_indicators ();
+  viewfinders_paddles = controller_viewfinders::get_instance ();
+  player_indicators = controller_indicators::get_instance ();
   ptMiniMess = new zeMiniMess ();
   gigablitz = controller_gigablitz::get_instance ();
   game_over = controller_game_over::get_instance ();
@@ -288,9 +287,9 @@ supervisor_guards_level::main_loop ()
     }
   else
     {
-      //######################################################
-      // game running !
-      //######################################################
+      /*
+       * game running !
+       */
       display->wait_frame ();
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
         {
@@ -303,20 +302,20 @@ supervisor_guards_level::main_loop ()
           viewfinders_paddles->run ();
           /* moving guards, and fire bullets and gigablitz */
           guards->run ();
-          bullets->execution1 ();    //moving the guards's weapons
-          bullets->bumper_col ();    //collision weapons with the bumper
+          bullets->move ();
+          bullets->check_paddle_collisions ();
           money_capsules->move_bottom ();
           power_up_capsules->move_in_guardians_levels ();
           ptMoveText->goMoveText ();
           player_indicators->display_money_and_lifes ();
           gigablitz->execution2 ();    //move the Gigablitz from guards
           explosions->play_animation ();
-          bullets->anim_fires ();    //the animation of the guards's weapons
+          bullets->play_animation_loop ();
 
         }
       else
         {
-          bullets->anim_fires ();
+          bullets->play_animation_loop ();
           tiles_map->scrolling1 (0);
           display->lock_surfaces ();
         }
@@ -415,9 +414,9 @@ supervisor_guards_level::run_scroll ()
       scrolSpeed = 0;
       return;
     }
-  sprite_bullet *weapo = bullets->getWeapOne ();
-  sprite_ball *balle = balls->first_ball ();
-  scrolSpeed = guards->get_scrolling_speed (scrollType, scrolSpeed, balle, weapo);
+  sprite_bullet *bullet = bullets->get_last_bullet ();
+  sprite_ball *ball = balls->first_ball ();
+  scrolSpeed = guards->get_scrolling_speed (scrollType, scrolSpeed, ball, bullet);
 }
 
 //------------------------------------------------------------------------------
@@ -427,7 +426,9 @@ void
 supervisor_guards_level::cheat_keys ()
 {
   if (!cheat_flag)
-    return;
+    {
+      return;
+    }
   if (!keyboard->key_is_pressed (SDLK_RSHIFT) ||
       keyboard->key_is_pressed (SDLK_LSHIFT) ||
       !keyboard->key_is_pressed (SDLK_RCTRL) ||

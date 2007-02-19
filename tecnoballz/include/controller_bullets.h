@@ -1,14 +1,14 @@
 /** 
  * @file controller_bullets.h 
  * @brief Bullets controller 
- $ @date 2007-02-08
+ * @date 2007-02-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bullets.h,v 1.3 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_bullets.h,v 1.4 2007/02/19 21:03:35 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,6 @@ class controller_bullets;
 #include "../include/sprite_bullet.h"
 #include "../include/objects_list.h"
 #include "../include/sprite_guardian.h"
-#include "../include/sprite_paddle.h"
-#include "../include/controller_explosions.h"
 
 class controller_bullets:public objects_list < sprite_bullet, controller_bullets >
 {
@@ -46,29 +44,27 @@ private:
   static const Sint16 tir04_posi[14];
   static const Sint16 tir10_posi[12];
   static const Sint16 fire_sinus[60];
-  sprite_paddle *ptbumper01;
-  controller_explosions *explosions;
 
 public:
-    controller_bullets (sprite_paddle * pBump, controller_explosions * pexpl);
+    controller_bullets ();
    ~controller_bullets ();
-  void execution1 ();
-  void anim_fires ();
-  void bumper_col ();
-  sprite_bullet *getWeapOne ();
-  void newMissile (Sint32 nfire, sprite_guardian * pgard);
+  void move ();
+  void play_animation_loop ();
+  void check_paddle_collisions ();
+  sprite_bullet *get_last_bullet ();
+  void fire (Uint32 fire_id, sprite_guardian * guardian);
 
 private:
-  void tir01_init (sprite_guardian * pgard);
-  void tir02_init (sprite_guardian * pgard);
-  void tir03_init (sprite_guardian * pgard);
-  void tir04_init (sprite_guardian * pgard);
-  void tir05_init (sprite_guardian * pgard);
-  void tir06_init (sprite_guardian * pgard);
-  void tir07_init (sprite_guardian * pgard);
-  void tir08_init (sprite_guardian * pgard);
-  void tir09_init (sprite_guardian * pgard);
-  void tir10_init (sprite_guardian * pgard);
-  void tir11_init (sprite_guardian * pgard);
+  void init_fire_01 (sprite_guardian * pgard);
+  void init_fire_02 (sprite_guardian * pgard);
+  void init_fire_03 (sprite_guardian * pgard);
+  void init_fire_04 (sprite_guardian * pgard);
+  void init_fire_05 (sprite_guardian * pgard);
+  void init_fire_06 (sprite_guardian * pgard);
+  void init_fire_07 (sprite_guardian * pgard);
+  void init_fire_08 (sprite_guardian * pgard);
+  void init_fire_09 (sprite_guardian * pgard);
+  void init_fire_10 (sprite_guardian * pgard);
+  void init_fire_11 (sprite_guardian * pgard);
 };
 #endif

@@ -1,14 +1,14 @@
 /** 
  * @file sprite_bullet.cc 
  * @brief The bullet sprite from a guardian 
- * @date 2007-02-06
+ * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_bullet.cc,v 1.1 2007/02/06 16:28:17 gurumeditation Exp $
+ * $Id: sprite_bullet.cc,v 1.2 2007/02/19 21:03:35 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,61 +53,62 @@ sprite_bullet::~sprite_bullet ()
 {
 }
 
-//------------------------------------------------------------------------------
-// select a trajectory
-//------------------------------------------------------------------------------
+/**
+ * Move the bullet
+ */
 void
-sprite_bullet::execution1 ()
+sprite_bullet::move ()
 {
-  if (is_enabled)
+  if (!is_enabled)
     {
+      return;
+    }
       switch (is_enabled)
         {
         case 1:
-          dmissile01 ();
+          trajectory_01 ();
           break;
         case 2:
-          dmissile02 ();
+          trajectory_02 ();
           break;
         case 3:
-          dmissile03 ();
+          trajectory_03 ();
           break;
         case 4:
-          dmissile04 ();
+          trajectory_04 ();
           break;
         case 5:
-          dmissile05 ();
+          trajectory_05 ();
           break;
         case 6:
-          dmissile06 ();
+          trajectory_06 ();
           break;
         case 7:
-          dmissile07 ();
+          trajectory_07 ();
           break;
         case 8:
-          dmissile08 ();
+          trajectory_08 ();
           break;
         case 9:
-          dmissile09 ();
+          trajectory_09 ();
           break;
         case 10:
-          dmissile10 ();
+          trajectory_10 ();
           break;
         case 11:
-          dmissile11 ();
+          trajectory_11 ();
           break;
         case 12:
-          dmissile12 ();
+          trajectory_12 ();
           break;
         }
-    }
 }
 
 //------------------------------------------------------------------------------
 // weapons: trajectory number 1
 //------------------------------------------------------------------------------
 void
-sprite_bullet::dmissile01 ()
+sprite_bullet::trajectory_01 ()
 {
   y_coord = y_coord + (4 * resolution);
   Sint32 v = tablesinus[++flagDepla1];
@@ -124,7 +125,7 @@ sprite_bullet::dmissile01 ()
 // weapons: trajectory number 2
 //------------------------------------------------------------------------------
 void
-sprite_bullet::dmissile02 ()
+sprite_bullet::trajectory_02 ()
 {
   flagDepla3 = flagDepla3 + 2;
   if (tablesinus[flagDepla3] == 99)     //end of the table?
@@ -139,7 +140,7 @@ sprite_bullet::dmissile02 ()
 // weapons: trajectory number 3
 //------------------------------------------------------------------------------
 void
-sprite_bullet::dmissile03 ()
+sprite_bullet::trajectory_03 ()
 {
   y_coord = y_coord + (4 * resolution);
   screenOver (tir_minixy);
@@ -149,7 +150,7 @@ sprite_bullet::dmissile03 ()
 // weapons: trajectory number 4
 //------------------------------------------------------------------------------
 void
-sprite_bullet::dmissile04 ()
+sprite_bullet::trajectory_04 ()
 {
   if (flagDepla5)
     {
@@ -176,7 +177,7 @@ sprite_bullet::dmissile04 ()
 // weapons: trajectory number 5
 //------------------------------------------------------------------------------
 void
-sprite_bullet::dmissile05 ()
+sprite_bullet::trajectory_05 ()
 {
   if (flagDepla1)
     {
@@ -195,7 +196,7 @@ sprite_bullet::dmissile05 ()
 // weapons: trajectory number 6
 //------------------------------------------------------------------------------
 void
-sprite_bullet::dmissile06 ()
+sprite_bullet::trajectory_06 ()
 {
   flagDepla3 = flagDepla3 + 2;
   if (tablesinus[flagDepla3] == 99)     //end of the table?
@@ -216,7 +217,7 @@ sprite_bullet::dmissile06 ()
 // weapons: trajectory number 7
 //------------------------------------------------------------------------------
 void
-sprite_bullet::dmissile07 ()
+sprite_bullet::trajectory_07 ()
 {
   y_coord = y_coord + (3 * resolution); //new position y 
   if (y_coord < (150 * resolution))
@@ -232,7 +233,7 @@ sprite_bullet::dmissile07 ()
 // weapons: trajectory number 8 - infernal circle (circle which grows)
 //------------------------------------------------------------------------------
 void
-sprite_bullet::dmissile08 ()
+sprite_bullet::trajectory_08 ()
 {
   flagDepla3 = flagDepla3 + 2;
   if (flagDepla3 >= 360)
@@ -252,7 +253,7 @@ sprite_bullet::dmissile08 ()
 // weapons: trajectory number 9 - sucker circle (circle which rebounds )
 //------------------------------------------------------------------------------
 void
-sprite_bullet::dmissile09 ()
+sprite_bullet::trajectory_09 ()
 {
   flagDepla3 = flagDepla3 + 4;
   if (flagDepla3 >= 360)
@@ -284,7 +285,7 @@ sprite_bullet::dmissile09 ()
 // weapons: trajectory number 10 - elipse
 //------------------------------------------------------------------------------
 void
-sprite_bullet::dmissile10 ()
+sprite_bullet::trajectory_10 ()
 {
   flagDepla3 = flagDepla3 + 6;
   if (flagDepla3 >= 360)
@@ -310,7 +311,7 @@ sprite_bullet::dmissile10 ()
 // weapons: trajectory number 11 - triangle I
 //------------------------------------------------------------------------------
 void
-sprite_bullet::dmissile11 ()
+sprite_bullet::trajectory_11 ()
 {
   flagDepla3 = flagDepla3 + 4;
   if (flagDepla3 >= 360)
@@ -330,7 +331,7 @@ sprite_bullet::dmissile11 ()
 // weapons: trajectory number 12 - triangle II
 //------------------------------------------------------------------------------
 void
-sprite_bullet::dmissile12 ()
+sprite_bullet::trajectory_12 ()
 {
   flagDepla3 = flagDepla3 + 4;
   if (flagDepla3 >= 360)

@@ -5,11 +5,11 @@
  * @date 2007-02-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.cc,v 1.6 2007/02/19 15:40:27 gurumeditation Exp $
+ * $Id: sprite_guardian.cc,v 1.7 2007/02/19 21:03:35 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -196,7 +196,7 @@ sprite_guardian::start_fire ()
               gardptfire = 0;
             }
           gardptfire++;         // pt/next weapons
-          ptMissiles->newMissile (nfire, this);
+          ptMissiles->fire (nfire, this);
         }
     }
 }
