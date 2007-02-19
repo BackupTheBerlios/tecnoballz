@@ -2,14 +2,14 @@
  * @file controller_guardians.cc 
  * @brief Guardians controller 
  * @created 2003-01-10 
- * @date 2007-02-09
+ * @date 2007-02-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.cc,v 1.6 2007/02/09 20:35:12 gurumeditation Exp $
+ * $Id: controller_guardians.cc,v 1.7 2007/02/19 15:40:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,11 +78,8 @@ controller_guardians::~controller_guardians ()
  * @param pExpl
  */
 void
-controller_guardians::create_guardians_list (controller_bullets * pMiss, Sint32 grdPt,
-                                  controller_gigablitz * pBliz, controller_explosions * pExpl)
+controller_guardians::create_guardians_list (controller_bullets * pMiss, Sint32 grdPt)
 {
-  ptGigaBlit = pBliz;
-  pexplosion = pExpl;
 
   /* count the number of guardians, 1 or 2 guardians */
   max_of_sprites = -1;
@@ -123,9 +120,7 @@ controller_guardians::create_guardians_list (controller_bullets * pMiss, Sint32 
       sprites_list[i] = guard;
       sprites->add (guard);
       guard->enable ();
-      guard->init_guard (&guard_list[p],
-                         getLissaPt (guard_list[p].para_lissa), pMiss,
-                         ptGigaBlit, pexplosion);
+      guard->init_guard (&guard_list[p], getLissaPt (guard_list[p].para_lissa), pMiss);
     }
 
   /*
@@ -168,12 +163,12 @@ controller_guardians::set_gauge_height ()
     {
       sprite_guardian *guard_sprite = sprites_list[i];
       sprite_object *gauge_sprite = life_gauges_list[i];
-      if (!guard_sprite->gard_power)
+      if (!guard_sprite->energy_level)
         {
           gauge_sprite->disable ();
           break;
         }
-      Uint32 h = guard_sprite->gard_power / 4;
+      Uint32 h = guard_sprite->energy_level / 4;
       gauge_sprite->enable_vertical_repeat (h);
       if (0 == h)
         {
@@ -212,7 +207,7 @@ controller_guardians::is_guardians_destroyed ()
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_guardian *guard_sprite = sprites_list[i];
-      if (guard_sprite->gard_power > 0)
+      if (guard_sprite->energy_level > 0)
         {
           is_finished = false;
         }
@@ -228,18 +223,18 @@ controller_guardians::killguards (Sint32 numGa)
     case 2:
       if (max_of_sprites > 1)
         {
-          if (sprites_list[1]->gard_power)
+          if (sprites_list[1]->energy_level)
             {
-              sprites_list[1]->gard_power = 0;
+              sprites_list[1]->energy_level = 0;
               sprites_list[1]->explo_time = 500;
             }
         }
       break;
 
     case 1:
-      if (sprites_list[0]->gard_power)
+      if (sprites_list[0]->energy_level)
         {
-          sprites_list[0]->gard_power = 0;
+          sprites_list[0]->energy_level = 0;
           sprites_list[0]->explo_time = 500;
         }
       break;
@@ -247,16 +242,16 @@ controller_guardians::killguards (Sint32 numGa)
     default:
       if (max_of_sprites > 1)
         {
-          if (sprites_list[1]->gard_power)
+          if (sprites_list[1]->energy_level)
             {
-              sprites_list[1]->gard_power = 0;
+              sprites_list[1]->energy_level = 0;
               sprites_list[1]->explo_time = 500;
             }
         }
 
-      if (sprites_list[0]->gard_power)
+      if (sprites_list[0]->energy_level)
         {
-          sprites_list[0]->gard_power = 0;
+          sprites_list[0]->energy_level = 0;
           sprites_list[0]->explo_time = 500;
         }
       break;
@@ -264,46 +259,57 @@ controller_guardians::killguards (Sint32 numGa)
 
 }
 
-//-------------------------------------------------------------------------------
-// handle background scrolling (direction and speed)
-//-------------------------------------------------------------------------------
+/**
+ * Return speed and direction of the vertical scrolling
+ * @param ntype
+ * @param speed the current speed of the scrolling
+ * @param ball the first found ball 
+ * @param weapo the first found bullet 
+ * @return the speed of the scrolling
+ */
 Sint32
-controller_guardians::run_scroll (Uint32 ntype, Sint32 speed,
-                                  sprite_ball * balle, sprite_bullet * weapo)
+controller_guardians::get_scrolling_speed (Uint32 ntype, Sint32 speed,
+                                  sprite_ball * ball, sprite_bullet * weapo)
 {
-  sprite_guardian *pGua1, *pGua2;
+  sprite_guardian *guard1, *guard2;
   if (max_of_sprites < 1)
-    return speed;
-  pGua1 = sprites_list[0];
+    {
+      return speed;
+    }
+  guard1 = sprites_list[0];
   if (max_of_sprites > 1)
-    pGua2 = sprites_list[1];
+    {
+      guard2 = sprites_list[1];
+    }
   else
-    pGua2 = pGua1;
+    {
+      guard2 = guard1;
+    }
 
   switch (ntype)
     {
-      //###############################################################
-      // medium area 1 (SCROLL DOWN)
-      //###############################################################
+    /*
+     * medium area 1 (SCROLL DOWN)
+     */
     case 1:
-      if (!pGua1->gard_power && !pGua2->gard_power)
+      if (!guard1->energy_level && !guard2->energy_level)
         speed = 2;
       else
         {
-          if (!pGua1->gard_power || !pGua2->gard_power)
+          if (!guard1->energy_level || !guard2->energy_level)
             speed = 1;
           else
             speed = 0;
         }
       break;
 
-      //###############################################################
-      // final area 1 (SCROLL GUARD 1)
-      //###############################################################
+    /*
+     * final area 1 (SCROLL GUARD 1)
+     */
     case 2:
-      if (pGua1->gard_power)
+      if (guard1->energy_level)
         {
-          Sint32 gposy = pGua1->y_coord;
+          Sint32 gposy = guard1->y_coord;
           if (scrollTemp)
             {
               gposy = scrollTemp - gposy;
@@ -311,7 +317,7 @@ controller_guardians::run_scroll (Uint32 ntype, Sint32 speed,
               if (gposy)
                 speed = gposy;
             }
-          scrollTemp = pGua1->y_coord;
+          scrollTemp = guard1->y_coord;
         }
       break;
 
@@ -319,11 +325,11 @@ controller_guardians::run_scroll (Uint32 ntype, Sint32 speed,
       // medium area 2 (SCROLL COLLISION 1)
       //###############################################################
     case 3:
-      if (pGua1->gard_touch && pGua1->gard_power)
+      if (guard1->gard_touch && guard1->energy_level)
         speed = -1;
       else
         {
-          if (pGua2->gard_touch && pGua2->gard_power)
+          if (guard2->gard_touch && guard2->energy_level)
             speed = 1;
         }
       break;
@@ -332,16 +338,16 @@ controller_guardians::run_scroll (Uint32 ntype, Sint32 speed,
       // final area 2 (SCROLL BALL 1)
       //###############################################################
     case 4:
-      if (pGua1->gard_power)
+      if (guard1->energy_level)
         {
-          if (balle->colleBallF || !balle->is_enabled)
+          if (ball->colleBallF || !ball->is_enabled)
             {
               speed = -1;
               scrollTemp = 0;
             }
           else
             {
-              Sint32 gposy = balle->y_coord;
+              Sint32 gposy = ball->y_coord;
               if (scrollTemp)
                 {
                   gposy = scrollTemp - gposy;
@@ -349,7 +355,7 @@ controller_guardians::run_scroll (Uint32 ntype, Sint32 speed,
                   if (gposy)
                     speed = gposy;
                 }
-              scrollTemp = balle->y_coord;
+              scrollTemp = ball->y_coord;
             }
         }
       break;
@@ -358,14 +364,14 @@ controller_guardians::run_scroll (Uint32 ntype, Sint32 speed,
       // medium area 3 (SCROLL COLLISION 2)
       //###############################################################
     case 5:
-      if (pGua1->gard_touch && pGua1->gard_power)
+      if (guard1->gard_touch && guard1->energy_level)
         {
           if (--speed < (-4 * resolution))
             speed = (-4 * resolution);
         }
       else
         {
-          if (pGua2->gard_touch && pGua2->gard_power)
+          if (guard2->gard_touch && guard2->energy_level)
             {
               if (++speed > (4 * resolution))
                 speed = (4 * resolution);
@@ -377,16 +383,16 @@ controller_guardians::run_scroll (Uint32 ntype, Sint32 speed,
       // final area 3 (SCROLL GUARD 2)
       //###############################################################
     case 6:
-      if (pGua1->gard_power)
+      if (guard1->energy_level)
         {
-          Sint32 gposy = pGua1->y_coord;
+          Sint32 gposy = guard1->y_coord;
           if (scrollTemp)
             {
               gposy = gposy - scrollTemp;
               if (gposy)
                 speed = gposy * 2;
             }
-          scrollTemp = pGua1->y_coord;
+          scrollTemp = guard1->y_coord;
         }
       break;
 
@@ -438,14 +444,14 @@ controller_guardians::run_scroll (Uint32 ntype, Sint32 speed,
       // medium area 5 (SCROLL COLLISION 3)
       //###############################################################
     case 9:
-      if (pGua1->gard_touch && pGua1->gard_power)
+      if (guard1->gard_touch && guard1->energy_level)
         {
           if (--speed < (-16 * resolution))
             speed = (-16 * resolution);
         }
       else
         {
-          if (pGua2->gard_touch && pGua2->gard_power)
+          if (guard2->gard_touch && guard2->energy_level)
             {
               if (++speed > (16 * resolution))
                 speed = (16 * resolution);

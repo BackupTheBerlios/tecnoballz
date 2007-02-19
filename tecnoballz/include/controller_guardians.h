@@ -2,14 +2,14 @@
  * @file controller_guardians.h
  * @brief Guardians controller 
  * @created 2003-01-10 
- * @date 2007-02-06
+ * @date 2007-02-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.h,v 1.5 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_guardians.h,v 1.6 2007/02/19 15:40:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,8 +56,8 @@ gardlevel;
 #include "../include/list_sprites.h"
 #include "../include/objects_list.h"
 #include "../include/controller_bullets.h"
-#include "../include/controller_gigablitz.h"
-#include "../include/controller_explosions.h"
+#include "../include/sprite_ball.h"
+
 
 class controller_guardians:public objects_list < sprite_guardian, controller_guardians >
 {
@@ -69,18 +69,15 @@ private:
 public:
     controller_guardians ();
    ~controller_guardians ();
-  void create_guardians_list (controller_bullets * pMiss, Sint32 grdPt,
-                     controller_gigablitz * pBliz, controller_explosions * pExpl);
+  void create_guardians_list (controller_bullets * pMiss, Sint32 grdPt);
   void run ();
   void killguards (Sint32 numGa = 0);
   bool is_guardians_destroyed ();
-  Sint32 run_scroll (Uint32, Sint32, sprite_ball *, sprite_bullet *);
+  Sint32 get_scrolling_speed (Uint32, Sint32, sprite_ball *, sprite_bullet *);
 private:
   Sint32 scrollTemp;          //use for scroll background
   Sint32 offset_ptr;
   unsigned char *displacement_curve;
-  controller_gigablitz *ptGigaBlit;
-  controller_explosions *pexplosion;
   sprite_object **life_gauges_list;
 
 public:
@@ -107,20 +104,5 @@ private:
       LISSA_NB15
     }
   CURVE_ID;
-
-/*
-  static const Sint32 LISSA_NB01 = 0;
-  static const Sint32 LISSA_NB02 = 1;
-  static const Sint32 LISSA_NB03 = 2;
-  static const Sint32 LISSA_NB04 = 3;
-  static const Sint32 LISSA_NB05 = 4;
-  static const Sint32 LISSA_NB07 = 5;
-  static const Sint32 LISSA_NB08 = 6;
-  static const Sint32 LISSA_NB09 = 7;
-  static const Sint32 LISSA_NB11 = 8;
-  static const Sint32 LISSA_NB12 = 9;
-  static const Sint32 LISSA_NB13 = 10;
-  static const Sint32 LISSA_NB15 = 11;
- */
 };
 #endif

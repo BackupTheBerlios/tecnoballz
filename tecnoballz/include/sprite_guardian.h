@@ -2,14 +2,14 @@
  * @file sprite_guardian.h
  * @brief The guardian sprite 
  * @created 2003-01-09 
- * @date 2007-02-08
+ * @date 2007-02-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.h,v 1.4 2007/02/08 20:40:39 gurumeditation Exp $
+ * $Id: sprite_guardian.h,v 1.5 2007/02/19 15:40:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ private:
   const static Sint32 table_gga1[8];    //table different size of gigablitz
   const static Sint32 table_gga2[8];    //table different size of gigablitz
 
-  Sint32 gard_power;            //strength
+  Sint32 energy_level;            //strength
   Sint32 explo_time;            //duration of the explosions
   Sint32 explotempo;
   Sint32 gard_xcent;            //middle x from where weapons starts
@@ -71,16 +71,13 @@ private:
   unsigned char *ptr_lissa1;
   unsigned char *ptr_lissa2;
   controller_bullets *ptMissiles;
-  controller_gigablitz *ptGigaBlit;
-  controller_explosions *explosions;
   Sint32 hasardval2;
 
 public:
     sprite_guardian ();
    ~sprite_guardian ();
-  Sint32 init_guard (gardlevel * guard, unsigned char *ptLis,
-                     controller_bullets * pMiss, controller_gigablitz * pBliz,
-                     controller_explosions * pexpl);
+  void init_guard (gardlevel * guard, unsigned char *ptLis,
+                     controller_bullets * pMiss);
   void run (Uint32 voffset);
 
 private:

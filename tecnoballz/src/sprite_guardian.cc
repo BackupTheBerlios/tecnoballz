@@ -2,14 +2,14 @@
  * @file sprite_guardian.cc 
  * @brief The guardian sprite 
  * @created 2003-01-09 
- * @date 2007-02-06
+ * @date 2007-02-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.cc,v 1.5 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: sprite_guardian.cc,v 1.6 2007/02/19 15:40:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
  */
 sprite_guardian::sprite_guardian ()
 {
-  gard_power = 0;
+  energy_level = 0;
   gard_xcent = 0;
   gardwaitf1 = 0;
   gardwaitf2 = 0;
@@ -61,23 +61,21 @@ sprite_guardian::~sprite_guardian ()
 {
 }
 
-//-----------------------------------------------------------------------------
-// perform some initializations
-//-----------------------------------------------------------------------------
-Sint32
-sprite_guardian::init_guard (gardlevel * guard, unsigned char *ptLis,
-                             controller_bullets * pMiss, controller_gigablitz * pBliz,
-                             controller_explosions * pexpl)
+/** 
+ * perform some initializations
+ */
+void
+sprite_guardian::init_guard (gardlevel * guard, unsigned char *ptLis, controller_bullets * pMiss)
 {
-  ptGigaBlit = pBliz;
-  explosions = pexpl;
-  gard_power = guard->para_power * difficulty_level;  //strength 
+  energy_level = guard->para_power * difficulty_level;  //strength 
   gard_xcent = (guard->para_xcent * resolution) - (11 * resolution / 2);        //middle x from where weapons starts 
   gardwaitf1 = guard->para_waitf / difficulty_level;  //shoot frequency of gigaBlitz
   gardwaitf2 = gardwaitf1 / difficulty_level; //shoot frequency of gigaBlitz
   gard_speed = guard->para_speed;       //speed of moving
   if (difficulty_level == 4)
-    gard_speed *= 2;
+    {
+      gard_speed *= 2;
+    }
   gard_colx1 = guard->para_colx1 * resolution;
   gard_coly1 = guard->para_coly1 * resolution;
   gard_colx2 = guard->para_colx2 * resolution;
@@ -95,10 +93,13 @@ sprite_guardian::init_guard (gardlevel * guard, unsigned char *ptLis,
   y_maximum = (232 - 8 - 1 - 16) * resolution;
   ptMissiles = pMiss;
   if (sprite_width == resolution * 32)
-    explotempo = 7;
+    {
+      explotempo = 7;
+    }
   else
-    explotempo = 3;
-  return erreur_num;
+    {
+      explotempo = 3;
+    }
 }
 
 /**
@@ -108,10 +109,12 @@ sprite_guardian::init_guard (gardlevel * guard, unsigned char *ptLis,
 void
 sprite_guardian::run (Uint32 voffset)
 {
+  controller_explosions *explosions = controller_explosions::get_instance ();
+
   /**
    * guards is alive
    */
-  if (gard_power > 0)
+  if (energy_level > 0)
     {
       Sint32 x = (ptr_lissa1[0]);
       x = x * (screen_width - sprite_width) / 192;
@@ -204,19 +207,24 @@ sprite_guardian::start_fire ()
 void
 sprite_guardian::startBlitz ()
 {
-  if (gardwaitf1-- <= 0)
-    {
-      Sint32 v = random_counter & 7;
-      //v = 7;        //test only
-      if (sprite_width > (32 * resolution))
-        v = table_gga1[v];
-      else
-        v = table_gga2[v];
-      //v = 0;        //test only 
-      if (ptGigaBlit->guard_shoot (v, x_coord, y_coord,
-                                   sprite_width, sprite_height))
-        gardwaitf1 = gardwaitf2;
-    }
+  controller_gigablitz* gigablitz = controller_gigablitz::get_instance ();
+  if (gardwaitf1-- > 0)
+  {
+    return;
+  }
+  Uint32 v = random_counter & 7;
+  if (sprite_width > 32 * resolution)
+  {
+    v = table_gga1[v];
+  }
+  else
+  {
+    v = table_gga2[v];
+  }
+  if (gigablitz->guard_shoot (v, x_coord, y_coord, sprite_width, sprite_height))
+  {
+    gardwaitf1 = gardwaitf2;
+  } 
 }
 
 //-----------------------------------------------------------------------------

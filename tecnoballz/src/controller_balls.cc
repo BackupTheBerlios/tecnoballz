@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.26 2007/02/18 21:07:00 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.27 2007/02/19 15:40:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,7 +140,7 @@ controller_balls::init (Uint32 start,
   num_of_sprites = 1;
   if (super_jump == BRICKS_LEVEL)
     {
-      controller_ejectors* ejectors = controller_ejectors::get_instance ();
+      controller_ejectors *ejectors = controller_ejectors::get_instance ();
       ejectors->ballPosIni (&sprite_ball::furaxTable[0]);
     }
 }
@@ -820,7 +820,7 @@ controller_balls::vitusrobot ()
 void
 controller_balls::vitusEject ()
 {
-  controller_ejectors* ejectors = controller_ejectors::get_instance ();
+  controller_ejectors *ejectors = controller_ejectors::get_instance ();
   sprite_object *coin1 =
     ejectors->get_ejector (controller_ejectors::TOP_LEFT_EJECTOR);
   sprite_object *coin2 =
@@ -949,7 +949,8 @@ controller_balls::vitusEject ()
 void
 controller_balls::collision_with_walls ()
 {
-  controller_sides_bricks* sides_bricks = controller_sides_bricks::get_instance ();
+  controller_sides_bricks *sides_bricks =
+    controller_sides_bricks::get_instance ();
   Sint32 murGa = sides_bricks->getCollisG ();
   Sint32 murDr = sides_bricks->getCollisD ();
   Sint32 murHt = sides_bricks->getCollisH ();
@@ -1402,65 +1403,67 @@ controller_balls::vitusGuard ()
   controller_moneys *moneys = controller_moneys::get_instance ();
 
   /* number of balls from 1 to n */
-  Uint32 u = max_of_sprites;
-  sprite_ball **liste = sprites_list;
+  Uint32 numof_balls = max_of_sprites;
+  sprite_ball **balls = sprites_list;
   /* number of guardians from 1 to 2 */
-  Uint32 t = guards->get_max_of_sprites ();
-  sprite_guardian **aList = guards->get_sprites_list ();
-  for (Uint32 j = 0; j < t; j++)
+  Uint32 numof_guards = guards->get_max_of_sprites ();
+  sprite_guardian **guards_list = guards->get_sprites_list ();
+  for (Uint32 j = 0; j < numof_guards; j++)
     {
-      sprite_guardian *pGard = aList[j];
-      sprite_ball *balok = NULL;
-      if (pGard->is_enabled && pGard->gard_power > 0)
+      sprite_guardian *guardian = guards_list[j];
+      if (!guardian->is_enabled || guardian->energy_level <= 0)
         {
-          Sint32 grdx1 = pGard->x_coord;
-          Sint32 grdx2 = grdx1 + pGard->gard_colx2;
-          grdx1 += pGard->gard_colx1;
-          Sint32 grdy1 = pGard->y_coord;
-          Sint32 grdy2 = grdy1 + pGard->gard_coly2;
-          grdy1 += pGard->gard_coly1;
-          for (Uint32 i = 0; i < u; i++)
+          continue;
+        }
+      sprite_ball *balok = NULL;
+      Sint32 grdx1 = guardian->x_coord;
+      Sint32 grdx2 = grdx1 + guardian->gard_colx2;
+      grdx1 += guardian->gard_colx1;
+      Sint32 grdy1 = guardian->y_coord;
+      Sint32 grdy2 = grdy1 + guardian->gard_coly2;
+      grdy1 += guardian->gard_coly1;
+      for (Uint32 i = 0; i < numof_balls; i++)
+        {
+          sprite_ball *balle = balls[i];
+          if (!balle->is_enabled)
             {
-              sprite_ball *balle = liste[i];
-              if (balle->is_enabled)
+              continue;
+            }
+          Sint32 x = balle->x_coord;
+          if (x <= grdx2)
+            {
+              Sint32 y = balle->y_coord;
+              if (y <= grdy2)
                 {
-                  Sint32 x = balle->x_coord;
-                  if (x <= grdx2)
+                  x += balle->collision_width;
+                  if (x > grdx1)
                     {
-                      Sint32 y = balle->y_coord;
-                      if (y <= grdy2)
+                      y += balle->collision_width;
+                      if (y > grdy1)
                         {
-                          x += balle->collision_width;
-                          if (x > grdx1)
-                            {
-                              y += balle->collision_width;
-                              if (y > grdy1)
-                                {
-                                  x = ((random_counter + i) & 0xF) << 2;
+                          x = ((random_counter + i) & 0xF) << 2;
 #ifndef SOUNDISOFF
-                                  audio->play_sound (S_GARDIENT);
+                          audio->play_sound (S_GARDIENT);
 #endif
-                                  balle->directBall = x;
-                                  pGard->gard_touch = 5;
-                                  pGard->gard_power -= balle->powerBall1;
-                                  if (pGard->gard_power <= 0)
-                                    {
-                                      pGard->gard_power = 0;
-                                      pGard->explo_time = 500;
-                                    }
-                                  balok = balle;
-                                }
+                          balle->directBall = x;
+                          guardian->gard_touch = 5;
+                          guardian->energy_level -= balle->powerBall1;
+                          if (guardian->energy_level <= 0)
+                            {
+                              guardian->energy_level = 0;
+                              guardian->explo_time = 500;
                             }
+                          balok = balle;
                         }
                     }
                 }
             }
-          if (balok)
-            {
+        }
+      if (NULL != balok)
+        {
 
-              moneys->send_money_from_guardian (balok);
-              capsules->envoieGads (balok);
-            }
+          moneys->send_money_from_guardian (balok);
+          capsules->envoieGads (balok);
         }
     }
 }
@@ -1650,7 +1653,7 @@ void
 controller_balls::time_2tilt ()
 {
   bool tilt = false;
-  head_animation* head_anim = head_animation::get_instance ();
+  head_animation *head_anim = head_animation::get_instance ();
   sprite_ball **balls = sprites_list;
   Sint32 delay = balle_tilt;
   for (Uint32 i = 0; i < max_of_sprites; i++)
@@ -1739,14 +1742,13 @@ controller_balls::controll_balls ()
 //------------------------------------------------------------------------------
 // bricks levels: check if there remains at least a ball glue
 //------------------------------------------------------------------------------
-Sint32 controller_balls::least_glue ()
+Sint32
+controller_balls::least_glue ()
 {
-  sprite_ball **
-    balls = sprites_list;
+  sprite_ball **balls = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball *
-        ball = *(balls++);
+      sprite_ball *ball = *(balls++);
       if (ball->colleBallF)
         {
           return 1;
@@ -1760,67 +1762,80 @@ Sint32 controller_balls::least_glue ()
 // directions of the ball when it is leave an ejector. 
 //------------------------------------------------------------------------------
 // top-left
-Sint32 controller_balls::ballEject1[] =
-{
-52, 56, 60, 60, 52, 56, 60, 60, 52, 52, 56, 52, 52, 60, 56, 52, 56, 56};
+Sint32
+  controller_balls::ballEject1[] = {
+  52, 56, 60, 60, 52, 56, 60, 60, 52, 52, 56, 52, 52, 60, 56, 52, 56, 56
+};
 
 // bottom-left
-Sint32 controller_balls::ballEject2[] =
-{
-8, 4, 12, 12, 8, 4, 4, 12, 8, 4, 12, 4, 8, 12, 4, 8, 12, 4, 4};
+Sint32
+  controller_balls::ballEject2[] = {
+  8, 4, 12, 12, 8, 4, 4, 12, 8, 4, 12, 4, 8, 12, 4, 8, 12, 4, 4
+};
 
 // bottom-right
-Sint32 controller_balls::ballEject3[] =
-{
-20, 28, 24, 20, 20, 28, 28, 24, 20, 28, 24, 24, 28, 28, 20, 20, 24, 24, 28};
+Sint32
+  controller_balls::ballEject3[] = {
+  20, 28, 24, 20, 20, 28, 28, 24, 20, 28, 24, 24, 28, 28, 20, 20, 24, 24, 28
+};
 
 // top-right 
-Sint32 controller_balls::ballEject4[] =
-{
-36, 44, 40, 36, 36, 44, 44, 40, 40, 36, 44, 40, 40, 36, 36, 44, 44, 40, 36};
+Sint32
+  controller_balls::ballEject4[] = {
+  36, 44, 40, 36, 36, 44, 44, 40, 40, 36, 44, 40, 40, 36, 36, 44, 44, 40, 36
+};
 
 //------------------------------------------------------------------------------
 // directions of the ball after a rebound on a brick. 
 //------------------------------------------------------------------------------
-Sint32 controller_balls::rb0[16] =
-{
-64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64};
+Sint32
+  controller_balls::rb0[16] = {
+  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64
+};
 
 // right
-Sint32 controller_balls::rb1[16] =
-{
-32, 28, 24, 20, 20, 24, 24, 28, 32, 36, 40, 40, 44, 44, 40, 36};
+Sint32
+  controller_balls::rb1[16] = {
+  32, 28, 24, 20, 20, 24, 24, 28, 32, 36, 40, 40, 44, 44, 40, 36
+};
 
-Sint32 controller_balls::rb2[16] =
-{
-48, 36, 40, 44, 32, 44, 24, 28, 32, 36, 40, 44, 48, 48, 44, 40};
+Sint32
+  controller_balls::rb2[16] = {
+  48, 36, 40, 44, 32, 44, 24, 28, 32, 36, 40, 44, 48, 48, 44, 40
+};
 
 //top
-Sint32 controller_balls::rb3[16] =
-{
-60, 60, 56, 52, 48, 44, 40, 36, 36, 40, 40, 44, 48, 52, 56, 56};
+Sint32
+  controller_balls::rb3[16] = {
+  60, 60, 56, 52, 48, 44, 40, 36, 36, 40, 40, 44, 48, 52, 56, 56
+};
 
-Sint32 controller_balls::rb4[16] =
-{
-0, 4, 8, 0, 0, 52, 56, 60, 48, 52, 56, 44, 48, 52, 56, 60};
+Sint32
+  controller_balls::rb4[16] = {
+  0, 4, 8, 0, 0, 52, 56, 60, 48, 52, 56, 44, 48, 52, 56, 60
+};
 
 // left
-Sint32 controller_balls::rb5[16] =
-{
-0, 4, 8, 8, 12, 12, 8, 4, 0, 60, 56, 52, 52, 36, 56, 60};
+Sint32
+  controller_balls::rb5[16] = {
+  0, 4, 8, 8, 12, 12, 8, 4, 0, 60, 56, 52, 52, 36, 56, 60
+};
 
-Sint32 controller_balls::rb6[16] =
-{
-0, 4, 8, 12, 16, 20, 24, 12, 16, 12, 8, 4, 0, 4, 8, 60};
+Sint32
+  controller_balls::rb6[16] = {
+  0, 4, 8, 12, 16, 20, 24, 12, 16, 12, 8, 4, 0, 4, 8, 60
+};
 
 // bottom
-Sint32 controller_balls::rb7[16] =
-{
-4, 8, 12, 12, 16, 20, 20, 24, 28, 28, 24, 20, 16, 12, 8, 4};
+Sint32
+  controller_balls::rb7[16] = {
+  4, 8, 12, 12, 16, 20, 20, 24, 28, 28, 24, 20, 16, 12, 8, 4
+};
 
-Sint32 controller_balls::rb8[16] =
-{
-16, 20, 24, 12, 16, 20, 24, 28, 32, 36, 40, 28, 32, 20, 24, 28};
+Sint32
+  controller_balls::rb8[16] = {
+  16, 20, 24, 12, 16, 20, 24, 28, 32, 36, 40, 28, 32, 20, 24, 28
+};
 Sint32 *
   controller_balls::brick_jump[15] =
   { rb1, rb3, rb2, rb5, rb1, rb4, rb3, rb7, rb8, rb2, rb1, rb6, rb7, rb5,

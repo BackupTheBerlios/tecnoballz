@@ -5,11 +5,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.23 2007/02/18 21:07:00 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.24 2007/02/19 15:40:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ supervisor_guards_level::supervisor_guards_level ()
   guards = controller_guardians::get_instance ();
   paddles = controller_paddles::get_instance ();
   ptMoveText = new controller_fontes_game ();
-  explosions = new controller_explosions ();
+  explosions = controller_explosions::get_instance ();
   sprite_paddle *paddle = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
   bullets = new controller_bullets (paddle, explosions);
   money_capsules = controller_moneys::get_instance ();
@@ -48,8 +48,8 @@ supervisor_guards_level::supervisor_guards_level ()
   viewfinders_paddles = new controller_viewfinders ();
   player_indicators = new controller_indicators ();
   ptMiniMess = new zeMiniMess ();
-  gigablitz = new controller_gigablitz ();
-  game_over = new controller_game_over ();
+  gigablitz = controller_gigablitz::get_instance ();
+  game_over = controller_game_over::get_instance ();
   ptCongBall = new controller_spheres ();
   popup_menu = new handler_popup_menu ();
   ptBob_name = NULL;
@@ -114,7 +114,7 @@ supervisor_guards_level::first_init ()
    */
   resources->load_sprites_bitmap ();
   bullets->create_sprites_list ();
-  guards->create_guardians_list (bullets, grdP, gigablitz, explosions);
+  guards->create_guardians_list (bullets, grdP);
   paddles->create_paddles_sprites ();
   balls->create_sprites_list ();
   money_capsules->create_sprites_list ();
@@ -417,7 +417,7 @@ supervisor_guards_level::run_scroll ()
     }
   sprite_bullet *weapo = bullets->getWeapOne ();
   sprite_ball *balle = balls->first_ball ();
-  scrolSpeed = guards->run_scroll (scrollType, scrolSpeed, balle, weapo);
+  scrolSpeed = guards->get_scrolling_speed (scrollType, scrolSpeed, balle, weapo);
 }
 
 //------------------------------------------------------------------------------
