@@ -1,14 +1,14 @@
 /** 
  * @file sprite_projectile.h 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-02-11
+ * @date 2007-02-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.h,v 1.10 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: sprite_projectile.h,v 1.11 2007/02/20 20:52:14 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,36 +39,39 @@ class sprite_projectile;
 
 class sprite_projectile:public sprite_object
 {
-	friend class controller_projectiles;
-	friend class sprite_money;	  
-	friend class sprite_capsule;
-	friend class sprite_gem;
+  friend class controller_projectiles;
+  friend class sprite_money;
+  friend class sprite_capsule;
+  friend class sprite_gem;
 
-	private:
-		static const Sint32	maxi_fires = 200;
-		static Sint32		total_fire;
-		static sprite_projectile*	list_fires[maxi_fires];
-		static controller_bricks*	brickObjet;
-		static controller_ships*	atomsObjet;
-		Sint32				indexSinus;
-		Sint32				fire_Xscie;
-		Sint32				fire_Yscie;                          
-		sprite_paddle*			raquettePT;
-		Sint32				fire_power;		// 1 = fire destroys the indestructible-destructibles bricks 
-		Sint32				firePowerX;		// fire power 1 or 2
+private:
+  static const Uint32 MAXI_TOTAL_OF_PROJECTILES = 200;
+  static Uint32 total_fire;
+  static sprite_projectile *projectiles_list[MAXI_TOTAL_OF_PROJECTILES];
+  static controller_bricks *brickObjet;
+  static controller_ships *atomsObjet;
+  Sint32 indexSinus;
+  Sint32 fire_Xscie;
+  Sint32 fire_Yscie;
+  /* Paddle to which the projectile belongs. Used for the capsules */
+  sprite_paddle *paddle;
+  Sint32 fire_power;            // 1 = fire destroys the indestructible-destructibles bricks 
+  Sint32 firePowerX;            // fire power 1 or 2
 
-	public:
-						sprite_projectile();
-						~sprite_projectile();
-		void			littleInit(sprite_paddle * raket);
-		void			firePower1();
-		void			firePower2();
-		static void		start_list (controller_bricks * brick, controller_ships * atoms);
-		static void		gestionTir();
-		static void		hors_ecran();
-		static void		anim_fires();
-		static void		collision1();
-		static void		collision2();
-		static void		disable_sprites();
+public:
+    sprite_projectile ();
+   ~sprite_projectile ();
+  void init_members (sprite_paddle * pad);
+  void firePower1 ();
+  void firePower2 ();
+  static void start_list (controller_bricks * brick,
+                          controller_ships * atoms);
+  static void gestionTir ();
+  static void hors_ecran ();
+  static void anim_fires ();
+  static void disable_sprites ();
+private:
+  static void check_collisions_with_bricks ();
+  static void check_collisions_with_ships ();
 };
 #endif

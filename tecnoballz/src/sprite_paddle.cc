@@ -4,11 +4,11 @@
  * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.7 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.8 2007/02/20 20:52:14 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +73,6 @@ sprite_paddle::sprite_paddle (bool has_projectiles)
  */
 sprite_paddle::~sprite_paddle ()
 {
-  printf("sprite_paddle::~sprite_paddle DELETE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
   /* Paddle had projectiles */
   if (NULL != projectiles)
     {
@@ -103,14 +102,14 @@ sprite_paddle::fire_projectiles ()
     }
 }
 
-//------------------------------------------------------------------------------
-// move bumper's fires
-//------------------------------------------------------------------------------
+/**
+ * Move the paddle's projectiles 
+ */
 void
 sprite_paddle::deplaceTir ()
 {
-  projectiles->nouveauTir ();    //controller_projectiles::nouveauTir();
-  projectiles->deplaceTir ();    //controller_projectiles::deplaceTir();
+  projectiles->fire ();
+  projectiles->move ();
 }
 
 //------------------------------------------------------------------------------

@@ -1,14 +1,14 @@
 /** 
  * @file controller_projectiles.cc 
- * @brief Projectiles controller 
- * @date 2007-02-09
+ * @brief Projectiles controller for a single paddle! 
+ * @date 2007-02-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_projectiles.cc,v 1.2 2007/02/09 17:05:29 gurumeditation Exp $
+ * $Id: controller_projectiles.cc,v 1.3 2007/02/20 20:52:14 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,35 +55,36 @@ controller_projectiles::~controller_projectiles ()
   release_sprites_list ();
 }
 
-//-----------------------------------------------------------------------------
-// perform some initializations
-//-----------------------------------------------------------------------------
+/**
+ * Create and initialize the list of projectiles sprites
+ * @param paddle a pointer to a paddle sprite
+ */ 
 void
 controller_projectiles::create_projectiles_list (sprite_paddle * paddle)
 {
   create_sprites_list ();
   gun_paddle = paddle;
-  sprite_projectile **liste = sprites_list;
+  sprite_projectile **projectiles = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_projectile *xFire = *(liste++);
-      xFire->littleInit (paddle);
+      sprite_projectile *projectile = *(projectiles++);
+      projectile->init_members (paddle);
     }
   fire1RunOn ();
 }
 
-//-----------------------------------------------------------------------------
-// check if fire is available
-//-----------------------------------------------------------------------------
+/**
+ * Check if fire is available
+ */
 void
 controller_projectiles::disponible ()
 {
 
-  //###################################################################
-  // return if bumper has no fire (bumperFire = 0)
-  //###################################################################
-  if (!gun_paddle->bumperFire)
-    return;
+  /* return if bumper has no fire (bumperFire = 0) */
+  if (gun_paddle->bumperFire == 0)
+    {
+      return;
+    }
 
   Uint32 t = max_of_sprites;
   sprite_projectile **liste = sprites_list;
@@ -125,7 +126,7 @@ controller_projectiles::disponible ()
 // new fire start
 //-----------------------------------------------------------------------------
 void
-controller_projectiles::nouveauTir ()
+controller_projectiles::fire ()
 {
   if (gun_paddle->bumperFire)
     {
@@ -505,16 +506,18 @@ controller_projectiles::init_type7 ()
     }
 }
 
-//-----------------------------------------------------------------------------
-// move bumper's fires
-//-----------------------------------------------------------------------------
+/**
+ * Move paddle's projectiles
+ */
 void
-controller_projectiles::deplaceTir ()
+controller_projectiles::move ()
 {
   Sint32 i = gun_paddle->length;
   paddle_length = i;
-  i -= gun_paddle->width_mini;  //smallest bumper is of 16/32 pixels width
-  i >>= gun_paddle->width_deca; //size of bumper step by 8/16 pixels
+  /* smallest paddle width is of 16/32 pixels */
+  i -= gun_paddle->width_mini;
+  /* size of paddle step by 8/16 pixels */
+  i >>= gun_paddle->width_deca;
   switch (i)
     {
     case 0:

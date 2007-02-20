@@ -4,11 +4,11 @@
  * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_projectiles.h,v 1.4 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_projectiles.h,v 1.5 2007/02/20 20:52:14 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ public:
    ~controller_projectiles ();
   void create_projectiles_list (sprite_paddle * paddle);
   void disponible ();
-  void nouveauTir ();
+  void fire ();
   void init_type1 ();
   void init_type2 ();
   void init_type3 ();
@@ -66,7 +66,7 @@ public:
   void init_type5 ();
   void init_type6 ();
   void init_type7 ();
-  void deplaceTir ();
+  void move ();
   void move_type1 ();
   void move_type2 ();
   void move_type3 ();

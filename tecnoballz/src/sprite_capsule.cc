@@ -4,11 +4,11 @@
  * @date 2007-02-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.cc,v 1.6 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: sprite_capsule.cc,v 1.7 2007/02/20 20:52:14 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -166,16 +166,20 @@ sprite_capsule::nouveauGad (sprite_ball * balle, Sint32 nuGad)
 // bricks levels: drop new gadget from a BouiBoui
 //-----------------------------------------------------------------------------
 void
-sprite_capsule::nouveauGad (sprite_projectile * pfire, Sint32 nuGad)
+sprite_capsule::nouveauGad (sprite_projectile * projectile, Sint32 nuGad)
 {
   if (nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-    set_draw_method (sprite_object::CYCLE_PTAB);
+    {
+      set_draw_method (sprite_object::CYCLE_PTAB);
+    }
   else
-    set_draw_method (sprite_object::DRAW_WITH_TABLES);
+    {
+      set_draw_method (sprite_object::DRAW_WITH_TABLES);
+    }
   gadget_num = nuGad;
-  x_coord = pfire->get_x_coord ();
-  y_coord = pfire->get_y_coord ();
-  sprite_paddle *raket = pfire->raquettePT;
+  x_coord = projectile->get_x_coord ();
+  y_coord = projectile->get_y_coord ();
+  sprite_paddle *raket = projectile->paddle;
   raquettePT = raket;
   directionX = raket->get_paddle_number ();
   nuGad = nuGad >> 1;
@@ -183,9 +187,8 @@ sprite_capsule::nouveauGad (sprite_projectile * pfire, Sint32 nuGad)
   const Sint16 *p = gagdetBrik + nuGad;
   if (*p < 0)
     {
-      fprintf (stderr,
-               "sprite_capsule::nouveauGad() : nuGad = %i, no used ! \n",
-               nuGad);
+      std::cerr << "sprite_capsule::nouveauGad() nuGad: " << nuGad <<
+        " is not used!" << std::endl;
       return;
     }
   is_enabled = true;

@@ -1,14 +1,14 @@
-/** 
+/**U
  * @file sprite_projectile.cc 
  * @brief The fire sprite of the paddle into the bricks level
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.7 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.8 2007/02/20 20:52:14 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@
  */
 sprite_projectile::sprite_projectile ()
 {
-  if (total_fire < maxi_fires)
+  if (total_fire < MAXI_TOTAL_OF_PROJECTILES)
     {
-      list_fires[total_fire] = this;
+      projectiles_list[total_fire] = this;
       total_fire++;
     }
   set_draw_method (DRAW_COLOR_CYCLING_MASK);
@@ -75,13 +75,13 @@ sprite_projectile::firePower2 ()
   pt_cycling = &sprite_object::cycling_01[0];
 }
 
-//-----------------------------------------------------------------------------
-// intialize a simple bumper's fire
-//-----------------------------------------------------------------------------
+/**
+ * Clear member a simple
+ */
 void
-sprite_projectile::littleInit (sprite_paddle * raket)
+sprite_projectile::init_members (sprite_paddle * pad)
 {
-  raquettePT = raket;
+  paddle = pad;
   indexSinus = 0;
   fire_Xscie = 0;
   fire_Yscie = 0;
@@ -94,20 +94,20 @@ sprite_projectile::littleInit (sprite_paddle * raket)
   firePowerX = 0;
 }
 
-//-----------------------------------------------------------------------------
-// static method: initialise all bumper's fires before a bricks level
-//-----------------------------------------------------------------------------
+/**
+ * Static method which initialize all projectiles before a bricks level
+ */
 void
-sprite_projectile::start_list (controller_bricks * brick, controller_ships * atoms)
+sprite_projectile::start_list (controller_bricks * brick,
+                               controller_ships * atoms)
 {
   brickObjet = brick;
   atomsObjet = atoms;
   total_fire = 0;
-  sprite_projectile **liste = list_fires;
-  Sint32 t = maxi_fires;
-  sprite_projectile *nFire = (sprite_projectile *) 0x0;
-  for (Sint32 i = 0; i < t; i++)
-    *(liste++) = nFire;
+  for (Uint32 i = 0; i < MAXI_TOTAL_OF_PROJECTILES; i++)
+    {
+      projectiles_list[i] = NULL;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -118,8 +118,8 @@ sprite_projectile::gestionTir ()
 {
   hors_ecran ();
   anim_fires ();
-  collision1 ();
-  collision2 ();
+  check_collisions_with_bricks ();
+  check_collisions_with_ships ();
 }
 
 //-----------------------------------------------------------------------------
@@ -128,7 +128,7 @@ sprite_projectile::gestionTir ()
 void
 sprite_projectile::hors_ecran ()
 {
-  sprite_projectile **liste = list_fires;
+  sprite_projectile **liste = projectiles_list;
   Sint32 t = total_fire;
   Sint32 y1 = 15 * resolution;
   Sint32 y2 = 232 * resolution;
@@ -155,16 +155,21 @@ sprite_projectile::hors_ecran ()
 void
 sprite_projectile::anim_fires ()
 {
-  sprite_projectile **liste = list_fires;
+  sprite_projectile **liste = projectiles_list;
   Sint32 t = total_fire;
   sprite_projectile *xFire = liste[0];
   xFire->play_animation_loop ();
   Sint32 o = xFire->get_frame_index ();
   Sint32 cycle = o & 0X1;
   if (!cycle)
-    cycle = sprite_object::DRAW_WITH_TABLES;
+    {
+      cycle = sprite_object::DRAW_WITH_TABLES;
+    }
   else
-    cycle = sprite_object::DRAW_COLOR_CYCLING_MASK;
+    {
+      cycle = sprite_object::DRAW_COLOR_CYCLING_MASK;
+    }
+  xFire->draw_method = cycle;
   for (Sint32 i = 1; i < t; i++)
     {
       xFire = liste[i];
@@ -173,116 +178,125 @@ sprite_projectile::anim_fires ()
     }
 }
 
-//-----------------------------------------------------------------------------
-// static method: collision of all bumper's fire with the bricks
-//-----------------------------------------------------------------------------
+/**
+ * Static method which check collision projectiles between bricks  
+ */ 
 void
-sprite_projectile::collision1 ()
+sprite_projectile::check_collisions_with_bricks ()
 {
 
-  Sint32 bwght = brickObjet->get_brick_width ();     //brick's width in pixels
-  Sint32 byoff = brickObjet->getYOffset ();     //y-offset between 2 bricks
-  Sint32 indus = brickObjet->getBkIndus ();     //first indestructible brick
-  sprite_projectile **liste = list_fires;
-  Sint32 t = total_fire;
-  brickInfos *tMega = brickObjet->mega_table;
-  brickClear *briPT = brickObjet->brique_pnt;
-  Sint32 save = brickObjet->briqueSave;
-  for (Sint32 i = 0; i < t; i++)
+  controller_bricks *bricks = controller_bricks::get_instance ();
+
+  Sint32 bwght = bricks->get_brick_width ();    //brick's width in pixels
+  Sint32 byoff = bricks->getYOffset (); //y-offset between 2 bricks
+  Sint32 indus = bricks->getBkIndus (); //first indestructible brick
+  sprite_projectile **projectiles = projectiles_list;
+  brickInfos *tMega = bricks->mega_table;
+  brickClear *briPT = bricks->brique_pnt;
+  Sint32 save = bricks->briqueSave;
+  for (Uint32 i = 0; i < total_fire; i++)
     {
-      sprite_projectile *xFire = *(liste++);
-      if (xFire->is_enabled)
+      sprite_projectile *projectile = *(projectiles++);
+      if (!projectile->is_enabled)
         {
-          Sint32 x = xFire->x_coord + 2;
-          Sint32 y = xFire->y_coord + 2;
-          brickClear *briP2 = briPT + save;
-          briP2->balle_posX = x;
-          briP2->balle_posY = y;
-          x /= bwght;
-          y /= byoff;
-          y *= controller_bricks::NB_BRICKSH;
-          x += y;
-          brickInfos *megaT = (tMega + x);
-          x = megaT->brique_rel;
-          if (x)
+          continue;
+        }
+      Sint32 x = projectile->x_coord + 2;
+      Sint32 y = projectile->y_coord + 2;
+      brickClear *briP2 = briPT + save;
+      briP2->balle_posX = x;
+      briP2->balle_posY = y;
+      x /= bwght;
+      y /= byoff;
+      y *= controller_bricks::NB_BRICKSH;
+      x += y;
+      brickInfos *megaT = (tMega + x);
+      x = megaT->brique_rel;
+      if (x == 0)
+        {
+          continue;
+        }
+      if (projectile->is_enabled == 1)
+        {
+          projectile->is_enabled = 0;
+        }
+      briP2->raquettePT = projectile->paddle;
+      if ((x -= indus) >= 0)
+        {
+          /* 
+           * indestructible brick touched!
+           */
+          if ((x -= bwght) > 0) //indestructible-destructible bricks?
             {
-              if (xFire->is_enabled == 1)
-                xFire->is_enabled = 0;
-              briP2->raquettePT = xFire->raquettePT;
-              if ((x -= indus) >= 0)
-                {               //###################################################
-                  // touched indestructible brick
-                  //###################################################                                   
-                  if ((x -= bwght) > 0) //indestructible-destructible bricks?
-                    {
-                      // fire destroys the indestructibles-destructibles bricks
-                      if (xFire->fire_power)
-                        {
-                          briP2->balle_posX = -1;
-                          briP2->adresseAff = megaT->adresseAff;
-                          briP2->adresseTab = megaT;
-                          megaT->brique_rel = 0;        // RAZ code brique
-                          briP2->brique_num = megaT->brique_num;
-                          briP2->briqueFlag = 1;        //1 = restore background
-                          save += 1;    // inc. pt/restaure table
-                          save &= (controller_bricks::MAXBRIKCLR - 1);
-                        }
-                      else
-                        {
-                          x = 2;
-#ifndef SOUNDISOFF
-                          audio->play_sound (S_TOINDES2);
-#endif
-                        }
-                    }
-                  else
-                    {
-                      x = 1;    //the brick is really indestructible
-#ifndef SOUNDISOFF
-                      audio->play_sound (S_TOINDES1);
-#endif
-                    }
-                }
-              else
-                {               //###################################################
-                  // touched normal brick
-                  //###################################################
+              // fire destroys the indestructibles-destructibles bricks
+              if (projectile->fire_power)
+                {
+                  briP2->balle_posX = -1;
                   briP2->adresseAff = megaT->adresseAff;
                   briP2->adresseTab = megaT;
-                  x = xFire->firePowerX;        // fire power : 1 or 2
-                  megaT->briquePosX = megaT->briquePosX - (x * 2);
-                  if (megaT->briquePosX <= 0)
-                    {
-                      megaT->briquePosX = 0;
-                      megaT->brique_rel = 0;
-                      briP2->brique_num = megaT->brique_num;
-                      briP2->briqueFlag = 1;    // flag restaure background 
-                    }
-                  else
-                    {
-                      megaT->brique_rel = megaT->brique_rel - (x * bwght);
-                      briP2->brique_num = megaT->brique_rel;
-                      briP2->briqueFlag = 0;    // flag display brick
-                    }
+                  megaT->brique_rel = 0;        // RAZ code brique
+                  briP2->brique_num = megaT->brique_num;
+                  briP2->briqueFlag = 1;        //1 = restore background
                   save += 1;    // inc. pt/restaure table
                   save &= (controller_bricks::MAXBRIKCLR - 1);
                 }
+              else
+                {
+                  x = 2;
+#ifndef SOUNDISOFF
+                  audio->play_sound (S_TOINDES2);
+#endif
+                }
+            }
+          else
+            {
+              /* the brick is really indestructible */
+              x = 1;
+#ifndef SOUNDISOFF
+              audio->play_sound (S_TOINDES1);
+#endif
             }
         }
+      /* 
+       * normal brick touched
+       */
+      else
+        {
+          briP2->adresseAff = megaT->adresseAff;
+          briP2->adresseTab = megaT;
+          x = projectile->firePowerX;   // fire power : 1 or 2
+          megaT->briquePosX = megaT->briquePosX - (x * 2);
+          if (megaT->briquePosX <= 0)
+            {
+              megaT->briquePosX = 0;
+              megaT->brique_rel = 0;
+              briP2->brique_num = megaT->brique_num;
+              briP2->briqueFlag = 1;    // flag restaure background 
+            }
+          else
+            {
+              megaT->brique_rel = megaT->brique_rel - (x * bwght);
+              briP2->brique_num = megaT->brique_rel;
+              briP2->briqueFlag = 0;    // flag display brick
+            }
+          save += 1;            // inc. pt/restaure table
+          save &= (controller_bricks::MAXBRIKCLR - 1);
+        }
+
     }
-  brickObjet->briqueSave = save;
+  bricks->briqueSave = save;
 }
 
 //-----------------------------------------------------------------------------
 // static method: collision of all bumper's fire with the BouiBouis
 //-----------------------------------------------------------------------------
 void
-sprite_projectile::collision2 ()
+sprite_projectile::check_collisions_with_ships ()
 {
-  sprite_projectile **liste = list_fires;
+  sprite_projectile **liste = projectiles_list;
   Sint32 t = atomsObjet->get_max_of_sprites ();
   sprite_ship **aList = atomsObjet->get_sprites_list ();
-  for (Sint32 i = 0; i < total_fire; i++)
+  for (Uint32 i = 0; i < total_fire; i++)
     {
       sprite_projectile *xFire = *(liste++);
       if (!xFire->is_enabled)
@@ -334,18 +348,15 @@ sprite_projectile::collision2 ()
 void
 sprite_projectile::disable_sprites ()
 {
-  sprite_projectile **liste = list_fires;
-  for (Sint32 i = 0; i < total_fire; i++)
+  sprite_projectile **liste = projectiles_list;
+  for (Uint32 i = 0; i < total_fire; i++)
     {
       sprite_projectile *xFire = *(liste++);
       xFire->is_enabled = 0;
     }
 }
 
-Sint32 sprite_projectile::total_fire = 0;
-sprite_projectile *
-  sprite_projectile::list_fires[maxi_fires];
-controller_bricks *
-  sprite_projectile::brickObjet;
-controller_ships *
-  sprite_projectile::atomsObjet;
+Uint32 sprite_projectile::total_fire = 0;
+sprite_projectile * sprite_projectile::projectiles_list[MAXI_TOTAL_OF_PROJECTILES];
+controller_bricks * sprite_projectile::brickObjet;
+controller_ships * sprite_projectile::atomsObjet;

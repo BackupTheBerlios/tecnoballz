@@ -5,11 +5,11 @@
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_gem.cc,v 1.6 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: sprite_gem.cc,v 1.7 2007/02/20 20:52:14 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,17 +77,20 @@ sprite_gem::disponible (sprite_ball * pball)
   return 1;
 }
 
-//-----------------------------------------------------------------------------
-// initialize a new gem
-//-----------------------------------------------------------------------------
+/**
+ * Initialize a new gem from a projectile
+ * @param blast a pointer to the projectile sprite which
+ *        destroyed the enemy ship
+ * @return true if the sprite was enabled, otherwise false
+ */
 Sint32
-sprite_gem::disponible (sprite_projectile * pfire)
+sprite_gem::disponible (sprite_projectile * blast)
 {
   if (is_enabled)
     {
       return 0;
     }
-  initialGem (pfire->x_coord, pfire->y_coord, pfire->raquettePT);
+  initialGem (blast->x_coord, blast->y_coord, blast->paddle);
   return 1;
 }
 
