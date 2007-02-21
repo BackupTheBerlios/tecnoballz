@@ -2,14 +2,14 @@
  * @file handler_resources.cc 
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-02-12
+ * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.7 2007/02/17 16:56:08 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.8 2007/02/21 21:07:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,8 @@ const char *
   "edmap02.data",               //RESEDMAP02
   "edmap03.data",               //RESEDMAP03
   "gard_lissa.list",            //RESGCURVES
-  "tableau.data",               //RESBLEVELS: all bricks levels
+  /* DATA_BRICKS_LEVELS */
+  "tableau.data",
   "min60map.bmp"                //RES60BACKG
 };
 
@@ -110,21 +111,39 @@ const char *
   "reject.wav",                 //27
 };
 
-const char *
-  handler_resources::graphfiles[] = { "ani_head.bmp",   //RESHEADANI
-  "ba_score2.bmp",              //RESBASCORE
-  "bumper_1.bmp",               //RESBUMPER1
-  "bumper_2.bmp",               //RESBUMPER2
-  "fontgame.bmp",               //RESFONTGAM
-  "fontmenu.bmp",               //RESFONTMEN
-  "font_messa.bmp",             //RESFONTMES
-  "gigablzt.bmp",               //RESGIGABLZ
-  "map_edit.bmp",               //RESMAPEDIT
-  "money.bmp",                  //RESMONEYFT
-  "new_shop.bmp",               //RESNEWSHOP
-  "pagezbob.bmp",               //RESPAGEBOB
-  "zebricks.bmp",               //RESZEBRICK
-  "font_score.bmp"              //RESFONTSCR
+const char * handler_resources::bitmap_files[] =
+{
+  /* BITMAP_HEAD_ANIMATION */
+  "ani_head.bmp",
+  /* BITMAP_RIGHT_PANEL */
+  "ba_score2.bmp",
+  /* BITMAP_PADDLES_1 */
+  "bumper_1.bmp",
+  /* BITMAP_PADDLES_2 */
+  "bumper_2.bmp",
+  /* BITMAP_GAME_FONTS */
+  "fontgame.bmp",
+  /* BITMAP_MENU_FONTS */
+  "fontmenu.bmp",
+  /* BITMAP_SMALL_FONTS */
+  "font_messa.bmp",
+  /* BITMAP_GIGABLITZ */
+  "gigablzt.bmp",
+  /* BITMAP_TILESMAP */
+  "map_edit.bmp",
+  /* BITMAP_SHOP */
+  "new_shop.bmp",
+  /* BITMAP_ALL_SPRITES */
+  "pagezbob.bmp",
+  /* BITMAP_BRICKS */
+  "zebricks.bmp",
+  /* BITMAP_SCORES_FONTS */
+  "font_score.bmp"
+};
+
+const char * handler_resources::texts_files[] =
+{
+  "shop_%s.txt",
 };
 
 char
@@ -156,7 +175,7 @@ handler_resources::~handler_resources ()
  * @return file data buffer pointer
  */
 char *
-handler_resources::load_data (Sint32 resource_id)
+handler_resources::load_data (Uint32 resource_id)
 {
   char *filename = get_filename (resource_id);
   return load_file (filename);
@@ -168,13 +187,13 @@ handler_resources::load_data (Sint32 resource_id)
  * @return filename with a relative pathname
  */
 char *
-handler_resources::get_filename (Sint32 resource_id)
+handler_resources::get_filename (Uint32 resource_id)
 {
   const char *pfile;
-  if (resource_id >= 4096)
+  if (resource_id >= BITMAP_OFFSET)
     {
-      resource_id -= 4096;
-      pfile = graphfiles[resource_id];
+      resource_id -= BITMAP_OFFSET;
+      pfile = bitmap_files[resource_id];
       if (resolution == 1)
         {
           strcpy (tmp_filename, folder_320);
@@ -199,7 +218,7 @@ handler_resources::get_filename (Sint32 resource_id)
  * @return music filename with a relative pathname
  */
 char *
-handler_resources::get_music_filename (Sint32 resource_id)
+handler_resources::get_music_filename (Uint32 resource_id)
 {
   const char *pfile;
   strcpy (tmp_filename, "musics/");
@@ -214,7 +233,7 @@ handler_resources::get_music_filename (Sint32 resource_id)
  * @return sound filename with a relative pathname
  */
 char *
-handler_resources::get_sound_filename (Sint32 resource_id)
+handler_resources::get_sound_filename (Uint32 resource_id)
 {
   strcpy (tmp_filename, "sounds/");
   strcat (tmp_filename, soundfiles[resource_id]);
@@ -239,7 +258,7 @@ handler_resources::get_tilemaps_filename (Sint32 title_num)
  * @return a pointer to the file data buffer
  */
 char *
-handler_resources::get_full_pathname (Sint32 resource_id)
+handler_resources::get_full_pathname (Uint32 resource_id)
 {
   return locate_data_file (get_filename (resource_id));
 }
@@ -362,10 +381,11 @@ handler_resources::locate_data_file (const char *const name)
 
 /** 
  * Load a bitmap of sprites
- * @param indent
+ * @param resource_id resource identifier of the bitmap
+ *                    BITMAP_ALL_SPRITES by default 
  */
 void
-handler_resources::load_sprites_bitmap (Sint32 resource_id)
+handler_resources::load_sprites_bitmap (Uint32 resource_id)
 {
   release_sprites_bitmap ();
   sprites_bitmap = new bitmap_data ();
@@ -386,6 +406,33 @@ handler_resources::release_sprites_bitmap ()
   sprites_bitmap = (bitmap_data *) NULL;
 }
 
+char *
+handler_resources::load_texts(Uint32 resource_id)
+{
+  resource_id -=TEXTS_OFFSET; 
+  const char *file = texts_files[resource_id];
+  strcpy (tmp_filename, "texts/");
+  strcat (tmp_filename, file);
+  Uint32 filesize;
+  
+  char *filedata = loadfile_with_lang (tmp_filename, &filesize);
+  printf("******* filesize:%i\n", filesize);
+ 
+  /* 
+   * caclulate the number of lines 
+   */
+  Uint32 offset = 0;
+  Uint32 texts_loaded_count = 0;
+  while (offset < filesize)
+    {
+      if (filedata[offset++] == '\n') 
+        {
+          texts_loaded_count++;
+        }
+     }
+  printf("******* texts_loaded_count:%i\n", texts_loaded_count);
+  return filedata;
+}
 
 /**
  * Allocate memory and load a file (filename with a language code)

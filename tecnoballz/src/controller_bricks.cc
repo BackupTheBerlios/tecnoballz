@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-02-18
+ * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.14 2007/02/18 15:13:25 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.15 2007/02/21 21:07:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -185,7 +185,7 @@ controller_bricks::initialize ()
        */
       /* load the 10 sets of bricks */
       bitmap_data *bmp_bricks = new bitmap_data ();
-      bmp_bricks->load (handler_resources::RESZEBRICK);
+      bmp_bricks->load (handler_resources::BITMAP_BRICKS);
       Sint32 i = random_counter & 0x0F;
       if (i >= 10)
         {
@@ -256,7 +256,7 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
   num_of_bricks = 0;
 
   /* load bricks levels (34000 bytes => 100 levels) */
-  char *all_levels = resources->load_data (handler_resources::RESBLEVELS);
+  char *all_levels = resources->load_data (handler_resources::DATA_BRICKS_LEVELS);
   if (level_nu >= 6)
     {
       level_nu--;

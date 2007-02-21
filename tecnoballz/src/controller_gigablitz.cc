@@ -1,14 +1,14 @@
 /** 
  * @file controller_gigablitz.cc 
  * @brief Gigablitz controller 
- * @date 2007-02-10
+ * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.6 2007/02/10 20:22:17 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.7 2007/02/21 21:07:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,7 +90,7 @@ controller_gigablitz::create_gigablitz_sprites (controller_paddles * paddles,
   
   /* load the bitmap of the different Gigablitz,
    * in the 'sprites_bitmap' static member */
-  resources->load_sprites_bitmap (handler_resources::RESGIGABLZ);
+  resources->load_sprites_bitmap (handler_resources::BITMAP_GIGABLITZ);
 
  /* create and initialize the gigablitz sprites */
  for (Uint32 i = 0; i < max_of_sprites; i++)
@@ -274,7 +274,7 @@ controller_gigablitz::create_gigablitz_sprites (controller_paddles * paddles,
   alloc_sprites_list ();
   /* load the bitmap of the different Gigablitz,
    * in the 'sprites_bitmap' static member */
-  resources->load_sprites_bitmap (handler_resources::RESGIGABLZ);
+  resources->load_sprites_bitmap (handler_resources::BITMAP_GIGABLITZ);
 
  /* create and initialize the gigablitz sprites */
   for (Uint32 i = 0; i < max_of_sprites; i++)

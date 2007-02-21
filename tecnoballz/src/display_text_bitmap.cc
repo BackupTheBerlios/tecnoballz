@@ -1,14 +1,14 @@
 /** 
  * @file display_text_bitmap.cc 
  * @brief Display bitmap strings 
- * @date 2007-02-16
+ * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: display_text_bitmap.cc,v 1.2 2007/02/16 16:53:52 gurumeditation Exp $
+ * $Id: display_text_bitmap.cc,v 1.3 2007/02/21 21:07:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ display_text_bitmap::destroy_me ()
 void
 display_text_bitmap::initialize ()
 {
-  load_bitmap_fonts (handler_resources::RESFONTGAM);
+  load_bitmap_fonts (handler_resources::BITMAP_GAME_FONTS);
 }
 
 /**

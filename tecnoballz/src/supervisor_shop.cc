@@ -4,11 +4,11 @@
  * @date 2007-02-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.14 2007/02/16 20:46:24 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.15 2007/02/21 21:07:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,12 +95,15 @@ supervisor_shop::~supervisor_shop ()
   liberation ();
 }
 
-//-------------------------------------------------------------------------------
-// Initialize the shop
-//-------------------------------------------------------------------------------
+/**
+ * Initialize the shop supervisor
+ */
 Sint32
 supervisor_shop::first_init ()
 {
+
+  resources->load_texts (handler_resources::TEXTS_SHOP);
+
   Sint32 arean = current_player->get_area_number ();
   Sint32 level = current_player->get_level_number ();
 #ifndef SOUNDISOFF
@@ -186,7 +189,7 @@ supervisor_shop::first_init ()
 
   /* load bitmap background of the shop */
   bitmap_data *bmp = new bitmap_data ();
-  bmp->load (handler_resources::RESNEWSHOP);
+  bmp->load (handler_resources::BITMAP_SHOP);
   bmp->copyTampon ();
   delete bmp;
 
@@ -364,11 +367,12 @@ supervisor_shop::testkursor (Sint32 x, Sint32 y)
     }
 }
 
-//-------------------------------------------------------------------------------
-// set LED indicator, and gadget indicator
-//      input   =>      index: index of the selected bonus; 0 to 24 (-1: disable)
-//      output  <=      price: price of the selected bonus 
-//-------------------------------------------------------------------------------
+/**
+ * set LED indicator, and gadget indicator
+ * @param index index of the selected bonus; 0 to 24 (-1: disable)
+      input   =>      index: index of the selected bonus; 0 to 24 (-1: disable)
+      output  <=      price: price of the selected bonus 
+*/
 Sint32
 supervisor_shop::led_moving (Sint32 index)
 {

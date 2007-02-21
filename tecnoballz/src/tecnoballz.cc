@@ -2,14 +2,14 @@
  * @file tecnoballz.cc 
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-02-17
+ * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.12 2007/02/18 15:13:25 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.13 2007/02/21 21:07:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

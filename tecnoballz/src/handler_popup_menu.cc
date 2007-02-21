@@ -5,11 +5,11 @@
  * @date 2007-02-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.3 2007/02/16 16:53:52 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.4 2007/02/21 21:07:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ handler_popup_menu::first_init (bitmap_data * bmp, Uint32 menu_num,
     }
 
   /* load fontes bitmap files and perform some initializations */
-  load_bitmap_fonts (handler_resources::RESFONTMEN);
+  load_bitmap_fonts (handler_resources::BITMAP_MENU_FONTS);
 
   /* determine height of the menu box */
   menu_number = menu_num;

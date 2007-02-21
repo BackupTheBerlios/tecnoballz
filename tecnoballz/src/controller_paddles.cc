@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.14 2007/02/18 21:07:00 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.15 2007/02/21 21:07:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,11 +140,11 @@ controller_paddles::create_paddles_sprites ()
       Uint32 id;
       if (current_player->get_area_number () > 2)
         {
-          id = handler_resources::RESBUMPER1;
+          id = handler_resources::BITMAP_PADDLES_1;
         }
       else
         {
-          id = handler_resources::RESBUMPER2;
+          id = handler_resources::BITMAP_PADDLES_2;
         }
       resources->load_sprites_bitmap (id);
 

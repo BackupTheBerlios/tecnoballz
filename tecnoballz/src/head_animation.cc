@@ -1,14 +1,14 @@
 /** 
  * @file head_animation.cc 
  * @brief Animate the head in the right score panel 
- * @date 2007-02-15
+ * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: head_animation.cc,v 1.3 2007/02/15 20:52:43 gurumeditation Exp $
+ * $Id: head_animation.cc,v 1.4 2007/02/21 21:07:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ void
 head_animation::load_bitmap ()
 {
   head_bitmap = new bitmap_data ();
-  head_bitmap->load (handler_resources::RESHEADANI);
+  head_bitmap->load (handler_resources::BITMAP_HEAD_ANIMATION);
   head_height = head_bitmap->get_height ();
   head_width = head_bitmap->get_width () / MAX_OF_IMAGES;
 }

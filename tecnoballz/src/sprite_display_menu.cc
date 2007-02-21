@@ -1,14 +1,14 @@
 /** 
  * @file sprite_display_menu.cc 
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-02-16
+ * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.2 2007/02/16 16:53:52 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.3 2007/02/21 21:07:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ Sint32
 sprite_display_menu::first_init ()
 {
 
-  load_bitmap_fonts (handler_resources::RESFONTMEN);
+  load_bitmap_fonts (handler_resources::BITMAP_MENU_FONTS);
 
   //###################################################################
   // allocate 512 * 323 pixels buffer for text menu 

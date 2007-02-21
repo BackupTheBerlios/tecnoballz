@@ -57,7 +57,7 @@ Sint32 zeMiniMess::intialise1()
 {
 	if(!minifontes)
 	{	minifontes = new bitmap_data();
-		minifontes->load(handler_resources::RESFONTMES);
+		minifontes->load(handler_resources::BITMAP_SMALL_FONTS);
 
 		off_desti1 = game_screen->get_row_size();	// modulo destination
 		off_source = minifontes->get_row_size();	// modulo source

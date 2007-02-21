@@ -2,14 +2,14 @@
  * @file sprite_display_scores.cc 
  * @brief Sprite wich display text of the score table 
  * @created 2003-04-30 
- * @date 2007-02-18
+ * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_scores.cc,v 1.3 2007/02/18 21:07:00 gurumeditation Exp $
+ * $Id: sprite_display_scores.cc,v 1.4 2007/02/21 21:07:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ void
 sprite_display_scores::first_init (Uint32 x_offset)
 {
 
-  load_bitmap_fonts (handler_resources::RESFONTSCR);
+  load_bitmap_fonts (handler_resources::BITMAP_SCORES_FONTS);
 
 /* allocate 512 * 323 pixels buffer for scores text */ 
   offscreen_text = new bitmap_data ();
