@@ -4,11 +4,11 @@
  * @date 2007-02-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_projectiles.cc,v 1.3 2007/02/20 20:52:14 gurumeditation Exp $
+ * $Id: controller_projectiles.cc,v 1.4 2007/02/21 14:22:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -803,31 +803,31 @@ controller_projectiles::move_type7 ()
     }
 }
 
-//-----------------------------------------------------------------------------
-// enable fire power 1
-//-----------------------------------------------------------------------------
+/**
+ * Enable fire power 1
+ */
 void
 controller_projectiles::fire1RunOn ()
 {
-  sprite_projectile **liste = sprites_list;
+  sprite_projectile **projectiles = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_projectile *xFire = *(liste++);
-      xFire->firePower1 ();
+      sprite_projectile *blast = *(projectiles++);
+      blast->set_power1 ();
     }
 }
 
-//-----------------------------------------------------------------------------
-// enable fire power 2
-//-----------------------------------------------------------------------------
+/**
+ * Enable fire power 2
+ */
 void
 controller_projectiles::fire2RunOn ()
 {
-  sprite_projectile **liste = sprites_list;
+  sprite_projectile **projectiles = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_projectile *xFire = *(liste++);
-      xFire->firePower2 ();
+      sprite_projectile *blast = *(projectiles++);
+      blast->set_power2 ();
     }
 }
 

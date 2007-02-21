@@ -1,14 +1,14 @@
 /**U
  * @file sprite_projectile.cc 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-02-11
+ * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.8 2007/02/20 20:52:14 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.9 2007/02/21 14:22:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,31 +47,31 @@ sprite_projectile::~sprite_projectile ()
 {
 }
 
-//-----------------------------------------------------------------------------
-// enable a simple bumper's fire power 1
-//-----------------------------------------------------------------------------
+/**
+ * Enable the power 1 of the projectiles
+ */
 void
-sprite_projectile::firePower1 ()
+sprite_projectile::set_power1 ()
 {
   frame_index_min = 4;
   frame_index_max = 7;
   frame_index = 4;
-  fire_power = 0;
-  firePowerX = 1;
+  can_destroy_indestructible = false;
+  power = 1;
   pt_cycling = &sprite_object::cycling_02[0];
 }
 
-//-----------------------------------------------------------------------------
-// enable a simple bumper's fire power 2
-//-----------------------------------------------------------------------------
+/**
+ * Enable the power 2 of the projectiles
+ */
 void
-sprite_projectile::firePower2 ()
+sprite_projectile::set_power2 ()
 {
   frame_index_min = 0;
   frame_index_max = 3;
   frame_index = 0;
-  fire_power = 1;
-  firePowerX = 2;
+  can_destroy_indestructible = true;
+  power = 2;
   pt_cycling = &sprite_object::cycling_01[0];
 }
 
@@ -90,8 +90,8 @@ sprite_projectile::init_members (sprite_paddle * pad)
   frame_index_min = 0;
   frame_delay = 10;
   frame_period = 10;
-  fire_power = 0;
-  firePowerX = 0;
+  can_destroy_indestructible = false;
+  power = 0;
 }
 
 /**
@@ -110,58 +110,58 @@ sprite_projectile::start_list (controller_bricks * brick,
     }
 }
 
-//-----------------------------------------------------------------------------
-// static method: manage all bumper's fires
-//-----------------------------------------------------------------------------
+/**
+ * Static method which manage all projectiles
+ */
 void
 sprite_projectile::gestionTir ()
 {
-  hors_ecran ();
-  anim_fires ();
+  check_outside ();
+  play_projectiles_animations ();
   check_collisions_with_bricks ();
   check_collisions_with_ships ();
 }
 
-//-----------------------------------------------------------------------------
-// static method: test if all bumper's fire go out of the screen of game
-//-----------------------------------------------------------------------------
+/**
+ * Static method which check if all projectiles go out of the screen of game 
+ */
 void
-sprite_projectile::hors_ecran ()
+sprite_projectile::check_outside ()
 {
-  sprite_projectile **liste = projectiles_list;
-  Sint32 t = total_fire;
+  sprite_projectile **projectiles = projectiles_list;
   Sint32 y1 = 15 * resolution;
   Sint32 y2 = 232 * resolution;
   Sint32 x1 = 15 * resolution;
   Sint32 x2 = 228 * resolution;
-  for (Sint32 i = 0; i < t; i++)
+  for (Uint32 i = 0; i < total_fire; i++)
     {
-      sprite_projectile *xFire = *(liste++);
-      Sint32 a = xFire->y_coord;
+      sprite_projectile *blast = *(projectiles++);
+      Sint32 a = blast->y_coord;
       if (a < y1 || a > y2)
-        xFire->is_enabled = 0;
-      else
         {
-          a = xFire->x_coord;
-          if (a < x1 || a > x2)
-            xFire->is_enabled = 0;
+          blast->is_enabled = false;
+          continue;
+        }
+      a = blast->x_coord;
+      if (a < x1 || a > x2)
+        {
+          blast->is_enabled = false;
         }
     }
 }
 
-//-----------------------------------------------------------------------------
-// static method: animation of all bumper's fire
-//-----------------------------------------------------------------------------
+/**
+ * Static method which manages the animation played in loop-mode
+ */
 void
-sprite_projectile::anim_fires ()
+sprite_projectile::play_projectiles_animations ()
 {
-  sprite_projectile **liste = projectiles_list;
-  Sint32 t = total_fire;
-  sprite_projectile *xFire = liste[0];
-  xFire->play_animation_loop ();
-  Sint32 o = xFire->get_frame_index ();
-  Sint32 cycle = o & 0X1;
-  if (!cycle)
+  sprite_projectile **projectiles = projectiles_list;
+  sprite_projectile *blast = projectiles[0];
+  blast->play_animation_loop ();
+  Sint32 index = blast->get_frame_index ();
+  Sint32 cycle = index & 0X1;
+  if (0 == cycle)
     {
       cycle = sprite_object::DRAW_WITH_TABLES;
     }
@@ -169,12 +169,12 @@ sprite_projectile::anim_fires ()
     {
       cycle = sprite_object::DRAW_COLOR_CYCLING_MASK;
     }
-  xFire->draw_method = cycle;
-  for (Sint32 i = 1; i < t; i++)
+  blast->draw_method = cycle;
+  for (Uint32 i = 1; i < total_fire; i++)
     {
-      xFire = liste[i];
-      xFire->set_image (o);
-      xFire->draw_method = cycle;
+      blast = projectiles[i];
+      blast->set_image (index);
+      blast->draw_method = cycle;
     }
 }
 
@@ -229,7 +229,7 @@ sprite_projectile::check_collisions_with_bricks ()
           if ((x -= bwght) > 0) //indestructible-destructible bricks?
             {
               // fire destroys the indestructibles-destructibles bricks
-              if (projectile->fire_power)
+              if (projectile->can_destroy_indestructible)
                 {
                   briP2->balle_posX = -1;
                   briP2->adresseAff = megaT->adresseAff;
@@ -264,7 +264,7 @@ sprite_projectile::check_collisions_with_bricks ()
         {
           briP2->adresseAff = megaT->adresseAff;
           briP2->adresseTab = megaT;
-          x = projectile->firePowerX;   // fire power : 1 or 2
+          x = projectile->power;   // fire power : 1 or 2
           megaT->briquePosX = megaT->briquePosX - (x * 2);
           if (megaT->briquePosX <= 0)
             {
@@ -287,27 +287,27 @@ sprite_projectile::check_collisions_with_bricks ()
   bricks->briqueSave = save;
 }
 
-//-----------------------------------------------------------------------------
-// static method: collision of all bumper's fire with the BouiBouis
-//-----------------------------------------------------------------------------
+/**
+ * Static method which check collisions between projectiles and ships 
+ */ 
 void
 sprite_projectile::check_collisions_with_ships ()
 {
-  sprite_projectile **liste = projectiles_list;
+  sprite_projectile **projectiles = projectiles_list;
   Sint32 t = atomsObjet->get_max_of_sprites ();
   sprite_ship **aList = atomsObjet->get_sprites_list ();
   for (Uint32 i = 0; i < total_fire; i++)
     {
-      sprite_projectile *xFire = *(liste++);
-      if (!xFire->is_enabled)
+      sprite_projectile *blast = *(projectiles++);
+      if (!blast->is_enabled)
         {
           continue;
         }
       sprite_ship **monPT = aList;
-      Sint32 y1 = xFire->y_coord;
+      Sint32 y1 = blast->y_coord;
       Sint32 y2 = y1 + 3;
       y1 -= 26;
-      Sint32 x1 = xFire->x_coord;
+      Sint32 x1 = blast->x_coord;
       Sint32 x2 = x1 + 3;
       x1 -= 20;
       for (Sint32 j = 0; j < t; j++)
@@ -327,32 +327,32 @@ sprite_projectile::check_collisions_with_ships ()
             {
               continue;
             }
-          if (xFire->is_enabled == 1)
+          if (blast->is_enabled == 1)
             {
-              xFire->is_enabled = 0;
+              blast->is_enabled = 0;
             }
           current_player->add_score (100);
-          k = xFire->firePowerX;
+          k = blast->power;
           atome->atom_power -= k;
           if (atome->atom_power < 1)
             {
-              atome->explosion1 (xFire);
+              atome->explosion1 (blast);
             }
         }
     }
 }
 
-//-----------------------------------------------------------------------------
-// static method: collision of all bumper's fire with the BouiBouis
-//-----------------------------------------------------------------------------
+/**
+ * Static method which disables all projectiles
+ */ 
 void
 sprite_projectile::disable_sprites ()
 {
-  sprite_projectile **liste = projectiles_list;
+  sprite_projectile **projectiles = projectiles_list;
   for (Uint32 i = 0; i < total_fire; i++)
     {
-      sprite_projectile *xFire = *(liste++);
-      xFire->is_enabled = 0;
+      sprite_projectile *blast = *(projectiles++);
+      blast->is_enabled = false;
     }
 }
 

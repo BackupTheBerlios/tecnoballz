@@ -1,14 +1,14 @@
 /** 
  * @file sprite_projectile.h 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-02-20
+ * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.h,v 1.11 2007/02/20 20:52:14 gurumeditation Exp $
+ * $Id: sprite_projectile.h,v 1.12 2007/02/21 14:22:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,22 +55,25 @@ private:
   Sint32 fire_Yscie;
   /* Paddle to which the projectile belongs. Used for the capsules */
   sprite_paddle *paddle;
-  Sint32 fire_power;            // 1 = fire destroys the indestructible-destructibles bricks 
-  Sint32 firePowerX;            // fire power 1 or 2
+  /** If true projectile destroys the
+   * indestructible-destructibles bricks */
+  bool can_destroy_indestructible;
+  /** Power of the projectile 1 or 2 */
+  Uint32 power;
 
 public:
     sprite_projectile ();
    ~sprite_projectile ();
   void init_members (sprite_paddle * pad);
-  void firePower1 ();
-  void firePower2 ();
+  void set_power1 ();
+  void set_power2 ();
   static void start_list (controller_bricks * brick,
                           controller_ships * atoms);
   static void gestionTir ();
-  static void hors_ecran ();
-  static void anim_fires ();
+  static void check_outside ();
   static void disable_sprites ();
 private:
+  static void play_projectiles_animations ();
   static void check_collisions_with_bricks ();
   static void check_collisions_with_ships ();
 };
