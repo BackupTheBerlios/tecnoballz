@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.h
  * @brief Shop supervisor 
- * @date 2007-02-16
+ * @date 2007-02-22
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.9 2007/02/16 16:53:52 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.10 2007/02/22 22:07:32 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,16 @@ class supervisor_shop;
 class supervisor_shop:public supervisor
 {
 private:
-  static const Sint32 STEXTWIDHT = 22;  //largeur d'une ligne texte en caracteres
+  typedef enum
+    {
+      TEXT_INFOS = 21,
+
+    };
+
+
+
+  static const Sint32 BOX_LENGTH_STRING = 22;  //largeur d'une ligne texte en caracteres
+  char** box_texts;
   tiles_background *tiles_ground;
   sprite_mouse_pointer *mouse_pointer;
   sprite_object *led_indicator;
@@ -102,7 +111,7 @@ private:
   static char shoptext63[];
   static char shoptext56[];
   static char shoptextPT[];
-  static char shoptext12[];
+ // static char shoptext12[];
   static char info_text1[];
   static char info_text2[];
   static char info_text3[];

@@ -1,15 +1,15 @@
 /** 
  * @file configfile.h
  * @brief Config file handler 
- * @created 2005-01-19 
+ * @created 2005-01-22
  * @date 2007-02-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: configfile.h,v 1.7 2007/02/17 16:56:08 gurumeditation Exp $
+ * $Id: configfile.h,v 1.8 2007/02/22 22:07:32 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

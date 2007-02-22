@@ -5,11 +5,11 @@
  * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.8 2007/02/21 21:07:11 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.9 2007/02/22 22:07:32 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -406,32 +406,153 @@ handler_resources::release_sprites_bitmap ()
   sprites_bitmap = (bitmap_data *) NULL;
 }
 
-char *
-handler_resources::load_texts(Uint32 resource_id)
+/**
+ * Load texts data into strings list
+ * @param resource_id resource identifier of the texts data 
+ * @param row_length maximum number of chars by string, 0 if preserve the size of
+ *                   the original string  
+ * @param modulo 0 if non concatenation, 2 concatene strings 3 by 3 
+ */
+char **
+handler_resources::load_texts(Uint32 resource_id, Uint32 row_length, Uint32 modulo)
 {
   resource_id -=TEXTS_OFFSET; 
   const char *file = texts_files[resource_id];
   strcpy (tmp_filename, "texts/");
   strcat (tmp_filename, file);
   Uint32 filesize;
-  
   char *filedata = loadfile_with_lang (tmp_filename, &filesize);
-  printf("******* filesize:%i\n", filesize);
  
   /* 
    * caclulate the number of lines 
    */
   Uint32 offset = 0;
-  Uint32 texts_loaded_count = 0;
+  bool is_first_row = true;
+  bool is_comment = false;
+  Uint32 row_count = 0;
+  Uint32 alloc_size = 0;
+  Uint32 list_count = 0;
+  Uint32 str_count = 0;
   while (offset < filesize)
     {
-      if (filedata[offset++] == '\n') 
+      char c = filedata[offset++];
+      row_count++;
+      if (is_first_row && c == '#')
         {
-          texts_loaded_count++;
+          is_comment = true;
+        } 
+      is_first_row = false;
+      if (c == '\n') 
+        {
+          if (!is_comment)
+            {
+              if (row_length > 0)
+                {
+                  alloc_size += row_length;
+                }
+              else
+                {
+                  alloc_size += row_count - 1;
+                }
+              str_count++;
+              if (modulo == 0 || (str_count % modulo == 0))
+                {
+                  /* null-terminated string */
+                  alloc_size++;
+                  list_count++;
+                }
+            }
+          is_first_row = true;
+          is_comment = false;
+          row_count = 0;
         }
      }
-  printf("******* texts_loaded_count:%i\n", texts_loaded_count);
-  return filedata;
+
+  /*
+   * allocate memory require to create strings list
+   */
+  alloc_size += sizeof(char *) * list_count;
+  char *buffer = NULL;
+  try
+  {
+    buffer = new char[alloc_size];
+  }
+  catch (std::bad_alloc &)
+  {
+    std::cerr << "(!)handler_resources::load_texts() " <<
+      "not enough memory to allocate " <<
+      alloc_size << " bytes!" << std::endl;
+    throw;
+  }
+  char **list = (char**) buffer;
+  char *strs = buffer + sizeof(char *) * list_count; 
+
+
+  offset = 0;
+  is_first_row = true;
+  is_comment = false;
+  row_count = 0;
+  char* source = filedata;
+  list_count = 0;
+  str_count = 0;
+  char *str_current = strs;
+  while (offset < filesize)
+    {
+      char c = filedata[offset++];
+      row_count++;
+      if (is_first_row && c == '#')
+        {
+          is_comment = true;
+        } 
+      is_first_row = false;
+      if (c == '\n') 
+        {
+          if (!is_comment)
+            {
+              /* do not copy the carriage return */
+              row_count--;
+              if (row_length > 0 && row_count >= row_length) 
+                {
+                  row_count = row_length;
+                }
+              for (Uint32 i = 0; i < row_count; i++)
+                {
+                  *(strs++) = source[i];
+                }
+              for (Uint32 i = row_count; i < row_length; i++)
+                {
+                  *(strs++) = ' ';
+                }
+              //printf("str_count=%i) %i list_count=%i\n", str_count, str_count % modulo, list_count );
+              str_count++;
+              if (modulo == 0 || (str_count % modulo == 0))
+                {
+                  *(strs++) = '\0';
+                  list[list_count++] = str_current;
+                  //printf("list_count=%i\n", list_count);
+                  str_current = strs;
+                }
+            }
+          is_first_row = true;
+          is_comment = false;
+          row_count = 0;
+          source = &filedata[offset];
+        }
+     }
+ 
+/*
+   for (Uint32 i = 0; i < list_count; i++)
+     {
+       printf(">> %s\n", list[i]);
+     } 
+     */
+//printf("size:%f \n", int (strs - buffer)); 
+
+  //printf("list_count:%i\n", list_count);
+
+  delete[]filedata;
+
+  return list; 
 }
 
 /**

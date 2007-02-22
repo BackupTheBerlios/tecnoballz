@@ -1,15 +1,15 @@
 /** 
  * @file configfile.cc 
  * @brief Config file handler 
- * @created 2005-01-19 
+ * @created 2005-01-22
  * @date 2007-02-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: configfile.cc,v 1.21 2007/02/17 16:56:08 gurumeditation Exp $
+ * $Id: configfile.cc,v 1.22 2007/02/22 22:07:32 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -330,7 +330,19 @@ configfile::saveconfig ()
       fprintf (config, "\n\t;; players names\n");
       for (Uint32 i = 0; i < 6; i++)
         fprintf (config, "\t(player%i      \"%s\")\n", i + 1, thePlayers[i]);
+     fprintf (config, "\n\t;; language en or fr\n");
+      fprintf (config, "\t(lang      ");
+      switch (language)
+        {
+        case LANGUAGE_FR:
+          fprintf (config, "\"fr\")\n");
+          break;
+        default:
+          fprintf (config, "\"en\")\n");
+          break;
+        }
       fprintf (config, ")\n");
+
     }
 
 }

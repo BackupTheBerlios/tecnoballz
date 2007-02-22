@@ -1,41 +1,42 @@
 # expand paddle      #
-    AH YEAH IT IS     
-   MUCH BETTER WITH A 
- SUCH LONGER BUMPER   
+ AH OUAIS C'EST BIEN
+   MIEUX AVEC UNE
+RAQUETTE PLUS GRANDE
 #fire power 1        #
-THIS FIRE IS NOT AS SO
-POWERFULL AS FIRE 1   
-  BUT IT IS CHEAPER   
+CE TIR N'EST PAS AUSSI
+PUISSANT QUE LE TIR 2
+MAIS IL EST MOINS CHER 
 #fire power 2        #
-   BIGGER POWER  TO   
-  DESTROY MORE BRICS  
-                      
+  PLUS DE PUISSANCE  #
+  POUR DETRUIRE PLUS #  
+   PLUS DE BRIQUES   #
 #rebuild wall        #
-   OK, THE RED WALLS  
-   WILL BE REBUILT    
+BIEN, LE MUR DE COTE
+VA ETRE RECONSTRUIT
                       
 #extra balls         #
                       
-  TWO BALLS TO CATCH  
+DEUX BALLES A ATTRAPER
                       
 # multi balls        #
-    THREE BALLS NOW   
- YOU WILL BRAKE MORE  
- AND FASTER THE WALL  
+  TROIS BALLES VONT 
+  MAINTENANT DETRUIRE
+  LE MUR PLUS VITE
 # ball power 1       #
-  A VERY STRONG BALL  
-    TO BREAK BRIKS    
-                      
+A BALLE TRES
+RESISTANTE POUR
+BRISER LES BRIQUES
 # ball power 2       #
-  WITH THAT YOU WILL  
-  BREAK ALL YOU WANT  
+AVEC CELA VOUS 
+CASSEREZ TOUT CE QUE
+VOUS VOUDREZ
 # less bricks         
- THERE WILL 10 BRICKS 
-    LESS TO BREAK     
+CELA FERA 10 BRIQUES
+DE MOINS A CASSER
                       
 # extra life         #
-                      
- - EXTRA LIFE ADDED - 
+  VIE SUPPLEMENTAIRE
+      AJOUTEE                      
                       
 # Info text          #
                       

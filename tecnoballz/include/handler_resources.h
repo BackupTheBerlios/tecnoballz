@@ -5,11 +5,11 @@
  * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.7 2007/02/21 21:07:11 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.8 2007/02/22 22:07:32 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,34 +85,7 @@ public:
     }
     RESOURCE_IDENTFIERS;
 
-/*
-  static const Uint32 RESCOSLIST = 0;
-  static const Uint32 RESEDMAP01 = 1;
-  static const Uint32 RESEDMAP02 = 2;
-  static const Uint32 RESEDMAP03 = 3;
-  static const Uint32 RESGCURVES = 4;
-  static const Uint32 RESBLEVELS = 5;
-  static const Uint32 RES60BACKG = 6;
-
-  static const Uint32 RESHEADANI = 4096;
-  static const Uint32 RESBASCORE = 4097;
-  static const Uint32 RESBUMPER1 = 4098;
-  static const Uint32 RESBUMPER2 = 4099;
-  static const Uint32 RESFONTGAM = 4100;
-  static const Uint32 RESFONTMEN = 4101;
-  static const Uint32 RESFONTMES = 4102;
-  static const Uint32 RESGIGABLZ = 4103;
-  static const Uint32 RESMAPEDIT = 4104;
-  static const Uint32 RESMONEYFT = 4105;
-  static const Uint32 RESNEWSHOP = 4106;
-  static const Uint32 RESPAGEBOB = 4107;
-  static const Uint32 RESZEBRICK = 4108;
-  static const Uint32 RESFONTSCR = 4109;
-
-  static const Uint32 MUSICAREA1 = 8192;
-  */
-
-  static const Sint16 cosinus360[720];
+   static const Sint16 cosinus360[720];
   static const Sint16 *zesinus360;
   static const Uint32 tabledegas[180];
 
@@ -135,7 +108,7 @@ public:
   char *load_high_score_file ();
   void save_high_score_file (char *buffer, Uint32 size);
   char *locate_data_file (const char *const name);
-  char *load_texts(Uint32 resource_id);
+  char **load_texts(Uint32 resource_id, Uint32 row_length = 0, Uint32 modulo = 0);
 
 private:
   char *loadfile_with_lang (const char *const filename, Uint32 * const fsize);

@@ -4,11 +4,11 @@
  * @date 2007-02-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.15 2007/02/21 21:07:12 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.16 2007/02/22 22:07:32 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,6 +75,7 @@ supervisor_shop::supervisor_shop ()
   triche_key = 0;               //last key pressed
   triche_etb = 0;               //input (triche_etb == tricheCode then cheat_flag = 1)
   tricheCode = SDLK_e << 24 | SDLK_t << 16 | SDLK_b << 8 | SDLK_RETURN;
+  box_texts = NULL;
 }
 
 /**
@@ -90,6 +91,11 @@ supervisor_shop::~supervisor_shop ()
       delete led_indicator;
       led_indicator = (sprite_object *) NULL;
     }
+  if (NULL != box_texts)
+    {
+      delete[](char *)box_texts;
+      box_texts = NULL;
+    }
   delete mouse_pointer;
   delete tiles_ground;
   liberation ();
@@ -102,7 +108,12 @@ Sint32
 supervisor_shop::first_init ()
 {
 
-  resources->load_texts (handler_resources::TEXTS_SHOP);
+  box_texts = resources->load_texts (handler_resources::TEXTS_SHOP, BOX_LENGTH_STRING, 3);
+  for(Uint32 i = 0; i < 31; i++)
+    {
+      printf("%02d): %s \n", i, box_texts[i]);
+    } 
+
 
   Sint32 arean = current_player->get_area_number ();
   Sint32 level = current_player->get_level_number ();
@@ -112,38 +123,38 @@ supervisor_shop::first_init ()
 #endif
   sprites->reset ();
 
-  //###################################################################
-  // copy name player into menu text
-  //###################################################################
+  /* copy name player into menu text */
   char *ptDes;
   const char *ptSrc;
   ptDes = current_player->get_name ();
-  for (Sint32 i = 0; i < 6; i++)
-    shoptext00[8 + i] = ptDes[i];
+  for (Uint32 i = 0; i < 6; i++)
+    {
+      shoptext00[8 + i] = ptDes[i];
+    }
   intToASCII (NB_OPTIONS, &shoptext63[48], 1);
   intToASCII (current_player->get_num_of_lifes (),
-              &info_text1[STEXTWIDHT * 4 + 5], 1);
+              &info_text1[BOX_LENGTH_STRING * 4 + 5], 1);
 
   if (arean > 1)
     {
       const char *pPass =
         supervisor_main_menu::getTheCode (arean, difficulty_level);
-      ptDes = &info_text3[1 * STEXTWIDHT + 10];
+      ptDes = &info_text3[1 * BOX_LENGTH_STRING + 10];
       for (Sint32 i = 0; i < 10; i++)
         ptDes[i] = pPass[i];
       ptSrc = &info_text3[0];
     }
   else
     {
-      ptSrc = &info_text3[STEXTWIDHT * 2];
+      ptSrc = &info_text3[BOX_LENGTH_STRING * 2];
     }
-  ptDes = &info_text1[6 * STEXTWIDHT];
-  for (Sint32 i = 0; i < (STEXTWIDHT * 2); i++)
+  ptDes = &info_text1[6 * BOX_LENGTH_STRING];
+  for (Sint32 i = 0; i < (BOX_LENGTH_STRING * 2); i++)
     ptDes[i] = ptSrc[i];
 
 
   ptSrc = &sprite_display_menu::difficulte[(difficulty_level - 1) * 4];
-  ptDes = &info_text1[8 * STEXTWIDHT + 16];
+  ptDes = &info_text1[8 * BOX_LENGTH_STRING + 16];
   for (Sint32 i = 0; i < 4; i++)
     ptDes[i] = ptSrc[i];
 
@@ -199,7 +210,7 @@ supervisor_shop::first_init ()
 
   putthetext (shoptext00);
   if (current_player->get_Bprice ())
-    shop_line3 = &shoptext00[STEXTWIDHT * 3];
+    shop_line3 = &shoptext00[BOX_LENGTH_STRING * 3];
 
   keyboard->set_grab_input (false);
   tiles_ground->set_4_color_palette ();
@@ -220,7 +231,6 @@ supervisor_shop::main_loop ()
                                    3 * resolution, 26 * resolution,
                                    180 * resolution);
 
-  display_text->draw (game_screen, 32, 350, "JE VAIS BIEN!");
   
   /* display the 3 lines of text  */
   display_box_text ();
@@ -290,9 +300,6 @@ supervisor_shop::main_loop ()
   //###################################################################
   aff_select ();
 
-  //###################################################################
-  // display all sprites
-  //###################################################################
   sprites->draw ();
   aff_course ();
 
@@ -529,20 +536,20 @@ supervisor_shop::faitcourse (Sint32 gadnu)
             char *ptTxt = ptSrc;
             if (current_player->get_bumpOn (i) <= 0)
               {
-                ptTxt += STEXTWIDHT;
+                ptTxt += BOX_LENGTH_STRING;
                 if (arean >= 2 && i == 3)
-                  ptTxt += STEXTWIDHT;
+                  ptTxt += BOX_LENGTH_STRING;
                 if (arean >= 3 && i == 2)
-                  ptTxt += STEXTWIDHT;
+                  ptTxt += BOX_LENGTH_STRING;
                 if (arean >= 4 && i == 4)
-                  ptTxt += STEXTWIDHT;
+                  ptTxt += BOX_LENGTH_STRING;
                 //area 2 => bumper 3 
                 //area 3 => bumper 3 & 2 
                 //area 4 & 5 => bumper 3 & 2 & 4 
               }
-            for (Sint32 j = 0; j < STEXTWIDHT; j++)
+            for (Sint32 j = 0; j < BOX_LENGTH_STRING; j++)
               *(ptDes++) = *(ptTxt++);
-            ptSrc += STEXTWIDHT * 3;
+            ptSrc += BOX_LENGTH_STRING * 3;
           }
 
 
@@ -553,17 +560,17 @@ supervisor_shop::faitcourse (Sint32 gadnu)
           }
         infodejavu = 1;
         if (optioninfo < 3)
-          putthetext (&info_text1[optioninfo * STEXTWIDHT * 3]);
+          putthetext (&info_text1[optioninfo * BOX_LENGTH_STRING * 3]);
         else
           {
             if (cheat_flag)
-              putthetext (&info_text1[(optioninfo + 2) * STEXTWIDHT * 3]);
+              putthetext (&info_text1[(optioninfo + 2) * BOX_LENGTH_STRING * 3]);
             else
               {
                 if (birth_flag)
-                  putthetext (&info_text1[(optioninfo + 1) * STEXTWIDHT * 3]);
+                  putthetext (&info_text1[(optioninfo + 1) * BOX_LENGTH_STRING * 3]);
                 else
-                  putthetext (&info_text1[optioninfo * STEXTWIDHT * 3]);
+                  putthetext (&info_text1[optioninfo * BOX_LENGTH_STRING * 3]);
               }
           }
         optioninfo++;
@@ -688,8 +695,11 @@ supervisor_shop::achete_gad (Sint32 gadnb)
 void
 supervisor_shop::message_ok ()
 {
-  Sint32 i = shoptextPT[shop_point] * STEXTWIDHT * 3;
-  char *texte = shoptext12 + i;
+  //Sint32 i = shoptextPT[shop_point] * BOX_LENGTH_STRING * 3;
+  //char *texte = shoptext12 + i;
+  //Sint32 i = shoptextPT[shop_point] * BOX_LENGTH_STRING * 3;
+  char *texte = box_texts[shoptextPT[shop_point]];
+
   putthetext (texte);
 }
 
@@ -701,9 +711,9 @@ void
 supervisor_shop::putthetext (char *ligne)
 {
   shop_line1 = ligne;
-  ligne += STEXTWIDHT;
+  ligne += BOX_LENGTH_STRING;
   shop_line2 = ligne;
-  ligne += STEXTWIDHT;
+  ligne += BOX_LENGTH_STRING;
   shop_line3 = ligne;
 }
 
@@ -720,9 +730,9 @@ supervisor_shop::display_box_text ()
   game_screen->clear (0, x_pos, y_pos, 22 * 8 * resolution, 3 * yspac);
 
 
-  game_screen->draw_text (display_text, x_pos, y_pos, shop_line1, 22);
-  game_screen->draw_text (display_text, x_pos, y_pos + yspac ,shop_line2, 22);
-  game_screen->draw_text (display_text, x_pos, y_pos + yspac * 2, shop_line3, 22);
+  game_screen->draw_text (display_text, x_pos, y_pos, shop_line1, BOX_LENGTH_STRING);
+  game_screen->draw_text (display_text, x_pos, y_pos + yspac ,shop_line2, BOX_LENGTH_STRING);
+  game_screen->draw_text (display_text, x_pos, y_pos + yspac * 2, shop_line3, BOX_LENGTH_STRING);
 }
 
 //-------------------------------------------------------------------------------
@@ -1047,52 +1057,32 @@ char
   20, 20, 20, 20, 20, 20,       //XX/XX/XX/XX/XX/XX
 };
 
-//*- S+ --------------------------------------------------------------------*
+/*
 char
   supervisor_shop::shoptext12[] =
   { "    AH YEAH IT IS     " "  MUCH BETTER WITH A  " " SUCH LONGER BUMPER   "
-//*- F1 --------------------------------------------------------------------*
     "THIS FIRE IS NOT AS SO" " POWERFULL AS FIRE 1  " "  BUT IT IS CHEAPER   "
-//*- F2 --------------------------------------------------------------------*
     "   BIGGER POWER  TO   " "  DESTROY MORE BRICS  " "                      "
-//*- RW --------------------------------------------------------------------*
     "   OK, THE RED WALLS  " "   WILL BE REBUILT    " "                      "
-//*- B1 --------------------------------------------------------------------*
     "                      " "  TWO BALLS TO CATCH  " "                      "
-//*- B2 --------------------------------------------------------------------*
     "    THREE BALLS NOW   " " YOU WILL BRAKE MORE  " " AND FASTER THE WALL  "
-//*- P1 --------------------------------------------------------------------*
     "  A VERY STRONG BALL  " "    TO BREAK BRIKS    " "                      "
-//*- P2 --------------------------------------------------------------------*
     "  WITH THAT YOU WILL  " "  BREAK ALL YOU WANT  " "                      "
-//*- LB --------------------------------------------------------------------*
     " THERE WILL 10 BRICKS " "    LESS TO BREAK     " "                      "
-//*- L+ --------------------------------------------------------------------*
     " -------------------- " "   EXTRA LIFE ADDED   " " -------------------- "
-//*- ?? --------------------------------------------------------------------*
-//text.info     
     "                      " "                      " "                      "
-//*- WA --------------------------------------------------------------------*
     "          OK          " "       FOR  THE       " "         WALL         "
-//*- BL --------------------------------------------------------------------*
     " OK FOR A LEFT BUMPER " "BUT DON'T FORGET IT IS" " OVER AFTER 3 LEVELS  "
-//*- BU --------------------------------------------------------------------*
     "  OK FOR  UP  BUMPER  " "BUT DON'T FORGET IT IS" " OVER AFTER 3 LEVELS  "
-//*- BR --------------------------------------------------------------------*
     "OK  FOR A RIGHT BUMPER" "BUT DON'T FORGET IT IS" " OVER AFTER 3 LEVELS  "
-//*- S2 --------------------------------------------------------------------*
     "                      " "    BIGSIZE  BALLS!   " "                      "
-//*- S3 --------------------------------------------------------------------*
     "                      " "   MAXISIZE  BALLS!   " "                      "
-//*- RB --------------------------------------------------------------------*
     "          OK          " "       FOR  THE       " "     ROBOT BUMPER!    "
-//*- CT --------------------------------------------------------------------*
     "          OK          " "       FOR  THE       " " CONTROL BALL OPTION  "
-//*- GL --------------------------------------------------------------------*
     "          OK          " "       FOR  THE       " "     GLUE  OPTION     "
-//*- XX --------------------------------------------------------------------*
   "      GO AND SEE      " "        MY LOVE       " "                      "
 };
+*/
 
 char
   supervisor_shop::info_text1[] = {
