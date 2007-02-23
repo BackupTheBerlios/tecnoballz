@@ -43,21 +43,21 @@ DE MOINS A CASSER
                       
                       
 # the wall           #
- A WALL TO KEEP THE   
-   BALLS IN PLAY      
-  FOR A BREF MOMENT   
+ UN MUR POUR RETENIR
+  LES BALLES PENDANT
+   UN COURT INSTANT
 # left paddle        #
- OK FOR A LEFT BUMPER 
-BUT DON'T FORGET IT IS
- OVER AFTER 3 LEVELS  
+OK POUR UNE RAQUETTE
+GAUCHE MAIS ELLE NE
+DURE QUE 3 NIVEAUX
 # top paddle         #
-  OK FOR  UP  BUMPER  
-BUT DON'T FORGET IT IS
- OVER AFTER 3 LEVELS  
+OK POUR UNE RAQUETTE
+HAUTE MAIS ELLE NE
+DURE QUE 3 NIVEAUX
 # right paddle       #
-OK  FOR A RIGHT BUMPER
-BUT DON'T FORGET IT IS
- OVER AFTER 3 LEVELS  
+OK POUR UNE RAQUETTE
+DROITE MAIS ELLE NE
+DURE QUE 3 NIVEAUX
 # ball size 2        #
                       
     BIGSIZE  BALLS!   
@@ -86,8 +86,8 @@ BUT DON'T FORGET IT IS
 RIGHT BUMPER:NO ACTIVE
 UP BUMPER   :NO ACTIVE
 LEFT BUMPER :NO ACTIVE
-     YOU ONLY HAVE    
-     00 LIVES LEFT    
+  VOUS POSSEDEZ ENCORE
+     00 VIE(S)
                       
                       
                       

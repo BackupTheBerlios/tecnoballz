@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_main_menu.h
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-02-14
+ * @date 2007-02-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.h,v 1.6 2007/02/16 12:38:24 gurumeditation Exp $
+ * $Id: supervisor_main_menu.h,v 1.7 2007/02/23 17:22:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,26 +41,34 @@
 
 class supervisor_main_menu:public virtual supervisor
 {
+public:
+  static const Uint32 AREA_CODE_LENGTH = 10;
+
 private:
   tilesmap_scrolling * tiles_map;
   sprite_object *tecnoballz_logo;
-  controller_fontes_menu *BOB_defile;
+  controller_fontes_menu *fonts_scrolling;
   sprite_display_menu *menu_texte;
   Sint32 offset_xx1;
   sprite_mouse_pointer *mouse_pointer;
-  static const char codesarea[241];
+  static const char area_codes[241];
+  /** Current input area code used to jump
+   * directly to the end of a area */
+  static char current_area_code[AREA_CODE_LENGTH + 1];
 
 public:
     supervisor_main_menu ();
    ~supervisor_main_menu ();
   Sint32 first_init ();
   Sint32 main_loop ();
-  static const char *getTheCode (Uint32 arean, Uint32 hardc);
+  static const char *get_area_code (Uint32 aera_num, Uint32 difficulty);
+  static char *get_current_area_code ();
+  static void copy_current_area_code (char *destination);
 
 private:
   void offset_inc ();
   void move_tecnoballz_logo ();
   Sint32 start_new_game ();
-  Uint32 check_area_password ();
+  Uint32 check_area_code ();
 };
 #endif

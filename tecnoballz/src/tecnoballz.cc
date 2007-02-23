@@ -2,14 +2,14 @@
  * @file tecnoballz.cc 
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-02-21
+ * @date 2007-02-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.13 2007/02/21 21:07:12 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.14 2007/02/23 17:22:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -526,14 +526,13 @@ bitmap_data * tecnoballz::sprites_bitmap = 0;
 Uint32 tecnoballz::cheat_flag = 0;
 Uint32 tecnoballz::birth_flag = 0;
 Uint32 tecnoballz::double_mem = 1;
-Sint32 tecnoballz::difficulty_level = 1;
+Sint32 tecnoballz::difficulty_level = DIFFICULTY_EASY;
 Sint32 tecnoballz::initial_num_of_lifes = 8;
 Sint32 tecnoballz::number_of_players = 1;
 char tecnoballz::chainelog[100];
 const char tecnoballz::nomprefix[] = PREFIX;
 Sint32 tecnoballz::resolution = 2;
 bool tecnoballz::bob_ground = false;
-char tecnoballz::zeAreaCode[11] = "          ";
 offscreen_surface * tecnoballz::game_screen = NULL;
 offscreen_surface * tecnoballz::background_screen = NULL;
 configfile *tecnoballz::config_file;

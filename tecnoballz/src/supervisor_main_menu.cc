@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_main_menu.cc 
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-02-15
+ * @date 2007-02-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.11 2007/02/16 12:38:24 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.12 2007/02/23 17:22:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ supervisor_main_menu::supervisor_main_menu ()
   tiles_map = new tilesmap_scrolling ();
   /*  big logo "TecnoballZ" */
   tecnoballz_logo = new sprite_object ();
-  BOB_defile = new controller_fontes_menu ();
+  fonts_scrolling = new controller_fontes_menu ();
   menu_texte = new sprite_display_menu ();
   mouse_pointer = new sprite_mouse_pointer ();
   offset_xx1 = 0;
@@ -54,7 +54,7 @@ supervisor_main_menu::~supervisor_main_menu ()
 {
   delete mouse_pointer;
   delete menu_texte;
-  delete BOB_defile;
+  delete fonts_scrolling;
   delete tecnoballz_logo;
   delete tiles_map;
   liberation ();
@@ -83,7 +83,7 @@ supervisor_main_menu::first_init ()
   sprites->add (tecnoballz_logo);
   tecnoballz_logo->enable ();
   tecnoballz_logo->set_coordinates (64 * resolution, 13 * resolution);
-  BOB_defile->create_fontes_list ();
+  fonts_scrolling->create_fontes_list ();
   mouse_pointer->create_pointer_sprite (sprites_bitmap);
   resources->release_sprites_bitmap ();
   tiles_map->initialize (tilesmap_scrolling::TILES_COLOR_MENU,
@@ -115,7 +115,7 @@ supervisor_main_menu::main_loop ()
   offset_inc ();
   move_tecnoballz_logo ();
   /* scroll text of the menu */
-  BOB_defile->move_chars ();
+  fonts_scrolling->move_chars ();
   mouse_pointer->move ();
   sprites->draw ();
 
@@ -200,37 +200,37 @@ supervisor_main_menu::start_new_game ()
   /*
    * check area password validity
    */
-  Uint32 nArea;
-  Uint32 level;
+  Uint32 area_num;
+  Uint32 level_num;
   Uint32 grdPt;
-  Uint32 area_count = check_area_password ();
+  Uint32 area_count = check_area_code ();
   if (area_count == 0)
     {
-      nArea = 1;
-      level = 1;
+      area_num = 1;
+      level_num = 1;
       grdPt = 0;
     }
   else
     {
       if (area_count == 6)
       {
-        nArea = 5;
-        level = 13;
+        area_num = 5;
+        level_num = 13;
       }
       else
       {
-        nArea = area_count;
-        level = 12;
+        area_num = area_count;
+        level_num = 12;
       }
       if (is_verbose)
       {
         std::cout << "*supervisor_main_menu::start_new_game() " <<
-          "password is valid! Password: " << &zeAreaCode[0] <<
-          "; area number:" << nArea << "; level number:" << level << 
-          "; difficulty level: " << difficulty_level << std::endl;
+          "password is valid! Password: " << &current_area_code[0] <<
+          "; area number:" << area_num << "; level number:" << level_num << 
+          "; difficulty level_num: " << difficulty_level << std::endl;
 
     }
-        grdPt = controller_guardians::level2gdpt (nArea, level);
+        grdPt = controller_guardians::level2gdpt (area_num, level_num);
     }
  
 
@@ -258,7 +258,7 @@ supervisor_main_menu::start_new_game ()
       if (chaine_cmp
           (handler_players::players_list[iplay]->get_name (), "REG   ", 6))
         nlife += 1;
-      handler_players::players_list[iplay]->initialize (nlife, nArea, level,
+      handler_players::players_list[iplay]->initialize (nlife, area_num, level_num,
                                                  600, grdPt);
     }
 
@@ -287,7 +287,7 @@ supervisor_main_menu::start_new_game ()
  *         Return 0 if password is not valid
  */
 Uint32
-supervisor_main_menu::check_area_password ()
+supervisor_main_menu::check_area_code ()
 {
   Uint32 area_max = 4;
   Uint32 index = 0;
@@ -309,7 +309,7 @@ supervisor_main_menu::check_area_password ()
           bool is_valid = true;
           for (Uint32 i = 0; i < 10; i++)
             {
-              if (zeAreaCode[i] != codesarea[index + i])
+              if (current_area_code[i] != area_codes[index + i])
                 {
                   is_valid = false;
                   break;
@@ -326,24 +326,48 @@ supervisor_main_menu::check_area_password ()
   return 0;
 } 
 
-
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
-/*
-unsigned char supervisor_main_menu::colors_map[] =
-{ 0, 0, 0, 0, 0, 0, 48, 80, 112, 16, 48, 80, 64, 96, 128, 112, 112, 144, 80,
-  80, 112, 32, 64, 96, 144, 144, 176
-};*/
-
+/**
+ * Static method which return a area code
+ * @param aera_num area number from 2 to 5
+ * @param difficulty 0 to 3
+ * @return the area code
+ */
 const char *
-supervisor_main_menu::getTheCode (Uint32 arean, Uint32 hardc)
+supervisor_main_menu::get_area_code (Uint32 aera_num, Uint32 difficulty)
 {
-  if (arean < 2)
-    return NULL;
-  return &codesarea[(arean - 2) * 40 + (hardc - 1) * 10];
-
+  if (aera_num < 2)
+    {
+      return NULL;
+    }
+  return &area_codes[(aera_num - 2) * 40 + (difficulty - 1) * 10];
 }
+  
+ /**
+ * Static method which return the current area code
+ * @return the current area code
+ */
+char
+*supervisor_main_menu::get_current_area_code ()
+{
+  return current_area_code;
+}
+
+/**
+ * Static method which copy current area code
+ * @param destination destination string
+ */
+void
+supervisor_main_menu::copy_current_area_code (char *destination)
+{
+  for (Uint32 i = 0; i < AREA_CODE_LENGTH; i++)
+    {
+      destination[i] = current_area_code[i];
+    }
+}
+
+
+
+
 
 /*
 	LARRYHEARD: area 2
@@ -354,26 +378,39 @@ supervisor_main_menu::getTheCode (Uint32 arean, Uint32 hardc)
 	SHELLSHOCK: area 5 level 13
 */
 
-const char
-  supervisor_main_menu::codesarea[241] = {
-  "LARRYHEARD"
-    "SAUNDERSON"
-    "JUANATKINS"
-    "STEPHENSON"
-    "DANCEFLOOR"
-    "REVOLUTION"
-    "LOOKTOSEXY"
-    "REACHINGUP"
-    "ZULUNATION"
-    "HOUSEPIMPS"
-    "ANDRONICUS"
-    "DEFINITIVE"
-    "DANCEMANIA"
-    "PEPPERMINT"
-    "SOLARTRIBE"
-    "PROJECTXYZ"
-    "RINGOFFIRE"
-    "POINTBLANK"
-    "TEMPTATION"
-    "BLUEMONDAY" "SHELLSHOCK" "HOUSEMUSIC" "DAVECLARKE" "CYBERACTIF"
+const char supervisor_main_menu::area_codes[241] =
+{
+  /* level 12 area 1 */
+	"LARRYHEARD" \
+	"SAUNDERSON" \
+	"JUANATKINS" \
+	"STEPHENSON" \
+  /* level 12 area 2 */
+	"DANCEFLOOR" \
+	"REVOLUTION" \
+	"LOOKTOSEXY" \
+	"REACHINGUP" \
+  /* level 12 area 3 */
+	"ZULUNATION" \
+	"HOUSEPIMPS" \
+	"ANDRONICUS" \
+	"DEFINITIVE" \
+  /* level 12 area 4 */
+	"DANCEMANIA" \
+	"PEPPERMINT" \
+	"SOLARTRIBE" \
+	"PROJECTXYZ" \
+  /* level 12 area 5 (with cheat code enabled) */
+	"RINGOFFIRE" \
+	"POINTBLANK" \
+	"TEMPTATION" \
+	"BLUEMONDAY" \
+  /* level 13 area 5 (with cheat code enabled) */
+	"SHELLSHOCK" \
+	"HOUSEMUSIC" \
+	"DAVECLARKE" \
+	"CYBERACTIF"
 };
+char supervisor_main_menu::current_area_code[AREA_CODE_LENGTH + 1] = 
+"          ";
+

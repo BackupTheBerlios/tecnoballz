@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.cc 
- * @brief Shop supervisor 
- * @date 2007-02-16
+ * @brief Shop supervisor
+ * @date 2007-02-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.16 2007/02/22 22:07:32 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.17 2007/02/23 17:22:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -138,10 +138,12 @@ supervisor_shop::first_init ()
   if (arean > 1)
     {
       const char *pPass =
-        supervisor_main_menu::getTheCode (arean, difficulty_level);
+        supervisor_main_menu::get_area_code (arean, difficulty_level);
       ptDes = &info_text3[1 * BOX_LENGTH_STRING + 10];
       for (Sint32 i = 0; i < 10; i++)
-        ptDes[i] = pPass[i];
+        {
+          ptDes[i] = pPass[i];
+        }
       ptSrc = &info_text3[0];
     }
   else

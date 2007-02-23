@@ -1,14 +1,14 @@
 /** 
  * @file sprite_display_menu.cc 
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-02-21
+ * @date 2007-02-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.3 2007/02/21 21:07:12 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.4 2007/02/23 17:22:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #include "../include/handler_keyboard.h"
 #include "../include/handler_players.h"
 #include "../include/scoretable.h"
+#include "../include/supervisor_main_menu.h"
 
 /**
  * Create the sprite displaying text
@@ -446,7 +447,10 @@ sprite_display_menu::testLeMenu ()
               // input area password
             case LINE_CODE1:
             case LINE_CODE2:
-              input_init (10, LINE_CODE2, 10, &zeAreaCode[0]);
+              {
+                char *area_code = supervisor_main_menu::get_current_area_code ();
+                input_init (10, LINE_CODE2, supervisor_main_menu::AREA_CODE_LENGTH, area_code);
+              }
               break;
             case LINE_SORTI:
               zeRet = 1;
@@ -560,13 +564,9 @@ sprite_display_menu::mis_a_jour ()
   const char *s;
   char *d;
 
-  //###########################################################
-  // copy password
-  //###########################################################
+  /* copy current area code */
   d = menuTexte0 + (MENU_LARGE * LINE_CODE2) + 10;
-  s = &zeAreaCode[0];
-  for (Sint32 i = 0; i < 10; i++)
-    d[i] = s[i];
+  supervisor_main_menu::copy_current_area_code (d);
 
   //###########################################################
   // number of players

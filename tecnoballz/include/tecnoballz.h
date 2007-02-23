@@ -5,11 +5,11 @@
  * @date 2007-02-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.12 2007/02/19 21:03:35 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.13 2007/02/23 17:22:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-02-19)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-02-23)"
 /** To define only under development  */
 #define UNDER_DEVELOPMENT
 /** Force bytes copy (SPARC unaligned memory access) */
@@ -108,6 +108,15 @@ public:
     MAP_EDITOR,
   }
   GAME_PHASE;
+
+  typedef enum 
+  {
+    DIFFICULTY_EASY = 1,
+    DIFFICULTY_NORMAL,
+    DIFFICULTY_MEDIUM,
+    DIFFICULTY_HARD,
+  }
+  DIFFICULTIES_ENUM;
 
 public:
   /* number maximum of bonus capsules bought */
@@ -181,7 +190,6 @@ protected:
   static supervisor_map_editor *map_editor;
   /** A bitmap containing the current images of sprites */
   static bitmap_data *sprites_bitmap;
-  static char zeAreaCode[11];
 
   static offscreen_surface *game_screen;
   static offscreen_surface *background_screen;
