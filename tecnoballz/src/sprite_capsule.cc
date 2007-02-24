@@ -1,14 +1,14 @@
 /** 
  * @file sprite_capsule.cc
  * @brief The capsule sprite which contains a bonus or a penalty 
- * @date 2007-02-13
+ * @date 2007-02-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.cc,v 1.7 2007/02/20 20:52:14 gurumeditation Exp $
+ * $Id: sprite_capsule.cc,v 1.8 2007/02/24 09:10:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,12 +33,11 @@
 sprite_capsule::sprite_capsule ()
 {
   clear_sprite_members ();
-  directionX = 0;
-  gadget_num = 0;
-  raquettePT = 0x0;
+  towards = 0;
+  capsule_identifier = 0;
+  paddle = NULL;
   pt_cycling = &sprite_object::cycling_01[0];
 }
-
 
 /**
  * Release a caspsule
@@ -57,118 +56,83 @@ sprite_capsule::init_members ()
   x_minimum = 3 * resolution;
   y_maximum = screen_height - 10 * resolution;
   y_minimum = 0 * resolution;
-  frame_period = 6;             // vitesse d'animation
-  frame_delay = 1;              // compteur tempo animation
+  /* speed of the animation */
+  frame_period = 6;
+  /* time delay before each image */
+  frame_delay = 1;
   set_draw_method (sprite_object::CYCLE_PTAB);
 }
 
-//-----------------------------------------------------------------------------
-// bricks levels: initialize new gadget (bonus or malus)
-//-----------------------------------------------------------------------------
+/**
+ * Initialize a new indicator capsule (life or reserver)
+ * @param brick a pointer to the brick which touched by a ball
+ * @param id capsule identifier 
+ */
 void
-sprite_capsule::new_gadget (Sint32 nuGad)
+sprite_capsule::enable_indicator_capsule (Uint32 id)
 {
-  if (nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-    set_draw_method (sprite_object::CYCLE_PTAB);
-  else
-    set_draw_method (sprite_object::DRAW_WITH_TABLES);
-  gadget_num = nuGad;
-  nuGad = nuGad >> 1;
-  random_counter += nuGad;
-  const Sint16 *p = gagdetBrik + nuGad;
-  if (*p < 0)
-    {
-      std::cerr << "sprite_capsule::new_gadget() " <<
-        "nuGad " << nuGad << "is not used!" << std::endl;
-      return;
-    }
-  is_enabled = true;
-  nuGad = *p;
-  frame_index_min = nuGad;
-  frame_index = nuGad;
-  nuGad += XXX_IMAGES - 1;
-  frame_index_max = nuGad;
-  set_image (frame_index);
+  set_new_capsule (id, &gagdetBrik[0], 0, 0, NULL);
 }
 
-//-----------------------------------------------------------------------------
-// bricks levels: drop new gadget from brick
-//-----------------------------------------------------------------------------
+/**
+ * Initialize a new bonus or penalty capsule from a brick 
+ * @param brick a pointer to the brick which touched by a ball
+ * @param id capsule identifier 
+ */
 void
-sprite_capsule::nouveauGad (brickClear * briPT, Sint32 nuGad)
+sprite_capsule::enable_capsule (brickClear * briPT, Uint32 id)
 {
-  if (nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-    set_draw_method (sprite_object::CYCLE_PTAB);
-  else
-    set_draw_method (sprite_object::DRAW_WITH_TABLES);
-  gadget_num = nuGad;
-  x_coord = briPT->balle_posX;
-  y_coord = briPT->balle_posY;
-  sprite_paddle *raket = briPT->raquettePT;
-  raquettePT = raket;
-  directionX = raket->get_paddle_number ();
-  nuGad = nuGad >> 1;
-  random_counter += nuGad;
-  const Sint16 *p = gagdetBrik + nuGad;
-  if (*p < 0)
-    {
-      fprintf (stderr,
-               "sprite_capsule::nouveauGad() : nuGad = %i, no used ! \n",
-               nuGad);
-      return;
-    }
-  is_enabled = true;
-  nuGad = *p;
-  frame_index_min = nuGad;
-  frame_index = nuGad;
-  nuGad += XXX_IMAGES - 1;
-  frame_index_max = nuGad;
-  set_image (frame_index);
-
+  set_new_capsule (id, &gagdetBrik[0], briPT->balle_posX, briPT->balle_posY,briPT->raquettePT);
 }
 
-//-----------------------------------------------------------------------------
-// bricks levels: drop new gadget from a BouiBoui
-//-----------------------------------------------------------------------------
+/**
+ * Initialize a new bonus or penalty capsule from a ball 
+ * @param ball a pointer to the ball sprite which destroyed
+ *        the enemy ship
+ * @param id capsule identifier 
+ */
 void
-sprite_capsule::nouveauGad (sprite_ball * balle, Sint32 nuGad)
+sprite_capsule::enable_capsule (sprite_ball * ball, Uint32 id)
 {
-  if (nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-    set_draw_method (sprite_object::CYCLE_PTAB);
-  else
-    set_draw_method (sprite_object::DRAW_WITH_TABLES);
-  gadget_num = nuGad;
-  x_coord = balle->get_x_coord ();
-  y_coord = balle->get_y_coord ();
-  sprite_paddle *raket = balle->get_last_paddle_touched ();
-  raquettePT = raket;
-  directionX = raket->get_paddle_number ();
-  nuGad = nuGad >> 1;
-  random_counter += nuGad;
-  const Sint16 *p = gagdetBrik + nuGad;
-  if (*p < 0)
-    {
-      fprintf (stderr,
-               "sprite_capsule::nouveauGad() : nuGad = %i, no used ! \n",
-               nuGad);
-      return;
-    }
-  is_enabled = true;
-  nuGad = *p;
-  frame_index_min = nuGad;
-  frame_index = nuGad;
-  nuGad += XXX_IMAGES - 1;
-  frame_index_max = nuGad;
-  set_image (frame_index);
+  set_new_capsule (id, &gagdetBrik[0], ball->get_x_coord (), ball->get_y_coord (), ball->get_last_paddle_touched ());
 }
 
-//-----------------------------------------------------------------------------
-// bricks levels: drop new gadget from a BouiBoui
-//-----------------------------------------------------------------------------
+/**
+ * Initialize a new bonus or penalty capsule from a projectile
+ * @param blast a pointer to the projectile sprite which
+ *        destroyed the enemy ship
+ * @param id capsule identifier 
+ */
+
 void
-sprite_capsule::nouveauGad (sprite_projectile * projectile, Sint32 nuGad)
+sprite_capsule::enable_capsule (sprite_projectile * blast, Uint32 id)
 {
-  if (nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
+  set_new_capsule (id, &gagdetBrik[0], blast->get_x_coord (), blast->get_y_coord (), blast->paddle);
+}
+
+/**
+ * Initialize a new bonus or penalty capsule from a ball 
+ * @param ball a pointer to the ball sprite which touched the guardian
+ * @param id capsule identifier 
+ */
+void
+sprite_capsule::enable_guardian_capsule (sprite_ball * ball, Uint32 id)
+{
+  set_new_capsule (id, &gagdetGuar[0], ball->get_x_coord (), ball->get_y_coord (), ball->get_last_paddle_touched ());
+}
+
+/**
+ * Set a new bonus or penalty capsule
+ * @param id capsule identifier 
+ * @param frames frames index list
+ * @param xcoord x-coordinate of the capsule
+ * @param ycoord y-coordinate of the capsule
+ * @param pad a pointer to a sprite capsule
+ */
+void
+sprite_capsule::set_new_capsule (Uint32 id, const Sint16 *frames, Uint32 xcoord, Uint32 ycoord, sprite_paddle *pad)
+{
+  if (GAD_MEGA00 == id || GAD_RANDOM == id)
     {
       set_draw_method (sprite_object::CYCLE_PTAB);
     }
@@ -176,117 +140,91 @@ sprite_capsule::nouveauGad (sprite_projectile * projectile, Sint32 nuGad)
     {
       set_draw_method (sprite_object::DRAW_WITH_TABLES);
     }
-  gadget_num = nuGad;
-  x_coord = projectile->get_x_coord ();
-  y_coord = projectile->get_y_coord ();
-  sprite_paddle *raket = projectile->paddle;
-  raquettePT = raket;
-  directionX = raket->get_paddle_number ();
-  nuGad = nuGad >> 1;
-  random_counter += nuGad;
-  const Sint16 *p = gagdetBrik + nuGad;
-  if (*p < 0)
+  capsule_identifier = id;
+  x_coord = xcoord;
+  y_coord = ycoord;
+  paddle = pad;
+  if (NULL != paddle)
     {
-      std::cerr << "sprite_capsule::nouveauGad() nuGad: " << nuGad <<
-        " is not used!" << std::endl;
-      return;
+       towards = paddle->get_paddle_number ();
     }
-  is_enabled = true;
-  nuGad = *p;
-  frame_index_min = nuGad;
-  frame_index = nuGad;
-  nuGad += XXX_IMAGES - 1;
-  frame_index_max = nuGad;
-  set_image (frame_index);
-}
-
-
-//-----------------------------------------------------------------------------
-// guards levels: drop new gadget gadget from a guard
-//-----------------------------------------------------------------------------
-void
-sprite_capsule::new_gadget (sprite_ball * balle, Sint32 nuGad)
-{
-  if (nuGad == GAD_MEGA00 || nuGad == GAD_RANDOM)
-    set_draw_method (sprite_object::CYCLE_PTAB);
   else
-    set_draw_method (sprite_object::DRAW_WITH_TABLES);
-  gadget_num = nuGad;
-  x_coord = balle->get_x_coord ();
-  y_coord = balle->get_y_coord ();
-  sprite_paddle *raket = balle->get_last_paddle_touched ();
-  raquettePT = raket;
-  directionX = raket->get_paddle_number ();
-  nuGad = nuGad >> 1;
-  random_counter += nuGad;
-  const Sint16 *p = gagdetGuar + nuGad;
-  if (*p < 0)
     {
-      fprintf (stderr,
-               "sprite_capsule::nouveauGad() : nuGad = %i, no used ! \n",
-               nuGad);
+      towards = 0;
+    }
+  id = id >> 1;
+  random_counter += id;
+  Sint32 index = frames[id]; 
+  if (index < 0)
+    {
+      std::cerr << "sprite_capsule::set_new_capsule() " << "index " <<
+	"is not used!" << std::endl;
       return;
     }
-  is_enabled = true;
-  nuGad = *p;
-  frame_index_min = nuGad;
-  frame_index = nuGad;
-  nuGad += XXX_IMAGES - 1;
-  frame_index_max = nuGad;
-  set_image (frame_index);
-}
-
-//-----------------------------------------------------------------------------
-// shop: new gadget
-//-----------------------------------------------------------------------------
-void
-sprite_capsule::nouveauGad (Sint32 nuGad)
-{
-  if (gadget_num != nuGad)
-    {
-      gadget_num = nuGad;
-      nuGad = nuGad >> 1;
-      random_counter += nuGad;
-      Sint32 i = gagdetBrik[nuGad];
-      if (i == XXX_VIDE00)      // empty code, no gaget code ?
-        is_enabled = false;         // disable the objet
-      else
-        {
-          is_enabled = true;
-          frame_index_min = i;
-          frame_index = i;
-          i += XXX_IMAGES - 1;
-          frame_index_max = i;
-          set_image (frame_index);
-        }
-    }
-}
-
-//-----------------------------------------------------------------------------
-// copie l'image d'un gadget dans un autre gadget 
-// gadgt : pt to the source objet
-//-----------------------------------------------------------------------------
-void
-sprite_capsule::copiegadet (sprite_capsule * gadgt)
-{
-  gadget_num = gadgt->gadget_num;
-  frame_index_min = gadgt->frame_index_min;
-  frame_index = gadgt->frame_index;
-  frame_index_max = gadgt->frame_index_max;
-  set_image (frame_index);
-}
-
-//-----------------------------------------------------------------------------
-// Donne le numero du gadget
-//-----------------------------------------------------------------------------
-Sint32
-sprite_capsule::get_gadget ()
-{
-  return gadget_num;
+  enable_capsule (index);
 }
 
 /**
- * Displacement and collision of the caspsule
+ * Set a new capsule in the shop
+ * @param id capsule indentifier
+ */
+void
+sprite_capsule::set_in_shop (Uint32 id)
+{
+  if (capsule_identifier == id)
+    {
+      return;
+    }
+  capsule_identifier = id;
+  id = id >> 1;
+  random_counter += id;
+  Sint32 i = gagdetBrik[id];
+  if (i == XXX_VIDE00)          // empty code, no gaget code ?
+    {
+      is_enabled = false;
+    }
+  else
+    {
+      enable_capsule (i);
+    }
+}
+
+void sprite_capsule::enable_capsule (Uint32 index)
+{
+  is_enabled = true;
+  frame_index_min = index;
+  frame_index = index;
+  index += XXX_IMAGES - 1;
+  frame_index_max = index;
+  set_image (frame_index);
+}
+ 
+
+/**
+ * Clone this capsule from another
+ * @param capsule capsule source
+ */
+void
+sprite_capsule::clone_from_capsule (sprite_capsule * capsule)
+{
+  capsule_identifier = capsule->capsule_identifier;
+  frame_index_min = capsule->frame_index_min;
+  frame_index = capsule->frame_index;
+  frame_index_max = capsule->frame_index_max;
+  set_image (frame_index);
+}
+
+/**
+ * Return the identifier of the capsule
+ * @return identifier of the capsule
+ */
+Uint32 sprite_capsule::get_id ()
+{
+  return capsule_identifier;
+}
+
+/**
+ * Displacement and collision of the capsule
  * @return the pointer on the paddle object which
  *         was touched by the capsule or NULL if no collision
  */
@@ -297,75 +235,79 @@ sprite_capsule::move ()
     {
       return NULL;
     }
-      sprite_paddle *paddle = raquettePT;
-      switch (directionX)
+  switch (towards)
+    {
+    case controller_paddles::BOTTOM_PADDLE:
+      y_coord += resolution;
+      if (y_coord < y_maximum)
         {
-          /* bottom paddle */
-        case 1:
-          y_coord += resolution;
-          if (y_coord < y_maximum)
+          if (collision1 (paddle))
             {
-              if (collision1 (paddle))
-                {
-                  is_enabled = false;
-                  current_player->add_score (20);
-                  return paddle;
-                }
+              is_enabled = false;
+              current_player->add_score (20);
+              return paddle;
             }
-          else
-            is_enabled = false;
-          break;
-
-          /* right paddle */
-        case 2:
-          x_coord += resolution;
-          if (x_coord < x_maximum)
-            {
-              if (collision1 (paddle))
-                {
-                  is_enabled = false;
-                  current_player->add_score (20);
-                  return paddle;
-                }
-            }
-          else
-            is_enabled = false;
-          break;
-
-          /* top paddle */ 
-        case 3:
-          y_coord -= resolution;
-          if (y_coord > y_minimum)
-            {
-              if (collision1 (paddle))
-                {
-                  is_enabled = false;
-                  current_player->add_score (20);
-                  return paddle;
-                }
-            }
-          else
-            is_enabled = false;
-          break;
-
-          /* left paddle */
-        case 4:
-          x_coord -= resolution;
-          if (x_coord > x_minimum)
-            {
-              if (collision1 (paddle))
-                {
-                  is_enabled = false;
-                  current_player->add_score (20);
-                  return paddle;
-                }
-            }
-          else
-            is_enabled = false;
-          break;
-
         }
-      return NULL;
+      else
+        {
+          is_enabled = false;
+        }
+      break;
+
+    case controller_paddles::RIGHT_PADDLE:
+      x_coord += resolution;
+      if (x_coord < x_maximum)
+        {
+          if (collision1 (paddle))
+            {
+              is_enabled = false;
+              current_player->add_score (20);
+              return paddle;
+            }
+        }
+      else
+        {
+          is_enabled = false;
+        }
+      break;
+
+    case controller_paddles::TOP_PADDLE:
+      y_coord -= resolution;
+      if (y_coord > y_minimum)
+        {
+          if (collision1 (paddle))
+            {
+              is_enabled = false;
+              current_player->add_score (20);
+              return paddle;
+            }
+        }
+      else
+        {
+          is_enabled = false;
+        }
+      break;
+
+      /* left paddle */
+    case controller_paddles::LEFT_PADDLE:
+      x_coord -= resolution;
+      if (x_coord > x_minimum)
+        {
+          if (collision1 (paddle))
+            {
+              is_enabled = false;
+              current_player->add_score (20);
+              return paddle;
+            }
+        }
+      else
+        {
+          is_enabled = false;
+        }
+      break;
+
+    }
+  return NULL;
 }
 
 //-------------------------------------------------------------------------------
@@ -409,7 +351,8 @@ const Sint16
 //-------------------------------------------------------------------------------
 // guards levels : pointers on the images of the animation of the gadget 
 //-------------------------------------------------------------------------------
-const Sint16
+const
+  Sint16
   sprite_capsule::gagdetGuar[] = { XXX_VIDE00,  // *unused*
   XXX_VIDE00,                   // *unused*
   XXX_PROTEC,                   // bumper protect (guards levels only)

@@ -4,11 +4,11 @@
  * @date 2007-02-22
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.10 2007/02/22 22:07:32 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.11 2007/02/24 09:10:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ private:
 
 
 
-  static const Sint32 BOX_LENGTH_STRING = 22;  //largeur d'une ligne texte en caracteres
+  static const Uint32 BOX_LENGTH_STRING = 22;  //largeur d'une ligne texte en caracteres
   char** box_texts;
   tiles_background *tiles_ground;
   sprite_mouse_pointer *mouse_pointer;
@@ -63,9 +63,12 @@ private:
   Sint32 shoppoint3;            //pointeur
 
   Sint32 optioninfo;            // 0;1;2;3
-  Sint32 infodejavu;            //1 = info already seen at least once
-  Sint32 prixActuel;            //current price
-  Sint32 bonusachat;            //number of bought bonus
+  /** If true info already seen at least once */
+  bool is_already_view_info;
+  /** Current price of the selected option */
+  Uint32 current_price;
+  /** The number of bought capsules */
+  Uint32 num_of_bought_capsules;
   char *shop_line1;
   char *shop_line2;
   char *shop_line3;
@@ -74,7 +77,7 @@ private:
   Sint32 get_object;            // drag object : pointer to the table "case_price" (-1 = no drag object)
   Sint32 pt_get_obj;
   sprite_capsule *bobclignot;
-  sprite_capsule *bob_volant;
+  sprite_capsule *drag_sprite;
   Sint32 *courseList;
 
   // temporary list of the bonuses bought
@@ -123,7 +126,7 @@ public:
   Sint32 main_loop ();
   Sint32 testkursor (Sint32 x, Sint32 y);
   void faitcourse (Sint32 gadnu);
-  void aff_course ();
+  void display_capsules_bought ();
   void achete_gad (Sint32 gadnb);
   void message_ok ();
   Sint32 led_moving (Sint32 point);

@@ -35,8 +35,8 @@ CELA FERA 10 BRIQUES
 DE MOINS A CASSER
                       
 # extra life         #
-  VIE SUPPLEMENTAIRE
-      AJOUTEE                      
+  VIE SUPPLEMENTAIRE  
+      AJOUTEE         
                       
 # Info text          #
                       
@@ -114,3 +114,16 @@ LEFT BUMPER :NO ACTIVE
   AREA IS ..........  
  NO AVAILABLE PASSWORD
  FOR THIS AREA.       
+#welcome message
+BIENVENUE ..........  
+DANS LE MAGASIN       
+BONUS PRIX ACTIF      
+DESOLE, MAIS VOUS     
+N'AVEZ PAS ASSEZ      
+D'ARGENT POUR CELA    
+VOUS NE POUVEZ PAS    
+ ACHETER PLUS DE      
+    .. CAPSULES       
+DESOLE, CETTE OPTION  
+NET PEUT-ETRE UTILISE 
+QUE DANS LA ZONE 5    

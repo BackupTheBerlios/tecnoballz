@@ -1,14 +1,14 @@
 /** 
  * @file sprite_capsule.h
  * @brief The capsule sprite which contains a bonus or a penalty 
- * @date 2007-02-12
+ * @date 2007-02-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.h,v 1.5 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: sprite_capsule.h,v 1.6 2007/02/24 09:10:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,45 @@ class sprite_capsule;
 #include "../include/handler_display.h"
 #include "../include/sprite_projectile.h"
 
+typedef enum 
+{
+  GAD_VIDE00 = 0,
+  GAD_GLUE00 = 2,
+  GAD_NEXTLV = 4,
+  GAD_PROTEC = 4,
+  GAD_FIRE01 = 6,
+  GAD_FIRE02 = 8,
+  GAD_SIZE_M = 10,
+  GAD_SIZE_P = 12,
+  GAD_LIFE_M = 14,
+  GAD_LIFE_P = 16,
+  GAD_BALLE2 = 18,
+  GAD_BALLE3 = 20,
+  GAD_POWER1 = 22,
+  GAD_POWER2 = 24,
+  GAD_INVERS = 26,
+  GAD_REBUIL = 28,
+  GAD_SPEEDM = 30,
+  GAD_BUMP01 = 32,
+  GAD_BUMP02 = 34,
+  GAD_BUMP03 = 36,
+  GAD_BUMP04 = 38,
+  GAD_SIZE01 = 40,
+  GAD_SIZE02 = 42,
+  GAD_RANDOM = 44,
+  GAD_MEGA00 = 46,
+  GAD_PRICE1 = 48,
+  GAD_WALL01 = 50,
+  GAD_ROBOT1 = 52,
+  GAD_CONTRO = 54,
+  GAD_OEIL00 = 56,
+  GAD_LESSBR = 58,
+  GAD_INFORM = 60,
+  GAD_EXITSH = 62,
+}
+CASPULES_ENUM;
+
+/*
 const Sint32 GAD_VIDE00 = 0;
 const Sint32 GAD_GLUE00 = 2;    // glue (only briks levels)
 const Sint32 GAD_NEXTLV = 4;    // next level (only briks levels)
@@ -68,6 +107,7 @@ const Sint32 GAD_OEIL00 = 56;   // Oeil
 const Sint32 GAD_LESSBR = 58;   // Less-Brick (only Shop)
 const Sint32 GAD_INFORM = 60;   // Informations (only Shop)
 const Sint32 GAD_EXITSH = 62;   // Exit (only shop)
+*/
 
 const Sint32 XXX_IMAGES = 7;
 const Sint16 XXX_VIDE00 = -1;
@@ -98,9 +138,9 @@ class sprite_capsule:public sprite_object
   friend class supervisor_shop;
 
 private:
-  Sint32 directionX;
-  Sint32 gadget_num;
-  sprite_paddle *raquettePT;
+  Uint32 towards;
+  Uint32 capsule_identifier;
+  sprite_paddle *paddle;
   static const Sint16 gagdetBrik[];
   static const Sint16 gagdetGuar[];
 
@@ -108,15 +148,18 @@ public:
     sprite_capsule ();
    ~sprite_capsule ();
   void init_members ();
-  void new_gadget (Sint32 nuGad);
-  void nouveauGad (brickClear * briPT, Sint32 nuGad);
-  void nouveauGad (sprite_ball * balle, Sint32 nuGad);
-  void nouveauGad (sprite_projectile * pfire, Sint32 nuGad);
-  void new_gadget (sprite_ball * balle, Sint32 nuGad);
-  void nouveauGad (Sint32 nuGad);
-  void copiegadet (sprite_capsule * gadgt);
-  Sint32 get_gadget ();
+  void enable_indicator_capsule (Uint32 id);
+  void enable_capsule (brickClear * brick, Uint32 id);
+  void enable_capsule (sprite_ball * ball, Uint32 id);
+  void enable_capsule (sprite_projectile * blast, Uint32 id);
+  void enable_guardian_capsule (sprite_ball * ball, Uint32 id);
+  void set_in_shop (Uint32 id);
+  void clone_from_capsule (sprite_capsule * capsule);
+  Uint32 get_id ();
   sprite_paddle *move ();
-  void gagdet_run (Sint32 nuGad);
+  void gagdet_run (Uint32 id);
+private:
+  void set_new_capsule (Uint32 id, const Sint16 *frames, Uint32 xcoord, Uint32 ycoord, sprite_paddle *pad);
+  void enable_capsule (Uint32 index);
 };
 #endif

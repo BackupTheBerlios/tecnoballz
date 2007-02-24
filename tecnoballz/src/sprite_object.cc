@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.cc 
  * @brief Draw sprites on the screen 
- * @date 2007-01-12
+ * @date 2007-02-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.25 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.26 2007/02/24 09:10:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -155,7 +155,7 @@ sprite_object::clear_sprite_members ()
   current_drawing_values = (Sint16 *) NULL;
   current_drawing_data = (char *) NULL;
   current_drawing_pixels = NULL;
-  sprite_has_shadow = 0;
+  sprite_has_shadow = false;
   sprite_type_id = 0;
   srceNextLn = 0;
   affligFrst = 0;
@@ -687,6 +687,18 @@ sprite_object::has_shadow ()
 {
   return sprite_has_shadow;
 }
+
+/**
+ * Set or clear the flag sprite shadow
+ * param shadow true if the sprite has a shadow
+ */
+void
+sprite_object::set_shadow (bool shadow)
+{
+  sprite_has_shadow = shadow;
+}
+
+
 
 /**
  * Get x coordinate

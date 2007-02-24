@@ -2,14 +2,14 @@
  * @file controller_indicators.cc 
  * @brief Controller of money amount, reverse penalty   
  * @created 2002-11-28 
- * @date 2007-02-18
+ * @date 2007-02-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_indicators.cc,v 1.4 2007/02/18 21:07:00 gurumeditation Exp $
+ * $Id: controller_indicators.cc,v 1.5 2007/02/24 09:10:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,6 +80,7 @@ controller_indicators::create_indicators_sprites ()
   sprite_money *money = moneys->get_first_sprite ();
   money_sprite = new sprite_money ();
   money->duplicate_to (money_sprite);
+  money->set_shadow (false);
   sprites->add (money_sprite);
   init_money ();
   
@@ -92,10 +93,11 @@ controller_indicators::create_indicators_sprites ()
     {
       reverse_sprite = new sprite_capsule ();
       caps->duplicate_to (reverse_sprite);
+      caps->set_shadow (false);
       sprites->add (reverse_sprite);
 
       Sint32 x = 215 * resolution;
-      reverse_sprite->new_gadget (GAD_INVERS);
+      reverse_sprite->enable_indicator_capsule (GAD_INVERS);
       reverse_sprite->set_coordinates (x, money_posy);
       reverse_sprite->set_frame_delay (5);
       x += reverse_sprite->get_sprite_width ();
@@ -115,8 +117,9 @@ controller_indicators::create_indicators_sprites ()
       life_sprite = new sprite_capsule ();
       caps->duplicate_to (life_sprite);
       sprites->add (life_sprite);
+      caps->set_shadow (false);
       Sint32 x = 264 * resolution;
-      life_sprite->new_gadget (GAD_LIFE_P);
+      life_sprite->enable_indicator_capsule (GAD_LIFE_P);
       life_sprite->set_coordinates (x, money_posy);
       life_sprite->set_frame_delay (5);
       x += life_sprite->get_sprite_width ();

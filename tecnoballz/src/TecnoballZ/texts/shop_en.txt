@@ -29,6 +29,7 @@ POWERFULL AS FIRE 1
 # ball power 2       #
   WITH THAT YOU WILL  
   BREAK ALL YOU WANT  
+
 # less bricks         
  THERE WILL 10 BRICKS 
     LESS TO BREAK     
@@ -113,3 +114,16 @@ LEFT BUMPER :NO ACTIVE
   AREA IS ..........  
  NO AVAILABLE PASSWORD
  FOR THIS AREA.       
+#welcome message      
+WELCOME ...... TO THE 
+  TECNOBALLZ SHOP     
+PRICE BONUS IS ENABLE 
+SORRY, BUT YOU HAVEN'T
+GOT ENOUGH MONEY      
+TO BUY THIS OPTION    
+  YOU CAN ONLY BUY    
+  .. CAPSULES         
+                      
+  SORRY  THIS OPTION  
+   CAN ONLY BE USED   
+      FOR AREA 5      

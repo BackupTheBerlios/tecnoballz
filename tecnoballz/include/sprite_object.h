@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.h
  * @brief Draw sprites on the screen 
- * @date 2007-01-27
+ * @date 2007-02-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.26 2007/02/16 12:38:24 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.27 2007/02/24 09:10:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,71 @@ class sprite_object;
 /*
  * sprite's ID
  */
+typedef enum
+{
+  BOB_ATOMES,
+  BOB_EJECT1,
+  BOB_EJECT2,
+  BOB_EJECT3,
+  BOB_EJECT4,
+  BOB_BRICKV,
+  BOB_BRICKH,
+  BOB_BRICKS,
+  BOB_BUMPHR,
+  BOB_BUMPVT,
+  BOB_BALLES,
+  BOB_FIREBP,
+  BOB_MONEYS,
+  BOB_GADGET,
+  BOB_LETTRE,
+  BOB_LEDSHP,
+  BOB_GAMEOV,
+  BOB_DEFILE,
+  BOB_LOGOTB,
+  BOB_MOUSE1,
+  BOB_MOUSE2,
+  BOB_GIGAB1,
+  BOB_GIGAB2,
+  BOB_GIGAB3,
+  BOB_GIGAB4,
+  BOB_GIGAB5,
+  BOB_GIGAB6,
+  BOB_GIGAB7,
+  BOB_MONEY0,
+  BOB_ROBOT0,
+  BOB_FINAL1,
+  BOB_FINAL2,
+  BOB_FINAL3,
+  BOB_FINAL4,
+  BOB_FINAL5,
+  BOB_FINAL6,
+  BOB_INTE1A,
+  BOB_INTE1B,
+  BOB_INTE2A,
+  BOB_INTE2B,
+  BOB_INTE3A,
+  BOB_INTE3B,
+  BOB_INTE4A,
+  BOB_INTE4B,
+  BOB_INTE5A,
+  BOB_INTE5B,
+  BOB_BUMPER,
+  BOB_MISSIL,
+  BOB_EXPLO1,
+  BOB_EXPLO2,
+  BOB_ARGENT,
+  BOB_GRDNRJ,
+  BOB_GEMSTO,
+  BOB_WALLBO,
+  BOB_DIRECT,
+  BOB_ESCMEN,
+  BOB_MAGEYE,
+  BOB_LEDSH2,
+  BOB_BRICK1
+}
+SPRITES_ENUM;
+
+/*
 const Sint32 BOB_ATOMES = 0;
 const Sint32 BOB_EJECT1 = 1;
 const Sint32 BOB_EJECT2 = 2;
@@ -96,6 +161,7 @@ const Sint32 BOB_ESCMEN = 55;
 const Sint32 BOB_MAGEYE = 56;
 const Sint32 BOB_LEDSH2 = 57;
 const Sint32 BOB_BRICK1 = 58;
+*/
 /* const Sint32	BOB_BRICK2 = 59;
 const Sint32	BOB_BRICK3 = 60;
 const Sint32	BOB_BRICK4 = 61;
@@ -287,6 +353,7 @@ public:
   void move_x (Sint32 x_offset);
   void move_y (Sint32 y_offset);
   bool has_shadow ();
+  void set_shadow (bool shadow = true);
   Sint32 get_x_coord ();
   Sint32 get_y_coord ();
   void set_image ();

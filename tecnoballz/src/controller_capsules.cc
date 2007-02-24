@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.12 2007/02/18 21:07:00 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.13 2007/02/24 09:10:12 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -159,7 +159,7 @@ controller_capsules::envoieGads (brickClear * briPT)
               j = *(malusTable + j);
               malus_step = 0;
               //j = GAD_MEGA00;       //test only
-              gadg->nouveauGad (briPT, j);
+              gadg->enable_capsule (briPT, j);
             }
           else
             //###########################################################
@@ -179,7 +179,7 @@ controller_capsules::envoieGads (brickClear * briPT)
                           course_ptr = 0;
                         }
                       course_ptr++;
-                      gadg->nouveauGad (briPT, j);
+                      gadg->enable_capsule (briPT, j);
                     }
                 }
             }
@@ -201,7 +201,7 @@ controller_capsules::send_malus (sprite_ball * pball)
         {
           Sint16 j = random_counter & 0x1F; //value 0 to 31 
           j = *(malusTable + j);
-          gadg->nouveauGad (pball, j);
+          gadg->enable_capsule (pball, j);
           return;
         }
     }
@@ -220,7 +220,7 @@ controller_capsules::send_malus (sprite_projectile * pfire)
         {
           Sint16 j = random_counter & 0x1F; //value 0 to 31 
           j = *(malusTable + j);
-          gadg->nouveauGad (pfire, j);
+          gadg->enable_capsule (pfire, j);
           return;
         }
     }
@@ -231,20 +231,22 @@ controller_capsules::send_malus (sprite_projectile * pfire)
 // guards level : test if send a gadget (malus or bonus)
 //-------------------------------------------------------------------------------
 void
-controller_capsules::envoieGads (sprite_ball * pball)
+controller_capsules::envoieGads (sprite_ball * ball)
 {
   malus_step++;
   if (malus_step <= malus_frek)
-    return;
+    {
+      return;
+    }
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_capsule *gadg = sprites_list[i];
-      if (!gadg->is_enabled)
+      sprite_capsule *capsule = sprites_list[i];
+      if (!capsule->is_enabled)
         {
           Sint16 j = random_counter & 0x1F; //value 0 to 31 
           j = *(malusTable + j);
           malus_step = 0;
-          gadg->new_gadget (pball, j);
+          capsule->enable_guardian_capsule (ball, j);
           return;
         }
     }
@@ -290,7 +292,7 @@ controller_capsules::create_shop_sprites_list ()
 void
 controller_capsules::gadgetShop (Sint32 nuGad)
 {
-  temoin_gad->nouveauGad (nuGad);
+  temoin_gad->set_in_shop (nuGad);
 }
 
 /**
@@ -306,7 +308,7 @@ controller_capsules::move_in_bricks_levels ()
       sprite_paddle *paddle = capsule->move ();
       if (NULL != paddle)
         {
-          Sint32 g = capsule->get_gadget ();
+          Sint32 g = capsule->get_id ();
           gadget_run (paddle, g);
         }
     }
@@ -325,7 +327,7 @@ controller_capsules::move_in_guardians_levels ()
       sprite_paddle *paddle = capsule->move ();
       if (NULL != paddle)
         {
-          Sint32 g = capsule->get_gadget ();
+          Sint32 g = capsule->get_id ();
           gadgetrun2 (paddle, g);
         }
     }
