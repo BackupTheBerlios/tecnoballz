@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.cc 
  * @brief Capsules controller 
- * @date 2007-02-18
+ * @date 2007-02-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.13 2007/02/24 09:10:12 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.14 2007/02/25 20:33:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,30 +38,23 @@
 controller_capsules::controller_capsules ()
 {
   littleInit ();
-  Sint16 *monPT;
-  monPT = courseList;
-  /* clear the list of bonus capsules bought in shop */
-  for (Sint32 i = 0; i < NB_OPTIONS; i++)
-    {
-      *(monPT++) = 0;
-    }
-  *(monPT++) = -1;
   frame_delay = 0;
   frame_period = 5;
   frame_index = 0;
   malus_step = 0;
   malus_frek = 0;
-  brick_kass = 0;
-  bonusAchet = 0;
-  bonusTombe = 0;
+  bricks_breaked_count = 0;
+  num_of_caspules_bought = 0;
+  capsules_released_count = 0;
   bonus_step = 0;
-  course_ptr = 0;
+  shopping_cart_index = 0;
   max_of_sprites = 0;
   sprites_have_shades = false;
   /* additional table to drawing pixel by pixel is required
    * for color cycling of the chance capsule */
   is_draw_pixel_by_pixel = true;
   sprite_type_id = BOB_GADGET;
+  shopping_cart = NULL;
 }
 
 /**
@@ -75,14 +68,11 @@ controller_capsules::~controller_capsules ()
 /**
  * Perform some initializations
  * @param mStep time interval between two capsules 
- * @param bKauf number of capsules bought in shop
- * @param brCnt number of bricks to be destroyed
  * @param table pointer to the list of capsules
- * @param cours pointer to list of capsules bought in shop
  */
 void
-controller_capsules::initialize (Sint32 mStep, Sint32 bKauf, Sint32 brCnt,
-                                 const Sint16 * table, Sint32 * cours,
+controller_capsules::initialize (Sint32 mStep,
+                                 const Sint16 * table,
                                  zeMiniMess * ptMes,
                                  controller_balls * pBall,
                                  sprite_object * pWall)
@@ -92,100 +82,89 @@ controller_capsules::initialize (Sint32 mStep, Sint32 bKauf, Sint32 brCnt,
   controller_paddles* paddles = controller_paddles::get_instance ();
   paddle_selected = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
   malus_frek = mStep;
-  bonusAchet = bKauf;
   bonus_step = 0;
-  malusTable = table;
+  random_list = table;
   malus_step = 0;               //"malus" drop frequency 
-  brick_kass = 0;               //number of bricks current destroyed
-  bonusTombe = 0;               //number of bonuses dropped 
+  bricks_breaked_count = 0;               //number of bricks current destroyed
+  capsules_released_count = 0;               //number of bonuses dropped 
   ptMiniMess = ptMes;
-  sprite_capsule *bonus = sprites_list[0];
+  sprite_capsule *capsule = sprites_list[0];
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      bonus = sprites_list[i];
-      bonus->init_members ();
+      capsule = sprites_list[i];
+      capsule->init_members ();
     }
-  frame_period = bonus->frame_period;
+  frame_period = capsule->frame_period;
 
-  /* clear the list of bonuses bought in the shop */
-  for (Uint32 i = 0; i < NB_OPTIONS; i++)
+  if (super_jump == BRICKS_LEVEL)
     {
-      courseList[i] = 0;
-    }
-  /* mark the end of the list */
-  courseList[NB_OPTIONS] = -1;
-
-  //###################################################################
-  // copy list of bonuses bought in the shop
-  //###################################################################
-  if (cours)
-    {
-      for (Sint32 i = 0; i < bonusAchet; i++)
-        courseList[i] = cours[i];
-    }
-  else
-    courseList[0] = -1;
-
-  if (bonusAchet > 0)           //at least a bought bonus?
-    {
-      Sint32 v = brCnt - (brCnt / 2);
-      bonus_step = v / bonusAchet;
-    }
-  else
-    {
-      //no bonus bought in the shop. Initialize with the maximum value.
-      bonus_step = brCnt + 1;
+      controller_bricks *bricks = controller_bricks::get_instance ();
+      Uint32 numof_bricks = bricks->get_num_of_bricks ();
+      shopping_cart = current_player->get_shopping_cart ();
+      num_of_caspules_bought = current_player->get_cou_nb ();
+      /* at least a bought bonus? */
+      if (num_of_caspules_bought > 0)
+	{
+	  bonus_step = (numof_bricks - numof_bricks / 2) / num_of_caspules_bought;
+	}
+      else
+	{
+          /* no bonus bought in the shop,
+	   * initialize with the maximum value */
+	  bonus_step  = numof_bricks + 1;
+	}
     }
 }
 
-//-------------------------------------------------------------------------------
-// bricks level: test if send a gadget (malus or bonus)
-//-------------------------------------------------------------------------------
+/**
+ * Check if send a bonus or penalty capsule
+ * @param briPT
+ */
 void
-controller_capsules::envoieGads (brickClear * briPT)
+controller_capsules::send_capsule_from_bricks (brickClear * briPT)
 {
-  brick_kass++;
+  bricks_breaked_count++;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_capsule *gadg = sprites_list[i];
-      if (!gadg->is_enabled)
-        {                       //###########################################################
-          // handle maluses
-          //###########################################################
+      sprite_capsule *caspule = sprites_list[i];
+      if (caspule->is_enabled)
+        { 
+	  continue;
+	}
+
+	  /*
+	   * Send a random penalty or bonus capsule
+	   */
           malus_step++;
           if (malus_step > malus_frek)
             {
-              Sint16 j = random_counter & 0x3F;     //value 0 to 63 
-              j = *(malusTable + j);
               malus_step = 0;
-              //j = GAD_MEGA00;       //test only
-              gadg->enable_capsule (briPT, j);
+              caspule->enable_capsule (briPT, random_list[random_counter & 0x3F]);
             }
+	  /*
+	   * Send a bonus capsule bought in th shop
+	   */
           else
-            //###########################################################
-            // handle bonuses
-            //###########################################################
             {
-              if (bonusAchet > bonusTombe)
+              if (num_of_caspules_bought > capsules_released_count)
                 {
-                  if (brick_kass > bonus_step)
+                  if (bricks_breaked_count > bonus_step)
                     {
-                      brick_kass = 0;
-                      bonusTombe++;
-                      Sint32 j = courseList[course_ptr];
+                      bricks_breaked_count = 0;
+                      capsules_released_count++;
+                      Sint32 j = shopping_cart[shopping_cart_index];
                       if (!j)
                         {
-                          j = courseList[0];
-                          course_ptr = 0;
+                          j = shopping_cart[0];
+                          shopping_cart_index = 0;
                         }
-                      course_ptr++;
-                      gadg->enable_capsule (briPT, j);
+                      shopping_cart_index++;
+                      caspule->enable_capsule (briPT, j);
                     }
                 }
             }
           return;
         }
-    }
 }
 
 //-------------------------------------------------------------------------------
@@ -200,7 +179,7 @@ controller_capsules::send_malus (sprite_ball * pball)
       if (!gadg->is_enabled)
         {
           Sint16 j = random_counter & 0x1F; //value 0 to 31 
-          j = *(malusTable + j);
+          j = *(random_list + j);
           gadg->enable_capsule (pball, j);
           return;
         }
@@ -211,18 +190,19 @@ controller_capsules::send_malus (sprite_ball * pball)
 // bricks levels: send a malus (from BouiBoui)
 //-------------------------------------------------------------------------------
 void
-controller_capsules::send_malus (sprite_projectile * pfire)
+controller_capsules::send_malus (sprite_projectile * blast)
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_capsule *gadg = sprites_list[i];
-      if (!gadg->is_enabled)
+      sprite_capsule *capsule = sprites_list[i];
+      if (capsule->is_enabled)
         {
-          Sint16 j = random_counter & 0x1F; //value 0 to 31 
-          j = *(malusTable + j);
-          gadg->enable_capsule (pfire, j);
-          return;
+	  continue;
         }
+          Sint16 j = random_counter & 0x1F; //value 0 to 31 
+          j = *(random_list + j);
+          capsule->enable_capsule (blast, j);
+          return;
     }
 }
 
@@ -231,7 +211,7 @@ controller_capsules::send_malus (sprite_projectile * pfire)
 // guards level : test if send a gadget (malus or bonus)
 //-------------------------------------------------------------------------------
 void
-controller_capsules::envoieGads (sprite_ball * ball)
+controller_capsules::check_if_send_capsule (sprite_ball * ball)
 {
   malus_step++;
   if (malus_step <= malus_frek)
@@ -241,58 +221,59 @@ controller_capsules::envoieGads (sprite_ball * ball)
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_capsule *capsule = sprites_list[i];
-      if (!capsule->is_enabled)
+      if (capsule->is_enabled)
         {
+	  continue;
+        }
           Sint16 j = random_counter & 0x1F; //value 0 to 31 
-          j = *(malusTable + j);
+          j = *(random_list + j);
           malus_step = 0;
           capsule->enable_guardian_capsule (ball, j);
           return;
-        }
     }
 }
 
-//-------------------------------------------------------------------------------
-// shop : initialize the positions of bonuses
-//-------------------------------------------------------------------------------
+/**
+ * Initialize the coordinattes of the bonus capsules in the shop 
+ */
 void
 controller_capsules::create_shop_sprites_list ()
 {
-  //set_max_of_sprites (NB_OPTIONS + 2);
-  create_sprites_list (NB_OPTIONS + 2 ,0);
-  Sint32 t = NB_OPTIONS;
-  sprite_capsule **liste = sprites_list;
-  sprite_capsule *bonus = *liste;
-  Sint32 h = bonus->sprite_height + 1;
+  create_sprites_list (supervisor_shop::MAX_OF_CAPSULES_BOUGHT + 2 ,false);
+  Uint32 maxof = supervisor_shop::MAX_OF_CAPSULES_BOUGHT;
+  sprite_capsule **caspules = sprites_list;
+  sprite_capsule *caspule = caspules[0];
+  Uint32 h = caspule->sprite_height + 1;
   Sint32 x = SGADGET_X1 * resolution;
   Sint32 y = SGADGET_Y1 * resolution;
-  for (Sint32 i = 0; i < t; i++)
+  for (Uint32 i = 0; i < maxof; i++)
     {
-      bonus = *(liste++);
-      bonus->set_coordinates (x, y);
-      bonus->disable ();
+      caspule = *(caspules++);
+      caspule->set_coordinates (x, y);
+      caspule->disable ();
       y += h;
     }
 
-  //initialize bonus sprite object for the drag and drop 
-  bonus = *(liste++);
-  bonus->set_coordinates (0, 0);
-  bonus->disable ();
+  /* initialize caspule sprite object for the drag and drop */ 
+  caspule = *(caspules++);
+  caspule->set_coordinates (0, 0);
+  caspule->disable ();
 
-  //initialize bonus sprite object that display indicator   
-  bonus = *liste;
-  bonus->set_coordinates (SGADGET_X2 * resolution, SGADGET_Y2 * resolution);
-  bonus->disable ();
-  temoin_gad = bonus;
+  /* initialize caspule sprite object that display indicator */ 
+  caspule = *caspules;
+  caspule->set_coordinates (SGADGET_X2 * resolution, SGADGET_Y2 * resolution);
+  caspule->disable ();
+  overview_capsule = caspule;
 }
 
-//-------------------------------------------------------------------------------
-// shop : change bonus indicator
-//-------------------------------------------------------------------------------
+/**
+ * Set the overview capsule in the shop
+ * @id id capsule identifier
+ */
 void
-controller_capsules::gadgetShop (Sint32 nuGad)
+controller_capsules::set_overview_capsule (Uint32 id)
 {
-  temoin_gad->set_in_shop (nuGad);
+  overview_capsule->set_in_shop (id);
 }
 
 /**
@@ -308,8 +289,8 @@ controller_capsules::move_in_bricks_levels ()
       sprite_paddle *paddle = capsule->move ();
       if (NULL != paddle)
         {
-          Sint32 g = capsule->get_id ();
-          gadget_run (paddle, g);
+          Uint32 id = capsule->get_id ();
+          gadget_run (paddle, id);
         }
     }
 }
@@ -327,31 +308,33 @@ controller_capsules::move_in_guardians_levels ()
       sprite_paddle *paddle = capsule->move ();
       if (NULL != paddle)
         {
-          Sint32 g = capsule->get_id ();
-          gadgetrun2 (paddle, g);
+          Uint32 id = capsule->get_id ();
+          gadgetrun2 (paddle, id);
         }
     }
 }
 
-//-------------------------------------------------------------------------------
-// shop: animation of bonus
-//-------------------------------------------------------------------------------
+/**
+ * Play capsules animation in shop
+ * @param speed speed of the animation 1 or 2
+ */
 void
-controller_capsules::animations (Sint32 value)
+controller_capsules::play_animation_in_shop (Uint32 speed)
 {
-  if ((--frame_delay) <= 0)
+  if (--frame_delay <= 0)
     {
-      frame_delay = frame_period / value;
+      frame_delay = frame_period / speed;
       if (++frame_index >= XXX_IMAGES)
-        frame_index = 0;
+	{
+          frame_index = 0;
+	}
     }
-  Sint32 a = frame_index;
-  sprite_capsule **liste = sprites_list;
+  Uint32 offset = frame_index;
+  sprite_capsule **caspules = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_capsule *bonus = *(liste++);
-      Sint32 o = bonus->frame_index_min + a;
-      bonus->set_image (o);
+      sprite_capsule *caspule = *(caspules++);
+      caspule->set_image (caspule->frame_index_min + offset);
     }
 }
 

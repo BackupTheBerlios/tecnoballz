@@ -1,14 +1,14 @@
 /** 
  * @file handler_players.h
  * @brief players handler 
- * @date 2007-02-14
+ * @date 2007-02-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.h,v 1.9 2007/02/14 13:39:20 gurumeditation Exp $
+ * $Id: handler_players.h,v 1.10 2007/02/25 20:33:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ class handler_players;
 
 #include "../include/tecnoballz.h"
 #include "../include/controller_capsules.h"
+#include "../include/supervisor_shop.h"
 
 class handler_players:public virtual tecnoballz
 {
@@ -70,7 +71,8 @@ private:
   /** Number of lifes remaining */
   Sint32 number_of_lifes;
   /** List ot the items bought in the shop */
-  Sint32 shopping_cart[NB_OPTIONS + 1];
+  //Sint32 shopping_cart[supervisor_shop::MAX_OF_CAPSULES_BOUGHT + 1];
+  Sint32 shopping_cart[20];
   /** The number of items in the shopping cart */
   Uint32 shopping_cart_items;
   /** Amount of money available to be spend in the shop */

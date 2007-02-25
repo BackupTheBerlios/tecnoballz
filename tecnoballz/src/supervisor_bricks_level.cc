@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.29 2007/02/18 21:07:00 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.30 2007/02/25 20:33:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -196,20 +196,20 @@ supervisor_bricks_level::first_init ()
   //##############################################################
   //Initialize the object which handles gadgets (bonus and malus)
   //##############################################################
-  Sint32 *cours = current_player->get_shopping_cart ();
-  Sint32 counb = current_player->get_cou_nb ();
-  Sint32 brCnt = bricks->get_num_of_bricks ();
+  //Sint32 *cours = current_player->get_shopping_cart ();
+  //Sint32 counb = current_player->get_cou_nb ();
+  //Sint32 brCnt = bricks->get_num_of_bricks ();
   power_up_capsules->initialize (
                            //frequency of appearance of malus 
                            levelParam->malusCount * difficulty_level,
                            //number of bonus bought in the shop
-                           counb,
+                           //counb,
                            //number of bricks which it is necessary to break
-                           brCnt,
+                           //brCnt,
                            //the list of malus
                            levelParam->malusListe,
                            //the list of bonus bought in the shop
-                           cours,
+                           //cours,
                            //the object which displays the small messages
                            ptMiniMess,
                            //the object which handles the balls

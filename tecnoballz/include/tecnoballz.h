@@ -5,11 +5,11 @@
  * @date 2007-02-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.13 2007/02/23 17:22:34 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.14 2007/02/25 20:33:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,8 +119,6 @@ public:
   DIFFICULTIES_ENUM;
 
 public:
-  /* number maximum of bonus capsules bought */
-  static const Sint32 NB_OPTIONS = 19;
   /** 4 levels of difficulty */
   static const Uint32 NDIFFICULT = 4;
   static const Sint32 MAX_PLAYER = 6;

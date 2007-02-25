@@ -5,11 +5,11 @@
  * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.15 2007/02/21 21:07:11 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.16 2007/02/25 20:33:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -621,10 +621,9 @@ bool controller_bricks::update ()
           if (briPT->balle_posX != 512)
             {
               moneys->send_money_from_brick (briPT);
-              capsules->envoieGads (briPT);
+              capsules->send_capsule_from_bricks (briPT);
             }
         }
-
     }
 
   //###############################################################

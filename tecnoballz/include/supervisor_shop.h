@@ -4,11 +4,11 @@
  * @date 2007-02-22
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.11 2007/02/24 09:10:12 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.12 2007/02/25 20:33:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,9 @@ class supervisor_shop;
 
 class supervisor_shop:public supervisor
 {
+public:
+  /* number maximum of bonus capsules bought */
+  static const Uint32 MAX_OF_CAPSULES_BOUGHT = 19;
 private:
   typedef enum
     {
@@ -81,7 +84,7 @@ private:
   Sint32 *courseList;
 
   // temporary list of the bonuses bought
-  Sint32 coursetemp[NB_OPTIONS + 1];
+  Sint32 coursetemp[MAX_OF_CAPSULES_BOUGHT + 1];
 
   Sint32 shop_xmini;
   Sint32 shop_xmaxi;
@@ -105,7 +108,7 @@ private:
   Sint32 tricheCode;
 
   // table de pointeurs sur "case_price"
-  static Sint32 sh_tablept[NB_OPTIONS];
+  static Sint32 sh_tablept[MAX_OF_CAPSULES_BOUGHT];
 
   static Sint32 case_types[];
   static Sint32 case_price[];

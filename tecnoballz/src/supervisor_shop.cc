@@ -4,11 +4,11 @@
  * @date 2007-02-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.18 2007/02/24 09:10:12 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.19 2007/02/25 20:33:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -131,7 +131,7 @@ supervisor_shop::first_init ()
     {
       shoptext00[8 + i] = ptDes[i];
     }
-  intToASCII (NB_OPTIONS, &shoptext63[48], 1);
+  intToASCII (MAX_OF_CAPSULES_BOUGHT, &shoptext63[48], 1);
   intToASCII (current_player->get_num_of_lifes (),
               &info_text1[BOX_LENGTH_STRING * 4 + 5], 1);
 
@@ -178,12 +178,12 @@ supervisor_shop::first_init ()
   power_up_capsules->create_shop_sprites_list ();
   current_player->clear_shopping_cart ();
   Sint32 *tp = coursetemp;
-  for (Sint32 i = 0; i < NB_OPTIONS; i++)
+  for (Sint32 i = 0; i < MAX_OF_CAPSULES_BOUGHT; i++)
     {
       *(tp++) = 0;
     }
   sprite_capsule **capsules = power_up_capsules->get_sprites_list ();
-  drag_sprite = capsules[(NB_OPTIONS + 2) - 1 - 1];
+  drag_sprite = capsules[(MAX_OF_CAPSULES_BOUGHT + 2) - 1 - 1];
 
   /* initialize the mouse pointer */
   mouse_pointer->create_pointer_sprite (sprites_bitmap);
@@ -297,9 +297,13 @@ supervisor_shop::main_loop ()
 
   mouse_pointer->move ();
   if (cheat_flag)
-    power_up_capsules->animations (2);
+    {
+      power_up_capsules->play_animation_in_shop (2);
+    }
   else
-    power_up_capsules->animations (1);
+    {
+      power_up_capsules->play_animation_in_shop (1);
+    }
 
 
   //###################################################################
@@ -342,7 +346,7 @@ supervisor_shop::display_capsules_bought ()
   Sint32 *cart = current_player->get_shopping_cart ();
   sprite_capsule **capsules = power_up_capsules->get_sprites_list ();
   Sint32 pos_y = 4 * resolution;
-  for (Sint32 i = 0; i < NB_OPTIONS; i++)
+  for (Sint32 i = 0; i < MAX_OF_CAPSULES_BOUGHT; i++)
     {
       sprite_capsule *capsule = *(capsules++);
       capsule->set_coordinates (294 * resolution, pos_y);
@@ -394,14 +398,14 @@ supervisor_shop::led_moving (Sint32 index)
     {
       led_indicator->disable ();
       Sint32 i = 0;
-      power_up_capsules->gadgetShop (0);
+      power_up_capsules->set_overview_capsule (0);
       return i;
     }
   else
     {
       // set gadget indicator
       Sint32 i = case_types[index];
-      power_up_capsules->gadgetShop (i);
+      power_up_capsules->set_overview_capsule (i);
 
       // set LED indicator
       led_indicator->enable ();
@@ -678,7 +682,7 @@ void
 supervisor_shop::achete_gad (Sint32 gadnb)
 {
   /* maximum number of capsules reached */
-  if (num_of_bought_capsules >= NB_OPTIONS)
+  if (num_of_bought_capsules >= MAX_OF_CAPSULES_BOUGHT)
     {
       putthetext (box_texts[33]);
       return;
@@ -798,26 +802,26 @@ supervisor_shop::sh_ballade ()
                             {
                               if (p1 <= p2)     // source <= destination
                                 {
-                                  if (i++ < NB_OPTIONS)
+                                  if (i++ < MAX_OF_CAPSULES_BOUGHT)
                                     {
                                       *(tp++) = *(p0++);
                                     }
                                 }
-                              if (i++ < NB_OPTIONS)
+                              if (i++ < MAX_OF_CAPSULES_BOUGHT)
                                 {
                                   *(tp++) = value;
                                 }
                             }
-                          if (i++ < NB_OPTIONS)
+                          if (i++ < MAX_OF_CAPSULES_BOUGHT)
                             {
                               *(tp++) = *(p0++);
                             }
                         }
                     }
-                  while (i < NB_OPTIONS);
+                  while (i < MAX_OF_CAPSULES_BOUGHT);
                   tp = coursetemp;
                   p0 = current_player->get_shopping_cart ();
-                  for (Sint32 i = 0; i < NB_OPTIONS; i++)
+                  for (Sint32 i = 0; i < MAX_OF_CAPSULES_BOUGHT; i++)
                     {
                       *(p0++) = *(tp++);
                     }
@@ -1021,8 +1025,7 @@ Sint32
 //-------------------------------------------------------------------------------
 //
 //-------------------------------------------------------------------------------
-Sint32
-  supervisor_shop::sh_tablept[NB_OPTIONS];
+Sint32 supervisor_shop::sh_tablept[MAX_OF_CAPSULES_BOUGHT];
 
 //-------------------------------------------------------------------------------
 // Prix des gadgets 

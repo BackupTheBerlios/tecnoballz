@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.9 2007/02/14 13:39:20 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.10 2007/02/25 20:33:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -311,7 +311,7 @@ void
 handler_players::clear_shopping_cart ()
 {
   Sint32 *cart = shopping_cart;
-  for (Sint32 i = 0; i < NB_OPTIONS; i++)
+  for (Uint32 i = 0; i < supervisor_shop::MAX_OF_CAPSULES_BOUGHT; i++)
     {
       *(cart++) = 0;
     }

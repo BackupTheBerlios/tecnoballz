@@ -5,11 +5,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.25 2007/02/19 21:03:35 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.26 2007/02/25 20:33:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -170,13 +170,13 @@ supervisor_guards_level::first_init ()
                           /* delay of appearance of a penalty capsule */
                           levelParam->malusCount * difficulty_level,
                           /* number of bonus bought in the shop (not * applicable) */
-                          0,
+                          //0,
                           /* number of bricks which it is necessary to break * (not applicable) */
-                          0,
+                          //0,
                           /* list of penalties capsules */ 
                           levelParam->malusListe,
                           /* list of bonus bought in the shop (not applicable) * */
-                          NULL,
+                          //NULL,
                           /* object which displays the small messages (not * applicable) */
                           NULL,
                           /* object which control the balls */

@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.27 2007/02/19 15:40:27 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.28 2007/02/25 20:33:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1463,7 +1463,7 @@ controller_balls::vitusGuard ()
         {
 
           moneys->send_money_from_guardian (balok);
-          capsules->envoieGads (balok);
+          capsules->check_if_send_capsule (balok);
         }
     }
 }
