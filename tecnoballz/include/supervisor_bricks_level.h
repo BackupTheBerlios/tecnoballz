@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.h 
  * @brief Bricks levels supervisor 
- * @date 2007-02-18
+ * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.17 2007/02/18 11:03:52 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.18 2007/02/26 09:01:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ class supervisor_bricks_level;
 #include "../include/head_animation.h"
 #include "../include/controller_indicators.h"
 #include "../include/controller_game_over.h"
-#include "../include/zeMiniMess.h"
+#include "../include/short_info_messages.h"
 #include "../include/level_data.h"
 #include "../include/controller_gems.h"
 #include "../include/controller_viewfinders.h"
@@ -76,7 +76,7 @@ class supervisor_bricks_level:public virtual supervisor
   friend class sprite_paddle;
 
 private:
-  zeMiniMess * ptMiniMess;
+  short_info_messages *info_messages;
   controller_indicators *player_indicators;
   controller_sides_bricks *sides_bricks;
   /** Head animation in the right score panel */

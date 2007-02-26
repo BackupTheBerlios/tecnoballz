@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.28 2007/02/25 20:33:37 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.29 2007/02/26 09:01:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
 /** 
  * Create the balls controller into bricks levels
  */
-controller_balls::controller_balls (sprite_object * pwall, zeMiniMess * pMess)
+controller_balls::controller_balls (sprite_object * pwall, short_info_messages * pMess)
 {
   littleInit ();
   num_erreur = 0;
@@ -260,8 +260,8 @@ controller_balls::check_outside_balls ()
       audio->play_lost_music ();
       audio->play_sound (S_ENLEVVIE);
 #endif
-      ptMiniMess->mesrequest (10);
-      ptMiniMess->mesrequest (1);
+      ptMiniMess->send_message_request (10);
+      ptMiniMess->send_message_request (1);
       panel->reset_gigablitz_countdown ();
     }
 }

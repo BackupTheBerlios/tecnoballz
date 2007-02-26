@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.30 2007/02/25 20:33:37 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.31 2007/02/26 09:01:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,8 +46,8 @@ supervisor_bricks_level::supervisor_bricks_level ()
   ships = controller_ships::get_instance ();
   magnetic_eyes = controller_magnetic_eyes::get_instance ();
   bottom_wall = new sprite_object ();
-  ptMiniMess = new zeMiniMess ();
-  balls = new controller_balls (bottom_wall, ptMiniMess);
+  info_messages = new short_info_messages ();
+  balls = new controller_balls (bottom_wall, info_messages);
   viewfinders_paddles = controller_viewfinders::get_instance ();
   paddles = controller_paddles::get_instance ();
   gere_texte = controller_fontes_game::get_instance ();
@@ -79,7 +79,7 @@ supervisor_bricks_level::~supervisor_bricks_level ()
   delete paddles;
   delete viewfinders_paddles;
   delete balls;
-  delete ptMiniMess;
+  delete info_messages;
   delete bottom_wall;
   delete magnetic_eyes;
   delete ships;
@@ -211,7 +211,7 @@ supervisor_bricks_level::first_init ()
                            //the list of bonus bought in the shop
                            //cours,
                            //the object which displays the small messages
-                           ptMiniMess,
+                           info_messages,
                            //the object which handles the balls
                            balls,
                            bottom_wall);
@@ -232,7 +232,7 @@ supervisor_bricks_level::first_init ()
 
   keyboard->clear_command_keys ();
   keyboard->set_grab_input (true);
-  ptMiniMess->mesrequest (1);
+  info_messages->send_message_request (1);
   return erreur_num;
 }
 
@@ -270,10 +270,10 @@ supervisor_bricks_level::main_loop ()
           money_capsules->disable_sprites ();
           balls->disable_sprites ();
           sprite_projectile::disable_sprites ();
-          ptMiniMess->erase_mess ();
+          info_messages->erase_mess ();
           isgameover++;
         }
-      ptMiniMess->execution1 ();
+      info_messages->run ();
       display->wait_frame ();
       head_anim->play ();
       display->lock_surfaces ();
@@ -321,7 +321,7 @@ supervisor_bricks_level::main_loop ()
 
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
         {
-          ptMiniMess->execution1 ();
+          info_messages->run ();
           gigablitz->execution1 ();
 
           //handle the "less bricks" option
@@ -397,7 +397,7 @@ supervisor_bricks_level::main_loop ()
 #ifndef SOUNDISOFF
               audio->play_win_music ();
 #endif
-              ptMiniMess->mesrequest (17);
+              info_messages->send_message_request (17);
 #ifndef SOUNDISOFF
               audio->disable_sound ();
 #endif
@@ -427,7 +427,7 @@ supervisor_bricks_level::main_loop ()
   if (phase == handler_audio::LOST_PORTION &&
       phase != audio->get_portion_music_played ())
     {
-      ptMiniMess->mesrequest (2);
+      info_messages->send_message_request (2);
       paddles->release_all_balls ();
     }
 #endif
@@ -530,12 +530,8 @@ supervisor_bricks_level::background (Sint32 nbkdg)
   /* Initialize and draw the tiles background */
   tiles_ground->setup (nbkdg);
 
-  //###################################################################
-  // initialize the mini messages
-  //###################################################################
-  error_init (ptMiniMess->intialise1 ());
-  if (erreur_num)
-    return erreur_num;
+  /* short info messages displayed */
+  info_messages->intialize ();
 
   //###################################################################
   // display the ejectors and small bricks

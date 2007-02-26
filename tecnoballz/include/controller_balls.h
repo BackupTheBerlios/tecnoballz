@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.16 2007/02/18 21:07:00 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.17 2007/02/26 09:01:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ class controller_balls;
 #include "../include/controller_guardians.h"
 #include "../include/controller_moneys.h"
 #include "../include/controller_capsules.h"
-#include "../include/zeMiniMess.h"
+#include "../include/short_info_messages.h"
 #include "../include/controller_paddles.h"
 #include "../include/controller_magnetic_eyes.h"
 #include "../include/sprite_eye.h"
@@ -64,7 +64,7 @@ private:
   sprite_paddle *paddle_left;
   sprite_paddle *tec_robot0;
   sprite_object *ptBob_wall;
-  zeMiniMess *ptMiniMess;
+  short_info_messages *ptMiniMess;
 
 private:
   static Sint32 ballEject1[];
@@ -83,7 +83,7 @@ private:
   static Sint32 *brick_jump[15];
 
 public:
-    controller_balls (sprite_object * pwall, zeMiniMess *);
+    controller_balls (sprite_object * pwall, short_info_messages *);
     controller_balls ();
    ~controller_balls ();
   void init (Uint32 start, Uint32 glueC,

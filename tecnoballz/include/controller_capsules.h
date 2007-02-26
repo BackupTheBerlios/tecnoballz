@@ -4,11 +4,11 @@
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.h,v 1.7 2007/02/25 20:33:37 gurumeditation Exp $
+ * $Id: controller_capsules.h,v 1.8 2007/02/26 09:01:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ class controller_capsules;
 
 #include "../include/objects_list.h"
 #include "../include/sprite_capsule.h"
-#include "../include/zeMiniMess.h"
+#include "../include/short_info_messages.h"
 #include "../include/controller_paddles.h"
 #include "../include/controller_balls.h"
 
@@ -45,7 +45,7 @@ public:
 
 private:
   sprite_paddle * paddle_selected; //bump select (cheat mode)
-  zeMiniMess *ptMiniMess;       //use for display minis messages
+  short_info_messages *ptMiniMess;       //use for display minis messages
   controller_balls *ptNewBalls;
   sprite_object *ptBob_wall;
   Sint32 frame_delay;
@@ -79,7 +79,7 @@ private:
 public:
     controller_capsules ();
    ~controller_capsules ();
-  void initialize (Sint32 mStep, const Sint16 * table, zeMiniMess * ptMes, controller_balls * pBall, sprite_object *);
+  void initialize (Sint32 mStep, const Sint16 * table, short_info_messages * ptMes, controller_balls * pBall, sprite_object *);
   void send_capsule_from_bricks (brickClear * briPT);
   void send_malus (sprite_ball *);
   void send_malus (sprite_projectile *);

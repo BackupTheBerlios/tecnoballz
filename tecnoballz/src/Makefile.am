@@ -18,7 +18,7 @@ SOURCES_MAIN = \
   controller_bricks.cc \
   controller_bullets.cc \
   controller_capsules.cc \
-	controller_ejectors.cc \
+  controller_ejectors.cc \
   controller_explosions.cc \
   controller_fontes_game.cc \
   controller_fontes_menu.cc \
@@ -32,10 +32,10 @@ SOURCES_MAIN = \
   controller_paddles.cc \
   controller_projectiles.cc \
   controller_ships.cc \
-	controller_sides_bricks.cc \
+  controller_sides_bricks.cc \
   controller_spheres.cc \
   controller_viewfinders.cc \
-	display_text_bitmap.cc \
+  display_text_bitmap.cc \
   handler_audio.cc \
   handler_display.cc \
   handler_keyboard.cc \
@@ -51,12 +51,12 @@ SOURCES_MAIN = \
   offscreen_surface.cc \
   right_panel_score.cc \
   scoretable.cc \
-  surface_sdl.cc \
+  short_info_messages.cc \
   sprite_ball.cc \
   sprite_bullet.cc \
   sprite_capsule.cc \
-	sprite_display_menu.cc \
-	sprite_display_scores.cc \
+  sprite_display_menu.cc \
+  sprite_display_scores.cc \
   sprite_eye.cc \
   sprite_fonte_game.cc \
   sprite_fonte_menu.cc \
@@ -75,9 +75,9 @@ SOURCES_MAIN = \
   supervisor_map_editor.cc \
   supervisor_guards_level.cc \
   supervisor_shop.cc \
+  surface_sdl.cc \
   tecnoballz.cc \
   tiles_background.cc \
   tilesmap_scrolling.cc \
-  zeMiniMess.cc \
   $(NULL)
 

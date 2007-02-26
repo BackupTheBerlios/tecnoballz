@@ -5,11 +5,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.26 2007/02/25 20:33:37 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.27 2007/02/26 09:01:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ supervisor_guards_level::supervisor_guards_level ()
   balls = new controller_balls ();
   viewfinders_paddles = controller_viewfinders::get_instance ();
   player_indicators = controller_indicators::get_instance ();
-  ptMiniMess = new zeMiniMess ();
+  ptMiniMess = new short_info_messages ();
   gigablitz = controller_gigablitz::get_instance ();
   game_over = controller_game_over::get_instance ();
   ptCongBall = new controller_spheres ();

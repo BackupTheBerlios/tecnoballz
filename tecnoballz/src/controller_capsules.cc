@@ -4,11 +4,11 @@
  * @date 2007-02-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.14 2007/02/25 20:33:37 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.15 2007/02/26 09:01:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ controller_capsules::~controller_capsules ()
 void
 controller_capsules::initialize (Sint32 mStep,
                                  const Sint16 * table,
-                                 zeMiniMess * ptMes,
+                                 short_info_messages * ptMes,
                                  controller_balls * pBall,
                                  sprite_object * pWall)
 {
@@ -400,14 +400,14 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_TRANSFOR);
 #endif
-      ptMiniMess->mesrequest (16);
+      ptMiniMess->send_message_request (16);
       paddle->set_glue ();
       break;
 
       /* next level */
     case GAD_NEXTLV:
       {
-        ptMiniMess->mesrequest (17);
+        ptMiniMess->send_message_request (17);
         right_panel_score* panel = right_panel_score::get_instance ();
         panel->set_bricks_counter (0);
       }
@@ -418,7 +418,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_TRANSFOR);
 #endif
-      ptMiniMess->mesrequest (4);
+      ptMiniMess->send_message_request (4);
       paddle->set_fire_1 ();
       break;
 
@@ -427,7 +427,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_TRANSFOR);
 #endif
-      ptMiniMess->mesrequest (5);
+      ptMiniMess->send_message_request (5);
       paddle->set_fire_2 ();
       break;
 
@@ -436,7 +436,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_TRANSFOR);
 #endif
-      ptMiniMess->mesrequest (18);
+      ptMiniMess->send_message_request (18);
       paddles->shrink_paddles ();
       break;
 
@@ -445,7 +445,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_TRANSFOR);
 #endif
-      ptMiniMess->mesrequest (19);
+      ptMiniMess->send_message_request (19);
       paddles->expand_paddles ();
       break;
 
@@ -454,7 +454,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_ENLEVVIE);
 #endif
-      ptMiniMess->mesrequest (10);
+      ptMiniMess->send_message_request (10);
       current_player->remove_life (1);
       break;
 
@@ -463,7 +463,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_AJOUTVIE);
 #endif
-      ptMiniMess->mesrequest (11);
+      ptMiniMess->send_message_request (11);
       current_player->add_life (1);
       break;
 
@@ -472,7 +472,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      ptMiniMess->mesrequest (20);
+      ptMiniMess->send_message_request (20);
       oBall->run_2balls ();
       break;
 
@@ -481,13 +481,13 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      ptMiniMess->mesrequest (21);
+      ptMiniMess->send_message_request (21);
       oBall->run_3balls ();
       break;
 
       // power ball 1
     case GAD_POWER1:
-      ptMiniMess->mesrequest (22);
+      ptMiniMess->send_message_request (22);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -496,7 +496,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // power ball 2
     case GAD_POWER2:
-      ptMiniMess->mesrequest (23);
+      ptMiniMess->send_message_request (23);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -505,13 +505,13 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // inverse control
     case GAD_INVERS:
-      ptMiniMess->mesrequest (24);
+      ptMiniMess->send_message_request (24);
       paddles->set_reverse_counter (50 * 4);
       break;
 
       // maxi ball speed (no gadget)
     case GAD_SPEEDM:
-      ptMiniMess->mesrequest (25);
+      ptMiniMess->send_message_request (25);
       oBall->maxi_speed ();
       break;
 
@@ -522,28 +522,28 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // right bumper[2] enable (no gadget)
     case GAD_BUMP02:
-      ptMiniMess->mesrequest (26);
+      ptMiniMess->send_message_request (26);
       paddle_selected = paddles->get_paddle (controller_paddles::RIGHT_PADDLE);
       paddle_selected->enable ();
       break;
 
       // top bumper[3] enable (no gadget)
     case GAD_BUMP03:
-      ptMiniMess->mesrequest (27);
+      ptMiniMess->send_message_request (27);
       paddle_selected = paddles->get_paddle (controller_paddles::TOP_PADDLE);
       paddle_selected->enable ();
       break;
 
       // right bumper[4] enable (no gadget)
     case GAD_BUMP04:
-      ptMiniMess->mesrequest (28);
+      ptMiniMess->send_message_request (28);
       paddle_selected = paddles->get_paddle (controller_paddles::LEFT_PADDLE);
       paddle_selected->enable ();
       break;
 
       // ball size 2
     case GAD_SIZE01:
-      ptMiniMess->mesrequest (29);
+      ptMiniMess->send_message_request (29);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -552,7 +552,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // ball size 3
     case GAD_SIZE02:
-      ptMiniMess->mesrequest (30);
+      ptMiniMess->send_message_request (30);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -565,7 +565,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // all options
     case GAD_MEGA00:
-      ptMiniMess->mesrequest (31);
+      ptMiniMess->send_message_request (31);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -595,7 +595,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // Bonus price (shop's price at 1 in the shop) (no gadget)
     case GAD_PRICE1:
-      ptMiniMess->mesrequest (15);
+      ptMiniMess->send_message_request (15);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -604,7 +604,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // bottom wall enable
     case GAD_WALL01:
-      ptMiniMess->mesrequest (32);
+      ptMiniMess->send_message_request (32);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -615,7 +615,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // robot bumper enable
     case GAD_ROBOT1:
-      ptMiniMess->mesrequest (33);
+      ptMiniMess->send_message_request (33);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -627,7 +627,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       // balls control 
     case GAD_CONTRO:
       oBall->enable_balls_control ();
-      ptMiniMess->mesrequest (34);
+      ptMiniMess->send_message_request (34);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
