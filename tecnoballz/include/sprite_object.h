@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.h
  * @brief Draw sprites on the screen 
- * @date 2007-02-24
+ * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.27 2007/02/24 09:10:12 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.28 2007/02/26 21:29:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -302,7 +302,7 @@ protected:
   /** Y coordinate maximum */
   Sint32 y_maximum;
   /** Type identifier of the sprite, integer from 0 to n */
-  Sint32 sprite_type_id;
+  Uint32 sprite_type_id;
   Sint32 affligFrSv;            // premiere ligne a afficher (si afflignesF=1)
   Sint32 affligLaSv;            // derniere ligne a afficher (si afflignesF=1)
   /** If true, object has allocated memory */
@@ -339,10 +339,9 @@ public:
   void enable ();
   void disable ();
   Sint32 is_enable ();
+  Uint32 get_sprite_type_id ();
   void set_display_pos (Sint32 num);
   void set_object_pos (Sint32 num);
-  sprite_object & operator= (const sprite_object &sprite);
-  sprite_object * operator= (const sprite_object *sprite);
   void duplicate_to (sprite_object * sprite_dest);
   void set_coordinates (Sint32 xcoord, Sint32 ycoord);
   void create_sprite (Sint32 type_id, bitmap_data * bitmap, bool shadow,

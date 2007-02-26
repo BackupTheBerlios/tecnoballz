@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.32 2007/02/26 17:39:39 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.33 2007/02/26 21:29:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,10 +47,10 @@ supervisor_bricks_level::supervisor_bricks_level ()
   magnetic_eyes = controller_magnetic_eyes::get_instance ();
   bottom_wall = new sprite_object ();
   info_messages = short_info_messages::get_instance ();
-  balls = new controller_balls (bottom_wall, info_messages);
+  balls = new controller_balls (bottom_wall);
   viewfinders_paddles = controller_viewfinders::get_instance ();
   paddles = controller_paddles::get_instance ();
-  gere_texte = controller_fontes_game::get_instance ();
+  fontes_game = controller_fontes_game::get_instance ();
   gigablitz = controller_gigablitz::get_instance ();
   player_indicators = controller_indicators::get_instance ();
   game_over = controller_game_over::get_instance ();
@@ -75,7 +75,7 @@ supervisor_bricks_level::~supervisor_bricks_level ()
   delete game_over;
   delete player_indicators;
   delete gigablitz;
-  delete gere_texte;
+  delete fontes_game;
   delete paddles;
   delete viewfinders_paddles;
   delete balls;
@@ -147,9 +147,11 @@ supervisor_bricks_level::first_init ()
   ships->create_sprites_list ();
   magnetic_eyes->create_eyes_list ();
   money_capsules->create_sprites_list ();
+  printf("================ power_up_capsules==== \n");
   power_up_capsules->create_sprites_list (6);
+  printf("================ power_up_capsules==== \n");
   gem_stones->create_sprites_list ();
-  gere_texte->create_sprites_list ();
+  fontes_game->create_sprites_list ();
   paddles->create_projectiles_list ();
   player_indicators->create_indicators_sprites ();
   game_over->create_sprites_list ();
@@ -196,22 +198,11 @@ supervisor_bricks_level::first_init ()
   //##############################################################
   //Initialize the object which handles gadgets (bonus and malus)
   //##############################################################
-  //Sint32 *cours = current_player->get_shopping_cart ();
-  //Sint32 counb = current_player->get_cou_nb ();
-  //Sint32 brCnt = bricks->get_num_of_bricks ();
   power_up_capsules->initialize (
                            //frequency of appearance of malus 
                            levelParam->malusCount * difficulty_level,
-                           //number of bonus bought in the shop
-                           //counb,
-                           //number of bricks which it is necessary to break
-                           //brCnt,
                            //the list of malus
                            levelParam->malusListe,
-                           //the list of bonus bought in the shop
-                           //cours,
-                           //the object which displays the small messages
-                           info_messages,
                            //the object which handles the balls
                            balls,
                            bottom_wall);
@@ -221,7 +212,7 @@ supervisor_bricks_level::first_init ()
   //##############################################################
   // initialize mobiles characters ("LEVEL x COMPLETED")
   //##############################################################
-  gere_texte->initialise (level_number);
+  fontes_game->initialise (level_number);
 
 
   viewfinders_paddles->initialize ();
@@ -340,10 +331,10 @@ supervisor_bricks_level::main_loop ()
           ships->move ();
           magnetic_eyes->execution1 ();
           money_capsules->move ();
-          power_up_capsules->move_in_bricks_levels ();
-          power_up_capsules->cheat_keys ();
+          power_up_capsules->move_in_bricks_level ();
+          power_up_capsules->check_cheat_keys ();
           gem_stones->move ();
-          gere_texte->goMoveText ();
+          fontes_game->goMoveText ();
           if (bottom_wall->thecounter < 1)
             bottom_wall->disable ();
           else
@@ -391,7 +382,7 @@ supervisor_bricks_level::main_loop ()
             }
           else
             {
-              gere_texte->activeText ();
+              fontes_game->activeText ();
               sprite_projectile::disable_sprites ();
               balls->disable_sprites ();
 #ifndef SOUNDISOFF

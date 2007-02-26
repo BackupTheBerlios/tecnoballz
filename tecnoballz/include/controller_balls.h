@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.h
  * @brief Control the balls. Move and collisions 
- * @date 2007-02-18
+ * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.17 2007/02/26 09:01:03 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.18 2007/02/26 21:29:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@ class controller_balls;
 #include "../include/controller_guardians.h"
 #include "../include/controller_moneys.h"
 #include "../include/controller_capsules.h"
-#include "../include/short_info_messages.h"
 #include "../include/controller_paddles.h"
 #include "../include/controller_magnetic_eyes.h"
 #include "../include/sprite_eye.h"
@@ -51,12 +50,12 @@ class controller_balls:public objects_list < sprite_ball, controller_balls >
 
 private:
   Sint32 num_erreur;
-  Sint32 balle_glue;            //duration of the glue
+  Uint32 glue_delay;            //duration of the glue
   Sint16 *balleVites;           // table premiere vitesse
   Sint32 tempoVites;            // temps avant changement vitesse
   Sint32 startCount;            // Temps avant que la balle ne parte
   Sint32 balle_tilt;            // Temps avant que le tilt soit possible
-  /* true if ball controlled by the left mouse button */
+  /** True if ball controlled by the left mouse button */
   bool balls_are_controlled;
   sprite_paddle *paddle_bottom;
   sprite_paddle *paddle_right;
@@ -64,7 +63,6 @@ private:
   sprite_paddle *paddle_left;
   sprite_paddle *tec_robot0;
   sprite_object *ptBob_wall;
-  short_info_messages *ptMiniMess;
 
 private:
   static Sint32 ballEject1[];
@@ -83,13 +81,13 @@ private:
   static Sint32 *brick_jump[15];
 
 public:
-    controller_balls (sprite_object * pwall, short_info_messages *);
+    controller_balls (sprite_object * pwall);
     controller_balls ();
    ~controller_balls ();
   void init (Uint32 start, Uint32 glueC,
                    Uint32 speed, Uint32 tiltC, Uint32 table);
   void run_in_bricks_levels ();
-  void vitusBall2 ();
+  void run_in_guardians_level ();
   sprite_ball *first_ball ();
 
 private:

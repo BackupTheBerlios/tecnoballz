@@ -4,11 +4,11 @@
  * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.18 2007/02/26 09:01:03 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.19 2007/02/26 21:29:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -93,7 +93,7 @@ private:
   controller_moneys *money_capsules;
   controller_capsules *power_up_capsules;
   controller_gems *gem_stones;
-  controller_fontes_game *gere_texte;
+  controller_fontes_game *fontes_game;
   controller_gigablitz *gigablitz;
   controller_game_over *game_over;
   sprite_object *bottom_wall;

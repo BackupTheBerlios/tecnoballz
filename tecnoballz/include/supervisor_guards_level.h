@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.h
  * @brief Guardians level supervisor 
  * @created 2003-01-11
- * @date 2007-02-18
+ * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.16 2007/02/26 09:01:03 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.17 2007/02/26 21:29:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,8 +41,6 @@ class supervisor_guards_level;
 #include "../include/controller_moneys.h"
 #include "../include/controller_capsules.h"
 #include "../include/controller_indicators.h"
-#include "../include/short_info_messages.h"
-#include "../include/short_info_messages.h"
 #include "../include/controller_gigablitz.h"
 #include "../include/controller_explosions.h"
 #include "../include/controller_viewfinders.h"
@@ -67,7 +65,6 @@ private:
   controller_moneys *money_capsules;
   controller_capsules *power_up_capsules;
   controller_indicators *player_indicators;
-  short_info_messages *ptMiniMess;
   controller_explosions *explosions;
   /** Sprite of the money capsule to the left of amount money */
   sprite_object *money_indicator;
@@ -88,7 +85,7 @@ private:
   Sint32 count_next;            //temporisation before next level 
   /** If true game is finished, play game over with congratulations */
   bool is_victory; 
-  controller_fontes_game *ptMoveText;
+  controller_fontes_game *fontes_game;
 
 private:
   void init_level ();

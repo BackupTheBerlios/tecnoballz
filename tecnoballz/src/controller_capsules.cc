@@ -4,11 +4,11 @@
  * @date 2007-02-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.16 2007/02/26 17:39:38 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.17 2007/02/26 21:29:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ controller_capsules::controller_capsules ()
   bonus_step = 0;
   shopping_cart_index = 0;
   max_of_sprites = 0;
-  sprites_have_shades = false;
+  sprites_have_shades = true;
   /* additional table to drawing pixel by pixel is required
    * for color cycling of the chance capsule */
   is_draw_pixel_by_pixel = true;
@@ -73,7 +73,6 @@ controller_capsules::~controller_capsules ()
 void
 controller_capsules::initialize (Sint32 mStep,
                                  const Sint16 * table,
-                                 short_info_messages * ptMes,
                                  controller_balls * pBall,
                                  sprite_object * pWall)
 {
@@ -85,9 +84,8 @@ controller_capsules::initialize (Sint32 mStep,
   bonus_step = 0;
   random_list = table;
   malus_step = 0;               //"malus" drop frequency 
-  bricks_breaked_count = 0;               //number of bricks current destroyed
-  capsules_released_count = 0;               //number of bonuses dropped 
-  ptMiniMess = ptMes;
+  bricks_breaked_count = 0;
+  capsules_released_count = 0;
   sprite_capsule *capsule = sprites_list[0];
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
@@ -280,7 +278,7 @@ controller_capsules::set_overview_capsule (Uint32 id)
  *  Move and collision with paddles in bricks levels
  */
 void
-controller_capsules::move_in_bricks_levels ()
+controller_capsules::move_in_bricks_level ()
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
@@ -299,7 +297,7 @@ controller_capsules::move_in_bricks_levels ()
  * Move and collision with paddle in guardians levels
  */
 void
-controller_capsules::move_in_guardians_levels ()
+controller_capsules::move_in_guardians_level ()
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
@@ -342,7 +340,7 @@ controller_capsules::play_animation_in_shop (Uint32 speed)
  * Enable a bonus or a penalty with the keyboard
  */
 void
-controller_capsules::cheat_keys ()
+controller_capsules::check_cheat_keys ()
 {
   if (!cheat_flag)
     {
@@ -362,7 +360,7 @@ controller_capsules::cheat_keys ()
     {
       return;
     }
-  Sint16 *liste = keysTriche;
+  Sint16 *liste = cheat_keys;
   while (Sint16 k = *(liste++)) //k = SDL key code
     {
       Sint16 g = *(liste++);    //g = gadget code (bonus or malus)
@@ -388,6 +386,8 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 {
   paddle_selected = paddle;
   controller_paddles* paddles = controller_paddles::get_instance ();
+  short_info_messages *messages = short_info_messages::get_instance ();
+
   controller_balls *balls = ptNewBalls;
 
   if (nuGad == GAD_RANDOM)
@@ -403,14 +403,14 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_TRANSFOR);
 #endif
-      ptMiniMess->send_message_request (short_info_messages::GLUE_OPTION);
+      messages->send_message_request (short_info_messages::GLUE_OPTION);
       paddle->set_glue ();
       break;
 
       /* next level */
     case GAD_NEXTLV:
       {
-        ptMiniMess->send_message_request (short_info_messages::NEXT_LEVEL);
+        messages->send_message_request (short_info_messages::NEXT_LEVEL);
         right_panel_score* panel = right_panel_score::get_instance ();
         panel->set_bricks_counter (0);
       }
@@ -421,7 +421,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_TRANSFOR);
 #endif
-      ptMiniMess->send_message_request (short_info_messages::SIMPLE_FIRE);
+      messages->send_message_request (short_info_messages::SIMPLE_FIRE);
       paddle->set_fire_1 ();
       break;
 
@@ -430,7 +430,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_TRANSFOR);
 #endif
-      ptMiniMess->send_message_request (short_info_messages::COOL_FIRE);
+      messages->send_message_request (short_info_messages::COOL_FIRE);
       paddle->set_fire_2 ();
       break;
 
@@ -439,7 +439,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_TRANSFOR);
 #endif
-      ptMiniMess->send_message_request (short_info_messages::SMALL_PADDLE);
+      messages->send_message_request (short_info_messages::SMALL_PADDLE);
       paddles->shrink_paddles ();
       break;
 
@@ -448,7 +448,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_TRANSFOR);
 #endif
-      ptMiniMess->send_message_request (short_info_messages::BIG_PADDLE);
+      messages->send_message_request (short_info_messages::BIG_PADDLE);
       paddles->expand_paddles ();
       break;
 
@@ -457,7 +457,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_ENLEVVIE);
 #endif
-      ptMiniMess->send_message_request (short_info_messages::LOST_FILE);
+      messages->send_message_request (short_info_messages::LOST_FILE);
       current_player->remove_life (1);
       break;
 
@@ -466,7 +466,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_AJOUTVIE);
 #endif
-      ptMiniMess->send_message_request (short_info_messages::WIN_LIFE);
+      messages->send_message_request (short_info_messages::WIN_LIFE);
       current_player->add_life (1);
       break;
 
@@ -475,7 +475,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      ptMiniMess->send_message_request (short_info_messages::EXTRA_BALLS);
+      messages->send_message_request (short_info_messages::EXTRA_BALLS);
       balls->run_2balls ();
       break;
 
@@ -484,13 +484,13 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      ptMiniMess->send_message_request (short_info_messages::MULTI_BALLS);
+      messages->send_message_request (short_info_messages::MULTI_BALLS);
       balls->run_3balls ();
       break;
 
       // power ball 1
     case GAD_POWER1:
-      ptMiniMess->send_message_request (short_info_messages::POWERBALLS);
+      messages->send_message_request (short_info_messages::POWERBALLS);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -499,7 +499,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // power ball 2
     case GAD_POWER2:
-      ptMiniMess->send_message_request (short_info_messages::MEGA_POWERBALLS);
+      messages->send_message_request (short_info_messages::MEGA_POWERBALLS);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -508,13 +508,13 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // inverse control
     case GAD_INVERS:
-      ptMiniMess->send_message_request (short_info_messages::INVERSE_COMMANDS);
+      messages->send_message_request (short_info_messages::INVERSE_COMMANDS);
       paddles->set_reverse_counter (50 * 4);
       break;
 
       // maxi ball speed (no gadget)
     case GAD_SPEEDM:
-      ptMiniMess->send_message_request (short_info_messages::MAXIMUM_ACCELERATION);
+      messages->send_message_request (short_info_messages::MAXIMUM_ACCELERATION);
       balls->maxi_speed ();
       break;
 
@@ -525,28 +525,28 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // right bumper[2] enable (no gadget)
     case GAD_BUMP02:
-      ptMiniMess->send_message_request (short_info_messages::RIGHT_PADDLE);
+      messages->send_message_request (short_info_messages::RIGHT_PADDLE);
       paddle_selected = paddles->get_paddle (controller_paddles::RIGHT_PADDLE);
       paddle_selected->enable ();
       break;
 
       // top bumper[3] enable (no gadget)
     case GAD_BUMP03:
-      ptMiniMess->send_message_request (short_info_messages::TOP_PADDLE);
+      messages->send_message_request (short_info_messages::TOP_PADDLE);
       paddle_selected = paddles->get_paddle (controller_paddles::TOP_PADDLE);
       paddle_selected->enable ();
       break;
 
       // right bumper[4] enable (no gadget)
     case GAD_BUMP04:
-      ptMiniMess->send_message_request (short_info_messages::LEFT_PADDLE);
+      messages->send_message_request (short_info_messages::LEFT_PADDLE);
       paddle_selected = paddles->get_paddle (controller_paddles::LEFT_PADDLE);
       paddle_selected->enable ();
       break;
 
       // ball size 2
     case GAD_SIZE01:
-      ptMiniMess->send_message_request (short_info_messages::BIG_BALLS);
+      messages->send_message_request (short_info_messages::BIG_BALLS);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -555,7 +555,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // ball size 3
     case GAD_SIZE02:
-      ptMiniMess->send_message_request (short_info_messages::HUGE_BALLS);
+      messages->send_message_request (short_info_messages::HUGE_BALLS);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -568,7 +568,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // all options
     case GAD_MEGA00:
-      ptMiniMess->send_message_request (short_info_messages::MAXIMUM_OPTIONS);
+      messages->send_message_request (short_info_messages::MAXIMUM_OPTIONS);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -598,7 +598,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // Bonus price (shop's price at 1 in the shop) (no gadget)
     case GAD_PRICE1:
-      ptMiniMess->send_message_request (short_info_messages::BUDGET_PRICES);
+      messages->send_message_request (short_info_messages::BUDGET_PRICES);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -607,7 +607,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // bottom wall enable
     case GAD_WALL01:
-      ptMiniMess->send_message_request (short_info_messages::WALL_ENABLE);
+      messages->send_message_request (short_info_messages::WALL_ENABLE);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -618,7 +618,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       // robot bumper enable
     case GAD_ROBOT1:
-      ptMiniMess->send_message_request (short_info_messages::ROBOT_ENABLE);
+      messages->send_message_request (short_info_messages::ROBOT_ENABLE);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -630,7 +630,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       // balls control 
     case GAD_CONTRO:
       balls->enable_balls_control ();
-      ptMiniMess->send_message_request (short_info_messages::CONTROL_BALLS);
+      messages->send_message_request (short_info_messages::CONTROL_BALLS);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
@@ -740,11 +740,12 @@ GAD_BALLE3,
   GAD_WALL01, GAD_WALL01
 };
 
-//-------------------------------------------------------------------------------
-// bricks levels: key enable options (for test only)
-//-------------------------------------------------------------------------------
-Sint16
-  controller_capsules::keysTriche[] = { SDLK_F1, GAD_GLUE00, 0,
+/**
+ * Cheat keys to enable options in bricks levels, only under development
+ */
+Sint16 controller_capsules::cheat_keys[] =
+{
+  SDLK_F1, GAD_GLUE00, 0,
   SDLK_F2, GAD_NEXTLV, 0,
   SDLK_F3, GAD_FIRE01, 0,
   SDLK_F4, GAD_FIRE02, 0,

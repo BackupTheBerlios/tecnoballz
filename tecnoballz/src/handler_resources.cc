@@ -5,11 +5,11 @@
  * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.10 2007/02/26 17:39:39 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.11 2007/02/26 21:29:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -530,7 +530,16 @@ handler_resources::load_texts(Uint32 resource_id, Uint32 numof_lines, Uint32 row
                 }
               for (Uint32 i = 0; i < row_count; i++)
                 {
-                  *(strs++) = source[i];
+                  char c = source[i];
+                  if (c >= 'a' && c <= 'z') 
+                    {
+                      c = c - ('a' - 'A');
+                    }
+                  if (c < ' ')
+                    {
+                      c = ' ';
+                    }
+                  *(strs++) = c;
                 }
               for (Uint32 i = row_count; i < row_length; i++)
                 {

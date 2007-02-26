@@ -4,11 +4,11 @@
  * @date 2007-02-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.26 2007/02/24 09:10:12 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.27 2007/02/26 21:29:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -246,6 +246,16 @@ sprite_object::disable ()
 Sint32 sprite_object::is_enable ()
 {
   return is_enabled;
+}
+
+/**
+ * Return the sprite identifier
+ * @return indentifier of sprite, identify the type of the sprite
+ */
+Uint32
+sprite_object::get_sprite_type_id ()
+{
+  return sprite_type_id;
 }
 
 /**

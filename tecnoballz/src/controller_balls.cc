@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-02-18
+ * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.30 2007/02/26 17:39:38 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.31 2007/02/26 21:29:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,17 +36,13 @@
 /** 
  * Create the balls controller into bricks levels
  */
-controller_balls::controller_balls (sprite_object * pwall, short_info_messages * pMess)
+controller_balls::controller_balls (sprite_object * pwall)
 {
   littleInit ();
   num_erreur = 0;
-
   ptBob_wall = pwall;
-  ptMiniMess = pMess;
-
-  balle_glue = 4 * 60;
   startCount = 60;
-  balle_glue = 60;
+  glue_delay = 60;
   tempoVites = 60;
   balle_tilt = 60;
   balleVites = sprite_ball::donneSpeed (1);
@@ -63,13 +59,9 @@ controller_balls::controller_balls ()
 {
   littleInit ();
   num_erreur = 0;
-
   ptBob_wall = NULL;
-  ptMiniMess = NULL;
-
-  balle_glue = 4 * 60;
   startCount = 60;
-  balle_glue = 60;
+  glue_delay = 60;
   tempoVites = 60;
   balle_tilt = 60;
   balleVites = sprite_ball::donneSpeed (1);
@@ -104,7 +96,7 @@ controller_balls::init (Uint32 start,
   controller_paddles *paddles = controller_paddles::get_instance ();
 
   startCount = start;
-  balle_glue = glueC;
+  glue_delay = glueC;
   tempoVites = speed;
   balle_tilt = tiltC;
   balleVites = sprite_ball::donneSpeed (table);
@@ -125,17 +117,18 @@ controller_balls::init (Uint32 start,
       controller_bricks *bricks = controller_bricks::get_instance ();
       w = bricks->get_brick_width ();
     }
-
+  
+  /* initialize all balls */
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];
       ball->once_init (start, speed, paddle_bottom, balleVites, w);
     }
 
-  // first ball special initialization
-  sprite_ball *balle = sprites_list[0];
-  paddle_bottom->ball_glued = balle;
-  balle->startBalle (paddle_bottom->collision_width);
+  /* first ball special initialization */
+  sprite_ball *ball = sprites_list[0];
+  paddle_bottom->ball_glued = ball;
+  ball->startBalle (paddle_bottom->collision_width);
   /* one ball on the screen */
   num_of_sprites = 1;
   if (super_jump == BRICKS_LEVEL)
@@ -157,11 +150,13 @@ controller_balls::run_in_bricks_levels ()
   vitus_move ();                //move the balls
   vitus_bump ();                //collisions balls and bumpers
   vitusrobot ();
-  collision_with_walls ();      //collisions balls and walls
+  /* collisions between balls and the 3 walls */
+  collision_with_walls ();
   vitusEject ();                //collisions balls and ejectors
   check_collisions_with_ships ();
   vitus_eyes ();
-  controll_balls ();            //control ball with the left mouse button
+  /* control balls with the left mouse button */
+  controll_balls ();
   time_2tilt ();
   accelerate ();
 }
@@ -170,7 +165,7 @@ controller_balls::run_in_bricks_levels ()
  * Move the balls and check the collisions in the guardians levels
  */
 void
-controller_balls::vitusBall2 ()
+controller_balls::run_in_guardians_level ()
 {
   vitussort2 ();                //test if balls go out of the screen
   activate_tilt ();
@@ -260,8 +255,9 @@ controller_balls::check_outside_balls ()
       audio->play_lost_music ();
       audio->play_sound (S_ENLEVVIE);
 #endif
-      ptMiniMess->send_message_request (short_info_messages::LOST_FILE);
-      ptMiniMess->send_message_request (short_info_messages::ARE_YOU_READY);
+      short_info_messages* messages = short_info_messages::get_instance ();
+      messages->send_message_request (short_info_messages::LOST_FILE);
+      messages->send_message_request (short_info_messages::ARE_YOU_READY);
       panel->reset_gigablitz_countdown ();
     }
 }
@@ -704,7 +700,7 @@ controller_balls::vitus_bump ()
                   bumpX->is_glue = 2;   //ball glued to the bumper 
                   bumpX->ball_glued = (sprite_ball *) balle;
                   balle->raket_glue = bumpX;
-                  balle->startCount = balle_glue;       //time of the glue 
+                  balle->startCount = glue_delay;       //time of the glue 
                   balle->colleBallF = raket->paddle_number;
                 }
 
@@ -766,7 +762,7 @@ controller_balls::vitusbump2 ()
                   bumpX->is_glue = 2;   //ball glued to the bumper 
                   bumpX->ball_glued = (sprite_ball *) balle;
                   balle->raket_glue = bumpX;
-                  balle->startCount = balle_glue;       //time of the glue 
+                  balle->startCount = glue_delay;       //time of the glue 
                   balle->colleBallF = raket->paddle_number;
                 }
             }

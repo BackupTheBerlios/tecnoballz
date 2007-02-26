@@ -4,11 +4,11 @@
  * @date 2007-02-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.20 2007/02/26 17:39:39 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.21 2007/02/26 21:29:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -825,7 +825,7 @@ supervisor_shop::sh_ballade ()
                   while (i < MAX_OF_CAPSULES_BOUGHT);
                   tp = coursetemp;
                   p0 = current_player->get_shopping_cart ();
-                  for (Sint32 i = 0; i < MAX_OF_CAPSULES_BOUGHT; i++)
+                  for (Uint32 i = 0; i < MAX_OF_CAPSULES_BOUGHT; i++)
                     {
                       *(p0++) = *(tp++);
                     }

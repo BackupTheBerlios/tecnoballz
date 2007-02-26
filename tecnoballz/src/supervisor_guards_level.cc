@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-02-18
+ * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.27 2007/02/26 09:01:04 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.28 2007/02/26 21:29:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ supervisor_guards_level::supervisor_guards_level ()
   tiles_map = new tilesmap_scrolling ();
   guards = controller_guardians::get_instance ();
   paddles = controller_paddles::get_instance ();
-  ptMoveText = new controller_fontes_game ();
+  fontes_game = controller_fontes_game::get_instance ();
   explosions = controller_explosions::get_instance ();
   bullets = controller_bullets::get_instance ();
   money_capsules = controller_moneys::get_instance ();
@@ -46,7 +46,6 @@ supervisor_guards_level::supervisor_guards_level ()
   balls = new controller_balls ();
   viewfinders_paddles = controller_viewfinders::get_instance ();
   player_indicators = controller_indicators::get_instance ();
-  ptMiniMess = new short_info_messages ();
   gigablitz = controller_gigablitz::get_instance ();
   game_over = controller_game_over::get_instance ();
   ptCongBall = new controller_spheres ();
@@ -65,7 +64,6 @@ supervisor_guards_level::~supervisor_guards_level ()
   delete ptCongBall;
   delete game_over;
   delete gigablitz;
-  delete ptMiniMess;
   delete player_indicators;
   delete viewfinders_paddles;
   delete balls;
@@ -73,7 +71,7 @@ supervisor_guards_level::~supervisor_guards_level ()
   delete money_capsules;
   delete bullets;
   delete explosions;
-  delete ptMoveText;
+  delete fontes_game;
   delete paddles;
   delete guards;
   delete tiles_map;
@@ -124,7 +122,7 @@ supervisor_guards_level::first_init ()
   viewfinders_paddles->create_sprites_list ();
 
   //mobile characters at the end of the level
-  ptMoveText->create_sprites_list ();
+  fontes_game->create_sprites_list ();
 
   game_over->create_sprites_list ();
 
@@ -169,16 +167,8 @@ supervisor_guards_level::first_init ()
   power_up_capsules->initialize (
                           /* delay of appearance of a penalty capsule */
                           levelParam->malusCount * difficulty_level,
-                          /* number of bonus bought in the shop (not * applicable) */
-                          //0,
-                          /* number of bricks which it is necessary to break * (not applicable) */
-                          //0,
                           /* list of penalties capsules */ 
                           levelParam->malusListe,
-                          /* list of bonus bought in the shop (not applicable) * */
-                          //NULL,
-                          /* object which displays the small messages (not * applicable) */
-                          NULL,
                           /* object which control the balls */
                           balls,
                           /* object which handles the display of the text (not * applicable) */
@@ -187,7 +177,7 @@ supervisor_guards_level::first_init ()
   //player_indicators->init_guard (paddles, money_indicator, ptBobLifes);
 
   //initialize mobile characters at the end of the level
-  ptMoveText->initialise (level_number, 32 * resolution);
+  fontes_game->initialise (level_number, 32 * resolution);
 
   viewfinders_paddles->initialize ();
 
@@ -271,7 +261,7 @@ supervisor_guards_level::main_loop ()
         }
       viewfinders_paddles->run ();
       player_indicators->display_money_and_lifes ();
-      ptMoveText->goMoveText ();
+      fontes_game->goMoveText ();
       sprites->draw ();
       display->unlock_surfaces ();
       display->bufferCTab ();
@@ -298,15 +288,15 @@ supervisor_guards_level::main_loop ()
           display->lock_surfaces ();
           paddles->move_paddle ();
           paddles->check_if_release_ball ();
-          balls->vitusBall2 (); //moving ball(s)
+          balls->run_in_guardians_level ();
           viewfinders_paddles->run ();
           /* moving guards, and fire bullets and gigablitz */
           guards->run ();
           bullets->move ();
           bullets->check_paddle_collisions ();
           money_capsules->move_bottom ();
-          power_up_capsules->move_in_guardians_levels ();
-          ptMoveText->goMoveText ();
+          power_up_capsules->move_in_guardians_level ();
+          fontes_game->goMoveText ();
           player_indicators->display_money_and_lifes ();
           gigablitz->execution2 ();    //move the Gigablitz from guards
           explosions->play_animation ();
@@ -359,7 +349,7 @@ supervisor_guards_level::main_loop ()
         }
       else
         {
-          ptMoveText->activeText ();
+          fontes_game->activeText ();
           gigablitz->disable_sprites ();
           balls->disable_sprites ();
           bullets->disable_sprites ();

@@ -5,11 +5,11 @@
  * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: short_info_messages.h,v 1.2 2007/02/26 17:39:38 gurumeditation Exp $
+ * $Id: short_info_messages.h,v 1.3 2007/02/26 21:29:23 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,23 +38,16 @@ class short_info_messages:public virtual tecnoballz
 public:
   typedef enum
     {
-      EMPTY,
       ARE_YOU_READY,
       YEAH_YOU_WHERE,
-      EMPTY2,
-      SIMPLE_FIRE, //4
+      SIMPLE_FIRE,
       COOL_FIRE,
       COOL_GUY,
-      EMPTY3,
-      EMPTY4,
-      EMPTY5,
-      LOST_FILE, //10
+      LOST_FILE,
       WIN_LIFE,
-      EMPTY6,
-      EMPTY7,
       TOO_LATE,
       BUDGET_PRICES,
-      GLUE_OPTION, //16
+      GLUE_OPTION,
       NEXT_LEVEL,
       SMALL_PADDLE,
       BIG_PADDLE,
@@ -62,7 +55,7 @@ public:
       MULTI_BALLS,
       POWERBALLS,
       MEGA_POWERBALLS,
-      INVERSE_COMMANDS, //24
+      INVERSE_COMMANDS,
       MAXIMUM_ACCELERATION,
       RIGHT_PADDLE,
       TOP_PADDLE,
@@ -72,7 +65,7 @@ public:
       MAXIMUM_OPTIONS,
       WALL_ENABLE,
       ROBOT_ENABLE,
-      CONTROL_BALLS, //34
+      CONTROL_BALLS,
       MAX_OF_MESSAGES
     } MESSAGES_ENUM;
 
@@ -96,19 +89,18 @@ private:
   char *ptr_buffer;
   char *ptr_tampon;
   char *pt_mesfond;
-  Sint32 ft_hauteur;            //height of a character 
-  Sint32 ft_largeur;            //width of a character 
-  Sint32 fonteslarg;            //width of message's buffer  
+  /** Height of a character in pixels */
+  Uint32 height_font;
+  /** Width of a character in pixels */
+  Uint32 width_font;
+  Uint32 fonteslarg;            //width of message's buffer  
   bool messages_request[MAX_OF_MESSAGES];
-  static const char *zemessage0[MAX_OF_MESSAGES];
 
 private:
+    short_info_messages ();
   void draw ();
   void displaymes ();
   void clear_mess ();
-
-public:
-    short_info_messages ();
 public:
    ~short_info_messages ();
   static short_info_messages * get_instance ();
