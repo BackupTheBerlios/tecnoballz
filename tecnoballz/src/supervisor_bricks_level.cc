@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.31 2007/02/26 09:01:04 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.32 2007/02/26 17:39:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
   ships = controller_ships::get_instance ();
   magnetic_eyes = controller_magnetic_eyes::get_instance ();
   bottom_wall = new sprite_object ();
-  info_messages = new short_info_messages ();
+  info_messages = short_info_messages::get_instance ();
   balls = new controller_balls (bottom_wall, info_messages);
   viewfinders_paddles = controller_viewfinders::get_instance ();
   paddles = controller_paddles::get_instance ();
@@ -232,7 +232,7 @@ supervisor_bricks_level::first_init ()
 
   keyboard->clear_command_keys ();
   keyboard->set_grab_input (true);
-  info_messages->send_message_request (1);
+  info_messages->send_message_request (short_info_messages::ARE_YOU_READY);
   return erreur_num;
 }
 
@@ -270,7 +270,7 @@ supervisor_bricks_level::main_loop ()
           money_capsules->disable_sprites ();
           balls->disable_sprites ();
           sprite_projectile::disable_sprites ();
-          info_messages->erase_mess ();
+          info_messages->clear_messages_request ();
           isgameover++;
         }
       info_messages->run ();
@@ -397,7 +397,7 @@ supervisor_bricks_level::main_loop ()
 #ifndef SOUNDISOFF
               audio->play_win_music ();
 #endif
-              info_messages->send_message_request (17);
+              info_messages->send_message_request (short_info_messages::NEXT_LEVEL);
 #ifndef SOUNDISOFF
               audio->disable_sound ();
 #endif
@@ -427,7 +427,7 @@ supervisor_bricks_level::main_loop ()
   if (phase == handler_audio::LOST_PORTION &&
       phase != audio->get_portion_music_played ())
     {
-      info_messages->send_message_request (2);
+      info_messages->send_message_request (short_info_messages::YEAH_YOU_WHERE);
       paddles->release_all_balls ();
     }
 #endif

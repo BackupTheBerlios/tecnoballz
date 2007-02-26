@@ -5,11 +5,11 @@
  * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: short_info_messages.cc,v 1.1 2007/02/26 09:01:04 gurumeditation Exp $
+ * $Id: short_info_messages.cc,v 1.2 2007/02/26 17:39:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,14 +29,17 @@
 #include "../include/short_info_messages.h"
 #include "../include/handler_resources.h"
 
+short_info_messages * short_info_messages::info_messages_singleton = NULL;
+
 /**
  * Create the info messages object
  */
 short_info_messages::short_info_messages ()
 {
+  messages = NULL;
   bitmap_small_fonts = (bitmap_data *) NULL;
   messa_fond = (bitmap_data *) NULL;
-  mess_pause = 0;
+  delay_counter = 0;
   object_init ();
 }
 
@@ -55,8 +58,31 @@ short_info_messages::~short_info_messages ()
       delete messa_fond;
       messa_fond = (bitmap_data *) NULL;
     }
+  if (NULL != messages)
+    {
+      delete[](char *)messages ;
+      messages = NULL;
+    }
   object_free ();
+  info_messages_singleton = NULL;
 }
+
+/**
+ * Get the object instance
+ * short_info_messages is a singleton
+ * @return the short_info_messages object 
+ */
+short_info_messages *
+short_info_messages::get_instance ()
+{
+  if (NULL == info_messages_singleton)
+    {
+      info_messages_singleton = new short_info_messages ();
+    }
+  return info_messages_singleton;
+}
+
+
 
 /**
  * Initialize, load fonts bitmap, create offscreen
@@ -103,20 +129,55 @@ short_info_messages::intialize ()
       ptamp = ptamp + zemod;
     }
 
-  //###################################################################
-  // efface la table de demande des messages
-  //###################################################################
-  erase_mess ();
+  if (NULL == messages)
+    {
+       messages = resources->load_texts (handler_resources::TEXTS_MESSAGES, MAX_OF_MESSAGES, MAX_OF_CHARS, 0);
+       for (Uint32 i = 0; i < MAX_OF_MESSAGES; i++)
+        {
+          printf("%02d): %s \n", i,messages[i]);
+          char *str = messages[i];
+          for (Uint32 j = 0; j < MAX_OF_CHARS; j++)
+            {
+              char c = str[j];
+              if (' ' == c)
+                { 
+                  str[j] = '[';
+                  continue;
+                }
+              if ('!' == c)
+                { 
+                  str[j] = '\\';
+                  continue;
+                }
+              if ('?' == c)
+                { 
+                  str[j] = ']';
+                  continue;
+                }
+              if ('.' == c)
+                { 
+                  str[j] = '^';
+                  continue;
+                }
+            }
+          printf("%02d): %s \n", i,messages[i]);
+        }
+    }
+
+
+  clear_messages_request ();
 }
 
-//------------------------------------------------------------------------------
-// erase all messages
-//------------------------------------------------------------------------------
+/**
+ * Clear all message request 
+ */
 void
-short_info_messages::erase_mess ()
+short_info_messages::clear_messages_request ()
 {
-  for (Sint32 i = 0; i < MESSAGENUMB; i++)
-    zemessages[i] = 0;
+  for (Uint32 i = 0; i < MAX_OF_MESSAGES; i++)
+    {
+      messages_request[i] = false;
+    }
 }
 
 /** 
@@ -126,48 +187,54 @@ short_info_messages::erase_mess ()
 void
 short_info_messages::send_message_request (Uint32 id)
 {
-  zemessages[id] = 1;
+  messages_request[id] = true;
 }
 
-//------------------------------------------------------------------------------
-// runtime
-//------------------------------------------------------------------------------
+/**
+ * Display short info messages
+ */
 void
 short_info_messages::run ()
 {
-  if (mess_pause > 0)
-    execution2 ();
-  else
+  if (delay_counter > 0)
     {
-      Sint32 i = MESSAGENUMB;
-      while (--i >= 0)
+      draw ();
+      return;
+    }
+  Sint32 i = MAX_OF_MESSAGES;
+  while (--i >= 0)
+    {
+      if (!messages_request[i])
         {
-          if (zemessages[i] > 0)
-            {
-              zemessages[i] = 0;
-              mess_pnter = 0;
-              mess_pause = 66;
-              mess_reque = zemessage0[i];
-              execution2 ();
-              return;
-            }
+          continue;
         }
+      messages_request[i] = false;
+      mess_pnter = 0;
+      delay_counter = 66;
+      mess_reque = zemessage0[i];
+      draw ();
+      return;
     }
 }
 
-//------------------------------------------------------------------------------
-// display or clear the message
-//------------------------------------------------------------------------------
+/**
+ * Draw or clear a info message
+ */
 void
-short_info_messages::execution2 ()
+short_info_messages::draw ()
 {
   if (mess_pnter < 16)
-    displaymes ();              //display the message
+    {
+      /* draw a message */
+      displaymes ();
+    }
   else
     {
-      mess_pause--;
-      if (mess_pause < ft_hauteur)
-        clear_mess ();          //clear the message
+      delay_counter--;
+      if (delay_counter < ft_hauteur)
+        {
+          clear_mess ();          //clear the message
+        }
     }
 }
 
@@ -210,10 +277,10 @@ void
 short_info_messages::clear_mess ()
 {
   Sint32 pos_x = MESSAGEPOSX * resolution;
-  Sint32 pos_y = (MESSAGEPOSY * resolution) + mess_pause;
+  Sint32 pos_y = (MESSAGEPOSY * resolution) + delay_counter;
   char *pbuff = game_screen->get_pixel_data (pos_x, pos_y);
   char *ptamp = background_screen->get_pixel_data (pos_x, pos_y);
-  char *pfond = pt_mesfond + (mess_pause * fonteslarg);
+  char *pfond = pt_mesfond + (delay_counter * fonteslarg);
   for (Sint32 x = 0; x < fonteslarg; x++)
     {
       char pixel = pfond[x];
@@ -231,7 +298,7 @@ short_info_messages::clear_mess ()
 // ^ = dot
 //------------------------------------------------------------------------------
 const char *
-  short_info_messages::zemessage0[MESSAGENUMB] = {
+  short_info_messages::zemessage0[MAX_OF_MESSAGES] = {
   "[[[[[[[[[[[[[[[[",  //0
   "[ARE[YOU[READY[]",           //1
   "[YEAH[[YOU[WERE\\",          //2
@@ -268,5 +335,3 @@ const char *
   "[[ROBOT[ENABLE[[",           //33
   "[CONTROL[[BALLS[",           //34
 };
-char
-  short_info_messages::zemessages[MESSAGENUMB];

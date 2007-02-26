@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.29 2007/02/26 09:01:03 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.30 2007/02/26 17:39:38 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -260,8 +260,8 @@ controller_balls::check_outside_balls ()
       audio->play_lost_music ();
       audio->play_sound (S_ENLEVVIE);
 #endif
-      ptMiniMess->send_message_request (10);
-      ptMiniMess->send_message_request (1);
+      ptMiniMess->send_message_request (short_info_messages::LOST_FILE);
+      ptMiniMess->send_message_request (short_info_messages::ARE_YOU_READY);
       panel->reset_gigablitz_countdown ();
     }
 }

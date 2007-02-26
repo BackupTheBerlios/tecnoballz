@@ -2,14 +2,14 @@
  * @file handler_resources.h
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-02-21
+ * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.8 2007/02/22 22:07:32 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.9 2007/02/26 17:39:38 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,6 +65,7 @@ public:
       RES60BACKG,
 
       TEXTS_SHOP = TEXTS_OFFSET,
+      TEXTS_MESSAGES,
       
       BITMAP_HEAD_ANIMATION = BITMAP_OFFSET,
       BITMAP_RIGHT_PANEL,
@@ -85,7 +86,7 @@ public:
     }
     RESOURCE_IDENTFIERS;
 
-   static const Sint16 cosinus360[720];
+  static const Sint16 cosinus360[720];
   static const Sint16 *zesinus360;
   static const Uint32 tabledegas[180];
 
@@ -108,7 +109,7 @@ public:
   char *load_high_score_file ();
   void save_high_score_file (char *buffer, Uint32 size);
   char *locate_data_file (const char *const name);
-  char **load_texts(Uint32 resource_id, Uint32 row_length = 0, Uint32 modulo = 0);
+  char **load_texts(Uint32 resource_id, Uint32 maxof_lines = 0, Uint32 row_length = 0, Uint32 modulo = 0);
 
 private:
   char *loadfile_with_lang (const char *const filename, Uint32 * const fsize);

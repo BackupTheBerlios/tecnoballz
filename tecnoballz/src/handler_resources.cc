@@ -2,14 +2,14 @@
  * @file handler_resources.cc 
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-02-21
+ * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.9 2007/02/22 22:07:32 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.10 2007/02/26 17:39:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -143,7 +143,10 @@ const char * handler_resources::bitmap_files[] =
 
 const char * handler_resources::texts_files[] =
 {
+  /* TEXTS_SHOP */
   "shop_%s.txt",
+  /* TEXTS_MESSAGES */
+  "short_info_messages_%s.txt"
 };
 
 char
@@ -409,12 +412,13 @@ handler_resources::release_sprites_bitmap ()
 /**
  * Load texts data into strings list
  * @param resource_id resource identifier of the texts data 
+ * @param numof_lines number of lines
  * @param row_length maximum number of chars by string, 0 if preserve the size of
  *                   the original string  
  * @param modulo 0 if non concatenation, 2 concatene strings 3 by 3 
  */
 char **
-handler_resources::load_texts(Uint32 resource_id, Uint32 row_length, Uint32 modulo)
+handler_resources::load_texts(Uint32 resource_id, Uint32 numof_lines, Uint32 row_length, Uint32 modulo)
 {
   resource_id -=TEXTS_OFFSET; 
   const char *file = texts_files[resource_id];
@@ -467,6 +471,15 @@ handler_resources::load_texts(Uint32 resource_id, Uint32 row_length, Uint32 modu
           row_count = 0;
         }
      }
+
+  if (numof_lines > 0 && numof_lines != list_count) 
+    {
+      std::cerr << "(!)handler_resources::load_texts() " <<
+        numof_lines << " exceptes lines, read " << list_count <<
+        " lines!" << std::endl;
+      throw std::runtime_error ("(!))handler_resources::load_texts() "
+          "bad number of lines!");
+    }
 
   /*
    * allocate memory require to create strings list

@@ -5,11 +5,11 @@
  * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: short_info_messages.h,v 1.1 2007/02/26 09:01:03 gurumeditation Exp $
+ * $Id: short_info_messages.h,v 1.2 2007/02/26 17:39:38 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,15 +35,59 @@ class short_info_messages;
 
 class short_info_messages:public virtual tecnoballz
 {
+public:
+  typedef enum
+    {
+      EMPTY,
+      ARE_YOU_READY,
+      YEAH_YOU_WHERE,
+      EMPTY2,
+      SIMPLE_FIRE, //4
+      COOL_FIRE,
+      COOL_GUY,
+      EMPTY3,
+      EMPTY4,
+      EMPTY5,
+      LOST_FILE, //10
+      WIN_LIFE,
+      EMPTY6,
+      EMPTY7,
+      TOO_LATE,
+      BUDGET_PRICES,
+      GLUE_OPTION, //16
+      NEXT_LEVEL,
+      SMALL_PADDLE,
+      BIG_PADDLE,
+      EXTRA_BALLS,
+      MULTI_BALLS,
+      POWERBALLS,
+      MEGA_POWERBALLS,
+      INVERSE_COMMANDS, //24
+      MAXIMUM_ACCELERATION,
+      RIGHT_PADDLE,
+      TOP_PADDLE,
+      LEFT_PADDLE,
+      BIG_BALLS,
+      HUGE_BALLS,
+      MAXIMUM_OPTIONS,
+      WALL_ENABLE,
+      ROBOT_ENABLE,
+      CONTROL_BALLS, //34
+      MAX_OF_MESSAGES
+    } MESSAGES_ENUM;
+
 private:
+  static short_info_messages* info_messages_singleton;
+  char **messages;
   bitmap_data * bitmap_small_fonts;
   bitmap_data *messa_fond;
-  static const Uint32 MESSAGENUMB = 35;
   static const Uint32 MESSAGEPOSX = 96;
   static const Uint32 MESSAGEPOSY = 37;
-  static const Uint32 MAX_OF_CHARS = 16; //number of chars of a message
+  /** Maximum number of chars of a message */
+  static const Uint32 MAX_OF_CHARS = 16;
 
-  Sint32 mess_pause;            //tempo counter if<5 then clear message
+  /** Time delay counter, if < 5 then clear the message */
+  Uint32 delay_counter;
   Sint32 mess_pnter;            //number of the chars to display 0 to 15
   const char *mess_reque;
   Sint32 off_desti1;            // modulo destination (buffer)
@@ -55,18 +99,20 @@ private:
   Sint32 ft_hauteur;            //height of a character 
   Sint32 ft_largeur;            //width of a character 
   Sint32 fonteslarg;            //width of message's buffer  
-  static const char *zemessage0[MESSAGENUMB];
-  static char zemessages[MESSAGENUMB];
+  bool messages_request[MAX_OF_MESSAGES];
+  static const char *zemessage0[MAX_OF_MESSAGES];
 
 private:
-  void execution2 ();
+  void draw ();
   void displaymes ();
   void clear_mess ();
 
 public:
     short_info_messages ();
+public:
    ~short_info_messages ();
-  void erase_mess ();
+  static short_info_messages * get_instance ();
+  void clear_messages_request ();
   void intialize ();
   void send_message_request (Uint32 id);
   void run ();

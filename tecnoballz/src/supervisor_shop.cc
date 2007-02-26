@@ -4,11 +4,11 @@
  * @date 2007-02-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.19 2007/02/25 20:33:37 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.20 2007/02/26 17:39:39 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ Sint32
 supervisor_shop::first_init ()
 {
 
-  box_texts = resources->load_texts (handler_resources::TEXTS_SHOP, BOX_LENGTH_STRING, 3);
+  box_texts = resources->load_texts (handler_resources::TEXTS_SHOP, 0, BOX_LENGTH_STRING, 3);
   for(Uint32 i = 0; i < 31; i++)
     {
       printf("%02d): %s \n", i, box_texts[i]);
@@ -151,8 +151,10 @@ supervisor_shop::first_init ()
       ptSrc = &info_text3[BOX_LENGTH_STRING * 2];
     }
   ptDes = &info_text1[6 * BOX_LENGTH_STRING];
-  for (Sint32 i = 0; i < (BOX_LENGTH_STRING * 2); i++)
-    ptDes[i] = ptSrc[i];
+  for (Uint32 i = 0; i < (BOX_LENGTH_STRING * 2); i++)
+    {
+      ptDes[i] = ptSrc[i];
+    }
 
 
   ptSrc = &sprite_display_menu::difficulte[(difficulty_level - 1) * 4];
@@ -178,7 +180,7 @@ supervisor_shop::first_init ()
   power_up_capsules->create_shop_sprites_list ();
   current_player->clear_shopping_cart ();
   Sint32 *tp = coursetemp;
-  for (Sint32 i = 0; i < MAX_OF_CAPSULES_BOUGHT; i++)
+  for (Uint32 i = 0; i < MAX_OF_CAPSULES_BOUGHT; i++)
     {
       *(tp++) = 0;
     }
@@ -346,7 +348,7 @@ supervisor_shop::display_capsules_bought ()
   Sint32 *cart = current_player->get_shopping_cart ();
   sprite_capsule **capsules = power_up_capsules->get_sprites_list ();
   Sint32 pos_y = 4 * resolution;
-  for (Sint32 i = 0; i < MAX_OF_CAPSULES_BOUGHT; i++)
+  for (Uint32 i = 0; i < MAX_OF_CAPSULES_BOUGHT; i++)
     {
       sprite_capsule *capsule = *(capsules++);
       capsule->set_coordinates (294 * resolution, pos_y);
@@ -560,8 +562,10 @@ supervisor_shop::faitcourse (Sint32 gadnu)
                 //area 3 => bumper 3 & 2 
                 //area 4 & 5 => bumper 3 & 2 & 4 
               }
-            for (Sint32 j = 0; j < BOX_LENGTH_STRING; j++)
-              *(ptDes++) = *(ptTxt++);
+            for (Uint32 j = 0; j < BOX_LENGTH_STRING; j++)
+              {
+                *(ptDes++) = *(ptTxt++);
+              }
             ptSrc += BOX_LENGTH_STRING * 3;
           }
 
