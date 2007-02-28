@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.h
  * @brief Shop supervisor 
- * @date 2007-02-22
+ * @date 2007-02-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.12 2007/02/25 20:33:37 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.13 2007/02/28 08:49:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,9 +75,9 @@ private:
   char *shop_line1;
   char *shop_line2;
   char *shop_line3;
-  Sint32 curseur_x1;
-  Sint32 curseur_y1;
-  Sint32 get_object;            // drag object : pointer to the table "case_price" (-1 = no drag object)
+  Sint32 mouse_x_coord;
+  Sint32 mouse_y_coord;
+  Sint32 get_object;            // drag object : pointer to the table "options_prices" (-1 = no drag object)
   Sint32 pt_get_obj;
   sprite_capsule *bobclignot;
   sprite_capsule *drag_sprite;
@@ -107,11 +107,12 @@ private:
   Sint32 triche_etb;
   Sint32 tricheCode;
 
-  // table de pointeurs sur "case_price"
+  // table de pointeurs sur "options_prices"
   static Sint32 sh_tablept[MAX_OF_CAPSULES_BOUGHT];
 
   static Sint32 case_types[];
-  static Sint32 case_price[];
+  /** Prices of all the available options in the shop */ 
+  static Uint32 options_prices[];
   static char shoptext00[];
   static char shoptext41[];
   static char shoptext63[];

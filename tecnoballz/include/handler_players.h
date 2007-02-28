@@ -1,14 +1,14 @@
 /** 
  * @file handler_players.h
  * @brief players handler 
- * @date 2007-02-25
+ * @date 2007-02-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.h,v 1.10 2007/02/25 20:33:37 gurumeditation Exp $
+ * $Id: handler_players.h,v 1.11 2007/02/28 08:49:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ public:
   static handler_players **players_list;
 
 private:
-  /** Maximum number of playes */
+  /** Maximum number of players */
   static Uint32 max_of_players;
   static Sint32 joueur_run;     // Numero du joueur en cours
   static handler_players *first_player;
@@ -67,7 +67,8 @@ private:
   Sint32 score_life;            // Score pour une vie
   /** Area number from 1 to 5 */
   Uint32 area_number;
-  Uint32 level_number;            // Niveau dans l'Area
+  /** Level number in the current area, from 1 to 13 */
+  Uint32 level_number;
   /** Number of lifes remaining */
   Sint32 number_of_lifes;
   /** List ot the items bought in the shop */
@@ -92,7 +93,8 @@ private:
   /** Width of the horizontal paddles
    * and height of the vertical paddles */
   Uint32 paddle_length;
-  Sint32 bonusPrice;            // Bonus prix du magasin a 1
+  /** If true all options prices will be to 1 in the next shop */
+  bool budget_prices;
   bool gemmeActif[6];           // Etat des 6 gemmes
   Sint32 gemmeNombr;            // Nombre de gemme(s) ramassee(s)
   Sint32 guardianPt;            //pt / level_list of the guards
@@ -130,8 +132,8 @@ public:
   Uint32 get_less_bricks ();
   void setRebuild (Sint32 build);
   Sint32 getRebuild ();
-  void set_Bprice (Sint32 value);
-  Sint32 get_Bprice ();
+  void set_budget_prices (bool enbale);
+  bool is_budget_prices ();
   char *getBriLeft ();
   char *getBriRigh ();
   char *getBri_top ();

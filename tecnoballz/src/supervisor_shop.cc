@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.cc 
  * @brief Shop supervisor
- * @date 2007-02-23
+ * @date 2007-02-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.21 2007/02/26 21:29:23 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.22 2007/02/28 08:49:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,8 +47,8 @@ supervisor_shop::supervisor_shop ()
   is_already_view_info = false;
   current_price = 0;
   num_of_bought_capsules = 0;
-  curseur_x1 = 0;
-  curseur_y1 = 0;
+  mouse_x_coord = 0;
+  mouse_y_coord = 0;
   get_object = -1;
   pt_get_obj = 0;
   shop_point = 0;
@@ -213,7 +213,7 @@ supervisor_shop::first_init ()
 
 
   putthetext (box_texts[31]); 
-  if (!current_player->get_Bprice ())
+  if (!current_player->is_budget_prices ())
     {
        char *str = box_texts[31] + BOX_LENGTH_STRING * 2 ;
        for (Uint32 i = 0; i < BOX_LENGTH_STRING; i++)
@@ -377,12 +377,12 @@ supervisor_shop::testkursor (Sint32 x, Sint32 y)
       if (y > 4)
         x = 0;
       Sint32 i = x + 6 * y;
-      curseur_x1 = (x * (48 * resolution)) + (17 * resolution);
+      mouse_x_coord = (x * (48 * resolution)) + (17 * resolution);
 
       if (resolution == 1)
-        curseur_y1 = (y * (44 * resolution)) + (36 * resolution);
+        mouse_y_coord = (y * (44 * resolution)) + (36 * resolution);
       else
-        curseur_y1 = (y * (44 * resolution)) + (35 * resolution);
+        mouse_y_coord = (y * (44 * resolution)) + (35 * resolution);
       return i;
     }
 }
@@ -409,13 +409,17 @@ supervisor_shop::led_moving (Sint32 index)
       Sint32 i = case_types[index];
       power_up_capsules->set_overview_capsule (i);
 
-      // set LED indicator
+      /* set LED indicator */
       led_indicator->enable ();
-      led_indicator->set_coordinates (curseur_x1, curseur_y1);
-      if (current_player->get_Bprice ())
-        i = 1;
+      led_indicator->set_coordinates (mouse_x_coord, mouse_y_coord);
+      if (current_player->is_budget_prices ())
+	{
+          i = 1;
+	}
       else
-        i = case_price[index];
+	{
+          i = options_prices[index];
+	}
 
       // info already seen at least once ?
       if (index == 10 && is_already_view_info)
@@ -634,7 +638,7 @@ supervisor_shop::faitcourse (Sint32 gadnu)
       // exit from the shop
       //###############################################################
     case GAD_EXITSH:
-      current_player->set_Bprice (0);
+      current_player->set_budget_prices (false);
       current_player =
         handler_players::nextplayer (current_player, &end_return, 2);
       break;
@@ -760,7 +764,7 @@ supervisor_shop::display_box_text ()
 void
 supervisor_shop::sh_ballade ()
 {
-  if (get_object >= 0)          //pointer to the table "case_price" (-1 = no drag object)
+  if (get_object >= 0)          //pointer to the table "options_prices" (-1 = no drag object)
     {
       if (keyboard->is_left_button ())
         {
@@ -845,17 +849,22 @@ supervisor_shop::sh_ballade ()
               num_of_bought_capsules--;
               current_player->set_cou_nb (num_of_bought_capsules);
 
-              //check bonus price
               Sint32 price = 0;
-              if (current_player->get_Bprice ())
-                price = 1;
+              if (current_player->is_budget_prices ())
+		{
+		  /* the player collected a chance capsule containing 
+		   * a budget prices bonus in the previous bricks level.
+		   * All the options are thus for the price of 1 in 
+		   * the current shop */
+                  price = 1;
+		}
               else
                 {
                   while (case_types[i] != GAD_EXITSH)
                     {
                       if (case_types[i] == gadnu)
                         {
-                          price = case_price[i];
+                          price = options_prices[i];
                           break;
                         }
                       i++;
@@ -1031,11 +1040,11 @@ Sint32
 //-------------------------------------------------------------------------------
 Sint32 supervisor_shop::sh_tablept[MAX_OF_CAPSULES_BOUGHT];
 
-//-------------------------------------------------------------------------------
-// Prix des gadgets 
-//-------------------------------------------------------------------------------
-Sint32
-  supervisor_shop::case_price[] = { 60, 75, 150, 350, 25, 50,
+/**
+ * Prices of all the available options in the shop 
+ */
+Uint32 supervisor_shop::options_prices[] = {
+   60, 75, 150, 350, 25, 50,
   250, 500, 400, 450, 10, 75,
   100, 100, 100, 60, 75, 100,
   60, 150, 0, 0, 0, 0,

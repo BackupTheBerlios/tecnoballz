@@ -4,11 +4,11 @@
  * @date 2007-02-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.17 2007/02/26 21:29:23 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.18 2007/02/28 08:49:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -596,13 +596,14 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       paddle_selected->set_fire_2 ();
       break;
 
-      // Bonus price (shop's price at 1 in the shop) (no gadget)
+      /* options prices will be to 1 in the next shop
+       * this bonus is only available as a part of chance capsule */
     case GAD_PRICE1:
       messages->send_message_request (short_info_messages::BUDGET_PRICES);
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      current_player->set_Bprice (1);
+      current_player->set_budget_prices (true);
       break;
 
       // bottom wall enable

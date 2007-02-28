@@ -4,11 +4,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.10 2007/02/25 20:33:37 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.11 2007/02/28 08:49:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -152,7 +152,7 @@ handler_players::reset_members ()
   /* width of the horizontal paddles
    * and height of the vertical paddles */
   paddle_length = 32 * resolution;
-  bonusPrice = z;               //reset flag "bonus price" option
+  budget_prices = false;
   guardianPt = 0;
   RAZgemlist ();
 }
@@ -461,18 +461,18 @@ handler_players::get_less_bricks ()
 // initialize state "bonus price" option
 //-----------------------------------------------------------------------------
 void
-handler_players::set_Bprice (Sint32 value)
+handler_players::set_budget_prices (bool enable)
 {
-  bonusPrice = value;
+  budget_prices = enable;
 }
 
 //-----------------------------------------------------------------------------
 // return state "bonus price" option
 //-----------------------------------------------------------------------------
-Sint32
-handler_players::get_Bprice ()
+bool
+handler_players::is_budget_prices ()
 {
-  return bonusPrice;
+  return budget_prices;
 }
 
 

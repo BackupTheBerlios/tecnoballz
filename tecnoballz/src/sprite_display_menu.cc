@@ -4,11 +4,11 @@
  * @date 2007-02-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.4 2007/02/23 17:22:34 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.5 2007/02/28 08:49:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -590,7 +590,9 @@ sprite_display_menu::mis_a_jour ()
   for (Sint32 i = 0; i < 4; i++)
     d[i] = s[i];
   d = menuTexte1 + (MENU_LARGE * 13) + 24;
-  intToASCII (initial_num_of_lifes, d, 1);
+  //intToASCII (initial_num_of_lifes, d, 1);
+  integer_to_ascii (initial_num_of_lifes, 2, d);
+
 
   birth_flag = 1;
   //for(Uint32 i = 0; i < 1; i++) //test only

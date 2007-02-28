@@ -5,11 +5,11 @@
  * @date 2007-02-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.14 2007/02/23 17:22:34 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.15 2007/02/28 08:49:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -412,6 +412,38 @@ tecnoballz::chaine_cmp (char *srcPT, char *desPT, Sint32 taille)
         return (0);
     }
   return 1;
+}
+
+/**
+ * Creates a string representing an integer number
+ * @param value the integer value to be converted
+ * @param padding length of the string
+ * @param str the string representation of the number
+ */
+void
+tecnoballz::integer_to_ascii (Sint32 value, Uint32 padding, char *str) 
+{
+  char* ptr = str + padding - 1 ;
+  bool neg = (value < 0);
+  if(neg) 
+    {
+      value = -value;
+      --padding;
+    }
+  do
+    {
+      *ptr-- = (value % 10) + '0';
+      value /= 10;
+      --padding;
+    } while(value && padding > 0);
+  for(; padding > 0; --padding)
+    {
+      *ptr-- = '0';
+    }
+  if(neg)
+    {
+      *ptr-- = '-';
+    }
 }
 
 //------------------------------------------------------------------------------
