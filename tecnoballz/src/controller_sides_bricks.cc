@@ -5,11 +5,11 @@
  * @date 2007-02-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.cc,v 1.2 2007/02/14 07:15:30 gurumeditation Exp $
+ * $Id: controller_sides_bricks.cc,v 1.3 2007/02/28 21:08:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -164,9 +164,9 @@ controller_sides_bricks::initialise (Sint32 build)
   //###################################################################
   else
     {
-      char *bleft = current_player->getBriLeft ();
-      char *brigh = current_player->getBriRigh ();
-      char *b_top = current_player->getBri_top ();
+      bool *bleft = current_player->get_map_left ();
+      bool *brigh = current_player->get_map_right ();
+      bool *b_top = current_player->get_map_top ();
       for (Uint32 i = 0; i < MAX_OF_SIDES_BRICKS; i++)
         {
           map_left_wall[i] = bleft[i];
@@ -291,9 +291,9 @@ controller_sides_bricks::bobbg_init ()
 void
 controller_sides_bricks::sauve_etat ()
 {
-  char *bleft = current_player->getBriLeft ();
-  char *brigh = current_player->getBriRigh ();
-  char *b_top = current_player->getBri_top ();
+  bool *bleft = current_player->get_map_left ();
+  bool *brigh = current_player->get_map_right ();
+  bool *b_top = current_player->get_map_top ();
   for (Uint32 i = 0; i < MAX_OF_SIDES_BRICKS; i++)
     {
       bleft[i] = map_left_wall[i];

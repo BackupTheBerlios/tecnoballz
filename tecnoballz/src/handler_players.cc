@@ -1,14 +1,14 @@
 /** 
  * @file handler_players.cc 
  * @brief players handler 
- * @date 2007-02-14
+ * @date 2007-02-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.11 2007/02/28 08:49:17 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.12 2007/02/28 21:08:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,10 +31,7 @@
 #include "../include/controller_gems.h"
 
 Uint32 handler_players::max_of_players = 0;
-Sint32 handler_players::joueur_run = 0;
 handler_players * handler_players::first_player = NULL;
-Sint32 handler_players::best_score = 0;
-char handler_players::bestPlayer[6] = { ' ', ' ', ' ', ' ', ' ', ' ' };
 handler_players ** handler_players::players_list = NULL;
 
 /* 
@@ -127,9 +124,9 @@ handler_players::initialize (Uint32 lifes, Uint32 area, Uint32 level,
 void
 handler_players::reset_members ()
 {
-  Uint32 z = 0;
-  superScore = z;               //reset score of the player
-  score_life = 0;
+  /* clear the score value of the player */
+  score_value = 0;
+  bonus_life_counter = 0;
   area_number = 1;
   /* level number into the current area */
   level_number = 1;
@@ -138,17 +135,17 @@ handler_players::reset_members ()
   amount_of_money = 500;
   for (Uint32 i = 0; i < controller_sides_bricks::MAX_OF_SIDES_BRICKS; i++)
     {
-      bricotLeft[i] = 1;        //state of the left wall
-      bricotRigh[i] = 1;        //state of the right wall
-      bricot_top[i] = 1;        //state of the top wall
+      map_left_wall[i] = true;
+      map_right_wall[i] = true;
+      map_top_wall[i] = true;
     }
   /* disable right, top and left paddles */
   right_paddle_alive_counter = 0;
   top_paddle_alive_counter = 0;
   left_paddle_alive_counter = 0;
-  rebuild_ok = z;               //reset flag "rebuild wall" option
-  less_brick = z;               //reset flag "less brick" option
-  life_bonus = z;               //counter of points giving a free life
+  must_rebuild_walls = false;
+  less_brick = 0;
+  life_bonus = 0;
   /* width of the horizontal paddles
    * and height of the vertical paddles */
   paddle_length = 32 * resolution;
@@ -295,12 +292,12 @@ handler_players::increase_money_amount (Uint32 value)
 void
 handler_players::add_score (Uint32 value)
 {
-  superScore += value;
-  score_life += value;
-  if (score_life > 25000)
+  score_value += value;
+  bonus_life_counter += value;
+  if (bonus_life_counter > 25000)
     {
       add_life (1);
-      score_life -= 25000;
+      bonus_life_counter -= 25000;
     }
 }
 
@@ -457,68 +454,74 @@ handler_players::get_less_bricks ()
   return less_brick;
 }
 
-//-----------------------------------------------------------------------------
-// initialize state "bonus price" option
-//-----------------------------------------------------------------------------
+/**
+ * Set the budget prices option
+ * @param enable true if enable the budget prices option, false otherwise
+ */
 void
 handler_players::set_budget_prices (bool enable)
 {
   budget_prices = enable;
 }
 
-//-----------------------------------------------------------------------------
-// return state "bonus price" option
-//-----------------------------------------------------------------------------
+/**
+ * Check if the budget prices option is enable
+ */
 bool
 handler_players::is_budget_prices ()
 {
   return budget_prices;
 }
 
-
-//-----------------------------------------------------------------------------
-// initialize state of "rebuild wall" option
-//-----------------------------------------------------------------------------
+/**
+ * Enable or disable the option which will rebuild the walls bricks
+ * on the next levels
+ * @param enable true if rebuilt the walls, false otherwise
+ */
 void
-handler_players::setRebuild (Sint32 build)
+handler_players::set_rebuild_walls (bool enable)
 {
-  rebuild_ok = build;
+  must_rebuild_walls = enable;
 }
 
-//-----------------------------------------------------------------------------
-// return state of "rebuild wall" option
-//-----------------------------------------------------------------------------
-Sint32
-handler_players::getRebuild ()
+/**
+ * Check if the walls must be rebuilt.
+ * @return true if rebuilt the walls, false otherwise
+ */
+bool
+handler_players::is_rebuild_walls ()
 {
-  return rebuild_ok;
+  return must_rebuild_walls;
 }
 
-//-----------------------------------------------------------------------------
-// return state of the wall of left (small bricks)
-//-----------------------------------------------------------------------------
-char *
-handler_players::getBriLeft ()
+/**
+ * Return state of the left wall bricks 
+ * @return a pointer to the map of the left wall 
+ */
+bool*
+handler_players::get_map_left ()
 {
-  return bricotLeft;
+  return map_left_wall;
 }
 
-//-----------------------------------------------------------------------------
-// return state of the wall of right (small bricks)
-//-----------------------------------------------------------------------------
-char *
-handler_players::getBriRigh ()
+/**
+ * Return state of the right wall bricks 
+ * @return a pointer to the map of the right wall 
+ */
+bool*
+handler_players::get_map_right ()
 {
-  return bricotRigh;
+  return map_right_wall;
 }
 
-//-----------------------------------------------------------------------------
-// return state of the wall of top (small bricks)
-//-----------------------------------------------------------------------------
-char *
-handler_players::getBri_top ()
+/**
+ * Return state of the top wall bricks 
+ * @return a pointer to the map of the top wall 
+ */
+bool*
+handler_players::get_map_top ()
 {
-  return bricot_top;
+  return map_top_wall;
 }
 
 //-----------------------------------------------------------------------------
@@ -615,18 +618,6 @@ handler_players::get_previous_player ()
 {
   return previous_player;
 }
-
-/**
- * Return the next player
- * @return a pointer to the next player object
- */
-/*
-handler_players *
-handler_players::get_next_player ()
-{
-  return next_player;
-}
-*/
 
 /**
  * Set the next player 

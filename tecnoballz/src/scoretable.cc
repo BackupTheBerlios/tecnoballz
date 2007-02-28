@@ -5,7 +5,7 @@
 // created	: 2004-04-30
 // updates	: 2005-01-11
 // fonction	: display score table (game over and menu)
-// id		: $Id: scoretable.cc,v 1.12 2007/02/16 12:38:24 gurumeditation Exp $
+// id		: $Id: scoretable.cc,v 1.13 2007/02/28 21:08:09 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // This program is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -208,7 +208,7 @@ Sint32 scoretable::test_score()
 {
 	Sint32 fhigh = test_score(
 		&current_player->player_name[0],
-		current_player->superScore,
+		current_player->score_value,
 		current_player->level_number,
 		current_player->area_number);
 	if(fhigh)

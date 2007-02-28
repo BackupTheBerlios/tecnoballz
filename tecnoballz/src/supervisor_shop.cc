@@ -4,11 +4,11 @@
  * @date 2007-02-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.22 2007/02/28 08:49:17 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.23 2007/02/28 21:08:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -609,11 +609,11 @@ supervisor_shop::faitcourse (Sint32 gadnu)
         putthetext (shoptext56);
       else
         {
-          if (current_player->getRebuild () <= 0)
+          if (!current_player->is_rebuild_walls ())
             {
               if (decrease_money_amount ())
                 {
-                  current_player->setRebuild (1);
+                  current_player->set_rebuild_walls (true);
                   message_ok ();
                 }
             }

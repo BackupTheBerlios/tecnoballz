@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-02-18
+ * @date 2007-02-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.33 2007/02/26 21:29:23 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.34 2007/02/28 21:08:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,9 +137,9 @@ supervisor_bricks_level::first_init ()
   bottom_wall->set_coordinates (32 * resolution, 232 * resolution);
   //robot bumper
   paddles->init_robot ();
-  Sint32 build = current_player->getRebuild ();
-  current_player->setRebuild (0);
-  error_init (sides_bricks->initialise (build));
+  bool is_rebuild = current_player->is_rebuild_walls ();
+  current_player->set_rebuild_walls (false);
+  error_init (sides_bricks->initialise (is_rebuild));
   if (erreur_num)
     return erreur_num;
   ejectors_corners->create_ejectors_sprites ();
@@ -147,9 +147,7 @@ supervisor_bricks_level::first_init ()
   ships->create_sprites_list ();
   magnetic_eyes->create_eyes_list ();
   money_capsules->create_sprites_list ();
-  printf("================ power_up_capsules==== \n");
   power_up_capsules->create_sprites_list (6);
-  printf("================ power_up_capsules==== \n");
   gem_stones->create_sprites_list ();
   fontes_game->create_sprites_list ();
   paddles->create_projectiles_list ();

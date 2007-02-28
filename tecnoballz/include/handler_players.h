@@ -4,11 +4,11 @@
  * @date 2007-02-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.h,v 1.11 2007/02/28 08:49:17 gurumeditation Exp $
+ * $Id: handler_players.h,v 1.12 2007/02/28 21:08:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,11 +49,8 @@ public:
 private:
   /** Maximum number of players */
   static Uint32 max_of_players;
-  static Sint32 joueur_run;     // Numero du joueur en cours
   static handler_players *first_player;
-  static Sint32 best_score;
-  static char bestPlayer[6];
-  
+
   /** Pointer to the next player object */
   handler_players *next_player;
   /** Pointer to the previsous player object */
@@ -62,9 +59,10 @@ private:
   char player_name[7];
   /** Player number from 1 to 6 */
   Uint32 player_num;
-
-  Sint32 superScore;            // Score accumule
-  Sint32 score_life;            // Score pour une vie
+  /** Player score value */
+  Uint32 score_value;
+  /** Bonus life granted every 25,000 points */
+  Uint32 bonus_life_counter;
   /** Area number from 1 to 5 */
   Uint32 area_number;
   /** Level number in the current area, from 1 to 13 */
@@ -78,16 +76,21 @@ private:
   Uint32 shopping_cart_items;
   /** Amount of money available to be spend in the shop */
   Uint32 amount_of_money;
-  char bricotLeft[12];          // Etat du mur de gauche
-  char bricotRigh[12];          // Etat du mur de droite
-  char bricot_top[12];          // Etat du mur dy haut
+  /** State of the left wall of bricks */
+  bool map_left_wall[12];
+  /** State of the right  wall of bricks */
+  bool map_right_wall[12];
+  /** State of the top wall of bricks */
+  bool map_top_wall[12];
   /** Alive counter of the right paddle, 0 = paddle disabled */ 
   Uint32 right_paddle_alive_counter;
   /** Alive counter of the top paddle, 0 = paddle disabled */ 
   Uint32 top_paddle_alive_counter;
   /** Alive counter of the left paddle, 0 = paddle disabled */ 
   Uint32 left_paddle_alive_counter;
-  Sint32 rebuild_ok;            // Flag reconstruit les murs
+  /** If true, then the wall must be rebuilt on the next level
+   * ihis option is only available in area 5 */
+  bool must_rebuild_walls;
   Sint32 less_brick;            // Flag "less brick"
   Sint32 life_bonus;            // Compteur point une vie gratuite
   /** Width of the horizontal paddles
@@ -130,13 +133,13 @@ public:
   void set_bumpOn (Sint32 bumpN, Sint32 value);
   void set_less_bricks (Uint32 count);
   Uint32 get_less_bricks ();
-  void setRebuild (Sint32 build);
-  Sint32 getRebuild ();
+  void set_rebuild_walls (bool enable);
+  bool is_rebuild_walls ();
   void set_budget_prices (bool enbale);
   bool is_budget_prices ();
-  char *getBriLeft ();
-  char *getBriRigh ();
-  char *getBri_top ();
+  bool *get_map_left ();
+  bool *get_map_right ();
+  bool *get_map_top ();
 
   Sint32 zlastlevel ();
   Sint32 next_level (Sint32 grdNx = 0);
@@ -157,7 +160,6 @@ public:
 
 private:
   handler_players *get_previous_player ();
-  handler_players *get_next_player ();
   void set_next_player (handler_players *player);
   void set_previous_player (handler_players *player);
   void reset_members ();

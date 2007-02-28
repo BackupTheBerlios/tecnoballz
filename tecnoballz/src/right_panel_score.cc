@@ -1,14 +1,14 @@
 /** 
  * @file right_panel_score.cc 
  * @brief The right panel score in the bricks levels 
- * @date 2007-02-21
+ * @date 2007-02-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.9 2007/02/21 21:07:11 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.10 2007/02/28 21:08:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ right_panel_score::draw_background ()
 void
 right_panel_score::text_refresh ()
 {
-  affNombre1 (scoreAdres, current_player->superScore, 100000);
+  affNombre1 (scoreAdres, current_player->score_value, 100000);
   affNombre1 (lifesAdres, bricks_counter, 100);
   affNombre1 (brickAdres, current_player->number_of_lifes, 10);
 }
