@@ -2,14 +2,14 @@
  * @file short_info_messages.cc 
  * @brief Display short info messages in bricks levels 
  * @created 2002-12-30
- * @date 2007-02-26
+ * @date 2007-03-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: short_info_messages.cc,v 1.3 2007/02/26 21:29:23 gurumeditation Exp $
+ * $Id: short_info_messages.cc,v 1.4 2007/03/01 06:50:28 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,11 +165,8 @@ short_info_messages::intialize ()
                   str[j] = '[';
                 }
             }
-          printf("%02d): %s \n", i,messages[i]);
         }
     }
-
-
   clear_messages_request ();
 }
 

@@ -1,14 +1,14 @@
 /** 
  * @file handler_players.cc 
  * @brief players handler 
- * @date 2007-02-28
+ * @date 2007-03-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.12 2007/02/28 21:08:09 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.13 2007/03/01 06:50:28 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,10 @@
 #include "../include/controller_gems.h"
 
 Uint32 handler_players::max_of_players = 0;
-handler_players * handler_players::first_player = NULL;
-handler_players ** handler_players::players_list = NULL;
+handler_players *
+  handler_players::first_player = NULL;
+handler_players **
+  handler_players::players_list = NULL;
 
 /* 
  * Create a player object
@@ -44,7 +46,7 @@ handler_players::handler_players ()
   /* 
    * add a new player
    */
-  
+
   /* first player */
   if (0 == max_of_players)
     {
@@ -372,9 +374,9 @@ handler_players::gem_enable (Sint32 gemNu)
   for (Uint32 i = 0; i < controller_gems::MAX_OF_GEMS; i++)
     {
       if (!gemmeActif[i])
-    {
-        return 0;
-    }
+        {
+          return 0;
+        }
     }
   RAZgemlist ();
   return 1;
@@ -498,7 +500,7 @@ handler_players::is_rebuild_walls ()
  * Return state of the left wall bricks 
  * @return a pointer to the map of the left wall 
  */
-bool*
+bool *
 handler_players::get_map_left ()
 {
   return map_left_wall;
@@ -508,7 +510,7 @@ handler_players::get_map_left ()
  * Return state of the right wall bricks 
  * @return a pointer to the map of the right wall 
  */
-bool*
+bool *
 handler_players::get_map_right ()
 {
   return map_right_wall;
@@ -518,7 +520,7 @@ handler_players::get_map_right ()
  * Return state of the top wall bricks 
  * @return a pointer to the map of the top wall 
  */
-bool*
+bool *
 handler_players::get_map_top ()
 {
   return map_top_wall;
@@ -695,21 +697,22 @@ handler_players::remove_all_lifes ()
  */
 
 /**
- * Static method which return next player
- * @param  player: current "handler_players" object
- * @param  rcode: pointer to "end_return"
- * @param  vactu: current phase (1, 2, or 3)
- * @param  grdNx: pointer to "level_list" of the guards (NULL by default)
+ * Static method which return next player and determine the next phase
+ * @param player the current "handler_players" object
+ * @param next_phase pointer to "end_return"
+ * @param current_phase current phase: BRICKS_LEVEL, SHOP or GUARDS_LEVEL 
+ * @param grdNx pointer to "level_list" of the guards (NULL by default)
  * @return the new player object
  */
 handler_players *
-handler_players::nextplayer (handler_players * player, Sint32 * rcode,
-                             Sint32 vactu, Sint32 grdNx)
+handler_players::nextplayer (handler_players * player, Sint32 * next_phase,
+                             Sint32 current_phase, Sint32 grdNx)
 {
   Uint32 start = player->player_num;
   Uint32 index = start;
-  if (vactu != 2)
+  if (current_phase != SHOP)
     {
+      /* jump to the next level */
       player->next_level (grdNx);
     }
 
@@ -721,32 +724,30 @@ handler_players::nextplayer (handler_players * player, Sint32 * rcode,
           index = 1;
         }
       handler_players *player = players_list[index - 1];
-      if (player->number_of_lifes > 0)
+      if (player->number_of_lifes <= 0)
         {
-          /* get next phase: GUARDS_LEVEL or SHOP */
-          *rcode = player->get_next_phase ();
-
-          /* this player already went to the shop,
-           * he jump to the bricks level */
-          if (player->player_num <= start && *rcode == SHOP && vactu == SHOP)
-            {
-              *rcode = BRICKS_LEVEL;
-             } 
-          // - 1: bricks levels
-          // - 2: shop
-          // - 3: guards levels
-          // - 4: menu
-          if (player->player_num > start && vactu != SHOP)
-            {
-              if (*rcode == SHOP)
-                {
-                  *rcode = BRICKS_LEVEL;
-                }
-            }
-          return player;
+          continue;
         }
+      /* get next phase: GUARDS_LEVEL or SHOP */
+      *next_phase = player->get_next_phase ();
+
+      /* this player already went to the shop,
+       * he jump to the bricks level */
+      if (player->player_num <= start && *next_phase == SHOP
+          && current_phase == SHOP)
+        {
+          *next_phase = BRICKS_LEVEL;
+        }
+      /* multiplayers case: all players play the same level */
+      if (player->player_num > start && current_phase != SHOP
+          && *next_phase == SHOP)
+        {
+          *next_phase = BRICKS_LEVEL;
+        }
+      return player;
     }
-  *rcode = 4;                   //improbable
+  /* unlikely case  */
+  *next_phase = MAIN_MENU;
   return players_list[0];
 }
 
