@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<levels_data>
+
+
+
+<bricks_level>
+  <id>0</id>
+  <ships>
+    <appearance>1</appearance>
+    <appearance>45</appearance>
+    <appearance>35</appearance>
+    <appearance>10</appearance>
+    <reappearance>80</reappearance>
+    <strength>1</strength>
+  </ships>
+  <penalties_frequency>8</penalties_frequency>
+  <moneys_frequency>2</moneys_frequency>  
+  <penalties_list_id>0</penalties_list_id>
+  <starting_speed>1</starting_speed>
+  <acceleration_delay>90</acceleration_delay>
+  <ball_release_time>20</ball_release_time>
+  <glue_time>50</glue_time>
+  <tilt_delay>7</tilt_delay>
+</bricks_level>
+
+<!-- amigaTab11 -->
+<bricks_level>
+  <id>1</id>
+  <ships>
+    <appearance>1</appearance>
+    <appearance>45</appearance>
+    <appearance>25</appearance>
+    <appearance>12</appearance>
+    <reappearance>80</reappearance>
+    <strength>1</strength>
+  </ships>
+  <penalties_frequency>15</penalties_frequency>
+  <moneys_frequency>5</moneys_frequency>  
+  <penalties_list_id>1</penalties_list_id>
+  <starting_speed>1</starting_speed>
+  <acceleration_delay>77</acceleration_delay>
+  <ball_release_time>15</ball_release_time>
+  <glue_time>40</glue_time>
+  <tilt_delay>7</tilt_delay>
+</bricks_level>
+
+<!-- amigaTab12 -->
+<bricks_level>
+  <id>1</id>
+  <ships>
+    <appearance>1</appearance>
+    <appearance>35</appearance>
+    <appearance>25</appearance>
+    <appearance>12</appearance>
+    <reappearance>70</reappearance>
+    <strength>1</strength>
+  </ships>
+  <penalties_frequency>17</penalties_frequency>
+  <moneys_frequency>6</moneys_frequency>  
+  <penalties_list_id>3</penalties_list_id>
+  <starting_speed>1</starting_speed>
+  <acceleration_delay>67</acceleration_delay>
+  <ball_release_time>10</ball_release_time>
+  <glue_time>30</glue_time>
+  <tilt_delay>7</tilt_delay>
+</bricks_level>
+
+
+
+</levels_data>

@@ -2,14 +2,14 @@
  * @file handler_resources.cc 
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-02-26
+ * @date 2007-03-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.11 2007/02/26 21:29:23 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.12 2007/03/01 21:14:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,7 +64,9 @@ const char *
   "gard_lissa.list",            //RESGCURVES
   /* DATA_BRICKS_LEVELS */
   "tableau.data",
-  "min60map.bmp"                //RES60BACKG
+  "min60map.bmp",                //RES60BACKG
+  /* DATA_LEVELS */
+  "levels-data.xml"
 };
 
 const char *

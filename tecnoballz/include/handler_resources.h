@@ -5,11 +5,11 @@
  * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.9 2007/02/26 17:39:38 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.10 2007/03/01 21:14:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,6 +63,7 @@ public:
       RESGCURVES,
       DATA_BRICKS_LEVELS,
       RES60BACKG,
+      DATA_LEVELS,
 
       TEXTS_SHOP = TEXTS_OFFSET,
       TEXTS_MESSAGES,

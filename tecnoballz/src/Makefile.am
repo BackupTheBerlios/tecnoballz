@@ -79,5 +79,9 @@ SOURCES_MAIN = \
   tecnoballz.cc \
   tiles_background.cc \
   tilesmap_scrolling.cc \
+  tinyxml.cc \
+  tinyxmlerror.cc \
+  tinyxmlparser.cc \
+  tinystr.cc
   $(NULL)
 
