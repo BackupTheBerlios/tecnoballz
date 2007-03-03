@@ -4,11 +4,11 @@
  * @date 2007-02-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.34 $
+ * @version $Revision: 1.35 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.34 2007/02/28 21:08:09 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.35 2007/03/03 20:59:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -174,23 +174,23 @@ supervisor_bricks_level::first_init ()
 
   /* balls initialization */
   balls->init (
-      /* time before the ball leaves paddle (at the game beginning) */
-      levelParam->startCount,
-      //time before the ball leaves (glue option)
-      levelParam->glue_count / difficulty_level,
-      //time before the ball accelerates
-      levelParam->speedCount / difficulty_level,
-      //time before "tilt" is available
-      levelParam->tilt_count, levelParam->speedBall1);
+      /* time before the ball leaves paddle, at the level beginning */
+      level_desc->ball_release_time,
+      /* time before the ball leaves (glue option) */
+      level_desc->glue_time / difficulty_level,
+      /* time before the ball accelerates */
+      level_desc->acceleration_delay / difficulty_level,
+      /* time before "tilt" is available */
+      level_desc->tilt_delay, level_desc->starting_speed);
 
-  ships->initialise (levelParam->apparition / difficulty_level,
-                          levelParam->atom1Count / difficulty_level,
-                          levelParam->atom2Count / difficulty_level,
-                          levelParam->atom3Count / difficulty_level,
-                          levelParam->atom4Count / difficulty_level,
-                          levelParam->resistance * difficulty_level);
+  ships->initialise (level_desc->reappearance / difficulty_level,
+                     level_desc->ship_appearance_delay1 / difficulty_level,
+                     level_desc->ship_appearance_delay2 / difficulty_level,
+                     level_desc->ship_appearance_delay3 / difficulty_level,
+                     level_desc->ship_appearance_delay4 / difficulty_level,
+                     level_desc->ships_strength * difficulty_level);
 
-  money_capsules->initialize (levelParam->monayCount * difficulty_level,
+  money_capsules->initialize (level_desc->moneys_frequency * difficulty_level,
                           panel_score, player_indicators);
 
   //##############################################################
@@ -198,9 +198,9 @@ supervisor_bricks_level::first_init ()
   //##############################################################
   power_up_capsules->initialize (
                            //frequency of appearance of malus 
-                           levelParam->malusCount * difficulty_level,
+                           level_desc->penalties_frequency * difficulty_level,
                            //the list of malus
-                           levelParam->malusListe,
+                           level_desc->malusListe,
                            //the object which handles the balls
                            balls,
                            bottom_wall);
@@ -231,7 +231,7 @@ supervisor_bricks_level::first_init ()
 void
 supervisor_bricks_level::init_level ()
 {
-  levelParam = ptLev_data->bricklevel (area_number, level_number);
+  level_desc = ptLev_data->bricklevel (area_number, level_number);
 }
 
 /**

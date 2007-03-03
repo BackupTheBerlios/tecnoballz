@@ -2,14 +2,14 @@
  * @file level_data.cc 
  * @brief manage levels data 
  * @created 2004-04-06 
- * @date 2007-03-01
+ * @date 2007-03-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: level_data.h,v 1.4 2007/03/03 06:40:02 gurumeditation Exp $
+ * $Id: level_data.h,v 1.5 2007/03/03 20:59:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,26 +33,41 @@ class level_data;
 
 #include "../include/tecnoballz.h"
 #include "../include/tinyxml.h"
+#include <string.h>
 
 typedef struct
 {
-  Sint16 level_type;            // 0 = bricks level
-  Sint16 atom1Count;            // Temps appartion Atom 1
-  Sint16 atom2Count;            // Temps appartion Atom 2
-  Sint16 atom3Count;            // Temps appartion Atom 3
-  Sint16 atom4Count;            // Temps appartion Atom 4
-  Sint16 apparition;            // Temps de reappartion des Atoms
-  Sint16 resistance;            // Resistance des atoms
-  Sint16 malusCount;            // Frequence d'appartion des malus
-  Sint16 monayCount;            // Frequence d'appartion des capsules
+  /* 0 = bricks level */
+  Uint32 level_type;
+  /** Delay time before first appearance of ship 1 and 5 */
+  Uint32 ship_appearance_delay1;
+  /** Delay time before first appearance of ship 2 and 6 */
+  Uint32 ship_appearance_delay2;
+  /** Delay time before first appearance of ship 3 and 7 */
+  Uint32 ship_appearance_delay3;
+  /** Delay time before first appearance of ship 4 and 8 */
+  Uint32 ship_appearance_delay4;
+  /** Delay time of the reappearance of any ship after its destruction */
+  Uint32 reappearance;
+  /** strength of the ships */
+  Uint32 ships_strength;
+  /** Appearance frequency of the penalty capsules */
+  Uint32 penalties_frequency;
+  /** Appearance frequency of the monay capsules */
+  Uint32 moneys_frequency;
   const Sint16 *malusListe;     // pointreur sur la liste des malus
-  Sint16 speedBall1;            // pointeur sur la premiere table de vitesse
-  Sint16 speedCount;            // Temps avant l'acceleration de la balle
-  Sint16 startCount;            // Temps avant que la balle ne parte
-  Sint16 glue_count;            // Temps que dure la colle
-  Sint16 tilt_count;            // Temps avant que le tilt soit possible
+  Uint32 starting_speed;            // pointeur sur la premiere table de vitesse
+  /** Delay time before the ball accelerates */
+  Uint32 acceleration_delay;
+  /** Delay time before the ball leaves paddle, at the level beginning */
+  Uint32 ball_release_time;
+  /** Delay time before the ball leaves paddle with glue option */
+  Uint32 glue_time;
+  /** Delay time before tilt is available */
+  Uint32 tilt_delay;
 }
-amigaLevel;
+bricks_levels_desc;
+
 
 typedef struct
 {
@@ -67,20 +82,59 @@ typedef struct
 }
 atariLevel;
 
+
+
+
 class level_data:public virtual tecnoballz
 {
 
 public:
   static const Uint32 NUMOFAREAS = 5;
   static const Uint32 NUMOFLEVEL = 12;
+  static const Uint32 TIME_MULTIPLIER = 50;
+  static const Uint32 MAX_OF_CASPULES = 64;
+
+
+typedef struct
+{
+  Uint32 id;
+  Uint32 capsules[level_data::MAX_OF_CASPULES];
+} capsules_struct;
+
 
 public:
     level_data ();
    ~level_data ();
-  const amigaLevel *bricklevel (Uint32, Uint32);
+  const bricks_levels_desc *bricklevel (Uint32, Uint32);
   const atariLevel *guardlevel (Uint32, Uint32);
 private:
-   void parse (TiXmlNode* parent);
+   typedef enum 
+     {
+       ROOT,
+       LEVEL_NODE,
+       BRICKS_LEVEL_NODE,
+       CAPSULES_NODE  
+     }
+     NODES_ENUM;
+
+   void check_xml (TiXmlNode* parent, Uint32 node);
+   void parse (TiXmlNode* parent, Uint32 node);
+
+ private:
+     Uint32 time_multiplier;
+     
+     Uint32 levels_counter;
+     Uint32 bricks_levels_counter;
+     Uint32 capsules_lists_counter;
+     Uint32 capsules_counter;
+     
+     Sint32 level_index;
+     Sint32 bricks_level_index;
+     Sint32 appearance_index;
+     Sint32 capsule_list_index;
+     Sint32 capsule_index;
+     
+     std::string last_element;
 
 private:
   static const Sint16 zeCourseXX[];
@@ -92,14 +146,14 @@ private:
   static const Sint16 zeCourse40[];
   static const Sint16 zeCourse50[];
   static const Sint16 zeCourse55[];
-  static const amigaLevel amigaTab10;
-  static const amigaLevel amigaTab11;
-  static const amigaLevel amigaTab12;
-  static const amigaLevel amigaTab20;
-  static const amigaLevel amigaTab30;
-  static const amigaLevel amigaTab40;
-  static const amigaLevel amigaTab50;
-  static const amigaLevel amigaTab55;
+  static const bricks_levels_desc amigaTab10;
+  static const bricks_levels_desc amigaTab11;
+  static const bricks_levels_desc amigaTab12;
+  static const bricks_levels_desc amigaTab20;
+  static const bricks_levels_desc amigaTab30;
+  static const bricks_levels_desc amigaTab40;
+  static const bricks_levels_desc amigaTab50;
+  static const bricks_levels_desc amigaTab55;
   static const atariLevel atariTab00;
   static const atariLevel atariTab04;
   static const atariLevel atariTab08;
@@ -111,13 +165,17 @@ private:
   static const atariLevel atariTab32;
   static const atariLevel atariTab36;
   static const atariLevel atariTab40;
-  static const amigaLevel *giga_amiga[];
+  static const bricks_levels_desc *giga_amiga[];
 
 
   TiXmlDocument *xml_levels;
+  
+  bricks_levels_desc* bricks_levels;
+  capsules_struct* caspsules_list;
 
 
 };
+
 
 
 #endif

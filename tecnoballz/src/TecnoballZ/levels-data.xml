@@ -2,41 +2,95 @@
 
 <levels_data>
 
-<!-- area 1 -->
-<!-- type 0: bricks level or 1: guardians level -->
-<level type="0" id="0"/>
-<level type="0" id="1"/>
-<level type="0" id="1"/>
-<level type="0" id="1"/>
-<level type="0" id="1"/>
- <level type="1" id="0"/>
-<level type="0" id="2"/>
-<level type="0" id="2"/>
-<level type="0" id="2"/>
-<level type="0" id="2"/>
-<level type="0" id="2"/>
- <level type="1" id="1"/>
-<!-- area 2 -->
-<level type="0" id="3"/>
-<level type="0" id="3"/>
-<level type="0" id="3"/>
-<level type="0" id="3"/>
-<level type="0" id="3"/>
+<!-- zeCourse10 -->
+<capsules>
+<identifier>0</identifier>
+<id>40</id><id>6</id><id>18</id><id>12</id><id>6</id><id>6</id><id>18</id><id>18</id>
+<id>6</id><id>18</id><id>20</id><id>52</id><id>42</id><id>18</id><id>20</id><id>40</id>
+<id>18</id><id>40</id><id>50</id><id>40</id><id>42</id><id>44</id><id>54</id><id>6</id>
+<id>22</id><id>18</id><id>6</id><id>6</id><id>52</id><id>40</id><id>18</id><id>6</id>
+<id>18</id><id>6</id><id>18</id><id>12</id><id>6</id><id>42</id><id>18</id><id>18</id>
+<id>6</id><id>44</id><id>20</id><id>18</id><id>18</id><id>18</id><id>20</id><id>18</id>
+<id>44</id><id>44</id><id>50</id><id>18</id><id>42</id><id>18</id><id>20</id><id>6</id>
+<id>22</id><id>40</id><id>6</id><id>54</id><id>22</id><id>40</id><id>18</id><id>6</id>
+</capsules>
+<!-- zeCourse11 -->
+<capsules>
+<identifier>1</identifier>
+<id>40</id><id>10</id><id>40</id><id>12</id><id>18</id><id>10</id><id>40</id><id>12</id> 
+<id>06</id><id>10</id><id>02</id><id>18</id><id>18</id><id>42</id><id>02</id><id>12</id>
+<id>18</id><id>02</id><id>44</id><id>18</id><id>18</id><id>02</id><id>42</id><id>10</id>
+<id>10</id><id>18</id><id>12</id><id>02</id><id>18</id><id>18</id><id>52</id><id>12</id>
+<id>40</id><id>10</id><id>18</id><id>12</id><id>40</id><id>10</id><id>40</id><id>12</id>
+<id>06</id><id>46</id><id>02</id><id>18</id><id>18</id><id>42</id><id>02</id><id>12</id>
+<id>18</id><id>02</id><id>18</id><id>44</id><id>54</id><id>02</id><id>42</id><id>10</id>
+<id>10</id><id>44</id><id>12</id><id>02</id><id>18</id><id>18</id><id>10</id><id>12</id>
+</capsules>
+<!-- zeCourse20 -->
+<capsules>
+<identifier>2</identifier>
+<id>40</id><id>26</id><id>42</id><id>18</id><id>02</id><id>26</id><id>18</id><id>18</id>
+<id>06</id><id>52</id><id>02</id><id>42</id><id>18</id><id>16</id><id>02</id><id>18</id>
+<id>40</id><id>02</id><id>18</id><id>14</id><id>10</id><id>02</id><id>20</id><id>10</id>
+<id>10</id><id>18</id><id>10</id><id>02</id><id>26</id><id>18</id><id>10</id><id>10</id>
+<id>18</id><id>26</id><id>10</id><id>18</id><id>02</id><id>26</id><id>54</id><id>44</id>
+<id>06</id><id>46</id><id>02</id><id>10</id><id>44</id><id>16</id><id>02</id><id>44</id>
+<id>40</id><id>02</id><id>40</id><id>14</id><id>10</id><id>02</id><id>20</id><id>10</id>
+<id>10</id><id>18</id><id>10</id><id>02</id><id>26</id><id>40</id><id>10</id><id>10</id>
+</capsules>
+
+<!-- zeCourse30 -->
+<capsules>
+<identifier>3</identifier>
+<id>10</id><id>26</id><id>10</id><id>50</id><id>50</id><id>10</id><id>18</id><id>18</id>
+<id>14</id><id>14</id><id>10</id><id>10</id><id>40</id><id>40</id><id>10</id><id>18</id>
+<id>10</id><id>10</id><id>26</id><id>10</id><id>42</id><id>16</id><id>42</id><id>14</id>
+<id>44</id><id>18</id><id>10</id><id>10</id><id>40</id><id>40</id><id>18</id><id>14</id>
+<id>10</id><id>26</id><id>10</id><id>44</id><id>46</id><id>10</id><id>54</id><id>18</id>
+<id>14</id><id>14</id><id>40</id><id>40</id><id>10</id><id>10</id><id>10</id><id>18</id>
+<id>10</id><id>10</id><id>26</id><id>10</id><id>10</id><id>16</id><id>44</id><id>14</id>
+<id>42</id><id>18</id><id>40</id><id>40</id><id>10</id><id>52</id><id>18</id><id>14</id>
+</capsules>
+
+<!-- zeCourse40 -->
+<capsules>
+<identifier>3</identifier>
+<id>10</id><id>26</id><id>26</id><id>20</id><id>42</id><id>44</id><id>20</id><id>10</id>
+<id>44</id><id>14</id><id>26</id><id>10</id><id>40</id><id>40</id><id>10</id><id>10</id>
+<id>10</id><id>10</id><id>26</id><id>10</id><id>52</id><id>16</id><id>10</id><id>10</id>
+<id>10</id><id>20</id><id>26</id><id>10</id><id>40</id><id>40</id><id>20</id><id>10</id>
+<id>10</id><id>26</id><id>26</id><id>20</id><id>52</id><id>50</id><id>20</id><id>54</id>
+<id>44</id><id>14</id><id>26</id><id>10</id><id>40</id><id>40</id><id>46</id><id>10</id>
+<id>10</id><id>10</id><id>26</id><id>10</id><id>42</id><id>16</id><id>10</id><id>50</id>
+<id>10</id><id>20</id><id>26</id><id>10</id><id>40</id><id>40</id><id>20</id><id>10</id>
+</capsules>
+
+<!-- zeCourse50 -->
+<capsules>
+<identifier>4</identifier>
+<id>42</id><id>26</id><id>26</id><id>10</id><id>10</id><id>10</id><id>20</id><id>44</id>
+<id>10</id><id>14</id><id>26</id><id>10</id><id>10</id><id>10</id><id>20</id><id>10</id>
+<id>42</id><id>10</id><id>26</id><id>10</id><id>50</id><id>14</id><id>20</id><id>44</id>
+<id>46</id><id>18</id><id>26</id><id>10</id><id>10</id><id>10</id><id>20</id><id>14</id>
+<id>10</id><id>26</id><id>26</id><id>10</id><id>50</id><id>10</id><id>20</id><id>54</id>
+<id>10</id><id>14</id><id>26</id><id>10</id><id>52</id><id>10</id><id>20</id><id>10</id>
+<id>10</id><id>10</id><id>26</id><id>10</id><id>10</id><id>14</id><id>20</id><id>44</id>
+<id>10</id><id>18</id><id>26</id><id>10</id><id>52</id><id>10</id><id>20</id><id>14</id>
+</capsules>
 
 
-<level><type>0</type><id>3</id></level>
-<level><type>0</type><id>3</id></level>
-<level><type>0</type><id>3</id></level>
-<level><type>0</type><id>3</id></level>
-<level><type>0</type><id>3</id></level>
- <level><type>1</type><id>3</id></level>
-<level><type>0</type><id>3</id></level>
-<level><type>0</type><id>3</id></level>
-<level><type>0</type><id>3</id></level>
-<level><type>0</type><id>3</id></level>
-<level><type>0</type><id>3</id></level>
- <level><type>1</type><id>4</id></level>
-<!-- area 3 -->
+<capsules>
+<identifier>5</identifier>
+<id>14</id><id>26</id><id>26</id><id>10</id><id>16</id><id>10</id><id>20</id><id>14</id>
+<id>10</id><id>14</id><id>26</id><id>42</id><id>52</id><id>44</id><id>20</id><id>10</id>
+<id>14</id><id>10</id><id>26</id><id>44</id><id>18</id><id>14</id><id>20</id><id>10</id>
+<id>10</id><id>18</id><id>26</id><id>42</id><id>52</id><id>10</id><id>20</id><id>14</id>
+<id>14</id><id>26</id><id>26</id><id>10</id><id>16</id><id>10</id><id>20</id><id>54</id>
+<id>46</id><id>14</id><id>26</id><id>42</id><id>42</id><id>44</id><id>20</id><id>10</id>
+<id>14</id><id>10</id><id>26</id><id>44</id><id>18</id><id>14</id><id>20</id><id>50</id>
+<id>50</id><id>18</id><id>26</id><id>42</id><id>42</id><id>10</id><id>20</id><id>14</id>
+</capsules>
+
 
 <bricks_level>
   <id>0</id>
@@ -102,45 +156,48 @@
 
 
 
-<!-- zeCourse10 -->
-<capsules>
-<identifier>0</identifier>
-<id>40</id><id>6</id><id>18</id><id>12</id><id>6</id><id>6</id><id>18</id><id>18</id>
-<id>6</id><id>18</id><id>20</id><id>52</id><id>42</id><id>18</id><id>20</id><id>40</id>
-<id>18</id><id>40</id><id>50</id><id>40</id><id>42</id><id>44</id><id>54</id><id>6</id>
-<id>22</id><id>18</id><id>6</id><id>6</id><id>52</id><id>40</id><id>18</id><id>6</id>
-<id>18</id><id>6</id><id>18</id><id>12</id><id>6</id><id>42</id><id>18</id><id>18</id>
-<id>6</id><id>44</id><id>20</id><id>18</id><id>18</id><id>18</id><id>20</id><id>18</id>
-<id>44</id><id>44</id><id>50</id><id>18</id><id>42</id><id>18</id><id>20</id><id>6</id>
-<id>22</id><id>40</id><id>6</id><id>54</id><id>22</id><id>40</id><id>18</id><id>6</id>
-</capsule>
-<capsules>
-<!-- zeCourse11 -->
-<capsules>
-<identifier>1</identifier>
-<id>40</id><id>10</id><id>40</id><id>12</id><id>18</id><id>10</id><id>40</id><id>12</id> 
-<id>06</id><id>10</id><id>02</id><id>18</id><id>18</id><id>42</id><id>02</id><id>12</id>
-<id>18</id><id>02</id><id>44</id><id>18</id><id>18</id><id>02</id><id>42</id><id>10</id>
-<id>10</id><id>18</id><id>12</id><id>02</id><id>18</id><id>18</id><id>52</id><id>12</id>
-<id>40</id><id>10</id><id>18</id><id>12</id><id>40</id><id>10</id><id>40</id><id>12</id>
-<id>06</id><id>46</id><id>02</id><id>18</id><id>18</id><id>42</id><id>02</id><id>12</id>
-<id>18</id><id>02</id><id>18</id><id>44</id><id>54</id><id>02</id><id>42</id><id>10</id>
-<id>10</id><id>44</id><id>12</id><id>02</id><id>18</id><id>18</id><id>10</id><id>12</id>
-</capsules>
-<!-- zeCourse20 -->
-<capsules>
-<identifier>2</identifier>
-<id>40</id><id>26</id><id>42</id><id>18</id><id>02</id><id>26</id><id>18</id><id>18</id>
-<id>06</id><id>52</id><id>02</id><id>42</id><id>18</id><id>16</id><id>02</id><id>18</id>
-<id>40</id><id>02</id><id>18</id><id>14</id><id>10</id><id>02</id><id>20</id><id>10</id>
-<id>10</id><id>18</id><id>10</id><id>02</id><id>26</id><id>18</id><id>10</id><id>10</id>
-<id>18</id><id>26</id><id>10</id><id>18</id><id>02</id><id>26</id><id>54</id><id>44</id>
-<id>06</id><id>46</id><id>02</id><id>10</id><id>44</id><id>16</id><id>02</id><id>44</id>
-<id>40</id><id>02</id><id>40</id><id>14</id><id>10</id><id>02</id><id>20</id><id>10</id>
-<id>10</id><id>18</id><id>10</id><id>02</id><id>26</id><id>40</id><id>10</id><id>10</id>
-</capsules>
 
-
+<!-- area 1 -->
+<!-- type 0: bricks level or 1: guardians level -->
+<level type="0" id="0"/>
+<level type="0" id="1"/>
+<level type="0" id="1"/>
+<level type="0" id="1"/>
+<level type="0" id="1"/>
+ <level type="1" id="0"/>
+<level type="0" id="2"/>
+<level type="0" id="2"/>
+<level type="0" id="2"/>
+<level type="0" id="2"/>
+<level type="0" id="2"/>
+ <level type="1" id="1"/>
+<!-- area 2 -->
+<level type="0" id="3"/>
+<level type="0" id="3"/>
+<level type="0" id="3"/>
+<level type="0" id="3"/>
+<level type="0" id="3"/>
+ <level type="1" id="2"/>
+<level type="0" id="3"/>
+<level type="0" id="3"/>
+<level type="0" id="3"/>
+<level type="0" id="3"/>
+<level type="0" id="3"/>
+ <level type="1" id="3"/>
+<!-- area 3 -->
+<level type="0" id="4"/>
+<level type="0" id="4"/>
+<level type="0" id="4"/>
+<level type="0" id="4"/>
+<level type="0" id="4"/>
+ <level type="1" id="4"/>
+<level type="0" id="4"/>
+<level type="0" id="4"/>
+<level type="0" id="4"/>
+<level type="0" id="4"/>
+<level type="0" id="4"/>
+ <level type="1" id="5"/>
+<!-- area 4 -->
 
 
 

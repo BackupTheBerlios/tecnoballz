@@ -5,11 +5,11 @@
  * @date 2007-03-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: level_data.cc,v 1.4 2007/03/03 06:40:02 gurumeditation Exp $
+ * $Id: level_data.cc,v 1.5 2007/03/03 20:59:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,17 +26,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
+using namespace std; 
 #include "../include/level_data.h"
 #include "../include/handler_resources.h"
 #include "../include/tinyxml.h"
+#include <string.h>
+#include <sstream>
 
 
-//-----------------------------------------------------------------------------
-// Create the object
-//-----------------------------------------------------------------------------
+/**
+ * Create a level data objet
+ */
 level_data::level_data ()
 {
   object_init ();
+  time_multiplier = TIME_MULTIPLIER;
+  bricks_levels = NULL;
+  caspsules_list = NULL;
+  levels_counter = 0;
+  bricks_levels_counter = 0;
+  capsules_lists_counter = 0;
+  level_index = -1;
+  bricks_level_index = -1;
+  appearance_index = -1;
+  capsule_list_index = -1;
+  capsule_index = -1;
   char *fpath = resources->get_full_pathname (handler_resources::DATA_LEVELS);
   xml_levels = new TiXmlDocument(fpath);
   if (!xml_levels->LoadFile ())
@@ -45,29 +59,214 @@ level_data::level_data ()
           "failed to load file " << fpath << std::endl;
     }
 
-  printf ("DATA_LEVELS => %s\n", fpath);
-  parse (xml_levels);
+  check_xml (xml_levels, ROOT);
 
+
+ printf("levels_counter:%i, bricks_levels_counter:%i, capsules_lists_counter:%i\n",
+         levels_counter, bricks_levels_counter, capsules_lists_counter);
+  bricks_levels = new bricks_levels_desc[bricks_levels_counter];
+  caspsules_list = new capsules_struct[capsules_lists_counter]; 
+
+  parse (xml_levels, ROOT);
   //TiXmlHandle handle(xml_levels);
 }
 
-void level_data::parse (TiXmlNode* parent)
+void level_data::check_xml (TiXmlNode* parent, Uint32 node) 
+{
+  
+  if (NULL == parent)
+    {
+      return;
+    }
+ 
+  Sint32 type = parent->Type();
+  switch ( type )
+    {
+       case TiXmlNode::ELEMENT:
+         {
+            string element = parent->Value();
+            if (element == "level")
+              {
+                node = LEVEL_NODE;
+                levels_counter++;
+                break;
+              }
+            if (element == "bricks_level")
+              {
+                node = BRICKS_LEVEL_NODE;
+                bricks_levels_counter++;
+                break;
+              }
+            if (element == "capsules")
+              {
+                printf("capsules_lists_counter:%i, capsules_counter:%i\n", capsules_lists_counter, capsules_counter);
+                if (capsules_lists_counter > 0)
+                  {
+                    if (capsules_counter != MAX_OF_CASPULES)
+                      {
+                        cerr << "(!)level_data::check_xml() " <<
+                          MAX_OF_CASPULES << " <id> childnodes "
+                          << " of <capsules> chilnodes expected." 
+                          << " But " << capsules_counter <<
+                          " found!" << endl;
+                        throw runtime_error ("(!)level_data::check_xml()"
+                                    "Bad number of <id> childnodes!");
+                      }
+                  }
+                capsules_counter = 0;
+                node = CAPSULES_NODE;
+                capsules_lists_counter++;
+                break;
+              }
+            if (element == "id" and node == CAPSULES_NODE)
+              {
+                capsules_counter++;
+                break;
+              }
+         }
+       break;
+    }
+    for (TiXmlNode* child = parent->FirstChild(); NULL != child; child = child->NextSibling()) 
+      {
+        check_xml (child, node);
+      }
+}
+
+void level_data::parse (TiXmlNode* parent, Uint32 node)
 {
   if (NULL == parent)
     {
       return;
     }
   Sint32 type = parent->Type();
+  string value_str;
     
   TiXmlText* text;
+  stringstream input_stream;
+  Sint32 value;
   switch ( type )
     {
        case TiXmlNode::ELEMENT:
-          printf( "Element [%s]\n", parent->Value() );
+           {
+            last_element = parent->Value();
+            if (last_element == "level")
+              {
+                node = LEVEL_NODE;
+                level_index++;
+                break;
+              }
+            if (last_element == "bricks_level")
+              {
+                node = BRICKS_LEVEL_NODE;
+                appearance_index = -1;
+                bricks_level_index++;
+                break;
+              }
+            if (last_element == "capsules")
+              {
+                node = CAPSULES_NODE;
+                capsule_list_index++;
+                capsule_index = -1;
+                break;
+              }
+         }
           break;
        case TiXmlNode::TEXT:
-         text = parent->ToText();
-         printf( "Text: [%s]\n", text->Value() );
+          text = parent->ToText();
+          value_str = text->Value();
+          input_stream << value_str;
+          input_stream >> value;
+
+         switch (node)
+           {
+           
+           
+           case LEVEL_NODE:
+             break;
+
+           case CAPSULES_NODE:
+             if (last_element == "id")
+               {
+                 capsule_index++;
+                 caspsules_list[capsule_list_index].capsules[capsule_index] = value;
+               }
+             break;
+
+           
+           case BRICKS_LEVEL_NODE:
+             if (last_element == "id")
+               {
+               }
+             if (last_element == "appearance")
+               {
+                 appearance_index++;
+                 switch (appearance_index)
+                   {
+                     case 0:
+                       bricks_levels[bricks_level_index].ship_appearance_delay1 = value * time_multiplier;
+                       break;
+                     case 1:
+                       bricks_levels[bricks_level_index].ship_appearance_delay2 = value * time_multiplier;
+                       break;
+                     case 2:
+                       bricks_levels[bricks_level_index].ship_appearance_delay3 = value * time_multiplier;
+                       break;
+                     case 3:
+                       bricks_levels[bricks_level_index].ship_appearance_delay4 = value * time_multiplier;
+                       break;
+                     default:
+                       cerr << "(!) level_data::parse() " <<
+                         "ranking values must be between 0 and 3 inclusive!" << endl;
+                       break;
+                   }
+               }
+             if (last_element == "reappearance")
+               {
+                 bricks_levels[bricks_level_index].reappearance = value * time_multiplier;
+               }
+             if (last_element == "strength")
+               {
+                 bricks_levels[bricks_level_index].ships_strength = value;
+               }
+             if (last_element == "penalties_frequency")
+               {
+                 bricks_levels[bricks_level_index].penalties_frequency = value;
+               }
+             if (last_element == "moneys_frequency")
+               {
+                 bricks_levels[bricks_level_index].moneys_frequency = value;
+               }
+             if (last_element == "penalties_list_id")
+               {
+                 //bricks_levels[bricks_level_index]. = value;
+               }
+             if (last_element == "starting_speed")
+               {
+                 bricks_levels[bricks_level_index].starting_speed = value * time_multiplier;
+               }
+             if (last_element == "acceleration_delay")
+               {
+                 bricks_levels[bricks_level_index].acceleration_delay = value * time_multiplier;
+               }
+             if (last_element == "ball_release_time")
+               {
+                 bricks_levels[bricks_level_index].ball_release_time = value * time_multiplier;
+               }
+             if (last_element == "glue_time")
+               {
+                 bricks_levels[bricks_level_index].glue_time = value * time_multiplier;
+               }
+             if (last_element == "tilt_delay")
+               {
+                 bricks_levels[bricks_level_index].tilt_delay = value * time_multiplier;
+               }
+            break;
+           }
+
+
+
+         //text = parent->ToText();
+         //printf( "Text: [%s]\n", text->Value() );
          break;
        default:
          break;
@@ -76,7 +275,7 @@ void level_data::parse (TiXmlNode* parent)
 
     for (TiXmlNode* child = parent->FirstChild(); NULL != child; child = child->NextSibling()) 
       {
-        parse (child);
+        parse (child, node);
       }
 }
 
@@ -84,14 +283,27 @@ void level_data::parse (TiXmlNode* parent)
 //-----------------------------------------------------------------------------
 // Release the object
 //-----------------------------------------------------------------------------
+/**
+ * Release the level data object
+ */
 level_data::~level_data ()
 {
+  if (NULL != bricks_levels)
+    {
+      delete[]bricks_levels;
+      bricks_levels = NULL;
+    }
+  if (NULL != caspsules_list)
+    {
+      delete[]caspsules_list;
+      caspsules_list = NULL;
+    }
 }
 
 //-----------------------------------------------------------------------------
 // return the data of a bricks level
 //-----------------------------------------------------------------------------
-const amigaLevel *
+const bricks_levels_desc *
 level_data::bricklevel (Uint32 area, Uint32 lvnu)
 {
   if (area < 1 || area > 5)
@@ -234,7 +446,7 @@ const Sint16
 };
 
 // AREA 1 : level 1
-const amigaLevel
+const bricks_levels_desc
   level_data::amigaTab10 = { 0, // 0 = bricks level
   1 * 50,                       //time before appearance of the Atom 1
   45 * 50,                      //time before appearance of the Atom 2
@@ -253,7 +465,7 @@ const amigaLevel
 };
 
 // AREA 1 : level 2 to 5
-const amigaLevel
+const bricks_levels_desc
   level_data::amigaTab11 = { 0,
   1 * 50,
   45 * 50,
@@ -272,7 +484,7 @@ const amigaLevel
 };
 
 // AREA 1 : level 6 to 11
-const amigaLevel
+const bricks_levels_desc
   level_data::amigaTab12 = { 0,
   1 * 50,
   35 * 50,
@@ -291,7 +503,7 @@ const amigaLevel
 };
 
 // AREA 2
-const amigaLevel
+const bricks_levels_desc
   level_data::amigaTab20 = { 0,
   1 * 50,
   40 * 50,
@@ -310,7 +522,7 @@ const amigaLevel
 };
 
 // AREA 3
-const amigaLevel
+const bricks_levels_desc
   level_data::amigaTab30 = { 0,
   1 * 50,
   30 * 50,
@@ -329,7 +541,7 @@ const amigaLevel
 };
 
 // AREA 4
-const amigaLevel
+const bricks_levels_desc
   level_data::amigaTab40 = { 0,
   1 * 50,
   21 * 50,
@@ -348,7 +560,7 @@ const amigaLevel
 };
 
 // AREA 5 : level 1 to 5
-const amigaLevel
+const bricks_levels_desc
   level_data::amigaTab50 = { 0,
   1 * 50,
   15 * 50,
@@ -367,7 +579,7 @@ const amigaLevel
 };
 
 // AREA 5 : level 7 to 11
-const amigaLevel
+const bricks_levels_desc
   level_data::amigaTab55 = { 0,
   1 * 50,
   4 * 50,
@@ -522,67 +734,67 @@ const atariLevel
 
 
 // Une table par chacun des 61 niveaux
-const amigaLevel *level_data::giga_amiga[] =
+const bricks_levels_desc *level_data::giga_amiga[] =
 {
   &amigaTab10,     // area 1 ; level 1
   &amigaTab11,                  // area 1 ; level 2
   &amigaTab11,                  // area 1 ; level 3
   &amigaTab11,                  // area 1 ; level 4
   &amigaTab11,                  // area 1 ; level 5
-  (amigaLevel *) & atariTab00,  // area 1 ; level 6
+  (bricks_levels_desc *) & atariTab00,  // area 1 ; level 6
   &amigaTab12,                  // area 1 ; level 7
   &amigaTab12,                  // area 1 ; level 8
   &amigaTab12,                  // area 1 ; level 9
   &amigaTab12,                  // area 1 ; level 10
   &amigaTab12,                  // area 1 ; level 11
-  (amigaLevel *) & atariTab04,  // area 1 ; level 12
+  (bricks_levels_desc *) & atariTab04,  // area 1 ; level 12
   &amigaTab20,                  // area 2 ; level 1
   &amigaTab20,                  // area 2 ; level 2
   &amigaTab20,                  // area 2 ; level 3
   &amigaTab20,                  // area 2 ; level 4
   &amigaTab20,                  // area 2 ; level 5
-  (amigaLevel *) & atariTab08,  // area 2 ; level 6
+  (bricks_levels_desc *) & atariTab08,  // area 2 ; level 6
   &amigaTab20,                  // area 2 ; level 7
   &amigaTab20,                  // area 2 ; level 8
   &amigaTab20,                  // area 2 ; level 9
   &amigaTab20,                  // area 2 ; level 10
   &amigaTab20,                  // area 2 ; level 11
-  (amigaLevel *) & atariTab12,  // area 2 ; level 12
+  (bricks_levels_desc *) & atariTab12,  // area 2 ; level 12
   &amigaTab30,                  // area 3 ; level 1
   &amigaTab30,                  // area 3 ; level 2
   &amigaTab30,                  // area 3 ; level 3
   &amigaTab30,                  // area 3 ; level 4
   &amigaTab30,                  // area 3 ; level 5
-  (amigaLevel *) & atariTab16,  // area 3 ; level 6
+  (bricks_levels_desc *) & atariTab16,  // area 3 ; level 6
   &amigaTab30,                  // area 3 ; level 7
   &amigaTab30,                  // area 3 ; level 8
   &amigaTab30,                  // area 3 ; level 9
   &amigaTab30,                  // area 3 ; level 10
   &amigaTab30,                  // area 3 ; level 11
-  (amigaLevel *) & atariTab20,  // area 3 ; level 12
+  (bricks_levels_desc *) & atariTab20,  // area 3 ; level 12
   &amigaTab40,                  // area 4 ; level 1
   &amigaTab40,                  // area 4 ; level 2
   &amigaTab40,                  // area 4 ; level 3
   &amigaTab40,                  // area 4 ; level 4
   &amigaTab40,                  // area 4 ; level 5
-  (amigaLevel *) & atariTab24,  // area 4 ; level 6
+  (bricks_levels_desc *) & atariTab24,  // area 4 ; level 6
   &amigaTab40,                  // area 4 ; level 7
   &amigaTab40,                  // area 4 ; level 8
   &amigaTab40,                  // area 4 ; level 9
   &amigaTab40,                  // area 4 ; level 10
   &amigaTab40,                  // area 4 ; level 11
-  (amigaLevel *) & atariTab28,  // area 4 ; level 12
+  (bricks_levels_desc *) & atariTab28,  // area 4 ; level 12
   &amigaTab50,                  // area 5 ; level 1
   &amigaTab50,                  // area 5 ; level 2
   &amigaTab50,                  // area 5 ; level 3
   &amigaTab50,                  // area 5 ; level 4
   &amigaTab50,                  // area 5 ; level 5
-  (amigaLevel *) & atariTab32,  // area 5 ; level 6
+  (bricks_levels_desc *) & atariTab32,  // area 5 ; level 6
   &amigaTab55,                  // area 5 ; level 7
   &amigaTab55,                  // area 5 ; level 8
   &amigaTab55,                  // area 5 ; level 9
   &amigaTab55,                  // area 5 ; level 10
   &amigaTab55,                  // area 5 ; level 11
-  (amigaLevel *) & atariTab36,  // area 5 ; level 12
-  (amigaLevel *) & atariTab40   // area 5 ; level 13
+  (bricks_levels_desc *) & atariTab36,  // area 5 ; level 12
+  (bricks_levels_desc *) & atariTab40   // area 5 ; level 13
 };
