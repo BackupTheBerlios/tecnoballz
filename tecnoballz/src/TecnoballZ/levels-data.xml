@@ -4,19 +4,26 @@
 
 <!-- area 1 -->
 <!-- type 0: bricks level or 1: guardians level -->
-<level><type>0</type><id>0</id></level>
-<level><type>0</type><id>1</id></level>
-<level><type>0</type><id>1</id></level>
-<level><type>0</type><id>1</id></level>
-<level><type>0</type><id>1</id></level>
- <level><type>1</type><id>1</id></level>
-<level><type>0</type><id>2</id></level>
-<level><type>0</type><id>2</id></level>
-<level><type>0</type><id>2</id></level>
-<level><type>0</type><id>2</id></level>
-<level><type>0</type><id>2</id></level>
- <level><type>1</type><id>2</id></level>
+<level type="0" id="0"/>
+<level type="0" id="1"/>
+<level type="0" id="1"/>
+<level type="0" id="1"/>
+<level type="0" id="1"/>
+ <level type="1" id="0"/>
+<level type="0" id="2"/>
+<level type="0" id="2"/>
+<level type="0" id="2"/>
+<level type="0" id="2"/>
+<level type="0" id="2"/>
+ <level type="1" id="1"/>
 <!-- area 2 -->
+<level type="0" id="3"/>
+<level type="0" id="3"/>
+<level type="0" id="3"/>
+<level type="0" id="3"/>
+<level type="0" id="3"/>
+
+
 <level><type>0</type><id>3</id></level>
 <level><type>0</type><id>3</id></level>
 <level><type>0</type><id>3</id></level>
