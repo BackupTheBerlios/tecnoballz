@@ -5,11 +5,11 @@
  * @date 2007-03-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: level_data.cc,v 1.3 2007/03/01 21:14:20 gurumeditation Exp $
+ * $Id: level_data.cc,v 1.4 2007/03/03 06:40:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,12 +37,49 @@
 level_data::level_data ()
 {
   object_init ();
-  // xml_levels = new TiXmlDocument("");
   char *fpath = resources->get_full_pathname (handler_resources::DATA_LEVELS);
+  xml_levels = new TiXmlDocument(fpath);
+  if (!xml_levels->LoadFile ())
+    {
+        std::cerr << "(!) level_data::level_data() " << 
+          "failed to load file " << fpath << std::endl;
+    }
+
   printf ("DATA_LEVELS => %s\n", fpath);
+  parse (xml_levels);
 
-
+  //TiXmlHandle handle(xml_levels);
 }
+
+void level_data::parse (TiXmlNode* parent)
+{
+  if (NULL == parent)
+    {
+      return;
+    }
+  Sint32 type = parent->Type();
+    
+  TiXmlText* text;
+  switch ( type )
+    {
+       case TiXmlNode::ELEMENT:
+          printf( "Element [%s]\n", parent->Value() );
+          break;
+       case TiXmlNode::TEXT:
+         text = parent->ToText();
+         printf( "Text: [%s]\n", text->Value() );
+         break;
+       default:
+         break;
+    }
+
+
+    for (TiXmlNode* child = parent->FirstChild(); NULL != child; child = child->NextSibling()) 
+      {
+        parse (child);
+      }
+}
+
 
 //-----------------------------------------------------------------------------
 // Release the object
@@ -485,8 +522,9 @@ const atariLevel
 
 
 // Une table par chacun des 61 niveaux
-const amigaLevel *
-  level_data::giga_amiga[] = { &amigaTab10,     // area 1 ; level 1
+const amigaLevel *level_data::giga_amiga[] =
+{
+  &amigaTab10,     // area 1 ; level 1
   &amigaTab11,                  // area 1 ; level 2
   &amigaTab11,                  // area 1 ; level 3
   &amigaTab11,                  // area 1 ; level 4

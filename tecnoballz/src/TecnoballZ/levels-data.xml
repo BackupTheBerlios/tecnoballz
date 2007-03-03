@@ -2,7 +2,34 @@
 
 <levels_data>
 
-
+<!-- area 1 -->
+<!-- type 0: bricks level or 1: guardians level -->
+<level><type>0</type><id>0</id></level>
+<level><type>0</type><id>1</id></level>
+<level><type>0</type><id>1</id></level>
+<level><type>0</type><id>1</id></level>
+<level><type>0</type><id>1</id></level>
+ <level><type>1</type><id>1</id></level>
+<level><type>0</type><id>2</id></level>
+<level><type>0</type><id>2</id></level>
+<level><type>0</type><id>2</id></level>
+<level><type>0</type><id>2</id></level>
+<level><type>0</type><id>2</id></level>
+ <level><type>1</type><id>2</id></level>
+<!-- area 2 -->
+<level><type>0</type><id>3</id></level>
+<level><type>0</type><id>3</id></level>
+<level><type>0</type><id>3</id></level>
+<level><type>0</type><id>3</id></level>
+<level><type>0</type><id>3</id></level>
+ <level><type>1</type><id>3</id></level>
+<level><type>0</type><id>3</id></level>
+<level><type>0</type><id>3</id></level>
+<level><type>0</type><id>3</id></level>
+<level><type>0</type><id>3</id></level>
+<level><type>0</type><id>3</id></level>
+ <level><type>1</type><id>4</id></level>
+<!-- area 3 -->
 
 <bricks_level>
   <id>0</id>
@@ -47,7 +74,7 @@
 
 <!-- amigaTab12 -->
 <bricks_level>
-  <id>1</id>
+  <id>2</id>
   <ships>
     <appearance>1</appearance>
     <appearance>35</appearance>
@@ -65,6 +92,53 @@
   <glue_time>30</glue_time>
   <tilt_delay>7</tilt_delay>
 </bricks_level>
+
+
+
+<!-- zeCourse10 -->
+<capsules>
+<identifier>0</identifier>
+<id>40</id><id>6</id><id>18</id><id>12</id><id>6</id><id>6</id><id>18</id><id>18</id>
+<id>6</id><id>18</id><id>20</id><id>52</id><id>42</id><id>18</id><id>20</id><id>40</id>
+<id>18</id><id>40</id><id>50</id><id>40</id><id>42</id><id>44</id><id>54</id><id>6</id>
+<id>22</id><id>18</id><id>6</id><id>6</id><id>52</id><id>40</id><id>18</id><id>6</id>
+<id>18</id><id>6</id><id>18</id><id>12</id><id>6</id><id>42</id><id>18</id><id>18</id>
+<id>6</id><id>44</id><id>20</id><id>18</id><id>18</id><id>18</id><id>20</id><id>18</id>
+<id>44</id><id>44</id><id>50</id><id>18</id><id>42</id><id>18</id><id>20</id><id>6</id>
+<id>22</id><id>40</id><id>6</id><id>54</id><id>22</id><id>40</id><id>18</id><id>6</id>
+</capsule>
+<capsules>
+<!-- zeCourse11 -->
+<capsules>
+<identifier>1</identifier>
+<id>40</id><id>10</id><id>40</id><id>12</id><id>18</id><id>10</id><id>40</id><id>12</id> 
+<id>06</id><id>10</id><id>02</id><id>18</id><id>18</id><id>42</id><id>02</id><id>12</id>
+<id>18</id><id>02</id><id>44</id><id>18</id><id>18</id><id>02</id><id>42</id><id>10</id>
+<id>10</id><id>18</id><id>12</id><id>02</id><id>18</id><id>18</id><id>52</id><id>12</id>
+<id>40</id><id>10</id><id>18</id><id>12</id><id>40</id><id>10</id><id>40</id><id>12</id>
+<id>06</id><id>46</id><id>02</id><id>18</id><id>18</id><id>42</id><id>02</id><id>12</id>
+<id>18</id><id>02</id><id>18</id><id>44</id><id>54</id><id>02</id><id>42</id><id>10</id>
+<id>10</id><id>44</id><id>12</id><id>02</id><id>18</id><id>18</id><id>10</id><id>12</id>
+</capsules>
+<!-- zeCourse20 -->
+<capsules>
+<identifier>2</identifier>
+<id>40</id><id>26</id><id>42</id><id>18</id><id>02</id><id>26</id><id>18</id><id>18</id>
+<id>06</id><id>52</id><id>02</id><id>42</id><id>18</id><id>16</id><id>02</id><id>18</id>
+<id>40</id><id>02</id><id>18</id><id>14</id><id>10</id><id>02</id><id>20</id><id>10</id>
+<id>10</id><id>18</id><id>10</id><id>02</id><id>26</id><id>18</id><id>10</id><id>10</id>
+<id>18</id><id>26</id><id>10</id><id>18</id><id>02</id><id>26</id><id>54</id><id>44</id>
+<id>06</id><id>46</id><id>02</id><id>10</id><id>44</id><id>16</id><id>02</id><id>44</id>
+<id>40</id><id>02</id><id>40</id><id>14</id><id>10</id><id>02</id><id>20</id><id>10</id>
+<id>10</id><id>18</id><id>10</id><id>02</id><id>26</id><id>40</id><id>10</id><id>10</id>
+</capsules>
+
+
+
+
+
+
+
 
 
 

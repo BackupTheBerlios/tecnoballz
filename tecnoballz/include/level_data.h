@@ -5,11 +5,11 @@
  * @date 2007-03-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: level_data.h,v 1.3 2007/03/01 21:14:20 gurumeditation Exp $
+ * $Id: level_data.h,v 1.4 2007/03/03 06:40:02 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,6 +79,8 @@ public:
    ~level_data ();
   const amigaLevel *bricklevel (Uint32, Uint32);
   const atariLevel *guardlevel (Uint32, Uint32);
+private:
+   void parse (TiXmlNode* parent);
 
 private:
   static const Sint16 zeCourseXX[];
@@ -112,7 +114,7 @@ private:
   static const amigaLevel *giga_amiga[];
 
 
-  TiXmlDocument xml_levels;
+  TiXmlDocument *xml_levels;
 
 
 };
