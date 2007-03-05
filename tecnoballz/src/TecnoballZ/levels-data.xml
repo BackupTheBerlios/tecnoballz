@@ -319,10 +319,10 @@
   <id>2</id>
   <starting_speed>4</starting_speed>
   <ball_release_time>10</ball_release_time>
-  <tilt_delay>40</tilt_delay>
+  <tilt_delay>10</tilt_delay>
   <scroll_delay>5</scroll_delay>
   <scroll_id>3</scroll_id>
-  <capsules_frequency>3</capsules_frequency>
+  <capsules_frequency>9</capsules_frequency>
   <capsules_list_id>8</capsules_list_id>
 </guardians_level>
 <!-- atariTab12 -->
@@ -358,7 +358,7 @@
   <tilt_delay>10</tilt_delay>
   <scroll_delay>3</scroll_delay>
   <scroll_id>6</scroll_id>
-  <capsules_frequency>6</capsules_frequency>
+  <capsules_frequency>10</capsules_frequency>
   <capsules_list_id>8</capsules_list_id>
 </guardians_level>
 <!-- atariTab24 -->
@@ -369,17 +369,17 @@
   <ball_release_time>10</ball_release_time>
   <tilt_delay>10</tilt_delay>
   <scroll_delay>1</scroll_delay>
-  <scroll_id>8</scroll_id>
+  <scroll_id>7</scroll_id>
   <capsules_frequency>12</capsules_frequency>
   <capsules_list_id>8</capsules_list_id>
 </guardians_level>
 <!-- atariTab28 -->
-<!-- area 4 ; level 12 -->
+<!-- area 4; level 12 -->
 <guardians_level>
   <id>7</id>
   <starting_speed>4</starting_speed>
   <ball_release_time>10</ball_release_time>
-  <tilt_delay>40</tilt_delay>
+  <tilt_delay>10</tilt_delay>
   <scroll_delay>1</scroll_delay>
   <scroll_id>8</scroll_id>
   <capsules_frequency>12</capsules_frequency>

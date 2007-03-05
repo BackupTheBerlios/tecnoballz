@@ -5,11 +5,11 @@
  * @date 2007-03-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.16 2007/03/01 06:50:28 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.17 2007/03/05 20:53:30 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-03-01)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-03-05)"
 /** To define only under development  */
 #define UNDER_DEVELOPMENT
 /** Force bytes copy (SPARC unaligned memory access) */
@@ -164,7 +164,6 @@ protected:
   static Sint32 number_of_players;
   static const char nomprefix[];
   static char chainelog[100];
-  static const Uint32 LEVEL_AREA = 12;
 
   static scoretable *ptScoreTab;
   /** Handler of the files resources */

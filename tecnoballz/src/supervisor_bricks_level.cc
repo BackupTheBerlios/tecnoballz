@@ -4,11 +4,11 @@
  * @date 2007-02-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.35 $
+ * @version $Revision: 1.36 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.35 2007/03/03 20:59:04 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.36 2007/03/05 20:53:30 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -231,7 +231,7 @@ supervisor_bricks_level::first_init ()
 void
 supervisor_bricks_level::init_level ()
 {
-  level_desc = ptLev_data->bricklevel (area_number, level_number);
+  level_desc = ptLev_data->get_bricks_levels_params (area_number, level_number);
 }
 
 /**

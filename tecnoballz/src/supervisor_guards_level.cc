@@ -5,11 +5,11 @@
  * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.29 2007/03/05 17:36:26 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.30 2007/03/05 20:53:30 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -386,7 +386,7 @@ supervisor_guards_level::main_loop ()
 void
 supervisor_guards_level::init_level ()
 {
-  level_desc = ptLev_data->guardlevel (area_number, level_number);
+  level_desc = ptLev_data->get_guardians_levels_params (area_number, level_number);
   scrollType = level_desc->scroll_id;
   scrollTemp = level_desc->scroll_delay;
   scrolSpeed = 0;

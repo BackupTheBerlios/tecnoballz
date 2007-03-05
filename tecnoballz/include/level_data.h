@@ -5,11 +5,11 @@
  * @date 2007-03-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: level_data.h,v 1.6 2007/03/05 17:36:26 gurumeditation Exp $
+ * $Id: level_data.h,v 1.7 2007/03/05 20:53:30 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,8 +119,8 @@ typedef struct
 public:
     level_data ();
    ~level_data ();
-  const bricks_level_desc *bricklevel (Uint32, Uint32);
-  const guardians_level_desc *guardlevel (Uint32, Uint32);
+  const bricks_level_desc *get_bricks_levels_params (Uint32, Uint32);
+  const guardians_level_desc *get_guardians_levels_params (Uint32, Uint32);
 private:
    typedef enum 
      {
