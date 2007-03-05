@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.cc 
  * @brief Capsules controller 
- * @date 2007-02-25
+ * @date 2007-03-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.18 2007/02/28 08:49:17 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.19 2007/03/05 17:36:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ controller_capsules::~controller_capsules ()
  */
 void
 controller_capsules::initialize (Sint32 mStep,
-                                 const Sint16 * table,
+                                 const Uint32 * table,
                                  controller_balls * pBall,
                                  sprite_object * pWall)
 {
@@ -169,18 +169,17 @@ controller_capsules::send_capsule_from_bricks (brickClear * briPT)
 // bricks levels: send a malus (from BouiBoui)
 //-------------------------------------------------------------------------------
 void
-controller_capsules::send_malus (sprite_ball * pball)
+controller_capsules::send_malus (sprite_ball * ball)
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_capsule *gadg = sprites_list[i];
-      if (!gadg->is_enabled)
+      sprite_capsule *capsule = sprites_list[i];
+      if (capsule->is_enabled)
         {
-          Sint16 j = random_counter & 0x1F; //value 0 to 31 
-          j = *(random_list + j);
-          gadg->enable_capsule (pball, j);
-          return;
+          continue;
         }
+      capsule->enable_capsule (ball, random_list[random_counter & 0x3F]);
+      return;
     }
 }
 
@@ -195,12 +194,10 @@ controller_capsules::send_malus (sprite_projectile * blast)
       sprite_capsule *capsule = sprites_list[i];
       if (capsule->is_enabled)
         {
-	  continue;
+          continue;
         }
-          Sint16 j = random_counter & 0x1F; //value 0 to 31 
-          j = *(random_list + j);
-          capsule->enable_capsule (blast, j);
-          return;
+      capsule->enable_capsule (blast, random_list[random_counter & 0x3F]);
+      return;
     }
 }
 
@@ -221,13 +218,11 @@ controller_capsules::check_if_send_capsule (sprite_ball * ball)
       sprite_capsule *capsule = sprites_list[i];
       if (capsule->is_enabled)
         {
-	  continue;
+          continue;
         }
-          Sint16 j = random_counter & 0x1F; //value 0 to 31 
-          j = *(random_list + j);
-          malus_step = 0;
-          capsule->enable_guardian_capsule (ball, j);
-          return;
+      malus_step = 0;
+      capsule->enable_guardian_capsule (ball, random_list[random_counter & 0x3F]);
+      return;
     }
 }
 

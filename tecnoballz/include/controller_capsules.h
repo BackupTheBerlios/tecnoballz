@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.h
  * @brief Capsules controller 
- * @date 2007-02-26
+ * @date 2007-01-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.h,v 1.9 2007/02/26 21:29:23 gurumeditation Exp $
+ * $Id: controller_capsules.h,v 1.10 2007/03/05 17:36:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ private:
   Sint32 malus_frek;            // drop frequency malus
   /** Random list of capsules, bonuses or penalties which can
    * fall in the current level */
-  const Sint16 *random_list; 
+  const Uint32 *random_list; 
   /** Counter number of bricks breaked before release a new
    * bonus caspule bought in the shop */ 
   Uint32 bricks_breaked_count;
@@ -82,7 +82,7 @@ private:
 public:
     controller_capsules ();
    ~controller_capsules ();
-  void initialize (Sint32 mStep, const Sint16 * table, controller_balls * pBall, sprite_object *);
+  void initialize (Sint32 mStep, const Uint32* table, controller_balls * pBall, sprite_object *);
   void send_capsule_from_bricks (brickClear * briPT);
   void send_malus (sprite_ball *);
   void send_malus (sprite_projectile *);

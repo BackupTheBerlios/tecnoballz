@@ -2,14 +2,14 @@
  * @file controller_guardians.cc 
  * @brief Guardians controller 
  * @created 2003-01-10 
- * @date 2007-02-19
+ * @date 2007-03-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.cc,v 1.7 2007/02/19 15:40:27 gurumeditation Exp $
+ * $Id: controller_guardians.cc,v 1.8 2007/03/05 17:36:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,8 +74,6 @@ controller_guardians::~controller_guardians ()
  * Create and initialize the guardians and life gauges sprites
  * @param pMiss
  * @param grdPt
- * @param pBliz
- * @param pExpl
  */
 void
 controller_guardians::create_guardians_list (controller_bullets * pMiss, Sint32 grdPt)
@@ -807,21 +805,31 @@ Sint32
   15, -1, -1
 };
 
-//-------------------------------------------------------------------------------
-// convert couple (area, level) to gardian level pointer
-//-------------------------------------------------------------------------------
+/**
+ * Convert area and level numbers to a guardian level pointer
+ * @param area_num area number from 1 to 5
+ * @param level_num level number from 1 to 13 
+ */
 Sint32
-controller_guardians::level2gdpt (Uint32 arean, Uint32 level)
+controller_guardians::level2gdpt (Uint32 area_num, Uint32 level_num)
 {
-  if (arean < 1)
-    arean = 1;
-  if (level < 1)
-    level = 1;
-  if (arean > level_data::NUMOFAREAS)
-    arean = level_data::NUMOFAREAS;
-  Uint32 vloop = (level / 6) - 1 + (arean - 1) * 2;
-  if (level > level_data::NUMOFLEVEL)
-    vloop++;
+  if (area_num < 1)
+    { 
+      area_num = 1;
+    }
+  if (level_num < 1)
+    {
+      level_num = 1;
+    }
+  if (area_num > level_data::MAX_OF_AREAS)
+    {
+      area_num = level_data::MAX_OF_AREAS;
+    }
+  Uint32 vloop = (level_num / 6) - 1 + (area_num - 1) * 2;
+  if (level_num > level_data::NUM_OF_LEVELS_PER_AREA)
+    {
+      vloop++;
+    }
   Uint32 index = 0;
   Sint32 gdptr = 0;
   for (;;)
@@ -833,7 +841,7 @@ controller_guardians::level2gdpt (Uint32 arean, Uint32 level)
         {
           fprintf (stderr,
                    "controller_guardians::level2gdpt(%i, %i) end of table\n",
-                   arean, level);
+                   area_num, level_num);
           gdptr = 0;
           break;
         }

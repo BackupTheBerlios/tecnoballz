@@ -4,11 +4,11 @@
  * @date 2007-03-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.20 2007/03/03 20:59:04 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.21 2007/03/05 17:36:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,7 +103,7 @@ private:
   Sint32 area_number;
   /** Level number from 1 to 12 */
   Sint32 level_number;
-  const bricks_levels_desc *level_desc;
+  const bricks_level_desc *level_desc;
   Sint32 next_level;
   /** Time delay before next level */
   Sint32 count_next;

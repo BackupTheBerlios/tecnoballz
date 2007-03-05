@@ -5,11 +5,11 @@
  * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.28 2007/02/26 21:29:23 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.29 2007/03/05 17:36:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -150,14 +150,14 @@ supervisor_guards_level::first_init ()
    */
   balls->init (
     /* time delay before ball leaves paddle */
-    levelParam->startCount,
+    level_desc->ball_release_time,
     0,
     /* time delay before ball accelerates */
     50 * 99,
    /* time delay before titl available */
-   levelParam->tilt_count,
+   level_desc->tilt_delay,
    /* ball speed 3 or 4 */
-   levelParam->speedBall1);
+   level_desc->starting_speed);
   /* in the guardians levels, the balls are always forced to power 2 */
   balls->set_power_2 ();
 
@@ -166,9 +166,9 @@ supervisor_guards_level::first_init ()
   /* initialize le capsules controller */
   power_up_capsules->initialize (
                           /* delay of appearance of a penalty capsule */
-                          levelParam->malusCount * difficulty_level,
+                          level_desc->capsules_frequency * difficulty_level,
                           /* list of penalties capsules */ 
-                          levelParam->malusListe,
+                          level_desc->capsules_list,
                           /* object which control the balls */
                           balls,
                           /* object which handles the display of the text (not * applicable) */
@@ -386,9 +386,9 @@ supervisor_guards_level::main_loop ()
 void
 supervisor_guards_level::init_level ()
 {
-  levelParam = ptLev_data->guardlevel (area_number, level_number);
-  scrollType = levelParam->scrollType;
-  scrollTemp = levelParam->scrolCount;
+  level_desc = ptLev_data->guardlevel (area_number, level_number);
+  scrollType = level_desc->scroll_id;
+  scrollTemp = level_desc->scroll_delay;
   scrolSpeed = 0;
 }
 

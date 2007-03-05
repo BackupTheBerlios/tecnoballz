@@ -5,11 +5,11 @@
  * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.17 2007/02/26 21:29:23 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.18 2007/03/05 17:36:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ private:
   Uint32 area_number;
   /** Current level number 6, 12 or 13 */ 
   Uint32 level_number;
-  const atariLevel *levelParam;
+  const guardians_level_desc *level_desc;
   Sint32 scrollTemp;            // time before scroll start
   Sint32 scrollType;            // type of background scrolling
   Sint32 scrolSpeed;            // speed of the scrolling

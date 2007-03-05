@@ -2,14 +2,14 @@
  * @file level_data.cc 
  * @brief manage levels data 
  * @created 2004-04-06 
- * @date 2007-03-03
+ * @date 2007-03-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: level_data.h,v 1.5 2007/03/03 20:59:04 gurumeditation Exp $
+ * $Id: level_data.h,v 1.6 2007/03/05 17:36:26 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ typedef struct
 {
   /* 0 = bricks level */
   Uint32 level_type;
+  Uint32 id;
   /** Delay time before first appearance of ship 1 and 5 */
   Uint32 ship_appearance_delay1;
   /** Delay time before first appearance of ship 2 and 6 */
@@ -55,7 +56,8 @@ typedef struct
   Uint32 penalties_frequency;
   /** Appearance frequency of the monay capsules */
   Uint32 moneys_frequency;
-  const Sint16 *malusListe;     // pointreur sur la liste des malus
+  /** List of the capsules */
+  const Uint32 *malusListe;
   Uint32 starting_speed;            // pointeur sur la premiere table de vitesse
   /** Delay time before the ball accelerates */
   Uint32 acceleration_delay;
@@ -66,22 +68,34 @@ typedef struct
   /** Delay time before tilt is available */
   Uint32 tilt_delay;
 }
-bricks_levels_desc;
+bricks_level_desc;
 
 
 typedef struct
 {
-  Sint16 level_type;            // 1 = guard level
-  Sint16 speedBall1;            // Pointeur sur la table des vitesses  
-  Sint16 startCount;            // Temps avant que la balle parte
-  Sint16 tilt_count;            // Temps avant d'autoriser le tilt
-  Sint16 scrolCount;            // Temps minimum avant le defilement
-  Sint16 scrollType;            // type of background scrolling
-  Sint16 malusCount;            // Frequence des gadgets
-  const Sint16 *malusListe;     // Table des gagdets
+  /* 1 = guard level */
+  Uint32 level_type;
+  Uint32 id;
+  Uint32 starting_speed;
+  Uint32 ball_release_time;
+  Uint32 tilt_delay;
+  /** Delay time before the scrolling starts */
+  Uint32 scroll_delay;
+  /** Determines the behavior of the scrolling */
+  Uint32 scroll_id;
+  /** Appearance frequency of the capsules */
+  Uint32 capsules_frequency;
+  /** List of the capsules */
+  const Uint32 *capsules_list;
 }
-atariLevel;
+guardians_level_desc;
 
+typedef struct 
+{
+  Uint32 id;
+  Uint32 type; 
+}
+level_desc;
 
 
 
@@ -89,8 +103,8 @@ class level_data:public virtual tecnoballz
 {
 
 public:
-  static const Uint32 NUMOFAREAS = 5;
-  static const Uint32 NUMOFLEVEL = 12;
+  static const Uint32 MAX_OF_AREAS = 5;
+  static const Uint32 NUM_OF_LEVELS_PER_AREA = 12;
   static const Uint32 TIME_MULTIPLIER = 50;
   static const Uint32 MAX_OF_CASPULES = 64;
 
@@ -98,38 +112,46 @@ public:
 typedef struct
 {
   Uint32 id;
-  Uint32 capsules[level_data::MAX_OF_CASPULES];
+  Uint32 codes[level_data::MAX_OF_CASPULES];
 } capsules_struct;
 
 
 public:
     level_data ();
    ~level_data ();
-  const bricks_levels_desc *bricklevel (Uint32, Uint32);
-  const atariLevel *guardlevel (Uint32, Uint32);
+  const bricks_level_desc *bricklevel (Uint32, Uint32);
+  const guardians_level_desc *guardlevel (Uint32, Uint32);
 private:
    typedef enum 
      {
        ROOT,
        LEVEL_NODE,
        BRICKS_LEVEL_NODE,
-       CAPSULES_NODE  
+       CAPSULES_NODE,
+       GUARDIANS_LEVEL_NODE
      }
      NODES_ENUM;
 
+   void check_levels ();
    void check_xml (TiXmlNode* parent, Uint32 node);
    void parse (TiXmlNode* parent, Uint32 node);
+
+   Uint32* get_capsules_list (Uint32 id);
+   guardians_level_desc* get_guardians_level (Uint32 id);
+   bricks_level_desc* get_bricks_level (Uint32 id); 
 
  private:
      Uint32 time_multiplier;
      
      Uint32 levels_counter;
      Uint32 bricks_levels_counter;
+     Uint32 guardians_levels_counter;
      Uint32 capsules_lists_counter;
      Uint32 capsules_counter;
      
      Sint32 level_index;
      Sint32 bricks_level_index;
+     Sint32 guardians_level_index;
      Sint32 appearance_index;
      Sint32 capsule_list_index;
      Sint32 capsule_index;
@@ -137,41 +159,43 @@ private:
      std::string last_element;
 
 private:
-  static const Sint16 zeCourseXX[];
-  static const Sint16 zeCourse10[];
-  static const Sint16 zeCourse11[];
-  static const Sint16 zeCourse12[];
-  static const Sint16 zeCourse20[];
-  static const Sint16 zeCourse30[];
-  static const Sint16 zeCourse40[];
-  static const Sint16 zeCourse50[];
-  static const Sint16 zeCourse55[];
-  static const bricks_levels_desc amigaTab10;
-  static const bricks_levels_desc amigaTab11;
-  static const bricks_levels_desc amigaTab12;
-  static const bricks_levels_desc amigaTab20;
-  static const bricks_levels_desc amigaTab30;
-  static const bricks_levels_desc amigaTab40;
-  static const bricks_levels_desc amigaTab50;
-  static const bricks_levels_desc amigaTab55;
-  static const atariLevel atariTab00;
-  static const atariLevel atariTab04;
-  static const atariLevel atariTab08;
-  static const atariLevel atariTab12;
-  static const atariLevel atariTab16;
-  static const atariLevel atariTab20;
-  static const atariLevel atariTab24;
-  static const atariLevel atariTab28;
-  static const atariLevel atariTab32;
-  static const atariLevel atariTab36;
-  static const atariLevel atariTab40;
-  static const bricks_levels_desc *giga_amiga[];
+  static const Uint32 zeCourseXX[];
+  static const Uint32 zeCourse10[];
+  static const Uint32 zeCourse11[];
+  static const Uint32 zeCourse12[];
+  static const Uint32 zeCourse20[];
+  static const Uint32 zeCourse30[];
+  static const Uint32 zeCourse40[];
+  static const Uint32 zeCourse50[];
+  static const Uint32 zeCourse55[];
+  static const bricks_level_desc amigaTab10;
+  static const bricks_level_desc amigaTab11;
+  static const bricks_level_desc amigaTab12;
+  static const bricks_level_desc amigaTab20;
+  static const bricks_level_desc amigaTab30;
+  static const bricks_level_desc amigaTab40;
+  static const bricks_level_desc amigaTab50;
+  static const bricks_level_desc amigaTab55;
+  static const guardians_level_desc atariTab00;
+  static const guardians_level_desc atariTab04;
+  static const guardians_level_desc atariTab08;
+  static const guardians_level_desc atariTab12;
+  static const guardians_level_desc atariTab16;
+  static const guardians_level_desc atariTab20;
+  static const guardians_level_desc atariTab24;
+  static const guardians_level_desc atariTab28;
+  static const guardians_level_desc atariTab32;
+  static const guardians_level_desc atariTab36;
+  static const guardians_level_desc atariTab40;
+  static const bricks_level_desc *giga_amiga[];
 
 
   TiXmlDocument *xml_levels;
   
-  bricks_levels_desc* bricks_levels;
+  guardians_level_desc* guardians_levels;
+  bricks_level_desc* bricks_levels;
   capsules_struct* caspsules_list;
+  level_desc* levels_list;
 
 
 };
