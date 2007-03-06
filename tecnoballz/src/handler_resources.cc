@@ -5,11 +5,11 @@
  * @date 2007-03-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.12 2007/03/01 21:14:20 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.13 2007/03/06 11:16:15 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,29 +116,29 @@ const char *
 const char * handler_resources::bitmap_files[] =
 {
   /* BITMAP_HEAD_ANIMATION */
-  "ani_head.bmp",
+  "head_animation.bmp",
   /* BITMAP_RIGHT_PANEL */
-  "ba_score2.bmp",
+  "right_panel.bmp",
   /* BITMAP_PADDLES_1 */
-  "bumper_1.bmp",
+  "paddles_1.bmp",
   /* BITMAP_PADDLES_2 */
-  "bumper_2.bmp",
+  "paddles_2.bmp",
   /* BITMAP_GAME_FONTS */
-  "fontgame.bmp",
+  "game_fonts.bmp",
   /* BITMAP_MENU_FONTS */
-  "fontmenu.bmp",
+  "menu_fonts.bmp",
   /* BITMAP_SMALL_FONTS */
-  "font_messa.bmp",
+  "small_fonts.bmp",
   /* BITMAP_GIGABLITZ */
-  "gigablzt.bmp",
+  "gigablitz.bmp",
   /* BITMAP_TILESMAP */
-  "map_edit.bmp",
+  "tilesmap.bmp",
   /* BITMAP_SHOP */
-  "new_shop.bmp",
+  "shop.bmp",
   /* BITMAP_ALL_SPRITES */
-  "pagezbob.bmp",
+  "all_sprites.bmp",
   /* BITMAP_BRICKS */
-  "zebricks.bmp",
+  "bricks.bmp",
   /* BITMAP_SCORES_FONTS */
   "font_score.bmp"
 };

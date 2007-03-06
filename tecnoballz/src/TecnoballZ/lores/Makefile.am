@@ -1,17 +1,17 @@
 NULL =
 pkgdatadir = $(datadir)/tecnoballz/lores
 dist_pkgdata_DATA = \
-	ani_head.bmp \
-	ba_score2.bmp \
-	bumper_1.bmp \
-	bumper_2.bmp \
-	font_messa.bmp \
+	all_sprites.bmp \
+	bricks.bmp \
 	font_score.bmp \
-	fontgame.bmp \
-	fontmenu.bmp \
-	gigablzt.bmp \
-	map_edit.bmp \
-	new_shop.bmp \
-	pagezbob.bmp \
-	zebricks.bmp \
+	game_fonts.bmp \
+	gigablitz.bmp \
+	head_animation.bmp \
+	menu_fonts.bmp \
+	paddles_1.bmp \
+	paddles_2.bmp \
+	right_panel.bmp \
+	shop.bmp \
+	small_fonts.bmp \
+	tilesmap.bmp \
 	$(NULL)

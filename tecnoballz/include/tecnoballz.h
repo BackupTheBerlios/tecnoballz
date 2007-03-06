@@ -5,11 +5,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.18 2007/03/06 10:46:11 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.19 2007/03/06 11:16:15 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,7 +140,8 @@ protected:
    * static members
    */
 
-  static Uint32 counterObj;     //number of objects
+  /** Current number of objects */
+  static Uint32 objects_counter;
   /** Counter the number of frames */
   static Uint32 frame_counter;
   static Sint32 num_erreur;     //error number
@@ -163,7 +164,6 @@ protected:
   /** Number of players from 1 to 6 */
   static Sint32 number_of_players;
   static const char nomprefix[];
-  static char chainelog[100];
 
   static scoretable *ptScoreTab;
   /** Handler of the files resources */

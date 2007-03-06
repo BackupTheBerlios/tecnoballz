@@ -5,11 +5,11 @@
  * @date 2007-02-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.16 2007/03/06 10:46:11 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.17 2007/03/06 11:16:15 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -355,8 +355,8 @@ void
 tecnoballz::object_init ()
 {
   erreur_num = 0;
-  numero_obj = counterObj;
-  counterObj++;
+  numero_obj = objects_counter;
+  objects_counter++;
 }
 
 /**
@@ -365,7 +365,7 @@ tecnoballz::object_init ()
 void
 tecnoballz::object_free ()
 {
-  counterObj--;
+  objects_counter--;
 }
 
 //-------------------------------------------------------------------------------
@@ -528,7 +528,7 @@ Sint32 tecnoballz::arg_jumper = -1;
 Sint32 tecnoballz::bg4_colors = 0;
 bool tecnoballz::is_verbose = false;
 Sint32 tecnoballz::num_erreur = 0;
-Uint32 tecnoballz::counterObj = 0;
+Uint32 tecnoballz::objects_counter = 0;
 Sint32 tecnoballz::random_counter = 0;
 Uint32 tecnoballz::frame_counter = 0;
 scoretable * tecnoballz::ptScoreTab = NULL;
@@ -561,7 +561,6 @@ Uint32 tecnoballz::double_mem = 1;
 Sint32 tecnoballz::difficulty_level = DIFFICULTY_EASY;
 Sint32 tecnoballz::initial_num_of_lifes = 8;
 Sint32 tecnoballz::number_of_players = 1;
-char tecnoballz::chainelog[100];
 const char tecnoballz::nomprefix[] = PREFIX;
 Sint32 tecnoballz::resolution = 2;
 bool tecnoballz::bob_ground = false;
