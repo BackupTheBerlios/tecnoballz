@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.cc 
  * @brief Shop supervisor
- * @date 2007-02-28
+ * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.23 2007/02/28 21:08:09 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.24 2007/03/06 17:42:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -329,13 +329,17 @@ supervisor_shop::main_loop ()
   //###################################################################
   if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG) ||
       Ecode == handler_popup_menu::WEQUITGAME)
-    end_return = -1;
+    {
+      end_return = LEAVE_TECNOBALLZ;
+    }
   if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
       Ecode == handler_popup_menu::EXITTOMENU)
-    end_return = 4;
+    {
+      end_return = MAIN_MENU;
+    }
 
   tu_triches ();
-  return (end_return);
+  return end_return;
 }
 
 /**

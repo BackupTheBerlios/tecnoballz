@@ -2,14 +2,14 @@
  * @file supervisor_map_editor.cc 
  * @brief The tile map editor for the menu and guardians levels 
  * @created 2004-09-13 
- * @date 2007-02-07
+ * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.4 2007/02/07 21:05:45 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.5 2007/03/06 17:42:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

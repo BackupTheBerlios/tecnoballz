@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_main_menu.cc 
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-02-23
+ * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.12 2007/02/23 17:22:34 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.13 2007/03/06 17:42:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ supervisor_main_menu::supervisor_main_menu ()
   /*  big logo "TecnoballZ" */
   tecnoballz_logo = new sprite_object ();
   fonts_scrolling = new controller_fontes_menu ();
-  menu_texte = new sprite_display_menu ();
+  text_menu = new sprite_display_menu ();
   mouse_pointer = new sprite_mouse_pointer ();
   offset_xx1 = 0;
 }
@@ -53,7 +53,7 @@ supervisor_main_menu::supervisor_main_menu ()
 supervisor_main_menu::~supervisor_main_menu ()
 {
   delete mouse_pointer;
-  delete menu_texte;
+  delete text_menu;
   delete fonts_scrolling;
   delete tecnoballz_logo;
   delete tiles_map;
@@ -89,16 +89,13 @@ supervisor_main_menu::first_init ()
   tiles_map->initialize (tilesmap_scrolling::TILES_COLOR_MENU,
                          tilesmap_scrolling::MAPED_MENU);
 
-  error_init (menu_texte->first_init ());
+  text_menu->first_init ();
   keyboard->set_grab_input (false);
-  if (erreur_num)
-    return (erreur_num);
-
   if (is_verbose)
     {
       std::cout << "supervisor_main_menu::first_init() End!" << std::endl;
     }
-  return (erreur_num);
+  return erreur_num;
 }
 
 /**
@@ -119,22 +116,23 @@ supervisor_main_menu::main_loop ()
   mouse_pointer->move ();
   sprites->draw ();
 
-  Sint32 zeRet = 0;
-  zeRet = menu_texte->afficheTxt ();
-
-  switch (zeRet)
+  /* check and draw the menu text */
+  switch (text_menu->check_and_display ())
     {
-    case 1:
-      end_return = -1;
+    case sprite_display_menu::PROGRAM_EXIT:
+      end_return = LEAVE_TECNOBALLZ;
       break;
-    case 2:
+    case sprite_display_menu::START_GAME:
       end_return = start_new_game ();
       break;
     }
 
-  menu_texte->draw_copy_from_bitmap ();
+  text_menu->draw_copy_from_bitmap ();
   if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG))
-    end_return = -1;
+    {
+      end_return = LEAVE_TECNOBALLZ;
+      printf("end_return %i\n", end_return);
+    }
   display->unlock_surfaces ();
 
   //###################################################################
@@ -146,7 +144,7 @@ supervisor_main_menu::main_loop ()
 #ifdef UNDER_DEVELOPMENT
   if (keyboard->key_is_pressed (SDLK_F5))
     {
-      end_return = 5;
+      end_return = MAP_EDITOR;
     }
 #endif
   return end_return;

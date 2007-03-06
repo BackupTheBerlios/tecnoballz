@@ -5,11 +5,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.19 2007/03/06 11:16:15 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.20 2007/03/06 17:42:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,15 +83,6 @@ class supervisor_map_editor;
 class bitmap_data;
 class offscreen_surface;
 
-const Sint32 E_NO_ERROR = 0;
-const Sint32 E_GENRIQUE = -1;   // erreur generique
-const Sint32 E_OUT_LIST = -2;   // erreur reservation de la liste memoire
-const Sint32 E_NOMEMORY = -3;   // erreur reservation : depassement memoire
-const Sint32 E_OUT_ZONE = -4;   // erreur reservation : maxium de zones memoire 
-const Sint32 E_NORESOUR = -7;   // ressource non presente
-const Sint32 E_SDLERROR = -8;
-const Sint32 E_FILERROR = -9;
-const Sint32 E_SDLMIXER = -9;
 const Sint32 SINUS_MASK = 511;
 const Sint32 SINUS_DECA = 7;
 class tecnoballz
@@ -106,6 +97,7 @@ public:
     GUARDS_LEVEL,
     MAIN_MENU,
     MAP_EDITOR,
+    LEAVE_TECNOBALLZ,
   }
   GAME_PHASE;
 
@@ -194,8 +186,7 @@ protected:
 
 public:
   static Sint32 first_init (configfile * pConf);
-  static Sint32 game_begin ();
-  static void fullscreen ();
+  static void game_begin ();
   static void release_objects ();
   static void release_all_objects (configfile * pConf);
 

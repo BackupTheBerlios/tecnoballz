@@ -1,14 +1,14 @@
 /** 
  * @file sprite_display_menu.h
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-02-16
+ * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.h,v 1.1 2007/02/16 12:38:24 gurumeditation Exp $
+ * $Id: sprite_display_menu.h,v 1.2 2007/03/06 17:42:42 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,18 +37,36 @@ class sprite_display_menu;
 class sprite_display_menu:public virtual display_text_bitmap,
   public virtual sprite_object
 {
+
+public:
+  typedef enum 
+    {
+      DO_NO_EXIT,
+      PROGRAM_EXIT,
+      START_GAME
+    }
+    EXIT_ENUM;
+
+
+
+
 private:
   static const unsigned char cyclingtab[];
-  static const Sint32 MENU_TOTAL = 6;
-  static const Sint32 MENU_LARGE = 32;  // number of characters by lines
-  static const Sint32 MENU_HAUTE = 19;  // number of lines of characters
-
-  static const Sint32 MENU_ENTRE = 0;
-  static const Sint32 MENU_PARAM = 1;
-  static const Sint32 MENU_ABOUT = 2;
-  static const Sint32 MENU_INFOS = 3;
-  static const Sint32 MENU_SALUT = 4;
-  static const Sint32 MENU_SCORE = 5;
+  /** Number of characters by lines */
+  static const Sint32 NUM_OF_COLUMNS = 32;
+  /** Number of lines of characters */
+  static const Sint32 NUM_OF_ROWS = 19;
+  typedef enum
+    {
+      MAIN_SECTION,
+      OPTIONS_SECTION,
+      ABOUT_SECTION,
+      INFOS_SECTION,
+      GREETINGS_SECTION,
+      SCORE_SECTIONS,
+      NUM_OF_SECTIONS
+    }
+    SECTIONS_ENUM;
 
   static const Sint32 LINE_START = 5;
   static const Sint32 LINE_PARAM = 6;
@@ -64,16 +82,19 @@ private:
   static const Sint32 YCOORDNULL = -10240;
 
 
-  Sint32 width_font;            //fonte's width font 8 or 16
-  Sint32 heightfont;            //fonte's height
-  Sint32 space2next;            //number of lines to next fonte 9 or 18
-
-  Sint32 numeroMenu;            //Numero du texte menu
+  /** Width of font in pixels 8 or 16 */
+  Uint32 font_width;
+  /** Height of font in pixels 8 or 16 */
+  Uint32 font_height;
+  /** Space between lines in pixels */
+  Uint32 line_spacing;
+  /** Id of the current menu from MAIN_SECTION to SCORE_SECTIONS */
+  Uint32 current_menu_section; 
   Sint32 menu_color;
   Sint32 menu_colww;
-  Sint32 yPressLeft;
-  Sint32 yPressRigh;
-  bitmap_data *graphTexte;
+  Sint32 y_coord_left_down;
+  Sint32 y_coord_right_down;
+  bitmap_data *text_offscreen;
 
   char *clear_addr;
   Uint32 clearHeigh;
@@ -88,20 +109,20 @@ private:
   static char menuTexte3[];     //infos menu
   static char menuTexte4[];     //greetings menu
   static char menuTexte5[];     //best scores menu
-  static char *menu_liste[MENU_TOTAL];
+  static char *menu_liste[NUM_OF_SECTIONS];
 
 public:
   static const char difficulte[];
 public:
     sprite_display_menu ();
    ~sprite_display_menu ();
-  Sint32 first_init ();
-  Sint32 afficheTxt ();
+  void first_init ();
+  Uint32 check_and_display ();
 
 private:
   void mis_a_jour ();
-  Sint32 testLeMenu ();
-  void efface_BOB ();
+  Uint32 check_events ();
+  void clear_text_offscreen ();
   void clear_zone ();
   void clear_init (Uint32 xcoor, Uint32 ycoor, Uint32 width, Uint32 lines);
   void input_init (Uint32 xcoor, Uint32 ycoor, Uint32 width, char *strng);

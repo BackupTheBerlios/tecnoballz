@@ -5,11 +5,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.49 $
+ * @version $Revision: 1.50 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.49 2007/03/06 10:46:11 gurumeditation Exp $
+ * $Id: main.cc,v 1.50 2007/03/06 17:42:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,9 +53,7 @@ main (Sint32 nbArg, char **ptArg)
       error = tecnoballz::first_init (&configuration);
       if (error)
         return error;
-      error = tecnoballz::game_begin ();
-      if (error)
-        return error;
+      tecnoballz::game_begin ();
     }
   catch (std::ios_base::failure& fail) 
     {

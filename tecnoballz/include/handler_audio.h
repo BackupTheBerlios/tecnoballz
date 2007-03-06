@@ -2,14 +2,14 @@
  * @file handler_audio.h
  * @brief Handler of the sound and music
  * @created 2004-03-22
- * @date 2007-01-30
+ * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.h,v 1.3 2007/02/04 17:10:16 gurumeditation Exp $
+ * $Id: handler_audio.h,v 1.4 2007/03/06 17:42:42 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -121,8 +121,8 @@ public:
   void stop_music ();
   void play_music (Uint32 music_id);
   void run ();
-  Sint32 play_level_music (Uint32 area_num, Uint32 level_num);
-  Sint32 play_shop_music (Uint32 area_num);
+  void play_level_music (Uint32 area_num, Uint32 level_num);
+  void play_shop_music (Uint32 area_num);
   void play_win_music ();
   void play_lost_music ();
   void stop_lost_music ();

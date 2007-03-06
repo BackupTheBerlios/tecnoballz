@@ -5,11 +5,11 @@
  * @date 2007-02-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.17 2007/03/06 11:16:15 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.18 2007/03/06 17:42:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -107,9 +107,10 @@ tecnoballz::first_init (configfile * pConf)
 /**
  * main loop of the game
  */
-Sint32
+void
 tecnoballz::game_begin ()
 {
+  supervisor *current_phase = NULL;
   do
     {
       if (is_verbose)
@@ -117,121 +118,47 @@ tecnoballz::game_begin ()
           std::cout << ">tecnoballz::game_begin() phase:" << super_jump
             << std::endl;
         }
-      
-      /*
-       * initialize
-       */
       switch (super_jump)
         {
-          // exit of game
-        case -1:
+        case LEAVE_TECNOBALLZ:
           is_exit_game = true;
           break;
-
-          /* initialize a bricks level */
         case BRICKS_LEVEL:
-          release_objects ();
-          bricks_level = new supervisor_bricks_level ();
-          num_erreur = bricks_level->first_init ();
-          if (num_erreur)
-            return num_erreur;
+          current_phase = new supervisor_bricks_level ();
           break;
-
-          /* initialize a shop */
-        case SHOP:
-          release_objects ();
-          shop = new supervisor_shop ();
-          num_erreur = shop->first_init ();
-          if (num_erreur)
-            return num_erreur;
+        case SHOP: 
+          current_phase = new supervisor_shop ();
           break;
-
-          /* initialize a guardian level */
         case GUARDS_LEVEL:
-          release_objects ();
-          guards_level = new supervisor_guards_level ();
-          num_erreur = guards_level->first_init ();
-          if (num_erreur)
-            return num_erreur;
+          current_phase = new supervisor_guards_level ();
           break;
-
-          /* initialize the main menu */
         case MAIN_MENU:
-          release_objects ();
-          main_menu = new supervisor_main_menu ();
-          num_erreur = main_menu->first_init ();
-          if (num_erreur)
-            return num_erreur;
+          current_phase = new supervisor_main_menu ();
           break;
-
-         /* initialize the map editor */
         case MAP_EDITOR:
-          release_objects ();
-          map_editor = new supervisor_map_editor ();
+          current_phase = new supervisor_map_editor (); 
           break;
+         default:
+           std::cerr << "(!)tecnoballz::game_begin() phase number " << 
+             super_jump << "is invalid!" << std::endl;
+           throw std::runtime_error ("(!)tecnoballz::game_begin() " 
+             "invalid phase number!");
         }
-
-      //###############################################################
-      // running
-      //###############################################################
-      switch (super_jump)
+      if (NULL != current_phase) 
         {
-          // bricks level
-        case BRICKS_LEVEL:
+          current_phase->first_init ();
           super_jump = 0;
           do
             {
-              super_jump = bricks_level->main_loop ();
+              super_jump = current_phase->main_loop ();
             }
           while (!super_jump);
-          break;
-
-          // the shop
-        case SHOP:
-          super_jump = 0;
-          do
-            {
-              super_jump = shop->main_loop ();
-            }
-          while (!super_jump);
-          break;
-
-          // guards level
-        case GUARDS_LEVEL:
-          super_jump = 0;
-          do
-            {
-              super_jump = guards_level->main_loop ();
-            }
-          while (!super_jump);
-          break;
-
-          // the menu
-        case MAIN_MENU:
-          super_jump = 0;
-          do
-            {
-              super_jump = main_menu->main_loop ();
-            }
-          while (!super_jump);
-          break;
-
-          // scrolling editor (menu and guards)
-        case MAP_EDITOR:
-          super_jump = 0;
-          do
-            {
-              super_jump = map_editor->main_loop ();
-            }
-          while (!super_jump);
-          break;
-
-
+          delete current_phase;
+          current_phase = NULL;
         }
     }
   while (!is_exit_game);
-  return num_erreur;
-}
+ }
 
 /**
  * Release the main objects

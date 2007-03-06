@@ -1,14 +1,14 @@
 /** 
  * @file sprite_display_menu.cc 
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-02-23
+ * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.5 2007/02/28 08:49:17 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.6 2007/03/06 17:42:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,16 +38,20 @@
 sprite_display_menu::sprite_display_menu ()
 {
   clear_sprite_members ();
-  numeroMenu = 0;
-  graphTexte = (bitmap_data *) NULL;
-  yPressLeft = -10240;
-  yPressRigh = -10240;
-  width_font = 8 * resolution;
-  heightfont = 8 * resolution;
+  current_menu_section = 0;
+  text_offscreen = NULL;
+  y_coord_left_down = -10240;
+  y_coord_right_down = -10240;
+  font_width = 8 * resolution;
+  font_height = 8 * resolution;
   if (resolution == 2)
-    space2next = 17;
+    {
+      line_spacing = 17;
+    }
   else
-    space2next = 8;
+    {
+      line_spacing = 8;
+    }
   menu_colww = 0;
   menu_color = 0;
 
@@ -62,46 +66,45 @@ sprite_display_menu::sprite_display_menu ()
  */
 sprite_display_menu::~sprite_display_menu ()
 {
-  if (graphTexte)
-    delete graphTexte;
-  if (bitmap_fonts)
-    delete bitmap_fonts;
-  bitmap_fonts = (bitmap_data *) NULL;
-  graphTexte = (bitmap_data *) NULL;
+  if (NULL != text_offscreen)
+    {
+      delete text_offscreen;
+      text_offscreen = NULL;
+    }
+  if (NULL != bitmap_fonts)
+    {
+      delete bitmap_fonts;
+      bitmap_fonts = NULL;
+    }
 }
 
-//-----------------------------------------------------------------------------
-//      perform some initializations
-//-----------------------------------------------------------------------------
-Sint32
+/**
+ * Create offscreen and perform some initializations
+ */
+void
 sprite_display_menu::first_init ()
 {
 
   load_bitmap_fonts (handler_resources::BITMAP_MENU_FONTS);
 
-  //###################################################################
-  // allocate 512 * 323 pixels buffer for text menu 
-  //###################################################################
-  graphTexte = new bitmap_data ();
-  //graphTexte->create(MENU_LARGE * width_font, MENU_HAUTE * space2next , 1);
-  graphTexte->create_surface (MENU_LARGE * width_font,
-                              MENU_HAUTE * space2next);
+  /* allocate 512 * 323 pixels buffer for text menu  */
+  text_offscreen = new bitmap_data ();
+  text_offscreen->create_surface (NUM_OF_COLUMNS * font_width,
+                              NUM_OF_ROWS * line_spacing);
 
-  //###################################################################
-  // initialize sprite object
-  //###################################################################
-  make_sprite (graphTexte);
+  /* initialize sprite object */
+  make_sprite (text_offscreen);
   enable ();
   set_coordinates (32 * resolution, 80 * resolution);
 
-  //###################################################################
-  // initialize palette color chars
-  //###################################################################
+  /* initialize palette color chars */
   SDL_Color *palPT = display->get_palette ();
   SDL_Color *palP1 = palPT + 239;
   Sint32 i = random_counter & 0x0F;
   if (i >= 10)
-    i = i - 10;
+    {
+      i = i - 10;
+    }
   const Uint32 *ptpal = (handler_resources::tabledegas + i * 18);
   for (i = 0; i < 17; i++)
     {
@@ -117,26 +120,28 @@ sprite_display_menu::first_init ()
       palP1++;
     }
   display->enable_palette (palPT);
-  return erreur_num;
 }
 
-//------------------------------------------------------------------------------
-// display the text menu into buffer memory
-//------------------------------------------------------------------------------
-Sint32
-sprite_display_menu::afficheTxt ()
+/**
+ * Check events and draw menu text
+ * @return exit code DO_NO_EXIT, PROGRAM_EXIT, or START_GAME
+ */
+Uint32
+sprite_display_menu::check_and_display ()
 {
   clear_zone ();
   mis_a_jour ();
   Sint32 mousY = keyboard->get_mouse_y ();
-  Sint32 y = (mousY - y_coord) / space2next;
-  Sint32 zeRet = testLeMenu ();
+  Sint32 y = (mousY - y_coord) / line_spacing;
+  Uint32 exit_code = check_events ();
 
   //###################################################################
   // read color table offset (color line hover by mouse )
   //###################################################################
   if (menu_color++ > 32)
-    menu_color = 0;
+    {
+      menu_color = 0;
+    }
   Sint32 color = menu_color;
 
   //###################################################################
@@ -145,9 +150,9 @@ sprite_display_menu::afficheTxt ()
   char *desP1 = pixel_data;
   Sint32 offSc = off_source;
   Sint32 offDs = srceNextLn;
-  Sint32 offD2 = srceNextLn * (space2next - 1);
+  Sint32 offD2 = srceNextLn * (line_spacing - 1);
   Sint32 *basPT = (Sint32 *) caract_adr;
-  char *p = menu_liste[numeroMenu];
+  char *p = menu_liste[current_menu_section];
   char *c = ascii2code;
   Sint32 a, b, j;
 
@@ -156,14 +161,14 @@ sprite_display_menu::afficheTxt ()
       //######################################################
       // mode low-res (320 x 200)
       //######################################################
-      for (Sint32 k = 0; k < MENU_HAUTE; k++, desP1 += offD2)
+      for (Sint32 k = 0; k < NUM_OF_ROWS; k++, desP1 += offD2)
         {
           if (y != k)
             {
               //######################################
               // display normal line of 32 characters
               //######################################
-              for (j = 0; j < MENU_LARGE; j++)
+              for (j = 0; j < NUM_OF_COLUMNS; j++)
                 {
                   a = *(p++) - 32;
                   if (a)
@@ -208,7 +213,7 @@ sprite_display_menu::afficheTxt ()
             {                   //######################################
               // display selected line of 32 characters
               //######################################
-              for (j = 0; j < MENU_LARGE; j++)
+              for (j = 0; j < NUM_OF_COLUMNS; j++)
                 {
                   unsigned char pixel = cyclingtab[color];
                   char a = *(p++) - 32;
@@ -250,14 +255,14 @@ sprite_display_menu::afficheTxt ()
   else
     {
 
-      for (Sint32 k = 0; k < MENU_HAUTE; k++, desP1 += offD2)
+      for (Sint32 k = 0; k < NUM_OF_ROWS; k++, desP1 += offD2)
         {
           if (y != k)
             {
               //###########################################################
               // display normal line of 32 characters
               //###########################################################
-              for (j = 0; j < MENU_LARGE; j++)
+              for (j = 0; j < NUM_OF_COLUMNS; j++)
                 {
                   a = *(p++) - 32;
                   if (a)
@@ -312,7 +317,7 @@ sprite_display_menu::afficheTxt ()
             {                   //###########################################################
               // display selected line of 32 characters
               //###########################################################
-              for (j = 0; j < MENU_LARGE; j++)
+              for (j = 0; j < NUM_OF_COLUMNS; j++)
                 {
                   unsigned char pixel = cyclingtab[color];
                   char a = *(p++) - 32;
@@ -347,101 +352,97 @@ sprite_display_menu::afficheTxt ()
 
     }
   curs_print ();
-  return zeRet;
+  return exit_code;
 }
 
-//------------------------------------------------------------------------------
-// handle menu events
-//------------------------------------------------------------------------------
-Sint32
-sprite_display_menu::testLeMenu ()
+/**
+ * Check mouse events 
+ * @return exit code DO_NO_EXIT, PROGRAM_EXIT, or START_GAME
+ */
+Uint32
+sprite_display_menu::check_events ()
 {
-  Sint32 zeRet = 0;
-  Sint32 mposx, pos_y, freeL, freeR;
+  Uint32 exit_code = DO_NO_EXIT;
+  Sint32 mposx, pos_y;
 
-  //##############################################################
-  // check if right or left button are pressed
-  //##############################################################
-  Sint32 presL = keyboard->is_left_button ();
-  Sint32 presR = keyboard->is_right_button ();
+  /* check if right or left button are pressed */
+  bool is_left_down = keyboard->is_left_button ();
+  bool is_right_down = keyboard->is_right_button ();
 
   //##############################################################
   // read y where is pressed 
   //##############################################################
-  if (presL && yPressLeft == YCOORDNULL)
+  if (is_left_down && y_coord_left_down == YCOORDNULL)
     {
-      yPressLeft = keyboard->get_mouse_y ();
-      //printf("yPressLeft: %i \n",yPressLeft);
+      y_coord_left_down = keyboard->get_mouse_y ();
     }
   else
     {
-      if (presR && yPressRigh == YCOORDNULL)
+      if (is_right_down && y_coord_right_down == YCOORDNULL)
         {
-          yPressRigh = keyboard->get_mouse_y ();
-          //printf("yPressRigh: %i \n",yPressRigh);
+          y_coord_right_down = keyboard->get_mouse_y ();
         }
     }
 
-  freeR = 0;
-  freeL = keyboard->is_left_button_up (&mposx, &pos_y);
-  if (!freeL)
-    freeR = keyboard->is_right_button_up (&mposx, &pos_y);
+  bool is_right_up = false;
+  bool is_left_up = keyboard->is_left_button_up (&mposx, &pos_y);
+  if (!is_left_up)
+    {
+      is_right_up = keyboard->is_right_button_up (&mposx, &pos_y);
+    }
 
-  if ((freeL && pos_y == yPressLeft) || (freeR && pos_y == yPressRigh))
+  if ((is_left_up && pos_y == y_coord_left_down) || (is_right_up && pos_y == y_coord_right_down))
     {
       Sint32 incre = 0;
-      if (freeL)
+      if (is_left_up)
         {
           incre = 1;
-          yPressLeft = YCOORDNULL;
+          y_coord_left_down = YCOORDNULL;
         }
-      if (freeR)
+      if (is_right_up)
         {
           incre = -1;
-          yPressRigh = YCOORDNULL;
+          y_coord_right_down = YCOORDNULL;
         }
 
-      //printf("pos_y: %i \n", pos_y);
-      pos_y = (pos_y - y_coord) / space2next;
-      switch (numeroMenu)
+      pos_y = (pos_y - y_coord) / line_spacing;
+      switch (current_menu_section)
         {
 
-          //###########################################################
-          // the main menu
-          //###########################################################
-        case MENU_ENTRE:
+          /* main menu */
+        case MAIN_SECTION:
           switch (pos_y)
             {
             case LINE_START:
-              efface_BOB ();
+              clear_text_offscreen ();
               clear_stop ();
-              zeRet = 2;
+              exit_code = START_GAME;
               break;
             case LINE_PARAM:
-              efface_BOB ();
+              clear_text_offscreen ();
               clear_stop ();
-              numeroMenu = MENU_PARAM;
+              current_menu_section = OPTIONS_SECTION;
               break;
             case LINE_ABOUT:
-              efface_BOB ();
+              clear_text_offscreen ();
               clear_stop ();
-              numeroMenu = MENU_ABOUT;
+              current_menu_section = ABOUT_SECTION;
               break;
             case LINE_SALUT:
-              efface_BOB ();
+              clear_text_offscreen ();
               clear_stop ();
-              numeroMenu = MENU_SALUT;
+              current_menu_section = GREETINGS_SECTION;
               break;
             case LINE_INFOS:
-              efface_BOB ();
+              clear_text_offscreen ();
               clear_stop ();
-              numeroMenu = MENU_INFOS;
+              current_menu_section = INFOS_SECTION;
               break;
             case LINE_SCORE:
-              efface_BOB ();
+              clear_text_offscreen ();
               clear_stop ();
               copyScores ();
-              numeroMenu = MENU_SCORE;
+              current_menu_section = SCORE_SECTIONS;
               break;
 
               // input area password
@@ -453,7 +454,7 @@ sprite_display_menu::testLeMenu ()
               }
               break;
             case LINE_SORTI:
-              zeRet = 1;
+              exit_code = PROGRAM_EXIT;
               break;
             }
           break;
@@ -461,7 +462,7 @@ sprite_display_menu::testLeMenu ()
           //###########################################################
           // options
           //###########################################################
-        case MENU_PARAM:
+        case OPTIONS_SECTION:
           switch (pos_y)
             {
             case 5:
@@ -519,40 +520,43 @@ sprite_display_menu::testLeMenu ()
 
               //return to main menu
             case 14:
-              efface_BOB ();
-              numeroMenu = MENU_ENTRE;
+              clear_text_offscreen ();
+              current_menu_section = MAIN_SECTION;
               clear_stop ();
               break;
             }
           break;
 
-        case MENU_ABOUT:
-          efface_BOB ();
-          numeroMenu = MENU_ENTRE;
+        case ABOUT_SECTION:
+          clear_text_offscreen ();
+          current_menu_section = MAIN_SECTION;
           break;
 
-        case MENU_INFOS:
-          efface_BOB ();
-          numeroMenu = MENU_ENTRE;
+        case INFOS_SECTION:
+          clear_text_offscreen ();
+          current_menu_section = MAIN_SECTION;
           break;
 
-        case MENU_SALUT:
-          efface_BOB ();
-          numeroMenu = MENU_ENTRE;
+        case GREETINGS_SECTION:
+          clear_text_offscreen ();
+          current_menu_section = MAIN_SECTION;
           break;
 
-        case MENU_SCORE:
-          efface_BOB ();
-          numeroMenu = MENU_ENTRE;
+        case SCORE_SECTIONS:
+          clear_text_offscreen ();
+          current_menu_section = MAIN_SECTION;
           break;
         }
     }
-  if (!presL)
-    yPressLeft = YCOORDNULL;
-  if (!presR)
-    yPressRigh = YCOORDNULL;
-
-  return zeRet;
+  if (!is_left_down)
+    {
+      y_coord_left_down = YCOORDNULL;
+    }
+  if (!is_right_down)
+    {
+      y_coord_right_down = YCOORDNULL;
+    }
+  return exit_code;
 }
 
 //------------------------------------------------------------------------------
@@ -565,37 +569,36 @@ sprite_display_menu::mis_a_jour ()
   char *d;
 
   /* copy current area code */
-  d = menuTexte0 + (MENU_LARGE * LINE_CODE2) + 10;
+  d = menuTexte0 + (NUM_OF_COLUMNS * LINE_CODE2) + 10;
   supervisor_main_menu::copy_current_area_code (d);
 
   //###########################################################
   // number of players
   //###########################################################
-  d = menuTexte1 + (MENU_LARGE * 5) + 24;
+  d = menuTexte1 + (NUM_OF_COLUMNS * 5) + 24;
   intToASCII (number_of_players, d, 0);
 
   //###########################################################
   // copy playes names
   //###########################################################
-  d = menuTexte1 + (MENU_LARGE * 6) + 24;
+  d = menuTexte1 + (NUM_OF_COLUMNS * 6) + 24;
   for (Sint32 i = 0; i < MAX_PLAYER; i++)
     {
       s = handler_players::players_list[i]->get_name ();
       for (Uint32 j = 0; j < 6; j++)
         d[j] = s[j];
-      d += MENU_LARGE;
+      d += NUM_OF_COLUMNS;
     }
   s = &difficulte[(difficulty_level - 1) * 4];
-  d = menuTexte1 + (MENU_LARGE * 12) + 24;
+  d = menuTexte1 + (NUM_OF_COLUMNS * 12) + 24;
   for (Sint32 i = 0; i < 4; i++)
     d[i] = s[i];
-  d = menuTexte1 + (MENU_LARGE * 13) + 24;
+  d = menuTexte1 + (NUM_OF_COLUMNS * 13) + 24;
   //intToASCII (initial_num_of_lifes, d, 1);
   integer_to_ascii (initial_num_of_lifes, 2, d);
 
 
   birth_flag = 1;
-  //for(Uint32 i = 0; i < 1; i++) //test only
   for (Sint32 i = 0; i < MAX_PLAYER; i++)
     {
       s = handler_players::players_list[i]->get_name ();
@@ -605,23 +608,13 @@ sprite_display_menu::mis_a_jour ()
     }
 }
 
-//------------------------------------------------------------------------------
-// erase all memory buffer (used to display the text of the menu)
-//------------------------------------------------------------------------------
+/**
+ * Erase the entirety of the offscreen before drawing a new menu section 
+ */
 void
-sprite_display_menu::efface_BOB ()
+sprite_display_menu::clear_text_offscreen ()
 {
-  Sint32 *d = (Sint32 *) pixel_data;
-  Sint32 p = 0;
-  Sint32 n = srceNextLn / 4;
-  Sint32 h = sprite_height;
-  Sint32 l = srceNextLn / 4;
-  for (Sint32 i = 0; i < h; i++)
-    {
-      for (Sint32 j = 0; j < l; j++)
-        d[j] = p;
-      d += n;
-    }
+  text_offscreen->clear();
 }
 
 //------------------------------------------------------------------------------
@@ -659,11 +652,11 @@ sprite_display_menu::curs_print ()
   if (curs_tempo > 30)
     return;
   char z = 0xEE;
-  char *d = clear_addr + (xcurs * width_font);
+  char *d = clear_addr + (xcurs * font_width);
   Uint32 n = srceNextLn;
-  for (Sint32 h = 0; h < heightfont; h++)
+  for (Uint32 h = 0; h < font_height; h++)
     {
-      for (Sint32 w = 0; w < width_font; w++)
+      for (Uint32 w = 0; w < font_width; w++)
         {
           if (!d[w])
             d[w] = z;
@@ -694,10 +687,10 @@ sprite_display_menu::clear_init (Uint32 xcoor, Uint32 ycoor, Uint32 width,
                                  Uint32 lines)
 {
   clear_stop ();
-  clear_addr = pixel_data + (ycoor * space2next * srceNextLn) +
-    (xcoor * width_font);
-  clearWidth = (width * width_font) / 4;
-  clearHeigh = lines * heightfont;
+  clear_addr = pixel_data + (ycoor * line_spacing * srceNextLn) +
+    (xcoor * font_width);
+  clearWidth = (width * font_width) / 4;
+  clearHeigh = lines * font_height;
 }
 
 //------------------------------------------------------------------------------
@@ -719,7 +712,7 @@ sprite_display_menu::copyScores ()
   score_list *score = ptScoreTab->getScrList ();
   if (!score)
     return;
-  char *ptext = menuTexte5 + MENU_LARGE * 6;
+  char *ptext = menuTexte5 + NUM_OF_COLUMNS * 6;
   for (Uint32 i = 0; i < scoretable::NUMBSCORES; i++)
     {
       char *pName = score[i].playerName;
@@ -729,7 +722,7 @@ sprite_display_menu::copyScores ()
       intToASCII (score[i].scoreValue, &ptext[24], 5);
       intToASCII (score[i].score_area, &ptext[19], 0);
       intToASCII (score[i].scoreLevel, &ptext[13], 1);
-      ptext += MENU_LARGE;
+      ptext += NUM_OF_COLUMNS;
     }
 }
 
@@ -857,7 +850,7 @@ char
 
 
 char *
-  sprite_display_menu::menu_liste[MENU_TOTAL] =
+  sprite_display_menu::menu_liste[NUM_OF_SECTIONS] =
   { menuTexte0, menuTexte1, menuTexte2,
   menuTexte3, menuTexte4, menuTexte5
 };

@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-02-28
+ * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.36 $
+ * @version $Revision: 1.37 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.36 2007/03/05 20:53:30 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.37 2007/03/06 17:42:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -400,13 +400,19 @@ supervisor_bricks_level::main_loop ()
   //###################################################################
   if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG) ||
       Ecode == handler_popup_menu::WEQUITGAME)
-    end_return = -1;
+    {
+      end_return = LEAVE_TECNOBALLZ;
+    }
   if (keyboard->command_is_pressed (handler_keyboard::TOOVERFLAG) ||
       Ecode == handler_popup_menu::GOGAMEOVER)
-    current_player->remove_all_lifes ();
+    {
+      current_player->remove_all_lifes ();
+    }
   if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
       Ecode == handler_popup_menu::EXITTOMENU)
-    end_return = MAIN_MENU;
+    {
+      end_return = MAIN_MENU;
+    }
 
   //###################################################################
   // control position music's module

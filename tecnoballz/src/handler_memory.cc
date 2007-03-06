@@ -5,11 +5,11 @@
  * @date 2007-01-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_memory.cc,v 1.4 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: handler_memory.cc,v 1.5 2007/03/06 17:42:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,10 +69,10 @@ handler_memory::init (Sint32 numof)
   memory_list_base = (mem_struct *) malloc (total_size);
   if (memory_list_base == NULL)
     {
-      return (erreur_num = E_NOMEMORY);
+      return (erreur_num = -3);
     }
   memory_list = memory_list_base;
-  return E_NO_ERROR;
+  return 0;
 }
 
 /** 
@@ -90,7 +90,7 @@ handler_memory::alloc (Sint32 size, Uint32 ident)
   if (num_of_zones >= max_of_zones)
     {
       /* out of zones */
-      erreur_num = E_OUT_ZONE;
+      erreur_num = -4;
       fprintf (stderr, "handler_memory.cc::reserveMem() "
                "max. number of zones reached: %i\n", num_of_zones);
       return NULL;
@@ -99,7 +99,7 @@ handler_memory::alloc (Sint32 size, Uint32 ident)
   if (addr == NULL)
     {
       /* allocate error */
-      erreur_num = E_NOMEMORY;
+      erreur_num = -3;
       fprintf (stderr, "(!)handler_memory.cc::reserveMem() "
                "out of memory!\n");
       return NULL;

@@ -2,14 +2,14 @@
  * @file handler_audio.cc 
  * @brief Handler of the sound and music
  * @created 2004-03-22
- * @date 2007-01-30
+ * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.cc,v 1.5 2007/02/06 09:46:13 gurumeditation Exp $
+ * $Id: handler_audio.cc,v 1.6 2007/03/06 17:42:43 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -238,12 +238,12 @@ handler_audio::query_spec ()
  * @param level level number 1 to 12
  * @return error code, 0 if no error
  */
-Sint32
+void
 handler_audio::play_level_music (Uint32 aera_num, Uint32 level)
 {
   if (!is_audio_enable)
     {
-      return E_NO_ERROR;
+      return;
     }
   aera_number = aera_num;
   level_number = level;
@@ -265,19 +265,18 @@ handler_audio::play_level_music (Uint32 aera_num, Uint32 level)
   Mix_SetMusicPosition (position_1);
   current_portion_music = GAME_PORTION;
   Player_Stop ();
-  return (E_NO_ERROR);
 }
 
 /**
  * Play the music of the shop
  * @param aera_num area number
  */
-Sint32
+void
 handler_audio::play_shop_music (Uint32 aera_num)
 {
   if (!is_audio_enable || NULL == song_module)
     {
-      return E_NO_ERROR;
+      return;
     }
   aera_number = aera_num;
   Uint32 music = area_music (aera_num);
@@ -287,7 +286,6 @@ handler_audio::play_shop_music (Uint32 aera_num)
   play_music (music);
   Mix_SetMusicPosition (position_1);
   current_portion_music = SHOP_PORTION;
-  return (E_NO_ERROR);
 }
 
 /**
