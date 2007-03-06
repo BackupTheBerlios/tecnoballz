@@ -5,11 +5,11 @@
  * @date 2007-03-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.cc,v 1.8 2007/03/05 17:36:26 gurumeditation Exp $
+ * $Id: controller_guardians.cc,v 1.9 2007/03/06 10:46:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
  */
 #include "../include/controller_guardians.h"
 #include "../include/handler_resources.h"
-#include "../include/level_data.h"
+#include "../include/handler_levels.h"
 
 /**
  * Create the guardians controller 
@@ -821,12 +821,12 @@ controller_guardians::level2gdpt (Uint32 area_num, Uint32 level_num)
     {
       level_num = 1;
     }
-  if (area_num > level_data::MAX_OF_AREAS)
+  if (area_num > handler_levels::MAX_OF_AREAS)
     {
-      area_num = level_data::MAX_OF_AREAS;
+      area_num = handler_levels::MAX_OF_AREAS;
     }
   Uint32 vloop = (level_num / 6) - 1 + (area_num - 1) * 2;
-  if (level_num > level_data::NUM_OF_LEVELS_PER_AREA)
+  if (level_num > handler_levels::NUM_OF_LEVELS_PER_AREA)
     {
       vloop++;
     }

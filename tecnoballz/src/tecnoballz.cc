@@ -5,11 +5,11 @@
  * @date 2007-02-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.15 2007/02/28 08:49:17 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.16 2007/03/06 10:46:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@
 #include "../include/supervisor_main_menu.h"
 #include "../include/bitmap_data.h"
 #include "../include/handler_audio.h"
-#include "../include/level_data.h"
+#include "../include/handler_levels.h"
 #include "../include/handler_resources.h"
 #include "../include/scoretable.h"
 #include "../include/supervisor_map_editor.h"
@@ -83,7 +83,7 @@ tecnoballz::first_init (configfile * pConf)
   sprites = new list_sprites ();
   sprites->init (400);
 
-  ptLev_data = new level_data ();
+  ptLev_data = new handler_levels ();
   current_player = handler_players::create_all_players (MAX_PLAYER);
 
   /* retrieve player names */
@@ -309,7 +309,7 @@ tecnoballz::release_all_objects (configfile * pConf)
   release_objects ();
   handler_players::release_all_players ();
   if (is_verbose)
-    printf ("==3 level_data \n");
+    printf ("==3 handler_levels \n");
   delete ptLev_data;
   if (is_verbose)
     printf ("==4 sprites \n");
@@ -533,7 +533,7 @@ Sint32 tecnoballz::random_counter = 0;
 Uint32 tecnoballz::frame_counter = 0;
 scoretable * tecnoballz::ptScoreTab = NULL;
 handler_resources * tecnoballz::resources = NULL;
-level_data * tecnoballz::ptLev_data = NULL;
+handler_levels * tecnoballz::ptLev_data = NULL;
 handler_memory * tecnoballz::memory = NULL;
 #ifndef SOUNDISOFF
 handler_audio * tecnoballz::audio = NULL;

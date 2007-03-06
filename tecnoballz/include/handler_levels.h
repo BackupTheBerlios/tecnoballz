@@ -1,15 +1,15 @@
 /** 
- * @file level_data.cc 
+ * @file handler_levels.cc 
  * @brief manage levels data 
  * @created 2004-04-06 
- * @date 2007-03-05
+ * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.1 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: level_data.h,v 1.7 2007/03/05 20:53:30 gurumeditation Exp $
+ * $Id: handler_levels.h,v 1.1 2007/03/06 10:46:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #ifndef __LEVEL_DATA__
 #define __LEVEL_DATA__
 
-class level_data;
+class handler_levels;
 
 #include "../include/tecnoballz.h"
 #include "../include/tinyxml.h"
@@ -58,7 +58,7 @@ typedef struct
   Uint32 moneys_frequency;
   /** List of the capsules */
   const Uint32 *malusListe;
-  Uint32 starting_speed;            // pointeur sur la premiere table de vitesse
+  Uint32 starting_speed;        // pointeur sur la premiere table de vitesse
   /** Delay time before the ball accelerates */
   Uint32 acceleration_delay;
   /** Delay time before the ball leaves paddle, at the level beginning */
@@ -90,16 +90,16 @@ typedef struct
 }
 guardians_level_desc;
 
-typedef struct 
+typedef struct
 {
   Uint32 id;
-  Uint32 type; 
+  Uint32 type;
 }
 level_desc;
 
 
 
-class level_data:public virtual tecnoballz
+class handler_levels:public virtual tecnoballz
 {
 
 public:
@@ -109,56 +109,67 @@ public:
   static const Uint32 MAX_OF_CASPULES = 64;
 
 
-typedef struct
-{
-  Uint32 id;
-  Uint32 codes[level_data::MAX_OF_CASPULES];
-} capsules_struct;
+  typedef struct
+  {
+    Uint32 id;
+    Uint32 codes[handler_levels::MAX_OF_CASPULES];
+  } capsules_struct;
 
 
 public:
-    level_data ();
-   ~level_data ();
+    handler_levels ();
+   ~handler_levels ();
   const bricks_level_desc *get_bricks_levels_params (Uint32, Uint32);
   const guardians_level_desc *get_guardians_levels_params (Uint32, Uint32);
 private:
-   typedef enum 
-     {
-       ROOT,
-       LEVEL_NODE,
-       BRICKS_LEVEL_NODE,
-       CAPSULES_NODE,
-       GUARDIANS_LEVEL_NODE
-     }
-     NODES_ENUM;
 
-   void check_levels ();
-   void check_xml (TiXmlNode* parent, Uint32 node);
-   void parse (TiXmlNode* parent, Uint32 node);
 
-   Uint32* get_capsules_list (Uint32 id);
-   guardians_level_desc* get_guardians_level (Uint32 id);
-   bricks_level_desc* get_bricks_level (Uint32 id); 
+  typedef enum
+  {
+    BRICKS_LEVEL,
+    GUARDIANS_LEVEL,
+    MAX_OF_LEVEL_TYPES
+  }
+  LEVEL_TYPES;
 
- private:
-     Uint32 time_multiplier;
-     
-     Uint32 levels_counter;
-     Uint32 bricks_levels_counter;
-     Uint32 guardians_levels_counter;
-     Uint32 capsules_lists_counter;
-     Uint32 capsules_counter;
-     
-     Sint32 level_index;
-     Sint32 bricks_level_index;
-     Sint32 guardians_level_index;
-     Sint32 appearance_index;
-     Sint32 capsule_list_index;
-     Sint32 capsule_index;
-     
-     std::string last_element;
+  typedef enum
+  {
+    ROOT,
+    LEVEL_NODE,
+    BRICKS_LEVEL_NODE,
+    CAPSULES_NODE,
+    GUARDIANS_LEVEL_NODE
+  }
+  NODES_ENUM;
+
+  void check_levels ();
+  void check_xml (TiXmlNode * parent, Uint32 node);
+  void parse (TiXmlNode * parent, Uint32 node);
+
+  Uint32 *get_capsules_list (Uint32 id);
+  guardians_level_desc *get_guardians_level (Uint32 id);
+  bricks_level_desc *get_bricks_level (Uint32 id);
 
 private:
+    Uint32 time_multiplier;
+
+  Uint32 levels_counter;
+  Uint32 bricks_levels_counter;
+  Uint32 guardians_levels_counter;
+  Uint32 capsules_lists_counter;
+  Uint32 capsules_counter;
+
+  Sint32 level_index;
+  Sint32 bricks_level_index;
+  Sint32 guardians_level_index;
+  Sint32 appearance_index;
+  Sint32 capsule_list_index;
+  Sint32 capsule_index;
+
+    std::string last_element;
+
+private:
+/*
   static const Uint32 zeCourseXX[];
   static const Uint32 zeCourse10[];
   static const Uint32 zeCourse11[];
@@ -188,14 +199,15 @@ private:
   static const guardians_level_desc atariTab36;
   static const guardians_level_desc atariTab40;
   static const bricks_level_desc *giga_amiga[];
+  */
 
 
-  TiXmlDocument *xml_levels;
-  
-  guardians_level_desc* guardians_levels;
-  bricks_level_desc* bricks_levels;
-  capsules_struct* caspsules_list;
-  level_desc* levels_list;
+    TiXmlDocument * xml_levels;
+
+  guardians_level_desc *guardians_levels;
+  bricks_level_desc *bricks_levels;
+  capsules_struct *caspsules_list;
+  level_desc *levels_list;
 
 
 };

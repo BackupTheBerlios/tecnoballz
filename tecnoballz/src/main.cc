@@ -2,14 +2,14 @@
  * @file main.cc 
  * @brief The main function is where the program starts execution 
  * @created 2002-08-21 
- * @date 2007-03-01
+ * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.48 $
+ * @version $Revision: 1.49 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.48 2007/03/01 21:14:20 gurumeditation Exp $
+ * $Id: main.cc,v 1.49 2007/03/06 10:46:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,7 +85,6 @@ main (Sint32 nbArg, char **ptArg)
 /*
  
  a faire
- ** bug tir raquette, un tir de la raquette du bas n'est pas anime comme les autres
  ** desactiver le tilt pour les balles controles
  - utiliser les tilemaps de 16x16 originales dans le definlement menu/gardiens pour eviter
    d'utiliser les tilemaps 32x32 (qui ont ete doubles avec GIMP) refaire donc un mapeditor
@@ -155,27 +154,27 @@ lispreader  =>
 *menu_tecno  => supervisor_supervisor_map_editoror 
 *scrolledit  => supervisor_main_menu
 
-*escapeMenu   => item_popup_menu 
-*audiomixer   => handler_audio 
-*clavierMac   => handler_keyboard
-*ecran_hard   => handler_display 
-              => offscreen_surface
-*RAM_killer   => handler_memory
-*ressources   => handler_resources 
-scoretable   => handler_score_table
+*escapeMenu  => item_popup_menu 
+*audiomixer  => handler_audio 
+*clavierMac  => handler_keyboard
+*ecran_hard  => handler_display 
+             => offscreen_surface
+*RAM_killer  => handler_memory
+*ressources  => handler_resources 
+*scoretable  => handler_score_table
 *joueurData  => handler_players
-level_data   => handler_levels 
- *print_text  => display_text_bitmap 
+*level_data  => handler_levels 
+*print_text  => display_text_bitmap 
 
-zeMiniMess   => item_small_messages 
+*zeMiniMess  => short_info_messages 
 *barreScore  => right_panel_score 
 *briqueCote  => controller_sides_bricks
 *ejectBalls  => controller_ejectors
 *fond_ecran  => tiles_background
 *head_anima  => head_animation 
 *lastScroll  => tilesmap_scrolling 
-* print_menu   => sprite_display_menu 
-* score_over   => sprite_display_scores
+*print_menu  => sprite_display_menu 
+*score_over  => sprite_display_scores
 
 
 */

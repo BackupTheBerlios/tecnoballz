@@ -1,15 +1,15 @@
 /** 
- * @file level_data.cc 
- * @brief manage levels data 
+ * @file handler_levels.cc 
+ * @brief Levels handler
  * @created 2004-04-06 
- * @date 2007-03-05
+ * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.1 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: level_data.cc,v 1.7 2007/03/05 20:53:30 gurumeditation Exp $
+ * $Id: handler_levels.cc,v 1.1 2007/03/06 10:46:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
  * MA  02110-1301, USA.
  */
 using namespace std;
-#include "../include/level_data.h"
+#include "../include/handler_levels.h"
 #include "../include/handler_resources.h"
 #include "../include/tinyxml.h"
 #include <string.h>
@@ -35,9 +35,9 @@ using namespace std;
 
 
 /**
- * Create a level data objet
+ * Create a level handler objet
  */
-level_data::level_data ()
+handler_levels::handler_levels ()
 {
   object_init ();
   time_multiplier = TIME_MULTIPLIER;
@@ -59,22 +59,21 @@ level_data::level_data ()
   xml_levels = new TiXmlDocument (fpath);
   if (!xml_levels->LoadFile ())
     {
-      cerr << "(!)level_data::level_data() " <<
+      cerr << "(!)handler_levels::handler_levels() " <<
         "failed to load file " << fpath << endl;
-      throw runtime_error ("(!)level_data::level_data()"
+      throw runtime_error ("(!)handler_levels::handler_levels()"
                            "Fail to load XML file!");
     }
+
+  /* count number of structures elements */
   check_xml (xml_levels, ROOT);
-
-
   if (is_verbose)
     {
-      cout << "level_data::level_data() " <<
+      cout << "handler_levels::handler_levels() " <<
         " levels_counter: " << levels_counter <<
         "; guardians_levels_counter: " << guardians_levels_counter <<
         "; capsules_lists_counter: " << capsules_lists_counter << endl;
     }
-
 
   /* allocate levels structures */
   try
@@ -86,110 +85,47 @@ level_data::level_data ()
   }
   catch (bad_alloc &)
   {
-    cerr << "(!)level_data::level_data() " <<
+    cerr << "(!)handler_levels::handler_levels() " <<
       "not enough memory to allocate levels structures!" << endl;
     throw;
   }
+  /* clear levels structure */
   for (Uint32 i = 0; i < levels_counter; i++)
     {
       levels_list[i].id = 0;
-      levels_list[i].type = 0;
+      levels_list[i].type = BRICKS_LEVEL;
     }
-
+  /* copy XML file data in levels structures */
   parse (xml_levels, ROOT);
-
   check_levels ();
-
-
-
-
 }
 
+/**
+ * Check is levels structure is valid
+ */
 void
-level_data::check_levels ()
+handler_levels::check_levels ()
 {
-  /*
   for (Uint32 i = 0; i < levels_counter; i++)
     {
-      printf ("%i) id: %i; type:%i\n", i, levels_list[i].id,
-              levels_list[i].type);
-      if (0 == levels_list[i].type)
+      if (BRICKS_LEVEL == levels_list[i].type)
         {
-          bricks_level_desc *level = get_bricks_level (levels_list[i].id);
-          const bricks_level_desc *l = giga_amiga[i];
-
-          if (l->ship_appearance_delay1 != level->ship_appearance_delay1)
-            printf ("!!!!!! %i ship_appearance_delay1 \n", i);
-          if (l->ship_appearance_delay2 != level->ship_appearance_delay2)
-            printf ("!!!!!! %i ship_appearance_delay2 \n", i);
-          if (l->ship_appearance_delay3 != level->ship_appearance_delay3)
-            printf ("!!!!!! %i ship_appearance_delay3 \n", i);
-          if (l->ship_appearance_delay4 != level->ship_appearance_delay4)
-            printf ("!!!!!! %i ship_appearance_delay4 \n", i);
-
-          if (l->reappearance != level->reappearance)
-            printf ("!!!!!! %i reappearance \n", i);
-          if (l->ships_strength != level->ships_strength)
-            printf ("!!!!!! %i  ships_strength \n", i);
-          if (l->penalties_frequency != level->penalties_frequency)
-            printf ("!!!!!! %i penalties_frequency \n", i);
-          if (l->moneys_frequency != level->moneys_frequency)
-            printf ("!!!!!! %i moneys_frequency \n", i);
-          if (l->starting_speed != level->starting_speed)
-            printf ("!!!!!! %i starting_speed \n", i);
-          if (l->acceleration_delay != level->acceleration_delay)
-            printf ("!!!!!! %i acceleration_delay \n", i);
-          if (l->ball_release_time != level->ball_release_time)
-            printf ("!!!!!! %i ball_release_time \n", i);
-          if (l->glue_time != level->glue_time)
-            printf ("!!!!!! %i glue_time  \n", i);
-          if (l->tilt_delay != level->tilt_delay)
-            printf ("!!!!!! %i tilt_delay \n", i);
-
-          for (Uint32 j = 0; j < MAX_OF_CASPULES; j++)
-            {
-              if (l->malusListe[j] != level->malusListe[j])
-                {
-                  printf ("!!!!!! %i  malusListe[%i] \n", i, j);
-                }
-            }
+          //bricks_level_desc *level =
+          get_bricks_level (levels_list[i].id);
         }
-      else if (1 == levels_list[i].type)
+      else if (GUARDIANS_LEVEL == levels_list[i].type)
         {
-          guardians_level_desc *level =
-            get_guardians_level (levels_list[i].id);
-          const guardians_level_desc *l =
-            (const guardians_level_desc *) giga_amiga[i];
-          if (l->starting_speed != level->starting_speed)
-            printf ("!!!!!! %i starting_speed \n", i);
-          if (l->ball_release_time != level->ball_release_time)
-            printf ("!!!!!! %i ball_release_time \n", i);
-          if (l->tilt_delay != level->tilt_delay)
-            printf ("!!!!!! %i tilt_delay \n", i);
-
-          if (l->scroll_delay != level->scroll_delay)
-            printf ("!!!!!! scroll_delay %i \n", i);
-          if (l->scroll_id != level->scroll_id)
-            printf ("!!!!!! scroll_id %i \n", i);
-          if (l->capsules_frequency != level->capsules_frequency)
-            printf ("!!!!!! capsules_frequency %i \n", i);
-
-          for (Uint32 j = 0; j < MAX_OF_CASPULES; j++)
-            {
-              if (l->capsules_list[j] != level->capsules_list[j])
-                {
-                  printf ("!!!!!! %i  capsules_list[%i] \n", i, j);
-                }
-            }
-
-
+          //guardians_level_desc *level =
+          get_guardians_level (levels_list[i].id);
         }
       else
         {
-
+          cerr << "(!)handler_levels::check_levels() '" <<
+            levels_list[i].type << "' is a invalid level type!" << endl;
+          throw runtime_error ("(!)handler_levels::check_levels()"
+                               "bad level type!");
         }
     }
-*/
 }
 
 /**
@@ -198,7 +134,7 @@ level_data::check_levels ()
  * @param node node indentifier of the seconde level
  */
 void
-level_data::check_xml (TiXmlNode * parent, Uint32 node)
+handler_levels::check_xml (TiXmlNode * parent, Uint32 node)
 {
   if (NULL == parent)
     {
@@ -234,11 +170,11 @@ level_data::check_xml (TiXmlNode * parent, Uint32 node)
               {
                 if (capsules_counter != MAX_OF_CASPULES)
                   {
-                    cerr << "(!)level_data::check_xml() " <<
+                    cerr << "(!)handler_levels::check_xml() " <<
                       MAX_OF_CASPULES << " <id> childnodes "
                       << " of <capsules> chilnodes expected."
                       << " But " << capsules_counter << " found!" << endl;
-                    throw runtime_error ("(!)level_data::check_xml()"
+                    throw runtime_error ("(!)handler_levels::check_xml()"
                                          "Bad number of <id> childnodes!");
                   }
               }
@@ -268,7 +204,7 @@ level_data::check_xml (TiXmlNode * parent, Uint32 node)
  * @param node node indentifier of the seconde level
  */
 void
-level_data::parse (TiXmlNode * parent, Uint32 node)
+handler_levels::parse (TiXmlNode * parent, Uint32 node)
 {
   if (NULL == parent)
     {
@@ -297,29 +233,34 @@ level_data::parse (TiXmlNode * parent, Uint32 node)
             while (NULL != attribute)
               {
                 name = attribute->Name ();
+                if (attribute->QueryIntValue (&value) != TIXML_SUCCESS)
+                  {
+                    cerr << "(!)handler_levels::parse() '" << name <<
+                      "' attribute is not a integer!" << endl;
+                    throw runtime_error ("(!)handler_levels::parse()"
+                                         "an attribute is not a integer!");
+                  }
+                if (value < 0)
+                  {
+                    cerr << "(!)handler_levels::parse() '" << name <<
+                      "' attribute is a negative integer!" << endl;
+                    throw runtime_error ("(!)handler_levels::parse()"
+                                         "an attribute is negative integer!");
+                  }
                 if ("id" == name)
                   {
-                    if (attribute->QueryIntValue (&value) != TIXML_SUCCESS)
-                      {
-                        cerr << "level_data::parse() QueryIntValue failed!" <<
-                          std::endl;
-                      }
-                    else
-                      {
-                        levels_list[level_index].id = value;
-                      }
+                    levels_list[level_index].id = value;
                   }
                 if ("type" == name)
                   {
-                    if (attribute->QueryIntValue (&value) != TIXML_SUCCESS)
+                    if (value >= MAX_OF_LEVEL_TYPES)
                       {
-                        cerr << "level_data::parse() QueryIntValue failed!" <<
-                          std::endl;
+                        cerr << "(!)handler_levels::parse() '" << value <<
+                          "' is a invalid level type!" << endl;
+                        throw runtime_error ("(!)handler_levels::parse()"
+                                             "bad level type attribute!");
                       }
-                    else
-                      {
-                        levels_list[level_index].type = value;
-                      }
+                    levels_list[level_index].type = value;
                   }
                 attribute = attribute->Next ();
               }
@@ -347,11 +288,27 @@ level_data::parse (TiXmlNode * parent, Uint32 node)
           }
       }
       break;
+
+
     case TiXmlNode::TEXT:
       text = parent->ToText ();
       value_str = text->Value ();
-      input_stream << value_str;
-      input_stream >> value;
+
+      if (!sscanf (value_str.c_str (), "%d", &value))
+        {
+          cerr << "(!)handler_levels::parse() '" << last_element <<
+            "' element is not a integer!" << endl;
+          throw runtime_error ("(!)handler_levels::parse()"
+                               "an element is not a integer!");
+        }
+      if (value < 0)
+        {
+          cerr << "(!)handler_levels::parse() '" << last_element <<
+            "' element is a negative integer!" << endl;
+          throw runtime_error ("(!)handler_levels::parse()"
+                               "an element is negative integer!");
+        }
+
       switch (node)
         {
         case LEVEL_NODE:
@@ -395,7 +352,7 @@ level_data::parse (TiXmlNode * parent, Uint32 node)
                     value * time_multiplier;
                   break;
                 default:
-                  cerr << "(!) level_data::parse() " <<
+                  cerr << "(!) handler_levels::parse() " <<
                     "ranking values must be between 0 and 3 inclusive!" <<
                     endl;
                   break;
@@ -509,7 +466,7 @@ level_data::parse (TiXmlNode * parent, Uint32 node)
  * @return a pointer to guardians level 
  */
 guardians_level_desc *
-level_data::get_guardians_level (Uint32 id)
+handler_levels::get_guardians_level (Uint32 id)
 {
   for (Uint32 i = 0; i < guardians_levels_counter; i++)
     {
@@ -519,9 +476,9 @@ level_data::get_guardians_level (Uint32 id)
           return level;
         }
     }
-  cerr << "(!)level_data::get_guardians_level() " <<
+  cerr << "(!)handler_levels::get_guardians_level() " <<
     "id " << id << " not found!" << endl;
-  throw runtime_error ("(!)level_data::get_guardians_level()"
+  throw runtime_error ("(!)handler_levels::get_guardians_level()"
                        "ID not found!");
 }
 
@@ -532,7 +489,7 @@ level_data::get_guardians_level (Uint32 id)
  * @return a pointer to a bricks level 
  */
 bricks_level_desc *
-level_data::get_bricks_level (Uint32 id)
+handler_levels::get_bricks_level (Uint32 id)
 {
   for (Uint32 i = 0; i < bricks_levels_counter; i++)
     {
@@ -542,9 +499,10 @@ level_data::get_bricks_level (Uint32 id)
           return level;
         }
     }
-  cerr << "(!)level_data::get_bricks_level() " <<
+  cerr << "(!)handler_levels::get_bricks_level() " <<
     "id " << id << " not found!" << endl;
-  throw runtime_error ("(!)level_data::get_bricks_level()" "ID not found!");
+  throw runtime_error ("(!)handler_levels::get_bricks_level()"
+                       "ID not found!");
 }
 
 /**
@@ -554,7 +512,7 @@ level_data::get_bricks_level (Uint32 id)
  * @return a pointer to the list of capsules codes
  */
 Uint32 *
-level_data::get_capsules_list (Uint32 id)
+handler_levels::get_capsules_list (Uint32 id)
 {
   for (Uint32 i = 0; i < capsules_lists_counter; i++)
     {
@@ -564,16 +522,17 @@ level_data::get_capsules_list (Uint32 id)
           return &capsule->codes[0];
         }
     }
-  cerr << "(!)level_data::get_capsules_list() " <<
+  cerr << "(!)handler_levels::get_capsules_list() " <<
     "id " << id << " not found!" << endl;
-  throw runtime_error ("(!)level_data::get_capsules_list()" "ID not found!");
+  throw runtime_error ("(!)handler_levels::get_capsules_list()"
+                       "ID not found!");
 }
 
 
 /**
- * Release the level data object
+ * Release the level handler object
  */
-level_data::~level_data ()
+handler_levels::~handler_levels ()
 {
   if (NULL != levels_list)
     {
@@ -604,23 +563,23 @@ level_data::~level_data ()
  * @return a pointer to a guardians level
  */
 const bricks_level_desc *
-level_data::get_bricks_levels_params (Uint32 area_num, Uint32 level_num)
+handler_levels::get_bricks_levels_params (Uint32 area_num, Uint32 level_num)
 {
   if (area_num < 1 || area_num > 5)
     {
-      cerr << "(!)level_data::get_bricks_levels_params() " << "area_num:" <<
-        area_num << "out of range!" << endl;
+      cerr << "(!)handler_levels::get_bricks_levels_params() " << "area_num:"
+        << area_num << "out of range!" << endl;
       area_num = 1;
     }
   if (level_num < 1 || level_num > NUM_OF_LEVELS_PER_AREA)
     {
-      cerr << "(!)level_data::get_bricks_levels_params() " << "level:" <<
+      cerr << "(!)handler_levels::get_bricks_levels_params() " << "level:" <<
         level_num << "out of range!" << endl;
       level_num = 1;
     }
   if (level_num == 6 || level_num == NUM_OF_LEVELS_PER_AREA)
     {
-      cerr << "(!)level_data::get_bricks_levels_params() " << "level:" <<
+      cerr << "(!)handler_levels::get_bricks_levels_params() " << "level:" <<
         level_num << " is a guardians level!" << endl;
       level_num--;
     }
@@ -637,26 +596,27 @@ level_data::get_bricks_levels_params (Uint32 area_num, Uint32 level_num)
  * @return a pointer to a guardians level
  */
 const guardians_level_desc *
-level_data::get_guardians_levels_params (Uint32 area_num, Uint32 level_num)
+handler_levels::get_guardians_levels_params (Uint32 area_num,
+                                             Uint32 level_num)
 {
   if (area_num < 1 || area_num > 5)
     {
-      cerr << "(!)level_data::get_guardians_levels_params() " << "area_num:"
-        << area_num << "out of range!" << endl;
+      cerr << "(!)handler_levels::get_guardians_levels_params() " <<
+        "area_num:" << area_num << "out of range!" << endl;
       area_num = 1;
     }
   if (level_num < 1 || (area_num < 5 && level_num > NUM_OF_LEVELS_PER_AREA) ||
       (area_num == 5 && level_num > (NUM_OF_LEVELS_PER_AREA + 1)))
     {
-      cerr << "(!)level_data::get_guardians_levels_params() " << "level:" <<
-        level_num << "out of range!" << endl;
+      cerr << "(!)handler_levels::get_guardians_levels_params() " << "level:"
+        << level_num << "out of range!" << endl;
       level_num = 6;
     }
   if (level_num != 6 && level_num != NUM_OF_LEVELS_PER_AREA
       && level_num != (NUM_OF_LEVELS_PER_AREA + 1))
     {
-      cerr << "(!)level_data::get_guardians_levels_params() " << "level:" <<
-        level_num << " is a bricks level!" << endl;
+      cerr << "(!)handler_levels::get_guardians_levels_params() " << "level:"
+        << level_num << " is a bricks level!" << endl;
       level_num = 6;
     }
   Uint32 index = (area_num - 1) * NUM_OF_LEVELS_PER_AREA + (level_num - 1);
@@ -671,7 +631,7 @@ level_data::get_guardians_levels_params (Uint32 area_num, Uint32 level_num)
 // :-) :-) :-) :-) :-) :-) :-) :-) :-) :-)   (-: (-: (-: (-: (-: (-: (-: (-: (-:   
 // Table des gardiens
 const Uint32
-  level_data::zeCourseXX[] = {
+  handler_levels::zeCourseXX[] = {
   4, 22, 20, 24, 20, 20, 4, 20, // 4=GAD_PROTEC 22=GAD_POWER1 20=GAD_BALLE3
   20, 4, 20, 24, 20, 4, 22, 4,  // 24=GAD_POWER2 16=GAD_LIFE_P
   20, 22, 4, 16, 4, 24, 22, 20,
@@ -685,7 +645,7 @@ const Uint32
 // Area 1 : level 1
 const
   Uint32
-  level_data::zeCourse10[] =
+  handler_levels::zeCourse10[] =
   { 40, 06, 18, 12, 06, 06, 18, 18, 06, 18, 20, 52, 42, 18, 20, 40,
   18, 40, 50, 40, 42, 44, 54, 06, 22, 18, 06, 06, 52, 40, 18, 06,
   18, 06, 18, 12, 06, 42, 18, 18, 06, 44, 20, 18, 18, 18, 20, 18,
@@ -695,7 +655,7 @@ const
 // Area 1 : levels 2 to 5
 const
   Uint32
-  level_data::zeCourse11[] =
+  handler_levels::zeCourse11[] =
   { 40, 10, 40, 12, 18, 10, 40, 12, 06, 10, 02, 18, 18, 42, 02, 12,
   18, 02, 44, 18, 18, 02, 42, 10, 10, 18, 12, 02, 18, 18, 52, 12,
   40, 10, 18, 12, 40, 10, 40, 12, 06, 46, 02, 18, 18, 42, 02, 12,
@@ -705,7 +665,7 @@ const
 // Area 1 : levels 7 to 11 
 const
   Uint32
-  level_data::zeCourse12[] =
+  handler_levels::zeCourse12[] =
   { 40, 26, 42, 18, 02, 26, 18, 18, 06, 52, 02, 42, 18, 16, 02, 18,
   40, 02, 18, 14, 10, 02, 20, 10, 10, 18, 10, 02, 26, 18, 10, 10,
   18, 26, 10, 18, 02, 26, 54, 44, 06, 46, 02, 10, 44, 16, 02, 44,
@@ -715,7 +675,7 @@ const
 // Area 2 
 const
   Uint32
-  level_data::zeCourse20[] =
+  handler_levels::zeCourse20[] =
   { 42, 26, 10, 10, 10, 42, 18, 44, 10, 14, 10, 10, 10, 10, 10, 10,
   42, 10, 26, 10, 10, 16, 10, 44, 10, 18, 10, 42, 10, 10, 18, 10,
   42, 26, 10, 40, 10, 10, 18, 10, 46, 14, 10, 10, 10, 10, 10, 10,
@@ -725,7 +685,7 @@ const
 // Area 3
 const
   Uint32
-  level_data::zeCourse30[] =
+  handler_levels::zeCourse30[] =
   { 10, 26, 10, 50, 50, 10, 18, 18, 14, 14, 10, 10, 40, 40, 10, 18,
   10, 10, 26, 10, 42, 16, 42, 14, 44, 18, 10, 10, 40, 40, 18, 14,
   10, 26, 10, 44, 46, 10, 54, 18, 14, 14, 40, 40, 10, 10, 10, 18,
@@ -735,7 +695,7 @@ const
 // Aera 4
 const
   Uint32
-  level_data::zeCourse40[] =
+  handler_levels::zeCourse40[] =
   { 10, 26, 26, 20, 42, 44, 20, 10, 44, 14, 26, 10, 40, 40, 10, 10,
   10, 10, 26, 10, 52, 16, 10, 10, 10, 20, 26, 10, 40, 40, 20, 10,
   10, 26, 26, 20, 52, 50, 20, 54, 44, 14, 26, 10, 40, 40, 46, 10,
@@ -745,7 +705,7 @@ const
 // Area 5  : levels 1 to 5 
 const
   Uint32
-  level_data::zeCourse50[] =
+  handler_levels::zeCourse50[] =
   { 42, 26, 26, 10, 10, 10, 20, 44, 10, 14, 26, 10, 10, 10, 20, 10,
   42, 10, 26, 10, 50, 14, 20, 44, 46, 18, 26, 10, 10, 10, 20, 14,
   10, 26, 26, 10, 50, 10, 20, 54, 10, 14, 26, 10, 52, 10, 20, 10,
@@ -755,7 +715,7 @@ const
 // Area 5 : levels 7 to 11
 const
   Uint32
-  level_data::zeCourse55[] =
+  handler_levels::zeCourse55[] =
   { 14, 26, 26, 10, 16, 10, 20, 14, 10, 14, 26, 42, 52, 44, 20, 10,
   14, 10, 26, 44, 18, 14, 20, 10, 10, 18, 26, 42, 52, 10, 20, 14,
   14, 26, 26, 10, 16, 10, 20, 54, 46, 14, 26, 42, 42, 44, 20, 10,
@@ -765,7 +725,7 @@ const
 // AREA 1 : level 1
 const
   bricks_level_desc
-  level_data::amigaTab10 = { 0, // 0 = bricks level
+  handler_levels::amigaTab10 = { 0, // 0 = bricks level
   0,
   1 * 50,                       //time before appearance of the Atom 1
   45 * 50,                      //time before appearance of the Atom 2
@@ -786,7 +746,7 @@ const
 // AREA 1 : level 2 to 5
 const
   bricks_level_desc
-  level_data::amigaTab11 = { 0,
+  handler_levels::amigaTab11 = { 0,
   1,
   1 * 50,
   45 * 50,
@@ -807,7 +767,7 @@ const
 // AREA 1 : level 6 to 11
 const
   bricks_level_desc
-  level_data::amigaTab12 = { 0,
+  handler_levels::amigaTab12 = { 0,
   2,
   1 * 50,
   35 * 50,
@@ -828,7 +788,7 @@ const
 // AREA 2
 const
   bricks_level_desc
-  level_data::amigaTab20 = { 0,
+  handler_levels::amigaTab20 = { 0,
   3,
   1 * 50,
   40 * 50,
@@ -849,7 +809,7 @@ const
 // AREA 3
 const
   bricks_level_desc
-  level_data::amigaTab30 = { 0,
+  handler_levels::amigaTab30 = { 0,
   4,
   1 * 50,
   30 * 50,
@@ -870,7 +830,7 @@ const
 // AREA 4
 const
   bricks_level_desc
-  level_data::amigaTab40 = { 0,
+  handler_levels::amigaTab40 = { 0,
   5,
   1 * 50,
   21 * 50,
@@ -891,7 +851,7 @@ const
 // AREA 5 : level 1 to 5
 const
   bricks_level_desc
-  level_data::amigaTab50 = { 0,
+  handler_levels::amigaTab50 = { 0,
   6,
   1 * 50,
   15 * 50,
@@ -912,7 +872,7 @@ const
 // AREA 5 : level 7 to 11
 const
   bricks_level_desc
-  level_data::amigaTab55 = { 0,
+  handler_levels::amigaTab55 = { 0,
   7,
   1 * 50,
   4 * 50,
@@ -936,7 +896,7 @@ const
 // area 1 : level 6
 const
   guardians_level_desc
-  level_data::atariTab00 = { 1, // 1 = guards levels
+  handler_levels::atariTab00 = { 1, // 1 = guards levels
   0,
   3,                            // speed ball
   50 * 20,                      // time before ball start
@@ -950,7 +910,7 @@ const
 // Area  1 : Level 12
 const
   guardians_level_desc
-  level_data::atariTab04 = { 1,
+  handler_levels::atariTab04 = { 1,
   1,
   3,
   50 * 15,
@@ -964,7 +924,7 @@ const
 // Area 2 : Level 6
 const
   guardians_level_desc
-  level_data::atariTab08 = { 1,
+  handler_levels::atariTab08 = { 1,
   2,
   4,
   50 * 10,
@@ -978,7 +938,7 @@ const
 // Area 2 : Level 12
 const
   guardians_level_desc
-  level_data::atariTab12 = { 1,
+  handler_levels::atariTab12 = { 1,
   3,
   4,
   50 * 10,
@@ -992,7 +952,7 @@ const
 // Area 3 : Level 6
 const
   guardians_level_desc
-  level_data::atariTab16 = { 1,
+  handler_levels::atariTab16 = { 1,
   4,
   4,
   50 * 10,
@@ -1006,7 +966,7 @@ const
 // Area 3 : Level 12
 const
   guardians_level_desc
-  level_data::atariTab20 = { 1,
+  handler_levels::atariTab20 = { 1,
   5,
   4,
   50 * 10,
@@ -1020,7 +980,7 @@ const
 // Area 4 : Level 6
 const
   guardians_level_desc
-  level_data::atariTab24 = { 1,
+  handler_levels::atariTab24 = { 1,
   6,
   4,
   50 * 10,
@@ -1034,7 +994,7 @@ const
 // Area 4 : Level 12
 const
   guardians_level_desc
-  level_data::atariTab28 = { 1,
+  handler_levels::atariTab28 = { 1,
   7,
   4,
   50 * 10,
@@ -1048,7 +1008,7 @@ const
 // Area 5 : Level 6
 const
   guardians_level_desc
-  level_data::atariTab32 = { 1,
+  handler_levels::atariTab32 = { 1,
   8,
   4,
   50 * 10,
@@ -1062,7 +1022,7 @@ const
 // Area 5 : Level 12
 const
   guardians_level_desc
-  level_data::atariTab36 = { 1,
+  handler_levels::atariTab36 = { 1,
   9,
   4,
   50 * 10,
@@ -1076,7 +1036,7 @@ const
 // Area 5 : Level 13
 const
   guardians_level_desc
-  level_data::atariTab40 = { 1,
+  handler_levels::atariTab40 = { 1,
   10,
   4,
   50 * 10,
@@ -1090,7 +1050,7 @@ const
 
 // Une table par chacun des 61 niveaux
 const bricks_level_desc *
-  level_data::giga_amiga[] = {
+  handler_levels::giga_amiga[] = {
   &amigaTab10,                  // area 1 ; level 1
   &amigaTab11,                  // area 1 ; level 2
   &amigaTab11,                  // area 1 ; level 3

@@ -44,7 +44,7 @@ SOURCES_MAIN = \
   handler_popup_menu.cc \
   handler_resources.cc \
   head_animation.cc \
-  level_data.cc \
+  handler_levels.cc \
   lispreader.cc \
   list_sprites.cc \
   main.cc \

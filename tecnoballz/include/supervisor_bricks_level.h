@@ -4,11 +4,11 @@
  * @date 2007-03-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.21 2007/03/05 17:36:26 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.22 2007/03/06 10:46:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ class supervisor_bricks_level;
 #include "../include/controller_indicators.h"
 #include "../include/controller_game_over.h"
 #include "../include/short_info_messages.h"
-#include "../include/level_data.h"
+#include "../include/handler_levels.h"
 #include "../include/controller_gems.h"
 #include "../include/controller_viewfinders.h"
 #include "../include/handler_popup_menu.h"

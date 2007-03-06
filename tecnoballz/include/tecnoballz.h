@@ -2,14 +2,14 @@
  * @file tecnoballz.h
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-03-01
+ * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.17 2007/03/05 20:53:30 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.18 2007/03/06 10:46:11 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-03-05)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-03-06)"
 /** To define only under development  */
 #define UNDER_DEVELOPMENT
 /** Force bytes copy (SPARC unaligned memory access) */
@@ -66,7 +66,7 @@ class tecnoballz;
 class configfile;
 class scoretable;
 class handler_resources;
-class level_data;
+class handler_levels;
 class handler_memory;
 class handler_display;
 class handler_keyboard;
@@ -168,7 +168,7 @@ protected:
   static scoretable *ptScoreTab;
   /** Handler of the files resources */
   static handler_resources *resources;
-  static level_data *ptLev_data;
+  static handler_levels *ptLev_data;
   static handler_memory *memory;
 #ifndef SOUNDISOFF
   static handler_audio *audio;
