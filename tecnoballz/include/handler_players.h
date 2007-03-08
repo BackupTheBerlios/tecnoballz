@@ -4,11 +4,11 @@
  * @date 2007-02-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.h,v 1.12 2007/02/28 21:08:09 gurumeditation Exp $
+ * $Id: handler_players.h,v 1.13 2007/03/08 17:41:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ class handler_players:public virtual tecnoballz
   friend class supervisor_guards_level;
   friend class supervisor_bricks_level;
   friend class controller_indicators;
-  friend class scoretable;
+  friend class handler_high_score;
 
 public:
   /** List of all players object */

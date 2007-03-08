@@ -1,14 +1,14 @@
 /** 
  * @file sprite_display_menu.cc 
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-03-06
+ * @date 2007-03-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.6 2007/03/06 17:42:43 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.7 2007/03/08 17:41:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #include "../include/handler_resources.h"
 #include "../include/handler_keyboard.h"
 #include "../include/handler_players.h"
-#include "../include/scoretable.h"
+#include "../include/handler_high_score.h"
 #include "../include/supervisor_main_menu.h"
 
 /**
@@ -709,11 +709,11 @@ sprite_display_menu::clear_stop ()
 void
 sprite_display_menu::copyScores ()
 {
-  score_list *score = ptScoreTab->getScrList ();
+  score_list *score = high_score->getScrList ();
   if (!score)
     return;
   char *ptext = menuTexte5 + NUM_OF_COLUMNS * 6;
-  for (Uint32 i = 0; i < scoretable::NUMBSCORES; i++)
+  for (Uint32 i = 0; i < handler_high_score::MAX_OF_HIGH_SCORES; i++)
     {
       char *pName = score[i].playerName;
 

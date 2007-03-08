@@ -4,11 +4,11 @@
  * @date 2007-02-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.10 2007/02/28 21:08:09 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.11 2007/03/08 17:41:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
  */
 #include "../include/right_panel_score.h"
 #include "../include/handler_resources.h"
-#include "../include/scoretable.h"
+#include "../include/handler_high_score.h"
 
 right_panel_score * right_panel_score::panel_score_singleton = NULL;
 
@@ -104,9 +104,9 @@ right_panel_score::draw_background ()
   tamponAff2 (POSX_NOMJO * resolution, POSY_NOMJO * resolution,
               current_player->player_name, 6);
   tamponAff1 (POSX_BESTS * resolution, POSY_BESTS * resolution,
-              ptScoreTab->best_score (), 100000);
+              high_score->best_score (), 100000);
   tamponAff2 (POSX_BESTN * resolution, POSY_BESTN * resolution,
-              ptScoreTab->bestPlayer (), 6);
+              high_score->bestPlayer (), 6);
 
   draw_gigablizt_gauge ();
   delete bmp;

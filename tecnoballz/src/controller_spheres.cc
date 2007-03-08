@@ -24,7 +24,7 @@
 #include "../include/controller_spheres.h"
 #include "../include/handler_audio.h"
 #include "../include/handler_resources.h"
-#include "../include/scoretable.h"
+#include "../include/handler_high_score.h"
 #include "../include/handler_resources.h"
 
 

@@ -2,14 +2,14 @@
  * @file tecnoballz.h
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-03-06
+ * @date 2007-03-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.20 2007/03/06 17:42:43 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.21 2007/03/08 17:41:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-03-06)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-03-08)"
 /** To define only under development  */
 #define UNDER_DEVELOPMENT
 /** Force bytes copy (SPARC unaligned memory access) */
@@ -64,7 +64,7 @@
 
 class tecnoballz;
 class configfile;
-class scoretable;
+class handler_high_score;
 class handler_resources;
 class handler_levels;
 class handler_memory;
@@ -112,7 +112,7 @@ public:
 
 public:
   /** 4 levels of difficulty */
-  static const Uint32 NDIFFICULT = 4;
+  static const Uint32 MAX_OF_DIFFICULTY_LEVELS = 4;
   static const Sint32 MAX_PLAYER = 6;
 
 public:
@@ -157,7 +157,7 @@ protected:
   static Sint32 number_of_players;
   static const char nomprefix[];
 
-  static scoretable *ptScoreTab;
+  static handler_high_score *high_score;
   /** Handler of the files resources */
   static handler_resources *resources;
   static handler_levels *ptLev_data;
@@ -172,14 +172,9 @@ protected:
 
   static Sint16 *table_cosL;
   static Sint16 *table_sinL;
-  static supervisor_bricks_level *bricks_level;
-  static supervisor_shop *shop;
-  static supervisor_guards_level *guards_level;
-  static supervisor_main_menu *main_menu;
-  static supervisor_map_editor *map_editor;
-  /** A bitmap containing the current images of sprites */
-  static bitmap_data *sprites_bitmap;
 
+/** A bitmap containing the current images of sprites */
+  static bitmap_data *sprites_bitmap;
   static offscreen_surface *game_screen;
   static offscreen_surface *background_screen;
   static configfile *config_file;
@@ -187,10 +182,8 @@ protected:
 public:
   static Sint32 first_init (configfile * pConf);
   static void game_begin ();
-  static void release_objects ();
   static void release_all_objects (configfile * pConf);
 
-  static void ecritLog (char *f_nom, char *chain);
   static void integer_to_ascii (Sint32 value, Uint32 padding, char *str); 
   static void intToASCII (Sint32 value, char *strng, Uint32 reste);
 
@@ -202,8 +195,8 @@ public:
   void error_init (Sint32 error);
   Sint32 get_number ();
   Sint32 chaine_cmp (char *srcPT, char *desPT, Sint32 taille);
-  Sint32 littleWord (char *memPT);
-  void bigendianw (Uint32 *, Uint32 *);
-  void bigendianr (Uint32 *, Uint32 *);
+  //Sint32 littleWord (char *memPT);
+  void int_to_big_endian (Uint32 *, Uint32 *);
+  void big_endian_to_int (Uint32 *, Uint32 *);
 };
 #endif

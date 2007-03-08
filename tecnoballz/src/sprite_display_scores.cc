@@ -2,14 +2,14 @@
  * @file sprite_display_scores.cc 
  * @brief Sprite wich display text of the score table 
  * @created 2003-04-30 
- * @date 2007-02-21
+ * @date 2007-03-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_scores.cc,v 1.4 2007/02/21 21:07:12 gurumeditation Exp $
+ * $Id: sprite_display_scores.cc,v 1.5 2007/03/08 17:41:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 #include "../include/sprite_display_menu.h"
 #include "../include/handler_resources.h"
 #include "../include/handler_players.h"
-#include "../include/scoretable.h"
+#include "../include/handler_high_score.h"
 
 /**
  * Create the sprite displaying scores
@@ -184,9 +184,9 @@ sprite_display_scores::displayTxt ()
 void
 sprite_display_scores::copyToText ()
 {
-  score_list *score = ptScoreTab->getScrList ();
+  score_list *score = high_score->getScrList ();
   char *ptext = scorestext + TEXT_LARGE * 2;
-  for (Uint32 i = 0; i < scoretable::NUMBSCORES; i++)
+  for (Uint32 i = 0; i < handler_high_score::MAX_OF_HIGH_SCORES; i++)
     {
       char *pName = score[i].playerName;
       for (Uint32 j = 0; j < 6; j++)

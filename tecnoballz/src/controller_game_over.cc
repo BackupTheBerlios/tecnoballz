@@ -5,11 +5,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_game_over.cc,v 1.5 2007/02/18 21:07:00 gurumeditation Exp $
+ * $Id: controller_game_over.cc,v 1.6 2007/03/08 17:41:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #include "../include/controller_game_over.h"
 #include "../include/handler_audio.h"
 #include "../include/handler_resources.h"
-#include "../include/scoretable.h"
+#include "../include/handler_high_score.h"
 
 /**
  * Create the Game Over controller
@@ -104,7 +104,7 @@ controller_game_over::enable_game_over (bool is_victory)
   move_phase = 1;
   go_zetempo = 50 * 10;
 #ifndef SOUNDISOFF
-  Sint32 iscla = ptScoreTab->test_score ();
+  Sint32 iscla = high_score->test_score ();
   if (is_victory)
     {
       audio->play_music (MUSICCONGR);
@@ -121,7 +121,7 @@ controller_game_over::enable_game_over (bool is_victory)
         }
     }
 #else
-  ptScoreTab->test_score ();
+  high_score->test_score ();
 #endif
   ptScorOver->copyToText ();
 }

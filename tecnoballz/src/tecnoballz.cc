@@ -2,14 +2,14 @@
  * @file tecnoballz.cc 
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-02-23
+ * @date 2007-03-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.18 2007/03/06 17:42:43 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.19 2007/03/08 17:41:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@
 #include "../include/handler_audio.h"
 #include "../include/handler_levels.h"
 #include "../include/handler_resources.h"
-#include "../include/scoretable.h"
+#include "../include/handler_high_score.h"
 #include "../include/supervisor_map_editor.h"
 
 
@@ -65,10 +65,8 @@ tecnoballz::first_init (configfile * pConf)
 
   resources = new handler_resources ();
 
-  ptScoreTab = new scoretable ();
-  num_erreur = ptScoreTab->first_init ();
-  if (num_erreur)
-    return num_erreur;
+  high_score = handler_high_score::get_instance ();
+  //high_score->first_init ();
 
   resources->load_sinus ();
 
@@ -161,64 +159,6 @@ tecnoballz::game_begin ()
  }
 
 /**
- * Release the main objects
- */
-void
-tecnoballz::release_objects ()
-{
-  if (NULL != bricks_level)
-    {
-      delete bricks_level;
-      bricks_level = NULL;
-      if (is_verbose)
-        {
-          std::cout << "tecnoballz::release_objects() " <<
-            "'supervisor_bricks_level' released" << std::endl;
-        }
-    }
-  if (NULL != shop)
-    {
-      delete shop;
-      shop = NULL;
-      if (is_verbose)
-        {
-          std::cout << "tecnoballz::release_objects() " <<
-            "'supervisor_shop' released" << std::endl;
-        }
-    }
-  if (NULL != guards_level)
-    {
-      delete guards_level;
-      guards_level = NULL;
-      if (is_verbose)
-        {
-          std::cout << "tecnoballz::release_objects() " <<
-            "'supervisor_guards_level' released" << std::endl;
-        }
-    }
-  if (NULL != main_menu)
-    {
-      delete main_menu;
-      main_menu = NULL;
-      if (is_verbose)
-        {
-          std::cout << "tecnoballz::release_objects() " <<
-            "'supervisor_main_menu' released" << std::endl;
-        }
-    }
-  if (NULL != map_editor)
-    {
-      delete map_editor;
-      map_editor = NULL;
-      if (is_verbose)
-        {
-          std::cout << "tecnoballz::release_objects() " <<
-            "'supervisor_map_editor' released" << std::endl;
-        }
-    }
-}
-
-/**
  * Game exit, relase all objects
  */
 void
@@ -233,7 +173,6 @@ tecnoballz::release_all_objects (configfile * pConf)
     {
       std::cout << "==1 release_objects()" << std::endl;
     }
-  release_objects ();
   handler_players::release_all_players ();
   if (is_verbose)
     printf ("==3 handler_levels \n");
@@ -245,8 +184,8 @@ tecnoballz::release_all_objects (configfile * pConf)
     printf ("==5 keyboard\n");
   keyboard->destroy_instance ();
   if (is_verbose)
-    printf ("==6 ptScoreTab\n");
-  delete ptScoreTab;
+    printf ("==6 high_score\n");
+  delete high_score;
   if (is_verbose)
     printf ("==7 display\n");
   delete display;
@@ -406,9 +345,7 @@ tecnoballz::intToASCII (Sint32 value, char *strng, Uint32 reste)
     }
 }
 
-//-------------------------------------------------------------------------------
-// read little endian 16 bits word 
-//-------------------------------------------------------------------------------
+/*
 Sint32
 tecnoballz::littleWord (char *memPT)
 {
@@ -419,9 +356,10 @@ tecnoballz::littleWord (char *memPT)
   i += p[0];
   return i;
 }
+*/
 
 void
-tecnoballz::bigendianw (Uint32 * ptsrc, Uint32 * ptdes)
+tecnoballz::int_to_big_endian (Uint32 * ptsrc, Uint32 * ptdes)
 {
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
   *ptdes = *ptsrc;
@@ -436,7 +374,7 @@ tecnoballz::bigendianw (Uint32 * ptsrc, Uint32 * ptdes)
 }
 
 void
-tecnoballz::bigendianr (Uint32 * ptsrc, Uint32 * ptdes)
+tecnoballz::big_endian_to_int (Uint32 * ptsrc, Uint32 * ptdes)
 {
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
   *ptdes = *ptsrc;
@@ -458,7 +396,7 @@ Sint32 tecnoballz::num_erreur = 0;
 Uint32 tecnoballz::objects_counter = 0;
 Sint32 tecnoballz::random_counter = 0;
 Uint32 tecnoballz::frame_counter = 0;
-scoretable * tecnoballz::ptScoreTab = NULL;
+handler_high_score * tecnoballz::high_score = NULL;
 handler_resources * tecnoballz::resources = NULL;
 handler_levels * tecnoballz::ptLev_data = NULL;
 handler_memory * tecnoballz::memory = NULL;
@@ -471,13 +409,6 @@ list_sprites * tecnoballz::sprites = NULL;
 handler_players * tecnoballz::current_player = NULL;
 Sint16 * tecnoballz::table_cosL = NULL;
 Sint16 * tecnoballz::table_sinL = NULL;
-
-/* Objects supervising the various phases of the game */
-supervisor_bricks_level * tecnoballz::bricks_level = NULL;
-supervisor_shop * tecnoballz::shop = NULL;
-supervisor_guards_level * tecnoballz::guards_level = NULL;
-supervisor_map_editor * tecnoballz::map_editor = NULL;
-supervisor_main_menu * tecnoballz::main_menu = NULL;
 
 Uint32 tecnoballz::super_jump = BRICKS_LEVEL;
 bool tecnoballz::is_exit_game = false;
