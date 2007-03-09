@@ -1,14 +1,14 @@
 /** 
  * @file handler_players.h
  * @brief players handler 
- * @date 2007-02-28
+ * @date 2007-03-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.h,v 1.13 2007/03/08 17:41:52 gurumeditation Exp $
+ * $Id: handler_players.h,v 1.14 2007/03/09 17:18:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,8 @@ class handler_players:public virtual tecnoballz
   friend class supervisor_bricks_level;
   friend class controller_indicators;
   friend class handler_high_score;
+public:
+  static const Uint32 PLAYER_NAME_LENGTH = 6;
 
 public:
   /** List of all players object */
@@ -50,13 +52,12 @@ private:
   /** Maximum number of players */
   static Uint32 max_of_players;
   static handler_players *first_player;
-
   /** Pointer to the next player object */
   handler_players *next_player;
   /** Pointer to the previsous player object */
   handler_players *previous_player;
   /** Name of the player */
-  char player_name[7];
+  char player_name[PLAYER_NAME_LENGTH + 1];
   /** Player number from 1 to 6 */
   Uint32 player_num;
   /** Player score value */
@@ -91,15 +92,15 @@ private:
   /** If true, then the wall must be rebuilt on the next level
    * ihis option is only available in area 5 */
   bool must_rebuild_walls;
-  Sint32 less_brick;            // Flag "less brick"
-  Sint32 life_bonus;            // Compteur point une vie gratuite
+  /** Less bricks counter */
+  Uint32 less_bricks_count;
   /** Width of the horizontal paddles
    * and height of the vertical paddles */
   Uint32 paddle_length;
   /** If true all options prices will be to 1 in the next shop */
   bool budget_prices;
-  bool gemmeActif[6];           // Etat des 6 gemmes
-  Sint32 gemmeNombr;            // Nombre de gemme(s) ramassee(s)
+  /* states of the gems, collected or not */
+  bool gems_state_list[6];
   Sint32 guardianPt;            //pt / level_list of the guards
 
 private:
@@ -125,12 +126,12 @@ public:
   Uint32 get_cou_nb ();
   void set_cou_nb (Sint32 nombr);
 
-  void RAZgemlist ();
-  Sint32 gem_enable (Sint32 gemNu);
-  Sint32 gem_is_set (Sint32 gemNu);
+  void clear_collected_gems ();
+  bool are_collected_all_gems (Uint32 gemNu);
+  bool is_collected_gem (Uint32 gemNu);
 
-  Sint32 get_bumpOn (Sint32 bumpN);
-  void set_bumpOn (Sint32 bumpN, Sint32 value);
+  Uint32 get_paddle_alive_counter (Uint32 paddle_num);
+  void set_paddle_alive_counter (Uint32 paddle_num, Uint32 count);
   void set_less_bricks (Uint32 count);
   Uint32 get_less_bricks ();
   void set_rebuild_walls (bool enable);

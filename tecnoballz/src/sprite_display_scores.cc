@@ -2,14 +2,14 @@
  * @file sprite_display_scores.cc 
  * @brief Sprite wich display text of the score table 
  * @created 2003-04-30 
- * @date 2007-03-08
+ * @date 2007-03-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_scores.cc,v 1.5 2007/03/08 17:41:52 gurumeditation Exp $
+ * $Id: sprite_display_scores.cc,v 1.6 2007/03/09 17:18:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,9 +42,13 @@ sprite_display_scores::sprite_display_scores ()
   width_font = 8 * resolution;
   heightfont = 8 * resolution;
   if (resolution == 2)
-    space2next = 17;
+    {
+      space2next = 17;
+    }
   else
-    space2next = 8;
+    {
+      space2next = 8;
+    }
   run_offset = 0;
   max_offset = TEXT_LARGE * TEXT_HAUTE;
 }
@@ -178,22 +182,28 @@ sprite_display_scores::displayTxt ()
   return 1;
 }
 
-//------------------------------------------------------------------------------
-// copy scores into text field
-//------------------------------------------------------------------------------
+/**
+ * Copy high score table into strings
+ */
 void
 sprite_display_scores::copyToText ()
 {
-  score_list *score = high_score->getScrList ();
+  player_score *score = high_score->get_high_score_table ();
+  if (NULL == score)
+    {
+      return;
+    }
   char *ptext = scorestext + TEXT_LARGE * 2;
   for (Uint32 i = 0; i < handler_high_score::MAX_OF_HIGH_SCORES; i++)
     {
-      char *pName = score[i].playerName;
-      for (Uint32 j = 0; j < 6; j++)
-        ptext[j] = pName[j];
-      intToASCII (score[i].scoreValue, &ptext[7], 5);
-      intToASCII (score[i].score_area, &ptext[16], 0);
-      intToASCII (score[i].scoreLevel, &ptext[21], 1);
+      char *pName = score[i].player_name;
+      for (Uint32 j = 0; j < handler_players::PLAYER_NAME_LENGTH; j++)
+        {
+          ptext[j] = pName[j];
+        }
+      integer_to_ascii (score[i].value, 6,  &ptext[7]);
+      integer_to_ascii (score[i].area_number, 1, &ptext[16]);
+      integer_to_ascii (score[i].level_number, 2, &ptext[21]);
       ptext += TEXT_LARGE;
     }
 }

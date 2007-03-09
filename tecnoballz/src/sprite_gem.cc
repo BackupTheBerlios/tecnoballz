@@ -1,15 +1,15 @@
-/** 
+/**
  * @file sprite_gem.cc 
  * @brief The gem sprite 
  * @created 2004-04-12 
- * @date 2007-02-05
+ * @date 2007-03-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_gem.cc,v 1.7 2007/02/20 20:52:14 gurumeditation Exp $
+ * $Id: sprite_gem.cc,v 1.8 2007/03/09 17:18:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,13 +34,13 @@
 sprite_gem::sprite_gem ()
 {
   clear_sprite_members ();
-  directionX = 0;
-  la_vitesse = 0;
-  indicator1 = 0;
-  blinkcount = 0;
+  towards = 0;
+  speed_of_moving = 0;
+  is_indicator = false;
+  blink_counter = 0;
   rand_count = 0;
-  typeof_gem = GREYSQUARE;
-  raquettePT = (sprite_paddle *) NULL;
+  gem_id = GREY_SQUARE;
+  paddle = (sprite_paddle *) NULL;
 }
 
 /**
@@ -51,30 +51,20 @@ sprite_gem::~sprite_gem ()
 }
 
 /**
- * Initialize the coordinates of the max/min
+ * Initialize a new gem from a ball 
+ * @param ball a pointer to the ball sprite which destroyed
+ *        the enemy ship
+ * @return true if the sprite was enabled, otherwise false
  */
-/*
-void
-sprite_gem::init_members ()
-{
-  x_maximum = screen_width - ((64 + 16) * resolution);
-  x_minimum = 3 * resolution;
-  y_maximum = screen_height - 10 * resolution;
-  y_minimum = 0 * resolution;
-}
-*/
-//-----------------------------------------------------------------------------
-// initialize a new gem
-//-----------------------------------------------------------------------------
-Sint32
-sprite_gem::disponible (sprite_ball * pball)
+bool
+sprite_gem::enable_if_available (sprite_ball * ball)
 {
   if (is_enabled)
     {
-      return 0;
+      return false;
     }
-  initialGem (pball->x_coord, pball->y_coord, pball->paddle_touched);
-  return 1;
+  init_gem (ball->x_coord, ball->y_coord, ball->paddle_touched);
+  return true;
 }
 
 /**
@@ -83,184 +73,213 @@ sprite_gem::disponible (sprite_ball * pball)
  *        destroyed the enemy ship
  * @return true if the sprite was enabled, otherwise false
  */
-Sint32
-sprite_gem::disponible (sprite_projectile * blast)
+bool
+sprite_gem::enable_if_available (sprite_projectile * blast)
 {
   if (is_enabled)
     {
-      return 0;
+      return false;
     }
-  initialGem (blast->x_coord, blast->y_coord, blast->paddle);
-  return 1;
+  init_gem (blast->x_coord, blast->y_coord, blast->paddle);
+  return true;
 }
 
 /**
  * Initialize the gem
- * @param xcoord
- * @param ycoord
- * @param paddle
+ * @param xcoord x coordinate of the gem
+ * @param ycoord y coordinate of the gem
+ * @param paddle pointer to a paddle sprite
  */
 void
-sprite_gem::initialGem (Sint32 xcoord, Sint32 ycoord, sprite_paddle * paddle)
+sprite_gem::init_gem (Sint32 xcoord, Sint32 ycoord, sprite_paddle * pad)
 {
-  is_enabled = 1;
+  is_enabled = true;
   x_coord = xcoord;
   y_coord = ycoord;
-  raquettePT = paddle;
-  directionX = paddle->get_paddle_number ();
-  la_vitesse = resolution;
-  Sint32 h = (random_counter >> 4 + rand_count++) & 7;
+  paddle = pad;
+  towards = paddle->get_paddle_number ();
+  speed_of_moving = resolution;
+  Uint32 h = (random_counter >> 4 + rand_count++) & 7;
   random_counter += xcoord;
   h = gem_random[h];
-  //h = BOBListNum;               // for tests only !
-  typeof_gem = h;
+  gem_id = h;
   set_image (h);
-  indicator1 = 0;
-  sprite_has_shadow = 1;
-  blinkcount = 0;
+  is_indicator = false;
+  sprite_has_shadow = true;
+  blink_counter = 0;
 }
 
-//-----------------------------------------------------------------------------
-// a new gem was collected
-//-----------------------------------------------------------------------------
+/**
+ * A new gem was collected
+ * @param id gem identifier 0 to 5
+ */
 void
-sprite_gem::gemcollect (Sint32 ztype)
+sprite_gem::collect (Uint32 id)
 {
-  typeof_gem = ztype;
-  set_image (ztype);
-  sprite_has_shadow = 0;
-  indicator1 = 1;
+  gem_id = id;
+  set_image (id);
+  sprite_has_shadow = false;
+  is_indicator = true;
   y_coord = screen_height - sprite_height - 2 * resolution;
-  x_coord = 270 * resolution + sprite_width * ztype;
-  is_enabled = 1;
-  blinkcount = 0;
+  x_coord = 270 * resolution + sprite_width * id;
+  is_enabled = true;
+  blink_counter = 0;
 }
 
-//-----------------------------------------------------------------------------
-// active blink
-//-----------------------------------------------------------------------------
+/**
+ * Enable the blink
+ */
 void
-sprite_gem::activBlink ()
+sprite_gem::enable_blink ()
 {
-  if (is_enabled && indicator1)
-    blinkcount = 30;
+  if (is_enabled && is_indicator)
+    {
+      blink_counter = 30;
+    }
 }
 
-//-----------------------------------------------------------------------------
-// move or blink gem
-//-----------------------------------------------------------------------------
+/**
+ * Move or blink gem
+ * @return gem identifier collected, otherwise -1
+ */
 Sint32
 sprite_gem::move ()
 {
-  if (is_enabled && !indicator1)
+  if (is_indicator)
     {
-      Sint32 i = la_vitesse;
-      sprite_paddle *raket = raquettePT;
-      switch (directionX)
-        {
-          //###########################################################
-          // bottom bumper
-          //###########################################################
-        case 1:
-          y_coord += i;
-          if (y_coord < y_maximum)
-            {
-              if (collision1 (raket))
-                {
-                  is_enabled = 0;
-#ifndef SOUNDISOFF
-                  audio->play_sound (S_MONNAIES);
-#endif
-                  return typeof_gem;
-                }
-            }
-          else
-            is_enabled = 0;
-          break;
-
-          //###########################################################
-          // right bumper          
-          //###########################################################
-        case 2:
-          x_coord += i;
-          if (x_coord < x_maximum)
-            {
-              if (collision1 (raket))
-                {
-                  is_enabled = 0;
-#ifndef SOUNDISOFF
-                  audio->play_sound (S_MONNAIES);
-#endif
-                  return typeof_gem;
-                }
-            }
-          else
-            is_enabled = 0;
-          break;
-
-          //###########################################################
-          // top bumper
-          //###########################################################
-        case 3:
-          y_coord -= i;
-          if (y_coord > y_minimum)
-            {
-              if (collision1 (raket))
-                {
-                  is_enabled = 0;
-#ifndef SOUNDISOFF
-                  audio->play_sound (S_MONNAIES);
-#endif
-                  return typeof_gem;
-                }
-            }
-          else
-            is_enabled = 0;
-          break;
-
-          //###########################################################
-          // left bumper
-          //###########################################################
-        case 4:
-          x_coord -= i;
-          if (x_coord > x_minimum)
-            {
-              if (collision1 (raket))
-                {
-                  is_enabled = 0;
-#ifndef SOUNDISOFF
-                  audio->play_sound (S_MONNAIES);
-#endif
-                  return typeof_gem;
-                }
-            }
-          else
-            is_enabled = 0;
-          break;
-        }
+      blink ();
+      return -1;
     }
-  else
-    //###########################################################
-    // blink gem
-    //###########################################################
-    {
-      if (blinkcount > 0 && indicator1)
-        {
-          if (blinkcount > 20)
-            is_enabled = 0;
-          else
-            is_enabled = 1;
-          if (--blinkcount <= 0)
-            blinkcount = 30;
 
+  if (!is_enabled)
+    {
+      return -1;
+    }
+
+  switch (towards)
+    {
+    case controller_paddles::BOTTOM_PADDLE:
+      y_coord += speed_of_moving;
+      if (y_coord < y_maximum)
+        {
+          if (collision1 (paddle))
+            {
+              is_enabled = false;
+#ifndef SOUNDISOFF
+
+              audio->play_sound (S_MONNAIES);
+#endif
+
+              return gem_id;
+            }
         }
+      else
+        {
+          is_enabled = false;
+        }
+      break;
+
+    case controller_paddles::RIGHT_PADDLE:
+      x_coord += speed_of_moving;
+      if (x_coord < x_maximum)
+        {
+          if (collision1 (paddle))
+            {
+              is_enabled = false;
+#ifndef SOUNDISOFF
+
+              audio->play_sound (S_MONNAIES);
+#endif
+
+              return gem_id;
+            }
+        }
+      else
+        {
+          is_enabled = false;
+        }
+      break;
+
+    case controller_paddles::TOP_PADDLE:
+      y_coord -= speed_of_moving;
+      if (y_coord > y_minimum)
+        {
+          if (collision1 (paddle))
+            {
+              is_enabled = false;
+#ifndef SOUNDISOFF
+
+              audio->play_sound (S_MONNAIES);
+#endif
+
+              return gem_id;
+            }
+        }
+      else
+        {
+          is_enabled = false;
+        }
+      break;
+
+    case controller_paddles::LEFT_PADDLE:
+      x_coord -= speed_of_moving;
+      if (x_coord > x_minimum)
+        {
+          if (collision1 (paddle))
+            {
+              is_enabled = false;
+#ifndef SOUNDISOFF
+
+              audio->play_sound (S_MONNAIES);
+#endif
+
+              return gem_id;
+            }
+        }
+      else
+        {
+          is_enabled = false;
+        }
+      break;
     }
   return -1;
 }
 
 
-const Sint32
-  sprite_gem::gem_random[8] =
-  { GREYSQUARE, GREENSPHER, YELLOWRING, BLUETRIANG,
-  RHOMBUGOLD, PENTABRONZ, GREYSQUARE, GREENSPHER
-};
+/**
+ * Blinking the gem
+ */
+void
+sprite_gem::blink ()
+{
+  if (0 == blink_counter || !is_indicator)
+    {
+      return;
+    }
+  if (blink_counter > 20)
+    {
+      is_enabled = false;
+    }
+  else
+    {
+      is_enabled = true;
+    }
+  blink_counter--;
+  if (0 == blink_counter)
+    {
+      blink_counter = 30;
+    }
+}
+
+
+const Uint32 sprite_gem::gem_random[8] =
+  {
+    GREY_SQUARE,
+    GREEN_SPHERE,
+    YELLOW_RING,
+    BLUE_TRIANGLE,
+    GOLD_RHOMBUS,
+    BRONZE_PENTAGON,
+    GREY_SQUARE,
+    GREEN_SPHERE
+  };

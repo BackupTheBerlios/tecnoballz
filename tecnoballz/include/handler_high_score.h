@@ -2,14 +2,14 @@
  * @file handler_high_score.cc 
  * @brief high score handler 
  * @created 2004-04-30 
- * @date 2007-03-08
+ * @date 2007-03-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_high_score.h,v 1.1 2007/03/08 17:41:52 gurumeditation Exp $
+ * $Id: handler_high_score.h,v 1.2 2007/03/09 17:18:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,11 +35,11 @@ class handler_high_score;
 
 typedef struct
 {
-  char playerName[8];           //name of player
-  Uint32 scoreValue;
-  Uint32 score_area;
-  Uint32 scoreLevel;
-} score_list;
+  char player_name[8];
+  Uint32 value;
+  Uint32 area_number;
+  Uint32 level_number;
+} player_score;
 
 class handler_high_score:public virtual tecnoballz
 {
@@ -48,12 +48,12 @@ public:
 
 private:
   static handler_high_score *high_score_singleton;
-  score_list ** the_scores;
+  player_score ** scores_tables;
 
 private:
   Uint32 scores_table_size;
-  Sint32 test_score (char *pName, Uint32 vScre, Uint32 nLevl, Uint32 nArea);
-  void sort_score (Uint32 nHard);
+  bool is_player_ranked (char *playename, Uint32 score_value, Uint32 level_num, Uint32 area_num);
+  void sort_scores ();
   bool load_high_score ();
   void save_high_score ();
   Uint32 calculate_checksum (Uint32 * pBuff, Uint32 bsize);
@@ -63,9 +63,9 @@ private:
 public:
     ~handler_high_score ();
   static handler_high_score *get_instance ();
-  Sint32 test_score ();
-  score_list *getScrList ();
-  char *bestPlayer ();
-  Uint32 best_score ();
+  bool is_player_ranked ();
+  player_score *get_high_score_table ();
+  char *get_best_playername ();
+  Uint32 get_best_score ();
 };
 #endif

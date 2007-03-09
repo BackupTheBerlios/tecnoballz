@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.15 2007/02/21 21:07:11 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.16 2007/03/09 17:18:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -254,9 +254,9 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   /* initialize right paddle */ 
   paddle_right->set_coordinates (bumperXdro, centre);
   paddle_right->collision_height = paddle_length;
-  paddle_right->paddle_number = 2;
+  paddle_right->paddle_number = RIGHT_PADDLE;
   paddle_right->bumperType = 1;
-  paddle_right->bumpActive (is_team_mode, paddle_length, current_player->get_bumpOn (2));
+  paddle_right->bumpActive (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (RIGHT_PADDLE));
   paddle_right->bump_TFIRE = 2;
   paddle_right->bumper_FX0 = -5 * resolution;
   paddle_right->bumper_FY0 = 0;
@@ -273,14 +273,14 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   paddle_right->direct_tab = ballePets2;
   paddle_right->width_mini = width_mini;
   paddle_right->width_maxi = width_maxi;
-  current_player->set_bumpOn (2, paddle_right->bump_actif);
+  current_player->set_paddle_alive_counter (2, paddle_right->bump_actif);
 
   /* initialize top paddle */ 
   paddle_top->set_coordinates (centre, bumperYhau);
   paddle_top->collision_width = paddle_length;
-  paddle_top->paddle_number = 3;
+  paddle_top->paddle_number = TOP_PADDLE;
   paddle_top->bumperType = 0;
-  paddle_top->bumpActive (is_team_mode, paddle_length, current_player->get_bumpOn (3));
+  paddle_top->bumpActive (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (TOP_PADDLE));
   paddle_top->bump_TFIRE = 2;
   paddle_top->bumper_FX0 = 0;
   paddle_top->bumper_FY0 = 5 * resolution;
@@ -297,14 +297,14 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   paddle_top->direct_tab = ballePets3;
   paddle_top->width_mini = width_mini;
   paddle_top->width_maxi = width_maxi;
-  current_player->set_bumpOn (3, paddle_top->bump_actif);
+  current_player->set_paddle_alive_counter (3, paddle_top->bump_actif);
 
   /* initialize left paddle */ 
   paddle_left->set_coordinates (bumperXgau, centre);
   paddle_left->collision_height = paddle_length;
-  paddle_left->paddle_number = 4;
+  paddle_left->paddle_number = LEFT_PADDLE;
   paddle_left->bumperType = 1;
-  paddle_left->bumpActive (is_team_mode, paddle_length, current_player->get_bumpOn (4));
+  paddle_left->bumpActive (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (LEFT_PADDLE));
   paddle_left->bump_TFIRE = 2;
   paddle_left->bumper_FX0 = 5 * resolution;
   paddle_left->bumper_FY0 = 0 * resolution;
@@ -315,18 +315,19 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   paddle_left->bump_Xscie = 24 * resolution;
   paddle_left->bump_Yscie = 32 * resolution - 5;
   paddle_left->bump_xdeca = 10 * resolution;
-  paddle_left->bump_ydeca = 00;
+  paddle_left->bump_ydeca = 0;
   paddle_left->rebonds_Ga = midi4_left;
   paddle_left->rebonds_Dr = midi4Right;
   paddle_left->direct_tab = ballePets4;
   paddle_left->width_mini = width_mini;
   paddle_left->width_maxi = width_maxi;
-  current_player->set_bumpOn (4, paddle_left->bump_actif);
+  current_player->set_paddle_alive_counter (4, paddle_left->bump_actif);
 
-  // Bumper robot du bas
+  /* initialize robot paddle */
   tec_robot0->set_coordinates (centre, bumperYbas);
-  tec_robot0->collision_width = width_maxi;     // bumper's width always 128 pixels
-  tec_robot0->paddle_number = 5;   // bumper robot
+  /* paddle width always 128 pixels */
+  tec_robot0->collision_width = width_maxi;
+  tec_robot0->paddle_number = ROBOT_PADDLE;
   tec_robot0->bumperType = 0;
   tec_robot0->bump_TFIRE = 2;
   tec_robot0->bumper_FX0 = 0;

@@ -4,11 +4,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.24 2007/03/06 17:42:43 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.25 2007/03/09 17:18:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -557,7 +557,7 @@ supervisor_shop::faitcourse (Sint32 gadnu)
         for (Sint32 i = 2; i <= 4; i++)
           {
             char *ptTxt = ptSrc;
-            if (current_player->get_bumpOn (i) <= 0)
+            if (current_player->get_paddle_alive_counter (i) <= 0)
               {
                 ptTxt += BOX_LENGTH_STRING;
                 if (arean >= 2 && i == 3)
@@ -655,11 +655,11 @@ supervisor_shop::faitcourse (Sint32 gadnu)
         if (gadnu >= GAD_BUMP02 && gadnu <= GAD_BUMP04)
           {
             Sint32 i = (gadnu - GAD_BUMP02) / 2 + 2;
-            if (current_player->get_bumpOn (i) <= 0)
+            if (current_player->get_paddle_alive_counter (i) <= 0)
               {
                 if (decrease_money_amount ())
                   {
-                    current_player->set_bumpOn (i, 3);
+                    current_player->set_paddle_alive_counter (i, 3);
                     message_ok ();
                   }
               }

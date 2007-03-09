@@ -2,14 +2,14 @@
  * @file controller_gems.cc 
  * @brief The gems controller 
  * @created 2004-04-12 
- * @date 2007-02-10
+ * @date 2007-03-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gems.h,v 1.5 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_gems.h,v 1.6 2007/03/09 17:18:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,10 +32,8 @@
 class controller_gems;
 
 #include "../include/objects_list.h"
-#include "../include/controller_paddles.h"
 #include "../include/sprite_gem.h"
 #include "../include/handler_players.h"
-#include "../include/controller_indicators.h"
 
 class controller_gems:public objects_list < sprite_gem, controller_gems >
 {
@@ -43,14 +41,11 @@ public:
   static const Uint32 MAX_OF_GEMS = 6;
 
 private:
-  controller_paddles * paddles;
-  right_panel_score *ptBarScore;
-  controller_indicators *ptPrintmon;
 
 public:
     controller_gems ();
    ~controller_gems ();
-  void initialize (right_panel_score *, controller_indicators *, controller_paddles *);
+  void initialize ();
   void send (sprite_ball * ball);
   void send (sprite_projectile * blast);
   void move ();

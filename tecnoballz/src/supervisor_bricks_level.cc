@@ -4,11 +4,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.37 $
+ * @version $Revision: 1.38 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.37 2007/03/06 17:42:43 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.38 2007/03/09 17:18:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -143,6 +143,7 @@ supervisor_bricks_level::first_init ()
   if (erreur_num)
     return erreur_num;
   ejectors_corners->create_ejectors_sprites ();
+  game_over->create_sprites_list ();
   balls->create_sprites_list ();
   ships->create_sprites_list ();
   magnetic_eyes->create_eyes_list ();
@@ -152,7 +153,6 @@ supervisor_bricks_level::first_init ()
   fontes_game->create_sprites_list ();
   paddles->create_projectiles_list ();
   player_indicators->create_indicators_sprites ();
-  game_over->create_sprites_list ();
   viewfinders_paddles->create_sprites_list ();
   popup_menu->first_init (sprites_bitmap, 0, 256 * resolution);
   resources->release_sprites_bitmap ();
@@ -205,13 +205,10 @@ supervisor_bricks_level::first_init ()
                            balls,
                            bottom_wall);
 
-  gem_stones->initialize (panel_score, player_indicators, paddles);
+  gem_stones->initialize ();
 
-  //##############################################################
-  // initialize mobiles characters ("LEVEL x COMPLETED")
-  //##############################################################
+  /* initialize sprite fonts "LEVEL x COMPLETED" */
   fontes_game->initialise (level_number);
-
 
   viewfinders_paddles->initialize ();
 
@@ -255,6 +252,8 @@ supervisor_bricks_level::main_loop ()
 #endif
           paddles->disable_all_paddles ();
           bricks->clr_bricks ();
+          fontes_game->disable_sprites ();
+          gem_stones->disable_sprites (); 
           power_up_capsules->disable_sprites ();
           money_capsules->disable_sprites ();
           balls->disable_sprites ();

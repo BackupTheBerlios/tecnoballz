@@ -1,14 +1,14 @@
 /** 
  * @file handler_players.cc 
  * @brief players handler 
- * @date 2007-03-01
+ * @date 2007-03-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.13 2007/03/01 06:50:28 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.14 2007/03/09 17:18:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,10 +31,8 @@
 #include "../include/controller_gems.h"
 
 Uint32 handler_players::max_of_players = 0;
-handler_players *
-  handler_players::first_player = NULL;
-handler_players **
-  handler_players::players_list = NULL;
+handler_players *handler_players::first_player = NULL;
+handler_players **handler_players::players_list = NULL;
 
 /* 
  * Create a player object
@@ -146,14 +144,13 @@ handler_players::reset_members ()
   top_paddle_alive_counter = 0;
   left_paddle_alive_counter = 0;
   must_rebuild_walls = false;
-  less_brick = 0;
-  life_bonus = 0;
+  less_bricks_count = 0;
   /* width of the horizontal paddles
    * and height of the vertical paddles */
   paddle_length = 32 * resolution;
   budget_prices = false;
   guardianPt = 0;
-  RAZgemlist ();
+  clear_collected_gems ();
 }
 
 /**
@@ -163,11 +160,11 @@ handler_players::reset_members ()
 void
 handler_players::set_name (char *name)
 {
-  for (Uint32 i = 0; i < 6; i++)
+  for (Uint32 i = 0; i < PLAYER_NAME_LENGTH; i++)
     {
       player_name[i] = ' ';
     }
-  for (Uint32 i = 0; i < 6; i++)
+  for (Uint32 i = 0; i < PLAYER_NAME_LENGTH; i++)
     {
       char c = name[i];
       if (0 == c)
@@ -350,62 +347,64 @@ handler_players::set_cou_nb (Sint32 value)
   shopping_cart_items = value;
 }
 
-//-----------------------------------------------------------------------------
-// Reset the list of gems collected
-//-----------------------------------------------------------------------------
+/**
+ * Clear the list of gems collected
+ */
 void
-handler_players::RAZgemlist ()
+handler_players::clear_collected_gems ()
 {
   for (Uint32 i = 0; i < controller_gems::MAX_OF_GEMS; i++)
     {
       /* states of the 6 gems */
-      gemmeActif[i] = false;
+      gems_state_list[i] = false;
     }
-  gemmeNombr = 0;
 }
 
-//-----------------------------------------------------------------------------
-// verify if the 6 gemstones are collected
-//-----------------------------------------------------------------------------
-Sint32
-handler_players::gem_enable (Sint32 gemNu)
+/**
+ * Verify if the 6 gemstones are collected
+ * @param gem_id last gem identifier collected
+ * @return true if all gems are collected, otherwise false
+ */
+bool
+handler_players::are_collected_all_gems (Uint32 gemNu)
 {
-  gemmeActif[gemNu] = true;
+  gems_state_list[gemNu] = true;
   for (Uint32 i = 0; i < controller_gems::MAX_OF_GEMS; i++)
     {
-      if (!gemmeActif[i])
+      if (!gems_state_list[i])
         {
-          return 0;
+          return false;
         }
     }
-  RAZgemlist ();
-  return 1;
-
+  clear_collected_gems ();
+  return true;
 }
 
-//-----------------------------------------------------------------------------
-// return the state of one of six gemstones
-//-----------------------------------------------------------------------------
-Sint32
-handler_players::gem_is_set (Sint32 gemNu)
+/**
+ * Return state of one of six gemstones
+ * @param gem_id gem identifier 0 to 5
+ * @return true if the gem is enabled, otherwise false
+ */
+bool
+handler_players::is_collected_gem (Uint32 gem_id)
 {
-  return gemmeActif[gemNu];
+  return gems_state_list[gem_id];
 }
 
-//-----------------------------------------------------------------------------
-// return the state of one of the bumper
-// input        => bumpN: bumper number (2 = right, 3 = top, or 4 left)
-// output       <= 0(disable) or > 1 (enable)
-//-----------------------------------------------------------------------------
-Sint32
-handler_players::get_bumpOn (Sint32 bumpN)
+/**
+ * Get the alive counter of a paddle
+ * @param paddle_num paddle number RIGHT_PADDLE, TOP_PADDLE, or LEFT_PADDLE
+ * @return alive counter value, if 0 then the paddle is disabled
+ */
+Uint32
+handler_players::get_paddle_alive_counter (Uint32 paddle_num)
 {
-  switch (bumpN)
+  switch (paddle_num)
     {
-    case 2:
+    case controller_paddles::RIGHT_PADDLE:
       return right_paddle_alive_counter;
       break;
-    case 3:
+    case controller_paddles::TOP_PADDLE:
       return top_paddle_alive_counter;
       break;
     default:
@@ -414,24 +413,24 @@ handler_players::get_bumpOn (Sint32 bumpN)
     }
 }
 
-//-----------------------------------------------------------------------------
-// modify the state of one of the bumper
-// input        => bumpN: bumper number (2 = right, 3 = top, or 4 left)
-//                      => value: 0 (disable) or > 1 (enable)
-//-----------------------------------------------------------------------------
+/**
+ * Set the alive counter of a paddle
+ * @param paddle_num paddle number RIGHT_PADDLE, TOP_PADDLE, or LEFT_PADDLE
+ * @param count value of the counter, if 0 then the paddle is disabled
+ */
 void
-handler_players::set_bumpOn (Sint32 bumpN, Sint32 value)
+handler_players::set_paddle_alive_counter (Uint32 paddle_num, Uint32 counter)
 {
-  switch (bumpN)
+  switch (paddle_num)
     {
-    case 2:
-      right_paddle_alive_counter = value;
+    case controller_paddles::RIGHT_PADDLE:
+      right_paddle_alive_counter = counter;
       break;
-    case 3:
-      top_paddle_alive_counter = value;
+    case controller_paddles::TOP_PADDLE:
+      top_paddle_alive_counter = counter;
       break;
-    case 4:
-      left_paddle_alive_counter = value;
+    case controller_paddles::LEFT_PADDLE:
+      left_paddle_alive_counter = counter;
       break;
     }
 }
@@ -443,7 +442,7 @@ handler_players::set_bumpOn (Sint32 bumpN, Sint32 value)
 void
 handler_players::set_less_bricks (Uint32 count)
 {
-  less_brick = count;
+  less_bricks_count = count;
 }
 
 /**
@@ -453,7 +452,7 @@ handler_players::set_less_bricks (Uint32 count)
 Uint32
 handler_players::get_less_bricks ()
 {
-  return less_brick;
+  return less_bricks_count;
 }
 
 /**

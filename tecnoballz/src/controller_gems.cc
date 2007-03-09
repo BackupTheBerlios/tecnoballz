@@ -5,11 +5,11 @@
  * @date 2007-02-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gems.cc,v 1.7 2007/02/14 17:04:44 gurumeditation Exp $
+ * $Id: controller_gems.cc,v 1.8 2007/03/09 17:18:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,23 +50,17 @@ controller_gems::~controller_gems ()
 
 /**
  * Initialize the gemstones sprites
- * @param score
- * @param coins
- * @param pad pointer to the paddles controller 
  */
 void
-controller_gems::initialize (right_panel_score * score,
-                             controller_indicators * coins,
-                             controller_paddles * pad)
+controller_gems::initialize ()
 {
-  ptBarScore = score;
-  ptPrintmon = coins;
-  paddles = pad;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_gem *gem = sprites_list[i];
-      if (current_player->gem_is_set (i))
-        gem->gemcollect (i);
+      if (current_player->is_collected_gem (i))
+        {
+          gem->collect (i);
+        }
     }
 }
 
@@ -80,7 +74,7 @@ controller_gems::send (sprite_ball * ball)
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_gem *gem = sprites_list[i];
-      if (gem->disponible (ball))
+      if (gem->enable_if_available (ball))
         {
           return;
         }
@@ -98,7 +92,7 @@ controller_gems::send (sprite_projectile * blast)
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_gem *gem = sprites_list[i];
-      if (gem->disponible (blast))
+      if (gem->enable_if_available (blast))
         {
           return;
         }
@@ -114,20 +108,20 @@ controller_gems::move ()
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_gem *gem = sprites_list[i];
-      Sint32 ztype = gem->move ();
-      if (ztype < 0)
+      Sint32 gem_id = gem->move ();
+      if (gem_id < 0)
         {
           /* this gem is disabled or was not collected by a paddle  */
           continue;
         }
-      if (current_player->gem_is_set (ztype))
+      if (current_player->is_collected_gem (gem_id))
         {
           /* this gem was already collected */
           continue;
         }
       current_player->add_score (500);
-      gem->gemcollect (ztype);
-      if (!current_player->gem_enable (ztype))
+      gem->collect (gem_id);
+      if (!current_player->are_collected_all_gems (gem_id))
         {
           /* the six gems were not collected yet */
           continue;
@@ -137,21 +131,24 @@ controller_gems::move ()
        */
       for (Uint32 k = 0; k < max_of_sprites; k++)
         {
-          sprite_gem *zegem = sprites_list[k];
-          zegem->activBlink ();
+          sprite_gem *gem = sprites_list[k];
+          gem->enable_blink ();
         }
       current_player->add_score (2500);
-      ptPrintmon->increase_money_amount (500);
+      controller_indicators* indicators = controller_indicators::get_instance ();
+      indicators->increase_money_amount (500);
       current_player->add_life (3);
       /* jump to the next level */
-      ptBarScore->set_bricks_counter (0);
+      right_panel_score* panel = right_panel_score::get_instance ();
+      panel->set_bricks_counter (0);
       /* enable right paddle */
-      current_player->set_bumpOn (controller_paddles::RIGHT_PADDLE, 3);
+      current_player->set_paddle_alive_counter (controller_paddles::RIGHT_PADDLE, 3);
       /* enable top paddle */
-      current_player->set_bumpOn (controller_paddles::TOP_PADDLE, 3);
+      current_player->set_paddle_alive_counter (controller_paddles::TOP_PADDLE, 3);
       /* enable left paddle */
-      current_player->set_bumpOn (controller_paddles::LEFT_PADDLE, 3);
+      current_player->set_paddle_alive_counter (controller_paddles::LEFT_PADDLE, 3);
       sprite_paddle *paddle;
+      controller_paddles* paddles = controller_paddles::get_instance ();
       paddle = paddles->get_paddle (controller_paddles::RIGHT_PADDLE);
       paddle->enable ();
       paddle = paddles->get_paddle (controller_paddles::TOP_PADDLE);

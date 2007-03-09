@@ -2,14 +2,14 @@
  * @file controller_game_over.cc 
  * @brief Game Over controller 
  * @created 2002-12-14
- * @date 2007-02-18
+ * @date 2007-03-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_game_over.cc,v 1.6 2007/03/08 17:41:52 gurumeditation Exp $
+ * $Id: controller_game_over.cc,v 1.7 2007/03/09 17:18:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,14 +104,14 @@ controller_game_over::enable_game_over (bool is_victory)
   move_phase = 1;
   go_zetempo = 50 * 10;
 #ifndef SOUNDISOFF
-  Sint32 iscla = high_score->test_score ();
+  bool is_ranked = high_score->is_player_ranked ();
   if (is_victory)
     {
       audio->play_music (MUSICCONGR);
     }
   else
     {
-      if (iscla)
+      if (is_ranked)
         {
           audio->play_music (MUSICSCORE);
         }
@@ -121,7 +121,7 @@ controller_game_over::enable_game_over (bool is_victory)
         }
     }
 #else
-  high_score->test_score ();
+  high_score->is_player_ranked ();
 #endif
   ptScorOver->copyToText ();
 }

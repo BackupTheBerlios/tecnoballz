@@ -2,14 +2,14 @@
  * @file sprite_gem.h
  * @brief The gem sprite 
  * @created 2004-04-12 
- * @date 2007-02-05
+ * @date 2007-03-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_gem.h,v 1.4 2007/02/12 16:28:19 gurumeditation Exp $
+ * $Id: sprite_gem.h,v 1.5 2007/03/09 17:18:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,41 +34,48 @@ class sprite_gem;
 #include "../include/sprite_ball.h"
 #include "../include/sprite_projectile.h"
 
-enum
+typedef enum
 {
-  GREYSQUARE,
-  GREENSPHER,
-  YELLOWRING,
-  BLUETRIANG,
-  RHOMBUGOLD,
-  PENTABRONZ
-};
+  GREY_SQUARE,
+  GREEN_SPHERE,
+  YELLOW_RING,
+  BLUE_TRIANGLE,
+  GOLD_RHOMBUS,
+  BRONZE_PENTAGON
+}
+GEMS_ENUM;
 
 class sprite_gem:public sprite_object
 {
   friend class controller_moneys;
 
 private:
-  Sint32 directionX;
-  Sint32 la_vitesse;
-  Sint32 indicator1;
-  Sint32 typeof_gem;
-  sprite_paddle *raquettePT;
-  Sint32 blinkcount;
-  Sint32 rand_count;
+  /** Toward bottom, right, top, left */
+  Uint32 towards;
+  /** Moving speed in pixels of the gem */
+  Uint32 speed_of_moving;
+  /** If true the gem is positionned as indicator on the score panel */
+  bool is_indicator;
+  /** Gem identifier GREY_SQUARE to BRONZE_PENTAGON */
+  Uint32 gem_id;
+  sprite_paddle *paddle;
+  Uint32 blink_counter;
+  Uint32 rand_count;
 
 public:
     sprite_gem ();
    ~sprite_gem ();
-  void init_members ();
-  Sint32 disponible (sprite_ball * pball);
-  Sint32 disponible (sprite_projectile * pfire);
-  void initialGem (Sint32 pos_x, Sint32 pos_y, sprite_paddle * raket);
-  void gemcollect (Sint32 ztype);
-  void activBlink ();
+  bool enable_if_available (sprite_ball *ball);
+  bool enable_if_available (sprite_projectile *blast);
+  void collect (Uint32 id);
+  void enable_blink ();
   Sint32 move ();
 
 private:
-  static const Sint32 gem_random[8];
+  void init_gem (Sint32 pos_x, Sint32 pos_y, sprite_paddle *pad);
+  void blink ();
+
+private:
+  static const Uint32 gem_random[8];
 };
 #endif

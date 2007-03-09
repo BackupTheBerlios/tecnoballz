@@ -4,11 +4,11 @@
  * @date 2007-03-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.7 2007/03/08 17:41:52 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.8 2007/03/09 17:18:34 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -709,19 +709,22 @@ sprite_display_menu::clear_stop ()
 void
 sprite_display_menu::copyScores ()
 {
-  score_list *score = high_score->getScrList ();
-  if (!score)
-    return;
+  player_score *score = high_score->get_high_score_table ();
+  if (NULL == score)
+    {
+      return;
+    }
   char *ptext = menuTexte5 + NUM_OF_COLUMNS * 6;
   for (Uint32 i = 0; i < handler_high_score::MAX_OF_HIGH_SCORES; i++)
     {
-      char *pName = score[i].playerName;
-
-      for (Uint32 j = 0; j < 6; j++)
-        ptext[6 + j] = pName[j];
-      intToASCII (score[i].scoreValue, &ptext[24], 5);
-      intToASCII (score[i].score_area, &ptext[19], 0);
-      intToASCII (score[i].scoreLevel, &ptext[13], 1);
+      char *pName = score[i].player_name;
+      for (Uint32 j = 0; j < handler_players::PLAYER_NAME_LENGTH; j++)
+        {
+          ptext[6 + j] = pName[j];
+        }
+      integer_to_ascii (score[i].value, 6,  &ptext[24]);
+      integer_to_ascii (score[i].area_number, 1, &ptext[19]);
+      integer_to_ascii (score[i].level_number, 2, &ptext[13]);
       ptext += NUM_OF_COLUMNS;
     }
 }
