@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.cc 
  * @brief Shop supervisor
- * @date 2007-03-06
+ * @date 2007-03-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.26 2007/03/11 17:50:20 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.27 2007/03/11 20:18:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -126,7 +126,6 @@ supervisor_shop::first_init ()
   /* copy name player into menu text */
   display_text->print_to_string (current_player->get_name (), 
 				 box_texts[32]);
-
   char *ptDes;
   const char *ptSrc;
   ptDes = current_player->get_name ();

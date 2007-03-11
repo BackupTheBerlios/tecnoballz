@@ -1,14 +1,14 @@
 /** 
  * @file display_text_bitmap.h
  * @brief Display bitmap strings 
- * @date 2007-02-16
+ * @date 2007-03-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: display_text_bitmap.h,v 1.3 2007/03/11 17:50:20 gurumeditation Exp $
+ * $Id: display_text_bitmap.h,v 1.4 2007/03/11 20:18:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,6 +72,7 @@ public:
   void tamponAff2 (Sint32 x, Sint32 y, char *chain, Sint32 total);
   void bufferAff2 (Sint32 x, Sint32 y, char *chain, Sint32 total);
   void print_to_string (char *src, char *dst);
+  void print_int_to_string (Sint32 value, Sint32 padding, char *dst);
   sprite_object *string2bob (const char *ptStr);
 };
 #endif

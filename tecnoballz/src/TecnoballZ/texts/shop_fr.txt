@@ -110,10 +110,12 @@ UP BUMPER   :NO ACTIVE
 LEFT[BUMPER :  ACTIVE 
 LEFT BUMPER :NO ACTIVE
   BUY A LEFT BUMPER   
- THE PASSWORD FOR THIS
-  AREA IS ..........  
- NO AVAILABLE PASSWORD
- FOR THIS AREA.       
+  LE CODE D'ACCES DE  
+    CETTE ZONE EST    
+      ..........      
+  AUCUN CODE D'ACCES  
+     N'EXISTE POUR    
+      CETTE ZONE      
 #welcome message
 BIENVENUE ..........  
 DANS LE MAGASIN       

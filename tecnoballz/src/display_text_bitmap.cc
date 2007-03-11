@@ -1,14 +1,14 @@
 /** 
  * @file display_text_bitmap.cc 
  * @brief Display bitmap strings 
- * @date 2007-02-21
+ * @date 2007-03-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: display_text_bitmap.cc,v 1.4 2007/03/11 17:50:20 gurumeditation Exp $
+ * $Id: display_text_bitmap.cc,v 1.5 2007/03/11 20:18:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,15 +57,17 @@ display_text_bitmap::initial_me ()
   off_desti1 = 0;
 }
 
-//------------------------------------------------------------------------------
-// release handler_resources
-//------------------------------------------------------------------------------
+/**
+ * Release display text object
+ */  
 void
 display_text_bitmap::destroy_me ()
 {
-  if (bitmap_fonts)
-    delete bitmap_fonts;
-  bitmap_fonts = (bitmap_data *) NULL;
+  if (NULL != bitmap_fonts)
+    {
+      delete bitmap_fonts;
+      bitmap_fonts = (bitmap_data *) NULL;
+    }
   object_free ();
 }
 
@@ -409,10 +411,11 @@ display_text_bitmap::bufferAff2 (Sint32 x, Sint32 y, char *chain,
 /**
  * Replace dots string by another string
  * @param src string source
- * @param dst string destination with dots string
+ * @param dst string destination with dots
  */
 
-void display_text_bitmap::print_to_string (char *src, char *dst)
+void
+display_text_bitmap::print_to_string (char *src, char *dst)
 {
   char *d = strchr (dst, '.');
   if (NULL == d)
@@ -421,6 +424,19 @@ void display_text_bitmap::print_to_string (char *src, char *dst)
     }
   strncpy (d, src, strlen(src));
 }
+
+void
+display_text_bitmap::print_int_to_string (Sint32 value, Sint32 padding, char *dst)
+{
+  char *d = strchr (dst, '.');
+  if (NULL == d)
+    {
+      d = dst;
+    }
+  integer_to_ascii (value, padding, d);
+}
+
+
 
 //------------------------------------------------------------------------------
 // create a BOB to display string (used into guards levels)
