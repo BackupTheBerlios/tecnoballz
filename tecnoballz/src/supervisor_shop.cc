@@ -4,11 +4,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.25 2007/03/09 17:18:34 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.26 2007/03/11 17:50:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,7 +109,7 @@ supervisor_shop::first_init ()
 {
 
   box_texts = resources->load_texts (handler_resources::TEXTS_SHOP, 0, BOX_LENGTH_STRING, 3);
-  for(Uint32 i = 0; i < 31; i++)
+  for(Uint32 i = 0; i < 35; i++)
     {
       printf("%02d): %s \n", i, box_texts[i]);
     } 
@@ -124,6 +124,9 @@ supervisor_shop::first_init ()
   sprites->reset ();
 
   /* copy name player into menu text */
+  display_text->print_to_string (current_player->get_name (), 
+				 box_texts[32]);
+
   char *ptDes;
   const char *ptSrc;
   ptDes = current_player->get_name ();
@@ -212,10 +215,10 @@ supervisor_shop::first_init ()
   display->bufferCopy ();       //copy buffer memory into the screen
 
 
-  putthetext (box_texts[31]); 
+  putthetext (box_texts[32]); 
   if (!current_player->is_budget_prices ())
     {
-       char *str = box_texts[31] + BOX_LENGTH_STRING * 2 ;
+       char *str = box_texts[32] + BOX_LENGTH_STRING * 2 ;
        for (Uint32 i = 0; i < BOX_LENGTH_STRING; i++)
 	 {
 	   str[i] = 'X';

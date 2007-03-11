@@ -5,11 +5,11 @@
  * @date 2007-03-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.13 2007/03/06 11:16:15 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.14 2007/03/11 17:50:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -572,7 +572,7 @@ handler_resources::load_texts(Uint32 resource_id, Uint32 numof_lines, Uint32 row
      */
 //printf("size:%f \n", int (strs - buffer)); 
 
-  //printf("list_count:%i\n", list_count);
+  printf("list_count:%i\n", list_count);
 
   delete[]filedata;
 
