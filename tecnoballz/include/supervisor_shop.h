@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.h
  * @brief Shop supervisor 
- * @date 2007-02-28
+ * @date 2007-03-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.13 2007/02/28 08:49:17 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.14 2007/03/13 16:11:56 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,9 @@ private:
   typedef enum
     {
       TEXT_INFOS = 21,
-
+      TEXT_WELCOME = 32,
+      TEXT_NOT_ENOUGH_MONEY = 33,
+      TEXT_CANNOT_BUY_MORE = 34
     };
 
 

@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.cc 
  * @brief Shop supervisor
- * @date 2007-03-11
+ * @date 2007-03-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.27 2007/03/11 20:18:17 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.28 2007/03/13 16:11:56 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -125,7 +125,7 @@ supervisor_shop::first_init ()
 
   /* copy name player into menu text */
   display_text->print_to_string (current_player->get_name (), 
-				 box_texts[32]);
+				 box_texts[TEXT_WELCOME]);
   char *ptDes;
   const char *ptSrc;
   ptDes = current_player->get_name ();
@@ -136,6 +136,9 @@ supervisor_shop::first_init ()
   intToASCII (MAX_OF_CAPSULES_BOUGHT, &shoptext63[48], 1);
   intToASCII (current_player->get_num_of_lifes (),
               &info_text1[BOX_LENGTH_STRING * 4 + 5], 1);
+
+  display_text->print_int_to_string (MAX_OF_CAPSULES_BOUGHT, 2, box_texts[TEXT_CANNOT_BUY_MORE]);
+
 
   if (area_num > 1)
     {
@@ -214,13 +217,13 @@ supervisor_shop::first_init ()
   display->bufferCopy ();       //copy buffer memory into the screen
 
 
-  putthetext (box_texts[32]); 
+  putthetext (box_texts[TEXT_WELCOME]); 
   if (!current_player->is_budget_prices ())
     {
-       char *str = box_texts[32] + BOX_LENGTH_STRING * 2 ;
+       char *str = box_texts[TEXT_WELCOME] + BOX_LENGTH_STRING * 2 ;
        for (Uint32 i = 0; i < BOX_LENGTH_STRING; i++)
 	 {
-	   str[i] = 'X';
+	   str[i] = ' ';
 	 }
     }
 
@@ -684,7 +687,7 @@ supervisor_shop::decrease_money_amount ()
     }
   else
     {
-      putthetext (box_texts[32]);
+      putthetext (box_texts[TEXT_NOT_ENOUGH_MONEY]);
       return false;
     }
 }
@@ -698,7 +701,7 @@ supervisor_shop::achete_gad (Sint32 gadnb)
   /* maximum number of capsules reached */
   if (num_of_bought_capsules >= MAX_OF_CAPSULES_BOUGHT)
     {
-      putthetext (box_texts[33]);
+      putthetext (box_texts[TEXT_CANNOT_BUY_MORE]);
       return;
     }
 
