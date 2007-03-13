@@ -4,11 +4,11 @@
  * @date 2007-03-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.28 2007/03/13 16:11:56 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.29 2007/03/13 20:11:10 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -316,7 +316,7 @@ supervisor_shop::main_loop ()
   //###################################################################
   // display the cursor of the bonus selected in the list on the right 
   //###################################################################
-  aff_select ();
+  draw_select_cursor ();
 
   sprites->draw ();
   display_capsules_bought ();
@@ -949,14 +949,16 @@ supervisor_shop::pos_select ()
     }
 }
 
-//-------------------------------------------------------------------------------
-// display the cursor of the bonus selected in the list on the right 
-//-------------------------------------------------------------------------------
+/**
+ * Draw the cursor of the bonus selected in the list on the right
+ */
 void
-supervisor_shop::aff_select ()
+supervisor_shop::draw_select_cursor ()
 {
   if (box_colour++ > 32)
-    box_colour = 0;
+    {
+      box_colour = 0;
+    }
 
   Sint32 a = angleValue + 5;
   a &= 511;

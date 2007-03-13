@@ -4,11 +4,11 @@
  * @date 2007-03-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.14 2007/03/13 16:11:56 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.15 2007/03/13 20:11:10 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -144,7 +144,7 @@ private:
   void sh_ballade ();
   Sint32 collisions ();
   void pos_select ();
-  void aff_select ();
+  void draw_select_cursor ();
   void tu_triches ();
 
   static const unsigned char cyclingtab[];
