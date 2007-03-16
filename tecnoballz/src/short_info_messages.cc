@@ -2,14 +2,14 @@
  * @file short_info_messages.cc 
  * @brief Display short info messages in bricks levels 
  * @created 2002-12-30
- * @date 2007-03-01
+ * @date 2007-03-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: short_info_messages.cc,v 1.4 2007/03/01 06:50:28 gurumeditation Exp $
+ * $Id: short_info_messages.cc,v 1.5 2007/03/16 15:13:05 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -125,7 +125,7 @@ short_info_messages::intialize ()
   Sint32 zemod = background_screen->get_row_size ();
   for (Uint32 y = 0; y < height_font; y++)
     {
-      for (Sint32 x = 0; x < fonteslarg; x++)
+      for (Uint32 x = 0; x < fonteslarg; x++)
         pfond[x] = ptamp[x];
       pfond = pfond + fonteslarg;
       ptamp = ptamp + zemod;
@@ -283,7 +283,7 @@ short_info_messages::clear_mess ()
   char *pbuff = game_screen->get_pixel_data (pos_x, pos_y);
   char *ptamp = background_screen->get_pixel_data (pos_x, pos_y);
   char *pfond = pt_mesfond + (delay_counter * fonteslarg);
-  for (Sint32 x = 0; x < fonteslarg; x++)
+  for (Uint32 x = 0; x < fonteslarg; x++)
     {
       char pixel = pfond[x];
       pbuff[x] = pixel;

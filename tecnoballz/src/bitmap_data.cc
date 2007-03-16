@@ -2,14 +2,14 @@
  * @file bitmap_data.cc 
  * @brief Handle the bitmap 
  * @created 1996-06-29 
- * @date 2007-02-08
+ * @date 2007-03-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.15 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.16 2007/03/16 15:13:05 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ bitmap_data::release ()
  * Return width of the bitmap
  * @return width in pixels
  */
-Sint32
+Uint32
 bitmap_data::get_width ()
 {
   return width;
@@ -94,7 +94,7 @@ bitmap_data::get_width ()
  * Return size of line in bytes
  * @return row size in bytes
  */
-Sint32
+Uint32
 bitmap_data::get_row_size ()
 {
   return row_size;
@@ -104,7 +104,7 @@ bitmap_data::get_row_size ()
  * Return bitmap height
  * @return the height of the bitmap in pixels
  */
-Sint32
+Uint32
 bitmap_data::get_height ()
 {
   return height;
@@ -161,6 +161,7 @@ bitmap_data::get_offset (Sint32 posX, Sint32 posY)
  * @param h height of the bitmap in pixels
  * @param d depth of the bitmap 
  */
+/*
 void
 bitmap_data::create (Uint32 w, Uint32 h, Uint32 d)
 {
@@ -182,6 +183,7 @@ bitmap_data::create (Uint32 w, Uint32 h, Uint32 d)
   }
   clear ();
 }
+*/
 
 /** 
  * Create a new SDL surface
@@ -220,25 +222,19 @@ bitmap_data::duplicate_pixel_data ()
       bytes_size << " bytes " << std::endl;
     throw;
   }
-  for (Sint32 i = 0; i < bytes_size; i++)
+  for (Uint32 i = 0; i < bytes_size; i++)
     {
       pixel[i] = pixel_data[i];
     }
   return pixel;
 }
 
-//-------------------------------------------------------------------------------
-// copy the page into the "tampon" memory
-//-------------------------------------------------------------------------------
+/*
 void
 bitmap_data::copyTampon ()
 {
   copyTampon (0, 0, 0, 0, width, height);
 }
-
-//-------------------------------------------------------------------------------
-// recopy a piece of the page into the "tampon" memory
-//-------------------------------------------------------------------------------
 void
 bitmap_data::copyTampon (Sint32 srceX, Sint32 srceY, Sint32 destX,
                          Sint32 destY, Sint32 large, Sint32 haute)
@@ -254,6 +250,7 @@ bitmap_data::copyTampon (Sint32 srceX, Sint32 srceY, Sint32 destX,
         d[j] = s[j];
     }
 }
+*/
 
 //-------------------------------------------------------------------------------
 // recopy a piece of the page into the "buffer" memory
@@ -283,6 +280,7 @@ bitmap_data::copyBuffer (Sint32 srceX, Sint32 srceY, Sint32 destX,
  * Clear image buffer memory
  * @param pixel value of the pixel (0 by default)
  */
+/*
 void
 bitmap_data::clear (Sint32 pixel)
 {
@@ -307,6 +305,7 @@ bitmap_data::clear (Sint32 pixel)
         }
     }
 }
+*/
 
 /**
  * Enable palette of the bitmap 
@@ -334,6 +333,7 @@ bitmap_data::get_palette ()
  * @param l width of the detination bitmap
  * @param h height of the destination bitmap
  */
+/*
 bitmap_data *
 bitmap_data::cut (Sint32 xcoord, Sint32 ycoord, Sint32 l, Sint32 h)
 {
@@ -352,6 +352,7 @@ bitmap_data::cut (Sint32 xcoord, Sint32 ycoord, Sint32 l, Sint32 h)
     }
   return bmp;
 }
+*/
 
 /** 
  * Copy a part of the bitmap in a new bitmap surface
@@ -367,7 +368,7 @@ bitmap_data::cut_to_surface (Sint32 xcoord, Sint32 ycoord, Sint32 l, Sint32 h)
   bmp->create_surface (l, h);
   SDL_Surface* surface_dest = bmp->get_surface ();
   SDL_Rect rect = { xcoord, ycoord, l, h };
-  if (depth == 1)
+  if (1 == depth)
     {
       SDL_SetPalette (surface_dest, SDL_LOGPAL | SDL_PHYSPAL, surface->format->palette->colors, 0, 256);
     }

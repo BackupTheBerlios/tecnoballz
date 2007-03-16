@@ -4,11 +4,11 @@
  * @date 2007-03-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.8 2007/03/09 17:18:34 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.9 2007/03/16 15:13:05 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,8 +56,10 @@ sprite_display_menu::sprite_display_menu ()
   menu_color = 0;
 
   clear_addr = (char *) NULL;
-  clearHeigh = 0;
-  clearWidth = 0;
+  clear_zone_height = 0;
+  clear_zone_width = 0;
+  clear_zone_xcoord = 0;
+  clear_zone_ycoord = 0;
   curs_tempo = 0;
 }
 
@@ -129,7 +131,7 @@ sprite_display_menu::first_init ()
 Uint32
 sprite_display_menu::check_and_display ()
 {
-  clear_zone ();
+  clear_input_zone ();
   mis_a_jour ();
   Sint32 mousY = keyboard->get_mouse_y ();
   Sint32 y = (mousY - y_coord) / line_spacing;
@@ -617,23 +619,15 @@ sprite_display_menu::clear_text_offscreen ()
   text_offscreen->clear();
 }
 
-//------------------------------------------------------------------------------
-// clear a zone of the menu (used to modify a string of the menu)
-//------------------------------------------------------------------------------
+/**
+ * Clear a zone of the menu (used to modify a string of the menu)
+ */
 void
-sprite_display_menu::clear_zone ()
+sprite_display_menu::clear_input_zone ()
 {
   if (!clear_addr)
     return;
-  Uint32 n = srceNextLn / 4;
-  Uint32 z = 0x0;
-  Uint32 *d = (Uint32 *) clear_addr;
-  for (Uint32 h = 0; h < clearHeigh; h++)
-    {
-      for (Uint32 w = 0; w < clearWidth; w++)
-        d[w] = z;
-      d += n;
-    }
+  text_offscreen->clear(0, clear_zone_xcoord, clear_zone_ycoord, clear_zone_width, clear_zone_height);
 }
 
 //------------------------------------------------------------------------------
@@ -646,20 +640,31 @@ sprite_display_menu::curs_print ()
     return;
   Sint32 xcurs = keyboard->get_input_cursor_pos ();
   if (xcurs < 0)
-    return;
+    {
+      return;
+    }
   if (--curs_tempo < 1)
     curs_tempo = 50;
   if (curs_tempo > 30)
     return;
+ 
+//  text_offscreen->clear(0xee, clear_zone_xcoord + xcurs * font_width,
+//			clear_zone_ycoord, font_width, font_height);
+
+  
+
   char z = 0xEE;
-  char *d = clear_addr + (xcurs * font_width);
+  //char *d = clear_addr + (xcurs * font_width);
+  char *d = text_offscreen->get_pixel_data(clear_zone_xcoord + xcurs * font_width, clear_zone_ycoord);
   Uint32 n = srceNextLn;
   for (Uint32 h = 0; h < font_height; h++)
     {
       for (Uint32 w = 0; w < font_width; w++)
         {
-          if (!d[w])
-            d[w] = z;
+          if (0 == d[w])
+	    {
+              d[w] = z;
+	    }
         }
       d += n;
     }
@@ -689,8 +694,10 @@ sprite_display_menu::clear_init (Uint32 xcoor, Uint32 ycoor, Uint32 width,
   clear_stop ();
   clear_addr = pixel_data + (ycoor * line_spacing * srceNextLn) +
     (xcoor * font_width);
-  clearWidth = (width * font_width) / 4;
-  clearHeigh = lines * font_height;
+  clear_zone_width = (width * font_width);
+  clear_zone_height = lines * font_height;
+  clear_zone_xcoord = xcoor * font_width;
+  clear_zone_ycoord = ycoor * line_spacing;
 }
 
 //------------------------------------------------------------------------------

@@ -2,14 +2,14 @@
  * @file surface_sdl.cc 
  * @brief an drawing surface
  * @created 2007-02-15
- * @date 2007-02-18
+ * @date 2007-03-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.cc,v 1.7 2007/02/18 15:13:25 gurumeditation Exp $
+ * $Id: surface_sdl.cc,v 1.8 2007/03/16 15:13:05 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -152,10 +152,12 @@ surface_sdl::get_offset (Uint32 xcoord, Uint32 ycoord)
 void
 surface_sdl::clear (Uint32 color)
 {
-  SDL_Rect rect = {0, surface->w, surface->h};
-  SDL_FillRect (surface, &rect, color);
+  if (SDL_FillRect (surface, NULL, color) < 0)
+    {
+      std::cerr << "(!)surface_sdl::blit_to_surface() " <<
+        "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+    }
 }
-
 
 /**
  * Clear surface
@@ -236,7 +238,7 @@ surface_sdl::blit_to_surface (surface_sdl *dest)
   SDL_Rect rect = {0, 0, surface->w, surface->h};
   if (SDL_BlitSurface (surface, &rect, surface_dest, &rect) < 0)
     {
-      std::cerr << "surface_sdl::blit_to_surface() " <<
+      std::cerr << "(!)surface_sdl::blit_to_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
 }
@@ -256,7 +258,7 @@ surface_sdl::blit_to_surface (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, U
   SDL_Rect rect = {xcoord, ycoord, w, h};
   if (SDL_BlitSurface (surface, &rect, surface_dest, &rect) < 0)
     {
-      std::cerr << "surface_sdl::blit_to_surface() " <<
+      std::cerr << "(!)surface_sdl::blit_to_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
 }
@@ -283,7 +285,7 @@ surface_sdl::blit_to_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2
   SDL_Rect dest_rect = {x2, y2, w, h};
   if (SDL_BlitSurface (surface, &src_rect, dest_surface, &dest_rect) < 0)
     {
-      std::cerr << "surface_sdl::blit_to_surface() " <<
+      std::cerr << "(!)surface_sdl::blit_to_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
 }
@@ -301,7 +303,7 @@ surface_sdl::set_palette (SDL_Color *colors)
     }
   if (!SDL_SetPalette (surface, SDL_LOGPAL | SDL_PHYSPAL, colors, 0, 256))
    {
-      std::cerr << "surface_sdl::set_palette() " <<
+      std::cerr << "(!)surface_sdl::set_palette() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
    }
 }
@@ -319,7 +321,7 @@ surface_sdl::set_palette (surface_sdl *dest)
     }
   if (!SDL_SetPalette (dest->get_surface (), SDL_LOGPAL | SDL_PHYSPAL, surface->format->palette->colors, 0, 256))
    {
-      std::cerr << "surface_sdl::set_palette() " <<
+      std::cerr << "(!)surface_sdl::set_palette() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
    }
 }
@@ -346,7 +348,7 @@ surface_sdl::blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, U
   SDL_Rect dest_rect = {x2, y2, w, h};
   if (SDL_BlitSurface (source_surface, &src_rect, surface, &dest_rect) < 0)
     {
-      std::cerr << "surface_sdl::blit_to_surface() " <<
+      std::cerr << "(!)surface_sdl::blit_to_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
 }

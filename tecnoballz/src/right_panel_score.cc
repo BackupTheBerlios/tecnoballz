@@ -1,14 +1,14 @@
 /** 
  * @file right_panel_score.cc 
  * @brief The right panel score in the bricks levels 
- * @date 2007-02-28
+ * @date 2007-03-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.12 2007/03/09 17:18:34 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.13 2007/03/16 15:13:05 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,8 +95,10 @@ right_panel_score::draw_background ()
   bitmap_data *bmp = new bitmap_data ();
 
   bmp->load (handler_resources::BITMAP_RIGHT_PANEL);
-  bmp->copyTampon (0, 0, 256 * resolution, 0, 64 * resolution,
-                          240 * resolution);
+
+  background_screen->blit_surface (bmp, 0, 0, 256 * resolution, 0, bmp->get_width (), 240 * resolution);
+
+  //bmp->copyTampon (0, 0, 256 * resolution, 0, 64 * resolution, 240 * resolution);
   tamponAff1 (POSX_AREAN * resolution, POSY_AREAN * resolution,
               current_player->area_number, 10);
   tamponAff1 (POSX_LEVEL * resolution, POSY_LEVEL * resolution,

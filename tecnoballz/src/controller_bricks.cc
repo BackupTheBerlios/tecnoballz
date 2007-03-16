@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-02-21
+ * @date 2007-03-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.16 2007/02/25 20:33:37 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.17 2007/03/16 15:13:05 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -204,10 +204,13 @@ controller_bricks::initialize ()
       //bposy = 1 * 63 * resolution;      //test only
 
       if (is_verbose)
-        printf ("controller_bricks::initialise()  bposx=%i / bposy=%i \n",
-                bposx, bposy);
+	{
+	  std::cout << "controller_bricks::initialize() " <<
+	    "bposx: " << bposx << " bposy: " << bposy << std::endl;
+	}
       bitmap_bricks =
-        bmp_bricks->cut (bposx, bposy, bricks_height, bricks_width);
+        bmp_bricks->cut_to_surface (bposx, bposy, bricks_height, bricks_width);
+        //bmp_bricks->cut (bposx, bposy, bricks_height, bricks_width);
       delete bmp_bricks;
 
       /* load one bricks level from the file "tableau.data" */

@@ -1,14 +1,14 @@
 /** 
  * @file sprite_display_menu.h
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-03-06
+ * @date 2007-03-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.h,v 1.2 2007/03/06 17:42:42 gurumeditation Exp $
+ * $Id: sprite_display_menu.h,v 1.3 2007/03/16 15:13:05 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,9 +46,6 @@ public:
       START_GAME
     }
     EXIT_ENUM;
-
-
-
 
 private:
   static const unsigned char cyclingtab[];
@@ -97,8 +94,10 @@ private:
   bitmap_data *text_offscreen;
 
   char *clear_addr;
-  Uint32 clearHeigh;
-  Uint32 clearWidth;
+  Uint32 clear_zone_height;
+  Uint32 clear_zone_width;
+  Uint32 clear_zone_xcoord;
+  Uint32 clear_zone_ycoord; 
   Sint32 curs_tempo;
 
 
@@ -123,7 +122,7 @@ private:
   void mis_a_jour ();
   Uint32 check_events ();
   void clear_text_offscreen ();
-  void clear_zone ();
+  void clear_input_zone ();
   void clear_init (Uint32 xcoor, Uint32 ycoor, Uint32 width, Uint32 lines);
   void input_init (Uint32 xcoor, Uint32 ycoor, Uint32 width, char *strng);
   void clear_stop ();

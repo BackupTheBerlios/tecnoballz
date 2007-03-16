@@ -4,11 +4,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.38 $
+ * @version $Revision: 1.39 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.38 2007/03/09 17:18:34 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.39 2007/03/16 15:13:05 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -156,6 +156,7 @@ supervisor_bricks_level::first_init ()
   viewfinders_paddles->create_sprites_list ();
   popup_menu->first_init (sprites_bitmap, 0, 256 * resolution);
   resources->release_sprites_bitmap ();
+  panel_score->first_init (balls);
   display->lock_surfaces ();
 
   /* initialize controller of the big letters animated composing the word
@@ -167,7 +168,7 @@ supervisor_bricks_level::first_init ()
   init_level ();
 
 
-  panel_score->first_init (balls);
+  //panel_score->first_init (balls);
 
   background ();
   paddles->init_paddles (gigablitz, balls);

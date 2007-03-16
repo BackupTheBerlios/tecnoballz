@@ -4,11 +4,11 @@
  * @date 2007-03-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.29 2007/03/13 20:11:10 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.30 2007/03/16 15:13:05 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -210,9 +210,8 @@ supervisor_shop::first_init ()
   /* load bitmap background of the shop */
   bitmap_data *bmp = new bitmap_data ();
   bmp->load (handler_resources::BITMAP_SHOP);
-  bmp->copyTampon ();
+  background_screen->blit_surface (bmp, 0, 0, 0, 0, bmp->get_width (), bmp->get_height ());
   delete bmp;
-
   background_screen->blit_to_surface (game_screen);
   display->bufferCopy ();       //copy buffer memory into the screen
 
