@@ -4,11 +4,11 @@
  * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.28 2007/02/26 21:29:23 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.29 2007/03/16 16:35:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -264,8 +264,8 @@ private:
 protected:
   /** The pixel data of the sprite */
   char *pixel_data;
-  Sint32 srceNextLn;
-  Sint32 destNextLn;
+  Uint32 row_size;
+  Uint32 destNextLn;
   /** true if the sprite is enabled and drawn */
   Sint32 is_enabled;
   /** true if the sprite has a shadow */

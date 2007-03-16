@@ -4,11 +4,11 @@
  * @date 2007-03-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: display_text_bitmap.cc,v 1.5 2007/03/11 20:18:17 gurumeditation Exp $
+ * $Id: display_text_bitmap.cc,v 1.6 2007/03/16 16:35:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -503,7 +503,7 @@ display_text_bitmap::string2bob (const char *ptStr)
   ptBob->set_pixel_data (pixel, 1);
   ptBob->sprite_width = pBmap->get_width ();
   ptBob->sprite_height = pBmap->get_height ();
-  ptBob->srceNextLn = pBmap->get_row_size ();
+  ptBob->row_size = pBmap->get_row_size ();
   ptBob->max_of_images = 1;
   ptBob->destNextLn = game_screen->get_row_size ();
   delete pBmap;

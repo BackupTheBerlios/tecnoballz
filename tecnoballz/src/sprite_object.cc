@@ -4,11 +4,11 @@
  * @date 2007-02-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.27 2007/02/26 21:29:23 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.28 2007/03/16 16:35:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -157,7 +157,7 @@ sprite_object::clear_sprite_members ()
   current_drawing_pixels = NULL;
   sprite_has_shadow = false;
   sprite_type_id = 0;
-  srceNextLn = 0;
+  row_size = 0;
   affligFrst = 0;
   affligLast = 1;
   mirrorVert = 0;
@@ -213,7 +213,7 @@ sprite_object::duplicate_to (sprite_object * sprite_dest)
   sprite_dest->current_drawing_pixels = current_drawing_pixels;
   sprite_dest->sprite_has_shadow = sprite_has_shadow;
   sprite_dest->sprite_type_id = sprite_type_id;
-  sprite_dest->srceNextLn = srceNextLn;
+  sprite_dest->row_size = row_size;
   sprite_dest->destNextLn = destNextLn;
   sprite_dest->draw_method = draw_method;
   sprite_dest->is_draw_pixel_by_pixel = is_draw_pixel_by_pixel;
@@ -295,7 +295,7 @@ sprite_object::init_common (bitmap_data * bitmap, bool shadow)
 {
   screen_width = display->get_width ();
   screen_height = display->get_height ();
-  srceNextLn = bitmap->get_row_size ();
+  row_size = bitmap->get_row_size ();
   destNextLn = game_screen->get_row_size ();
   sprite_has_shadow = shadow;
   screen_ptr = (char *) NULL;
@@ -1478,7 +1478,7 @@ sprite_object::draw_copy_from_bitmap ()
   char *d = game_screen->get_pixel_data (x_coord, y_coord);
   restore_ptr = background_screen->get_pixel_data (x_coord, y_coord);
   screen_ptr = d;
-  Sint32 m = srceNextLn;
+  Sint32 m = row_size;
   Sint32 n = destNextLn;
   Sint32 h = sprite_height;
   Sint32 l = sprite_width;
@@ -1512,7 +1512,7 @@ sprite_object::MSKbitcopy ()
   char *d = game_screen->get_pixel_data (x_coord, y_coord);
   restore_ptr = background_screen->get_pixel_data (x_coord, y_coord);
   screen_ptr = d;
-  Sint32 m = srceNextLn;
+  Sint32 m = row_size;
   Sint32 n = destNextLn;
   Sint32 h = sprite_height;
   Sint32 l = sprite_width;

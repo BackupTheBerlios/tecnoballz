@@ -4,11 +4,11 @@
  * @date 2007-03-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.9 2007/03/16 15:13:05 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.10 2007/03/16 16:35:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ sprite_display_menu::sprite_display_menu ()
   clear_zone_width = 0;
   clear_zone_xcoord = 0;
   clear_zone_ycoord = 0;
-  curs_tempo = 0;
+  blink_cursor_delay = 0;
 }
 
 /**
@@ -151,8 +151,8 @@ sprite_display_menu::check_and_display ()
   //###################################################################
   char *desP1 = pixel_data;
   Sint32 offSc = off_source;
-  Sint32 offDs = srceNextLn;
-  Sint32 offD2 = srceNextLn * (line_spacing - 1);
+  Sint32 offDs = row_size;
+  Sint32 offD2 = row_size * (line_spacing - 1);
   Sint32 *basPT = (Sint32 *) caract_adr;
   char *p = menu_liste[current_menu_section];
   char *c = ascii2code;
@@ -353,7 +353,7 @@ sprite_display_menu::check_and_display ()
         }
 
     }
-  curs_print ();
+  draw_input_cursor ();
   return exit_code;
 }
 
@@ -633,8 +633,11 @@ sprite_display_menu::clear_input_zone ()
 //------------------------------------------------------------------------------
 // display the cursor (input string)
 //------------------------------------------------------------------------------
+/**
+ * Draw the cursor
+ */
 void
-sprite_display_menu::curs_print ()
+sprite_display_menu::draw_input_cursor ()
 {
   if (!clear_addr)
     return;
@@ -643,20 +646,17 @@ sprite_display_menu::curs_print ()
     {
       return;
     }
-  if (--curs_tempo < 1)
-    curs_tempo = 50;
-  if (curs_tempo > 30)
-    return;
- 
-//  text_offscreen->clear(0xee, clear_zone_xcoord + xcurs * font_width,
-//			clear_zone_ycoord, font_width, font_height);
-
-  
-
+  if (--blink_cursor_delay == 0)
+    {
+      blink_cursor_delay = 50;
+    }
+  if (blink_cursor_delay > 30)
+    {
+      return;
+    }
   char z = 0xEE;
-  //char *d = clear_addr + (xcurs * font_width);
   char *d = text_offscreen->get_pixel_data(clear_zone_xcoord + xcurs * font_width, clear_zone_ycoord);
-  Uint32 n = srceNextLn;
+  Uint32 n = row_size;
   for (Uint32 h = 0; h < font_height; h++)
     {
       for (Uint32 w = 0; w < font_width; w++)
@@ -680,7 +680,7 @@ sprite_display_menu::input_init (Uint32 xcoor, Uint32 ycoor, Uint32 width,
   clear_init (xcoor, ycoor, width, 1);
   if (!strng)
     return;
-  curs_tempo = 50;
+  blink_cursor_delay = 50;
   keyboard->set_input_string (strng, width);
 }
 
@@ -692,7 +692,7 @@ sprite_display_menu::clear_init (Uint32 xcoor, Uint32 ycoor, Uint32 width,
                                  Uint32 lines)
 {
   clear_stop ();
-  clear_addr = pixel_data + (ycoor * line_spacing * srceNextLn) +
+  clear_addr = pixel_data + (ycoor * line_spacing * row_size) +
     (xcoor * font_width);
   clear_zone_width = (width * font_width);
   clear_zone_height = lines * font_height;

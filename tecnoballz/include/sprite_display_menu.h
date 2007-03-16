@@ -4,11 +4,11 @@
  * @date 2007-03-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.h,v 1.3 2007/03/16 15:13:05 gurumeditation Exp $
+ * $Id: sprite_display_menu.h,v 1.4 2007/03/16 16:35:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ private:
   Uint32 clear_zone_width;
   Uint32 clear_zone_xcoord;
   Uint32 clear_zone_ycoord; 
-  Sint32 curs_tempo;
+  Uint32 blink_cursor_delay;
 
 
   static char ascii2code[128];
@@ -126,7 +126,7 @@ private:
   void clear_init (Uint32 xcoor, Uint32 ycoor, Uint32 width, Uint32 lines);
   void input_init (Uint32 xcoor, Uint32 ycoor, Uint32 width, char *strng);
   void clear_stop ();
-  void curs_print ();
+  void draw_input_cursor ();
   void copyScores ();
 };
 #endif

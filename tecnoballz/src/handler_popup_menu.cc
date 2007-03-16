@@ -5,11 +5,11 @@
  * @date 2007-02-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.4 2007/02/21 21:07:11 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.5 2007/03/16 16:35:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -316,10 +316,10 @@ void
 handler_popup_menu::display640 ()
 {
   Sint32 color = menu_color;
-  char *desP1 = pixel_data + char_height + srceNextLn * vertical_space;
+  char *desP1 = pixel_data + char_height + row_size * vertical_space;
   Sint32 offSc = off_source;
-  Sint32 offDs = srceNextLn;
-  Sint32 offD2 = srceNextLn * (vertical_space - 1) + (char_height * 2);
+  Sint32 offDs = row_size;
+  Sint32 offD2 = row_size * (vertical_space - 1) + (char_height * 2);
   Sint32 *basPT = (Sint32 *) caract_adr;
   const char *p = menu_texts[menu_number];
   char *c = ascii2code;
@@ -406,10 +406,10 @@ void
 handler_popup_menu::display320 ()
 {
   Sint32 color = menu_color;
-  char *desP1 = pixel_data + char_height + srceNextLn * vertical_space;
+  char *desP1 = pixel_data + char_height + row_size * vertical_space;
   Sint32 offSc = off_source;
-  Sint32 offDs = srceNextLn;
-  Sint32 offD2 = srceNextLn * (vertical_space - 1) + (char_height * 2);
+  Sint32 offDs = row_size;
+  Sint32 offD2 = row_size * (vertical_space - 1) + (char_height * 2);
   Sint32 *basPT = (Sint32 *) caract_adr;
   const char *p = menu_texts[menu_number];
   char *c = ascii2code;

@@ -5,11 +5,11 @@
  * @date 2007-03-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_scores.cc,v 1.6 2007/03/09 17:18:34 gurumeditation Exp $
+ * $Id: sprite_display_scores.cc,v 1.7 2007/03/16 16:35:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,9 +98,9 @@ sprite_display_scores::displayTxt ()
   //###################################################################
   char *desP1 = pixel_data;
   Sint32 offSc = off_source;
-  Sint32 offDs = srceNextLn;
-  Sint32 offD2 = srceNextLn * (space2next - 1);
-  //Sint32 offD2 = srceNextLn * 8 * resolution;
+  Sint32 offDs = row_size;
+  Sint32 offD2 = row_size * (space2next - 1);
+  //Sint32 offD2 = row_size * 8 * resolution;
   Sint32 *basPT = (Sint32 *) caract_adr;
   char *p = scorestext;
   char *c = ascii2code;
