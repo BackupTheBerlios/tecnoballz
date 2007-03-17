@@ -4,11 +4,11 @@
  * @date 2007-03-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: display_text_bitmap.cc,v 1.6 2007/03/16 16:35:04 gurumeditation Exp $
+ * $Id: display_text_bitmap.cc,v 1.7 2007/03/17 18:18:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,10 @@
  */
 display_text_bitmap::display_text_bitmap ()
 {
+  for (Uint32 i = 0; i < 16; i++)
+    {
+      int_string_tmp[i] = 0;
+    }
   initial_me ();
 }
 
@@ -280,10 +284,56 @@ display_text_bitmap::affNombre1 (char *desP1, Sint32 value, Sint32 baseN)
 #endif
 }
 
+/**
+ * Draw a line of text onto a SDL_Surface 
+ * @param dest destination surface
+ * @param xcoord x-coordinate on the surface
+ * @param ycoord y-coordinate on the surface
+ * @param value the integer value to be converted
+ * @param padding length of the string
+ */
+void
+display_text_bitmap::draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, Sint32 value, Uint32 padding)
+{
+  integer_to_ascii (value, padding, int_string_tmp);
+  draw (dest, xcoord, ycoord, int_string_tmp, 0);
+}
+void
+display_text_bitmap::draw (offscreen_surface *dest, Uint32 xcoord, Uint32 ycoord, Sint32 value, Uint32 padding)
+{
+  integer_to_ascii (value, padding, int_string_tmp);
+  draw (dest, xcoord, ycoord, int_string_tmp, 0);
+}
+
+/**
+ * Draw a line of text onto a SDL_Surface 
+ * @param dest destination surface
+ * @param xcoord x-coordinate on the surface
+ * @param ycoord y-coordinate on the surface
+ * @param str string to draw
+ * @param length length of the string
+ */
+void
+display_text_bitmap::draw (offscreen_surface *dest, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 length)
+{
+  printf("[1] ====> display_text_bitmap::draw %s\n", str);  
+  Uint32 yoffset = dest->get_vertical_offset ();
+  draw ((surface_sdl *) dest, xcoord, ycoord + yoffset, str, length);
+}
+
+/**
+ * Draw a line of text onto a SDL_Surface 
+ * @param dest destination surface
+ * @param xcoord x-coordinate on the surface
+ * @param ycoord y-coordinate on the surface
+ * @param str string to draw
+ * @param length length of the string
+ */
 void
 display_text_bitmap::draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 length)
 {
 
+  printf("[2] ====> display_text_bitmap::draw %s\n", str);  
   SDL_Surface *surface_dest = dest->get_surface ();
   rect_destination.x = xcoord;
   rect_destination.y = ycoord;
@@ -297,7 +347,7 @@ display_text_bitmap::draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, cons
   for (Uint32 i = 0; i < length; i++, rect_destination.x += char_width)
     {
       Uint32 x = str[i] - 32;
-      if (x == 0) 
+      if (0 == x) 
         {  
            continue;
         }

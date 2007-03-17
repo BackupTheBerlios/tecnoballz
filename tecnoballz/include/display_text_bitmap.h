@@ -1,14 +1,14 @@
 /** 
  * @file display_text_bitmap.h
  * @brief Display bitmap strings 
- * @date 2007-03-11
+ * @date 2007-03-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: display_text_bitmap.h,v 1.4 2007/03/11 20:18:17 gurumeditation Exp $
+ * $Id: display_text_bitmap.h,v 1.5 2007/03/17 18:18:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ protected:
   SDL_Surface *surface_fonts;
   SDL_Rect rect_fonts;
   SDL_Rect rect_destination;
+  char int_string_tmp[16]; 
 
 
   char *fontes_adr;
@@ -67,6 +68,9 @@ public:
   void bufferAff1 (Sint32 x, Sint32 y, Sint32 value, Sint32 baseN);
   void tamponAff1 (Sint32 x, Sint32 y, Sint32 value, Sint32 baseN);
   void aff_texte1 (char *desP1, char *chain, Sint32 total);
+  void draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, Sint32 value, Uint32 padding);
+  void draw (offscreen_surface *dest, Uint32 xcoord, Uint32 ycoord, Sint32 value, Uint32 padding);
+  void draw (offscreen_surface *dest, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 length);
   void draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 length = 0);
   
   void tamponAff2 (Sint32 x, Sint32 y, char *chain, Sint32 total);

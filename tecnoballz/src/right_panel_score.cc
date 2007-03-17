@@ -4,11 +4,11 @@
  * @date 2007-03-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.13 2007/03/16 15:13:05 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.14 2007/03/17 18:18:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,10 +99,14 @@ right_panel_score::draw_background ()
   background_screen->blit_surface (bmp, 0, 0, 256 * resolution, 0, bmp->get_width (), 240 * resolution);
 
   //bmp->copyTampon (0, 0, 256 * resolution, 0, 64 * resolution, 240 * resolution);
-  tamponAff1 (POSX_AREAN * resolution, POSY_AREAN * resolution,
-              current_player->area_number, 10);
-  tamponAff1 (POSX_LEVEL * resolution, POSY_LEVEL * resolution,
-              current_player->level_number, 10);
+  //
+
+  draw (background_screen, POSX_AREAN * resolution, POSY_AREAN * resolution, current_player->area_number, 2);
+  draw (background_screen, POSX_LEVEL * resolution, POSY_LEVEL * resolution, current_player->level_number, 2);
+
+  //tamponAff1 (POSX_AREAN * resolution, POSY_AREAN * resolution, current_player->area_number, 10);
+  //tamponAff1 (POSX_LEVEL * resolution, POSY_LEVEL * resolution, current_player->level_number, 10);
+
   tamponAff2 (POSX_NOMJO * resolution, POSY_NOMJO * resolution,
               current_player->player_name, 6);
   tamponAff1 (POSX_BESTS * resolution, POSY_BESTS * resolution,
