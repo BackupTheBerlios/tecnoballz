@@ -1,14 +1,14 @@
 /** 
  * @file right_panel_score.h
  * @brief The right panel score in the bricks levels 
- * @date 2007-02-14
+ * @date 2007-02-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.h,v 1.5 2007/02/16 12:38:24 gurumeditation Exp $
+ * $Id: right_panel_score.h,v 1.6 2007/03/17 20:30:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,32 +47,29 @@ private:
   static const Uint32 GAUGE_XCOORD = 526 / 2;
   static const Uint32 GAUGE_YCOORD = 420 / 2;
   static const Uint32 TEMOINLARG = 10 / 2;
-  static const Sint32 POSX_AREAN = 528 / 2;
-  static const Sint32 POSY_AREAN = 306 / 2;
-  static const Sint32 POSX_LEVEL = 592 / 2;
-  static const Sint32 POSY_LEVEL = 306 / 2;
-  static const Sint32 POSX_NOMJO = 528 / 2;
-  static const Sint32 POSY_NOMJO = 78 / 2;
+  static const Uint32 AREA_NUM_XCOORD = 264; 
+  static const Uint32 AREA_NUM_YCOORD = 153;
+  static const Uint32 LEVEL_NUM_XCOORD = 296;
+  static const Uint32 LEVEL_NUM_YCOORD = 153;
+  static const Uint32 PLAYERNAME_XCOORD = 264;
+  static const Uint32 PLAYERNAME_YCOORD = 39;
 
-  static const Sint32 POSX_BESTN = 528 / 2;
-  static const Sint32 POSY_BESTN = 344 / 2;
+  static const Uint32 BEST_PLAYER_XCOORD = 528 / 2;
+  static const Uint32 BEST_PLAYER_YCOORD = 344 / 2;
 
-  static const Sint32 POSX_BESTS = 528 / 2;
-  static const Sint32 POSY_BESTS = 382 / 2;
+  static const Uint32 BEST_SCORE_XCOORD = 264;
+  static const Uint32 BEST_SCORE_YCOORD = 191;
 
-  static const Sint32 POSX_SCORE = 528 / 2;
-  static const Sint32 POSY_SCORE = 116 / 2;
-  static const Sint32 POSX_LIFES = 528 / 2;
-  static const Sint32 POSY_LIFES = 152 / 2;
-  static const Sint32 POSX_BRICK = 592 / 2;
-  static const Sint32 POSY_BRICK = 152 / 2;
+  static const Uint32 SCORE_XCOORD = 528 / 2;
+  static const Uint32 SCORE_YCOORD = 116 / 2;
+  static const Uint32 LIFES_XCOORD = 528 / 2;
+  static const Uint32 LIFES_YCOORD = 152 / 2;
+  static const Uint32 BRICKS_XCOORD = 592 / 2;
+  static const Uint32 BRICKS_YCOORD = 152 / 2;
   /** The number of bricks which remain */
   Uint32 bricks_counter;
   Sint32 flip_white;
   controller_balls *balls;
-  char *scoreAdres;             // buffer address score
-  char *lifesAdres;             // buffer address lifes
-  char *brickAdres;             // buffer address number bricks
   char *temoinAdrs;             // buffer address indicator blitz
   /** Countdown berfore Gigablitz launch */ 
   Uint32 gigablitz_countdown;

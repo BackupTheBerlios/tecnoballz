@@ -1,14 +1,14 @@
 /** 
  * @file display_text_bitmap.cc 
  * @brief Display bitmap strings 
- * @date 2007-03-11
+ * @date 2007-03-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: display_text_bitmap.cc,v 1.7 2007/03/17 18:18:50 gurumeditation Exp $
+ * $Id: display_text_bitmap.cc,v 1.8 2007/03/17 20:30:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,7 +104,6 @@ display_text_bitmap::load_bitmap_fonts (Uint32 resource_id)
   bitmap_fonts = new bitmap_data ();
   bitmap_fonts->load (resource_id);
   surface_fonts = bitmap_fonts->get_surface ();
-  fontes_adr = bitmap_fonts->get_pixel_data (216 * resolution, 0);        //characters '0' to '9'
   caract_adr = bitmap_fonts->get_pixel_data (0, 0);       //characters 'A' to 'Z'
   off_desti1 = game_screen->get_row_size ();    //modulo destination
   off_source = bitmap_fonts->get_row_size ();     //modulo source
@@ -117,212 +116,53 @@ display_text_bitmap::load_bitmap_fonts (Uint32 resource_id)
   rect_destination.h = rect_fonts.h = char_height;
 }
 
-// -----------------------------------------------------------------------------
-// display number into the "buffer" memory 
-//              input   => x            : abscissa
-//                              => y            : ordonnee
-//                              => value        : value to display
-//                              => baseN        : number of characters (10 = 2; 100 = 3; 1000 = 4;..)
-// -----------------------------------------------------------------------------
+/**
+ * Draw a integer into a offscreen surface 
+ * @param dest destination offscreen 
+ * @param xcoord x-coordinate on the offscreen 
+ * @param ycoord y-coordinate on the offscreen
+ * @param value the integer value to be draw 
+ * @param padding length of the string
+ */
 void
-display_text_bitmap::bufferAff1 (Sint32 x, Sint32 y, Sint32 value,
-                                 Sint32 baseN)
+display_text_bitmap::draw (offscreen_surface *dest, Uint32 xcoord, Uint32 ycoord, Sint32 value, Uint32 padding)
 {
-  char *desP1 = game_screen->get_pixel_data (x, y);
-  affNombre1 (desP1, value, baseN);
-}
-
-// -----------------------------------------------------------------------------
-// display number into the "tampon" memory 
-//              input   => x            : abscissa
-//                              => y            : ordinate
-//                              => value        : value to display
-//                              => baseN        : number of characters (10 = 2; 100 = 3; 1000 = 4;..)
-// -----------------------------------------------------------------------------
-void
-display_text_bitmap::tamponAff1 (Sint32 x, Sint32 y, Sint32 value,
-                                 Sint32 baseN)
-{
-  char *desP1 = background_screen->get_pixel_data (x, y);
-  affNombre1 (desP1, value, baseN);
-}
-
-// -----------------------------------------------------------------------------
-// display number into the "buffer" memory or the "tampon" memory 
-//              input   => desP1 : pointer to the buffer or the tampon
-//                              => value : value to display
-//                              => baseN : number of characters (10 = 2; 100 = 3; 1000 = 4;..)
-// -----------------------------------------------------------------------------
-void
-display_text_bitmap::affNombre1 (char *desP1, Sint32 value, Sint32 baseN)
-{
-  Sint32 offSc = off_source;
-  Sint32 offDs = off_desti1;
-#ifndef BYTES_COPY
-  Sint32 *basPT = (Sint32 *) fontes_adr;
-  if (resolution == 1)
-    {
-      while (baseN > 0)
-        {
-          Sint32 i = 0;
-          while (value >= baseN)
-            {
-              value -= baseN;
-              i++;
-            }
-          baseN /= 10;
-          Sint32 *s = (Sint32 *) basPT;
-          Sint32 *d = (Sint32 *) desP1;
-          s = (Sint32 *) ((char *) s + (i << 3));
-          for (i = 0; i < 8; i++)
-            {
-              d[0] = s[0];
-              d[1] = s[1];
-              s = (Sint32 *) ((char *) s + offSc);
-              d = (Sint32 *) ((char *) d + offDs);
-            }
-          desP1 = desP1 + 8;
-        }
-    }
-  else
-    {
-      while (baseN > 0)
-        {
-          Sint32 i = 0;
-          while (value >= baseN)
-            {
-              value -= baseN;
-              i++;
-            }
-          baseN /= 10;
-          Sint32 *s = (Sint32 *) basPT;
-          Sint32 *d = (Sint32 *) desP1;
-          s = (Sint32 *) ((char *) s + (i << 4));
-          for (i = 0; i < 16; i++)
-            {
-              d[0] = s[0];
-              d[1] = s[1];
-              d[2] = s[2];
-              d[3] = s[3];
-              s = (Sint32 *) ((char *) s + offSc);
-              d = (Sint32 *) ((char *) d + offDs);
-            }
-          desP1 = desP1 + 16;
-        }
-    }
-#else
-  char *basPT = fontes_adr;
-  if (resolution == 1)
-    {
-      while (baseN > 0)
-        {
-          Sint32 i = 0;
-          while (value >= baseN)
-            {
-              value -= baseN;
-              i++;
-            }
-          baseN /= 10;
-          char *s = basPT;
-          char *d = desP1;
-          s = s + (i << 3);
-          s += 8;
-          for (i = 0; i < 8; i++)
-            {
-              d[0] = s[0];
-              d[1] = s[1];
-              d[2] = s[2];
-              d[3] = s[3];
-              d[4] = s[4];
-              d[5] = s[5];
-              d[6] = s[6];
-              d[7] = s[7];
-              s = s + offSc;
-              d = d + offDs;
-            }
-          desP1 = desP1 + 8;
-        }
-    }
-  else
-    {
-      while (baseN > 0)
-        {
-          Sint32 i = 0;
-          while (value >= baseN)
-            {
-              value -= baseN;
-              i++;
-            }
-          baseN /= 10;
-          char *s = basPT;
-          char *d = desP1;
-          s = s + (i << 4);
-          for (i = 0; i < 16; i++)
-            {
-              d[0] = s[0];
-              d[1] = s[1];
-              d[2] = s[2];
-              d[3] = s[3];
-              d[4] = s[4];
-              d[5] = s[5];
-              d[6] = s[6];
-              d[7] = s[7];
-              d[8] = s[8];
-              d[9] = s[9];
-              d[10] = s[10];
-              d[11] = s[11];
-              d[12] = s[12];
-              d[13] = s[13];
-              d[14] = s[14];
-              d[15] = s[15];
-              s = s + offSc;
-              d = d + offDs;
-            }
-          desP1 = desP1 + 16;
-        }
-    }
-#endif
+  integer_to_ascii (value, padding, int_string_tmp);
+  draw (dest, xcoord, ycoord, int_string_tmp, padding);
 }
 
 /**
- * Draw a line of text onto a SDL_Surface 
+ * Draw a integer into a SDL_Surface 
  * @param dest destination surface
  * @param xcoord x-coordinate on the surface
  * @param ycoord y-coordinate on the surface
- * @param value the integer value to be converted
+ * @param value the integer value to be draw 
  * @param padding length of the string
  */
 void
 display_text_bitmap::draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, Sint32 value, Uint32 padding)
 {
   integer_to_ascii (value, padding, int_string_tmp);
-  draw (dest, xcoord, ycoord, int_string_tmp, 0);
-}
-void
-display_text_bitmap::draw (offscreen_surface *dest, Uint32 xcoord, Uint32 ycoord, Sint32 value, Uint32 padding)
-{
-  integer_to_ascii (value, padding, int_string_tmp);
-  draw (dest, xcoord, ycoord, int_string_tmp, 0);
+  draw (dest, xcoord, ycoord, int_string_tmp, padding);
 }
 
 /**
- * Draw a line of text onto a SDL_Surface 
- * @param dest destination surface
- * @param xcoord x-coordinate on the surface
- * @param ycoord y-coordinate on the surface
+ * Draw a line of text into a offscreen surface 
+ * @param dest destination offscreen 
+ * @param xcoord x-coordinate on the offscreen 
+ * @param ycoord y-coordinate on the offscreen
  * @param str string to draw
  * @param length length of the string
  */
 void
 display_text_bitmap::draw (offscreen_surface *dest, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 length)
 {
-  printf("[1] ====> display_text_bitmap::draw %s\n", str);  
   Uint32 yoffset = dest->get_vertical_offset ();
   draw ((surface_sdl *) dest, xcoord, ycoord + yoffset, str, length);
 }
 
 /**
- * Draw a line of text onto a SDL_Surface 
+ * Draw a line of text into a SDL_Surface 
  * @param dest destination surface
  * @param xcoord x-coordinate on the surface
  * @param ycoord y-coordinate on the surface
@@ -332,12 +172,9 @@ display_text_bitmap::draw (offscreen_surface *dest, Uint32 xcoord, Uint32 ycoord
 void
 display_text_bitmap::draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 length)
 {
-
-  printf("[2] ====> display_text_bitmap::draw %s\n", str);  
   SDL_Surface *surface_dest = dest->get_surface ();
   rect_destination.x = xcoord;
   rect_destination.y = ycoord;
-
   if (0 == length) 
     {
       length = strlen(str);
@@ -360,102 +197,6 @@ display_text_bitmap::draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, cons
          break;
        }
     }
-}
-
-
-// -----------------------------------------------------------------------------
-// display string into the "buffer" memory or the "tampon" memory 
-//              input   => desP1        : pointer to the buffer or the tampon
-//                              => chain        : string to display
-//                              => total        : number of characters
-// -----------------------------------------------------------------------------
-void
-display_text_bitmap::aff_texte1 (char *desP1, char *chain, Sint32 total)
-{
-  Sint32 offSc = off_source;
-  Sint32 offDs = off_desti1;
-  Sint32 *basPT = (Sint32 *) caract_adr;
-  Sint32 a, b;
-  char *c = ascii2code;
-  char *p = chain;
-  if (resolution == 1)
-    {
-      for (Sint32 j = 0; j < total; j++)
-        {
-          a = *(p++) - 32;
-          if (a)
-            {
-              b = c[a];
-              Sint32 *s = (Sint32 *) basPT;
-              Sint32 *d = (Sint32 *) desP1;
-              b = b << 3;
-              s = (Sint32 *) ((char *) s + b);
-              for (b = 0; b < 8; b++)
-                {
-                  d[0] = s[0];
-                  d[1] = s[1];
-                  s = (Sint32 *) ((char *) s + offSc);
-                  d = (Sint32 *) ((char *) d + offDs);
-                }
-            }
-          desP1 = desP1 + 8;
-        }
-    }
-  else
-    {
-      for (Sint32 j = 0; j < total; j++)
-        {
-          a = *(p++) - 32;
-          if (a)
-            {
-              b = c[a];
-              Sint32 *s = (Sint32 *) basPT;
-              Sint32 *d = (Sint32 *) desP1;
-              b = b << 4;
-              s = (Sint32 *) ((char *) s + b);
-              for (b = 0; b < 16; b++)
-                {
-                  d[0] = s[0];
-                  d[1] = s[1];
-                  d[2] = s[2];
-                  d[3] = s[3];
-                  s = (Sint32 *) ((char *) s + offSc);
-                  d = (Sint32 *) ((char *) d + offDs);
-                }
-            }
-          desP1 = desP1 + 16;
-        }
-    }
-}
-
-// -----------------------------------------------------------------------------
-// display string into the "tampon" memory
-//              input   => x            : abscissa
-//                              => y            : ordinate
-//                              => chain        : string to display
-//                              => total        : number of characters
-// -----------------------------------------------------------------------------
-void
-display_text_bitmap::tamponAff2 (Sint32 x, Sint32 y, char *chain,
-                                 Sint32 total)
-{
-  char *desP1 = background_screen->get_pixel_data (x, y);
-  aff_texte1 (desP1, chain, total);
-}
-
-//------------------------------------------------------------------------------
-// display string to buffer
-//              input   => x            : abscissa
-//                              => y            : ordinate 
-//                              => chain        : string to display
-//                              => total        : number of characters
-//------------------------------------------------------------------------------
-void
-display_text_bitmap::bufferAff2 (Sint32 x, Sint32 y, char *chain,
-                                 Sint32 total)
-{
-  char *desP1 = game_screen->get_pixel_data (x, y);
-  aff_texte1 (desP1, chain, total);
 }
 
 /**
@@ -494,19 +235,18 @@ display_text_bitmap::print_int_to_string (Sint32 value, Sint32 padding, char *ds
 sprite_object *
 display_text_bitmap::string2bob (const char *ptStr)
 {
-  Sint32 numch = strlen (ptStr);
-  bitmap_data *pBmap = new bitmap_data ();
-  //pBmap->create(numch * char_height, char_height, 1);
-  pBmap->create_surface (numch * char_height, char_height);
+  Sint32 length = strlen (ptStr);
+  bitmap_data *bmp = new bitmap_data ();
+  bmp->create_surface (length * char_height, char_height);
   Sint32 *basPT = (Sint32 *) caract_adr;
-  char *desP1 = pBmap->get_pixel_data ();
+  char *desP1 = bmp->get_pixel_data ();
   Sint32 offSc = off_source;
-  Sint32 offDs = pBmap->get_row_size ();
+  Sint32 offDs = bmp->get_row_size ();
   char *c = ascii2code;
   Sint32 a, b, h;
   if (resolution == 1)
     {
-      for (h = 0; h < numch; h++)
+      for (h = 0; h < length; h++)
         {
           a = *(ptStr++) - 32;
           b = c[a];
@@ -527,7 +267,7 @@ display_text_bitmap::string2bob (const char *ptStr)
     }
   else
     {
-      for (h = 0; h < numch; h++)
+      for (h = 0; h < length; h++)
         {
           a = *(ptStr++) - 32;
           b = c[a];
@@ -549,14 +289,14 @@ display_text_bitmap::string2bob (const char *ptStr)
     }
 
   sprite_object *ptBob = new sprite_object ();
-  char *pixel = pBmap->duplicate_pixel_data ();
+  char *pixel = bmp->duplicate_pixel_data ();
   ptBob->set_pixel_data (pixel, 1);
-  ptBob->sprite_width = pBmap->get_width ();
-  ptBob->sprite_height = pBmap->get_height ();
-  ptBob->row_size = pBmap->get_row_size ();
+  ptBob->sprite_width = bmp->get_width ();
+  ptBob->sprite_height = bmp->get_height ();
+  ptBob->row_size = bmp->get_row_size ();
   ptBob->max_of_images = 1;
   ptBob->destNextLn = game_screen->get_row_size ();
-  delete pBmap;
+  delete bmp;
   return ptBob;
 }
 

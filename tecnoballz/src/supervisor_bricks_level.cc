@@ -4,11 +4,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.39 $
+ * @version $Revision: 1.40 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.39 2007/03/16 15:13:05 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.40 2007/03/17 20:30:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -283,10 +283,10 @@ supervisor_bricks_level::main_loop ()
       viewfinders_paddles->run ();
       ships->move ();
       sprites->draw ();
-      panel_score->text_refresh ();
       panel_score->draw_gigablizt_gauge ();
       player_indicators->display_money_and_reverse ();
       display->unlock_surfaces ();
+      panel_score->text_refresh ();
       display->bufferCTab ();
       if (keyboard->is_left_button () && isgameover > 60)
         current_player = handler_players::nextplayer (current_player, &end_return, 1);
@@ -334,9 +334,13 @@ supervisor_bricks_level::main_loop ()
           gem_stones->move ();
           fontes_game->goMoveText ();
           if (bottom_wall->thecounter < 1)
-            bottom_wall->disable ();
+            {
+              bottom_wall->disable ();
+            }
           else
-            bottom_wall->thecounter--;
+            {
+              bottom_wall->thecounter--;
+            }
 
           panel_score->draw_gigablizt_gauge ();
           player_indicators->display_money_and_reverse ();
@@ -344,14 +348,14 @@ supervisor_bricks_level::main_loop ()
 
       //tiles_ground->draw();
       sprites->draw ();
-      panel_score->text_refresh ();
       Ecode = popup_menu->execution1 ();
       display->unlock_surfaces ();
+      panel_score->text_refresh ();
       display->bufferCTab ();
 
-      //###################################################################
-      // next level or next player
-      //###################################################################
+      /* 
+       * jump to next level or next player
+       */
       if (panel_score->get_bricks_counter () == 0)
         {
           if (count_next > 0)

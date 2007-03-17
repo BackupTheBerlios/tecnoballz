@@ -4,11 +4,11 @@
  * @date 2007-03-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.30 2007/03/16 15:13:05 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.31 2007/03/17 20:30:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -248,15 +248,21 @@ supervisor_shop::main_loop ()
   
   /* display the 3 lines of text  */
   display_box_text ();
+  
+  display_text->draw (game_screen, 263 * resolution, 227 * resolution, current_price, 6);
+   display_text->draw (game_screen, 263 * resolution, 183 * resolution, current_player->get_money_amount (), 6);
+
+
 
   display->lock_surfaces ();
   
   /* display current price and credit */
+  /*
   display_text->bufferAff1 (263 * resolution, 227 * resolution,
                           current_price, 100000);
   display_text->bufferAff1 (263 * resolution, 183 * resolution,
                           current_player->get_money_amount (), 100000);
-
+  */
 
   
   
@@ -311,15 +317,10 @@ supervisor_shop::main_loop ()
       power_up_capsules->play_animation_in_shop (1);
     }
 
-
-  //###################################################################
-  // display the cursor of the bonus selected in the list on the right 
-  //###################################################################
+  /* display the cursor of the bonus selected in the list on the right */
   draw_select_cursor ();
-
   sprites->draw ();
   display_capsules_bought ();
-
   Ecode = popup_menu->execution1 ();
 
   //###################################################################

@@ -4,11 +4,11 @@
  * @date 2007-03-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: display_text_bitmap.h,v 1.5 2007/03/17 18:18:50 gurumeditation Exp $
+ * $Id: display_text_bitmap.h,v 1.6 2007/03/17 20:30:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,10 +47,8 @@ protected:
   SDL_Rect rect_fonts;
   SDL_Rect rect_destination;
   char int_string_tmp[16]; 
-
-
-  char *fontes_adr;
   char *caract_adr;
+
   /** Height of the chars in pixels */
   Uint32 char_height;
   /** Width of the chars in pixels */
@@ -64,17 +62,10 @@ public:
   void initialize ();
   Uint32 get_char_height ();
   void load_bitmap_fonts (Uint32 resource_id);
-  void affNombre1 (char *desP1, Sint32 value, Sint32 baseN);
-  void bufferAff1 (Sint32 x, Sint32 y, Sint32 value, Sint32 baseN);
-  void tamponAff1 (Sint32 x, Sint32 y, Sint32 value, Sint32 baseN);
-  void aff_texte1 (char *desP1, char *chain, Sint32 total);
-  void draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, Sint32 value, Uint32 padding);
   void draw (offscreen_surface *dest, Uint32 xcoord, Uint32 ycoord, Sint32 value, Uint32 padding);
-  void draw (offscreen_surface *dest, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 length);
+  void draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, Sint32 value, Uint32 padding);
+  void draw (offscreen_surface *dest, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 length = 0);
   void draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 length = 0);
-  
-  void tamponAff2 (Sint32 x, Sint32 y, char *chain, Sint32 total);
-  void bufferAff2 (Sint32 x, Sint32 y, char *chain, Sint32 total);
   void print_to_string (char *src, char *dst);
   void print_int_to_string (Sint32 value, Sint32 padding, char *dst);
   sprite_object *string2bob (const char *ptStr);

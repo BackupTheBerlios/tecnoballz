@@ -1,14 +1,14 @@
 /** 
  * @file right_panel_score.cc 
  * @brief The right panel score in the bricks levels 
- * @date 2007-03-16
+ * @date 2007-03-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.14 2007/03/17 18:18:50 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.15 2007/03/17 20:30:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,21 +67,16 @@ right_panel_score::get_instance ()
   return panel_score_singleton;
 }
 
-//-------------------------------------------------------------------------------
-// first initialization
-//-------------------------------------------------------------------------------
+/**
+ * First initialization
+ * @param balls
+ */
 void
 right_panel_score::first_init (controller_balls* b)
 {
   initialize ();
   balls = b;
-  scoreAdres = game_screen->get_pixel_data
-    (POSX_SCORE * resolution, POSY_SCORE * resolution);
-  lifesAdres = game_screen->get_pixel_data
-    (POSX_LIFES * resolution, POSY_LIFES * resolution);
-  brickAdres = game_screen->get_pixel_data
-    (POSX_BRICK * resolution, POSY_BRICK * resolution);
-  temoinAdrs = game_screen->get_pixel_data
+ temoinAdrs = game_screen->get_pixel_data
     (GAUGE_XCOORD * resolution, GAUGE_YCOORD * resolution);
   draw_background ();
 }
@@ -98,23 +93,13 @@ right_panel_score::draw_background ()
 
   background_screen->blit_surface (bmp, 0, 0, 256 * resolution, 0, bmp->get_width (), 240 * resolution);
 
-  //bmp->copyTampon (0, 0, 256 * resolution, 0, 64 * resolution, 240 * resolution);
-  //
+  draw (background_screen, AREA_NUM_XCOORD * resolution, AREA_NUM_YCOORD * resolution, current_player->area_number, 2);
+  draw (background_screen, LEVEL_NUM_XCOORD * resolution, LEVEL_NUM_YCOORD * resolution, current_player->level_number, 2);
+  draw (background_screen, PLAYERNAME_XCOORD * resolution, PLAYERNAME_YCOORD * resolution, current_player->player_name);
+  draw (background_screen, BEST_SCORE_XCOORD * resolution, BEST_SCORE_YCOORD * resolution, high_score->get_best_score (), 6);
+  draw (background_screen, BEST_PLAYER_XCOORD * resolution, BEST_PLAYER_YCOORD * resolution, high_score->get_best_playername (), 0);
 
-  draw (background_screen, POSX_AREAN * resolution, POSY_AREAN * resolution, current_player->area_number, 2);
-  draw (background_screen, POSX_LEVEL * resolution, POSY_LEVEL * resolution, current_player->level_number, 2);
-
-  //tamponAff1 (POSX_AREAN * resolution, POSY_AREAN * resolution, current_player->area_number, 10);
-  //tamponAff1 (POSX_LEVEL * resolution, POSY_LEVEL * resolution, current_player->level_number, 10);
-
-  tamponAff2 (POSX_NOMJO * resolution, POSY_NOMJO * resolution,
-              current_player->player_name, 6);
-  tamponAff1 (POSX_BESTS * resolution, POSY_BESTS * resolution,
-              high_score->get_best_score (), 100000);
-  tamponAff2 (POSX_BESTN * resolution, POSY_BESTN * resolution,
-              high_score->get_best_playername (), 6);
-
-  draw_gigablizt_gauge ();
+  //draw_gigablizt_gauge ();
   delete bmp;
   bmp = (bitmap_data *) NULL;
 }
@@ -125,9 +110,9 @@ right_panel_score::draw_background ()
 void
 right_panel_score::text_refresh ()
 {
-  affNombre1 (scoreAdres, current_player->score_value, 100000);
-  affNombre1 (lifesAdres, bricks_counter, 100);
-  affNombre1 (brickAdres, current_player->number_of_lifes, 10);
+  draw (game_screen, SCORE_XCOORD * resolution, SCORE_YCOORD * resolution, current_player->score_value, 6); 
+  draw (game_screen, LIFES_XCOORD * resolution, LIFES_YCOORD * resolution, bricks_counter, 3); 
+  draw (game_screen, BRICKS_XCOORD * resolution, BRICKS_YCOORD * resolution, current_player->number_of_lifes, 2);
 }
 
 /**
