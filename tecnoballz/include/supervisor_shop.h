@@ -4,11 +4,11 @@
  * @date 2007-03-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.15 2007/03/13 20:11:10 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.16 2007/03/18 08:45:01 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,7 +81,9 @@ private:
   Sint32 mouse_y_coord;
   Sint32 get_object;            // drag object : pointer to the table "options_prices" (-1 = no drag object)
   Sint32 pt_get_obj;
-  sprite_capsule *bobclignot;
+  /** Capsule which blinks in the list when it is draged with the mouse */
+  sprite_capsule *blink_capsule;
+  /** Capsule which draged with the mouse */
   sprite_capsule *drag_sprite;
   Sint32 *courseList;
 

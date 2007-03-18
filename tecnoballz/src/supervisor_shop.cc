@@ -4,11 +4,11 @@
  * @date 2007-03-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.31 2007/03/17 20:30:17 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.32 2007/03/18 08:45:01 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ supervisor_shop::supervisor_shop ()
   pt_get_obj = 0;
   shop_point = 0;
   shoppoint3 = 0;
-  bobclignot = (sprite_capsule *) NULL;
+  blink_capsule = (sprite_capsule *) NULL;
 
   shop_xmini = 6 * resolution;
   shop_xmaxi = 283 * resolution;
@@ -761,10 +761,13 @@ supervisor_shop::display_box_text ()
   Uint32 yspac = height + resolution;
   game_screen->clear (0, x_pos, y_pos, 22 * 8 * resolution, 3 * yspac);
 
+  display_text->draw (game_screen, x_pos, y_pos, shop_line1, BOX_LENGTH_STRING);
+  display_text->draw (game_screen, x_pos, y_pos + yspac, shop_line2, BOX_LENGTH_STRING);
+  display_text->draw (game_screen, x_pos, y_pos + yspac * 2, shop_line3, BOX_LENGTH_STRING);
 
-  game_screen->draw_text (display_text, x_pos, y_pos, shop_line1, BOX_LENGTH_STRING);
-  game_screen->draw_text (display_text, x_pos, y_pos + yspac ,shop_line2, BOX_LENGTH_STRING);
-  game_screen->draw_text (display_text, x_pos, y_pos + yspac * 2, shop_line3, BOX_LENGTH_STRING);
+  //game_screen->draw_text (display_text, x_pos, y_pos, shop_line1, BOX_LENGTH_STRING);
+  //game_screen->draw_text (display_text, x_pos, y_pos + yspac ,shop_line2, BOX_LENGTH_STRING);
+  //game_screen->draw_text (display_text, x_pos, y_pos + yspac * 2, shop_line3, BOX_LENGTH_STRING);
 }
 
 //-------------------------------------------------------------------------------
@@ -780,17 +783,17 @@ supervisor_shop::sh_ballade ()
           drag_sprite->enable ();
           drag_sprite->set_coordinates (mouse_pointer->get_x_coord (),
                                        mouse_pointer->get_y_coord ());
-          if (bobclignot->is_enabled)
-            bobclignot->is_enabled = 0;
+          if (blink_capsule->is_enabled)
+            blink_capsule->is_enabled = 0;
           else
-            bobclignot->is_enabled = 1;
+            blink_capsule->is_enabled = 1;
         }
       else
         {
 
 
           drag_sprite->disable ();
-          bobclignot->is_enabled = 1;
+          blink_capsule->is_enabled = 1;
           Sint32 i = cadre_offs;
           if (i >= 0)
             {
@@ -898,12 +901,12 @@ supervisor_shop::sh_ballade ()
           if (i >= 0)
             {
               Sint32 *p = current_player->get_shopping_cart ();
-              sprite_capsule **liste = power_up_capsules->get_sprites_list ();
+              sprite_capsule **capsules = power_up_capsules->get_sprites_list ();
               courseList = p + i;
-              bobclignot = *(liste + i);
+              blink_capsule = *(capsules + i);
               get_object = *(sh_tablept + i);
-              drag_sprite->clone_from_capsule (bobclignot);
-              bobclignot->is_enabled = true;
+              drag_sprite->clone_from_capsule (blink_capsule);
+              blink_capsule->is_enabled = true;
             }
         }
     }
