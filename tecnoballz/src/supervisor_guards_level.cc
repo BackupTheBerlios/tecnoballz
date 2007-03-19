@@ -5,11 +5,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.32 2007/03/09 17:18:34 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.33 2007/03/19 20:47:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -422,7 +422,7 @@ supervisor_guards_level::run_scroll ()
 void
 supervisor_guards_level::cheat_keys ()
 {
-  if (!cheat_flag)
+  if (!is_enabled_cheat_mode)
     {
       return;
     }

@@ -4,11 +4,11 @@
  * @date 2007-03-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.32 2007/03/18 08:45:01 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.33 2007/03/19 20:47:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ supervisor_shop::supervisor_shop ()
   angleValue = 0;
 
   triche_key = 0;               //last key pressed
-  triche_etb = 0;               //input (triche_etb == tricheCode then cheat_flag = 1)
+  triche_etb = 0;               //input (triche_etb == tricheCode then is_enabled_cheat_mode = 1)
   tricheCode = SDLK_e << 24 | SDLK_t << 16 | SDLK_b << 8 | SDLK_RETURN;
   box_texts = NULL;
 }
@@ -133,7 +133,7 @@ supervisor_shop::first_init ()
     {
       shoptext00[8 + i] = ptDes[i];
     }
-  intToASCII (MAX_OF_CAPSULES_BOUGHT, &shoptext63[48], 1);
+  //intToASCII (MAX_OF_CAPSULES_BOUGHT, &shoptext63[48], 1);
   intToASCII (current_player->get_num_of_lifes (),
               &info_text1[BOX_LENGTH_STRING * 4 + 5], 1);
 
@@ -308,7 +308,7 @@ supervisor_shop::main_loop ()
     }
 
   mouse_pointer->move ();
-  if (cheat_flag)
+  if (is_enabled_cheat_mode)
     {
       power_up_capsules->play_animation_in_shop (2);
     }
@@ -595,7 +595,7 @@ supervisor_shop::faitcourse (Sint32 gadnu)
           putthetext (&info_text1[optioninfo * BOX_LENGTH_STRING * 3]);
         else
           {
-            if (cheat_flag)
+            if (is_enabled_cheat_mode)
               putthetext (&info_text1[(optioninfo + 2) * BOX_LENGTH_STRING * 3]);
             else
               {
@@ -760,14 +760,9 @@ supervisor_shop::display_box_text ()
   Uint32 y_pos = 180 * resolution;
   Uint32 yspac = height + resolution;
   game_screen->clear (0, x_pos, y_pos, 22 * 8 * resolution, 3 * yspac);
-
   display_text->draw (game_screen, x_pos, y_pos, shop_line1, BOX_LENGTH_STRING);
   display_text->draw (game_screen, x_pos, y_pos + yspac, shop_line2, BOX_LENGTH_STRING);
   display_text->draw (game_screen, x_pos, y_pos + yspac * 2, shop_line3, BOX_LENGTH_STRING);
-
-  //game_screen->draw_text (display_text, x_pos, y_pos, shop_line1, BOX_LENGTH_STRING);
-  //game_screen->draw_text (display_text, x_pos, y_pos + yspac ,shop_line2, BOX_LENGTH_STRING);
-  //game_screen->draw_text (display_text, x_pos, y_pos + yspac * 2, shop_line3, BOX_LENGTH_STRING);
 }
 
 //-------------------------------------------------------------------------------
@@ -1009,14 +1004,22 @@ supervisor_shop::draw_select_cursor ()
 //-------------------------------------------------------------------------------
 // test the cheat code
 //-------------------------------------------------------------------------------
+
+/**
+ * Check if the cheat mode is enable
+ */
 void
 supervisor_shop::tu_triches ()
 {
   mouse_pointer->set_frame_period (3);
-  if (cheat_flag)
-    return;
+  if (is_enabled_cheat_mode)
+    {
+      return;
+    }
   if (!birth_flag)
-    return;
+    {
+      return;
+    }
   if (!mouse_pointer->get_x_coord () && !mouse_pointer->get_y_coord ())
     {
       mouse_pointer->set_frame_period (20);
@@ -1028,9 +1031,13 @@ supervisor_shop::tu_triches ()
         }
     }
   if (triche_etb == tricheCode)
-    cheat_flag = 1;
+    {
+      is_enabled_cheat_mode = true;
+    }
   else
-    cheat_flag = 0;
+    {
+      is_enabled_cheat_mode = false;
+    }
 }
 
 //==============================================================================

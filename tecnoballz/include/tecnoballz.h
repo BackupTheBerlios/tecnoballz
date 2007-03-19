@@ -2,14 +2,14 @@
  * @file tecnoballz.h
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-03-16
+ * @date 2007-03-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.22 2007/03/16 15:13:05 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.23 2007/03/19 20:47:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-03-16)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-03-19)"
 /** To define only under development  */
 #define UNDER_DEVELOPMENT
 /** Force bytes copy (SPARC unaligned memory access) */
@@ -148,9 +148,13 @@ protected:
   static Sint32 difficulty_level;
   /** If true then leaves the game definitively */
   static bool is_exit_game;
-
-  static Uint32 cheat_flag;     //E + T + B + Return (into shop)
-  static Uint32 birth_flag;     //1 = all names is 040670
+  /** If true cheat mode is enabled. Before everything in the menu, 
+   * the six names must be 040670. Also the cheat mode must be enabled
+   * in the shop. You can moving the pointer to the top left screen
+   * corner, and type [E], [T], [B] and [ENTER].
+   */
+  static bool is_enabled_cheat_mode;
+  static bool birth_flag;     //1 = all names is 040670
   /** Number of initial lifes */
   static Sint32 initial_num_of_lifes;
   /** Number of players from 1 to 6 */

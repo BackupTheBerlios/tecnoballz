@@ -4,11 +4,11 @@
  * @date 2007-03-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.19 2007/03/05 17:36:26 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.20 2007/03/19 20:47:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -337,7 +337,7 @@ controller_capsules::play_animation_in_shop (Uint32 speed)
 void
 controller_capsules::check_cheat_keys ()
 {
-  if (!cheat_flag)
+  if (!is_enabled_cheat_mode)
     {
       return;
     }

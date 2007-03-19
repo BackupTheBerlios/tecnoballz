@@ -5,11 +5,11 @@
  * @date 2007-03-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_high_score.cc,v 1.2 2007/03/09 17:18:34 gurumeditation Exp $
+ * $Id: handler_high_score.cc,v 1.3 2007/03/19 20:47:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -287,7 +287,7 @@ handler_high_score::is_player_ranked (char *playername, Uint32 score_value, Uint
                                 Uint32 area_num)
 {
   /* exit if cheat mode! */
-  if (cheat_flag || birth_flag)
+  if (is_enabled_cheat_mode || birth_flag)
     {
       //return false;
     }

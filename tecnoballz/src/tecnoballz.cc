@@ -5,11 +5,11 @@
  * @date 2007-03-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.19 2007/03/08 17:41:52 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.20 2007/03/19 20:47:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -345,19 +345,6 @@ tecnoballz::intToASCII (Sint32 value, char *strng, Uint32 reste)
     }
 }
 
-/*
-Sint32
-tecnoballz::littleWord (char *memPT)
-{
-  Sint32 i = 0;
-  unsigned char *p = (unsigned char *) memPT;
-  i = p[1];
-  i <<= 8;
-  i += p[0];
-  return i;
-}
-*/
-
 void
 tecnoballz::int_to_big_endian (Uint32 * ptsrc, Uint32 * ptdes)
 {
@@ -413,8 +400,8 @@ Sint16 * tecnoballz::table_sinL = NULL;
 Uint32 tecnoballz::super_jump = BRICKS_LEVEL;
 bool tecnoballz::is_exit_game = false;
 bitmap_data * tecnoballz::sprites_bitmap = 0;
-Uint32 tecnoballz::cheat_flag = 0;
-Uint32 tecnoballz::birth_flag = 0;
+bool tecnoballz::is_enabled_cheat_mode = false;
+bool tecnoballz::birth_flag = 0;
 Uint32 tecnoballz::double_mem = 1;
 Sint32 tecnoballz::difficulty_level = DIFFICULTY_EASY;
 Sint32 tecnoballz::initial_num_of_lifes = 8;

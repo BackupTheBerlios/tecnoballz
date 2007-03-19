@@ -4,11 +4,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.13 2007/03/06 17:42:43 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.14 2007/03/19 20:47:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -189,9 +189,9 @@ supervisor_main_menu::move_tecnoballz_logo ()
 Sint32
 supervisor_main_menu::start_new_game ()
 {
-  cheat_flag = 0;
+  is_enabled_cheat_mode = false;
 #ifdef UNDER_DEVELOPMENT
-  cheat_flag = 1;
+  is_enabled_cheat_mode = true;
 #endif
   Sint32 iplay;
   
