@@ -4,11 +4,11 @@
  * @date 2007-03-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.17 2007/03/20 08:05:44 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.18 2007/03/20 22:53:16 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,10 +50,28 @@ private:
     {
       TEXT_INFOS = 21,
       TEXT_WELCOME = 32,
+      TEXT_PADDLES = 21,
+      TEXT_LIVES_LEFT = 22,
+      TEXT_HOPING_HELP = 24,
+      TEXT_WAITING_CHEAT_MODE = 25,
+      TEXT_ENABLED_CHEAT_MODE = 26,
+      TEXT_PADDLE_RIGHT = 27, 
+      TEXT_PADDLE_TOP = 28, 
+      TEXT_PADDLE_LEFT = 29, 
+      TEXT_AREA_CODE = 30,
+      TEXT_NO_AREA_CODE = 31,
       TEXT_NOT_ENOUGH_MONEY = 33,
-      TEXT_CANNOT_BUY_MORE = 34
-    };
+      TEXT_CANNOT_BUY_MORE = 34,
+      TEXT_ONLY_FOR_AREA_5 = 35,
+    } TEXT_ENUM;
 
+   typedef enum  
+    {
+      INFO_PADDLES,
+      INFO_LIVES,
+      INFO_AREA_CODE,
+      INFO_END
+    } INFO_ENUM;
 
 
   static const Uint32 BOX_LENGTH_STRING = 22;  //largeur d'une ligne texte en caracteres
@@ -74,9 +92,10 @@ private:
   Uint32 current_price;
   /** The number of bought capsules */
   Uint32 num_of_bought_capsules;
-  char *shop_line1;
-  char *shop_line2;
-  char *shop_line3;
+  //char *shop_line1;
+  //char *shop_line2;
+  //char *shop_line3;
+  char *text_lines[3];
   Sint32 mouse_x_coord;
   Sint32 mouse_y_coord;
   Sint32 get_object;            // drag object : pointer to the table "options_prices" (-1 = no drag object)
@@ -121,7 +140,7 @@ private:
   static Uint32 options_prices[];
   static char shoptext00[];
   static char shoptext41[];
-  static char shoptext63[];
+  //static char shoptext63[];
   static char shoptext56[];
   static char shoptextPT[];
  // static char shoptext12[];
@@ -134,14 +153,16 @@ public:
    ~supervisor_shop ();
   Sint32 first_init ();
   Sint32 main_loop ();
+
+private:
   Sint32 testkursor (Sint32 x, Sint32 y);
   void faitcourse (Sint32 gadnu);
+  void display_info(); 
   void display_capsules_bought ();
   void achete_gad (Sint32 gadnb);
   void message_ok ();
   Sint32 led_moving (Sint32 point);
 
-private:
   bool decrease_money_amount ();
   void putthetext (char *ligne);
   void display_box_text ();

@@ -98,9 +98,9 @@ I HOPE THIS ASSISTANCE
       TLK  GAMES      
       TECNOBALLZ      
       TLK  GAMES      
-  LA CORRUPTION REVET 
-   DES  DEGUISEMENTS  
-        INFINIS       
+   CORRUPTION WEARS   
+       INFINITE       
+      DISGUISES!      
 RIGHT BUMPER:  ACTIVE 
 RIGHT BUMPER:NO ACTIVE
   BUY A RIGHT BUMPER  
@@ -111,11 +111,11 @@ LEFT BUMPER :  ACTIVE
 LEFT BUMPER :NO ACTIVE
   BUY A LEFT BUMPER   
  THE PASSWORD FOR THIS
-
   AREA IS ..........  
+                      
  NO AVAILABLE PASSWORD
  FOR THIS AREA.       
-
+                      
 #welcome message      
 WELCOME ...... TO THE 
   TECNOBALLZ SHOP     
