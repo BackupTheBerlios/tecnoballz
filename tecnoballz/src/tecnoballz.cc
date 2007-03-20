@@ -2,14 +2,14 @@
  * @file tecnoballz.cc 
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-03-08
+ * @date 2007-03-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.20 2007/03/19 20:47:50 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.21 2007/03/20 08:05:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,28 +62,20 @@ tecnoballz::first_init (configfile * pConf)
 #endif
   memory = new handler_memory ();
   memory->init (17000);
-
   resources = new handler_resources ();
-
   high_score = handler_high_score::get_instance ();
-  //high_score->first_init ();
-
   resources->load_sinus ();
-
-
 #ifndef SOUNDISOFF
   audio = handler_audio::get_instance ();
 #endif
   display = new handler_display ();
   display->initialize ();
-
   keyboard = handler_keyboard::get_instance ();
   sprites = new list_sprites ();
   sprites->init (400);
-
   ptLev_data = new handler_levels ();
   current_player = handler_players::create_all_players (MAX_PLAYER);
-
+  
   /* retrieve player names */
   for (Uint32 i = 0; i < 6; i++)
     {
@@ -97,7 +89,7 @@ tecnoballz::first_init (configfile * pConf)
     }
   if (is_verbose)
     {
-      std::cout << ">tecnoballz::first_init() stop!" << std::endl;
+      std::cout << ">tecnoballz::first_init() end!" << std::endl;
     }
   return num_erreur;
 }
@@ -164,51 +156,75 @@ tecnoballz::game_begin ()
 void
 tecnoballz::release_all_objects (configfile * pConf)
 {
-  //save players names into config file
-  for (Uint32 i = 0; i < 6; i++)
+  /* save player names into config file */
+  for (Uint32 i = 0; i < MAX_PLAYER; i++)
     {
       pConf->set_player (i, handler_players::players_list[i]->get_name ());
     }
   if (is_verbose)
     {
-      std::cout << "==1 release_objects()" << std::endl;
+      std::cout << "(X) 1. release all player objects "<< std::endl;
     }
   handler_players::release_all_players ();
   if (is_verbose)
-    printf ("==3 handler_levels \n");
+    {
+      std::cout << "(x) 2. delete 'handler_levels' singleton" << std::endl;
+    }
   delete ptLev_data;
   if (is_verbose)
-    printf ("==4 sprites \n");
+    {
+      std::cout << "(x) 3. delete 'list_sprites' singleton" << std::endl;
+    }
   delete sprites;
+  
   if (is_verbose)
-    printf ("==5 keyboard\n");
-  keyboard->destroy_instance ();
+    {
+      std::cout << "(x) 4. delete 'hanbdler_keyboard' singleton" << std::endl;
+    }
+  delete keyboard;
+  
   if (is_verbose)
-    printf ("==6 high_score\n");
+    {
+      std::cout << "(x) 5. delete 'handler_high_score' singleton" << std::endl;
+    }
   delete high_score;
+  
   if (is_verbose)
-    printf ("==7 display\n");
+    {
+      std::cout << "(x) 6. delete 'handler_display' singleton" << std::endl;
+    }
   delete display;
+
 #ifndef SOUNDISOFF
   if (is_verbose)
-    printf ("==8 handler_audio\n");
+    {
+      std::cout << "(x) 7. delete 'handler_audio' singleton" << std::endl;
+    }
   delete audio;
 #endif
-  delete resources;
+
   if (is_verbose)
-    printf ("==9 memory\n");
+    {
+      std::cout << "(x) 8. delete 'handler_resources'" << std::endl;
+    }
+  delete resources;
+
+  if (is_verbose)
+    {
+      std::cout << "(x) 9. delete 'handler_memory' " << std::endl;
+    }
   delete memory;
 }
 
-//-----------------------------------------------------------------------------
-// create the object
-//-----------------------------------------------------------------------------
+/**
+ * Create the object
+ */
 tecnoballz::tecnoballz ()
 {
 }
 
 /** 
- * release object
+ * Release object
  */
 tecnoballz::~tecnoballz ()
 {
@@ -241,15 +257,6 @@ Sint32
 tecnoballz::retour_err ()
 {
   return erreur_num;
-}
-
-//-------------------------------------------------------------------------------
-// return the number of the object
-//-------------------------------------------------------------------------------
-Sint32
-tecnoballz::get_number ()
-{
-  return (numero_obj);
 }
 
 //-------------------------------------------------------------------------------

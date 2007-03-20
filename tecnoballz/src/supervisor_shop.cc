@@ -4,11 +4,11 @@
  * @date 2007-03-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.33 2007/03/19 20:47:50 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.34 2007/03/20 08:05:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,9 +72,9 @@ supervisor_shop::supervisor_shop ()
   box_colour = 0;
   angleValue = 0;
 
-  triche_key = 0;               //last key pressed
-  triche_etb = 0;               //input (triche_etb == tricheCode then is_enabled_cheat_mode = 1)
-  tricheCode = SDLK_e << 24 | SDLK_t << 16 | SDLK_b << 8 | SDLK_RETURN;
+  previous_key_code_down = 0;               //last key pressed
+  triche_etb = 0;               //input (triche_etb == cheat_code then is_enabled_cheat_mode = 1)
+  cheat_code = SDLK_e << 24 | SDLK_t << 16 | SDLK_b << 8 | SDLK_RETURN;
   box_texts = NULL;
 }
 
@@ -343,7 +343,7 @@ supervisor_shop::main_loop ()
       end_return = MAIN_MENU;
     }
 
-  tu_triches ();
+  check_if_enable_cheat ();
   return end_return;
 }
 
@@ -1001,19 +1001,16 @@ supervisor_shop::draw_select_cursor ()
     }
 }
 
-//-------------------------------------------------------------------------------
-// test the cheat code
-//-------------------------------------------------------------------------------
-
 /**
- * Check if the cheat mode is enable
+ * Check if the player enables the cheating mode
  */
 void
-supervisor_shop::tu_triches ()
+supervisor_shop::check_if_enable_cheat ()
 {
   mouse_pointer->set_frame_period (3);
   if (is_enabled_cheat_mode)
     {
+      /* the cheating mode is already enabled */
       return;
     }
   if (!birth_flag)
@@ -1023,14 +1020,14 @@ supervisor_shop::tu_triches ()
   if (!mouse_pointer->get_x_coord () && !mouse_pointer->get_y_coord ())
     {
       mouse_pointer->set_frame_period (20);
-      Sint32 k = keyboard->get_key_down_code ();
-      if (triche_key != k && k)
+      Uint32 code = keyboard->get_key_down_code ();
+      if (previous_key_code_down != code && code > 0)
         {
-          triche_key = k;
-          triche_etb = triche_etb << 8 | k;
+          previous_key_code_down = code;
+          triche_etb = triche_etb << 8 | code;
         }
     }
-  if (triche_etb == tricheCode)
+  if (triche_etb == cheat_code)
     {
       is_enabled_cheat_mode = true;
     }

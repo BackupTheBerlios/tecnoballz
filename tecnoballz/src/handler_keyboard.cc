@@ -1,14 +1,14 @@
 /** 
  * @file handler_keyboard.cc 
  * @brief Handler of the keyboard and mouse
- * @date 2007-02-11
+ * @date 2007-03-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.5 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.6 2007/03/20 08:05:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,6 +72,7 @@ handler_keyboard::handler_keyboard ()
 handler_keyboard::~handler_keyboard ()
 {
   object_free ();
+  keyboard_singleton = NULL;
 }
 
 /**
@@ -87,19 +88,6 @@ handler_keyboard::get_instance ()
       keyboard_singleton = new handler_keyboard ();
     }
   return keyboard_singleton;
-}
-
-/**
- * Destroy the object instance
- */
-void
-handler_keyboard::destroy_instance ()
-{
-  if (NULL != keyboard_singleton)
-    {
-      delete keyboard_singleton;
-      keyboard_singleton = NULL;
-    }
 }
 
 /**
@@ -554,7 +542,7 @@ Sint32 handler_keyboard::get_mouse_x ()
  * @param kCode key code of the pressed key
  */
 void
-handler_keyboard::set_key_code_down (Sint32 kCode)
+handler_keyboard::set_key_code_down (Uint32 kCode)
 {
   if (kCode != SDLK_LSHIFT && kCode != SDLK_RSHIFT && kCode != SDLK_LCTRL &&
       kCode != SDLK_RCTRL)
@@ -566,7 +554,7 @@ handler_keyboard::set_key_code_down (Sint32 kCode)
  * @param kCode key code of the pressed key
  */
 void
-handler_keyboard::set_keycode_up (Sint32 kCode)
+handler_keyboard::set_keycode_up (Uint32 kCode)
 {
   if (kCode != SDLK_LSHIFT && kCode != SDLK_RSHIFT && kCode != SDLK_LCTRL &&
       kCode != SDLK_RCTRL)
@@ -622,7 +610,7 @@ handler_keyboard::input_string ()
  * @param kCode key code enter
  */
 void
-handler_keyboard::input_string (Sint32 kCode)
+handler_keyboard::input_string (Uint32 kCode)
 {
   Sint32 j, i;
   if (0 == kCode)
@@ -744,7 +732,7 @@ handler_keyboard::stop_string_input ()
   current_input_string = NULL;
 }
 
-Sint32 handler_keyboard::get_key_down_code ()
+Uint32 handler_keyboard::get_key_down_code ()
 {
   return key_code_down;
 }

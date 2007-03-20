@@ -1,14 +1,14 @@
 /** 
  * @file handler_keyboard.cc 
  * @brief Handler of the keyboard and mouse
- * @date 2007-01-18
+ * @date 2007-03-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.h,v 1.2 2007/02/04 17:10:16 gurumeditation Exp $
+ * $Id: handler_keyboard.h,v 1.3 2007/03/20 08:05:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,11 +88,10 @@ private:
 
 private:
     handler_keyboard ();
-   ~handler_keyboard ();
 
 public:
+   ~handler_keyboard ();
   static handler_keyboard* get_instance ();
-  static void destroy_instance ();
   
   void set_grab_input (bool mode);
   void read_events ();
@@ -112,13 +111,13 @@ public:
   void set_input_string (char *str, Uint32 size);
   Sint32 get_input_cursor_pos ();
   void stop_string_input ();
-  Sint32 get_key_down_code ();
+  Uint32 get_key_down_code ();
 
 private:
   void input_string ();
-  void input_string (Sint32 code);
-  void set_key_code_down (Sint32 code);
-  void set_keycode_up (Sint32 code);
+  void input_string (Uint32 code);
+  void set_key_code_down (Uint32 code);
+  void set_keycode_up (Uint32 code);
 };
 
 #endif

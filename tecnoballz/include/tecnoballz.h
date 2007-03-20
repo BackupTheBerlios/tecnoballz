@@ -2,14 +2,14 @@
  * @file tecnoballz.h
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-03-19
+ * @date 2007-03-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.23 2007/03/19 20:47:50 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.24 2007/03/20 08:05:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-03-19)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-03-20)"
 /** To define only under development  */
 #define UNDER_DEVELOPMENT
 /** Force bytes copy (SPARC unaligned memory access) */
@@ -177,8 +177,9 @@ protected:
   static Sint16 *table_cosL;
   static Sint16 *table_sinL;
 
-/** A bitmap containing the current images of sprites */
+  /** A bitmap containing the current images of sprites */
   static bitmap_data *sprites_bitmap;
+  /**  The main offscreen surface of the game */
   static offscreen_surface *game_screen;
   static offscreen_surface *background_screen;
   static configfile *config_file;
@@ -197,9 +198,7 @@ public:
   void object_free ();
   Sint32 retour_err ();
   void error_init (Sint32 error);
-  Sint32 get_number ();
   Sint32 chaine_cmp (char *srcPT, char *desPT, Sint32 taille);
-  //Sint32 littleWord (char *memPT);
   void int_to_big_endian (Uint32 *, Uint32 *);
   void big_endian_to_int (Uint32 *, Uint32 *);
 };

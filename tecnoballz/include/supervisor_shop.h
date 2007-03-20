@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.h
  * @brief Shop supervisor 
- * @date 2007-03-13
+ * @date 2007-03-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.16 2007/03/18 08:45:01 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.17 2007/03/20 08:05:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -106,10 +106,12 @@ private:
   Sint32 cadre_larg;
   Sint32 angleValue;
   Sint32 box_colour;
-
-  Sint32 triche_key;
-  Sint32 triche_etb;
-  Sint32 tricheCode;
+  /** Code of the last key pressed, used for input cheat code */
+  Uint32 previous_key_code_down;
+  Uint32 triche_etb;
+  /** Cheat code is an unsigned 32 bits integer,
+   * a string of 4 chars containing the keycodes "ETB\n" */
+  Uint32 cheat_code;
 
   // table de pointeurs sur "options_prices"
   static Sint32 sh_tablept[MAX_OF_CAPSULES_BOUGHT];
@@ -147,7 +149,7 @@ private:
   Sint32 collisions ();
   void pos_select ();
   void draw_select_cursor ();
-  void tu_triches ();
+  void check_if_enable_cheat ();
 
   static const unsigned char cyclingtab[];
 };
