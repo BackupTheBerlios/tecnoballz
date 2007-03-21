@@ -2,14 +2,14 @@
  * @file supervisor_map_editor.cc 
  * @brief The tile map editor for the menu and guardians levels 
  * @created 2004-09-13 
- * @date 2007-03-06
+ * @date 2007-03-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.5 2007/03/06 17:42:43 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.6 2007/03/21 14:28:18 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@
 #include <stdio.h>
 #include <sys/stat.h>
 
-
 /**
  * Create the tile map editor
  */
@@ -44,12 +43,12 @@ supervisor_map_editor::supervisor_map_editor ()
   /*  vertical background scrolling */
   tiles_map = new tilesmap_scrolling ();
   mouse_pointer = new sprite_mouse_pointer ();
-  view_mode = 0;
-  flagSpaceK = 0;
+  view_mode = SHOW_MAP;
+  is_space_key_down = false;
   titlesPosy = 0;
   flag_press = 0;
   box_colour = 0;
-  pBrushTile = (Uint16 *) NULL;
+  tiles_brush = NULL;
   pBrush_bob = (bitmap_data *) NULL;
   flag_press = 0;
   flagPress2 = 0;
@@ -57,7 +56,7 @@ supervisor_map_editor::supervisor_map_editor ()
   brush_posy = 0;
   brushWidth = 0;
   brushHeigh = 0;
-  keyS_press = 0;
+  is_s_key_down = false;
   first_init ();
 }
 
@@ -76,11 +75,16 @@ supervisor_map_editor::~supervisor_map_editor ()
     {
       delete pt_select2;
     }
-  if (pBrushTile)
-    memory->release ((char *) pBrushTile);
+  if (tiles_brush)
+    {
+      delete[]tiles_brush;
+      tiles_brush = NULL;
+      //memory->release ((char *) tiles_brush);
+    }
   if (NULL != pBrush_bob)
     {
       delete pBrush_bob;
+      pBrush_bob = NULL;
     }
   liberation ();
 }
@@ -140,21 +144,22 @@ Sint32
 supervisor_map_editor::main_loop ()
 {
   display->wait_frame ();
-  display->lock_surfaces ();
 
   pt_select1->boxOffsetY = tiles_map->get_y_coord ();
   pt_select2->boxOffsetY = titlesPosy;
 
   switch (view_mode)
     {
-    case 1:
+    case SHOW_TILES:
       view_tiles ();
       break;
+    case SHOW_MAP:
     default:
       view_map_editor ();
       break;
     }
 
+  display->lock_surfaces ();
   mouse_pointer->move ();
   sprites->draw ();
 
@@ -165,28 +170,30 @@ supervisor_map_editor::main_loop ()
   display->unlock_surfaces ();
   display->bufferCTab ();
 
-  //###################################################################
-  // escape key to quit the game !
-  //###################################################################
+  /* [ctrl] + escape key to leave! */
   if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG))
-    end_return = -1;
+    {
+      end_return = LEAVE_TECNOBALLZ;
+    }
 
   check_keys ();
+  /* back to menu */
   if (keyboard->key_is_pressed (SDLK_F10))
     {
-      end_return = 4;
+      end_return = MAIN_MENU;
     }
 
-  if (keyboard->key_is_pressed (SDLK_s) && !keyS_press)
-    keyS_press = 1;
 
-  if (keyboard->key_is_released (SDLK_s) && keyS_press)
+  /* save the map */
+  if (keyboard->key_is_pressed (SDLK_s) && !is_s_key_down)
     {
-      keyS_press = 0;
+      is_s_key_down = true;
+    }
+  if (keyboard->key_is_released (SDLK_s) && is_s_key_down)
+    {
+      is_s_key_down = false;
       saveTheMap ();
     }
-
-
   return end_return;
 }
 
@@ -209,23 +216,47 @@ supervisor_map_editor::view_map_editor ()
 //
 //------------------------------------------------------------------------------
 void
-supervisor_map_editor::maps2brush ()
+supervisor_map_editor::map_to_brush ()
 {
-  printf ("supervisor_map_editor::maps2brush() : [%i, %i, %i, %i]\n",
+  printf ("supervisor_map_editor::map_to_brush() : [%i, %i, %i, %i]\n",
           pt_select0->box_pos_x1, pt_select0->box_pos_y1,
           pt_select0->box_pos_x2, pt_select0->box_pos_y2);
 
   //###################################################################
   // allocate map memory
   //###################################################################
-  if (pBrushTile)
-    memory->release ((char *) pBrushTile);
-  pBrushTile = (Uint16 *) memory->alloc
+
+  /*
+   * Allocate memory for tiles brush
+   */
+  if (NULL != tiles_brush)
+    {
+      delete[]tiles_brush;
+    }
+  Uint32 size = pt_select0->box_height * pt_select0->box_widthT;
+  try
+    {
+      tiles_brush = new Uint16[size];
+    }
+  catch (std::bad_alloc &)
+  {
+    std::
+      cerr << "(!)supervisor_map_editor::map_to_brush() "
+      "not enough memory to allocate " <<
+       size << " Uint16!" << std::endl;
+    throw;
+  }
+
+/*
+  if (tiles_brush)
+    memory->release ((char *) tiles_brush);
+  tiles_brush = (Uint16 *) memory->alloc
     (sizeof (Uint16) * pt_select0->box_height * pt_select0->box_widthT,
      0x4D454741);
   error_init (memory->retour_err ());
   if (erreur_num)
     return;
+   */
 
   //Sint32 scrlY = tiles_map->returnPosy();
   Sint32 i = pt_select0->box_pos_y1;
@@ -235,11 +266,13 @@ supervisor_map_editor::maps2brush ()
 
   Uint16 *carte = tiles_map->map_tiles + i;
   //Uint16* carte = tiles_map->map_tiles;
-  Uint16 *ptBrh = pBrushTile;
-  for (Sint32 y = 0; y < pt_select0->box_height; y++)
+  Uint16 *ptBrh = tiles_brush;
+  for (Uint32 y = 0; y < pt_select0->box_height; y++)
     {
-      for (Sint32 x = 0; x < pt_select0->box_widthT; x++)
+      for (Uint32 x = 0; x < pt_select0->box_widthT; x++)
+        {
         *(ptBrh++) = carte[x];
+        }
       carte += tilesmap_scrolling::MAP_WIDTH;
     }
   brushAlloc ();
@@ -285,9 +318,9 @@ supervisor_map_editor::tile2brush ()
   //###################################################################
   // allocate map memory
   //###################################################################
-  if (pBrushTile)
-    memory->release ((char *) pBrushTile);
-  pBrushTile = (Uint16 *) memory->alloc
+  if (tiles_brush)
+    memory->release ((char *) tiles_brush);
+  tiles_brush = (Uint16 *) memory->alloc
     (sizeof (Uint16) * pt_select0->box_height * pt_select0->box_widthT,
      0x4D454741);
   error_init (memory->retour_err ());
@@ -295,7 +328,7 @@ supervisor_map_editor::tile2brush ()
     return;
 
 
-  Uint16 *ptBrh = pBrushTile;
+  Uint16 *ptBrh = tiles_brush;
   for (Sint32 y = 0; y < pt_select0->box_height; y++)
     {
       Sint32 p = o;
@@ -313,26 +346,28 @@ supervisor_map_editor::tile2brush ()
 
 
 
-//------------------------------------------------------------------------------
-// check keyboard keys
-//------------------------------------------------------------------------------
+/**
+ * Check keyboard keys
+ */
 void
 supervisor_map_editor::check_keys ()
 {
   if (keyboard->key_is_pressed (SDLK_SPACE))
-    flagSpaceK = 1;
-  if (keyboard->key_is_released (SDLK_SPACE) && flagSpaceK)
+    {
+      is_space_key_down = true;
+    }
+  if (keyboard->key_is_released (SDLK_SPACE) && is_space_key_down)
     {
       switch (view_mode)
         {
-        case 0:
-          view_mode = 1;
+        case SHOW_MAP:
+          view_mode = SHOW_TILES;
           break;
         default:
-          view_mode = 0;
+          view_mode = SHOW_MAP;
           break;
         }
-      flagSpaceK = 0;
+      is_space_key_down = false;
     }
 }
 
@@ -477,11 +512,12 @@ supervisor_map_editor::select_box ()
 
           switch (view_mode)
             {
-            case 1:
+            case SHOW_TILES:
               tile2brush ();
               break;
+            case SHOW_MAP:
             default:
-              maps2brush ();
+              map_to_brush ();
               break;
             }
 
@@ -633,7 +669,7 @@ supervisor_map_editor::brushAlloc ()
 
   Sint32 n1 = tiles_map->source_mod;
   char **mapPT = tiles_map->mapAddress;        // pointer of each map of the page maps
-  Uint16 *carte = pBrushTile;
+  Uint16 *carte = tiles_brush;
   Sint32 *dt = (Sint32 *) pBrush_bob->get_pixel_data ();
 
   if (resolution == 1)
@@ -737,7 +773,7 @@ supervisor_map_editor::brush_draw ()
 
           i = (i / tiles_map->tile_height) + 4;
           i *= tilesmap_scrolling::MAP_WIDTH;
-          Uint16 *brush = pBrushTile;
+          Uint16 *brush = tiles_brush;
           Uint16 *table = tiles_map->map_tiles + i;
           Uint16 *t_end =
             tiles_map->map_tiles +

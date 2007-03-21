@@ -5,11 +5,11 @@
  * @date 2007-02-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.h,v 1.4 2007/02/07 21:05:45 gurumeditation Exp $
+ * $Id: supervisor_map_editor.h,v 1.5 2007/03/21 14:28:18 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,10 +40,10 @@ typedef struct
   Sint32 box_pos_x2;
   Sint32 box_pos_y1;
   Sint32 box_pos_y2;
-  Sint32 box_widthT;
-  Sint32 box_height;
+  Uint32 box_widthT;
+  Uint32 box_height;
   Sint32 boxOffsetY;
-  Sint32 box_typeID;            //0 = d'ont display / 1 = current select / 2 = select finish
+  Uint32 box_typeID;            //0 = d'ont display / 1 = current select / 2 = select finish
 }
 selectinfo;
 
@@ -51,13 +51,22 @@ selectinfo;
 class supervisor_map_editor:public virtual supervisor
 {
 private:
+  typedef enum 
+    {
+      SHOW_MAP,
+      SHOW_TILES
+    } SHOW_ENUM;
   static const Sint32 YCOORDNULL = -10240;
   tilesmap_scrolling *tiles_map;
   sprite_mouse_pointer *mouse_pointer;
-  Sint32 screen_height;         //height of the main window
-  Sint32 screen_width;          //weight of the main window
-  Uint32 view_mode;            //0=show map / 1=show tiles
-  Sint32 flagSpaceK;
+  /** Height of the main window */
+  Uint32 screen_height;
+  /** Weight of the main window */
+  Uint32 screen_width;
+  /** SHOW_MAP or SHOW_TILES */
+  Uint32 view_mode;
+  /** True if the space key is pressed down */
+  bool is_space_key_down;
   Sint32 titlesPosy;
   bitmap_data *ptrGBitMap;
   Sint32 flag_press;
@@ -68,7 +77,8 @@ private:
   Sint32 brush_posy;            //
   Sint32 brushWidth;
   Sint32 brushHeigh;
-  Uint16 *pBrushTile;
+  /** Brush composed of tiles copied from the main map */
+  Uint16 *tiles_brush;
   bitmap_data *pBrush_bob;
 
   Sint32 box_colour;
@@ -81,7 +91,7 @@ private:
   Sint32 tile_mask1;
   Sint32 tile_mask2;
 
-  Sint32 keyS_press;
+  bool is_s_key_down;
 
 
 public:
@@ -94,7 +104,7 @@ private:
   void view_map_editor ();
   void view_tiles ();
   void tile2brush ();
-  void maps2brush ();
+  void map_to_brush ();
   void check_keys ();
   Sint32 get_speed ();
   void select_box ();
