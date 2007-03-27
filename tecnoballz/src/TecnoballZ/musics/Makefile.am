@@ -12,4 +12,8 @@ dist_pkgdata_DATA = \
 	over-theme.mod \
 	tecno-winn.mod \
 	tecnoballz.mod \
+        mon-lapin_reg-zbb.mod \
+        termigator_reg-zbb.mod \
+        in-game-music-1_reg.mod \
+        fridge-in-space_from_reg-zbb.mod \
 	$(NULL)
