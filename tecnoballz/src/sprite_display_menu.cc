@@ -1,14 +1,14 @@
 /** 
  * @file sprite_display_menu.cc 
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-03-08
+ * @date 2007-03-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.10 2007/03/16 16:35:04 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.11 2007/03/28 13:57:51 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -426,21 +426,25 @@ sprite_display_menu::check_events ()
               current_menu_section = OPTIONS_SECTION;
               break;
             case LINE_ABOUT:
+              audio->play_music (FRIDGE_IN_SPACE_MUSIC);
               clear_text_offscreen ();
               clear_stop ();
               current_menu_section = ABOUT_SECTION;
               break;
             case LINE_SALUT:
+              audio->play_music (MON_LAPIN_MUSIC);
               clear_text_offscreen ();
               clear_stop ();
               current_menu_section = GREETINGS_SECTION;
               break;
             case LINE_INFOS:
+              audio->play_music (IN_GAME_MUSIC);
               clear_text_offscreen ();
               clear_stop ();
               current_menu_section = INFOS_SECTION;
               break;
             case LINE_SCORE:
+              audio->play_music (TERMIGATOR_MUSIC);
               clear_text_offscreen ();
               clear_stop ();
               copyScores ();

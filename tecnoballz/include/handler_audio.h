@@ -5,11 +5,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.h,v 1.4 2007/03/06 17:42:42 gurumeditation Exp $
+ * $Id: handler_audio.h,v 1.5 2007/03/28 13:57:51 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,11 @@ typedef enum
   MUSICSCORE,
   MUSICGOVER,
   MUSICINTRO,
-  MUSICCONGR
+  MUSICCONGR,
+  TERMIGATOR_MUSIC,
+  IN_GAME_MUSIC,
+  FRIDGE_IN_SPACE_MUSIC,
+  MON_LAPIN_MUSIC
 } music_code;
 
 // module's positions in a area music

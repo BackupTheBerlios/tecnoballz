@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_main_menu.cc 
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-03-06
+ * @date 2007-03-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.14 2007/03/19 20:47:50 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.15 2007/03/28 13:57:51 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
