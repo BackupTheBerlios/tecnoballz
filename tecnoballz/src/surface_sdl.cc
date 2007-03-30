@@ -5,11 +5,11 @@
  * @date 2007-03-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.cc,v 1.8 2007/03/16 15:13:05 gurumeditation Exp $
+ * $Id: surface_sdl.cc,v 1.9 2007/03/30 20:15:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -319,6 +319,7 @@ surface_sdl::set_palette (surface_sdl *dest)
     {
       return;
     }
+  std::cout << "surface_sdl::set_palette surface_sdl" << std::endl;
   if (!SDL_SetPalette (dest->get_surface (), SDL_LOGPAL | SDL_PHYSPAL, surface->format->palette->colors, 0, 256))
    {
       std::cerr << "(!)surface_sdl::set_palette() " <<

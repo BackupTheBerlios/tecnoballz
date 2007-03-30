@@ -5,11 +5,11 @@
  * @date 2007-03-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.6 2007/03/21 14:28:18 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.7 2007/03/30 20:15:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -136,10 +136,9 @@ supervisor_map_editor::first_init ()
   return 0;
 }
 
-
-//------------------------------------------------------------------------------
-// main loop
-//------------------------------------------------------------------------------
+/** 
+ * Main loop
+ */
 Sint32
 supervisor_map_editor::main_loop ()
 {
@@ -651,15 +650,21 @@ supervisor_map_editor::drawingBox ()
 void
 supervisor_map_editor::brushAlloc ()
 {
-  if (pBrush_bob)
-    delete pBrush_bob;
-  pBrush_bob = new bitmap_data ();
-  //pBrush_bob->create(pt_select0->box_widthT * tile_width,
-  //      pt_select0->box_height * tile_width, 1);
-  pBrush_bob->create_surface (pt_select0->box_widthT * tile_width,
-                              pt_select0->box_height * tile_width);
+  if (NULL != pBrush_bob)
+    {
+      delete pBrush_bob;
+    }
+  
+  pBrush_bob = tiles_map->alloc_brush (tiles_brush, pt_select0->box_widthT, pt_select0->box_height);
   brushWidth = pt_select0->box_widthT;
   brushHeigh = pt_select0->box_height;
+  return;
+      
+  
+  /*
+  pBrush_bob = new bitmap_data ();
+  pBrush_bob->create_surface (pt_select0->box_widthT * tile_width,
+                              pt_select0->box_height * tile_width);
 
   Sint32 m1 = pBrush_bob->get_line_modulo (0);
   Sint32 m2 =
@@ -671,6 +676,8 @@ supervisor_map_editor::brushAlloc ()
   char **mapPT = tiles_map->mapAddress;        // pointer of each map of the page maps
   Uint16 *carte = tiles_brush;
   Sint32 *dt = (Sint32 *) pBrush_bob->get_pixel_data ();
+
+        printf("box_widthT %i box_height %i \n", pt_select0->box_widthT, pt_select0->box_height);
 
   if (resolution == 1)
     {
@@ -720,6 +727,7 @@ supervisor_map_editor::brushAlloc ()
           dt = (Sint32 *) ((char *) dt + m3);
         }
     }
+   */
 }
 
 //------------------------------------------------------------------------------

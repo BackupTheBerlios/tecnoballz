@@ -5,11 +5,11 @@
  * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.cc,v 1.5 2007/02/21 21:07:12 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.cc,v 1.6 2007/03/30 20:15:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -369,6 +369,50 @@ tilesmap_scrolling::draw ()
   //offscreen->lock_surface ();
   //tiles_bitmap->lock_surface ();
 }
+
+bitmap_data*
+tilesmap_scrolling::alloc_brush (Uint16 *map, Uint32 num_of_cols, Uint32 num_of_lines) 
+{
+  bitmap_data *brush = new bitmap_data ();
+  brush->create_surface (num_of_cols * tile_width, num_of_lines * tile_height);
+  game_screen->set_palette (brush);
+  SDL_Surface *brush_surface = brush->get_surface ();
+  SDL_Surface *tiles_surface = tiles_bitmap->get_surface ();
+  SDL_Rect rect_src;
+  SDL_Rect rect_dst;
+  rect_src.h = rect_dst.h = tile_height;
+  rect_src.w = rect_dst.w = tile_width;
+  if (is_verbose) 
+    {
+       std::cout << "tilesmap_scrolling::alloc_brush num_of_cols:" <<
+         num_of_cols << " num_of_lines:" <<  num_of_lines << std::endl;
+    }
+  rect_dst.y = 0;
+  for (Uint32 v = 0; v < num_of_lines; v++)
+    {
+      rect_dst.x = 0;
+      //printf("x = %i, y = %i\n", rect_dst.x, rect_dst.y);
+      for (Uint32 h = 0; h < num_of_cols; h++)
+        {
+           Uint32 offset = *(map++); 
+           //offset = 0;
+           rect_src.y = offset / MAP_WIDTH;
+           rect_src.x = (offset - rect_src.y * MAP_WIDTH) * tile_width; 
+           rect_src.y = rect_src.y * tile_height;
+          if (SDL_BlitSurface
+              (tiles_surface, &rect_src, brush_surface, &rect_dst) < 0)
+            {
+              std::cerr << "(!)tilesmap_scrolling::draw_tiles() " <<
+                "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+            }
+          rect_dst.x += tile_width;
+        }
+      rect_dst.y += rect_dst.h;
+    }
+  return brush;
+}
+
+
 
 /**
  * load and convert the map file
