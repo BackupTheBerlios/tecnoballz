@@ -5,11 +5,11 @@
  * @date 2007-03-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.7 2007/03/30 20:15:09 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.8 2007/03/31 10:55:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ supervisor_map_editor::supervisor_map_editor ()
   flag_press = 0;
   box_colour = 0;
   tiles_brush = NULL;
-  pBrush_bob = (bitmap_data *) NULL;
+  brush_bitmap = (bitmap_data *) NULL;
   flag_press = 0;
   flagPress2 = 0;
   brush_posx = 0;
@@ -81,10 +81,10 @@ supervisor_map_editor::~supervisor_map_editor ()
       tiles_brush = NULL;
       //memory->release ((char *) tiles_brush);
     }
-  if (NULL != pBrush_bob)
+  if (NULL != brush_bitmap)
     {
-      delete pBrush_bob;
-      pBrush_bob = NULL;
+      delete brush_bitmap;
+      brush_bitmap = NULL;
     }
   liberation ();
 }
@@ -274,7 +274,7 @@ supervisor_map_editor::map_to_brush ()
         }
       carte += tilesmap_scrolling::MAP_WIDTH;
     }
-  brushAlloc ();
+  alloc_brush ();
 }
 
 //------------------------------------------------------------------------------
@@ -339,7 +339,7 @@ supervisor_map_editor::tile2brush ()
       o += tilesmap_scrolling::MAP_WIDTH;
       //printf("\n");
     }
-  brushAlloc ();
+  alloc_brush ();
 }
 
 
@@ -419,10 +419,10 @@ supervisor_map_editor::select_box ()
         pt_select0->boxOffsetY + keyboard->get_mouse_y ();
       pt_select0->box_pos_x1 &= tile_mask1;
       pt_select0->box_pos_y1 &= tile_mask1;
-      if (pBrush_bob)
+      if (brush_bitmap)
         {
-          delete pBrush_bob;
-          pBrush_bob = (bitmap_data *) NULL;
+          delete brush_bitmap;
+          brush_bitmap = (bitmap_data *) NULL;
         }
     }
 
@@ -644,90 +644,20 @@ supervisor_map_editor::drawingBox ()
     }
 }
 
-//------------------------------------------------------------------------------
-// allocate brush 
-//------------------------------------------------------------------------------
+/**
+ * Allocate a brush of the required size
+ */
 void
-supervisor_map_editor::brushAlloc ()
+supervisor_map_editor::alloc_brush ()
 {
-  if (NULL != pBrush_bob)
+  if (NULL != brush_bitmap)
     {
-      delete pBrush_bob;
+      delete brush_bitmap;
     }
-  
-  pBrush_bob = tiles_map->alloc_brush (tiles_brush, pt_select0->box_widthT, pt_select0->box_height);
+  brush_bitmap = tiles_map->alloc_brush (tiles_brush, pt_select0->box_widthT, pt_select0->box_height);
   brushWidth = pt_select0->box_widthT;
   brushHeigh = pt_select0->box_height;
   return;
-      
-  
-  /*
-  pBrush_bob = new bitmap_data ();
-  pBrush_bob->create_surface (pt_select0->box_widthT * tile_width,
-                              pt_select0->box_height * tile_width);
-
-  Sint32 m1 = pBrush_bob->get_line_modulo (0);
-  Sint32 m2 =
-    (tiles_map->tile_height * pBrush_bob->get_row_size ()) -
-    tiles_map->tile_width;
-  Sint32 m3 = ((tiles_map->tile_height - 1) * pBrush_bob->get_row_size ());
-
-  Sint32 n1 = tiles_map->source_mod;
-  char **mapPT = tiles_map->mapAddress;        // pointer of each map of the page maps
-  Uint16 *carte = tiles_brush;
-  Sint32 *dt = (Sint32 *) pBrush_bob->get_pixel_data ();
-
-        printf("box_widthT %i box_height %i \n", pt_select0->box_widthT, pt_select0->box_height);
-
-  if (resolution == 1)
-    {
-      for (Sint32 y = 0; y < pt_select0->box_height; y++)
-        {
-          for (Sint32 x = 0; x < pt_select0->box_widthT; x++)
-            {
-              Uint32 i = *(carte++);
-              Sint32 *s = (Sint32 *) mapPT[i];
-              for (i = 0; i < tiles_map->tile_height; i++)
-                {
-                  dt[0] = s[0];
-                  dt[1] = s[1];
-                  dt[2] = s[2];
-                  dt[3] = s[3];
-                  s = (Sint32 *) ((char *) s + n1);
-                  dt = (Sint32 *) ((char *) dt + m1);
-                }
-              dt = (Sint32 *) ((char *) dt - m2);
-            }
-          dt = (Sint32 *) ((char *) dt + m3);
-        }
-    }
-  else
-    {
-      for (Sint32 y = 0; y < pt_select0->box_height; y++)
-        {
-          for (Sint32 x = 0; x < pt_select0->box_widthT; x++)
-            {
-              Uint32 i = *(carte++);
-              Sint32 *s = (Sint32 *) mapPT[i];
-              for (i = 0; i < tiles_map->tile_height; i++)
-                {
-                  dt[0] = s[0];
-                  dt[1] = s[1];
-                  dt[2] = s[2];
-                  dt[3] = s[3];
-                  dt[4] = s[4];
-                  dt[5] = s[5];
-                  dt[6] = s[6];
-                  dt[7] = s[7];
-                  s = (Sint32 *) ((char *) s + n1);
-                  dt = (Sint32 *) ((char *) dt + m1);
-                }
-              dt = (Sint32 *) ((char *) dt - m2);
-            }
-          dt = (Sint32 *) ((char *) dt + m3);
-        }
-    }
-   */
 }
 
 //------------------------------------------------------------------------------
@@ -736,16 +666,16 @@ supervisor_map_editor::brushAlloc ()
 void
 supervisor_map_editor::brush_draw ()
 {
-  if (!pBrush_bob)
+  if (!brush_bitmap)
     return;
   Sint32 pos_x = keyboard->get_mouse_x ();
   Sint32 pos_y = keyboard->get_mouse_y ();
   pos_x &= tile_mask1;
   pos_y &= tile_mask1;
-  if (pos_x > screen_width - pBrush_bob->get_width ())
-    pos_x = screen_width - pBrush_bob->get_width ();
-  if (pos_y > screen_height - pBrush_bob->get_height ())
-    pos_y = screen_height - pBrush_bob->get_height ();
+  if (pos_x > screen_width - brush_bitmap->get_width ())
+    pos_x = screen_width - brush_bitmap->get_width ();
+  if (pos_y > screen_height - brush_bitmap->get_height ())
+    pos_y = screen_height - brush_bitmap->get_height ();
 
 
   Sint32 scrlY = tiles_map->get_y_coord ();
@@ -817,7 +747,7 @@ supervisor_map_editor::brush_draw ()
         }
     }
 
-  pBrush_bob->copyBuffer (0, 0, pos_x, pos_y - (scrlY & tile_mask2), -1, -1);
+  brush_bitmap->copyBuffer (0, 0, pos_x, pos_y - (scrlY & tile_mask2), -1, -1);
 
 
 

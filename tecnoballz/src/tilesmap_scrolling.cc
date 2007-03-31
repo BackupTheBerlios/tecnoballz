@@ -2,14 +2,14 @@
  * @file tilesmap_scrolling.cc 
  * @brief Vertical scrolling tiles map in the main menu
  *        and the guardians levels
- * @date 2007-02-21
+ * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.cc,v 1.6 2007/03/30 20:15:09 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.cc,v 1.7 2007/03/31 10:55:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -370,6 +370,13 @@ tilesmap_scrolling::draw ()
   //tiles_bitmap->lock_surface ();
 }
 
+/**
+ * Alloc a brush bitmap for the map editor
+ * @param map
+ * @param num_of_cols the number of tiles per lines
+ * @param num_of_lines the number of lines
+ * @return a bitmap data object
+ */
 bitmap_data*
 tilesmap_scrolling::alloc_brush (Uint16 *map, Uint32 num_of_cols, Uint32 num_of_lines) 
 {
@@ -391,11 +398,9 @@ tilesmap_scrolling::alloc_brush (Uint16 *map, Uint32 num_of_cols, Uint32 num_of_
   for (Uint32 v = 0; v < num_of_lines; v++)
     {
       rect_dst.x = 0;
-      //printf("x = %i, y = %i\n", rect_dst.x, rect_dst.y);
       for (Uint32 h = 0; h < num_of_cols; h++)
         {
            Uint32 offset = *(map++); 
-           //offset = 0;
            rect_src.y = offset / MAP_WIDTH;
            rect_src.x = (offset - rect_src.y * MAP_WIDTH) * tile_width; 
            rect_src.y = rect_src.y * tile_height;
@@ -411,8 +416,6 @@ tilesmap_scrolling::alloc_brush (Uint16 *map, Uint32 num_of_cols, Uint32 num_of_
     }
   return brush;
 }
-
-
 
 /**
  * load and convert the map file

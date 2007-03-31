@@ -2,14 +2,14 @@
  * @file supervisor_map_editor.cc 
  * @brief The tile map editor for the menu and guardians levels 
  * @created 2004-09-13 
- * @date 2007-02-07
+ * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.h,v 1.5 2007/03/21 14:28:18 gurumeditation Exp $
+ * $Id: supervisor_map_editor.h,v 1.6 2007/03/31 10:55:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,7 +79,8 @@ private:
   Sint32 brushHeigh;
   /** Brush composed of tiles copied from the main map */
   Uint16 *tiles_brush;
-  bitmap_data *pBrush_bob;
+  /** Brush bitmap */
+  bitmap_data *brush_bitmap;
 
   Sint32 box_colour;
   selectinfo *pt_select0;
@@ -109,7 +110,7 @@ private:
   Sint32 get_speed ();
   void select_box ();
   void drawingBox ();
-  void brushAlloc ();
+  void alloc_brush ();
   void brush_draw ();
   Sint32 saveTheMap ();
 

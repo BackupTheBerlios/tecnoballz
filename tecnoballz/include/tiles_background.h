@@ -1,14 +1,14 @@
 /** 
  * @file tiles_background.h
  * @brief Draw tiles background in bricks levels 
- * @date 2007-02-04
+ * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.h,v 1.6 2007/02/04 17:10:16 gurumeditation Exp $
+ * $Id: tiles_background.h,v 1.7 2007/03/31 10:55:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
