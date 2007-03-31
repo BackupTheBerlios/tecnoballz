@@ -5,11 +5,11 @@
  * @date 2007-02-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.cc,v 1.7 2007/02/19 21:03:35 gurumeditation Exp $
+ * $Id: sprite_guardian.cc,v 1.8 2007/03/31 21:31:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -221,7 +221,7 @@ sprite_guardian::startBlitz ()
   {
     v = table_gga2[v];
   }
-  if (gigablitz->guard_shoot (v, x_coord, y_coord, sprite_width, sprite_height))
+  if (gigablitz->shoot_guardian (v, x_coord, y_coord, sprite_width, sprite_height))
   {
     gardwaitf1 = gardwaitf2;
   } 

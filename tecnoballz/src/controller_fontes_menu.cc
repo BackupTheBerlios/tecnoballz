@@ -1,117 +1,137 @@
-//*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file         : "controller_fontes_menu.cc"
-// created              : ?
-// updates              : 2004-10-23
-// fonctions    : management of menu scrolling text
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA 02111-1307, USA.
-//*****************************************************************************
+/** 
+ * @file controller_fontes_menu.cc 
+ * @brief Controller of the menu scroll text 
+ * @date 2007-03-31
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.2 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: controller_fontes_menu.cc,v 1.2 2007/03/31 21:31:21 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
 #include "../include/controller_fontes_menu.h"
+#include "../include/handler_resources.h"
 
-//-----------------------------------------------------------------------------
-// create the object
-//-----------------------------------------------------------------------------
+/**
+ * Create the scroll text controller
+ */
 controller_fontes_menu::controller_fontes_menu ()
 {
   littleInit ();
-  max_of_sprites = DEFINUMBER + 2;
+  max_of_sprites = MAX_OF_FONTS + 2;
   sprites_have_shades = true;
   sprite_type_id = BOB_DEFILE;
   offset_xx1 = 0;
   offset_yy1 = 0;
 }
 
-//-----------------------------------------------------------------------------
-// release the object
-//-----------------------------------------------------------------------------
+/**
+ * Release the scroll text controller
+ */
 controller_fontes_menu::~controller_fontes_menu ()
 {
+  if (NULL != scrolltexts)
+    {
+      delete[](char *)scrolltexts;
+      scrolltexts = NULL;
+    }
   release_sprites_list ();
 }
 
-//-----------------------------------------------------------------------------
-// perform some initializations
-//-----------------------------------------------------------------------------
+/**
+ * Perform some initializations
+ */
 void
 controller_fontes_menu::create_fontes_list ()
 {
   create_sprites_list ();
-  Sint32 i;
-  objectChar[0] = 0;
-  Sint32 j = 0;
-  for (i = 0; i < DEFINUMBER; i++, j = (j + 18) & SINUS_MASK)
+  Uint32 i;
+  /* fisrt element of the list is NULL */ 
+  characters_list[0] = NULL;
+  Uint32 j = 0;
+  for (i = 0; i < MAX_OF_FONTS; i++, j = (j + 18) & SINUS_MASK)
     {
-      sprite_fonte_menu *zeBOB = sprites_list[i];
-      objectChar[i + 1] = zeBOB;
-      zeBOB->zeCosValue = j;
-      zeBOB->set_x_coord (100);
-      zeBOB->set_y_coord (300);
-      zeBOB->set_image (26);
+      sprite_fonte_menu *sprite = sprites_list[i];
+      characters_list[i + 1] = sprite;
+      sprite->zeCosValue = j;
+      sprite->set_x_coord (100);
+      sprite->set_y_coord (300);
+      sprite->set_image (26);
     }
-  objectChar[i + 1] = 0;
+  characters_list[i + 1] = NULL;
   objectLeft = sprites_list[i++];
   objectRigh = sprites_list[i];
   objectLeft->set_image (42);
   objectRigh->set_image (42);
   enable_sprites ();
-  object_ptr = &objectChar[DEFINUMBER];
+  object_ptr = &characters_list[MAX_OF_FONTS];
+  scrolltexts = resources->load_texts (handler_resources::TEXTS_SCROLL_MENU, 1, 0, 0);
+  scrollText = scrolltexts[0];
   scroll_ptr = scrollText;
 }
 
-//-----------------------------------------------------------------------------
-// moving of the characters 
-//-----------------------------------------------------------------------------
+/**
+ * Moving of the fonts
+ */ 
 void
 controller_fontes_menu::move_chars ()
 {
-  Sint32 a, b, large;
+  Sint32 a, b, width;
   Sint16 *table, *sinPT, *cosPT;
-  sprite_fonte_menu *zeBOB;
+  sprite_fonte_menu *sprite;
   sprite_fonte_menu *zzBOB;
+  /* convert unsigned to signed */
+  Sint32 res = (Sint32) resolution;
 
   sinPT = table_sinL;
   cosPT = table_cosL;
 
-  //###################################################################
-  // vertical moving of the characters 
-  //###################################################################
-
-  //determine the width of scrolling text
+  /*
+   * vertical moving of the characters 
+   */
+  /* determine the width of scrolling text */
   a = (offset_xx1 + 3) & SINUS_MASK;
   offset_xx1 = a;
   table = sinPT + a;
-  large = ((*table * 10 * resolution) >> SINUS_DECA) + 132 * resolution;
+  width = ((*table * 10 * res) >> SINUS_DECA) + 132 * res;
   Sint32 depla = 1;
   if (birth_flag)
-    depla *= 2;
-  sprite_fonte_menu **BOBpt = object_ptr;
-  for (Sint32 i = 0; i < DEFINUMBER; i++)
     {
-      if (!*BOBpt)
-        BOBpt = &objectChar[DEFINUMBER];
-      zeBOB = *(BOBpt--);
-      a = zeBOB->zeCosValue + depla;
+      depla *= 2;
+    }
+  sprite_fonte_menu **sprite_fonts = object_ptr;
+  for (Uint32 i = 0; i < MAX_OF_FONTS; i++)
+    {
+      if (NULL == *sprite_fonts)
+        {
+          sprite_fonts = &characters_list[MAX_OF_FONTS];
+        }
+      sprite = *(sprite_fonts--);
+      a = sprite->zeCosValue + depla;
 
-      //read a new character
+      /* read a new character */
       if (a >= 256)
         {
           char *sText = scroll_ptr;
           Uint32 c = (Uint32) * sText;
-          if (!c)
+          /* end of text, restart it! */
+          if (0 == c)
             {
               sText = scrollText;
               scroll_ptr = sText;
@@ -122,66 +142,66 @@ controller_fontes_menu::move_chars ()
           b = 127;
           c = c & b;
           b = asciiToBob[c];
-          zeBOB->set_image (b);
-          if (!*(object_ptr - 1))
-            object_ptr = &objectChar[DEFINUMBER + 1];
+          sprite->set_image (b);
+          /* fisrt element of the list? */
+          if (NULL == *(object_ptr - 1))
+            {
+              object_ptr = &characters_list[MAX_OF_FONTS + 1];
+            }
           object_ptr--;
         }
-      a = a & 255;              //radius only varies on 180 degree
-      zeBOB->zeCosValue = a;
+      /* radius only varies on 180 degree */
+      a = a & 255;
+      sprite->zeCosValue = a;
       table = cosPT + a;
-      a = ((*table * large) >> SINUS_DECA) + 152 * resolution;
-      zeBOB->set_x_coord (a);
+      a = ((*table * width) >> SINUS_DECA) + 152 * res;
+      sprite->set_x_coord (a);
     }
 
-  //###################################################################
-  // vertical moving of the characters 
-  //###################################################################
-  a = (offset_yy1 + 2) & SINUS_MASK;    // and 0x1ff => value 0 to 511
+  /*
+   * vertical moving of the characters 
+   */
+  /* and 0x1ff => value 0 to 511 */
+  a = (offset_yy1 + 2) & SINUS_MASK;
   offset_yy1 = a;
   depla = 4;
   if (birth_flag)
     depla *= 2;
-  BOBpt = object_ptr;
-  Sint32 zerad = 25 * resolution;
-  Sint32 zeoff = 200 * resolution;
-  for (Sint32 i = 0; i < DEFINUMBER; i++)
+  sprite_fonts = object_ptr;
+  Sint32 zerad = 25 * res;
+  Sint32 zeoff = 200 * res;
+  for (Uint32 i = 0; i < MAX_OF_FONTS; i++)
     {
-      if (!*BOBpt)
-        BOBpt = &objectChar[DEFINUMBER];
-      zeBOB = *(BOBpt--);
+      if (!*sprite_fonts)
+        {
+          sprite_fonts = &characters_list[MAX_OF_FONTS];
+        }
+      sprite = *(sprite_fonts--);
       a = (a + depla) & SINUS_MASK;
       table = sinPT + a;
       b = ((*table * zerad) >> SINUS_DECA) + zeoff;
-      zeBOB->set_y_coord (b);
+      sprite->set_y_coord (b);
     }
 
   // move the left mask
-  zeBOB = objectRigh;
+  sprite = objectRigh;
   table = cosPT;
-  a = ((*table * large) >> SINUS_DECA) + 152 * resolution;
-  zeBOB->set_x_coord (a);
-  zzBOB = *(++BOBpt);
+  a = ((*table * width) >> SINUS_DECA) + 152 * res;
+  sprite->set_x_coord (a);
+  zzBOB = *(++sprite_fonts);
   a = zzBOB->get_y_coord ();
-  zeBOB->set_y_coord (a);
+  sprite->set_y_coord (a);
 
   // move the right mask
-  zeBOB = objectLeft;
+  sprite = objectLeft;
   table = cosPT + 255;
-  a = ((*table * large) >> SINUS_DECA) + 152 * resolution;
-  zeBOB->set_x_coord (a);
+  a = ((*table * width) >> SINUS_DECA) + 152 * res;
+  sprite->set_x_coord (a);
   zzBOB = *object_ptr;
   a = zzBOB->get_y_coord ();
-  zeBOB->set_y_coord (a);
+  sprite->set_y_coord (a);
 }
 
-
-char
-  controller_fontes_menu::scrollText[] =
-  "WELCOME TO TECNOBALL Z. THIS GAME WAS ORIGINALLY A COMMODORE "
-  "AMIGA PRODUCTION. IN FACT IT'S THE FIRST PRODUCTION FROM TLK GAMES"
-  " RELEASED AT THE BEGINNING IF 1990. I COMPLETELY REWROTE THE GAME "
-  "WITH C LANGAGE AND SDL FOR LINUX. ENJOY IT !\0";
 char
   controller_fontes_menu::asciiToBob[128] = { 26,       // 32 ' ' space
   37,                           // 33 '!'

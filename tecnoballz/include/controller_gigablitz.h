@@ -1,14 +1,14 @@
 /** 
  * @file controller_gigablitz.h
  * @brief Gigablitz controller 
- * @date 2007-02-14
+ * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.h,v 1.7 2007/02/14 19:49:46 gurumeditation Exp $
+ * $Id: controller_gigablitz.h,v 1.8 2007/03/31 21:31:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,9 +58,9 @@ private:
   sprite_paddle *paddle_top;
   sprite_gigablitz *current_gigablitz;
   Sint32 blitz_colx;
-  Sint32 blitz_posx;
-  Sint32 blitz_posy;
-  Sint32 blitz_haut;            //gigablitz height
+  Sint32 gigablitz_xcoord;
+  /* Height of the gigablitz in pixels */
+  Uint32 gigablitz_height;
   Sint32 bitz_ystop;            //"gigablitz" Y max.
   Sint32 bitz_maxiy;            // 
   Sint32 bitz_miniy;            // 
@@ -77,10 +77,11 @@ public:
   void execution1 ();
   void collision1 ();
   void create_gigablitz_sprites (controller_paddles * paddles, controller_explosions * blast);
-  void execution2 ();
-  void collision2 ();
-  Sint32 guard_shoot (Sint32 value, Sint32 pos_x, Sint32 pos_y,
-                      Sint32 large, Sint32 haute);
-  Sint32 isactivate ();
+  void run_in_guardians_level ();
+  bool shoot_guardian (Uint32 id, Sint32 xcoord, Sint32 ycoord,
+                      Uint32 width, Uint32 height);
+  bool is_enable ();
+private: 
+  void collision_with_paddle ();
 };
 #endif

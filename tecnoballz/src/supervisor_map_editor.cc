@@ -2,14 +2,14 @@
  * @file supervisor_map_editor.cc 
  * @brief The tile map editor for the menu and guardians levels 
  * @created 2004-09-13 
- * @date 2007-03-21
+ * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.8 2007/03/31 10:55:03 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.9 2007/03/31 21:31:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,11 +46,10 @@ supervisor_map_editor::supervisor_map_editor ()
   view_mode = SHOW_MAP;
   is_space_key_down = false;
   titlesPosy = 0;
-  flag_press = 0;
+  is_right_button_down = false;
   box_colour = 0;
   tiles_brush = NULL;
   brush_bitmap = (bitmap_data *) NULL;
-  flag_press = 0;
   flagPress2 = 0;
   brush_posx = 0;
   brush_posy = 0;
@@ -67,13 +66,13 @@ supervisor_map_editor::~supervisor_map_editor ()
 {
   delete mouse_pointer;
   delete tiles_map;
-  if (NULL != pt_select1)
+  if (NULL != map_selection)
     {
-      delete pt_select1;
+      delete map_selection;
     }
-  if (NULL != pt_select2)
+  if (NULL != tiles_selection)
     {
-      delete pt_select2;
+      delete tiles_selection;
     }
   if (tiles_brush)
     {
@@ -98,18 +97,18 @@ supervisor_map_editor::first_init ()
 
   try
     {
-      pt_select1 = new selectinfo;
-      pt_select2 = new selectinfo;
+      map_selection = new selected_region;
+      tiles_selection = new selected_region;
     }
   catch (std::bad_alloc &)
   {
     std::
       cerr << "(!)supervisor_map_editor::first_init() "
       "not enough memory to allocate " <<
-      " 'selectinfo' structure!" << std::endl;
+      " 'selected_region' structure!" << std::endl;
     throw;
   }
-  pt_select0 = pt_select1;
+  current_selection = map_selection;
 
 
   screen_height = display->get_height ();
@@ -126,7 +125,7 @@ supervisor_map_editor::first_init ()
   Sint32 edmap = tilesmap_scrolling::MAPED_CONG;
 
   tiles_map->initialize (tilesmap_scrolling::TILES_COLOR_MENU, edmap);
-  ptrGBitMap = tiles_map->get_bitmap ();
+  tiles_bitmap = tiles_map->get_bitmap ();
 
   tile_width = tiles_map->get_tiles_width ();
   tile_mask1 = 0xffffffff ^ (tile_width - 1);
@@ -144,8 +143,8 @@ supervisor_map_editor::main_loop ()
 {
   display->wait_frame ();
 
-  pt_select1->boxOffsetY = tiles_map->get_y_coord ();
-  pt_select2->boxOffsetY = titlesPosy;
+  map_selection->boxOffsetY = tiles_map->get_y_coord ();
+  tiles_selection->boxOffsetY = titlesPosy;
 
   switch (view_mode)
     {
@@ -202,28 +201,24 @@ supervisor_map_editor::main_loop ()
 void
 supervisor_map_editor::view_map_editor ()
 {
-  pt_select0 = pt_select1;
+  current_selection = map_selection;
   Sint32 speed = get_speed ();
   /* draw tiles map on the screen */
   tiles_map->scrolling1 (speed); 
   select_box ();
-  drawingBox ();
+  highlight_selection ();
   brush_draw ();
 }
 
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
+/**
+ * Create a brush from map editor
+ */
 void
 supervisor_map_editor::map_to_brush ()
 {
   printf ("supervisor_map_editor::map_to_brush() : [%i, %i, %i, %i]\n",
-          pt_select0->box_pos_x1, pt_select0->box_pos_y1,
-          pt_select0->box_pos_x2, pt_select0->box_pos_y2);
-
-  //###################################################################
-  // allocate map memory
-  //###################################################################
+          current_selection->x1, current_selection->y1,
+          current_selection->x2, current_selection->y2);
 
   /*
    * Allocate memory for tiles brush
@@ -232,7 +227,7 @@ supervisor_map_editor::map_to_brush ()
     {
       delete[]tiles_brush;
     }
-  Uint32 size = pt_select0->box_height * pt_select0->box_widthT;
+  Uint32 size = current_selection->number_of_raws * current_selection->number_of_cols;
   try
     {
       tiles_brush = new Uint16[size];
@@ -246,29 +241,16 @@ supervisor_map_editor::map_to_brush ()
     throw;
   }
 
-/*
-  if (tiles_brush)
-    memory->release ((char *) tiles_brush);
-  tiles_brush = (Uint16 *) memory->alloc
-    (sizeof (Uint16) * pt_select0->box_height * pt_select0->box_widthT,
-     0x4D454741);
-  error_init (memory->retour_err ());
-  if (erreur_num)
-    return;
-   */
-
-  //Sint32 scrlY = tiles_map->returnPosy();
-  Sint32 i = pt_select0->box_pos_y1;
+  Sint32 i = current_selection->y1;
   i = (i / tiles_map->tile_height) + 4;
   i *= tilesmap_scrolling::MAP_WIDTH;
-  i += (pt_select0->box_pos_x1 / tiles_map->tile_width);
+  i += (current_selection->x1 / tiles_map->tile_width);
 
   Uint16 *carte = tiles_map->map_tiles + i;
-  //Uint16* carte = tiles_map->map_tiles;
   Uint16 *ptBrh = tiles_brush;
-  for (Uint32 y = 0; y < pt_select0->box_height; y++)
+  for (Uint32 y = 0; y < current_selection->number_of_raws; y++)
     {
-      for (Uint32 x = 0; x < pt_select0->box_widthT; x++)
+      for (Uint32 x = 0; x < current_selection->number_of_cols; x++)
         {
         *(ptBrh++) = carte[x];
         }
@@ -277,26 +259,28 @@ supervisor_map_editor::map_to_brush ()
   alloc_brush ();
 }
 
-//------------------------------------------------------------------------------
-// tiles wiew mode
-//------------------------------------------------------------------------------
+/**
+ * View tiles mode
+ */ 
 void
 supervisor_map_editor::view_tiles ()
 {
-  pt_select0 = pt_select2;
+  current_selection = tiles_selection;
   Sint32 speed = get_speed ();
-  Sint32 y_max = ptrGBitMap->get_height () - screen_height;
+  Sint32 y_max = tiles_bitmap->get_height () - screen_height;
 
   titlesPosy = titlesPosy + speed;
   if (titlesPosy < 0)
-    titlesPosy = 0;
-  if (titlesPosy > y_max)
-    titlesPosy = y_max;
-
-  //printf("y_max :%i / titlesPosy: %i\n", y_max, titlesPosy);
-  ptrGBitMap->copyBuffer (0, titlesPosy, 0, 0, screen_width, screen_height);
+    {
+      titlesPosy = 0;
+    }
+  else if (titlesPosy > y_max)
+    {
+      titlesPosy = y_max;
+    }
+  tiles_bitmap->copyBuffer (0, titlesPosy, 0, 0, screen_width, screen_height);
   select_box ();
-  drawingBox ();
+  highlight_selection ();
 }
 
 //------------------------------------------------------------------------------
@@ -306,13 +290,13 @@ void
 supervisor_map_editor::tile2brush ()
 {
   printf ("supervisor_map_editor::tile2brush() : [%i, %i, %i, %i]\n",
-          pt_select0->box_pos_x1, pt_select0->box_pos_y1,
-          pt_select0->box_pos_x2, pt_select0->box_pos_y2);
+          current_selection->x1, current_selection->y1,
+          current_selection->x2, current_selection->y2);
 
 
   Sint32 o =
-    (pt_select0->box_pos_y1 / tile_width) * tilesmap_scrolling::MAP_WIDTH +
-    (pt_select0->box_pos_x1 / tile_width);
+    (current_selection->y1 / tile_width) * tilesmap_scrolling::MAP_WIDTH +
+    (current_selection->x1 / tile_width);
 
   //###################################################################
   // allocate map memory
@@ -320,7 +304,7 @@ supervisor_map_editor::tile2brush ()
   if (tiles_brush)
     memory->release ((char *) tiles_brush);
   tiles_brush = (Uint16 *) memory->alloc
-    (sizeof (Uint16) * pt_select0->box_height * pt_select0->box_widthT,
+    (sizeof (Uint16) * current_selection->number_of_raws * current_selection->number_of_cols,
      0x4D454741);
   error_init (memory->retour_err ());
   if (erreur_num)
@@ -328,10 +312,10 @@ supervisor_map_editor::tile2brush ()
 
 
   Uint16 *ptBrh = tiles_brush;
-  for (Sint32 y = 0; y < pt_select0->box_height; y++)
+  for (Uint32 y = 0; y < current_selection->number_of_raws; y++)
     {
       Sint32 p = o;
-      for (Sint32 x = 0; x < pt_select0->box_widthT; x++)
+      for (Uint32 x = 0; x < current_selection->number_of_cols; x++)
         {                       //printf("%i ", p);
           *(ptBrh++) = p;
           p++;
@@ -362,6 +346,7 @@ supervisor_map_editor::check_keys ()
         case SHOW_MAP:
           view_mode = SHOW_TILES;
           break;
+        case SHOW_TILES:
         default:
           view_mode = SHOW_MAP;
           break;
@@ -378,21 +363,33 @@ Sint32
 supervisor_map_editor::get_speed ()
 {
   Sint32 speed = 0;
-  Sint32 mousY = keyboard->get_mouse_y ();
+  Uint32 mousY = keyboard->get_mouse_y ();
   if (mousY > 0 && mousY < 8 * resolution)
-    speed = -16 * resolution;
+    {
+      speed = -16 * resolution;
+    }
   if (mousY >= 8 * resolution && mousY < 16 * resolution)
-    speed = -8 * resolution;
+    {
+      speed = -8 * resolution;
+    }
   if (mousY >= 16 * resolution && mousY < 24 * resolution)
-    speed = -4 * resolution;
+    {
+      speed = -4 * resolution;
+    }
   if (mousY <= screen_height - 16 * resolution
       && mousY > screen_height - 24 * resolution)
-    speed = 4 * resolution;
+    {
+      speed = 4 * resolution;
+    }
   if (mousY <= screen_height - 8 * resolution
       && mousY > screen_height - 16 * resolution)
-    speed = 8 * resolution;
+      {
+        speed = 8 * resolution;
+      }
   if (mousY < screen_height && mousY > screen_height - 8 * resolution)
-    speed = 16 * resolution;
+      {
+        speed = 16 * resolution;
+      }
   return speed;
 }
 
@@ -411,14 +408,14 @@ supervisor_map_editor::select_box ()
   //##############################################################
   // read y where is pressed 
   //##############################################################
-  if (presR && !flag_press)
+  if (presR && !is_right_button_down)
     {
-      flag_press = 1;
-      pt_select0->box_pos_x1 = keyboard->get_mouse_x ();
-      pt_select0->box_pos_y1 =
-        pt_select0->boxOffsetY + keyboard->get_mouse_y ();
-      pt_select0->box_pos_x1 &= tile_mask1;
-      pt_select0->box_pos_y1 &= tile_mask1;
+      is_right_button_down = true;
+      current_selection->x1 = keyboard->get_mouse_x ();
+      current_selection->y1 =
+        current_selection->boxOffsetY + keyboard->get_mouse_y ();
+      current_selection->x1 &= tile_mask1;
+      current_selection->y1 &= tile_mask1;
       if (brush_bitmap)
         {
           delete brush_bitmap;
@@ -427,54 +424,54 @@ supervisor_map_editor::select_box ()
     }
 
 
-  if (flag_press)
+  if (is_right_button_down)
     {
-      pt_select0->box_pos_x2 = keyboard->get_mouse_x ();
-      pt_select0->box_pos_y2 =
-        keyboard->get_mouse_y () + pt_select0->boxOffsetY;
+      current_selection->x2 = keyboard->get_mouse_x ();
+      current_selection->y2 =
+        keyboard->get_mouse_y () + current_selection->boxOffsetY;
 
-      if (pt_select0->box_pos_x2 & tile_mask2)
-        pt_select0->box_pos_x2 += tile_width;
-      if (pt_select0->box_pos_y2 & tile_mask2)
-        pt_select0->box_pos_y2 += tile_width;
+      if (current_selection->x2 & tile_mask2)
+        current_selection->x2 += tile_width;
+      if (current_selection->y2 & tile_mask2)
+        current_selection->y2 += tile_width;
 
-      pt_select0->box_pos_x2 &= tile_mask1;
-      pt_select0->box_pos_y2 &= tile_mask1;
-      if (pt_select0->box_pos_x2 >= pt_select0->box_pos_x1 &&
-          pt_select0->box_pos_x2 - pt_select0->box_pos_x1 < tile_width)
-        pt_select0->box_pos_x2 = pt_select0->box_pos_x1 + tile_width;
+      current_selection->x2 &= tile_mask1;
+      current_selection->y2 &= tile_mask1;
+      if (current_selection->x2 >= current_selection->x1 &&
+          current_selection->x2 - current_selection->x1 < tile_width)
+        current_selection->x2 = current_selection->x1 + tile_width;
 
-      if (pt_select0->box_pos_x2 < pt_select0->box_pos_x1 &&
-          pt_select0->box_pos_x1 - pt_select0->box_pos_x2 < tile_width)
-        pt_select0->box_pos_x2 = pt_select0->box_pos_x1 - tile_width;
+      if (current_selection->x2 < current_selection->x1 &&
+          current_selection->x1 - current_selection->x2 < tile_width)
+        current_selection->x2 = current_selection->x1 - tile_width;
 
-      if (pt_select0->box_pos_y2 >= pt_select0->box_pos_y1 &&
-          pt_select0->box_pos_y2 - pt_select0->box_pos_y1 < tile_width)
-        pt_select0->box_pos_y2 = pt_select0->box_pos_y1 + tile_width;
+      if (current_selection->y2 >= current_selection->y1 &&
+          current_selection->y2 - current_selection->y1 < tile_width)
+        current_selection->y2 = current_selection->y1 + tile_width;
 
-      if (pt_select0->box_pos_y2 < pt_select0->box_pos_y1 &&
-          pt_select0->box_pos_y1 - pt_select0->box_pos_y2 < tile_width)
-        pt_select0->box_pos_x2 = pt_select0->box_pos_x1 - tile_width;
+      if (current_selection->y2 < current_selection->y1 &&
+          current_selection->y1 - current_selection->y2 < tile_width)
+        current_selection->x2 = current_selection->x1 - tile_width;
 
 
 
-      if (pt_select0->box_pos_y1 < pt_select0->box_pos_y2
-          && pt_select0->box_pos_y2 - pt_select0->box_pos_y1 >
+      if (current_selection->y1 < current_selection->y2
+          && current_selection->y2 - current_selection->y1 >
           (screen_height / 2))
-        pt_select0->box_pos_y2 = pt_select0->box_pos_y1 + (screen_height / 2);
+        current_selection->y2 = current_selection->y1 + (screen_height / 2);
 
-      if (pt_select0->box_pos_y1 > pt_select0->box_pos_y2
-          && pt_select0->box_pos_y1 - pt_select0->box_pos_y2 >
+      if (current_selection->y1 > current_selection->y2
+          && current_selection->y1 - current_selection->y2 >
           (screen_height / 2))
-        pt_select0->box_pos_y2 = pt_select0->box_pos_y1 - (screen_height / 2);
+        current_selection->y2 = current_selection->y1 - (screen_height / 2);
 
 
     }
 
 
-  if (flag_press && presR)
+  if (is_right_button_down && presR)
     {
-      pt_select0->box_typeID = 2;
+      current_selection->box_typeID = 2;
       //printf("supervisor_map_editor::select_box() / pressed\n");
     }
   else
@@ -483,30 +480,30 @@ supervisor_map_editor::select_box ()
       //###############################################################
       // left mouse button relased
       //###############################################################
-      if (!presR && flag_press)
+      if (!presR && is_right_button_down)
         {
-          flag_press = 0;
-          pt_select0->box_typeID = 1;
+          is_right_button_down = 0;
+          current_selection->box_typeID = 1;
           printf ("supervisor_map_editor::select_box() / relased\n");
 
-          if (pt_select0->box_pos_x1 > pt_select0->box_pos_x2)
+          if (current_selection->x1 > current_selection->x2)
             {
-              Sint32 x = pt_select0->box_pos_x1;
-              pt_select0->box_pos_x1 = pt_select0->box_pos_x2;
-              pt_select0->box_pos_x2 = x;
+              Sint32 x = current_selection->x1;
+              current_selection->x1 = current_selection->x2;
+              current_selection->x2 = x;
             }
-          if (pt_select0->box_pos_y1 > pt_select0->box_pos_y2)
+          if (current_selection->y1 > current_selection->y2)
             {
-              Sint32 y = pt_select0->box_pos_y1;
-              pt_select0->box_pos_y1 = pt_select0->box_pos_y2;
-              pt_select0->box_pos_y2 = y;
+              Sint32 y = current_selection->y1;
+              current_selection->y1 = current_selection->y2;
+              current_selection->y2 = y;
             }
 
 
-          pt_select0->box_widthT =
-            (pt_select0->box_pos_x2 - pt_select0->box_pos_x1) / tile_width;
-          pt_select0->box_height =
-            (pt_select0->box_pos_y2 - pt_select0->box_pos_y1) / tile_width;
+          current_selection->number_of_cols =
+            (current_selection->x2 - current_selection->x1) / tile_width;
+          current_selection->number_of_raws =
+            (current_selection->y2 - current_selection->y1) / tile_width;
 
 
           switch (view_mode)
@@ -525,28 +522,27 @@ supervisor_map_editor::select_box ()
 
 }
 
-
-//------------------------------------------------------------------------------
-// draw selection
-//------------------------------------------------------------------------------
+/**
+ * Draw highlighting selection
+ */
 void
-supervisor_map_editor::drawingBox ()
+supervisor_map_editor::highlight_selection ()
 {
   char *pBuff;
   Sint32 tmpco = 0;
 
-  if (pt_select0->box_pos_x2 == pt_select0->box_pos_x1 ||
-      pt_select0->box_pos_y2 == pt_select0->box_pos_y1)
+  if (current_selection->x2 == current_selection->x1 ||
+      current_selection->y2 == current_selection->y1)
     {
-      pt_select0->box_typeID = 0;
+      current_selection->box_typeID = 0;
     }
-  if (!pt_select0->box_typeID)
+  if (!current_selection->box_typeID)
     return;
 
-  Sint32 x1 = pt_select0->box_pos_x1;
-  Sint32 x2 = pt_select0->box_pos_x2;
-  Sint32 y1 = pt_select0->box_pos_y1 - pt_select0->boxOffsetY;
-  Sint32 y2 = pt_select0->box_pos_y2 - pt_select0->boxOffsetY;
+  Uint32 x1 = current_selection->x1;
+  Uint32 x2 = current_selection->x2;
+  Uint32 y1 = current_selection->y1 - current_selection->boxOffsetY;
+  Uint32 y2 = current_selection->y2 - current_selection->boxOffsetY;
 
   if (x1 > x2)
     {
@@ -566,12 +562,12 @@ supervisor_map_editor::drawingBox ()
   Sint32 color = box_colour;
 
 
-  //char *ptBuf = game_screen->get_pixel_data(box_pos_x1, box_pos_y1);
+  //char *ptBuf = game_screen->get_pixel_data(x1, y2);
 
   Sint32 width = x2 - x1;
   Sint32 heigh = y2 - y1;
 
-  /*printf("supervisor_map_editor::drawingBox() : [%i, %i, %i, %i]\n", 
+  /*printf("supervisor_map_editor::highlight_selection() : [%i, %i, %i, %i]\n", 
      x1, y1, x2, y2); */
 
 
@@ -654,9 +650,9 @@ supervisor_map_editor::alloc_brush ()
     {
       delete brush_bitmap;
     }
-  brush_bitmap = tiles_map->alloc_brush (tiles_brush, pt_select0->box_widthT, pt_select0->box_height);
-  brushWidth = pt_select0->box_widthT;
-  brushHeigh = pt_select0->box_height;
+  brush_bitmap = tiles_map->alloc_brush (tiles_brush, current_selection->number_of_cols, current_selection->number_of_raws);
+  brushWidth = current_selection->number_of_cols;
+  brushHeigh = current_selection->number_of_raws;
   return;
 }
 
@@ -666,8 +662,10 @@ supervisor_map_editor::alloc_brush ()
 void
 supervisor_map_editor::brush_draw ()
 {
-  if (!brush_bitmap)
-    return;
+  if (NULL == brush_bitmap)
+    {
+      return;
+    }
   Sint32 pos_x = keyboard->get_mouse_x ();
   Sint32 pos_y = keyboard->get_mouse_y ();
   pos_x &= tile_mask1;

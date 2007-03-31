@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_bullet.h,v 1.3 2007/02/19 21:03:35 gurumeditation Exp $
+ * $Id: sprite_bullet.h,v 1.4 2007/03/31 21:31:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,8 +40,8 @@ class sprite_bullet:public sprite_object
 
 private:
   Sint32 type_depla;
-  Sint32 flagDepla1;
-  Sint32 flagDepla2;
+  Uint32 flagDepla1;
+  Uint32 flagDepla2;
   Sint32 flagDepla3;
   Sint32 flagDepla4;
   Sint32 flagDepla5;

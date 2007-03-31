@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_bullet.cc,v 1.2 2007/02/19 21:03:35 gurumeditation Exp $
+ * $Id: sprite_bullet.cc,v 1.3 2007/03/31 21:31:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -179,7 +179,7 @@ sprite_bullet::trajectory_04 ()
 void
 sprite_bullet::trajectory_05 ()
 {
-  if (flagDepla1)
+  if (flagDepla1 > 0)
     {
       flagDepla1--;
       y_coord += resolution;
@@ -206,7 +206,7 @@ sprite_bullet::trajectory_06 ()
   if (flagDepla2 < (150 * resolution))
     {
       flagDepla1 = flagDepla1 + 2 * resolution;
-      if (ptbumper01->x_coord < flagDepla1)
+      if (ptbumper01->x_coord < (Sint32)flagDepla1)
         flagDepla1 = flagDepla1 - 4 * resolution;
     }
   x_coord = flagDepla1 + (tablesinus[flagDepla3] * resolution);
@@ -220,7 +220,7 @@ void
 sprite_bullet::trajectory_07 ()
 {
   y_coord = y_coord + (3 * resolution); //new position y 
-  if (y_coord < (150 * resolution))
+  if (y_coord < Sint32(150 * resolution))
     {
       x_coord = x_coord + 2 * resolution;
       if (ptbumper01->x_coord < x_coord)

@@ -4,11 +4,11 @@
  * @date 2007-03-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.15 2007/03/17 20:30:17 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.16 2007/03/31 21:31:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -159,7 +159,7 @@ void
 right_panel_score::draw_gigablizt_gauge ()
 {
   controller_gigablitz *gigablitz = controller_gigablitz::get_instance ();
-  if (keyboard->is_right_left_buttons () && !gigablitz->isactivate () &&
+  if (keyboard->is_right_left_buttons () && !gigablitz->is_enable () &&
       !balls->least_glue ())
     {
       if (++delay_gigablitz_countdown >= DELAY_GIGABLITZ_COUNTDOWN)

@@ -5,11 +5,11 @@
  * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.h,v 1.6 2007/03/31 10:55:03 gurumeditation Exp $
+ * $Id: supervisor_map_editor.h,v 1.7 2007/03/31 21:31:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,16 +36,20 @@
 
 typedef struct
 {
-  Sint32 box_pos_x1;
-  Sint32 box_pos_x2;
-  Sint32 box_pos_y1;
-  Sint32 box_pos_y2;
-  Uint32 box_widthT;
-  Uint32 box_height;
+  /** Left column of selection rectangle */
+  Sint32 x1;
+  /** Top row of selection rectangle */
+  Sint32 x2;
+  /** Right column of selection rectangle */
+  Sint32 y1;
+  /** Bottom row of selection rectangle */
+  Sint32 y2;
+  Uint32 number_of_cols;
+  Uint32 number_of_raws;
   Sint32 boxOffsetY;
   Uint32 box_typeID;            //0 = d'ont display / 1 = current select / 2 = select finish
 }
-selectinfo;
+selected_region;
 
 
 class supervisor_map_editor:public virtual supervisor
@@ -68,8 +72,8 @@ private:
   /** True if the space key is pressed down */
   bool is_space_key_down;
   Sint32 titlesPosy;
-  bitmap_data *ptrGBitMap;
-  Sint32 flag_press;
+  bitmap_data *tiles_bitmap;
+  bool is_right_button_down;
 
   // brush handle
   Sint32 flagPress2;            //left button pressed
@@ -83,9 +87,9 @@ private:
   bitmap_data *brush_bitmap;
 
   Sint32 box_colour;
-  selectinfo *pt_select0;
-  selectinfo *pt_select1;
-  selectinfo *pt_select2;
+  selected_region *current_selection;
+  selected_region *map_selection;
+  selected_region *tiles_selection;
 
 
   Sint32 tile_width;
@@ -109,7 +113,7 @@ private:
   void check_keys ();
   Sint32 get_speed ();
   void select_box ();
-  void drawingBox ();
+  void highlight_selection ();
   void alloc_brush ();
   void brush_draw ();
   Sint32 saveTheMap ();

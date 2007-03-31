@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.h
  * @brief Paddles controller 
- * @date 2007-02-10
+ * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.h,v 1.7 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_paddles.h,v 1.8 2007/03/31 21:31:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ private:
    * (on Amiga I had two mice simultaneously) */
   bool is_team_mode;
   /** Length of the paddles in pixels */
-  Sint32 paddle_length;
+  Uint32 paddle_length;
   Sint32 raketDepla;            //sens de deplacement 1 <- 0 -> 2
   Sint32 rakVgauche;            //vitesse gauche
   Sint32 rakVdroite;            //vitesse droite

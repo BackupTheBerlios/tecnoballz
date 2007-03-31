@@ -5,11 +5,11 @@
  * @date 2007-02-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: configfile.cc,v 1.22 2007/02/22 22:07:32 gurumeditation Exp $
+ * $Id: configfile.cc,v 1.23 2007/03/31 21:31:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -215,9 +215,11 @@ configfile::loadconfig ()
   if (!reader.read_bool ("verbose", &is_verbose))
     is_verbose = 0;
 
-  //read window resolution: 1 = 320 * 240; 2 = 640 * 480
-  if (!reader.read_int ("resolution", &resolution))
-    resolution = 2;
+  /* read window resolution: 1 = 320*240; 2 = 640*480 */
+  Sint32 res = 0;
+  if (!reader.read_int ("resolution", &res))
+    res = 2;
+  resolution = res;
   if (resolution < 1 || resolution > 2)
     resolution = 2;
   if (resolution == 2)

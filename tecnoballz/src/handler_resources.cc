@@ -2,14 +2,14 @@
  * @file handler_resources.cc 
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-03-28
+ * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.15 2007/03/28 13:57:51 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.16 2007/03/31 21:31:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -152,7 +152,9 @@ const char * handler_resources::texts_files[] =
   /* TEXTS_SHOP */
   "shop_%s.txt",
   /* TEXTS_MESSAGES */
-  "short_info_messages_%s.txt"
+  "short_info_messages_%s.txt",
+  /* TEXTS_SCROLL_MENU */
+  "scrolltext_%s.txt",
 };
 
 char

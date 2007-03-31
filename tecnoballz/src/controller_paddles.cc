@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.16 2007/03/09 17:18:34 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.17 2007/03/31 21:31:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -445,7 +445,8 @@ controller_paddles::move_paddles ()
       rakVgauche = 0;
       rakVdroite = 0;
 
-      if (!keyboard->is_right_left_buttons () && !gigablitz->isactivate ())    //if 2 mouse buttons are pressed or GigaBlitz runn also no test
+      /* if 2 mouse buttons are pressed or GigaBlitz run also no test */
+      if (!keyboard->is_right_left_buttons () && !gigablitz->is_enable ())
         {
           if (reverse_counter > 0)
             {

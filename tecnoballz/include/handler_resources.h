@@ -2,14 +2,14 @@
  * @file handler_resources.h
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-03-28
+ * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.11 2007/03/28 13:57:51 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.12 2007/03/31 21:31:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,6 +67,7 @@ public:
 
       TEXTS_SHOP = TEXTS_OFFSET,
       TEXTS_MESSAGES,
+      TEXTS_SCROLL_MENU,
       
       BITMAP_HEAD_ANIMATION = BITMAP_OFFSET,
       BITMAP_RIGHT_PANEL,

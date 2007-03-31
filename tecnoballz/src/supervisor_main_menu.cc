@@ -4,11 +4,11 @@
  * @date 2007-03-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.15 2007/03/28 13:57:51 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.16 2007/03/31 21:31:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -169,16 +169,18 @@ void
 supervisor_main_menu::move_tecnoballz_logo ()
 {
   Sint32 a, b;
+  /* convert unsigned to signed */
+  Sint32 res = (Sint32) resolution;
   a = offset_xx1;
   Sint16 *s = table_sinL + a;
-  b = ((*s * 20 * resolution) >> SINUS_DECA) + 32 * resolution;
+  b = ((*s * 20 * res) >> SINUS_DECA) + 32 * res;
   tecnoballz_logo->set_x_coord (b);
   if (birth_flag)
     {
       a *= 4;
       a &= SINUS_MASK;
       s = table_cosL + a;
-      b = ((*s * 5 * resolution) >> SINUS_DECA) + 7 * resolution;
+      b = ((*s * 5 * res) >> SINUS_DECA) + 7 * res;
       tecnoballz_logo->set_y_coord (b);
     }
 }

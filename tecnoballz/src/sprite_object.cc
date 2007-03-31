@@ -4,11 +4,11 @@
  * @date 2007-02-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.28 2007/03/16 16:35:04 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.29 2007/03/31 21:31:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -422,10 +422,10 @@ sprite_object::create_sprite (Sint32 type_id, bitmap_data * image, bool shadow,
       Uint32 pixels_count = 0;
       /* table size counter of offsets and loops counters values */ 
       Uint32 values_count = 0;
-      Sint32 pos_x = (Sint32) coord[i].BB_COORDX;
+      Uint32 pos_x = (Sint32) coord[i].BB_COORDX;
       pos_x *= resolution;
       pos_x *= 16;
-      Sint32 pos_y = (Sint32) coord[i].BB_COORDY;
+      Uint32 pos_y = (Sint32) coord[i].BB_COORDY;
       pos_y *= resolution;
 
       /* verify page overflow */ 

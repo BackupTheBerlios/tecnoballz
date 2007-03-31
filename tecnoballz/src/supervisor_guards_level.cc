@@ -5,11 +5,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.33 2007/03/19 20:47:50 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.34 2007/03/31 21:31:22 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -299,7 +299,8 @@ supervisor_guards_level::main_loop ()
           power_up_capsules->move_in_guardians_level ();
           fontes_game->goMoveText ();
           player_indicators->display_money_and_lifes ();
-          gigablitz->execution2 ();    //move the Gigablitz from guards
+          /* move Gigablitz and check collision with paddle */
+          gigablitz->run_in_guardians_level ();
           explosions->play_animation ();
           bullets->play_animation_loop ();
 
