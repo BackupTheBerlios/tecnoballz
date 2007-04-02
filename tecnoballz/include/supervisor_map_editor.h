@@ -2,14 +2,14 @@
  * @file supervisor_map_editor.cc 
  * @brief The tile map editor for the menu and guardians levels 
  * @created 2004-09-13 
- * @date 2007-03-31
+ * @date 2007-04-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.h,v 1.7 2007/03/31 21:31:21 gurumeditation Exp $
+ * $Id: supervisor_map_editor.h,v 1.8 2007/04/02 07:25:18 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ typedef struct
   Sint32 y2;
   Uint32 number_of_cols;
   Uint32 number_of_raws;
-  Sint32 boxOffsetY;
+  Sint32 y_offset;
   Uint32 box_typeID;            //0 = d'ont display / 1 = current select / 2 = select finish
 }
 selected_region;
@@ -76,11 +76,15 @@ private:
   bool is_right_button_down;
 
   // brush handle
-  Sint32 flagPress2;            //left button pressed
-  Sint32 brush_posx;            //
-  Sint32 brush_posy;            //
-  Sint32 brushWidth;
-  Sint32 brushHeigh;
+  bool is_left_button_down;            //left button pressed
+  /** X-coordinate of the current brush in pixels */
+  Sint32 brush_posx;
+  /** Y-coordinate of the current brush in pixels */
+  Sint32 brush_posy;
+  /** Width of the current brush in pixels */
+  Uint32 brush_width;
+  /** Height of the current brush in pixels */
+  Uint32 brush_height;
   /** Brush composed of tiles copied from the main map */
   Uint16 *tiles_brush;
   /** Brush bitmap */
@@ -108,14 +112,15 @@ public:
 private:
   void view_map_editor ();
   void view_tiles ();
-  void tile2brush ();
+  void tiles_to_brush ();
   void map_to_brush ();
   void check_keys ();
   Sint32 get_speed ();
-  void select_box ();
+  void select_rectangle ();
   void highlight_selection ();
+  void alloc_tilesmap_brush (Uint32 number_of_raws, Uint32 number_of_cols);
   void alloc_brush ();
-  void brush_draw ();
+  void draw_brush ();
   Sint32 saveTheMap ();
 
   static const unsigned char cyclingtab[];
