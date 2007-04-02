@@ -5,11 +5,11 @@
  * @date 2007-04-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.11 2007/04/02 16:27:04 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.12 2007/04/02 19:54:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ supervisor_map_editor::supervisor_map_editor ()
   mouse_pointer = new sprite_mouse_pointer ();
   view_mode = SHOW_MAP;
   is_space_key_down = false;
-  titlesPosy = 0;
+  tiles_ycoord = 0;
   map_width = 0;
   is_right_button_down = false;
   box_colour = 0;
@@ -153,7 +153,7 @@ supervisor_map_editor::main_loop ()
   display->wait_frame ();
 
   map_selection->y_offset = tiles_map->get_y_coord ();
-  tiles_selection->y_offset = titlesPosy;
+  tiles_selection->y_offset = tiles_ycoord;
 
   switch (view_mode)
     {
@@ -199,7 +199,7 @@ supervisor_map_editor::main_loop ()
   if (keyboard->key_is_released (SDLK_s) && is_s_key_down)
     {
       is_s_key_down = false;
-      saveTheMap ();
+      save_tilesmap ();
     }
   return end_return;
 }
@@ -232,21 +232,19 @@ supervisor_map_editor::map_to_brush ()
         current_selection->x2 << ", " << current_selection->y2 << std::endl;
   }
 
-  /*
-   * Allocate memory for tiles brush
-   */
+  /* allocate memory for tiles brush */
   alloc_tilesmap_brush (current_selection->number_of_raws, current_selection->number_of_cols);
   Sint32 ycoord = current_selection->y1;
   ycoord = (ycoord / tiles_map->tile_height) + 0;
   ycoord *= map_width;
   ycoord += (current_selection->x1 / tiles_map->tile_width);
   Uint16 *map = tiles_map->map_tiles + ycoord;
-  Uint16 *ptBrh = tiles_brush;
+  Uint16 *brush = tiles_brush;
   for (Uint32 y = 0; y < current_selection->number_of_raws; y++)
     {
       for (Uint32 x = 0; x < current_selection->number_of_cols; x++)
         {
-          *(ptBrh++) = map[x];
+          *(brush++) = map[x];
         }
       map += map_width;
     }
@@ -262,49 +260,54 @@ supervisor_map_editor::view_tiles ()
   current_selection = tiles_selection;
   Sint32 speed = get_speed ();
   Sint32 y_max = tiles_bitmap->get_height () - screen_height;
-
-  titlesPosy = titlesPosy + speed;
-  if (titlesPosy < 0)
+  tiles_ycoord = tiles_ycoord + speed;
+  if (tiles_ycoord < 0)
     {
-      titlesPosy = 0;
+      tiles_ycoord = 0;
     }
-  else if (titlesPosy > y_max)
+  else if (tiles_ycoord > y_max)
     {
-      titlesPosy = y_max;
+      tiles_ycoord = y_max;
     }
-  tiles_bitmap->copyBuffer (0, titlesPosy, 0, 0, screen_width, screen_height);
+  game_screen->blit_surface (tiles_bitmap, 0, tiles_ycoord, 0, 0, screen_width, screen_height);
   select_rectangle ();
   highlight_selection ();
 }
 
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
+/**
+ * Create a brush from tiles bitmap 
+ */
 void
 supervisor_map_editor::tiles_to_brush ()
 {
-  printf ("supervisor_map_editor::tiles_to_brush() : [%i, %i, %i, %i]\n",
-          current_selection->x1, current_selection->y1,
-          current_selection->x2, current_selection->y2);
+  if (is_verbose) 
+  {
+    std::cout << "supervisor_map_editor::map_to_brush() (" <<
+        current_selection->x1 << ", " << current_selection->y1 << "," << 
+        current_selection->x2 << ", " << current_selection->y2 << std::endl;
+  }
 
-
-  Sint32 o =
-    (current_selection->y1 / tile_width) * map_width +
-    (current_selection->x1 / tile_width);
-
-  /* allocate tilesmap for the brush */
+  /*
+   * allocate tilesmap for the brush
+   */
   alloc_tilesmap_brush (current_selection->number_of_raws, current_selection->number_of_cols);
 
-  Uint16 *ptBrh = tiles_brush;
+  /*
+   * copy tiles offsets to brush map
+   */
+  Sint32 offset =
+    (current_selection->y1 / tile_width) * map_width +
+    (current_selection->x1 / tile_width);
+  Uint16 *brush = tiles_brush;
   for (Uint32 y = 0; y < current_selection->number_of_raws; y++)
     {
-      Sint32 p = o;
+      Sint32 index = offset;
       for (Uint32 x = 0; x < current_selection->number_of_cols; x++)
         {
-          *(ptBrh++) = p;
-          p++;
+          *(brush++) = index;
+          index++;
         }
-      o += map_width;
+      offset += map_width;
     }
   alloc_brush ();
 }
@@ -443,17 +446,15 @@ supervisor_map_editor::select_rectangle ()
 
   if (is_right_button_down && is_right_down)
     {
-      current_selection->box_typeID = 2;
+      return;
     }
-  else
-    {
-      /* right mouse button relased */
-      if (!is_right_down && is_right_button_down)
+      if (is_right_down || !!is_right_button_down)
         {
-          is_right_button_down = false;
-          current_selection->box_typeID = 1;
-          printf ("supervisor_map_editor::select_rectangle() / relased\n");
+          return;
+        }
 
+      /* right mouse button released */
+          is_right_button_down = false;
           if (current_selection->x1 > current_selection->x2)
             {
               Sint32 x = current_selection->x1;
@@ -466,14 +467,10 @@ supervisor_map_editor::select_rectangle ()
               current_selection->y1 = current_selection->y2;
               current_selection->y2 = y;
             }
-
-
           current_selection->number_of_cols =
             (current_selection->x2 - current_selection->x1) / tile_width;
           current_selection->number_of_raws =
             (current_selection->y2 - current_selection->y1) / tile_width;
-
-
           switch (view_mode)
             {
             case SHOW_TILES:
@@ -484,9 +481,6 @@ supervisor_map_editor::select_rectangle ()
               map_to_brush ();
               break;
             }
-
-        }
-    }
 
 }
 
@@ -502,13 +496,8 @@ supervisor_map_editor::highlight_selection ()
   if (current_selection->x2 == current_selection->x1 ||
       current_selection->y2 == current_selection->y1)
     {
-      current_selection->box_typeID = 0;
-    }
-  if (0 == current_selection->box_typeID)
-    {
       return;
     }
-
   Uint32 x1 = current_selection->x1;
   Uint32 x2 = current_selection->x2;
   Uint32 y1 = current_selection->y1 - current_selection->y_offset;
@@ -746,11 +735,12 @@ supervisor_map_editor::draw_brush ()
             tiles_map->map_tiles[i++] = table[j];
         }
     }
-  brush_bitmap->copyBuffer (0, 0, pos_x, pos_y - (scrlY & tile_mask2), -1, -1);
+  //brush_bitmap->copyBuffer (0, 0, pos_x, pos_y - (scrlY & tile_mask2), -1, -1);
+  game_screen->blit_surface (brush_bitmap, 0, 0, pos_x, pos_y - (scrlY & tile_mask2), brush_bitmap->get_width(), brush_bitmap->get_height()); 
 }
 
 Sint32
-supervisor_map_editor::saveTheMap ()
+supervisor_map_editor::save_tilesmap ()
 {
   Sint32 zsize =
     tilesmap_scrolling::MAP_HEIGHT * map_width;
@@ -783,7 +773,7 @@ supervisor_map_editor::saveTheMap ()
   if (fhand == -1)
     {
       fprintf (stderr,
-               "supervisor_map_editor::saveTheMap(): file:%s / error:%s\n",
+               "supervisor_map_editor::save_tilesmap(): file:%s / error:%s\n",
                fnamescore, strerror (errno));
       memory->release ((char *) ptDes);
       return 0;
@@ -792,13 +782,13 @@ supervisor_map_editor::saveTheMap ()
   if (close (fhand) == -1)
     {
       fprintf (stderr,
-               "supervisor_map_editor::saveTheMap(): file:%s / error:%s\n",
+               "supervisor_map_editor::save_tilesmap(): file:%s / error:%s\n",
                fnamescore, strerror (errno));
       memory->release ((char *) ptDes);
       return 0;
     }
   memory->release ((char *) carte);
-  printf ("supervisor_map_editor::saveTheMap() : %s file was saved\n",
+  printf ("supervisor_map_editor::save_tilesmap() : %s file was saved\n",
           fnamescore);
   return erreur_num;
 }

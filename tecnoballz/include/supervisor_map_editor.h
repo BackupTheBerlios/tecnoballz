@@ -5,11 +5,11 @@
  * @date 2007-04-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.h,v 1.9 2007/04/02 16:27:04 gurumeditation Exp $
+ * $Id: supervisor_map_editor.h,v 1.10 2007/04/02 19:54:44 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,11 @@
 #include "../include/sprite_mouse_pointer.h"
 #include "../include/bitmap_data.h"
 
-typedef struct
+
+class supervisor_map_editor:public virtual supervisor
+{
+private:
+  typedef struct
 {
   /** Left column of selection rectangle */
   Sint32 x1;
@@ -47,20 +51,15 @@ typedef struct
   Uint32 number_of_cols;
   Uint32 number_of_raws;
   Sint32 y_offset;
-  Uint32 box_typeID;            //0 = d'ont display / 1 = current select / 2 = select finish
 }
 selected_region;
-
-
-class supervisor_map_editor:public virtual supervisor
-{
-private:
-  typedef enum 
+  
+    typedef enum 
     {
       SHOW_MAP,
       SHOW_TILES
     } SHOW_ENUM;
-  static const Sint32 YCOORDNULL = -10240;
+  //static const Sint32 YCOORDNULL = -10240;
   tilesmap_scrolling *tiles_map;
   sprite_mouse_pointer *mouse_pointer;
   /** Number of tiles per row in the map */
@@ -73,12 +72,15 @@ private:
   Uint32 view_mode;
   /** True if the space key is pressed down */
   bool is_space_key_down;
-  Sint32 titlesPosy;
+  /** Y-coordinate of the tiles bitmap */
+  Sint32 tiles_ycoord;
   bitmap_data *tiles_bitmap;
+  /** If true, the right mouse button is currently pressed */ 
   bool is_right_button_down;
 
-  // brush handle
-  bool is_left_button_down;            //left button pressed
+  /* brush handle */
+  /** If true, the left mouse button is currently pressed */ 
+  bool is_left_button_down;
   /** X-coordinate of the current brush in pixels */
   Sint32 brush_posx;
   /** Y-coordinate of the current brush in pixels */
@@ -123,7 +125,7 @@ private:
   void alloc_tilesmap_brush (Uint32 number_of_raws, Uint32 number_of_cols);
   void alloc_brush ();
   void draw_brush ();
-  Sint32 saveTheMap ();
+  Sint32 save_tilesmap ();
 
   static const unsigned char cyclingtab[];
 };
