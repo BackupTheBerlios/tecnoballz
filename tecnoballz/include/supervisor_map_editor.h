@@ -5,11 +5,11 @@
  * @date 2007-04-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.h,v 1.8 2007/04/02 07:25:18 gurumeditation Exp $
+ * $Id: supervisor_map_editor.h,v 1.9 2007/04/02 16:27:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,6 +63,8 @@ private:
   static const Sint32 YCOORDNULL = -10240;
   tilesmap_scrolling *tiles_map;
   sprite_mouse_pointer *mouse_pointer;
+  /** Number of tiles per row in the map */
+  Uint32 map_width;
   /** Height of the main window */
   Uint32 screen_height;
   /** Weight of the main window */

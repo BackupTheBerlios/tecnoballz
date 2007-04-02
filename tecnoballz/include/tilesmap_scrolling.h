@@ -2,14 +2,14 @@
  * @file tilesmap_scrolling.h
  * @brief Vertical scrolling tiles map in the main menu
  *        and the guardians levels
- * @date 2007-03-31
+ * @date 2007-04-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.h,v 1.4 2007/03/31 10:55:03 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.h,v 1.5 2007/04/02 16:27:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,6 +66,8 @@ private:
 
   Uint32 tile_width;
   Uint32 tile_height;
+  /** Number of tiles per row in the map */
+  Uint32 map_width;
 
   /** Number of tiles per row at screen */
   Uint32 tiles_per_row;
@@ -95,6 +97,7 @@ public:
   void initialize (Uint32 color_id = TILES_COLOR_GUARDIANS, Uint32 map_id = 0);
   Uint32 get_tiles_width ();
   Sint32 get_y_coord ();
+  Uint32 get_map_width();
   void enable_palette (Uint32 color_id = 0);
   void switch_map (Uint32 color_id, Uint32 map_id);
   void scrolling1 (Sint32 index = 0);

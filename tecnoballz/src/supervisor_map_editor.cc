@@ -5,11 +5,11 @@
  * @date 2007-04-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.10 2007/04/02 07:25:18 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.11 2007/04/02 16:27:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ supervisor_map_editor::supervisor_map_editor ()
   view_mode = SHOW_MAP;
   is_space_key_down = false;
   titlesPosy = 0;
+  map_width = 0;
   is_right_button_down = false;
   box_colour = 0;
   tiles_brush = NULL;
@@ -64,8 +65,16 @@ supervisor_map_editor::supervisor_map_editor ()
  */
 supervisor_map_editor::~supervisor_map_editor ()
 {
-  delete mouse_pointer;
-  delete tiles_map;
+  if (NULL != mouse_pointer)
+    {
+       delete mouse_pointer;
+       mouse_pointer = NULL;
+    }
+  if (NULL != tiles_map) 
+    {
+      delete tiles_map;
+      tiles_map = NULL;
+    }
   if (NULL != map_selection)
     {
       delete map_selection;
@@ -129,6 +138,7 @@ supervisor_map_editor::first_init ()
   tile_width = tiles_map->get_tiles_width ();
   tile_mask1 = 0xffffffff ^ (tile_width - 1);
   tile_mask2 = ~tile_mask1;
+  map_width = tiles_map->get_map_width();
 
   display->gradation1 ();
   return 0;
@@ -215,28 +225,30 @@ supervisor_map_editor::view_map_editor ()
 void
 supervisor_map_editor::map_to_brush ()
 {
-  printf ("supervisor_map_editor::map_to_brush() : [%i, %i, %i, %i]\n",
-          current_selection->x1, current_selection->y1,
-          current_selection->x2, current_selection->y2);
+  if (is_verbose) 
+  {
+    std::cout << "supervisor_map_editor::map_to_brush() (" <<
+        current_selection->x1 << ", " << current_selection->y1 << "," << 
+        current_selection->x2 << ", " << current_selection->y2 << std::endl;
+  }
 
   /*
    * Allocate memory for tiles brush
    */
   alloc_tilesmap_brush (current_selection->number_of_raws, current_selection->number_of_cols);
-  Sint32 i = current_selection->y1;
-  i = (i / tiles_map->tile_height) + 0;
-  i *= tilesmap_scrolling::MAP_WIDTH;
-  i += (current_selection->x1 / tiles_map->tile_width);
-
-  Uint16 *carte = tiles_map->map_tiles + i;
+  Sint32 ycoord = current_selection->y1;
+  ycoord = (ycoord / tiles_map->tile_height) + 0;
+  ycoord *= map_width;
+  ycoord += (current_selection->x1 / tiles_map->tile_width);
+  Uint16 *map = tiles_map->map_tiles + ycoord;
   Uint16 *ptBrh = tiles_brush;
   for (Uint32 y = 0; y < current_selection->number_of_raws; y++)
     {
       for (Uint32 x = 0; x < current_selection->number_of_cols; x++)
         {
-        *(ptBrh++) = carte[x];
+          *(ptBrh++) = map[x];
         }
-      carte += tilesmap_scrolling::MAP_WIDTH;
+      map += map_width;
     }
   alloc_brush ();
 }
@@ -277,7 +289,7 @@ supervisor_map_editor::tiles_to_brush ()
 
 
   Sint32 o =
-    (current_selection->y1 / tile_width) * tilesmap_scrolling::MAP_WIDTH +
+    (current_selection->y1 / tile_width) * map_width +
     (current_selection->x1 / tile_width);
 
   /* allocate tilesmap for the brush */
@@ -292,7 +304,7 @@ supervisor_map_editor::tiles_to_brush ()
           *(ptBrh++) = p;
           p++;
         }
-      o += tilesmap_scrolling::MAP_WIDTH;
+      o += map_width;
     }
   alloc_brush ();
 }
@@ -695,12 +707,12 @@ supervisor_map_editor::draw_brush ()
              scrlY, i, tiles_map->tile_height);
 
           i = (i / tiles_map->tile_height) + 0;
-          i *= tilesmap_scrolling::MAP_WIDTH;
+          i *= map_width;
           Uint16 *brush = tiles_brush;
           Uint16 *table = tiles_map->map_tiles + i;
           Uint16 *t_end =
             tiles_map->map_tiles +
-            (tilesmap_scrolling::MAP_HEIGHT * tilesmap_scrolling::MAP_WIDTH);
+            (tilesmap_scrolling::MAP_HEIGHT * map_width);
           table += (brush_posx / tiles_map->tile_width);
 
           printf
@@ -713,25 +725,24 @@ supervisor_map_editor::draw_brush ()
               if (table > t_end)
 		{
                   table -=
-                    (tilesmap_scrolling::MAP_HEIGHT *
-                    tilesmap_scrolling::MAP_WIDTH);
+                    (tilesmap_scrolling::MAP_HEIGHT * map_width);
 		}
 
               for (Uint32 j = 0; j < brush_width; j++)
 		{
                   table[j] = *(brush++);
 		}
-              table += tilesmap_scrolling::MAP_WIDTH;
+              table += map_width;
             }
           //###################################################################
           // copy a height of the screen (for scrolling rotation)
           //###################################################################
           table = tiles_map->map_tiles;
           i =
-            (tilesmap_scrolling::MAP_HEIGHT * tilesmap_scrolling::MAP_WIDTH);
+            (tilesmap_scrolling::MAP_HEIGHT * map_width);
           Sint32 tsupp =
             (display->get_height () / tiles_map->tile_height) * 2;
-          for (Uint32 j = 0; j < (tsupp * tilesmap_scrolling::MAP_WIDTH); j++)
+          for (Uint32 j = 0; j < (tsupp * map_width); j++)
             tiles_map->map_tiles[i++] = table[j];
         }
     }
@@ -742,7 +753,7 @@ Sint32
 supervisor_map_editor::saveTheMap ()
 {
   Sint32 zsize =
-    tilesmap_scrolling::MAP_HEIGHT * tilesmap_scrolling::MAP_WIDTH;
+    tilesmap_scrolling::MAP_HEIGHT * map_width;
 
   Sint32 msize = zsize * sizeof (Uint16);
   Uint16 *carte = (Uint16 *) memory->alloc (msize, 0x54425249);

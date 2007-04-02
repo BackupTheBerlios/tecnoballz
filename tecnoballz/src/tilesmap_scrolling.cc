@@ -2,14 +2,14 @@
  * @file tilesmap_scrolling.cc 
  * @brief Vertical scrolling tiles map in the main menu
  *        and the guardians levels
- * @date 2007-03-31
+ * @date 2007-04-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.cc,v 1.7 2007/03/31 10:55:03 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.cc,v 1.8 2007/04/02 16:27:04 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ tilesmap_scrolling::tilesmap_scrolling ()
   tiles_bitmap = (bitmap_data *) NULL;
   tile_width = 16 * resolution;
   tile_height = 16 * resolution;
+  map_width = MAP_WIDTH; 
 }
 
 /**
@@ -167,6 +168,16 @@ tilesmap_scrolling::get_y_coord ()
   return y_coord;
 }
 
+/**
+ * Return number of tiles per row in the map
+ * @return number of tiles per row  
+ */
+Uint32
+tilesmap_scrolling::get_map_width()
+{
+  return map_width;
+}
+
 /*
  * Load a new map
  * @param pal_id palette number identifier
@@ -281,7 +292,7 @@ tilesmap_scrolling::scrolling1 (Sint32 index)
     j = i & 31;
   offset_aff = j;
   i /= tile_height;
-  i *= MAP_WIDTH;
+  i *= map_width;
   map_top_screen = map_tiles + i;
   draw ();
 }
@@ -353,8 +364,8 @@ tilesmap_scrolling::draw ()
       for (Uint32 h = 0; h < tiles_per_row; h++)
         {
            Uint32 offset = *(map++); 
-           rect_src.y = offset / MAP_WIDTH;
-           rect_src.x = (offset - rect_src.y * MAP_WIDTH) * tile_width; 
+           rect_src.y = offset / map_width;
+           rect_src.x = (offset - rect_src.y * map_width) * tile_width; 
            rect_src.y = rect_src.y * tile_height + yoffset;
           if (SDL_BlitSurface
               (tiles_surface, &rect_src, screen_surface, &rect_dst) < 0)
@@ -401,8 +412,8 @@ tilesmap_scrolling::alloc_brush (Uint16 *map, Uint32 num_of_cols, Uint32 num_of_
       for (Uint32 h = 0; h < num_of_cols; h++)
         {
            Uint32 offset = *(map++); 
-           rect_src.y = offset / MAP_WIDTH;
-           rect_src.x = (offset - rect_src.y * MAP_WIDTH) * tile_width; 
+           rect_src.y = offset / map_width;
+           rect_src.x = (offset - rect_src.y * map_width) * tile_width; 
            rect_src.y = rect_src.y * tile_height;
           if (SDL_BlitSurface
               (tiles_surface, &rect_src, brush_surface, &rect_dst) < 0)
@@ -449,7 +460,7 @@ tilesmap_scrolling::load_map (Uint32 map_id)
 
   /* allocate memory for the map of tiles */
   Uint32 add_rows = display->get_height () / tile_height * 2;
-  Uint32 map_size = (add_rows + MAP_HEIGHT) * MAP_WIDTH;
+  Uint32 map_size = (add_rows + MAP_HEIGHT) * map_width;
   try
   {
     map_tiles = new Uint16[map_size];
@@ -466,7 +477,7 @@ tilesmap_scrolling::load_map (Uint32 map_id)
   /* convert "big-endian" to "little-endian" or "big-endian" */
   Sint32 i = 0;
   unsigned char *ptmap = (unsigned char *) file_data;
-  for (Uint32 j = 0; j < (MAP_HEIGHT * MAP_WIDTH); j++)
+  for (Uint32 j = 0; j < (MAP_HEIGHT * map_width); j++)
     {
       Uint16 codem = 0;
       codem = (Uint16) ptmap[0];
@@ -480,7 +491,7 @@ tilesmap_scrolling::load_map (Uint32 map_id)
   delete[](char *) file_data;
 
   /* copy a height of the screen (for scrolling rotation) */
-  for (Uint32 j = 0; j < (add_rows * MAP_WIDTH); j++)
+  for (Uint32 j = 0; j < (add_rows * map_width); j++)
     {
       map_tiles[i++] = map_tiles[j];
     }
