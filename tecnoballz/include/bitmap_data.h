@@ -2,14 +2,14 @@
  * @file bitmap_data.h 
  * @briefi Handle the bitmap 
  * @created 1996-06-29 
- * @date 2007-03-16
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.h,v 1.8 2007/03/16 15:13:05 gurumeditation Exp $
+ * $Id: bitmap_data.h,v 1.9 2007/04/03 10:15:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,22 +61,14 @@ public:
   char *get_pixel_data ();
   Sint32 get_offset (Sint32 xcoord, Sint32 ycoord);
   Sint32 get_line_modulo (Sint32 w);
-  //void create (Uint32 w, Uint32 h, Uint32 d);
   void create_surface (Uint32 w, Uint32 h);
-
   char *duplicate_pixel_data ();
-  void copyBuffer (Sint32 srceX, Sint32 srceY, Sint32 destX,
-                   Sint32 destY, Sint32 large, Sint32 haute);
-  //void clear (Sint32 pixel = 0);
-
   void enable_palette ();
   unsigned char *get_palette ();
-
   void load (char *filename);
   void load (Sint32 id);
-  //bitmap_data *cut (Sint32 xcoord, Sint32 ycoord, Sint32 l, Sint32 h);
-  bitmap_data *cut_to_surface (Sint32 xcoord, Sint32 ycoord, Sint32 l,
-                               Sint32 h);
+  bitmap_data *cut_to_surface (Sint32 xcoord, Sint32 ycoord, Uint32 w,
+                               Uint32 h);
 
 private:
   void sdl_load_bmp (char *filename);

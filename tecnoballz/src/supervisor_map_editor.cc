@@ -1,15 +1,15 @@
-/** 
+/**
  * @file supervisor_map_editor.cc 
  * @brief The tile map editor for the menu and guardians levels 
  * @created 2004-09-13 
  * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.13 2007/04/03 05:29:03 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.14 2007/04/03 10:15:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ supervisor_map_editor::supervisor_map_editor ()
   tiles_ycoord = 0;
   map_width = 0;
   is_right_button_down = false;
-  box_colour = 0;
+  cycled_colors_index = 0;
   tiles_brush = NULL;
   brush_bitmap = (bitmap_data *) NULL;
   is_left_button_down = false;
@@ -67,10 +67,10 @@ supervisor_map_editor::~supervisor_map_editor ()
 {
   if (NULL != mouse_pointer)
     {
-       delete mouse_pointer;
-       mouse_pointer = NULL;
+      delete mouse_pointer;
+      mouse_pointer = NULL;
     }
-  if (NULL != tiles_map) 
+  if (NULL != tiles_map)
     {
       delete tiles_map;
       tiles_map = NULL;
@@ -99,8 +99,7 @@ supervisor_map_editor::~supervisor_map_editor ()
 /**
  * Perform some initializations
  */
-Sint32
-supervisor_map_editor::first_init ()
+Sint32 supervisor_map_editor::first_init ()
 {
 
   try
@@ -109,13 +108,13 @@ supervisor_map_editor::first_init ()
       tiles_selection = new selected_region;
     }
   catch (std::bad_alloc &)
-  {
-    std::
+    {
+      std::
       cerr << "(!)supervisor_map_editor::first_init() "
       "not enough memory to allocate " <<
       " 'selected_region' structure!" << std::endl;
-    throw;
-  }
+      throw;
+    }
   current_selection = map_selection;
   map_selection->x1 = map_selection->x2 = 0;
   map_selection->y1 = map_selection->y2 = 0;
@@ -133,9 +132,10 @@ supervisor_map_editor::first_init ()
   resources->release_sprites_bitmap ();
 
 
-  //Sint32        edmap = tilesmap_scrolling::MAPED_MENU;
-  //Sint32        edmap = tilesmap_scrolling::MAPED_GARD;
-  Sint32 edmap = tilesmap_scrolling::MAPED_CONG;
+  //Sint32        edmap = tilesmap_scrolling::MAP_MENU;
+  //Sint32        edmap = tilesmap_scrolling::MAP_GUARDIANS;
+  Sint32
+  edmap = tilesmap_scrolling::MAP_CONGRATULATIONS;
 
   tiles_map->initialize (tilesmap_scrolling::TILES_COLOR_MENU, edmap);
   tiles_bitmap = tiles_map->get_bitmap ();
@@ -143,17 +143,16 @@ supervisor_map_editor::first_init ()
   tile_width = tiles_map->get_tiles_width ();
   tile_mask1 = 0xffffffff ^ (tile_width - 1);
   tile_mask2 = ~tile_mask1;
-  map_width = tiles_map->get_map_width();
+  map_width = tiles_map->get_map_width ();
 
   display->gradation1 ();
   return 0;
 }
 
-/** 
+/**
  * Main loop
  */
-Sint32
-supervisor_map_editor::main_loop ()
+Sint32 supervisor_map_editor::main_loop ()
 {
   display->wait_frame ();
 
@@ -175,10 +174,7 @@ supervisor_map_editor::main_loop ()
   mouse_pointer->move ();
   sprites->draw ();
 
-
-  //###################################################################
-  // copy whole buffer surface into screen surface
-  //###################################################################
+  /* copy whole buffer surface into screen surface */
   display->unlock_surfaces ();
   display->bufferCTab ();
 
@@ -218,7 +214,7 @@ supervisor_map_editor::view_map_editor ()
   current_selection = map_selection;
   Sint32 speed = get_speed ();
   /* draw tiles map on the screen */
-  tiles_map->scrolling1 (speed); 
+  tiles_map->scroll (speed);
   select_rectangle ();
   highlight_selection ();
   draw_brush ();
@@ -230,15 +226,16 @@ supervisor_map_editor::view_map_editor ()
 void
 supervisor_map_editor::map_to_brush ()
 {
-  if (is_verbose) 
-  {
-    std::cout << "supervisor_map_editor::map_to_brush() (" <<
-        current_selection->x1 << ", " << current_selection->y1 << "," << 
-        current_selection->x2 << ", " << current_selection->y2 << std::endl;
-  }
+  if (is_verbose)
+    {
+      std::cout << "supervisor_map_editor::map_to_brush() (" <<
+      current_selection->x1 << ", " << current_selection->y1 << "," <<
+      current_selection->x2 << ", " << current_selection->y2 << std::endl;
+    }
 
   /* allocate memory for tiles brush */
-  alloc_tilesmap_brush (current_selection->number_of_raws, current_selection->number_of_cols);
+  alloc_tilesmap_brush (current_selection->number_of_raws,
+                        current_selection->number_of_cols);
   Sint32 ycoord = current_selection->y1;
   ycoord = (ycoord / tiles_map->tile_height) + 0;
   ycoord *= map_width;
@@ -258,7 +255,7 @@ supervisor_map_editor::map_to_brush ()
 
 /**
  * View tiles mode
- */ 
+ */
 void
 supervisor_map_editor::view_tiles ()
 {
@@ -274,7 +271,8 @@ supervisor_map_editor::view_tiles ()
     {
       tiles_ycoord = y_max;
     }
-  game_screen->blit_surface (tiles_bitmap, 0, tiles_ycoord, 0, 0, screen_width, screen_height);
+  game_screen->blit_surface (tiles_bitmap, 0, tiles_ycoord, 0, 0,
+                             screen_width, screen_height);
   select_rectangle ();
   highlight_selection ();
 }
@@ -285,17 +283,18 @@ supervisor_map_editor::view_tiles ()
 void
 supervisor_map_editor::tiles_to_brush ()
 {
-  if (is_verbose) 
-  {
-    std::cout << "supervisor_map_editor::map_to_brush() (" <<
-        current_selection->x1 << ", " << current_selection->y1 << "," << 
-        current_selection->x2 << ", " << current_selection->y2 << std::endl;
-  }
+  if (is_verbose)
+    {
+      std::cout << "supervisor_map_editor::map_to_brush() (" <<
+      current_selection->x1 << ", " << current_selection->y1 << "," <<
+      current_selection->x2 << ", " << current_selection->y2 << std::endl;
+    }
 
   /*
    * allocate tilesmap for the brush
    */
-  alloc_tilesmap_brush (current_selection->number_of_raws, current_selection->number_of_cols);
+  alloc_tilesmap_brush (current_selection->number_of_raws,
+                        current_selection->number_of_cols);
 
   /*
    * copy tiles offsets to brush map
@@ -347,11 +346,12 @@ supervisor_map_editor::check_keys ()
  * Determine vertical scrolling speed
  * @return srolling speed
  */
-Sint32
-supervisor_map_editor::get_speed ()
+Sint32 supervisor_map_editor::get_speed ()
 {
-  Sint32 speed = 0;
-  Uint32 mousY = keyboard->get_mouse_y ();
+  Sint32
+  speed = 0;
+  Uint32
+  mousY = keyboard->get_mouse_y ();
   if (mousY > 0 && mousY < 8 * resolution)
     {
       speed = -16 * resolution;
@@ -371,13 +371,13 @@ supervisor_map_editor::get_speed ()
     }
   if (mousY <= screen_height - 8 * resolution
       && mousY > screen_height - 16 * resolution)
-      {
-        speed = 8 * resolution;
-      }
+    {
+      speed = 8 * resolution;
+    }
   if (mousY < screen_height && mousY > screen_height - 8 * resolution)
-      {
-        speed = 16 * resolution;
-      }
+    {
+      speed = 16 * resolution;
+    }
   return speed;
 }
 
@@ -410,82 +410,86 @@ supervisor_map_editor::select_rectangle ()
       current_selection->y2 =
         keyboard->get_mouse_y () + current_selection->y_offset;
       if (current_selection->x2 & tile_mask2)
-	{
-	  current_selection->x2 += tile_width;
-	}
+        {
+          current_selection->x2 += tile_width;
+        }
       if (current_selection->y2 & tile_mask2)
-	{
-	  current_selection->y2 += tile_width;
-	}
+        {
+          current_selection->y2 += tile_width;
+        }
       current_selection->x2 &= tile_mask1;
       current_selection->y2 &= tile_mask1;
       if (current_selection->x2 >= current_selection->x1 &&
           current_selection->x2 - current_selection->x1 < tile_width)
-	{
+        {
           current_selection->x2 = current_selection->x1 + tile_width;
-	}
+        }
       if (current_selection->x2 < current_selection->x1 &&
           current_selection->x1 - current_selection->x2 < tile_width)
-	{
-	  current_selection->x2 = current_selection->x1 - tile_width;
-	}
+        {
+          current_selection->x2 = current_selection->x1 - tile_width;
+        }
       if (current_selection->y2 >= current_selection->y1 &&
           current_selection->y2 - current_selection->y1 < tile_width)
-	{
-	  current_selection->y2 = current_selection->y1 + tile_width;
-	}
+        {
+          current_selection->y2 = current_selection->y1 + tile_width;
+        }
       if (current_selection->y2 < current_selection->y1 &&
           current_selection->y1 - current_selection->y2 < tile_width)
-	{
-	  current_selection->x2 = current_selection->x1 - tile_width;
-	}
+        {
+          current_selection->x2 = current_selection->x1 - tile_width;
+        }
       if (current_selection->y1 < current_selection->y2
           && current_selection->y2 - current_selection->y1 >
           (screen_height / 2))
-        current_selection->y2 = current_selection->y1 + (screen_height / 2);
+        {
+          current_selection->y2 = current_selection->y1 + (screen_height / 2);
+        }
       if (current_selection->y1 > current_selection->y2
           && current_selection->y1 - current_selection->y2 >
           (screen_height / 2))
-        current_selection->y2 = current_selection->y1 - (screen_height / 2);
+        {
+          current_selection->y2 = current_selection->y1 - (screen_height / 2);
+        }
     }
 
   if (is_right_button_down && is_right_down)
     {
       return;
     }
-      if (is_right_down || !is_right_button_down)
-        {
-          return;
-        }
+  if (is_right_down || !is_right_button_down)
+    {
+      return;
+    }
 
-      /* right mouse button released */
-          is_right_button_down = false;
-          if (current_selection->x1 > current_selection->x2)
-            {
-              Sint32 x = current_selection->x1;
-              current_selection->x1 = current_selection->x2;
-              current_selection->x2 = x;
-            }
-          if (current_selection->y1 > current_selection->y2)
-            {
-              Sint32 y = current_selection->y1;
-              current_selection->y1 = current_selection->y2;
-              current_selection->y2 = y;
-            }
-          current_selection->number_of_cols =
-            (current_selection->x2 - current_selection->x1) / tile_width;
-          current_selection->number_of_raws =
-            (current_selection->y2 - current_selection->y1) / tile_width;
-          switch (view_mode)
-            {
-            case SHOW_TILES:
-              tiles_to_brush ();
-              break;
-            case SHOW_MAP:
-            default:
-              map_to_brush ();
-              break;
-            }
+  /* right mouse button released */
+  is_right_button_down = false;
+  if (current_selection->x1 > current_selection->x2)
+    {
+      Sint32 x = current_selection->x1;
+      current_selection->x1 = current_selection->x2;
+      current_selection->x2 = x;
+    }
+  if (current_selection->y1 > current_selection->y2)
+    {
+      Sint32 y = current_selection->y1;
+      current_selection->y1 = current_selection->y2;
+      current_selection->y2 = y;
+    }
+  current_selection->number_of_cols =
+    (current_selection->x2 - current_selection->x1) / tile_width;
+  current_selection->number_of_raws =
+    (current_selection->y2 - current_selection->y1) / tile_width;
+  switch (view_mode)
+    {
+    case SHOW_TILES:
+      tiles_to_brush ();
+      break;
+    case SHOW_MAP:
+    default:
+      map_to_brush ();
+      break;
+    }
 
 }
 
@@ -495,8 +499,8 @@ supervisor_map_editor::select_rectangle ()
 void
 supervisor_map_editor::highlight_selection ()
 {
-  char *pBuff;
-  Sint32 tmpco = 0;
+  char *screen;
+  Uint32 cycle_delay = 0;
 
   if (current_selection->x2 == current_selection->x1 ||
       current_selection->y2 == current_selection->y1)
@@ -514,93 +518,100 @@ supervisor_map_editor::highlight_selection ()
       x1 = x2;
       x2 = x;
     }
+  Uint32 width = x2 - x1;
   if (y1 > y2)
     {
       Sint32 y = y1;
       y1 = y2;
       y2 = y;
     }
+  Uint32 height = y2 - y1;
 
-  if (box_colour++ > 32)
-    box_colour = 0;
-  Sint32 color = box_colour;
-
-
-  //char *ptBuf = game_screen->get_pixel_data(x1, y2);
-
-  Sint32 width = x2 - x1;
-  Sint32 heigh = y2 - y1;
-
-  /*printf("supervisor_map_editor::highlight_selection() : [%i, %i, %i, %i]\n", 
-     x1, y1, x2, y2); */
+  if (cycled_colors_index++ > MAX_OF_CYCLED_COLORS)
+    {
+      cycled_colors_index = 0;
+    }
+  Uint32 color = cycled_colors_index;
 
 
-  // top
+  /* top border */
   if (y1 >= 0 && y1 < screen_height)
     {
-      pBuff = game_screen->get_pixel_data (x1, y1);
-      tmpco = 0;
-      for (Sint32 i = 0; i < width; i++)
+      screen = game_screen->get_pixel_data (x1, y1);
+      cycle_delay = 0;
+      for (Uint32 i = 0; i < width; i++)
         {
-          unsigned char pixel = cyclingtab[color];
-          pBuff[i] = pixel;
-          if (++tmpco == 5)
+          unsigned char pixel = cycled_colors_list[color];
+          screen[i] = pixel;
+          if (++cycle_delay >= 5)
             {
-              tmpco = 0;
-              if (color++ > 32)
-                color = 0;
+              cycle_delay = 0;
+              if (color++ >= MAX_OF_CYCLED_COLORS)
+                {
+                  color = 0;
+                }
             }
         }
     }
 
-  // right
-  Sint32 nextl = game_screen->get_row_size ();
-  pBuff = game_screen->get_pixel_data (x2 - 1, y1 + 1);
-  for (Sint32 i = 1; i < heigh; i++)
+  /* right border */
+  Uint32 rowsize = game_screen->get_row_size ();
+  screen = game_screen->get_pixel_data (x2 - 1, y1 + 1);
+  for (Uint32 i = 1; i < height; i++)
     {
-      unsigned char pixel = cyclingtab[color];
+      unsigned char pixel = cycled_colors_list[color];
       if (y1 + i >= 0 && y1 + i < screen_height)
-        *pBuff = pixel;
-      if (++tmpco == 5)
         {
-          tmpco = 0;
-          if (color++ > 32)
-            color = 0;
+          *screen = pixel;
         }
-      pBuff += nextl;
+      if (++cycle_delay >= 5)
+        {
+          cycle_delay = 0;
+          if (color++ >= MAX_OF_CYCLED_COLORS)
+            {
+              color = 0;
+            }
+        }
+      screen += rowsize;
     }
 
-  // bottom
+  /* bottom border */
   if (y2 >= 0 && y2 < screen_height)
     {
-      pBuff = game_screen->get_pixel_data (x1, y2);
+      screen = game_screen->get_pixel_data (x1, y2);
       for (Sint32 i = width - 1; i >= 0; i--)
         {
-          unsigned char pixel = cyclingtab[color];
-          pBuff[i] = pixel;
-          if (++tmpco == 5)
+          unsigned char pixel = cycled_colors_list[color];
+          screen[i] = pixel;
+          if (++cycle_delay >= 5)
             {
-              tmpco = 0;
-              if (color++ > 32)
-                color = 0;
+              cycle_delay = 0;
+              if (color++ >= MAX_OF_CYCLED_COLORS)
+                {
+                  color = 0;
+                }
             }
         }
     }
 
-  // left
-  pBuff = game_screen->get_pixel_data (x1, y2 - 1);
-  for (Sint32 i = 1; i < heigh; i++)
+  /* left borser */
+  screen = game_screen->get_pixel_data (x1, y2 - 1);
+  for (Uint32 i = 1; i < height; i++)
     {
-      unsigned char pixel = cyclingtab[color];
+      unsigned char pixel = cycled_colors_list[color];
       if (y2 - i >= 0 && y2 - i < screen_height)
-        *pBuff = pixel;
-      if (++tmpco == 5)
         {
-          tmpco = 0;
-          if (color++ > 32)
-            color = 0;
+          *screen = pixel;
         }
-      pBuff -= nextl;
+      if (++cycle_delay >= 5)
+        {
+          cycle_delay = 0;
+          if (color++ > MAX_OF_CYCLED_COLORS)
+            {
+              color = 0;
+            }
+        }
+      screen -= rowsize;
     }
 }
 
@@ -611,7 +622,8 @@ supervisor_map_editor::highlight_selection ()
  * @param number_of_cols number of cols of tiles
  */
 void
-supervisor_map_editor::alloc_tilesmap_brush (Uint32 number_of_raws, Uint32 number_of_cols)
+supervisor_map_editor::alloc_tilesmap_brush (Uint32 number_of_raws,
+    Uint32 number_of_cols)
 {
   if (NULL != tiles_brush)
     {
@@ -623,13 +635,12 @@ supervisor_map_editor::alloc_tilesmap_brush (Uint32 number_of_raws, Uint32 numbe
       tiles_brush = new Uint16[size];
     }
   catch (std::bad_alloc &)
-  {
-    std::
+    {
+      std::
       cerr << "(!)supervisor_map_editor::alloc_tilesmap_brush() "
-      "not enough memory to allocate " <<
-       size << " Uint16!" << std::endl;
-    throw;
-  }
+      "not enough memory to allocate " << size << " Uint16!" << std::endl;
+      throw;
+    }
 }
 
 /**
@@ -642,7 +653,9 @@ supervisor_map_editor::alloc_brush ()
     {
       delete brush_bitmap;
     }
-  brush_bitmap = tiles_map->alloc_brush (tiles_brush, current_selection->number_of_cols, current_selection->number_of_raws);
+  brush_bitmap =
+    tiles_map->alloc_brush (tiles_brush, current_selection->number_of_cols,
+                            current_selection->number_of_raws);
   brush_width = current_selection->number_of_cols;
   brush_height = current_selection->number_of_raws;
   return;
@@ -658,49 +671,41 @@ supervisor_map_editor::draw_brush ()
     {
       return;
     }
-  Sint32 pos_x = keyboard->get_mouse_x ();
-  Sint32 pos_y = keyboard->get_mouse_y ();
-  pos_x &= tile_mask1;
-  pos_y &= tile_mask1;
-  if (pos_x > screen_width - brush_bitmap->get_width ())
+  Uint32 xcoord = keyboard->get_mouse_x ();
+  Uint32 ycoord = keyboard->get_mouse_y ();
+  xcoord &= tile_mask1;
+  ycoord &= tile_mask1;
+  if (xcoord > screen_width - brush_bitmap->get_width ())
     {
-      pos_x = screen_width - brush_bitmap->get_width ();
+      xcoord = screen_width - brush_bitmap->get_width ();
     }
-  if (pos_y > screen_height - brush_bitmap->get_height ())
+  if (ycoord > screen_height - brush_bitmap->get_height ())
     {
-      pos_y = screen_height - brush_bitmap->get_height ();
+      ycoord = screen_height - brush_bitmap->get_height ();
     }
-  Sint32 scrlY = tiles_map->get_y_coord ();
+  Uint32 map_ycoord = tiles_map->get_y_coord ();
   bool is_left_down = keyboard->is_left_button ();
   if (is_left_down && !is_left_button_down)
     {
       is_left_button_down = true;
-      brush_posx = pos_x;
-      brush_posy = pos_y;
+      brush_posx = xcoord;
+      brush_posy = ycoord;
     }
   if (is_left_down && is_left_button_down)
     {
-      pos_x = brush_posx;
-      pos_y = brush_posy;
+      xcoord = brush_posx;
+      ycoord = brush_posy;
     }
   else
     {
+      /*
+       * left mouse button released, copy tiles brush to the map
+       */
       if (!is_left_down && is_left_button_down)
         {
           is_left_button_down = false;
-          printf
-            ("supervisor_map_editor::draw_brush() : brush_posx:%i / brush_posy:%i\n",
-             brush_posx, brush_posy);
-
-
-          Sint32 i = scrlY + brush_posy;
-
-
-          printf
-            ("supervisor_map_editor::draw_brush() : scrlY:%i /  i :%i motifhaute:%i\n",
-             scrlY, i, tiles_map->tile_height);
-
-          i = (i / tiles_map->tile_height) + 0;
+          Uint32 i = map_ycoord + brush_posy;
+          i = (i / tiles_map->tile_height);
           i *= map_width;
           Uint16 *brush = tiles_brush;
           Uint16 *table = tiles_map->map_tiles + i;
@@ -708,60 +713,59 @@ supervisor_map_editor::draw_brush ()
             tiles_map->map_tiles +
             (tilesmap_scrolling::MAP_HEIGHT * map_width);
           table += (brush_posx / tiles_map->tile_width);
-
-          printf
-            ("supervisor_map_editor::draw_brush() : (table - carteFirst):%i /  i:%i\n",
-             (table - tiles_map->map_tiles), i);
-
-
-          for (i = 0; i < brush_height; i++)
+         for (i = 0; i < brush_height; i++)
             {
               if (table > t_end)
-		{
-                  table -=
-                    (tilesmap_scrolling::MAP_HEIGHT * map_width);
-		}
+                {
+                  table -= (tilesmap_scrolling::MAP_HEIGHT * map_width);
+                }
 
               for (Uint32 j = 0; j < brush_width; j++)
-		{
+                {
                   table[j] = *(brush++);
-		}
+                }
               table += map_width;
             }
-          //###################################################################
-          // copy a height of the screen (for scrolling rotation)
-          //###################################################################
+
+          /* copy a height of the screen (for scrolling rotation) */
           table = tiles_map->map_tiles;
-          i =
-            (tilesmap_scrolling::MAP_HEIGHT * map_width);
+          i = (tilesmap_scrolling::MAP_HEIGHT * map_width);
           Sint32 tsupp =
             (display->get_height () / tiles_map->tile_height) * 2;
           for (Uint32 j = 0; j < (tsupp * map_width); j++)
-            tiles_map->map_tiles[i++] = table[j];
+            {
+              tiles_map->map_tiles[i++] = table[j];
+            }
         }
     }
-  //brush_bitmap->copyBuffer (0, 0, pos_x, pos_y - (scrlY & tile_mask2), -1, -1);
-  game_screen->blit_surface (brush_bitmap, 0, 0, pos_x, pos_y - (scrlY & tile_mask2), brush_bitmap->get_width(), brush_bitmap->get_height()); 
+  game_screen->blit_surface (brush_bitmap, 0, 0, xcoord,
+                             ycoord - (map_ycoord & tile_mask2),
+                             brush_bitmap->get_width (),
+                             brush_bitmap->get_height ());
 }
 
-Sint32
-supervisor_map_editor::save_tilesmap ()
+Sint32 supervisor_map_editor::save_tilesmap ()
 {
-  Sint32 zsize =
-    tilesmap_scrolling::MAP_HEIGHT * map_width;
+  Sint32
+  zsize = tilesmap_scrolling::MAP_HEIGHT * map_width;
 
-  Sint32 msize = zsize * sizeof (Uint16);
-  Uint16 *carte = (Uint16 *) memory->alloc (msize, 0x54425249);
+  Sint32
+  msize = zsize * sizeof (Uint16);
+  Uint16 *
+  carte = (Uint16 *) memory->alloc (msize, 0x54425249);
   error_init (memory->retour_err ());
   if (erreur_num)
     return (erreur_num);
 
   //unsigned char* ptSrc = (unsigned char *)tiles_map->map_tiles;
-  Uint16 *ptSrc = (Uint16 *) tiles_map->map_tiles;
-  unsigned char *ptDes = (unsigned char *) carte;
+  Uint16 *
+  ptSrc = (Uint16 *) tiles_map->map_tiles;
+  unsigned char *
+  ptDes = (unsigned char *) carte;
   for (Sint32 i = 0; i < zsize; i++)
     {
-      Uint16 codem = *ptSrc;
+      Uint16
+      codem = *ptSrc;
       codem = codem << 2;
       ptDes[1] = codem;
       codem = codem >> 8;
@@ -771,10 +775,12 @@ supervisor_map_editor::save_tilesmap ()
     }
 
 
-  char *fnamescore = "edmap.data";
+  char *
+  fnamescore = "edmap.data";
 
   umask (0002);
-  Sint32 fhand = open (fnamescore, O_WRONLY | O_CREAT, 00666);
+  Sint32
+  fhand = open (fnamescore, O_WRONLY | O_CREAT, 00666);
   if (fhand == -1)
     {
       fprintf (stderr,
@@ -799,9 +805,10 @@ supervisor_map_editor::save_tilesmap ()
 }
 
 const unsigned char
-  supervisor_map_editor::cyclingtab[] =
-  { 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
-  253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
-  243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
-  249, 250, 251, 252, 253, 254, 255
-};
+supervisor_map_editor::cycled_colors_list[MAX_OF_CYCLED_COLORS] =
+  {
+    239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
+    253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
+    243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
+    249, 250, 251, 252, 253, 254, 255
+  };

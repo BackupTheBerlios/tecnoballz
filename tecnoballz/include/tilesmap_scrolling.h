@@ -2,14 +2,14 @@
  * @file tilesmap_scrolling.h
  * @brief Vertical scrolling tiles map in the main menu
  *        and the guardians levels
- * @date 2007-04-02
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.h,v 1.5 2007/04/02 16:27:04 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.h,v 1.6 2007/04/03 10:15:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,18 +41,17 @@ class tilesmap_scrolling:public virtual tecnoballz
   friend class supervisor_map_editor;
 
 public:
-  //static const Uint32 COLOR_GARD = 0;
-  //static const Uint32 TECZ_COLOR_MENU = 1;
-  //static const Uint32 COLOR_CONG = 2;
-  static const Uint32 MAPED_GARD = 0;
-  static const Uint32 MAPED_MENU = 1;
-  static const Uint32 MAPED_CONG = 2;
-  
+  typedef enum
+    {
+      MAP_GUARDIANS,
+      MAP_MENU,
+      MAP_CONGRATULATIONS 
+    }
+  MAPS_ENUM;
   /** Number of tiles per row in the map */
   static const Uint32 MAP_WIDTH = 20;
   /** Number of tiles per column in the map */
   static const Uint32 MAP_HEIGHT = 273;
-
   typedef enum {
       TILES_COLOR_GUARDIANS,
       TILES_COLOR_MENU,
@@ -60,35 +59,23 @@ public:
   }
   TILES_COLOR;
 
-
-
 private:
-
   Uint32 tile_width;
   Uint32 tile_height;
   /** Number of tiles per row in the map */
   Uint32 map_width;
-
   /** Number of tiles per row at screen */
   Uint32 tiles_per_row;
-  
-  Sint32 offset_aff;
-  
   /** The map of tiles */
   Uint16 *map_tiles;
   /** Fist line visible of the  map of tiles */
   Uint16 *map_top_screen;
   Sint32 y_coord;
+  /** Tileset bimap */
   bitmap_data *tiles_bitmap;
   /** Number of differents tiles in the bitmap */
   Uint32 number_of_different_tiles;
-  char *bitmap_adr;
-
   static const unsigned char colors_map[48];
-public:
-  Uint32 source_mod;
-  char ** mapAddress;
-
 
 public:
     tilesmap_scrolling ();
@@ -100,9 +87,8 @@ public:
   Uint32 get_map_width();
   void enable_palette (Uint32 color_id = 0);
   void switch_map (Uint32 color_id, Uint32 map_id);
-  void scrolling1 (Sint32 index = 0);
+  void scroll (Sint32 index = 0);
   bitmap_data* alloc_brush(Uint16 *map, Uint32 num_of_cols, Uint32 num_of_lines);
-  Sint32 initMapAdr ();
 
 private:
   void draw ();

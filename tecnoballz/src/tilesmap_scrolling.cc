@@ -2,14 +2,14 @@
  * @file tilesmap_scrolling.cc 
  * @brief Vertical scrolling tiles map in the main menu
  *        and the guardians levels
- * @date 2007-04-02
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.cc,v 1.8 2007/04/02 16:27:04 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.cc,v 1.9 2007/04/03 10:15:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,11 +58,6 @@ tilesmap_scrolling::~tilesmap_scrolling ()
       delete[]map_tiles;
       map_tiles = NULL;
     }
-  if (mapAddress)
-    {
-      memory->release ((char *)mapAddress);
-      mapAddress = NULL;
-    }
   tiles_bitmap = (bitmap_data *) NULL;
   map_tiles = (Uint16 *) NULL;
   object_free ();
@@ -92,7 +87,7 @@ tilesmap_scrolling::initialize (Uint32 pal_id, Uint32 map_id)
         << std::endl;
     }
 
-  /* load the bitamp of tiles im memory */
+  /* load the bitmap of tiles im memory */
   tiles_bitmap = new bitmap_data ();
   tiles_bitmap->load (handler_resources::BITMAP_TILESMAP);
 
@@ -101,14 +96,10 @@ tilesmap_scrolling::initialize (Uint32 pal_id, Uint32 map_id)
 
   /** 20 tiles per row */
   tiles_per_row = game_screen->get_width () / tile_width;
-
-   initMapAdr (); 
-source_mod = tiles_bitmap->get_row_size ();
-
   y_coord = 0;
 
   /* Draw all tiles */
-  scrolling1 (0);
+  scroll (0);
 
   /* initialize color palette */
   enable_palette (pal_id);
@@ -119,34 +110,6 @@ source_mod = tiles_bitmap->get_row_size ();
         << std::endl;
     }
 }
-
-Sint32
-tilesmap_scrolling::initMapAdr ()
-{
-  Sint32 error = 0;
-  /* 320 or 640 pixels width */
-  Uint32 l = tiles_bitmap->get_width ();
-  /* 624 or 1248 lines height */
-  Uint32 h = tiles_bitmap->get_height ();
-  number_of_different_tiles = (l / tile_width) * (h / tile_height);     //780 maps
-  mapAddress = (char **) memory->alloc (number_of_different_tiles * sizeof (char *));
-  if (!mapAddress)
-    return (memory->retour_err ());
-
-  char **m = mapAddress;
-  Sint32 nbMap = 0;
-  for (Uint32 y = 0; y < h; y += tile_height)
-    {
-      for (Uint32 x = 0; x < l; x += tile_width)
-        {
-          char *p = tiles_bitmap->get_pixel_data (x, y);
-          *(m++) = p;
-          nbMap++;
-        }
-    }
-  return error;
-}
-
 
 /**
  * Return width of a tile in pixels
@@ -208,10 +171,9 @@ tilesmap_scrolling::enable_palette (Uint32 pal_id)
   SDL_Color *palP1 = palPT;
   SDL_Color *palP2 = palP1 + 128;
   const unsigned char *colPT = colors_map;
-  for (Sint32 i = 0; i < 16; i++)
+  for (Uint32 i = 0; i < 16; i++)
     {
       unsigned char r, b, g;
-
       switch (pal_id)
         {
         default:
@@ -230,7 +192,6 @@ tilesmap_scrolling::enable_palette (Uint32 pal_id)
           r = *(colPT++);
           break;
         }
-
       palP1->r = r;
       palP1->g = g;
       palP1->b = b;
@@ -250,47 +211,34 @@ tilesmap_scrolling::enable_palette (Uint32 pal_id)
 
 }
 
-//------------------------------------------------------------------------------
-// color palette (16 colors)
-//------------------------------------------------------------------------------
-const unsigned char
-  tilesmap_scrolling::colors_map[48] = { 2, 2, 2,
-  17, 33, 50,
-  66, 98, 130,
-  19, 50, 81,
-  27, 58, 90,
-  85, 101, 133,
-  36, 66, 98,
-  39, 70, 102,
-  146, 146, 178,
-  82, 82, 114,
-  129, 129, 161,
-  59, 90, 122,
-  98, 98, 130,
-  42, 74, 106,
-  50, 82, 114,
-  111, 114, 146
-};
 
-
-//------------------------------------------------------------------------------
-// scrolling
-//------------------------------------------------------------------------------
+/**
+ * Scoll the background
+ * @param index
+ */
 void
-tilesmap_scrolling::scrolling1 (Sint32 index)
+tilesmap_scrolling::scroll (Sint32 index)
 {
   Sint32 i = y_coord + index;
-  Sint32 j = MAP_HEIGHT * tile_height;   // 273 * 32 = 8736
+  /* 273 * 32 = 8736 pixels */
+  Sint32 j = MAP_HEIGHT * tile_height;
   if (i < 0)
-    i += j;
+    {
+      i += j;
+    }
   if (i > j)
-    i -= j;
+    {
+      i -= j;
+    }
   y_coord = i;
-  if (resolution == 1)
-    j = i & 15;
+  if (1 == resolution)
+    {
+      j = i & 15;
+    }
   else
-    j = i & 31;
-  offset_aff = j;
+    {
+      j = i & 31;
+    }
   i /= tile_height;
   i *= map_width;
   map_top_screen = map_tiles + i;
@@ -308,31 +256,18 @@ tilesmap_scrolling::draw ()
   SDL_Surface *tiles_surface = tiles_bitmap->get_surface ();
   Uint32 voffset = offscreen->get_vertical_offset ();
   Uint32 height_box = offscreen->get_height () - voffset * 2;
-  
-  /*
-  offscreen->unlock_surface ();
-  offscreen->unlock_surface ();
-  tiles_bitmap->unlock_surface ();
-  */
-  
   /* calculate the height of the tiles of the first line */
   Uint32 modulo_y = y_coord % tile_height;
   Uint32 first_height = tile_height - modulo_y;
   /* calculate the height of the tiles of the last line, 
    * zero value is * possible */
   Uint32 last_height = (height_box - first_height) % tile_height;
- 
-
   SDL_Rect rect_src;
   SDL_Rect rect_dst;
-
   rect_dst.y = voffset;
-
   Uint32 vcount = (height_box - first_height) / tile_height + 1;
   rect_src.w = rect_dst.w = tile_width;
-  
   Uint16 *map = map_top_screen;
-  
   for (Uint32 v = 0; v <= vcount; v++)
     {
       Uint32 yoffset;
@@ -377,8 +312,6 @@ tilesmap_scrolling::draw ()
         }
       rect_dst.y += rect_dst.h;
     }
-  //offscreen->lock_surface ();
-  //tiles_bitmap->lock_surface ();
 }
 
 /**
@@ -437,14 +370,14 @@ tilesmap_scrolling::load_map (Uint32 map_id)
 {
   switch (map_id)
     {
-    case MAPED_GARD:
+    case MAP_GUARDIANS:
     default:
       map_id = handler_resources::RESEDMAP01;
       break;
-    case MAPED_MENU:
+    case MAP_MENU:
       map_id = handler_resources::RESEDMAP03;
       break;
-    case MAPED_CONG:
+    case MAP_CONGRATULATIONS:
       map_id = handler_resources::RESEDMAP02;
       break;
     }
@@ -497,3 +430,26 @@ tilesmap_scrolling::load_map (Uint32 map_id)
     }
   map_top_screen = map_tiles;
 }
+
+/**
+ *  Tileset colors palettes (16 colors)
+ * */
+const unsigned char tilesmap_scrolling::colors_map[48] =
+{
+  2, 2, 2,
+  17, 33, 50,
+  66, 98, 130,
+  19, 50, 81,
+  27, 58, 90,
+  85, 101, 133,
+  36, 66, 98,
+  39, 70, 102,
+  146, 146, 178,
+  82, 82, 114,
+  129, 129, 161,
+  59, 90, 122,
+  98, 98, 130,
+  42, 74, 106,
+  50, 82, 114,
+  111, 114, 146
+};

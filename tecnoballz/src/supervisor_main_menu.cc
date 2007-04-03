@@ -4,11 +4,11 @@
  * @date 2007-03-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.16 2007/03/31 21:31:22 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.17 2007/04/03 10:15:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ supervisor_main_menu::first_init ()
   mouse_pointer->create_pointer_sprite (sprites_bitmap);
   resources->release_sprites_bitmap ();
   tiles_map->initialize (tilesmap_scrolling::TILES_COLOR_MENU,
-                         tilesmap_scrolling::MAPED_MENU);
+                         tilesmap_scrolling::MAP_MENU);
 
   text_menu->first_init ();
   keyboard->set_grab_input (false);
@@ -107,7 +107,7 @@ supervisor_main_menu::main_loop ()
 
   display->wait_frame ();
   /* vertical scrolling of the screen background */
-  tiles_map->scrolling1 (-1);
+  tiles_map->scroll (-1);
   display->lock_surfaces ();
   offset_inc ();
   move_tecnoballz_logo ();
