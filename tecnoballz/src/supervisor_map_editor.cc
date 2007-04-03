@@ -2,14 +2,14 @@
  * @file supervisor_map_editor.cc 
  * @brief The tile map editor for the menu and guardians levels 
  * @created 2004-09-13 
- * @date 2007-04-02
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.12 2007/04/02 19:54:44 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.13 2007/04/03 05:29:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -117,7 +117,12 @@ supervisor_map_editor::first_init ()
     throw;
   }
   current_selection = map_selection;
-
+  map_selection->x1 = map_selection->x2 = 0;
+  map_selection->y1 = map_selection->y2 = 0;
+  map_selection->number_of_cols = map_selection->number_of_raws = 0;
+  tiles_selection->x1 = tiles_selection->x2 = 0;
+  tiles_selection->y1 = tiles_selection->y2 = 0;
+  tiles_selection->number_of_cols = tiles_selection->number_of_raws = 0;
 
   screen_height = display->get_height ();
   screen_width = display->get_width ();
@@ -448,7 +453,7 @@ supervisor_map_editor::select_rectangle ()
     {
       return;
     }
-      if (is_right_down || !!is_right_button_down)
+      if (is_right_down || !is_right_button_down)
         {
           return;
         }

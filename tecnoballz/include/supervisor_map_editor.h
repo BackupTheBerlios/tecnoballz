@@ -2,14 +2,14 @@
  * @file supervisor_map_editor.cc 
  * @brief The tile map editor for the menu and guardians levels 
  * @created 2004-09-13 
- * @date 2007-04-02
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.h,v 1.10 2007/04/02 19:54:44 gurumeditation Exp $
+ * $Id: supervisor_map_editor.h,v 1.11 2007/04/03 05:29:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,13 +41,13 @@ private:
   typedef struct
 {
   /** Left column of selection rectangle */
-  Sint32 x1;
+  Uint32 x1;
   /** Top row of selection rectangle */
-  Sint32 x2;
+  Uint32 x2;
   /** Right column of selection rectangle */
-  Sint32 y1;
+  Uint32 y1;
   /** Bottom row of selection rectangle */
-  Sint32 y2;
+  Uint32 y2;
   Uint32 number_of_cols;
   Uint32 number_of_raws;
   Sint32 y_offset;
@@ -100,9 +100,9 @@ selected_region;
   selected_region *tiles_selection;
 
 
-  Sint32 tile_width;
-  Sint32 tile_mask1;
-  Sint32 tile_mask2;
+  Uint32 tile_width;
+  Uint32 tile_mask1;
+  Uint32 tile_mask2;
 
   bool is_s_key_down;
 
