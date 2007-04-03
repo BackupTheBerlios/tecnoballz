@@ -5,11 +5,11 @@
  * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.15 2007/04/03 13:43:13 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.16 2007/04/03 20:20:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,9 +133,9 @@ supervisor_map_editor::first_init ()
   resources->release_sprites_bitmap ();
 
 
-  //Sint32        edmap = tilesmap_scrolling::MAP_MENU;
+  Sint32        edmap = tilesmap_scrolling::MAP_MENU;
   //Sint32        edmap = tilesmap_scrolling::MAP_GUARDIANS;
-  Sint32 edmap = tilesmap_scrolling::MAP_CONGRATULATIONS;
+  //Sint32 edmap = tilesmap_scrolling::MAP_CONGRATULATIONS;
 
   tiles_map->initialize (tilesmap_scrolling::TILES_COLOR_MENU, edmap);
   tiles_bitmap = tiles_map->get_bitmap ();
@@ -192,6 +192,18 @@ supervisor_map_editor::main_loop ()
       end_return = MAIN_MENU;
     }
 
+  if (keyboard->key_is_pressed (SDLK_F1))
+    {
+      tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_MENU, tilesmap_scrolling::MAP_MENU);
+    }
+  else if (keyboard->key_is_pressed (SDLK_F2))
+    {
+      tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_GUARDIANS, tilesmap_scrolling::MAP_GUARDIANS);
+    }
+  else if (keyboard->key_is_pressed (SDLK_F3))
+    {
+      tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_CONGRATULATIONS, tilesmap_scrolling::MAP_CONGRATULATIONS);
+    }
 
   /* save the map */
   if (keyboard->key_is_pressed (SDLK_s) && !is_s_key_down)
@@ -509,23 +521,31 @@ supervisor_map_editor::highlight_selection ()
     }
   Uint32 x1 = current_selection->x1;
   Uint32 x2 = current_selection->x2;
+  if (current_selection->y_offset > current_selection->y1  ||
+      current_selection->y_offset > current_selection->y2)
+    {
+      return;
+    }
   Uint32 y1 = current_selection->y1 - current_selection->y_offset;
   Uint32 y2 = current_selection->y2 - current_selection->y_offset;
+  //std::cout << ">> x1:" << x1  << " y1:" << y1 << "/  x2:" << x2 << " y2:" << y2 << std::endl;
+
 
   if (x1 > x2)
     {
-      Sint32 x = x1;
+      Uint32 x = x1;
       x1 = x2;
       x2 = x;
     }
   Uint32 width = x2 - x1;
   if (y1 > y2)
     {
-      Sint32 y = y1;
+      Uint32 y = y1;
       y1 = y2;
       y2 = y;
     }
   Uint32 height = y2 - y1;
+  //printf("height %i = %i - %i\n", height, y2, y1); 
 
   if (cycled_colors_index++ > MAX_OF_CYCLED_COLORS)
     {
@@ -751,11 +771,27 @@ bool
 supervisor_map_editor::save_tilesmap ()
 {
   Uint32 map_size = tilesmap_scrolling::MAP_HEIGHT * map_width;
+map_size = map_size * 2;
   Uint32 bytes_size = map_size * sizeof (Uint16);
+  
+  Uint16 *map2 = new Uint16[map_size];
+  Uint16 *map = (Uint16 *) tiles_map->map_tiles;
+  Uint16 *x2 = map2;
+  for (Uint32 v = 0; v < tilesmap_scrolling::MAP_HEIGHT; v++)
+    {
+      for (Uint32 w = 0; w < map_width; w++)
+        {
+          x2[w] = x2[w + map_width] = map[w];
+        }
+        map+= map_width;
+        x2+= map_width * 2;
+    }
+
+
   Uint16 *filedata;
   try
     {
-      filedata = new Uint16[bytes_size];
+      filedata = new Uint16[map_size];
     }
   catch (std::bad_alloc &)
     {
@@ -766,7 +802,8 @@ supervisor_map_editor::save_tilesmap ()
       throw;
     }
 
-  Uint16 *map = (Uint16 *) tiles_map->map_tiles;
+  //Uint16 *map = (Uint16 *) tiles_map->map_tiles;
+  map = map2;
   unsigned char *buffer = (unsigned char *) filedata;
   for (Uint32 i = 0; i < map_size; i++)
     {

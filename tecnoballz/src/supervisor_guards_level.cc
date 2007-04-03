@@ -5,11 +5,11 @@
  * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.36 $
+ * @version $Revision: 1.37 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.36 2007/04/03 13:43:13 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.37 2007/04/03 20:20:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -233,7 +233,7 @@ supervisor_guards_level::main_loop ()
           bullets->disable_sprites ();
           if (is_victory)
             {
-              tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_CONGRATULATIONS, handler_resources::RESEDMAP02);
+              tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_CONGRATULATIONS, tilesmap_scrolling::MAP_CONGRATULATIONS);
               ptCongBall->initialize ();        //congra
               scrolSpeed = 1;
               scrollTemp = 300;

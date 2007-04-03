@@ -2,14 +2,14 @@
  * @file handler_resources.cc 
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-03-31
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.17 2007/04/03 13:43:13 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.18 2007/04/03 20:20:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,9 +58,15 @@ char
 const char *
   handler_resources::standfiles[] = {
   "cosinus128.list",            //RESCOSLIST
-  "edmap01.data",               //RESEDMAP01
-  "edmap02.data",               //RESEDMAP02
-  "edmap03.data",               //RESEDMAP03
+  /* MAP_GUARDIANS_20 */
+  "tilemap-guardians_20.data",
+  "tilemap-guardians_40.data",
+  /* MAP_CONGRATULATIONS_20 */
+  "tilemap-congratulation_20.data",
+  "tilemap-congratulation_40.data",
+  /* MAP_MENU_20 */
+  "tilemap-menu_20.data",
+  "tilemap-menu_40.data",
   "gard_lissa.list",            //RESGCURVES
   /* DATA_BRICKS_LEVELS */
   "tableau.data",

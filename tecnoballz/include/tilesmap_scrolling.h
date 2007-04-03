@@ -5,11 +5,11 @@
  * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.h,v 1.6 2007/04/03 10:15:25 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.h,v 1.7 2007/04/03 20:20:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,14 +52,16 @@ public:
   static const Uint32 MAP_WIDTH = 20;
   /** Number of tiles per column in the map */
   static const Uint32 MAP_HEIGHT = 273;
-  typedef enum {
+  typedef enum
+    {
       TILES_COLOR_GUARDIANS,
       TILES_COLOR_MENU,
       TILES_COLOR_CONGRATULATIONS
-  }
-  TILES_COLOR;
+    }
+    TILES_COLOR;
 
 private:
+  bool is_40_columns;
   Uint32 tile_width;
   Uint32 tile_height;
   /** Number of tiles per row in the map */

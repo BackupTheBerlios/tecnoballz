@@ -5,11 +5,11 @@
  * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.12 2007/03/31 21:31:21 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.13 2007/04/03 20:20:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,9 +57,12 @@ public:
   typedef enum 
     {
       RESCOSLIST = 0,
-      RESEDMAP01,
-      RESEDMAP02,
-      RESEDMAP03,
+      MAP_GUARDIANS_20,
+      MAP_GUARDIANS_40,
+      MAP_CONGRATULATIONS_20,
+      MAP_CONGRATULATIONS_40,
+      MAP_MENU_20,
+      MAP_MENU_40,
       RESGCURVES,
       DATA_BRICKS_LEVELS,
       RES60BACKG,

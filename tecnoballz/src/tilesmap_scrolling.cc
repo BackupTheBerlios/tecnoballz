@@ -5,11 +5,11 @@
  * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.cc,v 1.9 2007/04/03 10:15:25 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.cc,v 1.10 2007/04/03 20:20:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ tilesmap_scrolling::tilesmap_scrolling ()
   tile_width = 16 * resolution;
   tile_height = 16 * resolution;
   map_width = MAP_WIDTH; 
+  is_40_columns = false;
 }
 
 /**
@@ -372,13 +373,34 @@ tilesmap_scrolling::load_map (Uint32 map_id)
     {
     case MAP_GUARDIANS:
     default:
-      map_id = handler_resources::RESEDMAP01;
+      if (is_40_columns)
+        {
+          map_id = handler_resources::MAP_GUARDIANS_40;
+        }
+      else
+        {
+          map_id = handler_resources::MAP_GUARDIANS_20;
+        }
       break;
     case MAP_MENU:
-      map_id = handler_resources::RESEDMAP03;
+      if (is_40_columns)
+        {
+          map_id = handler_resources::MAP_MENU_40;
+        }
+      else
+        {
+          map_id = handler_resources::MAP_MENU_20;
+        }
       break;
     case MAP_CONGRATULATIONS:
-      map_id = handler_resources::RESEDMAP02;
+      if (is_40_columns)
+        {
+          map_id = handler_resources::MAP_CONGRATULATIONS_40;
+        }
+      else
+        {
+          map_id = handler_resources::MAP_CONGRATULATIONS_20;
+        }
       break;
     }
 
