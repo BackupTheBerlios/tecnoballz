@@ -1,14 +1,14 @@
 /** 
  * @file controller_gigablitz.h
  * @brief Gigablitz controller 
- * @date 2007-03-31
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.h,v 1.8 2007/03/31 21:31:21 gurumeditation Exp $
+ * $Id: controller_gigablitz.h,v 1.9 2007/04/03 13:43:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,6 @@ class controller_gigablitz;
 #include "../include/handler_players.h"
 #include "../include/supervisor_bricks_level.h"
 #include "../include/objects_list.h"
-#include "../include/head_animation.h"
 #include "../include/controller_bricks.h"
 #include "../include/controller_explosions.h"
 
@@ -48,12 +47,7 @@ class controller_gigablitz:public objects_list < sprite_gigablitz, controller_gi
 
 private:
   static const Uint32 MAX_OF_GIGABLITZ = 7;
-  static Sint32 numeroBOBs[MAX_OF_GIGABLITZ];
-
-  controller_bricks *bricks;
-  head_animation *head_anim;
-  controller_paddles *paddles;
-  controller_explosions *explosions;
+  static Uint32 numeroBOBs[MAX_OF_GIGABLITZ];
   sprite_paddle *paddle_bottom;
   sprite_paddle *paddle_top;
   sprite_gigablitz *current_gigablitz;
@@ -71,12 +65,11 @@ private:
 public:
     controller_gigablitz ();
    ~controller_gigablitz ();
-  void create_gigablitz_sprites (controller_paddles * paddles, head_animation * gugus,
-                     controller_bricks * brick);
-  void initDepart ();
-  void execution1 ();
+  void create_gigablitz_sprites ();
+  void shoot_paddle ();
+  void run_in_bricks_levels ();
   void collision1 ();
-  void create_gigablitz_sprites (controller_paddles * paddles, controller_explosions * blast);
+  //void create_gigablitz_sprites ();
   void run_in_guardians_level ();
   bool shoot_guardian (Uint32 id, Sint32 xcoord, Sint32 ycoord,
                       Uint32 width, Uint32 height);

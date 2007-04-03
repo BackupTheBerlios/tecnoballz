@@ -5,11 +5,11 @@
  * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.14 2007/04/03 10:15:25 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.15 2007/04/03 13:43:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,7 +99,8 @@ supervisor_map_editor::~supervisor_map_editor ()
 /**
  * Perform some initializations
  */
-Sint32 supervisor_map_editor::first_init ()
+Sint32
+supervisor_map_editor::first_init ()
 {
 
   try
@@ -134,8 +135,7 @@ Sint32 supervisor_map_editor::first_init ()
 
   //Sint32        edmap = tilesmap_scrolling::MAP_MENU;
   //Sint32        edmap = tilesmap_scrolling::MAP_GUARDIANS;
-  Sint32
-  edmap = tilesmap_scrolling::MAP_CONGRATULATIONS;
+  Sint32 edmap = tilesmap_scrolling::MAP_CONGRATULATIONS;
 
   tiles_map->initialize (tilesmap_scrolling::TILES_COLOR_MENU, edmap);
   tiles_bitmap = tiles_map->get_bitmap ();
@@ -152,7 +152,8 @@ Sint32 supervisor_map_editor::first_init ()
 /**
  * Main loop
  */
-Sint32 supervisor_map_editor::main_loop ()
+Sint32
+supervisor_map_editor::main_loop ()
 {
   display->wait_frame ();
 
@@ -346,12 +347,11 @@ supervisor_map_editor::check_keys ()
  * Determine vertical scrolling speed
  * @return srolling speed
  */
-Sint32 supervisor_map_editor::get_speed ()
+Sint32
+supervisor_map_editor::get_speed ()
 {
-  Sint32
-  speed = 0;
-  Uint32
-  mousY = keyboard->get_mouse_y ();
+  Sint32 speed = 0;
+  Uint32 mousY = keyboard->get_mouse_y ();
   if (mousY > 0 && mousY < 8 * resolution)
     {
       speed = -16 * resolution;
@@ -713,7 +713,7 @@ supervisor_map_editor::draw_brush ()
             tiles_map->map_tiles +
             (tilesmap_scrolling::MAP_HEIGHT * map_width);
           table += (brush_posx / tiles_map->tile_width);
-         for (i = 0; i < brush_height; i++)
+          for (i = 0; i < brush_height; i++)
             {
               if (table > t_end)
                 {
@@ -744,64 +744,75 @@ supervisor_map_editor::draw_brush ()
                              brush_bitmap->get_height ());
 }
 
-Sint32 supervisor_map_editor::save_tilesmap ()
+/**
+ * Save tiles map file
+ */
+bool
+supervisor_map_editor::save_tilesmap ()
 {
-  Sint32
-  zsize = tilesmap_scrolling::MAP_HEIGHT * map_width;
-
-  Sint32
-  msize = zsize * sizeof (Uint16);
-  Uint16 *
-  carte = (Uint16 *) memory->alloc (msize, 0x54425249);
-  error_init (memory->retour_err ());
-  if (erreur_num)
-    return (erreur_num);
-
-  //unsigned char* ptSrc = (unsigned char *)tiles_map->map_tiles;
-  Uint16 *
-  ptSrc = (Uint16 *) tiles_map->map_tiles;
-  unsigned char *
-  ptDes = (unsigned char *) carte;
-  for (Sint32 i = 0; i < zsize; i++)
+  Uint32 map_size = tilesmap_scrolling::MAP_HEIGHT * map_width;
+  Uint32 bytes_size = map_size * sizeof (Uint16);
+  Uint16 *filedata;
+  try
     {
-      Uint16
-      codem = *ptSrc;
-      codem = codem << 2;
-      ptDes[1] = codem;
-      codem = codem >> 8;
-      ptDes[0] = codem;
-      ptSrc++;
-      ptDes += 2;
+      filedata = new Uint16[bytes_size];
+    }
+  catch (std::bad_alloc &)
+    {
+      std::
+      cerr << "(!)supervisor_map_editor::save_tilesmap() "
+      "not enough memory to allocate " << map_size <<
+      " bytes!" << std::endl;
+      throw;
     }
 
-
-  char *
-  fnamescore = "edmap.data";
-
+  Uint16 *map = (Uint16 *) tiles_map->map_tiles;
+  unsigned char *buffer = (unsigned char *) filedata;
+  for (Uint32 i = 0; i < map_size; i++)
+    {
+      Uint16 code = *map;
+      code = code << 2;
+      /* convert short int to big endian */
+      buffer[1] = code;
+      code = code >> 8;
+      buffer[0] = code;
+      map++;
+      buffer += 2;
+    }
+#ifdef WIN32
+  /* set umask so that files are group-writable */
+  _umask (0002);
+#else
   umask (0002);
-  Sint32
-  fhand = open (fnamescore, O_WRONLY | O_CREAT, 00666);
-  if (fhand == -1)
+#endif
+  char *filename = "edmap.data";
+  Sint32 handle = open (filename, O_WRONLY | O_CREAT, 00666);
+  if (-1 == handle)
     {
-      fprintf (stderr,
-               "supervisor_map_editor::save_tilesmap(): file:%s / error:%s\n",
-               fnamescore, strerror (errno));
-      memory->release ((char *) ptDes);
-      return 0;
+      std::cerr << "supervisor_map_editor::save_tilesmap() file " <<
+        filename << "; error " << strerror (errno) << std::endl;
+       delete[]filedata;
+      return false;
     }
-  write (fhand, carte, msize);
-  if (close (fhand) == -1)
+#ifdef WIN32
+  _write (handle, filedata, bytes_size);
+#else
+  write (handle, filedata, bytes_size);
+#endif
+  if (close (handle) == -1)
     {
-      fprintf (stderr,
-               "supervisor_map_editor::save_tilesmap(): file:%s / error:%s\n",
-               fnamescore, strerror (errno));
-      memory->release ((char *) ptDes);
-      return 0;
+      std::cerr << "supervisor_map_editor::save_tilesmap() file " <<
+        filename << "; error " << strerror (errno) << std::endl;
+       delete[]filedata;
+      return false;
     }
-  memory->release ((char *) carte);
-  printf ("supervisor_map_editor::save_tilesmap() : %s file was saved\n",
-          fnamescore);
-  return erreur_num;
+  delete[]filedata;
+  if (is_verbose)
+    {
+      std::cout << "supervisor_map_editor::save_tilesmap() " <<
+        filename << "file was saved" << std::endl;
+    }
+  return true;
 }
 
 const unsigned char

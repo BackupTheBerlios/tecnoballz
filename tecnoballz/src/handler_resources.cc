@@ -5,11 +5,11 @@
  * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.16 2007/03/31 21:31:21 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.17 2007/04/03 13:43:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -759,7 +759,8 @@ void
 handler_resources::save_high_score_file (char *buffer, Uint32 size)
 {
 #ifdef WIN32
-  _umask (0002);                //set umask so that files are group-writable
+  /* set umask so that files are group-writable */
+  _umask (0002);
 #else
   umask (0002);
 #endif

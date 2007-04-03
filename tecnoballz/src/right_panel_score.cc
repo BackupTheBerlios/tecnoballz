@@ -4,11 +4,11 @@
  * @date 2007-03-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.16 2007/03/31 21:31:21 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.17 2007/04/03 13:43:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -172,7 +172,7 @@ right_panel_score::draw_gigablizt_gauge ()
               if (gigablitz_countdown == 0)
                 {
                   /* yes, launch the gigablitz!*/
-                  gigablitz->initDepart ();
+                  gigablitz->shoot_paddle ();
                 }
             }
         }

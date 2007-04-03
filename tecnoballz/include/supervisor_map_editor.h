@@ -5,11 +5,11 @@
  * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.h,v 1.12 2007/04/03 10:15:25 gurumeditation Exp $
+ * $Id: supervisor_map_editor.h,v 1.13 2007/04/03 13:43:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -125,7 +125,7 @@ private:
   void alloc_tilesmap_brush (Uint32 number_of_raws, Uint32 number_of_cols);
   void alloc_brush ();
   void draw_brush ();
-  Sint32 save_tilesmap ();
+  bool save_tilesmap ();
 
   static const Uint32 MAX_OF_CYCLED_COLORS = 49;
   static const unsigned char cycled_colors_list[MAX_OF_CYCLED_COLORS];

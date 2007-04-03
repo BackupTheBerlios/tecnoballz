@@ -2,14 +2,14 @@
  * @file tecnoballz.h
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-04-02
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.27 2007/04/02 07:25:18 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.28 2007/04/03 13:43:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-04-02)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-04-03)"
 /** To define only under development  */
 #define UNDER_DEVELOPMENT
 /** Force bytes copy (SPARC unaligned memory access) */
@@ -113,7 +113,6 @@ public:
 public:
   /** 4 levels of difficulty */
   static const Uint32 MAX_OF_DIFFICULTY_LEVELS = 4;
-  static const Sint32 MAX_PLAYER = 6;
 
 public:
   /** True if verbose enable */

@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_main_menu.cc 
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-03-28
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.17 2007/04/03 10:15:25 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.18 2007/04/03 13:43:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -264,7 +264,7 @@ supervisor_main_menu::start_new_game ()
 
   
   /* disable other player(s) */
-  for (Sint32 i = iplay; i < MAX_PLAYER; i++)
+  for (Uint32 i = iplay; i < handler_players::MAX_OF_PLAYERS; i++)
     {
       handler_players::players_list[i]->initialize (0, 1, 1, 0, 0);
     }

@@ -1,14 +1,14 @@
 /** 
  * @file sprite_display_menu.cc 
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-03-28
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.11 2007/03/28 13:57:51 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.12 2007/04/03 13:43:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -473,8 +473,10 @@ sprite_display_menu::check_events ()
             {
             case 5:
               clear_init (24, 5, 1, 1);
-              if (++number_of_players > MAX_PLAYER)
-                number_of_players = 1;
+              if (++number_of_players > handler_players::MAX_OF_PLAYERS)
+                {
+                  number_of_players = 1;
+                }
               break;
 
               // input players names
@@ -588,7 +590,7 @@ sprite_display_menu::mis_a_jour ()
   // copy playes names
   //###########################################################
   d = menuTexte1 + (NUM_OF_COLUMNS * 6) + 24;
-  for (Sint32 i = 0; i < MAX_PLAYER; i++)
+  for (Uint32 i = 0; i < handler_players::MAX_OF_PLAYERS; i++)
     {
       s = handler_players::players_list[i]->get_name ();
       for (Uint32 j = 0; j < 6; j++)
@@ -605,7 +607,7 @@ sprite_display_menu::mis_a_jour ()
 
 
   birth_flag = 1;
-  for (Sint32 i = 0; i < MAX_PLAYER; i++)
+  for (Uint32 i = 0; i < handler_players::MAX_OF_PLAYERS; i++)
     {
       s = handler_players::players_list[i]->get_name ();
       if (s[0] != '0' || s[1] != '4' || s[2] != '0' ||

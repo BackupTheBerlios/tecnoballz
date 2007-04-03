@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-03-06
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.35 $
+ * @version $Revision: 1.36 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.35 2007/04/03 10:15:25 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.36 2007/04/03 13:43:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,7 +104,7 @@ supervisor_guards_level::first_init ()
   }
 
   /* gigablitz sprites are contained separately and in its own bitmap */
-  gigablitz->create_gigablitz_sprites (paddles, explosions);
+  gigablitz->create_gigablitz_sprites ();
 
   /* 
    * sprites who are contained into the large bitmap

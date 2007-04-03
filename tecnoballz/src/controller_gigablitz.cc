@@ -1,14 +1,14 @@
 /**
  * @file controller_gigablitz.cc 
  * @brief Gigablitz controller 
- * @date 2007-03-31
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.8 2007/03/31 21:31:21 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.9 2007/04/03 13:43:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,16 +28,10 @@
 #include "../include/controller_gigablitz.h"
 #include "../include/handler_resources.h"
 
-Sint32
-controller_gigablitz::numeroBOBs[MAX_OF_GIGABLITZ] =
-{  BOB_GIGAB7,
-   BOB_GIGAB6,
-   BOB_GIGAB5,
-   BOB_GIGAB4,
-   BOB_GIGAB3,
-   BOB_GIGAB2,
-   BOB_GIGAB1
-};
+Uint32 controller_gigablitz::numeroBOBs[MAX_OF_GIGABLITZ] =
+  {
+    BOB_GIGAB7,
+    BOB_GIGAB6, BOB_GIGAB5, BOB_GIGAB4, BOB_GIGAB3, BOB_GIGAB2, BOB_GIGAB1};
 
 /**
  * Create the Gigablitz controller
@@ -48,11 +42,8 @@ controller_gigablitz::controller_gigablitz ()
   /* there are 7 different Gigablitz */
   max_of_sprites = MAX_OF_GIGABLITZ;
   sprites_have_shades = false;
-  bricks = (controller_bricks *) NULL;
-  head_anim = (head_animation *) NULL;
   paddle_bottom = (sprite_paddle *) NULL;
   paddle_top = (sprite_paddle *) NULL;
-  //gigablitz_ycoord = 0;
   gigablitz_height = 0;
   bitz_ystop = 0;
   bitz_maxiy = 0;
@@ -73,20 +64,16 @@ controller_gigablitz::~controller_gigablitz ()
 
 /**
  * Create and initialize the sprites of the gigablitz in the bricks levels
- * @param paddles a pointer to a paddles controller
- * @param head a pointer to a head animation object
- * @param brcks a pointer to a bricks controller
  */
 void
-controller_gigablitz::create_gigablitz_sprites (controller_paddles * paddles,
-    head_animation * head,
-    controller_bricks * brcks)
+controller_gigablitz::create_gigablitz_sprites ()
 {
-  head_anim = head;
-  bricks = brcks;
+  controller_paddles* paddles = controller_paddles::get_instance ();
   paddle_bottom = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
-  paddle_top = paddles->get_paddle (controller_paddles::TOP_PADDLE);
-
+  if (BRICKS_LEVEL == super_jump)
+    {
+      paddle_top = paddles->get_paddle (controller_paddles::TOP_PADDLE);
+    }
   alloc_sprites_list ();
 
   /* load the bitmap of the different Gigablitz,
@@ -99,6 +86,10 @@ controller_gigablitz::create_gigablitz_sprites (controller_paddles * paddles,
       sprite_gigablitz *gigablitz_sprite = new sprite_gigablitz ();
       gigablitz_sprite->set_object_pos (i);
       gigablitz_sprite->set_draw_method (sprite_object::DRAW_LINE_BY_LINE);
+      if (GUARDS_LEVEL == super_jump)
+        {
+          gigablitz_sprite->mirrorVert = 1;
+        }
       Uint32 id = numeroBOBs[i];
       gigablitz_sprite->create_sprite (id, sprites_bitmap, false);
       sprites->add (gigablitz_sprite);
@@ -113,38 +104,42 @@ controller_gigablitz::create_gigablitz_sprites (controller_paddles * paddles,
  * Start a new Gigablitz in bricks levels
  */
 void
-controller_gigablitz::initDepart ()
+controller_gigablitz::shoot_paddle  ()
 {
-  if (0 == gigablitz_height)
+  if (gigablitz_height > 0)
     {
-      Sint32 large = paddle_bottom->get_length ();
-      Sint32 l = large;
-      l -= paddle_bottom->width_mini;	//smallest bumper is of 16/32 pixels width
-      l >>= paddle_bottom->width_deca;	//size of bumper step by 8/16 pixels
+      return;
+    }
+      Uint32 length = paddle_bottom->get_length ();
+      Uint32 l = length;
+      /* smallest bumper is of 16 or 32 pixels width */ 
+      l -= paddle_bottom->width_mini;
+      /* size of bumper step by 8 or 16 pixels */
+      l >>= paddle_bottom->width_deca;
       l = MAX_OF_GIGABLITZ - l - 1;
-      sprite_gigablitz *g = sprites_list[l];
-      current_gigablitz = g;
-      gigablitz_height = g->get_sprite_height ();
+      current_gigablitz = sprites_list[l];
+      gigablitz_height = current_gigablitz->get_sprite_height ();
       Sint32 x = paddle_bottom->get_x_coord ();
       Sint32 y = paddle_bottom->get_y_coord ();
       gigablitz_xcoord = x;
-      blitz_colx = x;		//special collision
-      g->set_coordinates (x, y);
-      //bitz_ystop = paddle_top->get_y_coord() - gigablitz_height;
+      /* special collision */
+      blitz_colx = x;
+      current_gigablitz->set_coordinates (x, y);
       Sint32 res = resolution;
       bitz_ystop = 8 * res - gigablitz_height;
       bitz_maxiy = paddle_bottom->get_y_coord ();
-      //bitz_miniy = paddle_top->get_y_coord();
       bitz_miniy = 8 * res;
-      y = large;
-      if (resolution == 1)
+      y = length;
+      if (1 == resolution) 
         {
-          y = y >> 4;		//in 320 width bricks = 16 pixels
+          /* in 320 pixels: width bricks = 16 pixels */
+          y = y >> 4;
           x = x & 0x000f;
         }
       else
         {
-          y = y >> 5;		//in 640 width bricks = 32 pixels
+          /* in 640 pixels: width bricks = 32 pixels */
+          y = y >> 5;
           x = x & 0x001f;
         }
       if (x)
@@ -153,68 +148,76 @@ controller_gigablitz::initDepart ()
 #ifndef SOUNDISOFF
       audio->play_sound (S_TIR_GARD);
 #endif
+      head_animation *head_anim = head_animation::get_instance ();
       head_anim->start_laugh ();
       controller_ships *ships = controller_ships::get_instance ();
       ships->force_explosion ();
-    }
 }
 
-// ------------------------------------------------------------------------------
-// bricks levels: move the Gigablitz
-// ------------------------------------------------------------------------------
+/**
+ * Move the Gigablitz in bricks level
+ */
 void
-controller_gigablitz::execution1 ()
+controller_gigablitz::run_in_bricks_levels ()
 {
-  if (!gigablitz_height)
-    return;
-  sprite_gigablitz *g = current_gigablitz;
-
-  //###################################################################
-  // vertical moving
-  //###################################################################
-  Sint32 y = g->get_y_coord ();
+  if (0 == gigablitz_height)
+    {
+      return;
+    }
+ 
+  /* vertical moving */
+  Sint32 y = current_gigablitz->get_y_coord ();
   Sint32 res = resolution;
   y = y - 8 * res;
   if (y <= bitz_ystop)
     {
-      g->disable ();
+      current_gigablitz->disable ();
       gigablitz_height = 0;
     }
   else
     {
       if (y >= bitz_maxiy)
-        g->disable ();
+        {
+          current_gigablitz->disable ();
+        }
       else
-        g->enable ();
+        {
+          current_gigablitz->enable ();
+        }
     }
 
-  //###################################################################
-  // determine last line of the gigablitz sprite
-  //###################################################################
-  Sint32 h = g->get_sprite_height ();
+  /* determine last line of the gigablitz sprite */
+  Sint32 h = current_gigablitz->get_sprite_height ();
   Sint32 l = bitz_maxiy - y;
   if (l > h)
-    l = h;
+    {
+      l = h;
+    }
   if (l < 1)
-    l = 1;
-  g->affligLast = l;
+    {
+      l = 1;
+    }
+  current_gigablitz->affligLast = l;
   l = bitz_miniy - y;
   if (l >= h)
-    l = h - 1;
+    {
+      l = h - 1;
+    }
   if (l < 0)
-    l = 0;
-  g->affligFrst = l;
+    {
+      l = 0;
+    }
+  current_gigablitz->affligFrst = l;
 
-  //###################################################################
-  // horizontal move
-  //###################################################################
+  /* horizontal move */
   blitz_xsin = (blitz_xsin + 50) & SINUS_MASK;
   Sint32 x = (table_cosL[blitz_xsin] * 5 * res) >> SINUS_DECA;
   x = gigablitz_xcoord + x;
-
   current_gigablitz->set_coordinates (x, y);
   if (y >= 0)
-    collision1 ();
+    {
+      collision1 ();
+    }
 }
 
 //-------------------------------------------------------------------------------
@@ -223,21 +226,24 @@ controller_gigablitz::execution1 ()
 void
 controller_gigablitz::collision1 ()
 {
-
-  Sint32 bwght = bricks->get_brick_width ();	//brick's width in pixels
-  Sint32 byoff = bricks->getYOffset ();	//y-offset between 2 bricks
-  Sint32 indus = bricks->getBkIndus ();	//first indestructible brick
+  controller_bricks *bricks = controller_bricks::get_instance ();
+  /* brick's width in pixels */
+  Sint32 bwght = bricks->get_brick_width ();
+  /* y-offset between 2 bricks */
+  Sint32 byoff = bricks->getYOffset ();
+  /* first indestructible brick */
+  Sint32 indus = bricks->getBkIndus ();
   if (blitz_brik > 0)
-    {				//Sint32 x = current_gigablitz->get_x_coord();
+    {
       Sint32 x = blitz_colx;
       Sint32 y = current_gigablitz->get_y_coord ();
-      x /= bwght;		// x = x / 32 (width of a brick)
-      y /= byoff;		// y = y / 16 (space between two bricks in height)
-      y *= controller_bricks::NB_BRICKSH;	// y = y * 16 (number of bricks on the same line)
+      x /= bwght;               // x = x / 32 (width of a brick)
+      y /= byoff;               // y = y / 16 (space between two bricks in height)
+      y *= controller_bricks::NB_BRICKSH;       // y = y * 16 (number of bricks on the same line)
       x += y;
       brickInfos *tMega = bricks->mega_table;
-      Sint32 save = bricks->briqueSave;	// save => offset on "brique_pnt"
-      brickClear *briPT = bricks->brique_pnt;	// pointer to structure "brickClear" (display and clear the bricks)
+      Sint32 save = bricks->briqueSave; // save => offset on "brique_pnt"
+      brickClear *briPT = bricks->brique_pnt;   // pointer to structure "brickClear" (display and clear the bricks)
       for (Sint32 i = 0; i < blitz_brik; i++)
         {
           brickInfos *megaT = (tMega + x);
@@ -246,16 +252,16 @@ controller_gigablitz::collision1 ()
           if (v)
             {
               if (v < indus)
-                briP2->balle_posX = 512;	// flag brick blitz destroy
+                briP2->balle_posX = 512;        // flag brick blitz destroy
               else
                 briP2->balle_posX = -1;
               briP2->adresseAff = megaT->adresseAff;
               briP2->adresseTab = megaT;
               megaT->briquePosX = -1;
-              megaT->brique_rel = 0;	// RAZ brick code
-              briP2->brique_num = megaT->brique_num;	// brick number
-              briP2->briqueFlag = 1;	// flag restaure background
-              save += 1;	// inc. pt restaure table
+              megaT->brique_rel = 0;    // RAZ brick code
+              briP2->brique_num = megaT->brique_num;    // brick number
+              briP2->briqueFlag = 1;    // flag restaure background
+              save += 1;        // inc. pt restaure table
               save &= (controller_bricks::MAXBRIKCLR - 1);
             }
           x++;
@@ -266,22 +272,17 @@ controller_gigablitz::collision1 ()
 
 /**
  * Create and initialize the sprites of the gigablitz in the guardians levels
- * @param paddles a pointer to a paddles controller
- * @param blast a pointer to a explosions controller
  */
+/*
 void
-controller_gigablitz::create_gigablitz_sprites (controller_paddles * paddles,
-    controller_explosions * blast)
+controller_gigablitz::create_gigablitz_sprites ()
 {
-  explosions = blast;
+  controller_paddles* paddles = controller_paddles::get_instance ();
   paddle_bottom = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
 
   alloc_sprites_list ();
-  /* load the bitmap of the different Gigablitz,
-   * in the 'sprites_bitmap' static member */
   resources->load_sprites_bitmap (handler_resources::BITMAP_GIGABLITZ);
 
-  /* create and initialize the gigablitz sprites */
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_gigablitz *gigablitz_sprite = new sprite_gigablitz ();
@@ -293,10 +294,9 @@ controller_gigablitz::create_gigablitz_sprites (controller_paddles * paddles,
       sprites->add (gigablitz_sprite);
       sprites_list[i] = gigablitz_sprite;
     }
-
-  // release the bitmap page of gigablitz
   resources->release_sprites_bitmap ();
 }
+*/
 
 /**
  * Move the Gigablitz in the guardians level
@@ -362,7 +362,8 @@ controller_gigablitz::collision_with_paddle ()
   Sint32 y = paddle_bottom->get_y_coord ();
   Sint32 w = paddle_bottom->get_length ();
   Sint32 h = paddle_bottom->get_sprite_height ();
-  if (gy + gigablitz_height < y || gx + gw < x || gx > x + w || gy > y + h)
+  if (gy + (Sint32) gigablitz_height < y || gx + gw < x || gx > x + w
+      || gy > y + h)
     {
       return;
     }
@@ -370,8 +371,11 @@ controller_gigablitz::collision_with_paddle ()
   audio->play_sound (S_RAKEXPLO);
   audio->play_sound (S_ENLEVVIE);
 #endif
-  explosions->add (x + paddle_bottom->get_length () / 2,
-                   y + paddle_bottom->get_sprite_height () / 2);
+
+  controller_explosions *explosions = controller_explosions::get_instance ();
+  explosions->add
+  (x + paddle_bottom->get_length () / 2,
+   y + paddle_bottom->get_sprite_height () / 2);
   current_player->remove_life (1);
   paddle_bottom->set_invincibility (100);
 }
@@ -406,8 +410,10 @@ controller_gigablitz::shoot_guardian (Uint32 id, Sint32 xcoord,
     }
   current_gigablitz->set_coordinates (xcoord, ycoord);
 #ifndef SOUNDISOFF
+
   audio->play_sound (S_TIR_GARD);
 #endif
+
   current_gigablitz->enable ();
   gigablitz_xcoord = xcoord;
   return true;
@@ -417,7 +423,8 @@ controller_gigablitz::shoot_guardian (Uint32 id, Sint32 xcoord,
  * Check if the gigablitz is enabled
  * @return true if gigablitz is enabled, otherwise false
  */
-bool controller_gigablitz::is_enable ()
+bool
+controller_gigablitz::is_enable ()
 {
   return gigablitz_height > 0 ? true : false;
 }

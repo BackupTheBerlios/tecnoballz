@@ -1,14 +1,14 @@
 /** 
  * @file tiles_background.cc 
  * @brief Draw tiles background in bricks levels 
- * @date 2007-02-17
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.12 2007/02/18 15:13:25 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.13 2007/04/03 13:43:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -179,7 +179,7 @@ tiles_background::setup (Uint32 tiles_num)
 
   /* draw top shadow */
   Uint32 hscreen = display->get_width () - (64 * resolution);
-  for (Sint32 det_Y = 0; det_Y < (handler_display::SHADOWOFFY * resolution);
+  for (Uint32 det_Y = 0; det_Y < (handler_display::SHADOWOFFY * resolution);
        det_Y++)
     {
       for (Uint32 det_X = 0; det_X < hscreen; det_X++)
@@ -193,7 +193,7 @@ tiles_background::setup (Uint32 tiles_num)
   Uint32 vscreen = display->get_height ();
   for (Uint32 det_Y = 0; det_Y < vscreen; det_Y++)
     {
-      for (Sint32 det_X = (252 * resolution); det_X < (256 * resolution);
+      for (Uint32 det_X = (252 * resolution); det_X < (256 * resolution);
            det_X++)
         {
           char *detPT = background_screen->get_pixel_data (det_X, det_Y);

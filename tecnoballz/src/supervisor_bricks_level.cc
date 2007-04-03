@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-03-06
+ * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.40 $
+ * @version $Revision: 1.41 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.40 2007/03/17 20:30:17 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.41 2007/04/03 13:43:13 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,7 +123,7 @@ supervisor_bricks_level::first_init ()
   paddles->create_paddles_sprites ();
 
   /* generation of gigablitz graphics shapes tables */
-  gigablitz->create_gigablitz_sprites (paddles, head_anim, bricks);
+  gigablitz->create_gigablitz_sprites ();
 
   /* load bitmap of sprites in memory (all other sprites) */
   resources->load_sprites_bitmap ();
@@ -135,7 +135,6 @@ supervisor_bricks_level::first_init ()
   bottom_wall->create_sprite (BOB_WALLBO, sprites_bitmap, 0);
   sprites->add (bottom_wall);
   bottom_wall->set_coordinates (32 * resolution, 232 * resolution);
-  //robot bumper
   paddles->init_robot ();
   bool is_rebuild = current_player->is_rebuild_walls ();
   current_player->set_rebuild_walls (false);
@@ -266,7 +265,7 @@ supervisor_bricks_level::main_loop ()
       display->wait_frame ();
       head_anim->play ();
       display->lock_surfaces ();
-      gigablitz->execution1 ();
+      gigablitz->run_in_bricks_levels ();
       sprites->clear ();
       if (!(random_counter & 0x00f))
         {
@@ -311,7 +310,7 @@ supervisor_bricks_level::main_loop ()
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
         {
           info_messages->run ();
-          gigablitz->execution1 ();
+          gigablitz->run_in_bricks_levels ();
 
           //handle the "less bricks" option
           bricks->less_bricks ();
@@ -484,7 +483,7 @@ supervisor_bricks_level::changebkgd ()
   if (keyboard->key_is_pressed (SDLK_n))
     head_anim->start_interference ();
   if (keyboard->key_is_pressed (SDLK_g))
-    gigablitz->initDepart ();
+    gigablitz->shoot_paddle ();
 /* 
 
 	if(keyboard->key_is_pressed(SDLK_w))
