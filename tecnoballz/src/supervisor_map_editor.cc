@@ -5,11 +5,11 @@
  * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.17 2007/04/04 16:24:50 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.18 2007/04/04 20:08:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -771,10 +771,10 @@ bool
 supervisor_map_editor::save_tilesmap ()
 {
   Uint32 map_size = tilesmap_scrolling::MAP_HEIGHT * map_width;
-map_size = map_size * 2;
+//map_size = map_size * 2;
   Uint32 bytes_size = map_size * sizeof (Uint16);
-  
 
+/*  
   Uint16 *map2 = new Uint16[map_size];
   for (Uint32 v = 0; v < map_size; v++)
     {
@@ -784,19 +784,15 @@ map_size = map_size * 2;
   Uint16 *x2 = map2;
   for (Uint32 v = 0; v < tilesmap_scrolling::MAP_HEIGHT; v++)
     {
-      //printf("%i", v);
       for (Uint32 w = 0; w < map_width; w++)
         {
           x2[w] = map[w];
           x2[w + map_width] = map[w];
-          //printf(" %i", w);
         }
         map = map + map_width;
         x2 = x2 + map_width + map_width ;
-      //printf("\n");
     }
-  printf("-----> %i\n", (char*)x2 - (char*)map2);
-
+*/
 
   Uint16 *filedata;
   try
@@ -812,8 +808,8 @@ map_size = map_size * 2;
       throw;
     }
 
-  //Uint16 *map = (Uint16 *) tiles_map->map_tiles;
-map = map2;
+  Uint16 *map = (Uint16 *) tiles_map->map_tiles;
+//map = map2;
   unsigned char *buffer = (unsigned char *) filedata;
   for (Uint32 i = 0; i < map_size; i++)
     {
@@ -826,7 +822,6 @@ map = map2;
       map++;
       buffer += 2;
     }
-  printf("-----> %i\n", (char*)buffer - (char *)filedata);
 #ifdef WIN32
   /* set umask so that files are group-writable */
   _umask (0002);

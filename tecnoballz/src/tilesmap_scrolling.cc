@@ -5,11 +5,11 @@
  * @date 2007-04-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.cc,v 1.11 2007/04/04 16:24:50 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.cc,v 1.12 2007/04/04 20:08:37 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,8 +91,11 @@ tilesmap_scrolling::initialize (Uint32 pal_id, Uint32 map_id)
     {
       is_40_columns = false;
     }
-  //is_40_columns = true;
-
+  else
+    {
+       is_40_columns = true;
+    }
+  
   /* load the bitmap of tiles im memory */
   tiles_bitmap = new bitmap_data ();
   if (!is_40_columns) 
@@ -107,6 +110,7 @@ tilesmap_scrolling::initialize (Uint32 pal_id, Uint32 map_id)
       char *pathname = resources->get_filename (handler_resources::BITMAP_TILESMAP, 1);
       tiles_bitmap->load (pathname);
     }
+  tileset_width = tiles_bitmap->get_width () / tile_width;
 
   /* load the map file in memory */
   load_map (map_id);
@@ -314,8 +318,8 @@ tilesmap_scrolling::draw ()
       for (Uint32 h = 0; h < tiles_per_row; h++)
         {
            Uint32 offset = *(map++); 
-           rect_src.y = offset / map_width;
-           rect_src.x = (offset - rect_src.y * map_width) * tile_width; 
+           rect_src.y = offset / tileset_width;
+           rect_src.x = (offset - rect_src.y * tileset_width) * tile_width; 
            rect_src.y = rect_src.y * tile_height + yoffset;
           if (SDL_BlitSurface
               (tiles_surface, &rect_src, screen_surface, &rect_dst) < 0)
@@ -360,8 +364,8 @@ tilesmap_scrolling::alloc_brush (Uint16 *map, Uint32 num_of_cols, Uint32 num_of_
       for (Uint32 h = 0; h < num_of_cols; h++)
         {
            Uint32 offset = *(map++); 
-           rect_src.y = offset / map_width;
-           rect_src.x = (offset - rect_src.y * map_width) * tile_width; 
+           rect_src.y = offset / tileset_width;
+           rect_src.x = (offset - rect_src.y * tileset_width) * tile_width; 
            rect_src.y = rect_src.y * tile_height;
           if (SDL_BlitSurface
               (tiles_surface, &rect_src, brush_surface, &rect_dst) < 0)
