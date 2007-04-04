@@ -2,14 +2,14 @@
  * @file tilesmap_scrolling.cc 
  * @brief Vertical scrolling tiles map in the main menu
  *        and the guardians levels
- * @date 2007-04-03
+ * @date 2007-04-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.cc,v 1.10 2007/04/03 20:20:25 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.cc,v 1.11 2007/04/04 16:24:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,16 +87,37 @@ tilesmap_scrolling::initialize (Uint32 pal_id, Uint32 map_id)
       std::cout << ">tilesmap_scrolling::initialise() Start!"
         << std::endl;
     }
+  if (1 == resolution)
+    {
+      is_40_columns = false;
+    }
+  //is_40_columns = true;
 
   /* load the bitmap of tiles im memory */
   tiles_bitmap = new bitmap_data ();
-  tiles_bitmap->load (handler_resources::BITMAP_TILESMAP);
+  if (!is_40_columns) 
+    {
+      tiles_bitmap->load (handler_resources::BITMAP_TILESMAP);
+    }
+  else
+    {
+      tile_width = 16;
+      tile_height = 16;
+      map_width = MAP_WIDTH * 2; 
+      char *pathname = resources->get_filename (handler_resources::BITMAP_TILESMAP, 1);
+      tiles_bitmap->load (pathname);
+    }
 
   /* load the map file in memory */
   load_map (map_id);
 
   /** 20 tiles per row */
   tiles_per_row = game_screen->get_width () / tile_width;
+  if (is_verbose)
+    {
+      std::cout << "tilesmap_scrolling::initialise() tile_width:" <<
+        tile_width << "; tiles_per_row:" << tiles_per_row << std::endl;
+    }
   y_coord = 0;
 
   /* Draw all tiles */
@@ -232,14 +253,7 @@ tilesmap_scrolling::scroll (Sint32 index)
       i -= j;
     }
   y_coord = i;
-  if (1 == resolution)
-    {
-      j = i & 15;
-    }
-  else
-    {
-      j = i & 31;
-    }
+  j = i & (tile_height - 1);
   i /= tile_height;
   i *= map_width;
   map_top_screen = map_tiles + i;

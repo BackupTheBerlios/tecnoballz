@@ -2,14 +2,14 @@
  * @file handler_resources.cc 
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-04-03
+ * @date 2007-04-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.18 2007/04/03 20:20:25 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.19 2007/04/04 16:24:50 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -201,17 +201,22 @@ handler_resources::load_data (Uint32 resource_id)
 /** 
  * Return valid name from a resource identifier
  * @param resource_id resource identifier
+ * @param resolution 0 default, 1 = 320 or 2 640,
  * @return filename with a relative pathname
  */
 char *
-handler_resources::get_filename (Uint32 resource_id)
+handler_resources::get_filename (Uint32 resource_id, Uint32 res)
 {
   const char *pfile;
   if (resource_id >= BITMAP_OFFSET)
     {
+      if (0 == res)
+        {
+          res = resolution;
+        }
       resource_id -= BITMAP_OFFSET;
       pfile = bitmap_files[resource_id];
-      if (resolution == 1)
+      if (1 == res)
         {
           strcpy (tmp_filename, folder_320);
         }
@@ -263,7 +268,7 @@ handler_resources::get_sound_filename (Uint32 resource_id)
  * @return tilemap filename with a relative pathname
  */
 char *
-handler_resources::get_tilemaps_filename (Sint32 title_num)
+handler_resources::get_tilemaps_filename (Uint32 title_num)
 {
   sprintf(tmp_filename, "textures/map%02d.bmp", title_num);
   return tmp_filename;
@@ -559,13 +564,11 @@ handler_resources::load_texts(Uint32 resource_id, Uint32 numof_lines, Uint32 row
                 {
                   *(strs++) = ' ';
                 }
-              //printf("str_count=%i) %i list_count=%i\n", str_count, str_count % modulo, list_count );
               str_count++;
               if (modulo == 0 || (str_count % modulo == 0))
                 {
                   *(strs++) = '\0';
                   list[list_count++] = str_current;
-                  //printf("list_count=%i\n", list_count);
                   str_current = strs;
                 }
             }
@@ -575,19 +578,7 @@ handler_resources::load_texts(Uint32 resource_id, Uint32 numof_lines, Uint32 row
           source = &filedata[offset];
         }
      }
- 
-/*
-   for (Uint32 i = 0; i < list_count; i++)
-     {
-       printf(">> %s\n", list[i]);
-     } 
-     */
-//printf("size:%f \n", int (strs - buffer)); 
-
-  printf("list_count:%i\n", list_count);
-
   delete[]filedata;
-
   return list; 
 }
 
@@ -614,7 +605,7 @@ handler_resources::loadfile_with_lang (const char *const filename, Uint32 * cons
   if (is_verbose)
     {
       std::cout << "handler_resources::loadfile_with_lang() " <<
-        "file " << fname << "was loaded in memory" << std::endl;
+        "file " << fname << " was loaded in memory" << std::endl;
     }
   char* data = load_file (fname, fsize);
   delete[]fname; 
