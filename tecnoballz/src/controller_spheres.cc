@@ -1,41 +1,47 @@
-//*****************************************************************************
-// copyright (c) 1991-2004 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file         : "controller_spheres.cc
-// created              : 2004-08-05
-// updates              : 2004-08-05
-// fonctions    : handle the "Techno Balls" (congratulations) 
-//-----------------------------------------------------------------------------
-// This program is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 2 of the License, or (at your option) any later
-// version.
-// 
-// This program is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA  02111-1307, USA.
-//
-//*****************************************************************************
+/** 
+ * @file controller_spheres.cc 
+ * @brief Metallic spheres controller used in congratulations 
+ * @created 2004-08-05 
+ * @date 2007-04-05
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.5 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: controller_spheres.cc,v 1.5 2007/04/05 16:04:01 gurumeditation Exp $
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
 #include "../include/controller_spheres.h"
 #include "../include/handler_audio.h"
 #include "../include/handler_resources.h"
 #include "../include/handler_high_score.h"
 #include "../include/handler_resources.h"
 
-
-//-----------------------------------------------------------------------------
-// create the object
-//----------------------------------------------------------------------------- 
+/**
+ * Create the metallic spheres controller
+ */
 controller_spheres::controller_spheres ()
 {
   littleInit ();
-  max_of_sprites = 8;           //there are 8 letters 
-  sprites_have_shades = true;   //shadow enable
+  /* 8 metallics spheres */
+  max_of_sprites = 8;
+  sprites_have_shades = true;
+  sprites_have_shades = false;
   sprite_type_id = BOB_ARGENT;
   speed_rad0 = 0;
   speed_rad1 = 0;
@@ -44,17 +50,17 @@ controller_spheres::controller_spheres ()
   speed_rad4 = 0;
 }
 
-//-----------------------------------------------------------------------------
-// release the object
-//-----------------------------------------------------------------------------
+/**
+ * Release the metallic spheres controller
+ */
 controller_spheres::~controller_spheres ()
 {
   release_sprites_list ();
 }
 
-//-----------------------------------------------------------------------------
-//      perform some initializations
-//-----------------------------------------------------------------------------
+/**
+ * Perform some initializations
+ */
 void
 controller_spheres::initialize ()
 {
@@ -91,12 +97,16 @@ controller_spheres::execution1 ()
   Sint32 v = (ptCos[speed_rad4] * 2) >> 7;
   Sint32 sball = 1 + h + v;
   if (!sball)
-    sball = 1;
+    {
+      sball = 1;
+    }
 
   // varie pointeur
   speed_rad3 = speed_rad3 + (random_counter & 7);
   if (speed_rad3 >= r_max)
-    speed_rad3 -= r_max;
+    {
+      speed_rad3 -= r_max;
+    }
   h = (ptSin[speed_rad3] * 3) >> 7;
   v = (ptCos[speed_rad3] * 3) >> 7;
   Sint32 incRd = h + v + 6;
@@ -105,7 +115,9 @@ controller_spheres::execution1 ()
   //VARIE RAYON X
   speed_rad1 = speed_rad1 + incRd;
   if (speed_rad1 >= r_max)
-    speed_rad1 -= r_max;
+    {
+      speed_rad1 -= r_max;
+    }
   h = (ptSin[speed_rad1] * 30 * resolution) >> 7;
   v = (ptCos[speed_rad1] * 30 * resolution) >> 7;
   rad_x = rad_x + h + v;
