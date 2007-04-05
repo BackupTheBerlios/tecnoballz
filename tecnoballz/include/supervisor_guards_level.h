@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.h
  * @brief Guardians level supervisor 
  * @created 2003-01-11
- * @date 2007-02-26
+ * @date 2007-04-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.18 2007/03/05 17:36:26 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.19 2007/04/05 19:57:10 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ private:
   controller_explosions *explosions;
   /** Sprite of the money capsule to the left of amount money */
   sprite_object *money_indicator;
-  sprite_object *ptBob_name;
+  sprite_object *sprite_playername;
   sprite_capsule *ptBobLifes;
   handler_popup_menu *popup_menu;
   /** Area number from 1 to 5 */
@@ -76,11 +76,15 @@ private:
   /** Current level number 6, 12 or 13 */ 
   Uint32 level_number;
   const guardians_level_desc *level_desc;
-  Sint32 scrollTemp;            // time before scroll start
-  Sint32 scrollType;            // type of background scrolling
-  Sint32 scrolSpeed;            // speed of the scrolling
+  /** Delay time before the scrolling starts */
+  Uint32 scroll_start_delay;
+  /** Behavior type of scrolling  */
+  Uint32 scroll_type;
+  /** Speed of the scrolling */
+  Sint32 scroll_speed;
   controller_game_over *game_over;
-  controller_spheres *ptCongBall;
+  /** Mettalic spheres used in congratulisation */
+  controller_spheres *metallic_spheres;
   Uint32 gameover_counter;
   Sint32 count_next;            //temporisation before next level 
   /** If true game is finished, play game over with congratulations */

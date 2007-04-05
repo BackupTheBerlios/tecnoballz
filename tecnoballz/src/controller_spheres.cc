@@ -5,11 +5,11 @@
  * @date 2007-04-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_spheres.cc,v 1.5 2007/04/05 16:04:01 gurumeditation Exp $
+ * $Id: controller_spheres.cc,v 1.6 2007/04/05 19:57:10 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,32 +74,36 @@ controller_spheres::initialize ()
     }
 }
 
-//-----------------------------------------------------------------------------
-// runtime
-//-----------------------------------------------------------------------------
+/**
+ * Animate the metal spheres 
+ */
 void
-controller_spheres::execution1 ()
+controller_spheres::run ()
 {
   const Sint16 *ptSin = handler_resources::zesinus360;
   const Sint16 *ptCos = handler_resources::cosinus360;
 
+  Sint32 res = resolution;
   Sint32 r_max = 360;
-  Sint32 rad_x = 80 * resolution;
-  Sint32 rad_y = 80 * resolution;
-  Sint32 centx = (160 * resolution) - (sprites_list[0]->sprite_width / 2);
-  Sint32 centy = (120 * resolution) - (sprites_list[0]->sprite_height / 2);
+  Sint32 rad_x = 80 * res;
+  Sint32 rad_y = 80 * res;
+  Sint32 centx = (160 * res) - (sprites_list[0]->sprite_width / 2);
+  Sint32 centy = (120 * res) - (sprites_list[0]->sprite_height / 2);
 
   // varie vitesse des boulles
   speed_rad4 = speed_rad4 + (random_counter & 3);
   if (speed_rad4 >= r_max)
-    speed_rad4 -= r_max;
+    {
+      speed_rad4 -= r_max;
+    }
   Sint32 h = (ptSin[speed_rad4] * 2) >> 7;
   Sint32 v = (ptCos[speed_rad4] * 2) >> 7;
-  Sint32 sball = 1 + h + v;
-  if (!sball)
+  Sint32 sball = 4 + h + v;
+  if (0 == sball)
     {
       sball = 1;
     }
+  //std::cout << "sball: " << sball << std::endl;
 
   // varie pointeur
   speed_rad3 = speed_rad3 + (random_counter & 7);
@@ -110,51 +114,47 @@ controller_spheres::execution1 ()
   h = (ptSin[speed_rad3] * 3) >> 7;
   v = (ptCos[speed_rad3] * 3) >> 7;
   Sint32 incRd = h + v + 6;
-  //printf("** h=%i v=%i speed_rad3=%i\n", h ,v, speed_rad3);
+  //std::cout << "incRd: " << incRd << std::endl;
 
-  //VARIE RAYON X
+
+  /* x radius variation */
   speed_rad1 = speed_rad1 + incRd;
   if (speed_rad1 >= r_max)
     {
       speed_rad1 -= r_max;
     }
-  h = (ptSin[speed_rad1] * 30 * resolution) >> 7;
-  v = (ptCos[speed_rad1] * 30 * resolution) >> 7;
+  h = (ptSin[speed_rad1] * 30 * res) >> 7;
+  v = (ptCos[speed_rad1] * 30 * res) >> 7;
   rad_x = rad_x + h + v;
-  /*printf("[rad_x  = %i] h=%i v=%i  / incRd=%i speed_rad1=%i \n",
-     rad_x, h, v, incRd, speed_rad1); */
 
   //VARIE RAYON Y
   speed_rad2 = speed_rad2 + incRd;
   if (speed_rad2 >= r_max)
-    speed_rad2 -= r_max;
-  h = (ptSin[speed_rad2] * 15 * resolution) >> 7;
-  v = (ptCos[speed_rad2] * 15 * resolution) >> 7;
+    {
+      speed_rad2 -= r_max;
+    }
+  h = (ptSin[speed_rad2] * 15 * res) >> 7;
+  v = (ptCos[speed_rad2] * 15 * res) >> 7;
   rad_y = rad_y + h + v;
-
-
-  //Sint32 sball = ptSin[speed_rad0] >> 7 ;
-  //spra1 = ptSin[speed_rad0];
-
 
 
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_object *zebob = sprites_list[i];
-      zebob->x_maximum += sball;
-      //printf("[%i]", zebob->x_maximum);
-      if (zebob->x_maximum >= r_max)
-        zebob->x_maximum -= r_max;
-      if (zebob->x_maximum < 0)
-        zebob->x_maximum += r_max;
-      Sint32 pos_x =
-        (handler_resources::zesinus360[zebob->x_maximum] * rad_x) >> 7;
-      Sint32 pos_y =
-        (handler_resources::cosinus360[zebob->x_maximum] * rad_y) >> 7;
+      sprite_object *sphere = sprites_list[i];
+      sphere->x_maximum += sball;
+      if (sphere->x_maximum >= r_max)
+        {
+          sphere->x_maximum -= r_max;
+        }
+      if (sphere->x_maximum < 0)
+        {
+          //sphere->x_maximum += r_max;
+        }
+      Sint32 pos_x = (handler_resources::zesinus360[sphere->x_maximum] * rad_x) >> 7;
+      Sint32 pos_y = (handler_resources::cosinus360[sphere->x_maximum] * rad_y) >> 7;
       pos_x += centx;
       pos_y += centy;
-      zebob->x_coord = pos_x;
-      zebob->y_coord = pos_y;
-      //printf("=> %i %i \n", pos_x , pos_y);
+      sphere->x_coord = pos_x;
+      sphere->y_coord = pos_y;
     }
 }

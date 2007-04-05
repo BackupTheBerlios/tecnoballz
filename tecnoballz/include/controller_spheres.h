@@ -5,11 +5,11 @@
  * @date 2007-04-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_spheres.h,v 1.5 2007/04/05 16:04:01 gurumeditation Exp $
+ * $Id: controller_spheres.h,v 1.6 2007/04/05 19:57:10 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ public:
     controller_spheres ();
    ~controller_spheres ();
   void initialize ();
-  void execution1 ();
+  void run ();
 
 };
 #endif

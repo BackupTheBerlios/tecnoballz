@@ -2,14 +2,14 @@
  * @file handler_display.cc 
  * @briefi Handle displaying and updating with SDL 
  * @created 2002-08-17 
- * @date 2007-02-17
+ * @date 2007-04-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.19 2007/02/18 15:13:25 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.20 2007/04/05 19:57:10 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -415,7 +415,7 @@ handler_display::enable_palette (SDL_Color * pal)
 {
   if (is_verbose)
     {
-      std::cout << "handler_display::enable_palette(SLD) " << std::endl;
+      std::cout << "handler_display::enable_palette(SDL) " << std::endl;
     }
   game_screen->set_palette (pal);
   background_screen->set_palette (pal);

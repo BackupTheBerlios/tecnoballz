@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-04-03
+ * @date 2007-04-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.37 $
+ * @version $Revision: 1.38 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.37 2007/04/03 20:20:25 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.38 2007/04/05 19:57:10 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,9 +48,9 @@ supervisor_guards_level::supervisor_guards_level ()
   player_indicators = controller_indicators::get_instance ();
   gigablitz = controller_gigablitz::get_instance ();
   game_over = controller_game_over::get_instance ();
-  ptCongBall = new controller_spheres ();
+  metallic_spheres = new controller_spheres ();
   popup_menu = new handler_popup_menu ();
-  ptBob_name = NULL;
+  sprite_playername = NULL;
 }
 
 /**
@@ -58,10 +58,13 @@ supervisor_guards_level::supervisor_guards_level ()
  */
 supervisor_guards_level::~supervisor_guards_level ()
 {
-  if (ptBob_name)
-    delete ptBob_name;
+  if (NULL != sprite_playername)
+    {
+      delete sprite_playername;
+      sprite_playername = NULL;
+    }
   delete popup_menu;
-  delete ptCongBall;
+  delete metallic_spheres;
   delete game_over;
   delete gigablitz;
   delete player_indicators;
@@ -118,15 +121,11 @@ supervisor_guards_level::first_init ()
   power_up_capsules->create_sprites_list (6);
   player_indicators->create_indicators_sprites ();
   explosions->create_explosions_list ();
-
   viewfinders_paddles->create_sprites_list ();
-
-  //mobile characters at the end of the level
+  /* mobile characters at the end of the level */
   fontes_game->create_sprites_list ();
-
   game_over->create_sprites_list ();
-
-  ptCongBall->create_sprites_list ();
+  metallic_spheres->create_sprites_list ();
 
   // intialize escape menu
   popup_menu->first_init (sprites_bitmap, 0,    //menu number
@@ -174,29 +173,20 @@ supervisor_guards_level::first_init ()
                           /* object which handles the display of the text (not * applicable) */
                           NULL);
 
-  //player_indicators->init_guard (paddles, money_indicator, ptBobLifes);
-
   //initialize mobile characters at the end of the level
   fontes_game->initialise (level_number, 32 * resolution);
-
   viewfinders_paddles->initialize ();
-
   display->unlock_surfaces ();
-
-
-
   keyboard->clear_command_keys ();
   keyboard->set_grab_input (true);
-
   sprite_display_scores *pOver = game_over->gtScorOver ();
-  ptBob_name = pOver->string2bob (current_player->get_name ());
-  sprites->add (ptBob_name);
-  ptBob_name->enable ();
-  ptBob_name->
+  sprite_playername = pOver->string2bob (current_player->get_name ());
+  sprites->add (sprite_playername);
+  sprite_playername->enable ();
+  sprite_playername->
     set_coordinates ((display->get_width () -
-                      ptBob_name->get_sprite_width ()) / 2, resolution);
-  ptBob_name->set_draw_method (sprite_object::COPY_FROM_BITMAP);
-
+                      sprite_playername->get_sprite_width ()) / 2, resolution);
+  sprite_playername->set_draw_method (sprite_object::COPY_FROM_BITMAP);
   if (is_verbose)
   {
     std::cout << ">supervisor_guards_level::first_init() End!" << std::endl;
@@ -233,22 +223,24 @@ supervisor_guards_level::main_loop ()
           bullets->disable_sprites ();
           if (is_victory)
             {
-              tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_CONGRATULATIONS, tilesmap_scrolling::MAP_CONGRATULATIONS);
-              ptCongBall->initialize ();        //congra
-              scrolSpeed = 1;
-              scrollTemp = 300;
+              //tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_CONGRATULATIONS, tilesmap_scrolling::MAP_CONGRATULATIONS);
+              metallic_spheres->initialize ();
+              scroll_speed = 1;
+              scroll_start_delay = 300;
             }
         }
       gameover_counter++;
       display->wait_frame ();
 
-      if (scrollTemp > 0)
+      if (scroll_start_delay > 0)
         {
-          scrollTemp--;
+          scroll_start_delay--;
           tiles_map->scroll (0);
         }
       else
-        tiles_map->scroll (scrolSpeed);
+        {
+          tiles_map->scroll (scroll_speed);
+        }
       
       display->lock_surfaces ();
 
@@ -257,7 +249,8 @@ supervisor_guards_level::main_loop ()
           game_over->execution1 (is_victory);
           if (is_victory)
             {
-              ptCongBall->execution1 ();  //congra
+              /* animate the metal spheres */
+              metallic_spheres->run ();
             }
         }
       viewfinders_paddles->run ();
@@ -285,7 +278,7 @@ supervisor_guards_level::main_loop ()
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
         {
           run_scroll ();
-          tiles_map->scroll (scrolSpeed);
+          tiles_map->scroll (scroll_speed);
           display->lock_surfaces ();
           paddles->move_paddle ();
           paddles->check_if_release_ball ();
@@ -395,26 +388,26 @@ void
 supervisor_guards_level::init_level ()
 {
   level_desc = ptLev_data->get_guardians_levels_params (area_number, level_number);
-  scrollType = level_desc->scroll_id;
-  scrollTemp = level_desc->scroll_delay;
-  scrolSpeed = 0;
+  scroll_type = level_desc->scroll_id;
+  scroll_start_delay = level_desc->scroll_delay;
+  scroll_speed = 0;
 }
 
-//------------------------------------------------------------------------------
-// manage scrolling speed
-//------------------------------------------------------------------------------
+/**
+ * Handle speed et behavior of the background scrolling
+ */
 void
 supervisor_guards_level::run_scroll ()
 {
-  if (scrollTemp > 0)
+  if (scroll_start_delay > 0)
     {
-      scrollTemp--;
-      scrolSpeed = 0;
+      scroll_start_delay--;
+      scroll_speed = 0;
       return;
     }
   sprite_bullet *bullet = bullets->get_last_bullet ();
   sprite_ball *ball = balls->first_ball ();
-  scrolSpeed = guards->get_scrolling_speed (scrollType, scrolSpeed, ball, bullet);
+  scroll_speed = guards->get_scrolling_speed (scroll_type, scroll_speed, ball, bullet);
 }
 
 //------------------------------------------------------------------------------
