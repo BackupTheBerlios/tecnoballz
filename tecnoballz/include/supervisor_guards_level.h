@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.h
  * @brief Guardians level supervisor 
  * @created 2003-01-11
- * @date 2007-04-05
+ * @date 2007-04-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.19 2007/04/05 19:57:10 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.20 2007/04/06 20:13:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,6 +89,8 @@ private:
   Sint32 count_next;            //temporisation before next level 
   /** If true game is finished, play game over with congratulations */
   bool is_victory; 
+  /** If true congratulations was already initialized  */
+  bool is_victory_initialized;
   controller_fontes_game *fontes_game;
 
 private:

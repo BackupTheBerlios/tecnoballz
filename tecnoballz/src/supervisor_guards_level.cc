@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-04-05
+ * @date 2007-04-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.38 $
+ * @version $Revision: 1.39 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.38 2007/04/05 19:57:10 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.39 2007/04/06 20:13:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,7 +95,9 @@ supervisor_guards_level::first_init ()
   end_return = 0;
   gameover_counter = 0;
   count_next = 0;
+  is_victory_initialized = false;
   is_victory = false;
+  is_victory = true;
   area_number = current_player->get_area_number ();
   level_number = current_player->get_level_number ();
   Sint32 grdP = current_player->getGuardPt ();
@@ -221,12 +223,13 @@ supervisor_guards_level::main_loop ()
           gigablitz->disable_sprites ();
           balls->disable_sprites ();
           bullets->disable_sprites ();
-          if (is_victory)
+          if (is_victory && !is_victory_initialized)
             {
-              //tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_CONGRATULATIONS, tilesmap_scrolling::MAP_CONGRATULATIONS);
               metallic_spheres->initialize ();
+              tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_CONGRATULATIONS, tilesmap_scrolling::MAP_CONGRATULATIONS);
               scroll_speed = 1;
               scroll_start_delay = 300;
+              is_victory_initialized = true;
             }
         }
       gameover_counter++;
