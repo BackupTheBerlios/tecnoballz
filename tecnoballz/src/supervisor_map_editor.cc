@@ -2,14 +2,14 @@
  * @file supervisor_map_editor.cc 
  * @brief The tile map editor for the menu and guardians levels 
  * @created 2004-09-13 
- * @date 2007-04-03
+ * @date 2007-04-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.18 2007/04/04 20:08:37 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.19 2007/04/07 20:24:57 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -284,6 +284,7 @@ supervisor_map_editor::view_tiles ()
     {
       tiles_ycoord = y_max;
     }
+  game_screen->clear ();
   game_screen->blit_surface (tiles_bitmap, 0, tiles_ycoord, 0, 0,
                              screen_width, screen_height);
   select_rectangle ();
@@ -312,8 +313,9 @@ supervisor_map_editor::tiles_to_brush ()
   /*
    * copy tiles offsets to brush map
    */
+  Uint32 width = tiles_bitmap->get_width() / tile_width; 
   Sint32 offset =
-    (current_selection->y1 / tile_width) * map_width +
+    (current_selection->y1 / tile_width) * width +
     (current_selection->x1 / tile_width);
   Uint16 *brush = tiles_brush;
   for (Uint32 y = 0; y < current_selection->number_of_raws; y++)
@@ -324,7 +326,7 @@ supervisor_map_editor::tiles_to_brush ()
           *(brush++) = index;
           index++;
         }
-      offset += map_width;
+      offset += width;
     }
   alloc_brush ();
 }
@@ -521,8 +523,8 @@ supervisor_map_editor::highlight_selection ()
     }
   Uint32 x1 = current_selection->x1;
   Uint32 x2 = current_selection->x2;
-  if (current_selection->y_offset > current_selection->y1  ||
-      current_selection->y_offset > current_selection->y2)
+  if (current_selection->y_offset > (Sint32)current_selection->y1  ||
+      current_selection->y_offset > (Sint32)current_selection->y2)
     {
       return;
     }
@@ -614,7 +616,7 @@ supervisor_map_editor::highlight_selection ()
         }
     }
 
-  /* left borser */
+  /* left border */
   screen = game_screen->get_pixel_data (x1, y2 - 1);
   for (Uint32 i = 1; i < height; i++)
     {
