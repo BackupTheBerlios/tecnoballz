@@ -5,11 +5,11 @@
  * @date 2007-04-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_spheres.cc,v 1.7 2007/04/06 20:13:40 gurumeditation Exp $
+ * $Id: controller_spheres.cc,v 1.8 2007/04/07 15:39:10 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ controller_spheres::controller_spheres ()
 {
   littleInit ();
   /* 8 metallics spheres */
-  max_of_sprites = 8;
+  max_of_sprites = 16;
   sprites_have_shades = true;
   sprites_have_shades = false;
   sprite_type_id = BOB_ARGENT;
@@ -83,67 +83,52 @@ controller_spheres::run ()
   const Sint16 *ptSin = handler_resources::zesinus360;
   const Sint16 *ptCos = handler_resources::cosinus360;
   Sint32 res = resolution;
-  Sint32 r_max = 360;
-  Sint32 rad_x = 80 * res;
-  Sint32 rad_y = 80 * res;
-  Sint32 centx = (160 * res) - (sprites_list[0]->sprite_width / 2);
-  Sint32 centy = (120 * res) - (sprites_list[0]->sprite_height / 2);
+  Sint32 angle_max = 360;
+  Sint32 horizontal_radius = 80 * res;
+  Sint32 vertical_radius = 80 * res;
 
   /* rotation speed variation */
   speed_rad4 = speed_rad4 + (random_counter & 3);
-  if (speed_rad4 >= r_max)
+  if (speed_rad4 >= angle_max)
     {
-      speed_rad4 -= r_max;
+      speed_rad4 -= angle_max;
     }
   Sint32 h = (ptSin[speed_rad4] * 2) >> 7;
   Sint32 v = (ptCos[speed_rad4] * 2) >> 7;
-  Sint32 sball = 4 + h + v;
-  if (0 == sball)
+  Sint32 sphere_speed = 4 + h + v;
+  if (0 == sphere_speed)
     {
-      sball = 1;
+      sphere_speed = 1;
     }
 
   // varie pointeur
-  speed_rad3 = speed_rad3 + (random_counter & 7);
-  if (speed_rad3 >= r_max)
-    {
-      speed_rad3 -= r_max;
-    }
+  speed_rad3 = (speed_rad3 + (random_counter & 7)) % angle_max;
   h = (ptSin[speed_rad3] * 3) >> 7;
   v = (ptCos[speed_rad3] * 3) >> 7;
-  Sint32 incRd = h + v + 6;
+  Sint32 radius_inc = h + v + 6;
 
   /* horizontal radius variation */
-  speed_rad1 = speed_rad1 + incRd;
-  if (speed_rad1 >= r_max)
-    {
-      speed_rad1 -= r_max;
-    }
+  speed_rad1 = (speed_rad1 + radius_inc) % angle_max;
   h = (ptSin[speed_rad1] * 30 * res) >> 7;
   v = (ptCos[speed_rad1] * 30 * res) >> 7;
-  rad_x = rad_x + h + v;
+  horizontal_radius = horizontal_radius + h + v;
 
   /* vertical radius variation */
-  speed_rad2 = speed_rad2 + incRd;
-  if (speed_rad2 >= r_max)
-    {
-      speed_rad2 -= r_max;
-    }
+  speed_rad2 = (speed_rad2 + radius_inc) % angle_max;
   h = (ptSin[speed_rad2] * 15 * res) >> 7;
   v = (ptCos[speed_rad2] * 15 * res) >> 7;
-  rad_y = rad_y + h + v;
+  vertical_radius = vertical_radius + h + v;
+  
+  Sint32 x_center = (160 * res) - (sprites_list[0]->sprite_width / 2);
+  Sint32 y_center = (120 * res) - (sprites_list[0]->sprite_height / 2);
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_object *sphere = sprites_list[i];
-      sphere->x_maximum += sball;
-      if (sphere->x_maximum >= r_max)
-        {
-          sphere->x_maximum -= r_max;
-        }
-      Sint32 xcoord = (ptSin[sphere->x_maximum] * rad_x) >> 7;
-      Sint32 ycoord = (ptCos[sphere->x_maximum] * rad_y) >> 7;
-      xcoord += centx;
-      ycoord += centy;
+      sphere->x_maximum = (sphere->x_maximum + sphere_speed) % angle_max;
+      Sint32 xcoord = (ptSin[sphere->x_maximum] * horizontal_radius) >> 7;
+      Sint32 ycoord = (ptCos[sphere->x_maximum] * vertical_radius) >> 7;
+      xcoord += x_center;
+      ycoord += y_center;
       sphere->x_coord = xcoord;
       sphere->y_coord = ycoord;
     }
