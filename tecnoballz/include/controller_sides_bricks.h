@@ -2,14 +2,14 @@
  * @file controller_sides_bricks.h
  * @brief Sides bricks controller. The small bricks on the side, the walls top
  *        left and right
- * @date 2007-02-14
+ * @date 2007-04-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.h,v 1.2 2007/02/14 07:15:30 gurumeditation Exp $
+ * $Id: controller_sides_bricks.h,v 1.3 2007/04/08 17:28:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,49 +36,79 @@ class controller_sides_bricks;
 #include "../include/tecnoballz.h"
 //...............................................................................
 
-//-----------------------------------------------------------------------------
-// struct of the redraw bricks table
-//-----------------------------------------------------------------------------
-typedef struct
-{
-  Sint32 iCote_type;            //1=bricote haut ; 2=droite ; 3=gauche
-  Sint32 iMapOffset;            //pointer to the background buffer
-} coteStruct;
-
 class controller_sides_bricks:public objects_list < sprite_object,
   controller_sides_bricks >
 {
 public:
   /** Maximum number of bricks per wall */
   static const Uint32 MAX_OF_SIDES_BRICKS = 12;
-
 private:
-  static const Uint32 BRICOTEGAX = 12;  //x coordinate (bricks of left)
-  static const Uint32 BRICOTEGAY = 24;  //y coordinate (bricks of left)
-  static const Uint32 BRICOTEDRX = 240; //x coordinate (bricks of right)
-  static const Uint32 BRICOTEDRY = 24;  //y coordinate (bricks of right)
-  static const Uint32 BRICOTEHRX = 32;  //x coordinate (bricks of top)
-  static const Uint32 BRICOTEHRY = 4;   //y coordinate (bricks of top)
+  typedef enum 
+    {
+      TOP_WALL = 1,
+      RIGHT_WALL,
+      LEFT_WALL
+    } WALLS_ENUM;
 
-  static const Uint32 iMAXBRICOT = 64;
+/**
+ * Structure for redraw side bricks
+ */
+typedef struct
+{
+  /** Wall identifier TOP_WALL, RIGHT_WALL or LEFT_WALL */
+  Uint32 wall_id;
+  /** Index of the side brick from 0 to 11 */
+  Uint32 side_brick_index;
+} restaure_struct;
 
+  static const Uint32 MAX_OF_RESTORED_BRICKS = 64;
+  /** X-coordinate of the left wall */
+  static const Uint32 XCOORD_LEFT_WALL = 12;
+  /** Y-coordinate of the left wall */
+  static const Uint32 YCOORD_LEFT_WALL = 24;
+  /** X-coordinate of the right wall */
+  static const Uint32 XCOORD_RIGHT_WALL = 240;
+  /** Y-coordinate of the right wall */
+  static const Uint32 YCOORD_RIGHT_WALL = 24;
+  /** X-coordinate of the top wall */
+  static const Uint32 XCOORD_TOP_WALL = 32;
+  /** Y-coordinate of the top wall */
+  static const Uint32 YCOORD_TOP_WALL = 4;
+  /** X-coordinate of the left wall */
+  Uint32 xcoord_left_wall;
+  /** Y-coordinate of the left wall */
+  Uint32 ycoord_left_wall;
+  /** X-coordinate of the right wall */
+  Uint32 xcoord_right_wall;
+  /** Y-coordinate of the right wall */
+  Uint32 ycoord_right_wall;
+  /** X-coordinate of the top wall */
+  Uint32 xcoord_top_wall;
+  /** Y-coordinate of the top wall */
+  Uint32 ycoord_top_wall;
   /** Small horizontal side brick */
   sprite_object *horizontal_brick;
   /** Small vertical side brick */
   sprite_object *vertical_brick;
   char *fond_sauve;             //buffer to save background under bricks
+  /** Bitmap surface to save background under top bricks */
+  bitmap_data *background_top_side;
+  /** Bitmap surface to save background under right bricks */
+  bitmap_data *background_right_side;
+  /** Bitmap surface to save background under left bricks */
+  bitmap_data *background_left_side;
   /** True if the wall of the top is breakable */
   bool is_top_wall_breakable;
   /** True if the wall of the right is breakable */
   bool is_right_wall_breakable;
   /** True if the wall of the left is breakable */
   bool is_left_wall_breakable;
-  Sint32 fconstruit;            //1=rebuild wall
-
-  Sint32 collisionG;            //x coordinate of the wall of the left
-  Sint32 collisionD;            //x coordinate of the wall of the right
-  Sint32 collisionH;            //y coordinate of the wall of the top
-
+  /** Collision x-coordinate of the left wall */
+  Sint32 left_collision_xcoord;
+  /** Collision x-coordinate of the right wall */
+  Sint32 right_collision_xcoord;
+  /** Collision y-coordinate of the top wall */
+  Sint32 top_collision_ycoord;
   bool map_top_side[MAX_OF_SIDES_BRICKS + 4];
   bool map_right_side[MAX_OF_SIDES_BRICKS + 4];
   bool map_left_side[MAX_OF_SIDES_BRICKS + 4];
@@ -110,22 +140,22 @@ private:
   /** Height of a vertical side brick in pixels */
   Uint32 vertical_brick_height;
 
-  coteStruct *pCoteTable;       //redraw bricks table
-  Sint32 iCoteSauve;
-  Sint32 iCoteRemap;
+  restaure_struct *restore_background;       //redraw bricks table
+  Uint32 restore_save_index;
+  Uint32 restore_index;
 
 public:
     controller_sides_bricks ();
    ~controller_sides_bricks ();
-  Sint32 initialise (Sint32 build);
-  void sauve_etat ();
-  void sauveFond ();
-  void execution1 ();
-  void afficheSha ();
-  void afficheGfx ();
-  Sint32 getCollisH ();
-  Sint32 getCollisD ();
-  Sint32 getCollisG ();
+  Sint32 initialize (bool build);
+  void save_state_of_walls ();
+  void save_background ();
+  void run ();
+  void draw_shadows_to_brackground ();
+  void draw_to_brackground ();
+  Sint32 get_top_ycoord ();
+  Sint32 get_right_xcoord ();
+  Sint32 get_left_xcoord ();
   bool collision_with_left_wall (Sint32 ycoord);
   bool collision_with_right_wall (Sint32 ycoord);
   bool collision_with_top_wall (Sint32 xcoord);

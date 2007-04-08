@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-02-26
+ * @date 2007-04-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.31 2007/02/26 21:29:23 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.32 2007/04/08 17:28:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -154,7 +154,7 @@ controller_balls::run_in_bricks_levels ()
   collision_with_walls ();
   vitusEject ();                //collisions balls and ejectors
   check_collisions_with_ships ();
-  vitus_eyes ();
+  check_collisions_with_eyes ();
   /* control balls with the left mouse button */
   controll_balls ();
   time_2tilt ();
@@ -947,11 +947,11 @@ controller_balls::collision_with_walls ()
 {
   controller_sides_bricks *sides_bricks =
     controller_sides_bricks::get_instance ();
-  Sint32 murGa = sides_bricks->getCollisG ();
-  Sint32 murDr = sides_bricks->getCollisD ();
-  Sint32 murHt = sides_bricks->getCollisH ();
-  Sint32 murBa = ptBob_wall->get_y_coord ();
-  Sint32 fwall = ptBob_wall->is_enable ();
+  Sint32 left_xcoord = sides_bricks->get_left_xcoord ();
+  Sint32 right_xcoord = sides_bricks->get_right_xcoord ();
+  Sint32 top_ycoord = sides_bricks->get_top_ycoord ();
+  Sint32 bottom_ycoord = ptBob_wall->get_y_coord ();
+  bool is_wall = ptBob_wall->is_enable ();
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];
@@ -964,14 +964,14 @@ controller_balls::collision_with_walls ()
       Sint32 *monPT = NULL;
 
       /* collision with the bottom wall, if it's enable */
-      if (fwall && y > (murBa - ball->collision_height))
+      if (is_wall && y > (bottom_ycoord - ball->collision_height))
         {
           monPT = rb7;
         }
       else
         {
           /* collision with the left wall */
-          if (x < murGa)
+          if (x < left_xcoord)
             {
               if (sides_bricks->collision_with_left_wall (y))
                 {
@@ -982,7 +982,7 @@ controller_balls::collision_with_walls ()
             {
               /* collision with the right wall */
               x += ball->collision_width;
-              if (x > murDr)
+              if (x > right_xcoord)
                 {
                   if (sides_bricks->collision_with_right_wall (y))
                     monPT = rb1;
@@ -990,7 +990,7 @@ controller_balls::collision_with_walls ()
               else
                 {
                   /* collision with the up wall */
-                  if (y < murHt)
+                  if (y < top_ycoord)
                     {
                       if (sides_bricks->collision_with_top_wall (x))
                         monPT = rb3;
@@ -1011,64 +1011,65 @@ controller_balls::collision_with_walls ()
     }
 }
 
-//------------------------------------------------------------------------------
-// guards levels: handle the collision with the 3 walls
-//------------------------------------------------------------------------------
+/**
+ * Collisions of the balls with the 3 walls in the guarduans levels
+ */
 void
 controller_balls::vituscote2 ()
 {
-  Sint32 murGa = 16 * resolution;
-  Sint32 murDr = 300 * resolution;
-  Sint32 murHt = 8 * resolution;
+  Sint32 left_xcoord = 16 * resolution;
+  Sint32 right_xcoord = 300 * resolution;
+  Sint32 top_ycoord = 8 * resolution;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball *balle = sprites_list[i];
-      if (balle->is_enabled)
+      sprite_ball *ball = sprites_list[i];
+      if (!ball->is_enabled)
         {
-          Sint32 x = balle->x_coord;
-          Sint32 y = balle->y_coord;
+          continue;
+        }
+          Sint32 x = ball->x_coord;
+          Sint32 y = ball->y_coord;
           Sint32 *monPT = 0;
-          if (x < murGa)
+          if (x < left_xcoord)
             {
               monPT = rb5;
-              balle->x_coord = murGa;
+              ball->x_coord = left_xcoord;
 #ifndef SOUNDISOFF
               audio->play_sound (S_BRICOTES);
 #endif
-              balle->colli_wall = 4;
+              ball->colli_wall = 4;
             }
           else
             {
-              if (x > murDr)
+              if (x > right_xcoord)
                 {
                   monPT = rb1;
-                  balle->x_coord = murDr;
+                  ball->x_coord = right_xcoord;
 #ifndef SOUNDISOFF
                   audio->play_sound (S_BRICOTES);
 #endif
-                  balle->colli_wall = 2;
+                  ball->colli_wall = 2;
                 }
               else
                 {
-                  if (y < murHt)
+                  if (y < top_ycoord)
                     {
                       monPT = rb3;
-                      balle->y_coord = murHt;
+                      ball->y_coord = top_ycoord;
 #ifndef SOUNDISOFF
                       audio->play_sound (S_BRICOTES);
 #endif
-                      balle->colli_wall = 3;
+                      ball->colli_wall = 3;
                     }
                   else
-                    balle->colli_wall = 0;
+                    ball->colli_wall = 0;
                 }
             }
           if (monPT)
-            {                   //(char *)monPT += balle->directBall;
-              monPT = (Sint32 *) ((char *) monPT + balle->directBall);
-              balle->directBall = *monPT;
+            {                   //(char *)monPT += ball->directBall;
+              monPT = (Sint32 *) ((char *) monPT + ball->directBall);
+              ball->directBall = *monPT;
             }
-        }
     }
 }
 
@@ -1231,103 +1232,135 @@ controller_balls::check_bricks_collision ()
     }                           // ball loop
 }
 
-//----------------------------------------------------------------------
-// bricks levels: collision of balls with eyes
-//----------------------------------------------------------------------
+/**
+ * Collisions between balls and eyes
+ */
 void
-controller_balls::vitus_eyes ()
+controller_balls::check_collisions_with_eyes ()
 {
-
   controller_magnetic_eyes *eyes = controller_magnetic_eyes::get_instance ();
-  Sint32 vhypo = eyes->hypotenuse;
+  Sint32 hypo = eyes->hypotenuse;
   sprite_ball **liste = sprites_list;
-  Sint32 nbEye = eyes->get_max_of_sprites ();
+  Sint32 numof_eyes = eyes->get_max_of_sprites ();
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball *balle = *(liste++);
-      if (!balle->is_enabled)
-        continue;
-      sprite_eye **pEyes = eyes->get_sprites_list ();
-      for (Sint32 j = 0; j < nbEye; j++)
+      sprite_ball *ball = *(liste++);
+      if (!ball->is_enabled)
         {
-          sprite_eye *ptEye = *(pEyes++);
-          if (!ptEye->is_enabled)
-            continue;
-          Sint32 centX = ptEye->x_coord + eyes->eyeCenterX;
-          Sint32 centY = ptEye->y_coord + eyes->eyeCenterY;
-
-          Sint32 deltX =
-            balle->x_coord + (balle->collision_width / 2) - centX;
-          deltX = deltX * deltX;
-          Sint32 deltY =
-            balle->y_coord + (balle->collision_width / 2) - centY;
-          deltY = deltY * deltY;
-          if (deltX + deltY >= vhypo)
-            continue;
-
-          deltX = balle->x_coord + (balle->collision_width / 2) - centX;
-          deltY = balle->y_coord + (balle->collision_width / 2) - centY;
-
-          if (deltY == 0)
+          continue;
+        }
+      sprite_eye **eyes_list = eyes->get_sprites_list ();
+      for (Sint32 j = 0; j < numof_eyes; j++)
+        {
+          sprite_eye *eye = *(eyes_list++);
+          if (!eye->is_enabled)
             {
-              if (deltX < 0)
-                balle->directBall = 32;
+              continue;
+            }
+          Sint32 center_x = eye->x_coord + eyes->center_x;
+          Sint32 center_y = eye->y_coord + eyes->center_y;
+          Sint32 delta_x =
+            ball->x_coord + (ball->collision_width / 2) - center_x;
+          delta_x = delta_x * delta_x;
+          Sint32 delta_y =
+            ball->y_coord + (ball->collision_width / 2) - center_y;
+          delta_y = delta_y * delta_y;
+          if (delta_x + delta_y >= hypo)
+            {
+              continue;
+            }
+          delta_x = ball->x_coord + (ball->collision_width / 2) - center_x;
+          delta_y = ball->y_coord + (ball->collision_width / 2) - center_y;
+          if (delta_y == 0)
+            {
+              if (delta_x < 0)
+               {
+                  ball->directBall = 32;
+               }
               else
-                balle->directBall = 0;
+               {
+                  ball->directBall = 0;
+               }
             }
 
-          // DELTA Y>0
-          if (deltY > 0)
+          if (delta_y > 0)
             {
-              if (deltX == 0)
-                balle->directBall = 48;
-              if (deltX < 0)
+              if (delta_x == 0)
                 {
-                  deltX = -deltX;
-                  if (deltX == deltY)
-                    balle->directBall = 40;
-                  if (deltX < deltY)
-                    balle->directBall = 44;
-                  else
-                    balle->directBall = 36;
+                  ball->directBall = 48;
                 }
-              else
+              if (delta_x < 0)
                 {
-                  if (deltX == deltY)
-                    balle->directBall = 56;
-                  if (deltX < deltY)
-                    balle->directBall = 52;
+                  delta_x = -delta_x;
+                  if (delta_x == delta_y)
+                    {
+                      ball->directBall = 40;
+                    }
+                  if (delta_x < delta_y)
+                    {
+                      ball->directBall = 44;
+                    }
                   else
-                    balle->directBall = 56;
-                }
-            }
-
-          if (deltY < 0)
-            {
-              deltY = -deltY;
-              if (deltX == 0)
-                balle->directBall = 16;
-              if (deltX < 0)
-                {
-                  deltX = -deltX;
-                  if (deltX == deltY)
-                    balle->directBall = 24;
-                  if (deltX < deltY)
-                    balle->directBall = 20;
-                  else
-                    balle->directBall = 28;
+                    {
+                      ball->directBall = 36;
+                    }
                 }
               else
                 {
-                  if (deltX == deltY)
-                    balle->directBall = 8;
-                  if (deltX < deltY)
-                    balle->directBall = 12;
+                  if (delta_x == delta_y)
+                    {
+                      ball->directBall = 56;
+                    }
+                  if (delta_x < delta_y)
+                    {
+                      ball->directBall = 52;
+                    }
                   else
-                    balle->directBall = 4;
+                    {
+                      ball->directBall = 56;
+                    }
                 }
             }
 
+          if (delta_y < 0)
+            {
+              delta_y = -delta_y;
+              if (delta_x == 0)
+                {
+                  ball->directBall = 16;
+                }
+              if (delta_x < 0)
+                {
+                  delta_x = -delta_x;
+                  if (delta_x == delta_y)
+                    {
+                      ball->directBall = 24;
+                    }
+                  if (delta_x < delta_y)
+                    {
+                      ball->directBall = 20;
+                    }
+                  else
+                    {
+                      ball->directBall = 28;
+                    }
+                }
+              else
+                {
+                  if (delta_x == delta_y)
+                    {
+                      ball->directBall = 8;
+                    }
+                  if (delta_x < delta_y)
+                    {
+                      ball->directBall = 12;
+                    }
+                  else
+                    {
+                      ball->directBall = 4;
+                    }
+                }
+            }
         }
     }
 }

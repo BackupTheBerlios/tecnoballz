@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-04-03
+ * @date 2007-04-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.41 $
+ * @version $Revision: 1.42 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.41 2007/04/03 13:43:13 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.42 2007/04/08 17:28:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -138,9 +138,7 @@ supervisor_bricks_level::first_init ()
   paddles->init_robot ();
   bool is_rebuild = current_player->is_rebuild_walls ();
   current_player->set_rebuild_walls (false);
-  error_init (sides_bricks->initialise (is_rebuild));
-  if (erreur_num)
-    return erreur_num;
+  sides_bricks->initialize (is_rebuild);
   ejectors_corners->create_ejectors_sprites ();
   game_over->create_sprites_list ();
   balls->create_sprites_list ();
@@ -161,15 +159,10 @@ supervisor_bricks_level::first_init ()
   /* initialize controller of the big letters animated composing the word
    * "game over"  */
   game_over->first_init ();
-
   head_anim->load_bitmap ();
-
   init_level ();
-
-
-  //panel_score->first_init (balls);
-
-  background ();
+  /* draw ejectors and side walls */
+  initialize_background ();
   paddles->init_paddles (gigablitz, balls);
 
   /* balls initialization */
@@ -278,7 +271,7 @@ supervisor_bricks_level::main_loop ()
         }
       if (!bricks->update () && isgameover < 2) //restore bricks
         isgameover = 2;
-      sides_bricks->execution1 ();
+      sides_bricks->run ();
       viewfinders_paddles->run ();
       ships->move ();
       sprites->draw ();
@@ -304,7 +297,7 @@ supervisor_bricks_level::main_loop ()
       display->lock_surfaces ();
       sprites->clear ();
       bricks->update ();        //restore bricks
-      sides_bricks->execution1 ();        //restore bricks on side
+      sides_bricks->run ();
       changebkgd ();
 
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
@@ -326,7 +319,7 @@ supervisor_bricks_level::main_loop ()
           viewfinders_paddles->run ();
           sprite_projectile::gestionTir ();
           ships->move ();
-          magnetic_eyes->execution1 ();
+          magnetic_eyes->move ();
           money_capsules->move ();
           power_up_capsules->move_in_bricks_level ();
           power_up_capsules->check_cheat_keys ();
@@ -371,7 +364,7 @@ supervisor_bricks_level::main_loop ()
               if (count_next > 20000000 ||
                   keyboard->key_is_pressed (SDLK_SPACE) || music_finished)
                 {
-                  sides_bricks->sauve_etat ();
+                  sides_bricks->save_state_of_walls ();
                   current_player = handler_players::nextplayer (current_player,
                                                        &end_return, 1);
 #ifndef SOUNDISOFF
@@ -472,7 +465,7 @@ supervisor_bricks_level::changebkgd ()
       if (is_verbose)
         printf ("supervisor_bricks_level::background() : changebkgd:%i\n",
                 indexbgrnd);
-      background (indexbgrnd);
+      initialize_background (indexbgrnd);
       background_screen->blit_to_surface (game_screen);
     }
 
@@ -509,39 +502,41 @@ supervisor_bricks_level::changebkgd ()
 #endif
 }
 
-//-------------------------------------------------------------------------------
-// initialize background
-//-------------------------------------------------------------------------------
-Sint32
-supervisor_bricks_level::background (Sint32 nbkdg)
+/** 
+ * Initialize the background, draw tiles side bricks and bicks
+ * @param bkg_num tileset number, if negative then the
+ *                tilesset number depends on the current level number 
+ */
+void
+supervisor_bricks_level::initialize_background (Sint32 bkg_num)
 {
-  if (nbkdg == -1)
+  if (bkg_num < 0)
     {
-      nbkdg = ((area_number - 1) * 10) + level_number;
+      bkg_num = ((area_number - 1) * 10) + level_number;
       if (level_number > 5)
-        nbkdg--;
+        {
+          bkg_num--;
+        }
       if (is_verbose)
-        printf ("supervisor_bricks_level::background() : nbkdg = %i\n",
-                nbkdg);
+        {
+          std::cout << "supervisor_bricks_level::initialize_background() " <<
+            "background number: " <<bkg_num << std::endl;
+        }
     }
-
-  /* Initialize and draw the tiles background */
-  tiles_ground->setup (nbkdg);
-
+  /* initialize and draw the tiles background */
+  tiles_ground->setup (bkg_num);
   /* short info messages displayed */
   info_messages->intialize ();
-
-  //###################################################################
-  // display the ejectors and small bricks
-  //###################################################################
+  /* draw shadows of ejectors */
   ejectors_corners->draw_shadow ();
-  sides_bricks->sauveFond ();     //save background under small bricks
-  sides_bricks->afficheSha ();    //display small bricks shadows
-  sides_bricks->afficheGfx ();    //display small bricks of the three walls
+  /* save background under small bricks */
+  sides_bricks->save_background ();
+  /* draw shadows of small bricks */
+  sides_bricks->draw_shadows_to_brackground ();
+  /* draw small bricks of the three walls */
+  sides_bricks->draw_to_brackground ();
   ejectors_corners->draw ();
-
   /* intialize the bricks level */
   bricks->first_init ();
   bricks->initialize ();
-  return erreur_num;
 }

@@ -1,15 +1,15 @@
-/** 
+/**
  * @file controller_magnetic_eyes.cc 
  * @brief Magectic eyes controller 
  * @created 2004-09-17 
- * @date 2007-02-15
+ * @date 2007-04-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_magnetic_eyes.cc,v 1.3 2007/02/15 20:52:43 gurumeditation Exp $
+ * $Id: controller_magnetic_eyes.cc,v 1.4 2007/04/08 17:28:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,127 +49,132 @@ controller_magnetic_eyes::~controller_magnetic_eyes ()
   release_sprites_list ();
 }
 
-
-//-----------------------------------------------------------------------------
-// enable a new eye
-//-----------------------------------------------------------------------------
-Sint32
-controller_magnetic_eyes::create_eye ()
+/**
+ * Enable a new eye
+ * @return true if an eye was activated
+ */
+bool controller_magnetic_eyes::create_eye ()
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_eye *ptEye = sprites_list[i];
-      if (ptEye->is_enabled)
-        continue;
-      ptEye->is_enabled = 1;
-      return 1;
+      sprite_eye *
+      eye = sprites_list[i];
+      if (eye->is_enabled)
+        {
+          continue;
+        }
+      eye->is_enabled = true;
+      return true;
     }
-  return 0;
+  return false;
 }
 
-//-----------------------------------------------------------------------------
-// initialize eyes
-//-----------------------------------------------------------------------------
+/**
+ * Create a initialize eyes sprites
+ */
 void
 controller_magnetic_eyes::create_eyes_list ()
 {
+  Sint32 res = resolution;
   create_sprites_list ();
-  Sint32 hval = random_counter;
+  Sint32 random = random_counter;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_eye *ptEye = sprites_list[i];
-      ptEye->centerPosx = Xcoordinat[hval & 31] * resolution;
+      sprite_eye *eye = sprites_list[i];
+      eye->centerPosx = x_coordinates[random & 31] * res;
 #if __WORDSIZE == 64
-      hval += (long) ptEye;
+      random += (long) eye;
 #else
-      hval += (Sint32) ptEye;
+      random += (Sint32) eye;
 #endif
-      ptEye->centerPosy = Ycoordinat[hval & 31] * resolution;
-      hval += keyboard->get_mouse_y ();
-      ptEye->finishPosx = Xcoordinat[hval & 31] * resolution;
-      hval += keyboard->get_mouse_x ();
-      ptEye->finishPosy = Ycoordinat[hval & 31] * resolution;
-      hval++;
-      ptEye->radius_360 = 0;
-
+      eye->centerPosy = y_coordinates[random & 31] * res;
+      random += keyboard->get_mouse_y ();
+      eye->finishPosx = x_coordinates[random & 31] * res;
+      random += keyboard->get_mouse_x ();
+      eye->finishPosy = y_coordinates[random & 31] * res;
+      random++;
+      eye->radius_360 = 0;
     }
-  hypotenuse = sprites_list[0]->collision_width - resolution * 2;
-  eyeCenterX = hypotenuse / 2;
-  eyeCenterY = eyeCenterX;
+  /* value used for the collisions with balls */
+  hypotenuse = sprites_list[0]->collision_width - res * 2;
+  center_x = hypotenuse / 2;
+  center_y = center_x;
   hypotenuse = hypotenuse * hypotenuse;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+/**
+ * Move all eyes
+ */
 void
-controller_magnetic_eyes::execution1 ()
+controller_magnetic_eyes::move ()
 {
-  Sint32 hval = random_counter;
+  Sint32 random = random_counter;
+  Sint32 res = resolution;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_eye *ptEye = sprites_list[i];
-      //if(!ptEye->is_enabled) continue;
-      ptEye->play_animation_loop ();
+      sprite_eye *eye = sprites_list[i];
+      eye->play_animation_loop ();
 
-      //###############################################################
-      // verify if coordinates of center arrived at destination.
-      //###############################################################
-      Sint32 j = 3 * resolution;
-      if (ptEye->centerPosx > ptEye->finishPosx - j &&
-          ptEye->centerPosx < ptEye->finishPosx + j &&
-          ptEye->centerPosy > ptEye->finishPosy - j &&
-          ptEye->centerPosy < ptEye->finishPosy + j)
+      /* verify if center coordinates arrived at destination */
+      Sint32 j = 3 * res;
+      if (eye->centerPosx > eye->finishPosx - j &&
+          eye->centerPosx < eye->finishPosx + j &&
+          eye->centerPosy > eye->finishPosy - j &&
+          eye->centerPosy < eye->finishPosy + j)
         {
-          hval += keyboard->get_mouse_y ();
-          ptEye->finishPosx = Xcoordinat[hval & 31] * resolution;
-          hval += keyboard->get_mouse_x ();
-          ptEye->finishPosy = Ycoordinat[hval & 31] * resolution;
+          random += keyboard->get_mouse_y ();
+          eye->finishPosx = x_coordinates[random & 31] * res;
+          random += keyboard->get_mouse_x ();
+          eye->finishPosy = y_coordinates[random & 31] * res;
         }
 
-
-
-      //###############################################################
-      // move center 
-      //###############################################################
-      Sint32 inc_x = resolution;
-      Sint32 inc_y = resolution;
-      Sint32 deltX = ptEye->finishPosx - ptEye->centerPosx;
-      if (deltX < 0)
+      /* move center */
+      Sint32 inc_x = res;
+      Sint32 inc_y = res;
+      Sint32 delta_x = eye->finishPosx - eye->centerPosx;
+      if (delta_x < 0)
         {
-          deltX = -deltX;
-          inc_x = -resolution;
+          delta_x = -delta_x;
+          inc_x = -res;
         }
-      Sint32 deltY = ptEye->finishPosy - ptEye->centerPosy;
-      if (deltY < 0)
+      Sint32 delta_y = eye->finishPosy - eye->centerPosy;
+      if (delta_y < 0)
         {
-          deltY = -deltY;
-          inc_y = -resolution;
+          delta_y = -delta_y;
+          inc_y = -res;
         }
       Sint32 hflag = 0;
-      if (deltY > deltX)
+      if (delta_y > delta_x)
         {
-          j = deltY;
-          deltY = deltX;
-          deltX = j;
+          j = delta_y;
+          delta_y = delta_x;
+          delta_x = j;
           hflag = 1;
         }
-      Sint32 value = deltY * 2 - deltX;
-      deltX *= 2;
-      j = deltX - 1;
+      Sint32 value = delta_y * 2 - delta_x;
+      delta_x *= 2;
+      j = delta_x - 1;
       do
         {
           if (hflag)
-            ptEye->centerPosy += inc_y;
+            {
+              eye->centerPosy += inc_y;
+            }
           else
-            ptEye->centerPosx += inc_x;
-          value -= deltX;
+            {
+              eye->centerPosx += inc_x;
+            }
+          value -= delta_x;
           if (value < 0)
             {
               if (!hflag)
-                ptEye->centerPosy += inc_y;
+                {
+                  eye->centerPosy += inc_y;
+                }
               else
-                ptEye->centerPosx += inc_x;
+                {
+                  eye->centerPosx += inc_x;
+                }
               break;
             }
           j--;
@@ -177,37 +182,29 @@ controller_magnetic_eyes::execution1 ()
       while (j >= 0);
 
 
-      //###############################################################
-      // move circle
-      //###############################################################
-      ptEye->radius_360 += 4;
-      if (ptEye->radius_360 >= 360)
-        ptEye->radius_360 -= 360;
+      /* move circle */
+      eye->radius_360 = (eye->radius_360 + 4) % 360;
       Sint32 x =
-        (handler_resources::zesinus360[ptEye->radius_360] * 10 *
-         resolution) >> 7;
+        (handler_resources::zesinus360[eye->radius_360] * 10 * res) >> 7;
       Sint32 y =
-        (handler_resources::cosinus360[ptEye->radius_360] * 10 *
-         resolution) >> 7;
-      ptEye->x_coord = ptEye->centerPosx + x + (15 * resolution);
-      ptEye->y_coord = ptEye->centerPosy + y + (15 * resolution);
-
-      /*
-         ptEye->x_coord = ptEye->centerPosx;
-         ptEye->y_coord = ptEye->centerPosy; */
-
-      hval += 4;
+        (handler_resources::cosinus360[eye->radius_360] * 10 * res) >> 7;
+      eye->x_coord = eye->centerPosx + x + (15 * res);
+      eye->y_coord = eye->centerPosy + y + (15 * res);
+      random += 4;
     }
 }
 const Uint16
-  controller_magnetic_eyes::Xcoordinat[32] =
-  { 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 92, 96, 100, 105, 111, 115,
-  118, 120, 122, 128, 130, 132, 135, 140, 144, 146, 150, 152, 160, 164, 166,
+controller_magnetic_eyes::x_coordinates[32] =
+  {
+    40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 92, 96, 100, 105, 111, 115,
+    118, 120, 122, 128, 130, 132, 135, 140, 144, 146, 150, 152, 160, 164, 166,
     170
-};
-const Uint16
-  controller_magnetic_eyes::Ycoordinat[32] =
-  { 40, 44, 56, 58, 60, 62, 70, 78, 80, 82, 85, 90, 92, 94, 96, 100,
-  101, 120, 122, 124, 130, 138, 144, 146, 148, 150, 152, 153, 154, 155, 160,
+  };
+const
+Uint16
+controller_magnetic_eyes::y_coordinates[32] =
+  {
+    40, 44, 56, 58, 60, 62, 70, 78, 80, 82, 85, 90, 92, 94, 96, 100,
+    101, 120, 122, 124, 130, 138, 144, 146, 148, 150, 152, 153, 154, 155, 160,
     170
-};
+  };

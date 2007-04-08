@@ -1,14 +1,14 @@
-/** 
+ /**
  * @file sprite_object.cc 
  * @brief Draw sprites on the screen 
- * @date 2007-02-24
+ * @date 2007-04-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.29 2007/03/31 21:31:21 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.30 2007/04/08 17:28:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1366,54 +1366,62 @@ sprite_object::afficheSHA ()
 #endif
 }
 
-//------------------------------------------------------------------------------
-// display a sprite into the "tampon" (build the background)
-//------------------------------------------------------------------------------
+/**
+ * Draw a sprite in the brackground surface.
+ * (build the background before a bricks level)
+ */
 void
-sprite_object::affich_MSK ()
+sprite_object::draw_to_brackground ()
 {
   restore_ptr = background_screen->get_pixel_data (x_coord, y_coord);
-  Uint16 *gfxP1 = (Uint16 *) current_drawing_values;        //offset and loop counter
-  Uint32 t = (Uint32) * (gfxP1++);
+  /* offsets and counters of loops for copies */
+  Uint16 *counters = (Uint16 *) current_drawing_values;
+  /* height of the sprite in pixels */
+  Uint32 h = (Uint32) * (counters++);
 #ifndef BYTES_COPY
-  Sint32 *adres = (Sint32 *) background_screen->get_pixel_data (x_coord, y_coord);
-  screen_ptr = (char *) adres;
-  Sint32 *gfxP2 = (Sint32 *) current_drawing_data;        //pixels
-  for (Uint32 i = 0; i < t; i++)
+  Sint32 *background32 = (Sint32 *) background_screen->get_pixel_data (x_coord, y_coord);
+  screen_ptr = (char *) background32;
+  Sint32 *pixels32 = (Sint32 *) current_drawing_data;
+  for (Uint32 i = 0; i < h; i++)
     {
-      Sint16 o = *(gfxP1++);    //offset
-      adres = (Sint32 *) ((char *) adres + o);
-      o = *(gfxP1++);           //number of longwords contigus
-      for (Sint32 k = 0; k < o; k++)
+      /* offset */
+      Sint16 k = *(counters++);
+      background32 = (Sint32 *) ((char *) background32 + k);
+      /* number of contiguous long words */
+      k = *(counters++);
+      for (Sint32 j = 0; j < k; j++)
         {
-          Sint32 j = *(gfxP2++);
-          *(adres++) = j;
+          Sint32 p = *(pixels32++);
+          *(background32++) = p;
         }
-      o = *(gfxP1++);           //number of bytes contigus
-      char *gfxpb = (char *) gfxP2;
-      char *adreb = (char *) adres;
-      for (Sint32 k = 0; k < o; k++)
+      /*  number of contiguous bytes */
+      k = *(counters++);
+      char *pixels8 = (char *) pixels32;
+      char *background8 = (char *) background32;
+      for (Sint32 j = 0; j < k; j++)
         {
-          char j = *(gfxpb++);
-          *(adreb++) = j;
+          char p = *(pixels8++);
+          *(background8++) = p;
         }
-      gfxP2 = (Sint32 *) gfxpb;
-      adres = (Sint32 *) adreb;
+      pixels32 = (Sint32 *) pixels8;
+      background32 = (Sint32 *) background8;
     }
 #else
-  char *adres = background_screen->get_pixel_data (x_coord, y_coord);
-  screen_ptr = adres;
-  char *gfxP2 = current_drawing_data;     //pixels data
-  for (Uint32 i = 0; i < t; i++)
+  char *background = background_screen->get_pixel_data (x_coord, y_coord);
+  screen_ptr = background;
+  char *pixels = current_drawing_data;
+  for (Uint32 i = 0; i < h; i++)
     {
-      Sint16 o = *(gfxP1++);    //offset
-      adres += o;
-      gfxP1++;
-      o = *(gfxP1++);           //number of pixels contigus
-      for (Sint32 k = 0; k < o; k++)
+      /* offset */
+      Sint16 k = *(counters++);
+      background += k;
+      counters++;
+      /*  number of contiguous bytes */
+      k = *(counters++);
+      for (Sint32 j = 0; j < k; j++)
         {
-          char j = *(gfxP2++);
-          *(adres++) = j;
+          char p = *(pixels++);
+          *(background++) = p;
         }
     }
 #endif

@@ -4,11 +4,11 @@
  * @date 2007-03-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.22 2007/03/06 10:46:11 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.23 2007/04/08 17:28:20 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,6 +122,6 @@ public:
 private:
   void init_level ();
   void changebkgd ();
-  Sint32 background (Sint32 nbkdg = -1);
+  void initialize_background (Sint32 bkg_num = -1);
 };
 #endif
