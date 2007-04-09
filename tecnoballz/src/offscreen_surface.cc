@@ -2,14 +2,14 @@
  * @file offscreen_surface.cc 
  * @brief an offscreen drawing surface
  * @created 2007-02-15
- * @date 2007-02-16
+ * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: offscreen_surface.cc,v 1.9 2007/02/16 20:46:24 gurumeditation Exp $
+ * $Id: offscreen_surface.cc,v 1.10 2007/04/09 19:55:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,7 +77,9 @@ offscreen_surface::blit_to_surface (offscreen_surface * offscreen)
     { 0, vertical_offset, surface->w, surface->h - vertical_offset };
   if (SDL_BlitSurface (surface, &rect, surface_dest, &rect) < 0)
     {
-      std::cerr << "offscreen_surface::blit_to_surface() " <<
+      std::cerr << "(!)offscreen_surface::blit_to_surface(x=0, y=)" <<
+        vertical_offset << ", w=" << surface->w << " h=" <<
+        surface->h - vertical_offset <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
 }
@@ -95,7 +97,7 @@ offscreen_surface::blit_to_surface (offscreen_surface * offscreen,
   SDL_Rect rect = { xcoord, ycoord + vertical_offset, width, height };
   if (SDL_BlitSurface (surface, &rect, surface_dest, &rect) < 0)
     {
-      std::cerr << "offscreen_surface::blit_to_surface() " <<
+      std::cerr << "(!)offscreen_surface::blit_to_surface() " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
 }

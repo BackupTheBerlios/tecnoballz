@@ -2,14 +2,14 @@
  * @file bitmap_data.h 
  * @briefi Handle the bitmap 
  * @created 1996-06-29 
- * @date 2007-04-03
+ * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.h,v 1.9 2007/04/03 10:15:25 gurumeditation Exp $
+ * $Id: bitmap_data.h,v 1.10 2007/04/09 19:55:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ public:
   unsigned char *get_palette ();
   void load (char *filename);
   void load (Sint32 id);
-  bitmap_data *cut_to_surface (Sint32 xcoord, Sint32 ycoord, Uint32 w,
+  bitmap_data *cut_to_bitmap (Sint32 xcoord, Sint32 ycoord, Uint32 w,
                                Uint32 h);
 
 private:

@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.h
  * @brief Draw sprites on the screen 
- * @date 2007-04-08
+ * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.30 2007/04/08 17:28:20 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.31 2007/04/09 19:55:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -344,9 +344,9 @@ public:
   void set_object_pos (Sint32 num);
   void duplicate_to (sprite_object * sprite_dest);
   void set_coordinates (Sint32 xcoord, Sint32 ycoord);
-  void create_sprite (Sint32 type_id, bitmap_data * bitmap, bool shadow,
+  void create_sprite (Sint32 type_id, surface_sdl * bitmap, bool shadow,
                      bool by_pixel = false);
-  void make_sprite (bitmap_data * image, bool shadow = false);
+  void make_sprite (surface_sdl * image, bool shadow = false);
   void set_x_coord (Sint32 xcoord);
   void set_y_coord (Sint32 ycoord);
   void move_x (Sint32 x_offset);
@@ -393,7 +393,7 @@ public:
   static const bb_describ *zelistBOB[];
 
 private:
-  void init_common (bitmap_data * image, bool shadow);
+  void init_common (surface_sdl * image, bool shadow);
   void alloc_drawing_tables (Sint32 num_images);
   void draw_line_by_line ();
   void draw_with_tables ();

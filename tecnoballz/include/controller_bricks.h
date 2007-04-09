@@ -2,14 +2,14 @@
  * @file controller_bricks.h
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-02-18
+ * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.9 2007/02/18 11:03:52 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.10 2007/04/09 19:55:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,7 +104,7 @@ private:
 
 private:
   /** Bitmap of the set of current bricks */
-  bitmap_data *bitmap_bricks;
+  surface_sdl *bitmap_bricks;
   /** Number of bricks in the current level */
   Uint32 num_of_bricks;
   /** Less bricks counter */

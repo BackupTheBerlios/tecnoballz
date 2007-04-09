@@ -2,14 +2,14 @@
  * @file controller_spheres.h
  * @brief Metallic spheres controller used in congratulations 
  * @created 2004-08-05 
- * @date 2007-04-07
+ * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_spheres.h,v 1.7 2007/04/07 20:24:57 gurumeditation Exp $
+ * $Id: controller_spheres.h,v 1.8 2007/04/09 19:55:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,11 +38,11 @@ class controller_spheres;
 class controller_spheres:public objects_list < sprite_object, controller_spheres >
 {
 private:
-  Sint32 radius_horizontal_variation;
-  Sint32 radius_vertical_variation;
-  Sint32 radius_inc_variation;
-  Sint32 radius_vinc_variation;
-  Sint32 radius_sphere_speed;
+  Uint32 radius_horizontal_variation;
+  Uint32 radius_vertical_variation;
+  Uint32 radius_hinc_variation;
+  Uint32 radius_vinc_variation;
+  Uint32 radius_sphere_speed;
 public:
     controller_spheres ();
    ~controller_spheres ();

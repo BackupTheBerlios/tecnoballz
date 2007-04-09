@@ -1,14 +1,14 @@
 /** 
  * @file tiles_background.cc 
  * @brief Draw tiles background in bricks levels 
- * @date 2007-04-03
+ * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.13 2007/04/03 13:43:13 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.14 2007/04/09 19:55:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -126,8 +126,8 @@ tiles_background::setup (Uint32 tiles_num)
           }
         y >>= 1;
         y = y * tiles_height;
-        current_tiles =
-          bmp->cut_to_surface (x, y, 5 * tiles_width, tiles_height);
+        current_tiles = (bitmap_data *)
+          bmp->cut_to_bitmap (x, y, 5 * tiles_width, tiles_height);
         delete bmp;
       }
       break;
@@ -314,7 +314,6 @@ tiles_background::draw (offscreen_surface *offscreen)
   SDL_Surface *screen_surface = offscreen->get_surface ();
   SDL_Surface *tiles_surface = current_tiles->get_surface ();
   Uint32 voffset = offscreen->get_vertical_offset ();
-  offscreen->unlock_surface ();
   
   /* width and height of the visible window */
   Uint32 width_box = offscreen->get_width () - 64 * resolution;
@@ -408,7 +407,6 @@ tiles_background::draw (offscreen_surface *offscreen)
       map_index += map_width * 2;
       rect_dst.y += rect_dst.h;
     }
-  offscreen->lock_surface ();
 }
 
 /**

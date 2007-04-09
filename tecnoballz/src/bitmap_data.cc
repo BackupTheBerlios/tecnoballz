@@ -2,14 +2,14 @@
  * @file bitmap_data.cc 
  * @brief Handle the bitmap 
  * @created 1996-06-29 
- * @date 2007-04-03
+ * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.17 2007/04/03 10:15:25 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.18 2007/04/09 19:55:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -214,33 +214,6 @@ bitmap_data::get_palette ()
 }
 
 /**
- * Copy a part of the bitmap in a new bitmap surface
- * @param xcoord 
- * @param ycoord
- * @param w width of the detination bitmap
- * @param h height of the destination bitmap
- */
-bitmap_data *
-bitmap_data::cut_to_surface (Sint32 xcoord, Sint32 ycoord, Uint32 w, Uint32 h)
-{
-  bitmap_data *bmp = new bitmap_data ();
-  bmp->create_surface (w, h);
-  SDL_Surface *surface_dest = bmp->get_surface ();
-  SDL_Rect rect = { xcoord, ycoord, w, h };
-  if (1 == depth)
-    {
-      SDL_SetPalette (surface_dest, SDL_LOGPAL | SDL_PHYSPAL,
-                      surface->format->palette->colors, 0, 256);
-    }
-  if (SDL_BlitSurface (surface, &rect, surface_dest, NULL) < 0)
-    {
-      std::cerr << "offscreen_surface::blit_to_surface() " <<
-      "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
-    }
-  return bmp;
-}
-
-/**
  * Load a bitmap file
  * @param fname filename specified by path
  */
@@ -283,6 +256,7 @@ bitmap_data::sdl_load_bmp (char *fpath)
   height = surface->h;
   bytes_size = height * width;
   depth = 1;
+  bytes_per_pixel = surface->format->BytesPerPixel;
   SDL_Color *couleurs = surface->format->palette->colors;
   Sint32 k = 0;
   for (Sint32 j = 0; j < surface->format->palette->ncolors; j++)
@@ -293,3 +267,21 @@ bitmap_data::sdl_load_bmp (char *fpath)
       couleurs++;
     }
 }
+
+/**
+ * Copy a part of the surface in a new  surface
+ * @param xcoord 
+ * @param ycoord
+ * @param w width of the detination surface
+ * @param h height of the destination surface
+ */
+bitmap_data *
+bitmap_data::cut_to_bitmap (Sint32 xcoord, Sint32 ycoord, Uint32 w, Uint32 h)
+{
+  bitmap_data *dest = new bitmap_data ();
+  dest->create_surface (w, h);
+  dynamic_cast < surface_sdl * >(this)->cut_to_surface (dest, xcoord, ycoord, w, h);
+  return dest;
+}
+
+

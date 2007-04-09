@@ -2,14 +2,14 @@
  * @file surface_sdl.cc 
  * @brief an drawing surface
  * @created 2007-02-15
- * @date 2007-03-16
+ * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.cc,v 1.9 2007/03/30 20:15:09 gurumeditation Exp $
+ * $Id: surface_sdl.cc,v 1.10 2007/04/09 19:55:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ surface_sdl::get_surface ()
  * Create an empty SDL surface
  * @param w width of the surface in pixels 
  * @param h height of the surface in pixels
- * @param depth number of byte(s) per pixel (1 to 4)
+ * @param depth number of bits(s) per pixel (8 to 32)
  * @param flags specifies the type of surface
  * @param red_mask
  * @param green_mask
@@ -186,7 +186,7 @@ surface_sdl::get_width ()
 
 /**
  * Return the height of the surface
- * @return the height of the bitmap in pixels
+ * @return the height of the surface in pixels
  */
 Uint32
 surface_sdl::get_height ()
@@ -349,7 +349,9 @@ surface_sdl::blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, U
   SDL_Rect dest_rect = {x2, y2, w, h};
   if (SDL_BlitSurface (source_surface, &src_rect, surface, &dest_rect) < 0)
     {
-      std::cerr << "(!)surface_sdl::blit_to_surface() " <<
+      std::cerr << "(!)surface_sdl::blit_to_surface(x1=" << x1 << 
+        ",y1=" << y1 << ",x2= " << x2 << ", y2=" << y2 << ", w=" << 
+        w << " , h=" << h <<  ") " <<
         "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
     }
 }
@@ -377,4 +379,48 @@ surface_sdl::fill_shadow_rect (Uint32 xcoord, Uint32 ycoord, Uint32 w,
         }
     }
 }
+
+/**
+ * Copy a part of the surface in a new  surface
+ * @param xcoord x-coordinate in source surface
+ * @param ycoord y-coordinate in source surface
+ * @param w width of the detination surface
+ * @param h height of the destination surface
+ */
+surface_sdl *
+surface_sdl::cut_to_surface (Sint32 xcoord, Sint32 ycoord, Uint32 w, Uint32 h)
+{
+  surface_sdl *dest = new surface_sdl ();
+  dest->create_surface (w, h, surface->format->BitsPerPixel);
+  cut_to_surface (dest, xcoord, ycoord, w, h);
+  return dest;
+}
+
+/**
+ * Copy a part of the surface in a new  surface
+ * @param xcoord x-coordinate in source surface
+ * @param ycoord y-coordinate in source surface
+ * @param w width of the detination surface
+ * @param h height of the destination surface
+ */
+void
+surface_sdl::cut_to_surface (surface_sdl *dest, Sint32 xcoord, Sint32 ycoord, Uint32 w, Uint32 h)
+{
+  SDL_Surface *surface_dest = dest->get_surface ();
+  SDL_Rect rect = { xcoord, ycoord, w, h };
+  if (1 == bytes_per_pixel)
+    {
+      SDL_SetPalette (surface_dest, SDL_LOGPAL | SDL_PHYSPAL,
+                      surface->format->palette->colors, 0, 256);
+    }
+  if (SDL_BlitSurface (surface, &rect, surface_dest, NULL) < 0)
+    {
+      std::cerr << "(!)surface_sdl::cut_to_surface(xcoord=" << xcoord <<
+        ", ycoord=" << ycoord << ", w= " << w << ", h=" << h << ") " << 
+        "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+    }
+}
+
+
+
 

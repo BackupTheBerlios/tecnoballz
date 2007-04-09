@@ -2,14 +2,14 @@
  * @file controller_sides_bricks.h
  * @brief Sides bricks controller. The small bricks on the side, the walls top
  *        left and right
- * @date 2007-04-08
+ * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.h,v 1.3 2007/04/08 17:28:20 gurumeditation Exp $
+ * $Id: controller_sides_bricks.h,v 1.4 2007/04/09 19:55:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ class controller_sides_bricks;
 #include "../include/objects_list.h"
 #include "../include/sprite_object.h"
 #include "../include/tecnoballz.h"
-//...............................................................................
 
 class controller_sides_bricks:public objects_list < sprite_object,
   controller_sides_bricks >
@@ -92,11 +91,11 @@ typedef struct
   sprite_object *vertical_brick;
   char *fond_sauve;             //buffer to save background under bricks
   /** Bitmap surface to save background under top bricks */
-  bitmap_data *background_top_side;
+  surface_sdl *background_top_side;
   /** Bitmap surface to save background under right bricks */
-  bitmap_data *background_right_side;
+  surface_sdl *background_right_side;
   /** Bitmap surface to save background under left bricks */
-  bitmap_data *background_left_side;
+  surface_sdl *background_left_side;
   /** True if the wall of the top is breakable */
   bool is_top_wall_breakable;
   /** True if the wall of the right is breakable */
@@ -109,18 +108,14 @@ typedef struct
   Sint32 right_collision_xcoord;
   /** Collision y-coordinate of the top wall */
   Sint32 top_collision_ycoord;
-  bool map_top_side[MAX_OF_SIDES_BRICKS + 4];
-  bool map_right_side[MAX_OF_SIDES_BRICKS + 4];
-  bool map_left_side[MAX_OF_SIDES_BRICKS + 4];
-
   // wall of sprites (bob_ground = 1)
   sprite_object *bobwal_lef[MAX_OF_SIDES_BRICKS + 4];
   sprite_object *bobwal_rgh[MAX_OF_SIDES_BRICKS + 4];
   sprite_object *bobwal_top[MAX_OF_SIDES_BRICKS + 4];
 
-  bool *map_top_wall;
-  bool *map_right_wall;
-  bool *map_left_wall;
+  bool map_top_wall[MAX_OF_SIDES_BRICKS];
+  bool map_right_wall[MAX_OF_SIDES_BRICKS];
+  bool map_left_wall[MAX_OF_SIDES_BRICKS];
 
   char *adr_gauche[MAX_OF_SIDES_BRICKS];
   char *adr_droite[MAX_OF_SIDES_BRICKS];
@@ -139,15 +134,15 @@ typedef struct
   Uint32 vertical_brick_width;
   /** Height of a vertical side brick in pixels */
   Uint32 vertical_brick_height;
-
-  restaure_struct *restore_background;       //redraw bricks table
+  /** Structures used for restore background under sides bricks */  
+  restaure_struct *restore_background;
   Uint32 restore_save_index;
   Uint32 restore_index;
 
 public:
     controller_sides_bricks ();
    ~controller_sides_bricks ();
-  Sint32 initialize (bool build);
+  Sint32 initialize ();
   void save_state_of_walls ();
   void save_background ();
   void run ();
@@ -162,7 +157,7 @@ public:
 
 private:
   void bobbg_init ();
-  void execution2 ();
+  void restore ();
   void execution3 ();
 };
 

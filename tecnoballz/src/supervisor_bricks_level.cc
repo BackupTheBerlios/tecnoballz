@@ -4,11 +4,11 @@
  * @date 2007-04-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.42 $
+ * @version $Revision: 1.43 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.42 2007/04/08 17:28:20 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.43 2007/04/09 19:55:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -136,9 +136,7 @@ supervisor_bricks_level::first_init ()
   sprites->add (bottom_wall);
   bottom_wall->set_coordinates (32 * resolution, 232 * resolution);
   paddles->init_robot ();
-  bool is_rebuild = current_player->is_rebuild_walls ();
-  current_player->set_rebuild_walls (false);
-  sides_bricks->initialize (is_rebuild);
+  sides_bricks->initialize ();
   ejectors_corners->create_ejectors_sprites ();
   game_over->create_sprites_list ();
   balls->create_sprites_list ();
@@ -154,6 +152,8 @@ supervisor_bricks_level::first_init ()
   popup_menu->first_init (sprites_bitmap, 0, 256 * resolution);
   resources->release_sprites_bitmap ();
   panel_score->first_init (balls);
+
+  initialize_background ();
   display->lock_surfaces ();
 
   /* initialize controller of the big letters animated composing the word
@@ -162,7 +162,7 @@ supervisor_bricks_level::first_init ()
   head_anim->load_bitmap ();
   init_level ();
   /* draw ejectors and side walls */
-  initialize_background ();
+  //initialize_background ();
   paddles->init_paddles (gigablitz, balls);
 
   /* balls initialization */
@@ -294,10 +294,10 @@ supervisor_bricks_level::main_loop ()
         {
           head_anim->play ();
         }
+      sides_bricks->run ();
       display->lock_surfaces ();
       sprites->clear ();
       bricks->update ();        //restore bricks
-      sides_bricks->run ();
       changebkgd ();
 
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
@@ -510,6 +510,10 @@ supervisor_bricks_level::changebkgd ()
 void
 supervisor_bricks_level::initialize_background (Sint32 bkg_num)
 {
+  if (is_verbose)
+    {
+      std::cout << ">supervisor_bricks_level::initialize_background() start! " << std::endl;
+    }
   if (bkg_num < 0)
     {
       bkg_num = ((area_number - 1) * 10) + level_number;
@@ -539,4 +543,8 @@ supervisor_bricks_level::initialize_background (Sint32 bkg_num)
   /* intialize the bricks level */
   bricks->first_init ();
   bricks->initialize ();
+  if (is_verbose)
+    {
+      std::cout << "/supervisor_bricks_level::initialize_background() start! " << std::endl;
+    }
 }

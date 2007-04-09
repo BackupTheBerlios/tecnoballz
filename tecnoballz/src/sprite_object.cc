@@ -1,14 +1,14 @@
  /**
  * @file sprite_object.cc 
  * @brief Draw sprites on the screen 
- * @date 2007-04-08
+ * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.30 2007/04/08 17:28:20 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.31 2007/04/09 19:55:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -279,7 +279,7 @@ sprite_object::set_display_pos (Sint32 num)
  * @param shadow true if the sprite has shadow, false by default
  */
 void
-sprite_object::make_sprite (bitmap_data * bitmap, bool shadow)
+sprite_object::make_sprite (surface_sdl * bitmap, bool shadow)
 {
   init_common (bitmap, shadow);
   pixel_data = bitmap->get_pixel_data ();
@@ -291,7 +291,7 @@ sprite_object::make_sprite (bitmap_data * bitmap, bool shadow)
  * @param shadow true if the sprite has shadow
  */
 void
-sprite_object::init_common (bitmap_data * bitmap, bool shadow)
+sprite_object::init_common (surface_sdl * bitmap, bool shadow)
 {
   screen_width = display->get_width ();
   screen_height = display->get_height ();
@@ -380,7 +380,7 @@ sprite_object::alloc_drawing_tables (Sint32 numof)
  *                 False by default
  */
 void
-sprite_object::create_sprite (Sint32 type_id, bitmap_data * image, bool shadow,
+sprite_object::create_sprite (Sint32 type_id, surface_sdl * image, bool shadow,
                               bool by_pixel)
 {
   is_draw_pixel_by_pixel = by_pixel;

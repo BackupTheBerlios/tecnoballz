@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-04-06
+ * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.39 $
+ * @version $Revision: 1.40 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.39 2007/04/06 20:13:40 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.40 2007/04/09 19:55:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,7 +97,7 @@ supervisor_guards_level::first_init ()
   count_next = 0;
   is_victory_initialized = false;
   is_victory = false;
-  is_victory = true;
+//is_victory = true;
   area_number = current_player->get_area_number ();
   level_number = current_player->get_level_number ();
   Sint32 grdP = current_player->getGuardPt ();

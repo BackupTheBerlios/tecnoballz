@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-03-16
+ * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.17 2007/03/16 15:13:05 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.18 2007/04/09 19:55:54 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -130,7 +130,10 @@ controller_bricks::first_init ()
 void
 controller_bricks::initialize ()
 {
-
+  if (is_verbose)
+    {
+      std::cout << ">controller_bricks::initialize() start!" << std::endl;
+    }
   if (bob_ground)
     {
       alloc_sprites_list ();
