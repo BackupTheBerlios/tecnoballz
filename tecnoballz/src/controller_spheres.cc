@@ -2,14 +2,14 @@
  * @file controller_spheres.cc 
  * @brief Metallic spheres controller used in congratulations 
  * @created 2004-08-05 
- * @date 2007-04-07
+ * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_spheres.cc,v 1.9 2007/04/07 20:24:57 gurumeditation Exp $
+ * $Id: controller_spheres.cc,v 1.10 2007/04/09 14:14:21 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,6 @@ controller_spheres::controller_spheres ()
   /* 8 metallics spheres */
   max_of_sprites = 12;
   sprites_have_shades = true;
-  sprites_have_shades = false;
   sprite_type_id = BOB_ARGENT;
   radius_horizontal_variation = 0;
   radius_vertical_variation = 0;
@@ -71,7 +70,9 @@ controller_spheres::initialize ()
       sprites_list[i]->enable ();
       sprites_list[i]->x_maximum = value;
       value += offst;
+      printf("=====> %i\n", i % 3);
     }
+
 }
 
 /**
@@ -133,5 +134,14 @@ controller_spheres::run ()
       ycoord += y_center;
       sphere->x_coord = xcoord;
       sphere->y_coord = ycoord;
+      if (xcoord > 640 || xcoord < 0)
+	{
+	  printf("xcoord=%i, ycoord=%i\n", xcoord, ycoord);
+	}
+      if (ycoord > 480 || ycoord < 0)
+	{
+	  printf("xcoord=%i, ycoord=%i\n", xcoord, ycoord);
+	  printf("radius_vinc=%i, radius_vertical_variation=%i, vertical_radius:%i \n", radius_vinc, radius_vertical_variation, vertical_radius);
+	}
     }
 }
