@@ -2,14 +2,14 @@
  * @file controller_sides_bricks.cc 
  * @brief Sides bricks controller. The small bricks on the side, the walls top
  *        left and right
- * @date 2007-04-09
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.cc,v 1.5 2007/04/09 19:55:54 gurumeditation Exp $
+ * $Id: controller_sides_bricks.cc,v 1.6 2007/04/10 06:06:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,19 +66,6 @@ controller_sides_bricks::controller_sides_bricks ()
   restore_background = (restaure_struct *) NULL;
   restore_save_index = 0;
   restore_index = 0;
-  
-  /*
-  for (Uint32 i = 0; i < (MAX_OF_SIDES_BRICKS + 4); i++)
-    {
-      map_top_side[i] = map_right_side[i] = map_left_side[i] = false;
-    }
-  map_top_side[0] = map_right_side[0] = map_left_side[0] = true;
-  map_top_side[MAX_OF_SIDES_BRICKS + 1] = map_right_side[MAX_OF_SIDES_BRICKS + 1] = map_left_side[MAX_OF_SIDES_BRICKS + 1] = true;
-  
-  map_left_wall = map_left_side + 2;
-  map_right_wall = map_right_side + 2;
-  map_top_wall = map_top_side + 2;
-  */
   
   for (Uint32 i = 0; i < MAX_OF_SIDES_BRICKS; i++)
     {
@@ -358,7 +345,7 @@ void
 controller_sides_bricks::save_background ()
 {
 
-  background_top_side = background_screen->cut_to_surface (xcoord_top_wall, ycoord_top_wall + 128,
+  background_top_side = background_screen->cut_to_surface (xcoord_top_wall, ycoord_top_wall,
                                        horizontal_brick_width * MAX_OF_SIDES_BRICKS, horizontal_brick_height) ; 
   background_right_side = background_screen->cut_to_surface (xcoord_right_wall, ycoord_right_wall,
                                          vertical_brick_width, vertical_brick_height * MAX_OF_SIDES_BRICKS);

@@ -2,14 +2,14 @@
  * @file offscreen_surface.cc 
  * @brief an offscreen drawing surface
  * @created 2007-02-15
- * @date 2007-04-09
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: offscreen_surface.cc,v 1.10 2007/04/09 19:55:54 gurumeditation Exp $
+ * $Id: offscreen_surface.cc,v 1.11 2007/04/10 06:06:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -175,6 +175,7 @@ offscreen_surface::blit_surface (surface_sdl * dest, Uint32 x1, Uint32 y1,
 /**
  * Draw a string into the offscreen
  */
+/*
 void
 offscreen_surface::draw_text (display_text_bitmap * display_text,
                               Uint32 xcoord, Uint32 ycoord, const char *str,
@@ -182,3 +183,19 @@ offscreen_surface::draw_text (display_text_bitmap * display_text,
 {
   display_text->draw (this, xcoord, ycoord + vertical_offset, str, length);
 }
+*/
+
+/**
+ * Copy a part of the offscreen surface in a new  surface
+ * @param xcoord x-coordinate in the offscreen 
+ * @param ycoord y-coordinate in the offscreen
+ * @param w width of the detination surface
+ * @param h height of the destination surface
+ * @return a pointer to the new surface sdl object
+ */
+surface_sdl *
+offscreen_surface::cut_to_surface (Sint32 xcoord, Sint32 ycoord, Uint32 w, Uint32 h)
+{
+  return dynamic_cast < surface_sdl * >(this)->cut_to_surface (xcoord, ycoord + vertical_offset, w, h);
+}
+

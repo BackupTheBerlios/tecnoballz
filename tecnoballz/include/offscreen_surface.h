@@ -2,14 +2,14 @@
  * @file offscreen_surface.h 
  * @brief an offscreen drawing surface
  * @created 2007-01-31
- * @date 2007-02-16
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: offscreen_surface.h,v 1.9 2007/02/16 20:46:24 gurumeditation Exp $
+ * $Id: offscreen_surface.h,v 1.10 2007/04/10 06:06:03 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,6 @@ public:
   void blit_to_surface (offscreen_surface *offscreen, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h);
   void blit_surface (surface_sdl *dest, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2, Uint32 w, Uint32 h);
   void draw_text (display_text_bitmap* display_text, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 lentgh);
+  surface_sdl *cut_to_surface (Sint32 xcoord, Sint32 ycoord, Uint32 w, Uint32 h);
 };
-
-
 #endif
