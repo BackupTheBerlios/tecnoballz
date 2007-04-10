@@ -1,14 +1,14 @@
 /** 
  * @file tiles_background.cc 
  * @brief Draw tiles background in bricks levels 
- * @date 2007-04-09
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.14 2007/04/09 19:55:54 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.15 2007/04/10 07:14:14 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -267,18 +267,14 @@ tiles_background::generate_map ()
           /* position source, from 0 to 4 */
           x = positions[x];
           x *= tiles_width;
-
           Uint32 map_index = v * map_width * 2 + h;
           map_tiles[map_index] = x;
           map_tiles[map_index + map_width] = x;
           map_tiles[map_index + map_width * 2 * map_height] = x;
           map_tiles[map_index + map_width * 2 * map_height + map_width] =
             x;
-
         }
-
     }
-
 }
 
 /**
@@ -370,16 +366,17 @@ tiles_background::draw (offscreen_surface *offscreen)
             }
         }
       rect_dst.x = 0;
+      Uint32 *map_line = &map_tiles[map_index];
       for (Uint32 h = 0; h <= hcount; h++)
         {
           if (h == 0)
             {
               rect_src.w = rect_dst.w = first_width;
-              rect_src.x = map_tiles[map_index] + modulo_x;
+              rect_src.x = *(map_line++) + modulo_x;
             }
           else
             {
-              rect_src.x = 0;
+              rect_src.x = *(map_line++);
               if (h < hcount)
                 {
                   rect_src.w = rect_dst.w = tiles_width;
