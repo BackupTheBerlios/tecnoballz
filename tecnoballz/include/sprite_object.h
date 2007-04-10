@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.h
  * @brief Draw sprites on the screen 
- * @date 2007-04-09
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.31 2007/04/09 19:55:54 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.32 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@
 class sprite_object;
 #include "../include/handler_display.h"
 #include "../include/bitmap_data.h"
-#include "../include/handler_memory.h"
 #include "../include/tecnoballz.h"
 #include "../include/display_text_bitmap.h"
 
@@ -100,76 +99,6 @@ typedef enum
   BOB_BRICK1
 }
 SPRITES_ENUM;
-
-/*
-const Sint32 BOB_ATOMES = 0;
-const Sint32 BOB_EJECT1 = 1;
-const Sint32 BOB_EJECT2 = 2;
-const Sint32 BOB_EJECT3 = 3;
-const Sint32 BOB_EJECT4 = 4;
-const Sint32 BOB_BRICKV = 5;
-const Sint32 BOB_BRICKH = 6;
-const Sint32 BOB_BRICKS = 7;
-const Sint32 BOB_BUMPHR = 8;
-const Sint32 BOB_BUMPVT = 9;
-const Sint32 BOB_BALLES = 10;
-const Sint32 BOB_FIREBP = 11;
-const Sint32 BOB_MONEYS = 12;
-const Sint32 BOB_GADGET = 13;
-const Sint32 BOB_LETTRE = 14;
-const Sint32 BOB_LEDSHP = 15;
-const Sint32 BOB_GAMEOV = 16;
-const Sint32 BOB_DEFILE = 17;
-const Sint32 BOB_LOGOTB = 18;
-const Sint32 BOB_MOUSE1 = 19;
-const Sint32 BOB_MOUSE2 = 20;
-const Sint32 BOB_GIGAB1 = 21;
-const Sint32 BOB_GIGAB2 = 22;
-const Sint32 BOB_GIGAB3 = 23;
-const Sint32 BOB_GIGAB4 = 24;
-const Sint32 BOB_GIGAB5 = 25;
-const Sint32 BOB_GIGAB6 = 26;
-const Sint32 BOB_GIGAB7 = 27;
-const Sint32 BOB_MONEY0 = 28;
-const Sint32 BOB_ROBOT0 = 29;
-const Sint32 BOB_FINAL1 = 30;
-const Sint32 BOB_FINAL2 = 31;
-const Sint32 BOB_FINAL3 = 32;
-const Sint32 BOB_FINAL4 = 33;
-const Sint32 BOB_FINAL5 = 34;
-const Sint32 BOB_FINAL6 = 35;
-const Sint32 BOB_INTE1A = 36;
-const Sint32 BOB_INTE1B = 37;
-const Sint32 BOB_INTE2A = 38;
-const Sint32 BOB_INTE2B = 39;
-const Sint32 BOB_INTE3A = 40;
-const Sint32 BOB_INTE3B = 41;
-const Sint32 BOB_INTE4A = 42;
-const Sint32 BOB_INTE4B = 43;
-const Sint32 BOB_INTE5A = 44;
-const Sint32 BOB_INTE5B = 45;
-const Sint32 BOB_BUMPER = 46;
-const Sint32 BOB_MISSIL = 47;
-const Sint32 BOB_EXPLO1 = 48;
-const Sint32 BOB_EXPLO2 = 49;
-const Sint32 BOB_ARGENT = 50;
-const Sint32 BOB_GRDNRJ = 51;
-const Sint32 BOB_GEMSTO = 52;
-const Sint32 BOB_WALLBO = 53;
-const Sint32 BOB_DIRECT = 54;
-const Sint32 BOB_ESCMEN = 55;
-const Sint32 BOB_MAGEYE = 56;
-const Sint32 BOB_LEDSH2 = 57;
-const Sint32 BOB_BRICK1 = 58;
-*/
-/* const Sint32	BOB_BRICK2 = 59;
-const Sint32	BOB_BRICK3 = 60;
-const Sint32	BOB_BRICK4 = 61;
-const Sint32	BOB_BRICK5 = 62;
-const Sint32	BOB_BRICK6 = 63;
-const Sint32	BOB_BRICK7 = 64;
-const Sint32	BOB_BRICK8 = 65;
-const Sint32	BOB_BRICK9 = 66; */
 
 typedef struct
 {
@@ -366,7 +295,7 @@ public:
   void draw_to_brackground ();
   void afficheCyc ();
   void cycle_ptab ();
-  void affich_SHA ();
+  void draw_shadow_to_brackground ();
   void draw_copy_from_bitmap ();
   void MSKbitcopy ();
   void MSK_bitclr ();

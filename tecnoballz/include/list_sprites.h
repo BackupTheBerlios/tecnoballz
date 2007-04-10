@@ -1,13 +1,13 @@
 /** 
  * @file list_sprites.h
  * @brief Call the drawing methods of all sprites
- * @date 2007-02-17
+ * @date 2007-04-10
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: list_sprites.h,v 1.4 2007/02/17 16:56:08 gurumeditation Exp $
+ * $Id: list_sprites.h,v 1.5 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@
 
 class list_sprites;
 #include "../include/sprite_object.h"
-#include "../include/handler_memory.h"
 #include "../include/tecnoballz.h"
 
 class list_sprites:public tecnoballz

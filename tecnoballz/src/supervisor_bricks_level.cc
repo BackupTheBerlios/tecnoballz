@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-04-08
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.43 $
+ * @version $Revision: 1.44 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.43 2007/04/09 19:55:54 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.44 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ supervisor_bricks_level::~supervisor_bricks_level ()
 /** 
  * Initialization of a bricks level
  */
-Sint32
+void
 supervisor_bricks_level::first_init ()
 {
   sprites->reset ();
@@ -212,7 +212,6 @@ supervisor_bricks_level::first_init ()
   keyboard->clear_command_keys ();
   keyboard->set_grab_input (true);
   info_messages->send_message_request (short_info_messages::ARE_YOU_READY);
-  return erreur_num;
 }
 
 //-------------------------------------------------------------------------------

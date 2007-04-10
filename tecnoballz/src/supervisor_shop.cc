@@ -1,14 +1,14 @@
 /**
  * @file supervisor_shop.cc 
  * @brief Shop supervisor
- * @date 2007-03-20
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.35 $
+ * @version $Revision: 1.36 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.35 2007/03/20 22:53:16 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.36 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,7 +105,8 @@ supervisor_shop::~supervisor_shop ()
 /**
  * Initialize the shop supervisor
  */
-Sint32 supervisor_shop::first_init ()
+void
+supervisor_shop::first_init ()
 {
 
   box_texts =
@@ -247,7 +248,6 @@ Sint32 supervisor_shop::first_init ()
 
   keyboard->set_grab_input (false);
   tiles_ground->set_4_color_palette ();
-  return erreur_num;
 }
 
 /**

@@ -2,14 +2,14 @@
  * @file main.cc 
  * @brief The main function is where the program starts execution 
  * @created 2002-08-21 
- * @date 2007-04-05
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.53 $
+ * @version $Revision: 1.54 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.53 2007/04/05 16:04:01 gurumeditation Exp $
+ * $Id: main.cc,v 1.54 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,9 +50,7 @@ main (Sint32 nbArg, char **ptArg)
   Sint32 error = 0;
   try
     {
-      error = tecnoballz::first_init (&configuration);
-      if (error)
-        return error;
+      tecnoballz::first_init (&configuration);
       tecnoballz::game_begin ();
     }
   catch (std::ios_base::failure& fail) 

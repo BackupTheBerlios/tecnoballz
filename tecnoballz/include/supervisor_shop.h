@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.h
  * @brief Shop supervisor 
- * @date 2007-03-20
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.18 2007/03/20 22:53:16 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.19 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -151,7 +151,7 @@ private:
 public:
     supervisor_shop ();
    ~supervisor_shop ();
-  Sint32 first_init ();
+  void first_init ();
   Sint32 main_loop ();
 
 private:

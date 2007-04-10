@@ -1,14 +1,14 @@
 /** 
  * @file controller_ejectors.cc 
  * @brief Ejectors corners controller 
- * @date 2007-04-08
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_ejectors.cc,v 1.4 2007/04/08 17:28:20 gurumeditation Exp $
+ * $Id: controller_ejectors.cc,v 1.5 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -128,10 +128,10 @@ controller_ejectors::draw_shadow ()
     {
       return;
     }
-  sprites_list[TOP_LEFT_EJECTOR]->affich_SHA ();
-  sprites_list[TOP_RIGHT_EJECTOR]->affich_SHA ();
-  sprites_list[BOTTOM_LEFT_EJECTOR]->affich_SHA ();
-  sprites_list[BOTTOM_RIGHT_EJECTOR]->affich_SHA ();
+  sprites_list[TOP_LEFT_EJECTOR]->draw_shadow_to_brackground ();
+  sprites_list[TOP_RIGHT_EJECTOR]->draw_shadow_to_brackground ();
+  sprites_list[BOTTOM_LEFT_EJECTOR]->draw_shadow_to_brackground ();
+  sprites_list[BOTTOM_RIGHT_EJECTOR]->draw_shadow_to_brackground ();
 }
 
 /**

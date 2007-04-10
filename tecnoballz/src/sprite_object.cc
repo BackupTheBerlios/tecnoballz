@@ -4,11 +4,11 @@
  * @date 2007-04-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.31 2007/04/09 19:55:54 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.32 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1427,47 +1427,59 @@ sprite_object::draw_to_brackground ()
 #endif
 }
 
-//------------------------------------------------------------------------------
-// display a shadow into the "tampon" (build the background)
-//------------------------------------------------------------------------------
+/**
+ * Draw a shadow in the brackground offscreen
+ */
 void
-sprite_object::affich_SHA ()
+sprite_object::draw_shadow_to_brackground ()
 {
   adresseTA2 = background_screen->get_pixel_data (x_coord + ombredecax,
                                     y_coord + ombredecay);
-  char j = ombrepixel;
-  Uint16 *gfxPT = (Uint16 *) current_drawing_values;
-  Uint32 t = (Uint32) * (gfxPT++);
+  Uint16 *counters = (Uint16 *) current_drawing_values;
+  /* height of the sprite in pixels */
+  Uint32 h = (Uint32) * (counters++);
 #ifndef BYTES_COPY
-  Sint32 *adres = (Sint32 *) background_screen->get_pixel_data (x_coord + ombredecax,
+  Sint32 *background32 = (Sint32 *) background_screen->get_pixel_data (x_coord + ombredecax,
                                                   y_coord + ombredecay);
   adresseEC2 = (char *) adres;
-  Sint32 q = ombrepixe4;
-  for (Uint32 i = 0; i < t; i++)
+  Sint32 p = ombrepixe4;
+  for (Uint32 i = 0; i < h; i++)
     {
-      Sint16 o = *(gfxPT++);    //offset
-      adres = (Sint32 *) ((char *) adres + o);
-      o = *(gfxPT++);           //number of longwords contigus
-      for (Sint32 k = 0; k < o; k++)
-        *(adres++) |= q;
-      o = *(gfxPT++);           //number of bytes contigus
-      char *adreb = (char *) adres;
-      for (Sint32 k = 0; k < o; k++)
-        *(adreb++) |= j;
-      adres = (Sint32 *) adreb;
+      /* offset */
+      Sint16 k = *(counters++);
+      background32 = (Sint32 *) ((char *) background32 + k);
+      /* number of contiguous long words */
+      k = *(counters++);
+      for (Sint32 j = 0; j < k; j++)
+        {
+          *(background32++) |= p;
+        }
+      /* number of contiguous bytes */
+      k = *(counters++);
+      char *background8 = (char *) background8;
+      for (Sint32 j = 0; j < k; j++)
+        {
+          *(background8++) |= p;
+        }
+      background32 = (Sint32 *) background8;
     }
 #else
-  char *adres = background_screen->get_pixel_data (x_coord + ombredecax,
+  char p = ombrepixel;
+  char *background = background_screen->get_pixel_data (x_coord + ombredecax,
                                      y_coord + ombredecay);
-  adresseEC2 = adres;
-  for (Uint32 i = 0; i < t; i++)
+  adresseEC2 = background;
+  for (Uint32 i = 0; i < h; i++)
     {
-      Sint16 o = *(gfxPT++);    //offset
-      adres += o;
-      gfxPT++;
-      o = *(gfxPT++);           //number of pixels contigus
-      for (Sint32 k = 0; k < o; k++)
-        *(adres++) |= j;
+      /* offset */
+      Sint16 k = *(counters++);
+      background += k;
+      counters++;
+      /* number of contiguous bytes */
+      k = *(counters++);
+      for (Sint32 j = 0; j < k; j++)
+        {
+          *(background++) |= p;
+        }
     }
 #endif
 }

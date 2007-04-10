@@ -2,14 +2,14 @@
  * @file tecnoballz.h
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-04-09
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.30 2007/04/09 19:55:54 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.31 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-04-09)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-04-10)"
 /** To define only under development  */
 #define UNDER_DEVELOPMENT
 /** Force bytes copy (SPARC unaligned memory access) */
@@ -67,7 +67,6 @@ class configfile;
 class handler_high_score;
 class handler_resources;
 class handler_levels;
-class handler_memory;
 class handler_display;
 class handler_keyboard;
 #ifndef SOUNDISOFF
@@ -120,12 +119,11 @@ public:
   static Sint32 bg4_colors;     //1 = force 4 colors background
   static Uint32 resolution;     //1:320*240 or 2:640*480 pixels
   static bool bob_ground;       //1 = background is sprites 
-  static Uint32 double_mem;     //double memory size of all allocations 
   static Sint32 arg_jumper;
 
 protected:
-  Sint32 numero_obj;          //object number
-  Sint32 erreur_num;            //error code
+  /* object number */
+  Uint32 object_num;
 
   /*
    * static members
@@ -135,7 +133,6 @@ protected:
   static Uint32 objects_counter;
   /** Counter the number of frames */
   static Uint32 frame_counter;
-  static Sint32 num_erreur;     //error number
   /** Random counting variable */
   static Sint32 random_counter;
   /** Current phase of the game
@@ -164,7 +161,6 @@ protected:
   /** Handler of the files resources */
   static handler_resources *resources;
   static handler_levels *ptLev_data;
-  static handler_memory *memory;
 #ifndef SOUNDISOFF
   static handler_audio *audio;
 #endif
@@ -184,7 +180,7 @@ protected:
   static configfile *config_file;
 
 public:
-  static Sint32 first_init (configfile * pConf);
+  static void first_init (configfile * pConf);
   static void game_begin ();
   static void release_all_objects (configfile * pConf);
 
@@ -195,8 +191,6 @@ public:
    ~tecnoballz ();
   void object_init ();
   void object_free ();
-  Sint32 retour_err ();
-  void error_init (Sint32 error);
   Sint32 chaine_cmp (char *srcPT, char *desPT, Sint32 taille);
   void int_to_big_endian (Uint32 *, Uint32 *);
   void big_endian_to_int (Uint32 *, Uint32 *);

@@ -5,11 +5,11 @@
  * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.cc,v 1.6 2007/04/10 06:06:03 gurumeditation Exp $
+ * $Id: controller_sides_bricks.cc,v 1.7 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ controller_sides_bricks::controller_sides_bricks ()
   is_top_wall_breakable = false;
   is_right_wall_breakable = false;
   is_left_wall_breakable = false;
-  fond_sauve = (char *) NULL;   //buffer to save background under bricks
+  //fond_sauve = (char *) NULL;   //buffer to save background under bricks
   background_top_side = NULL;
   background_right_side = NULL;
   background_left_side = NULL;
@@ -70,9 +70,9 @@ controller_sides_bricks::controller_sides_bricks ()
   for (Uint32 i = 0; i < MAX_OF_SIDES_BRICKS; i++)
     {
       map_left_wall[i] = map_right_wall[i] = map_top_wall[i] = false;
-      bobwal_top[i] = NULL;
-      bobwal_lef[i] = NULL;
-      bobwal_rgh[i] = NULL;
+      sprites_left[i] = NULL;
+      sprites_top[i] = NULL;
+      sprites_right[i] = NULL;
     }
 }
 
@@ -96,12 +96,7 @@ controller_sides_bricks::~controller_sides_bricks ()
       delete vertical_brick;
       vertical_brick = (sprite_object *) NULL;
     }
-  if (fond_sauve)
-    {
-      memory->release (fond_sauve);
-      fond_sauve = NULL;
-    }
-  if (NULL != background_top_side)
+ if (NULL != background_top_side)
     {
       delete background_top_side;
       background_top_side = NULL;
@@ -119,20 +114,20 @@ controller_sides_bricks::~controller_sides_bricks ()
 
   for (Uint32 i = 0; i < MAX_OF_SIDES_BRICKS; i++)
     {
-      if (bobwal_top[i] != NULL)
+      if (sprites_left[i] != NULL)
         {
-          delete bobwal_top[i];
-          bobwal_top[i] = NULL;
+          delete sprites_left[i];
+          sprites_left[i] = NULL;
         }
-      if (bobwal_lef[i] != NULL)
+      if (sprites_top[i] != NULL)
         {
-          delete bobwal_lef[i];
-          bobwal_lef[i] = NULL;
+          delete sprites_top[i];
+          sprites_top[i] = NULL;
         }
-      if (bobwal_rgh[i] != NULL)
+      if (sprites_right[i] != NULL)
         {
-          delete bobwal_rgh[i];
-          bobwal_rgh[i] = NULL;
+          delete sprites_right[i];
+          sprites_right[i] = NULL;
         }
     }
   object_free ();
@@ -143,7 +138,7 @@ controller_sides_bricks::~controller_sides_bricks ()
  * Perform some initializations 
  * params true if rebuilt the walls, false otherwise
  */
-Sint32
+void
 controller_sides_bricks::initialize ()
 {
   if (is_verbose)
@@ -162,10 +157,10 @@ controller_sides_bricks::initialize ()
   vertical_brick_width = vertical_brick->get_sprite_width ();
   vertical_brick_height = vertical_brick->get_sprite_height ();
 
+  /* set collisions coordinates of the 3 walls */
   left_collision_xcoord = xcoord_left_wall + vertical_brick_width;
   right_collision_xcoord = xcoord_right_wall;
   top_collision_ycoord = ycoord_top_wall + horizontal_brick_height;
-
 
   /* area 2 to 4; rebuild wall the three walls automatically */
   Uint32 area = current_player->get_area_number ();
@@ -235,21 +230,8 @@ area = 4; /* test only */
 	is_left_wall_breakable = 1;	//1=wall of the left is breakable (test only)
 */
 
-  //###################################################################
-  // allocate memory to save background under bricks
-  //###################################################################
-  Uint32 _iS1 = horizontal_brick_width * horizontal_brick_height;        // size of horizontal bricks
-  Uint32 _iS2 = horizontal_brick_width * vertical_brick_height;        // size of vertical bricks
-  _iS2 = (_iS1 * MAX_OF_SIDES_BRICKS) + (_iS2 * MAX_OF_SIDES_BRICKS) + (_iS2 * MAX_OF_SIDES_BRICKS);
-  fond_sauve = memory->alloc (_iS2);
-  error_init (memory->retour_err ());
-  if (erreur_num)
-    return (erreur_num);
-
-  //###################################################################
-  // initialize the sprites of the walls (bob_ground = 1)
-  //###################################################################
-  bobbg_init ();
+  /* create the sprites of the walls if necessary */
+  create_bricks_sprites ();
 
   /* allocate memory for background restoration under sides bricks */ 
   try 
@@ -273,51 +255,57 @@ area = 4; /* test only */
     {
       std::cout << "/controller_sides_bricks::initialize() end!" << std::endl;
     }
- return erreur_num;
 }
 
-//-----------------------------------------------------------------------------
-// initialize the sprites of the walls (bob_ground = 1)
-//-----------------------------------------------------------------------------
+/**
+ * Create the sprites of the walls
+ */
 void
-controller_sides_bricks::bobbg_init ()
+controller_sides_bricks::create_bricks_sprites ()
 {
   if (!bob_ground)
     {
       return;
     }
 
-  Sint32 x = xcoord_top_wall;
-  Sint32 yg = ycoord_left_wall;
-  Sint32 yd = ycoord_right_wall;
-  Sint32 lg = horizontal_brick->get_sprite_width ();
-  Sint32 ht = vertical_brick->get_sprite_height ();
+  Sint32 xcoord_top = xcoord_top_wall;
+  Sint32 ycoord_left = ycoord_left_wall;
+  Sint32 ycoord_right = ycoord_right_wall;
+  Uint32 width = horizontal_brick->get_sprite_width ();
+  Uint32 height = vertical_brick->get_sprite_height ();
+ 
+
   for (Uint32 i = 0; i < MAX_OF_SIDES_BRICKS; i++)       //12 bricks per wall
     {
-      bobwal_top[i] = new sprite_object ();
-      bobwal_top[i]->create_sprite (BOB_BRICKH, sprites_bitmap, 1);
-      sprites->add (bobwal_top[i]);
-      bobwal_top[i]->set_coordinates (x, ycoord_left_wall);
+      sprites_left[i] = new sprite_object ();
+      sprites_left[i]->create_sprite (BOB_BRICKH, sprites_bitmap, 1);
+      sprites->add (sprites_left[i]);
+      sprites_left[i]->set_coordinates (xcoord_top, ycoord_left_wall);
       if (map_top_wall[i])
-        bobwal_top[i]->enable ();
+        {
+          sprites_left[i]->enable ();
+        }
 
-      bobwal_lef[i] = new sprite_object ();
-      bobwal_lef[i]->create_sprite (BOB_BRICKV, sprites_bitmap, 1);
-      sprites->add (bobwal_lef[i]);
-      bobwal_lef[i]->set_coordinates (xcoord_left_wall, yg);
+      sprites_top[i] = new sprite_object ();
+      sprites_top[i]->create_sprite (BOB_BRICKV, sprites_bitmap, 1);
+      sprites->add (sprites_top[i]);
+      sprites_top[i]->set_coordinates (xcoord_left_wall, ycoord_left);
       if (map_left_wall[i])
-        bobwal_lef[i]->enable ();
+        {
+          sprites_top[i]->enable ();
+        }
 
-      bobwal_rgh[i] = new sprite_object ();
-      bobwal_rgh[i]->create_sprite (BOB_BRICKV, sprites_bitmap, 1);
-      sprites->add (bobwal_rgh[i]);
-      bobwal_rgh[i]->set_coordinates (xcoord_right_wall, yd);
+      sprites_right[i] = new sprite_object ();
+      sprites_right[i]->create_sprite (BOB_BRICKV, sprites_bitmap, 1);
+      sprites->add (sprites_right[i]);
+      sprites_right[i]->set_coordinates (xcoord_right_wall, ycoord_right);
       if (map_right_wall[i])
-        bobwal_rgh[i]->enable ();
-
-      x += lg;
-      yd += ht;
-      yg += ht;
+        {
+          sprites_right[i]->enable ();
+        }
+      xcoord_top += width;
+      ycoord_left += height;
+      ycoord_right += height;
     }
 }
 
@@ -352,9 +340,7 @@ controller_sides_bricks::save_background ()
   background_left_side = background_screen->cut_to_surface (xcoord_left_wall, ycoord_left_wall,
                                         vertical_brick_width, vertical_brick_height * MAX_OF_SIDES_BRICKS);
 
-  //###################################################################
-  // wall of the top
-  //###################################################################
+  /*
   Sint32 _iModulo = background_screen->get_line_modulo (horizontal_brick_width);
   Sint32 _iPosX = xcoord_top_wall;
   char *_pBuffer = fond_sauve;
@@ -415,6 +401,7 @@ controller_sides_bricks::save_background ()
         }
       _iPosY += vertical_brick_height;
     }
+    */
 }
 
 
@@ -426,11 +413,13 @@ controller_sides_bricks::run ()
 {
   if (!bob_ground)
    {
+     /* sides bricks are drawing to background */
       restore ();
    }
   else
    {
-     execution3 ();
+     /* sides bricks are displayed as sprites */
+     disable_sprites ();
    }
 }
 
@@ -445,7 +434,6 @@ controller_sides_bricks::restore ()
     {
       return;
     }
-  printf("wall_id: %i\n", restore_background[restore_index].wall_id);
  Uint32 index = restore_background[restore_index].side_brick_index;
  SDL_Rect source;
  SDL_Rect dest;
@@ -471,14 +459,12 @@ controller_sides_bricks::restore ()
      source.y = index * vertical_brick_height;
      if (LEFT_WALL == restore_background[restore_index].wall_id) 
        {
-         printf("LEFT_WALL: %i vertical_brick_height=%i\n", index, vertical_brick_height);
          dest.x = xcoord_left_wall;
          dest.y = voffset + ycoord_left_wall + index * vertical_brick_height;
          source_surface = background_left_side->get_surface ();
        }
      else
        {
-         printf("RIGHT_WALL: %i vertical_brick_height=%i\n", index, vertical_brick_height);
          dest.x = xcoord_right_wall;
          dest.y = voffset + ycoord_right_wall + index * vertical_brick_height;
 
@@ -497,136 +483,49 @@ controller_sides_bricks::restore ()
            "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
        }
 
+  /* clear shadow */
+  dest.x += handler_display::SHADOWOFFX * resolution;
+  dest.y = dest.y - voffset + handler_display::SHADOWOFFY * resolution; 
+  switch (restore_background[restore_index].wall_id)
+    {
+      case TOP_WALL:
+        if (0 == index)
+          {
+              dest.w -= resolution * 4;
+              dest.x += resolution * 4;
+          }
+      break;
+      case RIGHT_WALL:
+          if (index == MAX_OF_SIDES_BRICKS - 1)
+            {
+              dest.h -= resolution * 4;
+            }
+      break;
+    }
+  display->clr_shadow (dest.x, dest.y, dest.w, dest.h);
   restore_index = (restore_index + 1) & (MAX_OF_RESTORED_BRICKS - 1);
-
-  /*
-  restaure_struct *_pCote = restore_background + restore_index;
-  Sint32 _iType = _pCote->wall_id;
-  if (0 == _iType)
-   {
-      return;
-   }
-      restore_index++;
-      restore_index &= (MAX_OF_RESTORED_BRICKS - 1);
-      _pCote->wall_id = 0;
-      char *_pFond;             //pointer to the background buffer
-      Sint32 posx1;
-      Sint32 posx2;
-      Sint32 _iPosY;
-      Sint32 _iIndex = _pCote->side_brick_index;
-      Sint32 _iTmod;
-      Sint32 _iBmod;
-      Sint32 widt1;
-      Sint32 widt2;
-      Sint32 heig1;
-      Sint32 heig2;
-      switch (_iType)
-        {
-
-          //###########################################################
-          // wall of the top
-          //###########################################################
-        case TOP_WALL:
-          _pFond = adr_duHaut[_iIndex];
-          posx1 = pos_duHaut[_iIndex][0];
-          posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
-          _iPosY = pos_duHaut[_iIndex][1];
-          _iTmod = background_screen->get_line_modulo (horizontal_brick_width);
-          _iBmod = game_screen->get_line_modulo (horizontal_brick_width);
-          widt1 = horizontal_brick_width;
-          widt2 = horizontal_brick_width;
-          heig1 = horizontal_brick_height;
-          heig2 = horizontal_brick_height;
-          if (_iIndex == 0)
-            {
-              widt2 = widt2 - resolution * 4;
-              posx2 = posx2 + resolution * 4;
-            }
-          break;
-
-          //###########################################################
-          // wall of the left
-          //###########################################################
-        case LEFT_WALL:
-          _pFond = adr_gauche[_iIndex];
-          posx1 = pos_gauche[_iIndex][0];
-          posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
-          _iPosY = pos_gauche[_iIndex][1];
-          _iTmod = background_screen->get_line_modulo (vertical_brick_width);
-          _iBmod = game_screen->get_line_modulo (vertical_brick_width);
-          widt1 = vertical_brick_width;
-          widt2 = vertical_brick_width;
-          heig1 = vertical_brick_height;
-          heig2 = vertical_brick_height;
-
-          printf(" posx1=%i / _iPosY=%i \n", posx1, _iPosY);
-          printf(" posx1=%i / _iPosY=%i \n", xcoord_left_wall, ycoord_left_wall + _iIndex * vertical_brick_height);
-
-
-          break;
-
-          //###########################################################
-          // wall of the right
-          //###########################################################
-        case RIGHT_WALL:
-        default:
-          _pFond = adr_droite[_iIndex];
-          posx1 = pos_droite[_iIndex][0];
-          posx2 = posx1 + (handler_display::SHADOWOFFX * resolution);
-          _iPosY = pos_droite[_iIndex][1];
-          _iTmod = background_screen->get_line_modulo (vertical_brick_width);
-          _iBmod = game_screen->get_line_modulo (vertical_brick_width);
-          widt1 = vertical_brick_width;
-          widt2 = vertical_brick_width;
-          heig1 = vertical_brick_height;
-          heig2 = vertical_brick_height;
-          if (_iIndex == MAX_OF_SIDES_BRICKS - 1)
-            heig2 = heig2 - resolution * 4;
-          break;
-        }
-
-      char *_pBuffer = background_screen->get_pixel_data (posx1, _iPosY);
-      char *_pTampon = game_screen->get_pixel_data (posx1, _iPosY);
-
-      //###############################################################
-      // clear brick
-      //###############################################################
-      for (Sint32 _iY = 0; _iY < heig1; _iY++)
-        {
-          for (Sint32 _iX = 0; _iX < widt1; _iX++)
-            {
-              *(_pBuffer++) = *(_pFond);
-              *(_pTampon++) = *(_pFond++);
-            }
-          _pBuffer += _iBmod;
-          _pTampon += _iTmod;
-        }
-
-      //###############################################################
-      // clear shadow
-      //###############################################################
-      display->clr_shadow (posx2,
-                           _iPosY +
-                           (handler_display::SHADOWOFFY * resolution), widt2,
-                           heig2);
- */
 }
 
-//-----------------------------------------------------------------------------
-// disable sprites of wall 
-//-----------------------------------------------------------------------------
+/** 
+* Disable sides bricks sprites if necessary
+*/
 void
-controller_sides_bricks::execution3 ()
+controller_sides_bricks::disable_sprites ()
 {
   for (Uint32 i = 0; i < MAX_OF_SIDES_BRICKS; i++)
     {
-      if (bobwal_top[i]->is_enable () && !map_top_wall[i])
-        bobwal_top[i]->disable ();
-      if (bobwal_lef[i]->is_enable () && !map_left_wall[i])
-        bobwal_lef[i]->disable ();
-      if (bobwal_rgh[i]->is_enable () && !map_right_wall[i])
-        bobwal_rgh[i]->disable ();
-
+      if (sprites_left[i]->is_enable () && !map_top_wall[i])
+        {
+          sprites_left[i]->disable ();
+        }
+      if (sprites_top[i]->is_enable () && !map_left_wall[i])
+        {
+          sprites_top[i]->disable ();
+        }
+      if (sprites_right[i]->is_enable () && !map_right_wall[i])
+        {
+          sprites_right[i]->disable ();
+        }
     }
 }
 
@@ -640,32 +539,32 @@ controller_sides_bricks::draw_shadows_to_brackground ()
     {
       return;
     }
-  Sint32 x = xcoord_top_wall;
-  Sint32 yg = ycoord_left_wall;
-  Sint32 yd = ycoord_right_wall;
-  Sint32 lg = horizontal_brick->get_sprite_width ();
-  Sint32 ht = vertical_brick->get_sprite_height ();
+  Sint32 xcoord_top = xcoord_top_wall;
+  Sint32 ycoord_left = ycoord_left_wall;
+  Sint32 ycoord_right = ycoord_right_wall;
+  Uint32 width = horizontal_brick->get_sprite_width ();
+  Uint32 height = vertical_brick->get_sprite_height ();
   /* 12 bricks per wall */
   for (Uint32 i = 0; i < MAX_OF_SIDES_BRICKS; i++)
     {
       if (map_top_wall[i])
         {
-          horizontal_brick->set_coordinates (x, ycoord_top_wall);
-          horizontal_brick->affich_SHA ();
+          horizontal_brick->set_coordinates (xcoord_top, ycoord_top_wall);
+          horizontal_brick->draw_shadow_to_brackground ();
         }
       if (map_left_wall[i])
         {
-          vertical_brick->set_coordinates (xcoord_left_wall, yg);
-          vertical_brick->affich_SHA ();
+          vertical_brick->set_coordinates (xcoord_left_wall, ycoord_left);
+          vertical_brick->draw_shadow_to_brackground ();
         }
       if (map_right_wall[i])
         {
-          vertical_brick->set_coordinates (xcoord_right_wall, yd);
-          vertical_brick->affich_SHA ();
+          vertical_brick->set_coordinates (xcoord_right_wall, ycoord_right);
+          vertical_brick->draw_shadow_to_brackground ();
         }
-      x += lg;
-      yd += ht;
-      yg += ht;
+      xcoord_top += width;
+      ycoord_left += height;
+      ycoord_right += height;
     }
 }
 

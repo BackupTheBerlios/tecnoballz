@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.h
  * @brief Control the balls. Move and collisions 
- * @date 2007-02-26
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.19 2007/04/08 17:28:20 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.20 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

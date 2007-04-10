@@ -2,14 +2,14 @@
  * @file tilesmap_scrolling.cc 
  * @brief Vertical scrolling tiles map in the main menu
  *        and the guardians levels
- * @date 2007-04-04
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tilesmap_scrolling.cc,v 1.12 2007/04/04 20:08:37 gurumeditation Exp $
+ * $Id: tilesmap_scrolling.cc,v 1.13 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@
  */
 #include "../include/tilesmap_scrolling.h"
 #include "../include/handler_resources.h"
-#include "../include/handler_memory.h"
 
 /**
  * Create the scrolling tiles map object

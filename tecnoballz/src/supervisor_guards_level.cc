@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-04-09
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.40 $
+ * @version $Revision: 1.41 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.40 2007/04/09 19:55:54 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.41 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ supervisor_guards_level::~supervisor_guards_level ()
 /** 
  * Initializations of the guardian's level
  */
-Sint32
+void
 supervisor_guards_level::first_init ()
 {
 #ifndef SOUNDISOFF
@@ -193,7 +193,6 @@ supervisor_guards_level::first_init ()
   {
     std::cout << ">supervisor_guards_level::first_init() End!" << std::endl;
   }
-  return erreur_num;
 }
 
 /**

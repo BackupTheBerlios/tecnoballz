@@ -4,11 +4,11 @@
  * @date 2007-02-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor.cc,v 1.2 2007/02/06 09:46:13 gurumeditation Exp $
+ * $Id: supervisor.cc,v 1.3 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,14 +56,13 @@ supervisor::liberation ()
   object_free ();
 }
 
-Sint32
+void
 supervisor::first_init ()
 {
-  return erreur_num;
 }
 
 Sint32
 supervisor::main_loop ()
 {
-  return erreur_num;
+  return MAIN_MENU;
 }

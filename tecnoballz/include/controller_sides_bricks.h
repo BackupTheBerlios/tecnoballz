@@ -2,14 +2,14 @@
  * @file controller_sides_bricks.h
  * @brief Sides bricks controller. The small bricks on the side, the walls top
  *        left and right
- * @date 2007-04-09
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.h,v 1.4 2007/04/09 19:55:54 gurumeditation Exp $
+ * $Id: controller_sides_bricks.h,v 1.5 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ class controller_sides_bricks:public objects_list < sprite_object,
 public:
   /** Maximum number of bricks per wall */
   static const Uint32 MAX_OF_SIDES_BRICKS = 12;
+
 private:
   typedef enum 
     {
@@ -52,14 +53,6 @@ private:
 /**
  * Structure for redraw side bricks
  */
-typedef struct
-{
-  /** Wall identifier TOP_WALL, RIGHT_WALL or LEFT_WALL */
-  Uint32 wall_id;
-  /** Index of the side brick from 0 to 11 */
-  Uint32 side_brick_index;
-} restaure_struct;
-
   static const Uint32 MAX_OF_RESTORED_BRICKS = 64;
   /** X-coordinate of the left wall */
   static const Uint32 XCOORD_LEFT_WALL = 12;
@@ -89,7 +82,6 @@ typedef struct
   sprite_object *horizontal_brick;
   /** Small vertical side brick */
   sprite_object *vertical_brick;
-  char *fond_sauve;             //buffer to save background under bricks
   /** Bitmap surface to save background under top bricks */
   surface_sdl *background_top_side;
   /** Bitmap surface to save background under right bricks */
@@ -109,23 +101,15 @@ typedef struct
   /** Collision y-coordinate of the top wall */
   Sint32 top_collision_ycoord;
   // wall of sprites (bob_ground = 1)
-  sprite_object *bobwal_lef[MAX_OF_SIDES_BRICKS + 4];
-  sprite_object *bobwal_rgh[MAX_OF_SIDES_BRICKS + 4];
-  sprite_object *bobwal_top[MAX_OF_SIDES_BRICKS + 4];
-
+  sprite_object *sprites_top[MAX_OF_SIDES_BRICKS];
+  sprite_object *sprites_right[MAX_OF_SIDES_BRICKS];
+  sprite_object *sprites_left[MAX_OF_SIDES_BRICKS];
+  /** State of the top wall, used for collision */
   bool map_top_wall[MAX_OF_SIDES_BRICKS];
+  /** State of the right wall, used for collision */
   bool map_right_wall[MAX_OF_SIDES_BRICKS];
+  /** State of the left wall, used for collision */
   bool map_left_wall[MAX_OF_SIDES_BRICKS];
-
-  char *adr_gauche[MAX_OF_SIDES_BRICKS];
-  char *adr_droite[MAX_OF_SIDES_BRICKS];
-  char *adr_duHaut[MAX_OF_SIDES_BRICKS];
-
-  // state the 3 walls, 2 bricks before and after prevent overflows 
-  Sint32 pos_gauche[MAX_OF_SIDES_BRICKS][2];
-  Sint32 pos_droite[MAX_OF_SIDES_BRICKS][2];
-  Sint32 pos_duHaut[MAX_OF_SIDES_BRICKS][2];
-
   /** Width of a horizontal side brick in pixels */
   Uint32 horizontal_brick_width;
   /** Height of a horizontal side brick in pixels */
@@ -134,15 +118,24 @@ typedef struct
   Uint32 vertical_brick_width;
   /** Height of a vertical side brick in pixels */
   Uint32 vertical_brick_height;
+  /** Structure used for restore  */  
+typedef struct
+{
+  /** Wall identifier TOP_WALL, RIGHT_WALL or LEFT_WALL */
+  Uint32 wall_id;
+  /** Index of the side brick from 0 to 11 */
+  Uint32 side_brick_index;
+} restaure_struct;
   /** Structures used for restore background under sides bricks */  
   restaure_struct *restore_background;
+  /** Index to save the next brick */  
   Uint32 restore_save_index;
+  /** Index to save the current brick */  
   Uint32 restore_index;
-
 public:
     controller_sides_bricks ();
    ~controller_sides_bricks ();
-  Sint32 initialize ();
+  void initialize ();
   void save_state_of_walls ();
   void save_background ();
   void run ();
@@ -156,9 +149,9 @@ public:
   bool collision_with_top_wall (Sint32 xcoord);
 
 private:
-  void bobbg_init ();
+  void create_bricks_sprites ();
   void restore ();
-  void execution3 ();
+  void disable_sprites ();
 };
 
 #endif

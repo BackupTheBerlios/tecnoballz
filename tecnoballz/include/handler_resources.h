@@ -2,14 +2,14 @@
  * @file handler_resources.h
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-04-04
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.14 2007/04/04 16:24:50 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.15 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,10 +26,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-#ifndef __RESSOURCES__
-#define __RESSOURCES__
+#ifndef __HANDLER_RESOURCES__
+#define __HANDLER_RESOURCES__
 #include "../include/tecnoballz.h"
-#include "../include/handler_memory.h"
 
 class handler_resources:public virtual tecnoballz
   {

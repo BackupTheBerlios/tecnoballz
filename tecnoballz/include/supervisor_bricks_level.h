@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.h 
  * @brief Bricks levels supervisor 
- * @date 2007-03-03
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.23 2007/04/08 17:28:20 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.24 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ class supervisor_bricks_level;
 #include "../include/sprite_object.h"
 #include "../include/bitmap_data.h"
 #include "../include/list_sprites.h"
-#include "../include/handler_memory.h"
 #include "../include/objects_list.h"
 #include "../include/supervisor.h"
 #include "../include/controller_ships.h"
@@ -116,7 +115,7 @@ private:
 public:
     supervisor_bricks_level ();
    ~supervisor_bricks_level ();
-  Sint32 first_init ();
+  void first_init ();
   Sint32 main_loop ();
 
 private:

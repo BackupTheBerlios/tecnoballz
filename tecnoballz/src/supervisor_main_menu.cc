@@ -4,11 +4,11 @@
  * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.18 2007/04/03 13:43:13 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.19 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ supervisor_main_menu::~supervisor_main_menu ()
 /**
  * Perform some initializations
  */
-Sint32
+void
 supervisor_main_menu::first_init ()
 {
   if (is_verbose)
@@ -95,7 +95,6 @@ supervisor_main_menu::first_init ()
     {
       std::cout << "supervisor_main_menu::first_init() End!" << std::endl;
     }
-  return erreur_num;
 }
 
 /**

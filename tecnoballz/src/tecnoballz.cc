@@ -2,14 +2,14 @@
  * @file tecnoballz.cc 
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-03-31
+ * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.23 2007/04/03 13:43:13 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.24 2007/04/10 20:32:40 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@
  * MA  02110-1301, USA.
  */
 #include "../include/tecnoballz.h"
-#include "../include/handler_memory.h"
 #include "../include/handler_display.h"
 #include "../include/handler_keyboard.h"
 #include "../include/list_sprites.h"
@@ -47,7 +46,7 @@
 /**
  * Once initialization, create persistent objects
  */
-Sint32
+void
 tecnoballz::first_init (configfile * pConf)
 {
   config_file = pConf;
@@ -60,8 +59,6 @@ tecnoballz::first_init (configfile * pConf)
 #else
   random_counter = (Sint32) first_init;
 #endif
-  memory = new handler_memory ();
-  memory->init (17000);
   resources = new handler_resources ();
   high_score = handler_high_score::get_instance ();
   resources->load_sinus ();
@@ -91,7 +88,6 @@ tecnoballz::first_init (configfile * pConf)
     {
       std::cout << ">tecnoballz::first_init() end!" << std::endl;
     }
-  return num_erreur;
 }
 
 /**
@@ -208,12 +204,6 @@ tecnoballz::release_all_objects (configfile * pConf)
       std::cout << "(x) 8. delete 'handler_resources'" << std::endl;
     }
   delete resources;
-
-  if (is_verbose)
-    {
-      std::cout << "(x) 9. delete 'handler_memory' " << std::endl;
-    }
-  delete memory;
 }
 
 /**
@@ -236,8 +226,7 @@ tecnoballz::~tecnoballz ()
 void
 tecnoballz::object_init ()
 {
-  erreur_num = 0;
-  numero_obj = objects_counter;
+  object_num = objects_counter;
   objects_counter++;
 }
 
@@ -248,24 +237,6 @@ void
 tecnoballz::object_free ()
 {
   objects_counter--;
-}
-
-//-------------------------------------------------------------------------------
-// return the number of error
-//-------------------------------------------------------------------------------
-Sint32
-tecnoballz::retour_err ()
-{
-  return erreur_num;
-}
-
-//-------------------------------------------------------------------------------
-// initialize the number of error
-//-------------------------------------------------------------------------------
-void
-tecnoballz::error_init (Sint32 error)
-{
-  erreur_num = error;
 }
 
 //-------------------------------------------------------------------------------
@@ -386,14 +357,12 @@ tecnoballz::big_endian_to_int (Uint32 * ptsrc, Uint32 * ptdes)
 Sint32 tecnoballz::arg_jumper = -1;
 Sint32 tecnoballz::bg4_colors = 0;
 bool tecnoballz::is_verbose = false;
-Sint32 tecnoballz::num_erreur = 0;
 Uint32 tecnoballz::objects_counter = 0;
 Sint32 tecnoballz::random_counter = 0;
 Uint32 tecnoballz::frame_counter = 0;
 handler_high_score * tecnoballz::high_score = NULL;
 handler_resources * tecnoballz::resources = NULL;
 handler_levels * tecnoballz::ptLev_data = NULL;
-handler_memory * tecnoballz::memory = NULL;
 #ifndef SOUNDISOFF
 handler_audio * tecnoballz::audio = NULL;
 #endif
@@ -409,7 +378,6 @@ bool tecnoballz::is_exit_game = false;
 bitmap_data * tecnoballz::sprites_bitmap = 0;
 bool tecnoballz::is_enabled_cheat_mode = false;
 bool tecnoballz::birth_flag = 0;
-Uint32 tecnoballz::double_mem = 1;
 Sint32 tecnoballz::difficulty_level = DIFFICULTY_EASY;
 Sint32 tecnoballz::initial_num_of_lifes = 8;
 Sint32 tecnoballz::number_of_players = 1;
