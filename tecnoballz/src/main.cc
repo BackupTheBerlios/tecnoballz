@@ -2,14 +2,14 @@
  * @file main.cc 
  * @brief The main function is where the program starts execution 
  * @created 2002-08-21 
- * @date 2007-04-10
+ * @date 2007-04-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.54 $
+ * @version $Revision: 1.55 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.54 2007/04/10 20:32:40 gurumeditation Exp $
+ * $Id: main.cc,v 1.55 2007/04/12 06:42:58 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -82,18 +82,18 @@ main (Sint32 nbArg, char **ptArg)
  
  a faire
  ** desactiver le tilt pour les balles controles
- - utiliser les tilemaps de 16x16 originales dans le definlement menu/gardiens pour eviter
-   d'utiliser les tilemaps 32x32 (qui ont ete doubles avec GIMP) refaire donc un mapeditor
-   special pour le 640x480
- - gigablitz doit tuer les bouisbouis
+[OK] utiliser les tilemaps de 16x16 originales dans le definlement menu/gardiens pour eviter
+     d'utiliser les tilemaps 32x32 (qui ont ete doubles avec GIMP) refaire donc un mapeditor
+     special pour le 640x480
+[OK] gigablitz doit tuer les bouisbouis
  - si une raquette enclenche un multiballes pendant la musique lost, couper cette musique
  - si le joueur perd une balle et qu'il a le bouton droit presse ne pas ejecter la balle
    de suite attendre qu'il relache le bouton
- - si game over supprimer les gems
+[OK] si game over supprimer les gems
  - faire les textes du jeu (intro, magasin, jeu) en francais et anglais (fichiers externes)
  - accelerer l'affichage des mini messages si beaucoup de bonus
  
- - ? faire des fonds defilents des tableaux briques 
+ [OK] faire des fonds defilents des tableaux briques 
  - ? mettre les donnees (tableaux, sprites?, ...) au format XML avec tiny xml 
  - ? utiliser kyro comme moteur de sprites 
  - ? mode balle Arkanoid ?
