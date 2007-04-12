@@ -1,14 +1,14 @@
 /** 
  * @file sprite_ship.cc 
  * @brief A flying enemy ships sprite 
- * @date 2007-02-13
+ * @date 2007-04-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ship.cc,v 1.8 2007/02/15 17:12:24 gurumeditation Exp $
+ * $Id: sprite_ship.cc,v 1.9 2007/04/12 19:33:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -150,7 +150,7 @@ sprite_ship::is_collisions_with_bricks (Uint32 xcoord, Uint32 ycoord)
   controller_bricks* bricks = controller_bricks::get_instance ();
   Sint32 bwght = bricks->get_brick_width ();     //brick's width in pixels
   Sint32 byoff = bricks->getYOffset ();     //y-offset between 2 bricks
-  brickInfos *tMega = bricks->mega_table;
+  brick_info *tMega = bricks->get_bricks_map ();
   Sint32 c = 0;
   for (Sint32 i = 0; i < 4; i++)
     {
@@ -160,7 +160,7 @@ sprite_ship::is_collisions_with_bricks (Uint32 xcoord, Uint32 ycoord)
       y /= byoff;               // /16
       y *= controller_bricks::NB_BRICKSH;
       x += y;
-      brickInfos *megaT = (tMega + x);
+      brick_info *megaT = (tMega + x);
       x = megaT->brique_rel;
       if (x)
         {

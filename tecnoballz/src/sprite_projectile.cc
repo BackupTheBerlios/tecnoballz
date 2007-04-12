@@ -1,14 +1,14 @@
 /**U
  * @file sprite_projectile.cc 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-02-21
+ * @date 2007-04-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.9 2007/02/21 14:22:11 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.10 2007/04/12 19:33:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -191,7 +191,7 @@ sprite_projectile::check_collisions_with_bricks ()
   Sint32 byoff = bricks->getYOffset (); //y-offset between 2 bricks
   Sint32 indus = bricks->getBkIndus (); //first indestructible brick
   sprite_projectile **projectiles = projectiles_list;
-  brickInfos *tMega = bricks->mega_table;
+  brick_info *tMega = bricks->get_bricks_map ();
   brickClear *briPT = bricks->brique_pnt;
   Sint32 save = bricks->briqueSave;
   for (Uint32 i = 0; i < total_fire; i++)
@@ -210,7 +210,7 @@ sprite_projectile::check_collisions_with_bricks ()
       y /= byoff;
       y *= controller_bricks::NB_BRICKSH;
       x += y;
-      brickInfos *megaT = (tMega + x);
+      brick_info *megaT = (tMega + x);
       x = megaT->brique_rel;
       if (x == 0)
         {
@@ -265,10 +265,10 @@ sprite_projectile::check_collisions_with_bricks ()
           briP2->adresseAff = megaT->adresseAff;
           briP2->adresseTab = megaT;
           x = projectile->power;   // fire power : 1 or 2
-          megaT->briquePosX = megaT->briquePosX - (x * 2);
-          if (megaT->briquePosX <= 0)
+          megaT->h_pos = megaT->h_pos - (x * 2);
+          if (megaT->h_pos <= 0)
             {
-              megaT->briquePosX = 0;
+              megaT->h_pos = 0;
               megaT->brique_rel = 0;
               briP2->brique_num = megaT->brique_num;
               briP2->briqueFlag = 1;    // flag restaure background 

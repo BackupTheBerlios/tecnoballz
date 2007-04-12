@@ -2,14 +2,14 @@
  * @file controller_bricks.h
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-04-09
+ * @date 2007-04-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.10 2007/04/09 19:55:54 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.11 2007/04/12 19:33:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,15 +38,20 @@ class sprite_paddle;
 typedef struct
 {
   Sint32 brique_rel;            // adresse source relative Gfx de la brique (collision)
-  Sint32 brique_aff;            // adresse source relative Gfx de la brique (reaffichage)
+  bool is_displayed;            // adresse source relative Gfx de la brique (reaffichage)
   Sint32 brique_num;            // numero de la brique par rapport a la premiere
   Sint32 adresseAff;            // adresse ecran relative d'affichage
-  Sint32 briquePosX;            // abscisse de la brique dans la page Gfx brique
-  Sint32 briquePosY;            // ordonnee de la brique dans la page Gfx brique
+  /** Brick horizontal position in the bricks bitmap
+   * 0, 2, 4, 6, 8, 10 or 12  */
+  Sint32 h_pos;
+  /** Brick vertical position in the bricks bitmap
+   * 0, 1, 2, 3, 4, 5, 6, 7, or 8  */
+  Sint32 v_pos;
   Sint32 *briqueFond;           // adresse du fond de la brique (modulo 0)
-  Sint32 brickcolor;            // color's bricks (17 colors possibles)
+  /** Brick color, 17 colors possibles */
+  Uint32 color;
 }
-brickInfos;                     // used into "mega_table"
+brick_info;                     // used into "bricks_map"
 
 /**
  * Structure for draw brick or restore the background
@@ -59,7 +64,7 @@ typedef struct
   Sint32 brique_num;            // numero de la brique touchee
   Sint32 briqueFlag;            // 1=affiche le decor du fond ou 0=affiche la brique
   Sint32 adresseAff;            // offset d'affichage ecran de la brique
-  brickInfos *adresseTab;       // adresse de la brique dans "mega_table"
+  brick_info *adresseTab;       // adresse de la brique dans "bricks_map"
 }
 brickClear;
 
@@ -95,9 +100,11 @@ private:
   static const Sint32 offBri_BD = NB_BRICKSH + 1;
   static const Sint32 offBri_HG = -NB_BRICKSH - 1;
   static const Sint32 offBri_HD = -NB_BRICKSH + 1;
-  static const Sint32 LEVELWIDTH = 10;  //width of a simple level
-  static const Sint32 LEVELHEIGH = 17;  //height of a simple level
-  static const Sint32 LEVEL_SIZE = LEVELWIDTH * LEVELHEIGH;
+  /** Number of bricks per row in a level */ 
+  static const Uint32 BRICKS_MAP_WIDTH = 10;
+  /** Number of bricks per column in a level */ 
+  static const Uint32 BRICKS_MAP_HEIGHT = 17;
+  static const Sint32 LEVEL_SIZE = BRICKS_MAP_WIDTH * BRICKS_MAP_HEIGHT;
   static const Sint32 LEVELSAREA = 10;  //number of levels in a area
   static const Sint32 SIZEOFAREA = LEVELSAREA * LEVEL_SIZE;
   static const Sint32 BRKYOFFSET = 8;   //y-offset between 2 bricks 
@@ -111,7 +118,7 @@ private:
   Sint32 less_bricks_count;
   /** Time delay for the "less bricks" option */
   Sint32 less_bricks_delay;
-  brickInfos *mega_table;       // tableau de 16*30
+  brick_info *bricks_map;       // tableau de 16*30
 
   /** Width in pixels of a set of bricks */
   Uint32 bricks_height;
@@ -151,6 +158,7 @@ public:
   void less_bricks ();
   void draw_brick (char *srcPT, Sint32 adres, Sint32 colbr);
   void clr_bricks ();
+  brick_info* get_bricks_map ();
 
 
   Sint32 get_brick_width ();
@@ -174,16 +182,16 @@ private:
 NB_BRICKST = 480 briques a l'ecran
 
 
- mega_table 
+ bricks_map 
   fonction : collision des balles/tirs avec les 480 briques de l'ecran
   taille   : 7*480 = 3360 octets
-  type     : type structure brickInfos 6 mots et 1 pointeur
+  type     : type structure brick_info 6 mots et 1 pointeur
    brique_rel : adresse relative du bitmap de la brique, sert pour les collisions/resistance de la brique controller_balls::vitusBrick()
-   brique_aff : adresse relative du bitmap de la brique
+   is_displayed : adresse relative du bitmap de la brique
    brique_num : numero de la brique (sert a rien ???)
    adresseAff : adresse ecran relative d'affichage (dans le buffer et le tampon)
-   briquePosX : abscisse de la brique dans la page Gfx brique (0,1,2,3,4,5,6,7 ou 8)
-   briquePosY : ordonnee de la brique dans la page Gfx brique (0,2,4,6,8,10 ou 12)
+   h_pos : abscisse de la brique dans la page Gfx brique (0,1,2,3,4,5,6,7 ou 8)
+   v_pos : ordonnee de la brique dans la page Gfx brique (0,2,4,6,8,10 ou 12)
    briqueFond : adresse absolue du fond 4 couleurs sous la brique (modulo 0)
 
 
@@ -220,28 +228,28 @@ NB_BRICKST = 480 briques a l'ecran
  Si x et y sont a 0, c'est qu'il n'existe pas de brique.
  
  Le fichier est lu au debut de chaque niveau et les valeurs sont recopiees dans
- la "mega_table" tableau de structure "brickInfos"
+ la "bricks_map" tableau de structure "brick_info"
  
  
  -------------------------------------------------------------------------------
- tableau "mega_table" : (tableau de structures "brickInfos")
+ tableau "bricks_map" : (tableau de structures "brick_info")
  -------------------------------------------------------------------------------
- Ce tableau est un tableau de type "brickInfos". Chaque entree du tableau
+ Ce tableau est un tableau de type "brick_info". Chaque entree du tableau
  represente une brique a l'ecran. Le tableau represente 16 colonnes, de
  30 lignes de briques, et couvre donc la totalite de l'ecran de jeu, bien que
  seulement 10 colonnes de 17 lignes soient utilisees, ce qui correspond a la
  taille d'un tableau lu dans le fichier "tableau.data". 
  
- La structure "brickInfos", contient des informations sur une brique a l'ecran
+ La structure "brick_info", contient des informations sur une brique a l'ecran
  utilisee pour les collisions avec les balles, les tirs et le gigablitz.
  
  
   brique_rel => adresse source relative de la brique (resistance)
-  brique_aff => adresse source relative de la brique 
+  is_displayed => adresse source relative de la brique 
   brique_num => numero de la brique par rapport a la premiere
   adresseAff => adresse ecran relative d'affichage (buffer et tampon)
-  briquePosX => abscisse de la brique dans la page graphique brique 0, 2, 4, 6, 8, 10 ou 12  
-  briquePosY => ordonnee de la brique dans la page graphique brique 0, 1, 2, 3, 4, 5, 6, 7, ou 8 
+  h_pos => abscisse de la brique dans la page graphique brique 0, 2, 4, 6, 8, 10 ou 12  
+  v_pos => ordonnee de la brique dans la page graphique brique 0, 1, 2, 3, 4, 5, 6, 7, ou 8 
  *briqueFond => adresse du fond de la brique pour l'effacer (modulo 0)
 
 
@@ -279,6 +287,6 @@ typedef struct
   Sint32                    brique_num;                          // numero de la brique touchee
   Sint32                    briqueFlag;                          // 1=affiche le decor du fond ou 0=affiche la brique
   Sint32                    adresseAff;                          // offset d'affichage ecran de la brique
-  brickInfos             *adresseTab;                          // adresse de la brique dans "mega_table"
+  brick_info             *adresseTab;                          // adresse de la brique dans "bricks_map"
 
 */

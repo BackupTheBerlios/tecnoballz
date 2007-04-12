@@ -1,14 +1,14 @@
 /**
  * @file controller_gigablitz.cc 
  * @brief Gigablitz controller 
- * @date 2007-04-03
+ * @date 2007-04-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.9 2007/04/03 13:43:13 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.10 2007/04/12 19:33:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -241,12 +241,12 @@ controller_gigablitz::collision1 ()
       y /= byoff;               // y = y / 16 (space between two bricks in height)
       y *= controller_bricks::NB_BRICKSH;       // y = y * 16 (number of bricks on the same line)
       x += y;
-      brickInfos *tMega = bricks->mega_table;
+      brick_info *tMega = bricks->get_bricks_map ();
       Sint32 save = bricks->briqueSave; // save => offset on "brique_pnt"
       brickClear *briPT = bricks->brique_pnt;   // pointer to structure "brickClear" (display and clear the bricks)
       for (Sint32 i = 0; i < blitz_brik; i++)
         {
-          brickInfos *megaT = (tMega + x);
+          brick_info *megaT = (tMega + x);
           brickClear *briP2 = briPT + save;
           Sint32 v = megaT->brique_rel;
           if (v)
@@ -257,7 +257,7 @@ controller_gigablitz::collision1 ()
                 briP2->balle_posX = -1;
               briP2->adresseAff = megaT->adresseAff;
               briP2->adresseTab = megaT;
-              megaT->briquePosX = -1;
+              megaT->h_pos = -1;
               megaT->brique_rel = 0;    // RAZ brick code
               briP2->brique_num = megaT->brique_num;    // brick number
               briP2->briqueFlag = 1;    // flag restaure background

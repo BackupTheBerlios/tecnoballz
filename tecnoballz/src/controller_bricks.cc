@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-04-10
+ * @date 2007-04-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.19 2007/04/10 20:32:40 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.20 2007/04/12 19:33:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ controller_bricks::controller_bricks ()
   sprite_type_id = BOB_BRICK1;
   brique_pnt = (brickClear *) NULL;
   brikTampon = (char *) NULL;
-  mega_table = (brickInfos *) NULL;
+  bricks_map = (brick_info *) NULL;
   bitmap_bricks = (bitmap_data *) NULL;
   briqueSave = 0;
   brique_clr = 0;
@@ -77,10 +77,10 @@ controller_bricks::~controller_bricks ()
       delete[]brique_pnt;
       brique_pnt = NULL;
     }
-  if (mega_table != NULL)
+  if (bricks_map != NULL)
     {
-      delete[]mega_table;
-      mega_table = NULL;
+      delete[]bricks_map;
+      bricks_map = NULL;
     }
   if (brikTampon != NULL)
     {
@@ -114,9 +114,9 @@ controller_bricks::first_init ()
     }
 
   /* allocate memory for current brick level */
-  if (NULL == mega_table)
+  if (NULL == bricks_map)
     {
-      mega_table = new brickInfos[NB_BRICKST];
+      bricks_map = new brick_info[NB_BRICKST];
     }
 }
 
@@ -156,11 +156,11 @@ controller_bricks::initialize ()
           briPT->brique_num = 0;
           briPT->briqueFlag = 0;
           briPT->adresseAff = 0;
-          briPT->adresseTab = (brickInfos *) 0x0;
+          briPT->adresseTab = (brick_info *) 0x0;
         }
 
       /* initialize current brick level */
-      brickInfos *megaT = mega_table;
+      brick_info *megaT = bricks_map;
       Sint32 c = 0;
       Sint32 vacol = 239;
       for (Sint32 j = 0; j < NB_BRICKSV * brkyoffset; j += brkyoffset)
@@ -168,12 +168,12 @@ controller_bricks::initialize ()
           for (Uint32 i = 0; i < NB_BRICKSH * brick_width; i += brick_width)
             {
               megaT->brique_rel = 0;
-              megaT->brique_aff = 0;
+              megaT->is_displayed = false;
               megaT->adresseAff = game_screen->get_offset (i, j);
-              megaT->briquePosX = 0;
-              megaT->briquePosY = 0;
+              megaT->h_pos = 0;
+              megaT->v_pos = 0;
               megaT->brique_num = c++;
-              megaT->brickcolor = vacol;
+              megaT->color = vacol;
               megaT++;
             }
           if (++vacol > 255)
@@ -212,7 +212,6 @@ controller_bricks::initialize ()
 	}
       bitmap_bricks =
         bmp_bricks->cut_to_surface (bposx, bposy, bricks_height, bricks_width);
-        //bmp_bricks->cut (bposx, bposy, bricks_height, bricks_width);
       delete bmp_bricks;
 
       /* load one bricks level from the file "tableau.data" */
@@ -276,17 +275,19 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
       tabPT = tabPT + LEVEL_SIZE * 2 * 50;
     }
 
-  //###################################################################
-  // copy all bricks of the level in the structure "mega_table"
-  //###################################################################
-  brickInfos *megaT = mega_table;
-  megaT += (6 * NB_BRICKSH);    // 6 first lines are always empty
+  /*
+   * copy all bricks of the level in the structure "bricks_map"
+   */
+  brick_info *map = bricks_map;
+  /* 6 first lines are always empty */
+  map += (6 * NB_BRICKSH);
   Uint32 bobindex = 6 * NB_BRICKSH;
-  for (Sint32 j = 0; j < LEVELHEIGH; j++, megaT += 3, bobindex += 3)
+  for (Uint32 j = 0; j < BRICKS_MAP_HEIGHT; j++, map += 3, bobindex += 3)
     {
-      megaT += 3;               // the first 3 columns are always empty 
+      /* the first 3 columns are always empty */
+      map += 3;
       bobindex += 3;
-      for (Sint32 i = 0; i < LEVELWIDTH; i++, megaT++, bobindex++)
+      for (Uint32 i = 0; i < BRICKS_MAP_WIDTH; i++, map++, bobindex++)
         {
           Sint32 adres = 0;
           char pos_y = *(tabPT++);      // position y dans page brique de 0 a 8
@@ -294,13 +295,17 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
           if (pos_x || pos_y)
             {                   //pos_x = 12;   // test only
               //pos_y = 1;    // test only
-              megaT->briquePosX = pos_x;        // save X-coordinate into mega_table
-              megaT->briquePosY = pos_y;        // save Y-coordinate into mega_table
+              map->h_pos = pos_x;        // save X-coordinate into bricks_map
+              map->v_pos = pos_y;        // save Y-coordinate into bricks_map
               adres =
                 bitmap_bricks->get_offset (pos_x * 8 * resolution,
                                            pos_y * brick_height);
-              if (adres < brickIndus)   // it's a indestructible brick?
-                num_of_bricks++;        // not, counter's incremented
+              /* it's a indestructible brick? */
+              if (adres < brickIndus)
+                {
+                  /* not, counter's incremented */
+                  num_of_bricks++;
+                }
 
               if (bob_ground)
                 {
@@ -311,11 +316,9 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
                   ptbob->enable ();
                   ptbob->set_image (2);
                 }
-
-
             }
-          megaT->brique_rel = adres;
-          megaT->brique_aff = adres;
+          map->brique_rel = adres;
+          map->is_displayed = adres > 0 ? true : false;
         }
 
     }
@@ -339,7 +342,7 @@ controller_bricks::draw_bricks_shadows ()
     {
       return;
     }
-  brickInfos *megaT = mega_table;
+  brick_info *megaT = bricks_map;
   Sint32 xmax = NB_BRICKSH * brick_width - ombre_deca;
   for (Sint32 j = ombre_deca; j < NB_BRICKSV * brkyoffset + ombre_deca;
        j += brkyoffset)
@@ -361,20 +364,20 @@ controller_bricks::draw_bricks_shadows ()
 void
 controller_bricks::draw_bricks ()
 {
-  brickInfos *megaT = mega_table;
+  brick_info *megaT = bricks_map;
   for (Sint32 j = 0; j < NB_BRICKSV * brkyoffset; j += brkyoffset)
     {
       for (Uint32 i = 0; i < NB_BRICKSH * brick_width;
            i += brick_width, megaT++)
         {
-          Sint32 pos_x = megaT->briquePosX;     // x >= 0 and x < 14
-          Sint32 pos_y = megaT->briquePosY;     // y >= 0 and y < 9
+          Sint32 pos_x = megaT->h_pos;     // x >= 0 and x < 14
+          Sint32 pos_y = megaT->v_pos;     // y >= 0 and y < 9
           if (pos_x || pos_y)
             {
               pos_x *= 8 * resolution;  // planar -> chunky
               pos_y *= brick_height;
               char *srcPT = bitmap_bricks->get_pixel_data (pos_x, pos_y);
-              draw_brick (srcPT, megaT->adresseAff, megaT->brickcolor);
+              draw_brick (srcPT, megaT->adresseAff, megaT->color);
             }
         }
     }
@@ -452,7 +455,7 @@ void
 controller_bricks::save_background ()
 {
   Sint32 *bufPT = (Sint32 *) brikTampon;
-  brickInfos *megaT = mega_table;
+  brick_info *megaT = bricks_map;
   Sint32 offs = game_screen->get_row_size () - brick_width;
   for (Sint32 j = 0; j < NB_BRICKSV * brkyoffset; j += brkyoffset)
     {
@@ -523,7 +526,7 @@ bool controller_bricks::update ()
   brique_clr += 1;              // augmente le pointeur sur la table brique a effacer
   brique_clr &= (MAXBRIKCLR - 1);       // limite le compte a 512 (de 0 a 511)
   briPT->adresseAff = 0;
-  brickInfos *
+  brick_info *
     megaT = briPT->adresseTab;
 
   /**
@@ -543,7 +546,7 @@ bool controller_bricks::update ()
         srcPT = megaT->briqueFond;
 
 
-      megaT->brique_aff = 0;
+      megaT->is_displayed = 0;
       for (Uint32 j = 0; j < brick_height; j++)
         {
           for (Uint32 i = 0; i < brick_width / 4; i++)
@@ -562,7 +565,7 @@ bool controller_bricks::update ()
       //##########################################################
 
       // 1. bottom
-      if ((megaT + offBri_BB)->brique_aff)
+      if ((megaT + offBri_BB)->is_displayed)
         j = ombre_yoff;         // brique en bas (2 lignes)
       else
         j = ombre_deca;         // pas de brique en bas (6 lignes)
@@ -571,7 +574,7 @@ bool controller_bricks::update ()
       display->clr_shadow (decal, brick_width - ombre_deca, j);
 
       // 2. left-bottom
-      if ((megaT + offBri_BG)->brique_aff)
+      if ((megaT + offBri_BG)->is_displayed)
         j = ombre_yoff;
       else
         j = ombre_deca;
@@ -579,7 +582,7 @@ bool controller_bricks::update ()
       display->clr_shadow (decal, ombre_deca, j);
 
       // 3. left              
-      if (!(megaT + offBri_GG)->brique_aff)
+      if (!(megaT + offBri_GG)->is_displayed)
         {
           decal = display->ecran_next (adres, -ombre_deca, ombre_deca);
           display->clr_shadow (decal, ombre_deca, ombre_left);
@@ -590,18 +593,18 @@ bool controller_bricks::update ()
       //##########################################################
 
       // 1. exist top brick ? 
-      if ((megaT + offBri_HH)->brique_aff)
+      if ((megaT + offBri_HH)->is_displayed)
         display->set_shadow (adres, brick_width - ombre_deca, ombre_top1);
 
       // Il existe une brique en haut a droite ?
-      if ((megaT + offBri_HD)->brique_aff)
+      if ((megaT + offBri_HD)->is_displayed)
         {
           decal = display->ecran_next (adres, brick_width - ombre_deca, 0);
           display->set_shadow (decal, ombre_deca, ombre_top1);
         }
 
       // Il existe une brique a droite ?
-      if ((megaT + offBri_DD)->brique_aff)
+      if ((megaT + offBri_DD)->is_displayed)
         {
           decal =
             display->ecran_next (adres, brick_width - ombre_deca, ombre_deca);
@@ -638,9 +641,9 @@ bool controller_bricks::update ()
     {
       char *
         gfxad = bitmap_bricks->get_pixel_data ();
-      brickInfos *
+      brick_info *
         megaT = briPT->adresseTab;
-      draw_brick (gfxad + briPT->brique_num, adres, megaT->brickcolor);
+      draw_brick (gfxad + briPT->brique_num, adres, megaT->color);
       current_player->add_score (10);
 #ifndef SOUNDISOFF
       audio->play_sound (S_TOUBRIK1);
@@ -650,22 +653,24 @@ bool controller_bricks::update ()
   return true;
 }
 
-//------------------------------------------------------------------------------
-// clear all bricks (Game Over)
-//------------------------------------------------------------------------------
+/**
+ * Clear all bricks, in "Game Over"
+ */
 void
 controller_bricks::clr_bricks ()
 {
   Sint32 save = briqueSave;
   brickClear *briPT = brique_pnt;
-  brickInfos *tMega = mega_table;
-  tMega += (6 * NB_BRICKSH);    // 6 first lines are always empty
-  for (Sint32 j = 0; j < LEVELHEIGH; j++, tMega += 3)
+  brick_info *map = bricks_map;
+  /* 6 first lines are always empty */
+  map += (6 * NB_BRICKSH);
+  for (Uint32 j = 0; j < BRICKS_MAP_HEIGHT; j++, map += 3)
     {
-      tMega += 3;               // the first 3 columns are always empty 
-      for (Sint32 i = 0; i < LEVELWIDTH; i++, tMega++)
+      /* the first 3 columns are always empty */
+      map += 3;
+      for (Uint32 i = 0; i < BRICKS_MAP_WIDTH; i++, map++)
         {
-          brickInfos *megaT = tMega;
+          brick_info *megaT = map;
           brickClear *briP2 = briPT + save;
           Sint32 v = megaT->brique_rel;
           if (v)
@@ -673,8 +678,8 @@ controller_bricks::clr_bricks ()
               briP2->balle_posX = 512;  // flag brick blitz destroy
               briP2->adresseAff = megaT->adresseAff;
               briP2->adresseTab = megaT;
-              megaT->briquePosX = -1;
-              megaT->brique_rel = 0;    //RAZ brick code
+              megaT->h_pos = -1;
+              megaT->brique_rel = 0;
               briP2->brique_num = megaT->brique_num;    //brick number
               briP2->briqueFlag = 1;    //flag restore background
               save += 1;        // inc. pt restaure table
@@ -682,6 +687,16 @@ controller_bricks::clr_bricks ()
             }
         }
     }
+}
+ 
+/**
+ * Return pointer to the bricks map of the current level 
+ * @return a pointer to the bricks bricks_map
+ */
+brick_info*
+controller_bricks::get_bricks_map ()
+{
+   return bricks_map; 
 }
 
 /**

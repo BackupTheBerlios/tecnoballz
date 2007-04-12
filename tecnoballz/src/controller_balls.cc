@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-04-10
+ * @date 2007-04-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.33 2007/04/10 20:32:40 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.34 2007/04/12 19:33:52 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1115,7 +1115,7 @@ controller_balls::check_bricks_collision ()
   Sint32 indus = bricks->getBkIndus (); //first indestructible brick
 
   sprite_ball **balls = sprites_list;
-  brickInfos *tMega = bricks->mega_table;
+  brick_info *tMega = bricks->get_bricks_map ();
   Sint32 save = bricks->briqueSave;     // save => offset on "brique_pnt"
   brickClear *briPT = bricks->brique_pnt;       // pointer to structure "brickClear" (display and clear the bricks)
   for (Uint32 i = 0; i < max_of_sprites; i++)
@@ -1143,7 +1143,7 @@ controller_balls::check_bricks_collision ()
           y /= byoff;
           y *= controller_bricks::NB_BRICKSH;
           x += y;
-          brickInfos *megaT = (tMega + x);
+          brick_info *megaT = (tMega + x);
           x = megaT->brique_rel;
           if (x == 0)           //collision ball and brick?
             {
@@ -1195,10 +1195,10 @@ controller_balls::check_bricks_collision ()
             {
               briP2->adresseAff = megaT->adresseAff;
               briP2->adresseTab = megaT;
-              megaT->briquePosX = megaT->briquePosX - (ball->powerBall1 * 2);
-              if (megaT->briquePosX <= 0)
+              megaT->h_pos = megaT->h_pos - (ball->powerBall1 * 2);
+              if (megaT->h_pos <= 0)
                 {
-                  megaT->briquePosX = 0;
+                  megaT->h_pos = 0;
                   megaT->brique_rel = 0;        //reset code brick
                   briP2->brique_num = megaT->brique_num;
                   briP2->briqueFlag = 1;        //1 = restore background 
