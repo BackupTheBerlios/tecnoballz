@@ -1,14 +1,14 @@
 /** 
  * @file sprite_money.h
  * @brief The money sprite 
- * @date 2007-02-11
+ * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.h,v 1.7 2007/02/11 16:04:44 gurumeditation Exp $
+ * $Id: sprite_money.h,v 1.8 2007/04/13 22:15:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ public:
     sprite_money ();
    ~sprite_money ();
   void init_members ();
-  bool enable_if_available (brickClear * briPT);
+  bool enable_if_available (brick_redraw * briPT);
   bool enable_if_available (sprite_ball * pball);
   bool enable_if_available (sprite_projectile * pfire);
   Uint32 move ();

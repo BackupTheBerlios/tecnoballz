@@ -4,11 +4,11 @@
  * @date 2007-04-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.34 $
+ * @version $Revision: 1.35 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.34 2007/04/12 19:33:52 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.35 2007/04/13 22:15:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1115,9 +1115,7 @@ controller_balls::check_bricks_collision ()
   Sint32 indus = bricks->getBkIndus (); //first indestructible brick
 
   sprite_ball **balls = sprites_list;
-  brick_info *tMega = bricks->get_bricks_map ();
-  Sint32 save = bricks->briqueSave;     // save => offset on "brique_pnt"
-  brickClear *briPT = bricks->brique_pnt;       // pointer to structure "brickClear" (display and clear the bricks)
+  brick_info *bricks_map = bricks->get_bricks_map ();
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = *(balls++);
@@ -1136,20 +1134,21 @@ controller_balls::check_bricks_collision ()
           x += *(colTB++);
           Sint32 y = ball->y_coord;
           y += *(colTB++);
-          brickClear *briP2 = briPT + save;
-          briP2->balle_posX = x;
-          briP2->balle_posY = y;
+	  /* list of bricks to clear or redraw */
+          brick_redraw *redraw = bricks->get_bricks_redraw ();
+          redraw->balle_posX = x;
+          redraw->balle_posY = y;
           x /= bwght;
           y /= byoff;
           y *= controller_bricks::NB_BRICKSH;
           x += y;
-          brick_info *megaT = (tMega + x);
-          x = megaT->brique_rel;
+          brick_info *brick = (bricks_map + x);
+          x = brick->brique_rel;
           if (x == 0)           //collision ball and brick?
             {
               continue;
             }
-          briP2->raquettePT = ball->paddle_touched;
+          redraw->raquettePT = ball->paddle_touched;
 
           x = x - indus;
           if (x >= 0)
@@ -1162,14 +1161,14 @@ controller_balls::check_bricks_collision ()
                 {
                   if (ball->ballPowerX == sprite_ball::BALLPOWER2)
                     {
-                      briP2->adresseAff = megaT->adresseAff;
-                      briP2->adresseTab = megaT;
-                      briP2->balle_posX = -1;
-                      megaT->brique_rel = 0;    //reset code brick
-                      briP2->brique_num = megaT->brique_num;
-                      briP2->briqueFlag = 1;    //1 = restore background
-                      save += 1;        // augmente pointeur table brique effacement
-                      save &= (controller_bricks::MAXBRIKCLR - 1);
+                      redraw->pixel_offset = brick->pixel_offset;
+                      redraw->brick_map = brick;
+                      redraw->balle_posX = -1;
+                      brick->brique_rel = 0;    //reset code brick
+                      redraw->number = brick->number;
+		      /* restore background under brick */
+                      redraw->is_background = true;
+		      bricks->bricks_redraw_next ();
                     }
                   else
                     {
@@ -1181,7 +1180,8 @@ controller_balls::check_bricks_collision ()
                 }
               else
                 {
-                  x = 1;        //brick's really indestructible
+		  /* brick's really indestructible */
+                  x = 1; 
 #ifndef SOUNDISOFF
                   audio->play_sound (S_TOINDES1);
 #endif
@@ -1193,24 +1193,25 @@ controller_balls::check_bricks_collision ()
            */
           else
             {
-              briP2->adresseAff = megaT->adresseAff;
-              briP2->adresseTab = megaT;
-              megaT->h_pos = megaT->h_pos - (ball->powerBall1 * 2);
-              if (megaT->h_pos <= 0)
+              redraw->pixel_offset = brick->pixel_offset;
+              redraw->brick_map = brick;
+              brick->h_pos = brick->h_pos - (ball->powerBall1 * 2);
+              if (brick->h_pos <= 0)
                 {
-                  megaT->h_pos = 0;
-                  megaT->brique_rel = 0;        //reset code brick
-                  briP2->brique_num = megaT->brique_num;
-                  briP2->briqueFlag = 1;        //1 = restore background 
+                  brick->h_pos = 0;
+                  brick->brique_rel = 0;        //reset code brick
+                  redraw->number = brick->number;
+		  /* restore background */
+                  redraw->is_background = true;
                 }
               else
                 {
-                  megaT->brique_rel = megaT->brique_rel - ball->powerBall2;
-                  briP2->brique_num = megaT->brique_rel;
-                  briP2->briqueFlag = 0;        //flag redraw new brick
+                  brick->brique_rel = brick->brique_rel - ball->powerBall2;
+                  redraw->number = brick->brique_rel;
+		  /* redraw a new brick */
+                  redraw->is_background = false;
                 }
-              save += 1;        // augmente pointeur table brique effacement
-              save &= (controller_bricks::MAXBRIKCLR - 1);
+	      bricks->bricks_redraw_next ();
             }
           rebon += incre;       // incremente le flag rebond
           //incre = incre + incre;
@@ -1227,7 +1228,6 @@ controller_balls::check_bricks_collision ()
               ball->directBall = *rebPT;
             }
         }
-      bricks->briqueSave = save;
     }                           // ball loop
 }
 

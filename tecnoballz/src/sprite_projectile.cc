@@ -1,14 +1,14 @@
-/**U
+/**
  * @file sprite_projectile.cc 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-04-12
+ * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.10 2007/04/12 19:33:52 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.11 2007/04/13 22:15:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -192,8 +192,6 @@ sprite_projectile::check_collisions_with_bricks ()
   Sint32 indus = bricks->getBkIndus (); //first indestructible brick
   sprite_projectile **projectiles = projectiles_list;
   brick_info *tMega = bricks->get_bricks_map ();
-  brickClear *briPT = bricks->brique_pnt;
-  Sint32 save = bricks->briqueSave;
   for (Uint32 i = 0; i < total_fire; i++)
     {
       sprite_projectile *projectile = *(projectiles++);
@@ -203,7 +201,7 @@ sprite_projectile::check_collisions_with_bricks ()
         }
       Sint32 x = projectile->x_coord + 2;
       Sint32 y = projectile->y_coord + 2;
-      brickClear *briP2 = briPT + save;
+      brick_redraw *briP2 = bricks->get_bricks_redraw ();
       briP2->balle_posX = x;
       briP2->balle_posY = y;
       x /= bwght;
@@ -232,13 +230,13 @@ sprite_projectile::check_collisions_with_bricks ()
               if (projectile->can_destroy_indestructible)
                 {
                   briP2->balle_posX = -1;
-                  briP2->adresseAff = megaT->adresseAff;
-                  briP2->adresseTab = megaT;
+                  briP2->pixel_offset = megaT->pixel_offset;
+                  briP2->brick_map = megaT;
                   megaT->brique_rel = 0;        // RAZ code brique
-                  briP2->brique_num = megaT->brique_num;
-                  briP2->briqueFlag = 1;        //1 = restore background
-                  save += 1;    // inc. pt/restaure table
-                  save &= (controller_bricks::MAXBRIKCLR - 1);
+                  briP2->number = megaT->number;
+		  /* restore background under brick */
+                  briP2->is_background = true;
+		  bricks->bricks_redraw_next ();
                 }
               else
                 {
@@ -262,29 +260,29 @@ sprite_projectile::check_collisions_with_bricks ()
        */
       else
         {
-          briP2->adresseAff = megaT->adresseAff;
-          briP2->adresseTab = megaT;
+          briP2->pixel_offset = megaT->pixel_offset;
+          briP2->brick_map = megaT;
           x = projectile->power;   // fire power : 1 or 2
           megaT->h_pos = megaT->h_pos - (x * 2);
           if (megaT->h_pos <= 0)
             {
               megaT->h_pos = 0;
               megaT->brique_rel = 0;
-              briP2->brique_num = megaT->brique_num;
-              briP2->briqueFlag = 1;    // flag restaure background 
+              briP2->number = megaT->number;
+	      /* restore background under brick */
+              briP2->is_background = true;
             }
           else
             {
               megaT->brique_rel = megaT->brique_rel - (x * bwght);
-              briP2->brique_num = megaT->brique_rel;
-              briP2->briqueFlag = 0;    // flag display brick
+              briP2->number = megaT->brique_rel;
+              /* redraw a new brick */
+	      briP2->is_background = false;
             }
-          save += 1;            // inc. pt/restaure table
-          save &= (controller_bricks::MAXBRIKCLR - 1);
+	  bricks->bricks_redraw_next ();
         }
 
     }
-  bricks->briqueSave = save;
 }
 
 /**

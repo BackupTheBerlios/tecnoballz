@@ -2,14 +2,14 @@
  * @file controller_sides_bricks.cc 
  * @brief Sides bricks controller. The small bricks on the side, the walls top
  *        left and right
- * @date 2007-04-12
+ * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.cc,v 1.8 2007/04/12 06:42:58 gurumeditation Exp $
+ * $Id: controller_sides_bricks.cc,v 1.9 2007/04/13 22:15:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -191,7 +191,7 @@ controller_sides_bricks::initialize ()
     }
 
   /* determine the behavior of the three walls, according to the area */
-  area = 4; /* test only */
+//  area = 4; /* test only */
   switch (area)
     {
     case 2:
@@ -225,11 +225,11 @@ controller_sides_bricks::initialize ()
       break;
     }
   /* wall of the top is breakable (test only) */
-  is_top_wall_breakable = true;
+//  is_top_wall_breakable = true;
   /* wall of the right is breakable (test only) */
-  is_right_wall_breakable = true;
+//  is_right_wall_breakable = true;
   /* wall of the left is breakable (test only) */
-  is_left_wall_breakable = true;
+//  is_left_wall_breakable = true;
 
   /* create the sprites of the walls if necessary */
   create_bricks_sprites ();

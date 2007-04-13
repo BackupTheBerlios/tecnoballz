@@ -1,14 +1,14 @@
 /** 
  * @file controller_moneys.cc 
  * @brief Moneys controller 
- * @date 2007-02-11
+ * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_moneys.cc,v 1.6 2007/02/11 21:03:24 gurumeditation Exp $
+ * $Id: controller_moneys.cc,v 1.7 2007/04/13 22:15:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ controller_moneys::initialize (Uint32 delay, right_panel_score * score,
  * @param briPT a pointer to the brick which touched by a ball 
  */
 void
-controller_moneys::send_money_from_brick (brickClear * briPT)
+controller_moneys::send_money_from_brick (brick_redraw * briPT)
 {
   if (++delay_count <= send_delay)
     {

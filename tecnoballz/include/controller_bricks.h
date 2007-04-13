@@ -2,14 +2,14 @@
  * @file controller_bricks.h
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-04-12
+ * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.11 2007/04/12 19:33:52 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.12 2007/04/13 22:15:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,8 +39,8 @@ typedef struct
 {
   Sint32 brique_rel;            // adresse source relative Gfx de la brique (collision)
   bool is_displayed;            // adresse source relative Gfx de la brique (reaffichage)
-  Sint32 brique_num;            // numero de la brique par rapport a la premiere
-  Sint32 adresseAff;            // adresse ecran relative d'affichage
+  Sint32 number;            // numero de la brique par rapport a la premiere
+  Sint32 pixel_offset;            // adresse ecran relative d'affichage
   /** Brick horizontal position in the bricks bitmap
    * 0, 2, 4, 6, 8, 10 or 12  */
   Sint32 h_pos;
@@ -61,12 +61,14 @@ typedef struct
   Sint32 balle_posX;            // ball screen X-coordinate 
   Sint32 balle_posY;            // ball screen Y-coordinate 
   sprite_paddle *raquettePT;    // pointeur sur la raquette qui a touche cette balle en dernier
-  Sint32 brique_num;            // numero de la brique touchee
-  Sint32 briqueFlag;            // 1=affiche le decor du fond ou 0=affiche la brique
-  Sint32 adresseAff;            // offset d'affichage ecran de la brique
-  brick_info *adresseTab;       // adresse de la brique dans "bricks_map"
+  Sint32 number;            // numero de la brique touchee
+  /** If true restore backgound, redraw brick otherwise */
+  bool is_background;
+  Sint32 pixel_offset;            // offset d'affichage ecran de la brique
+  /** Pointer to the brick in the map */
+  brick_info *brick_map;
 }
-brickClear;
+brick_redraw;
 
 #include "../include/sprite_paddle.h"
 #include "../include/bitmap_data.h"
@@ -136,11 +138,11 @@ private:
   Sint32 ombre_left;            //(4 or 8)
   Sint32 ombre_yoff;            //space between 2 bricks (1 or 2)
   Sint32 ombre_top1;            //(2 or 4)
+  brick_redraw * bricks_redraw;    // table de reaffichage 
+  Sint32 briqueSave;            // pointeur sur "bricks_redraw"
 
 protected:
-  brickClear * brique_pnt;    // table de reaffichage 
-  Sint32 briqueSave;            // pointeur sur "brique_pnt"
-  Sint32 brique_clr;            // pointeur sur "brique_pnt"
+  Sint32 brique_clr;            // pointeur sur "bricks_redraw"
   char *brikTampon;             // sauvegarde briques
   Sint32 offsSource;            // adresse de la page brique
   Sint32 offsDestin;            //
@@ -159,6 +161,9 @@ public:
   void draw_brick (char *srcPT, Sint32 adres, Sint32 colbr);
   void clr_bricks ();
   brick_info* get_bricks_map ();
+  brick_redraw* get_bricks_redraw (); 
+  brick_redraw* get_bricks_redraw_next (); 
+  void bricks_redraw_next (); 
 
 
   Sint32 get_brick_width ();
@@ -188,8 +193,8 @@ NB_BRICKST = 480 briques a l'ecran
   type     : type structure brick_info 6 mots et 1 pointeur
    brique_rel : adresse relative du bitmap de la brique, sert pour les collisions/resistance de la brique controller_balls::vitusBrick()
    is_displayed : adresse relative du bitmap de la brique
-   brique_num : numero de la brique (sert a rien ???)
-   adresseAff : adresse ecran relative d'affichage (dans le buffer et le tampon)
+   number : numero de la brique (sert a rien ???)
+   pixel_offset : adresse ecran relative d'affichage (dans le buffer et le tampon)
    h_pos : abscisse de la brique dans la page Gfx brique (0,1,2,3,4,5,6,7 ou 8)
    v_pos : ordonnee de la brique dans la page Gfx brique (0,2,4,6,8,10 ou 12)
    briqueFond : adresse absolue du fond 4 couleurs sous la brique (modulo 0)
@@ -246,8 +251,8 @@ NB_BRICKST = 480 briques a l'ecran
  
   brique_rel => adresse source relative de la brique (resistance)
   is_displayed => adresse source relative de la brique 
-  brique_num => numero de la brique par rapport a la premiere
-  adresseAff => adresse ecran relative d'affichage (buffer et tampon)
+  number => numero de la brique par rapport a la premiere
+  pixel_offset => adresse ecran relative d'affichage (buffer et tampon)
   h_pos => abscisse de la brique dans la page graphique brique 0, 2, 4, 6, 8, 10 ou 12  
   v_pos => ordonnee de la brique dans la page graphique brique 0, 1, 2, 3, 4, 5, 6, 7, ou 8 
  *briqueFond => adresse du fond de la brique pour l'effacer (modulo 0)
@@ -284,9 +289,9 @@ typedef struct
   Sint32                    balle_posX;                          // abcsisse ecran de la balle
   Sint32                    balle_posY;                          // ordonnee ecran de la balle
   sprite_paddle             *raquettePT;                          // pointeur sur la raquette qui a touche cette balle en dernier
-  Sint32                    brique_num;                          // numero de la brique touchee
-  Sint32                    briqueFlag;                          // 1=affiche le decor du fond ou 0=affiche la brique
-  Sint32                    adresseAff;                          // offset d'affichage ecran de la brique
-  brick_info             *adresseTab;                          // adresse de la brique dans "bricks_map"
+  Sint32                    number;                          // numero de la brique touchee
+  Sint32                    is_background;                          // 1=affiche le decor du fond ou 0=affiche la brique
+  Sint32                    pixel_offset;                          // offset d'affichage ecran de la brique
+  brick_info             *brick_map;                          // adresse de la brique dans "bricks_map"
 
 */

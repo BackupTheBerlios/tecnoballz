@@ -1,14 +1,14 @@
 /** 
  * @file controller_moneys.h
  * @brief Moneys controller 
- * @date 2007-02-10
+ * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_moneys.h,v 1.5 2007/02/13 17:11:02 gurumeditation Exp $
+ * $Id: controller_moneys.h,v 1.6 2007/04/13 22:15:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ public:
    ~controller_moneys ();
   void initialize (Uint32 delay, right_panel_score * score, controller_indicators * money);
   void initialize (Uint32 delay, controller_indicators * money);
-  void send_money_from_brick (brickClear * briPT);
+  void send_money_from_brick (brick_redraw * briPT);
   void send_money (sprite_ball * ball);
   void send_money (sprite_projectile * blast);
   void send_money_from_guardian (sprite_ball * ball);

@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.cc
  * @brief Paddles controller 
- * @date 2007-02-18
+ * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.17 2007/03/31 21:31:21 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.18 2007/04/13 22:15:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -384,7 +384,8 @@ controller_paddles::check_if_release_balls ()
    */
   if (!is_team_mode)
     {
-      if (keyboard->is_right_button ())
+      if (keyboard->is_right_button () ||
+	  keyboard->key_is_pressed (SDLK_SPACE))
         {
           paddle_bottom->release_ball ();
           paddle_right->release_ball ();

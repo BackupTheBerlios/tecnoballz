@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.cc 
  * @brief Capsules controller 
- * @date 2007-03-05
+ * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.20 2007/03/19 20:47:50 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.21 2007/04/13 22:15:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ controller_capsules::initialize (Sint32 mStep,
  * @param briPT
  */
 void
-controller_capsules::send_capsule_from_bricks (brickClear * briPT)
+controller_capsules::send_capsule_from_bricks (brick_redraw * briPT)
 {
   bricks_breaked_count++;
   for (Uint32 i = 0; i < max_of_sprites; i++)

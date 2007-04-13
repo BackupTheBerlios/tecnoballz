@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.h
  * @brief Capsules controller 
- * @date 2007-01-03
+ * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.h,v 1.10 2007/03/05 17:36:26 gurumeditation Exp $
+ * $Id: controller_capsules.h,v 1.11 2007/04/13 22:15:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ public:
     controller_capsules ();
    ~controller_capsules ();
   void initialize (Sint32 mStep, const Uint32* table, controller_balls * pBall, sprite_object *);
-  void send_capsule_from_bricks (brickClear * briPT);
+  void send_capsule_from_bricks (brick_redraw * briPT);
   void send_malus (sprite_ball *);
   void send_malus (sprite_projectile *);
   void check_if_send_capsule (sprite_ball * pball);

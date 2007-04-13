@@ -1,14 +1,14 @@
 /** 
  * @file sprite_money.cc 
  * @brief The money sprite 
- * @date 2007-02-11
+ * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.cc,v 1.9 2007/02/20 20:52:14 gurumeditation Exp $
+ * $Id: sprite_money.cc,v 1.10 2007/04/13 22:15:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ sprite_money::init_members ()
  * @param brick a pointer to the brick which touched by a ball
  * @return true if the sprite was enabled, otherwise false
  */
-bool sprite_money::enable_if_available (brickClear * brick)
+bool sprite_money::enable_if_available (brick_redraw * brick)
 {
   if (is_enabled)
     {

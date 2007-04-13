@@ -4,11 +4,11 @@
  * @date 2007-04-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.10 2007/04/12 19:33:52 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.11 2007/04/13 22:15:17 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -242,31 +242,32 @@ controller_gigablitz::collision1 ()
       y *= controller_bricks::NB_BRICKSH;       // y = y * 16 (number of bricks on the same line)
       x += y;
       brick_info *tMega = bricks->get_bricks_map ();
-      Sint32 save = bricks->briqueSave; // save => offset on "brique_pnt"
-      brickClear *briPT = bricks->brique_pnt;   // pointer to structure "brickClear" (display and clear the bricks)
       for (Sint32 i = 0; i < blitz_brik; i++)
         {
           brick_info *megaT = (tMega + x);
-          brickClear *briP2 = briPT + save;
           Sint32 v = megaT->brique_rel;
-          if (v)
+          if (v != 0)
             {
+	      /* list of bricks to clear or redraw */
+	      brick_redraw *briP2 = bricks->get_bricks_redraw_next (); 
               if (v < indus)
-                briP2->balle_posX = 512;        // flag brick blitz destroy
+		{
+                  briP2->balle_posX = 512;        // flag brick blitz destroy
+		}
               else
-                briP2->balle_posX = -1;
-              briP2->adresseAff = megaT->adresseAff;
-              briP2->adresseTab = megaT;
+		{
+                  briP2->balle_posX = -1;
+		}
+              briP2->pixel_offset = megaT->pixel_offset;
+              briP2->brick_map = megaT;
               megaT->h_pos = -1;
               megaT->brique_rel = 0;    // RAZ brick code
-              briP2->brique_num = megaT->brique_num;    // brick number
-              briP2->briqueFlag = 1;    // flag restaure background
-              save += 1;        // inc. pt restaure table
-              save &= (controller_bricks::MAXBRIKCLR - 1);
+              briP2->number = megaT->number;    // brick number
+	      /* restore background under brick */
+              briP2->is_background = true;
             }
           x++;
         }
-      bricks->briqueSave = save;
     }
 }
 
