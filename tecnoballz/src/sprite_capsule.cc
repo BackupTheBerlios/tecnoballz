@@ -4,11 +4,11 @@
  * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.cc,v 1.9 2007/04/13 22:15:17 gurumeditation Exp $
+ * $Id: sprite_capsule.cc,v 1.10 2007/04/15 19:20:55 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,9 +80,9 @@ sprite_capsule::enable_indicator_capsule (Uint32 id)
  * @param id capsule identifier 
  */
 void
-sprite_capsule::enable_capsule (brick_redraw * briPT, Uint32 id)
+sprite_capsule::enable_capsule (brick_redraw * brick, Uint32 id)
 {
-  set_new_capsule (id, &gagdetBrik[0], briPT->balle_posX, briPT->balle_posY,briPT->raquettePT);
+  set_new_capsule (id, &gagdetBrik[0], brick->xcoord_collision, brick->ycoord_collision, brick->paddle);
 }
 
 /**

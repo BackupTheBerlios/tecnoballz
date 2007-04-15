@@ -4,11 +4,11 @@
  * @date 2007-04-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.35 $
+ * @version $Revision: 1.36 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.35 2007/04/13 22:15:17 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.36 2007/04/15 19:20:55 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1110,7 +1110,7 @@ controller_balls::check_bricks_collision ()
 {
   controller_bricks *bricks = controller_bricks::get_instance ();
 
-  Sint32 bwght = bricks->get_brick_width ();    //brick's width in pixels
+  Uint32 brick_width = bricks->get_brick_width ();    //brick's width in pixels
   Sint32 byoff = bricks->getYOffset (); //y-offset between 2 bricks
   Sint32 indus = bricks->getBkIndus (); //first indestructible brick
 
@@ -1136,19 +1136,22 @@ controller_balls::check_bricks_collision ()
           y += *(colTB++);
 	  /* list of bricks to clear or redraw */
           brick_redraw *redraw = bricks->get_bricks_redraw ();
-          redraw->balle_posX = x;
-          redraw->balle_posY = y;
-          x /= bwght;
+          redraw->xcoord_collision = x;
+          redraw->ycoord_collision = y;
+          x /= brick_width;
           y /= byoff;
           y *= controller_bricks::NB_BRICKSH;
           x += y;
           brick_info *brick = (bricks_map + x);
           x = brick->brique_rel;
-          if (x == 0)           //collision ball and brick?
+          /* collision between balls and brick? */
+	  if (0 == x)
             {
+	      /* no collision */
               continue;
             }
-          redraw->raquettePT = ball->paddle_touched;
+	  redraw->is_gigablitz_destroyed = false;
+          redraw->paddle = ball->paddle_touched;
 
           x = x - indus;
           if (x >= 0)
@@ -1157,13 +1160,14 @@ controller_balls::check_bricks_collision ()
                * indestructible brick touched!
                */
               indes = 1;        //collision with indestructible 
-              if ((x -= bwght) > 0)     //indestructible-destructible bricks?
+              if ((x -= brick_width) > 0)     //indestructible-destructible bricks?
                 {
                   if (ball->ballPowerX == sprite_ball::BALLPOWER2)
                     {
                       redraw->pixel_offset = brick->pixel_offset;
                       redraw->brick_map = brick;
-                      redraw->balle_posX = -1;
+		      redraw->is_indestructible = true;
+                      //redraw->xcoord_collision = -1;
                       brick->brique_rel = 0;    //reset code brick
                       redraw->number = brick->number;
 		      /* restore background under brick */
@@ -1193,6 +1197,7 @@ controller_balls::check_bricks_collision ()
            */
           else
             {
+	      redraw->is_indestructible = false;
               redraw->pixel_offset = brick->pixel_offset;
               redraw->brick_map = brick;
               brick->h_pos = brick->h_pos - (ball->powerBall1 * 2);

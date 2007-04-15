@@ -2,14 +2,14 @@
  * @file controller_bricks.h
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-04-13
+ * @date 2007-04-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.12 2007/04/13 22:15:17 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.13 2007/04/15 19:20:55 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,9 +58,16 @@ brick_info;                     // used into "bricks_map"
  */
 typedef struct
 {
-  Sint32 balle_posX;            // ball screen X-coordinate 
-  Sint32 balle_posY;            // ball screen Y-coordinate 
-  sprite_paddle *raquettePT;    // pointeur sur la raquette qui a touche cette balle en dernier
+  /** If true if indestructible power 1 brick */
+  bool is_indestructible;
+  /** If true brick was destroyed by the Gigablitz */
+  bool is_gigablitz_destroyed;
+  /** X-coordintate of the collision */
+  Sint32 xcoord_collision;
+  /** X-coordintate of the collision */
+  Sint32 ycoord_collision;
+  /** The last paddle touched by the ball or the paddle was fired */
+  sprite_paddle *paddle;
   Sint32 number;            // numero de la brique touchee
   /** If true restore backgound, redraw brick otherwise */
   bool is_background;
@@ -86,14 +93,16 @@ class controller_bricks:public objects_list < sprite_object, controller_bricks >
 
 public:
 
-  static const Sint32 MAXBRIKCLR = 2 << 8;      //maximum number of bricks to erase 
-  static const Sint32 NB_BRICKSH = 16;  //numbers of bricks peer line
-  static const Sint32 NB_BRICKSV = 30;  //numbers of lines of bricks
-  static const Sint32 NB_BRICKST = NB_BRICKSH * (NB_BRICKSV + 8);       //numbers total of bricks
+  static const Uint32 MAXBRIKCLR = 2 << 8;      //maximum number of bricks to erase 
+  static const Uint32 NB_BRICKSH = 16;  //numbers of bricks peer line
+  static const Uint32 NB_BRICKSV = 30;  //numbers of lines of bricks
+  static const Uint32 NB_BRICKST = NB_BRICKSH * (NB_BRICKSV + 8);       //numbers total of bricks
 
 private:
-  static const Sint32 BRICKWIDTH = 16;  // brick's width in pixels
-  static const Sint32 BRICKHEIGH = 7;   // brick's height in pixels
+  /** Brick width in pixels in low-res */
+  static const Uint32 BRICK_WIDTH = 16;
+  /** Brick height in pixels in low-res */
+  static const Uint32 BRICK_HEIGHT = 7;
   static const Sint32 offBri_DD = 1;
   static const Sint32 offBri_GG = -1;
   static const Sint32 offBri_HH = -NB_BRICKSH;
@@ -286,8 +295,8 @@ RIZ		=BK.X*4		Largeur en octets ligne map-editor
  -------------------------------------------------------------------------------
 typedef struct
 {
-  Sint32                    balle_posX;                          // abcsisse ecran de la balle
-  Sint32                    balle_posY;                          // ordonnee ecran de la balle
+  Sint32                    xcoord_collision;                          // abcsisse ecran de la balle
+  Sint32                    ycoord_collision;                          // ordonnee ecran de la balle
   sprite_paddle             *raquettePT;                          // pointeur sur la raquette qui a touche cette balle en dernier
   Sint32                    number;                          // numero de la brique touchee
   Sint32                    is_background;                          // 1=affiche le decor du fond ou 0=affiche la brique

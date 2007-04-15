@@ -5,11 +5,11 @@
  * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.21 2007/04/13 22:15:17 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.22 2007/04/15 19:20:55 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,14 +56,14 @@ controller_bricks::controller_bricks ()
   less_bricks_delay = 10;
   bricks_height = 112 * resolution;
   bricks_width = 63 * resolution;
-  brick_width = BRICKWIDTH * resolution;
-  brick_height = BRICKHEIGH * resolution;
+  brick_width = BRICK_WIDTH * resolution;
+  brick_height = BRICK_HEIGHT * resolution;
   brick_size = brick_width * brick_height;
   brkyoffset = BRKYOFFSET * resolution;
   brickIndus = 8 * brick_height * bricks_height;
   ombre_deca = 3 * resolution;
-  ombre_left = (BRICKHEIGH * resolution) - ombre_deca;
-  ombre_yoff = (BRKYOFFSET - BRICKHEIGH) * resolution;
+  ombre_left = (BRICK_HEIGHT * resolution) - ombre_deca;
+  ombre_yoff = (BRKYOFFSET - BRICK_HEIGHT) * resolution;
   ombre_top1 = ombre_deca - ombre_yoff;
 }
 
@@ -147,23 +147,25 @@ controller_bricks::initialize ()
       /* clear restauration list */
       briqueSave = 0;
       brique_clr = 0;
-      brick_redraw *briPT = bricks_redraw;
-      for (Sint32 j = 0; j < MAXBRIKCLR; j++, briPT++)
+      brick_redraw *redraw = bricks_redraw;
+      for (Uint32 j = 0; j < MAXBRIKCLR; j++, redraw++)
         {
-          briPT->balle_posX = 0;
-          briPT->balle_posY = 0;
-          briPT->raquettePT = (sprite_paddle *) 0x0;
-          briPT->number = 0;
-          briPT->is_background = 0;
-          briPT->pixel_offset = 0;
-          briPT->brick_map = (brick_info *) 0x0;
+	  redraw->is_indestructible = false;
+	  redraw->is_gigablitz_destroyed = false;
+          redraw->xcoord_collision = 0;
+          redraw->ycoord_collision = 0;
+          redraw->paddle = (sprite_paddle *) NULL;
+          redraw->number = 0;
+          redraw->is_background = false;
+          redraw->pixel_offset = 0;
+          redraw->brick_map = (brick_info *) NULL;
         }
 
       /* initialize current brick level */
       brick_info *map = bricks_map;
       Sint32 c = 0;
       Uint32 color = 239;
-      for (Sint32 j = 0; j < NB_BRICKSV * brkyoffset; j += brkyoffset)
+      for (Uint32 j = 0; j < NB_BRICKSV * brkyoffset; j += brkyoffset)
         {
           for (Uint32 i = 0; i < NB_BRICKSH * brick_width; i += brick_width)
             {
@@ -344,10 +346,10 @@ controller_bricks::draw_bricks_shadows ()
     }
   brick_info *megaT = bricks_map;
   Sint32 xmax = NB_BRICKSH * brick_width - ombre_deca;
-  for (Sint32 j = ombre_deca; j < NB_BRICKSV * brkyoffset + ombre_deca;
+  for (Uint32 j = ombre_deca; j < NB_BRICKSV * brkyoffset + ombre_deca;
        j += brkyoffset)
     {
-      for (Sint32 i = -ombre_deca; i < xmax; i += brick_width)
+      for (Uint32 i = -ombre_deca; i < xmax; i += brick_width)
         {
           if (megaT->brique_rel)
             {
@@ -531,7 +533,7 @@ bool controller_bricks::update ()
   /**
    * restaure background
    */
-  if (briPT->is_background)        // 0 = redraw brick / 1 = restore background
+  if (briPT->is_background)
     {
       Sint32
         line2 = offsDestin;
@@ -610,8 +612,8 @@ bool controller_bricks::update ()
           display->set_shadow (decal, ombre_deca, ombre_left);
         }
 
-      // destroyed indestructible brick
-      if (briPT->balle_posX < 0)
+      /* destroyed indestructible brick */
+      if (briPT->is_indestructible)
         {
           current_player->add_score (100);
 #ifndef SOUNDISOFF
@@ -625,7 +627,8 @@ bool controller_bricks::update ()
 #ifndef SOUNDISOFF
           audio->play_sound (S_TOUBRIK1);
 #endif
-          if (briPT->balle_posX != 512)
+          //if (briPT->xcoord_collision != 512)
+	  if (!briPT->is_gigablitz_destroyed) 
             {
               moneys->send_money_from_brick (briPT);
               capsules->send_capsule_from_bricks (briPT);
@@ -672,7 +675,8 @@ controller_bricks::clr_bricks ()
 	      continue;
 	    }
 	  brick_redraw *redraw = get_bricks_redraw_next ();
-          redraw->balle_posX = 512;  // flag brick blitz destroy
+          //redraw->xcoord_collision = 512;  // flag brick blitz destroy
+	  redraw->is_gigablitz_destroyed = true;
           redraw->pixel_offset = map->pixel_offset;
           redraw->brick_map = map;
           map->h_pos = -1;

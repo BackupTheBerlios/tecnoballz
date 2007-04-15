@@ -4,11 +4,11 @@
  * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.h,v 1.9 2007/04/03 13:43:13 gurumeditation Exp $
+ * $Id: controller_gigablitz.h,v 1.10 2007/04/15 19:20:55 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ private:
   Sint32 bitz_maxiy;            // 
   Sint32 bitz_miniy;            // 
   Sint32 blitz_seta;
-  Sint32 blitz_brik;            //width of collison bricks in row
+  Uint32 num_of_bricks;            //width of collison bricks in row
   Uint32 blitz_xsin;
 
 public:

@@ -4,11 +4,11 @@
  * @date 2007-04-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.11 2007/04/13 22:15:17 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.12 2007/04/15 19:20:55 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ controller_gigablitz::controller_gigablitz ()
   bitz_maxiy = 0;
   bitz_miniy = 0;
   blitz_seta = 0;
-  blitz_brik = 0;
+  num_of_bricks = 0;
   blitz_xsin = 0;
   blitz_colx = 0;
 }
@@ -144,7 +144,7 @@ controller_gigablitz::shoot_paddle  ()
         }
       if (x)
         y++;
-      blitz_brik = y;
+      num_of_bricks = y;
 #ifndef SOUNDISOFF
       audio->play_sound (S_TIR_GARD);
 #endif
@@ -233,43 +233,47 @@ controller_gigablitz::collision1 ()
   Sint32 byoff = bricks->getYOffset ();
   /* first indestructible brick */
   Sint32 indus = bricks->getBkIndus ();
-  if (blitz_brik > 0)
+  if (0 == num_of_bricks)
     {
+      return;
+    }
       Sint32 x = blitz_colx;
       Sint32 y = current_gigablitz->get_y_coord ();
       x /= bwght;               // x = x / 32 (width of a brick)
       y /= byoff;               // y = y / 16 (space between two bricks in height)
       y *= controller_bricks::NB_BRICKSH;       // y = y * 16 (number of bricks on the same line)
       x += y;
-      brick_info *tMega = bricks->get_bricks_map ();
-      for (Sint32 i = 0; i < blitz_brik; i++)
+      brick_info *bricks_map = bricks->get_bricks_map ();
+      for (Uint32 i = 0; i < num_of_bricks; i++, x++)
         {
-          brick_info *megaT = (tMega + x);
-          Sint32 v = megaT->brique_rel;
-          if (v != 0)
+          brick_info *map = (bricks_map + x);
+          Sint32 v = map->brique_rel;
+          if (0 == v)
             {
+	      continue;
+	    }
 	      /* list of bricks to clear or redraw */
-	      brick_redraw *briP2 = bricks->get_bricks_redraw_next (); 
+	      brick_redraw *redraw = bricks->get_bricks_redraw_next (); 
               if (v < indus)
 		{
-                  briP2->balle_posX = 512;        // flag brick blitz destroy
+		  redraw->is_indestructible = false;
+		  redraw->is_gigablitz_destroyed = true;
+                  //redraw->xcoord_collision = 512;
 		}
               else
 		{
-                  briP2->balle_posX = -1;
+		  redraw->is_indestructible = true;
+                  //redraw->xcoord_collision = -1;
 		}
-              briP2->pixel_offset = megaT->pixel_offset;
-              briP2->brick_map = megaT;
-              megaT->h_pos = -1;
-              megaT->brique_rel = 0;    // RAZ brick code
-              briP2->number = megaT->number;    // brick number
+              redraw->pixel_offset = map->pixel_offset;
+              redraw->brick_map = map;
+              map->h_pos = -1;
+              map->brique_rel = 0;    // RAZ brick code
+              redraw->number = map->number;    // brick number
 	      /* restore background under brick */
-              briP2->is_background = true;
-            }
-          x++;
+              redraw->is_background = true;
         }
     }
-}
 
 /**
  * Create and initialize the sprites of the gigablitz in the guardians levels

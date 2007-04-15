@@ -4,11 +4,11 @@
  * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.cc,v 1.10 2007/04/13 22:15:17 gurumeditation Exp $
+ * $Id: sprite_money.cc,v 1.11 2007/04/15 19:20:55 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,7 +86,7 @@ bool sprite_money::enable_if_available (brick_redraw * brick)
     {
       return false;
     }
-  init_money (brick->balle_posX, brick->balle_posY, brick->raquettePT);
+  init_money (brick->xcoord_collision, brick->ycoord_collision, brick->paddle);
   return true;
 }
 
