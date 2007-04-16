@@ -4,11 +4,11 @@
  * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.20 2007/04/10 20:32:40 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.21 2007/04/16 16:13:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,7 +97,7 @@ private:
   void vitus_move ();
   void accelerate ();
   void vitusmove2 ();
-  void vitus_bump ();
+  void check_collisions_with_paddles ();
   void vitusbump2 ();
   void vitusrobot ();
   void vitusEject ();

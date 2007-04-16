@@ -2,14 +2,14 @@
  * @file sprite_guardian.h
  * @brief The guardian sprite 
  * @created 2003-01-09 
- * @date 2007-02-19
+ * @date 2007-04-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.h,v 1.5 2007/02/19 15:40:27 gurumeditation Exp $
+ * $Id: sprite_guardian.h,v 1.6 2007/04/16 16:13:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ class sprite_guardian;
 #include "../include/sprite_object.h"
 #include "../include/handler_display.h"
 #include "../include/controller_guardians.h"
-#include "../include/controller_bullets.h"
 #include "../include/controller_balls.h"
 #include "../include/controller_gigablitz.h"
 #include "../include/controller_explosions.h"
@@ -47,41 +46,48 @@ class sprite_guardian:public sprite_object
 private:
   const static Sint32 table_gga1[8];    //table different size of gigablitz
   const static Sint32 table_gga2[8];    //table different size of gigablitz
-
-  Sint32 energy_level;            //strength
-  Sint32 explo_time;            //duration of the explosions
-  Sint32 explotempo;
-  Sint32 gard_xcent;            //middle x from where weapons starts
-  Sint32 gardwaitf1;            //shoot frequency of gigaBlitz
-  Sint32 gardwaitf2;            //shoot frequency of gigaBlitz
-  Sint32 gard_speed;            //speed of moving
+  /** Strength of the guardian */
+  Sint32 energy_level;
+  /** Duration of the explosions */
+  Uint32 explode_delay_counter;
+  /** Delay value before next explision */
+  Uint32 explode_frequency;
+  Sint32 canon_xcoord;            //middle x from where weapons starts
+  /** Counter of delay between two gigablitz */
+  Uint32 gigablitz_delay_counter;
+  /** Delay value before next gigablitz */
+  Uint32 gigablitz_frequency;
+  /** Moving speed of the guardian */
+  Uint32 speed_of_guardian;
   Sint32 gard_colx1;            // fenetre de collision x-mini
   Sint32 gard_coly1;            // fenetre de collision y-mini
   Sint32 gard_colx2;            // fenetre de collision x-maxi
   Sint32 gard_coly2;            // fenetre de collision y-maxi
   Sint32 gard_ycent;            //middle y from where weapons starts
-  Sint32 gard_wait1;            //shoot frequency of weapons
-  Sint32 gard_wait2;            //shoot frequency of weapons
+  /** Counter of delay between two shots */
+  Uint32 shot_delay_counter;
+  /** Delay value before next shot */ 
+  Uint32 shoot_frequency;
   Sint32 gard_nsbob;            //sprite's number
   Sint32 gard_lissa;            //curve's number
   Sint32 *gard_tfire;           //table des pointeurs sur la liste tirs
-  Sint32 gardptfire;            //
-  Sint32 gard_touch;
-  Sint32 gard_clign;
+  Sint32 gardptfire;            // 
+  /** Guardian recently touched by a ball if greater than zero */ 
+  Uint32 recently_touched;
+  /** Guardian blinks if true */
+  bool is_blinking ;
   unsigned char *ptr_lissa1;
   unsigned char *ptr_lissa2;
-  controller_bullets *ptMissiles;
   Sint32 hasardval2;
 
 public:
     sprite_guardian ();
    ~sprite_guardian ();
-  void init_guard (gardlevel * guard, unsigned char *ptLis,
-                     controller_bullets * pMiss);
+  void initialize (gardlevel * guard, unsigned char *ptLis);
   void run (Uint32 voffset);
 
 private:
-  void start_fire ();
+  void fire_bullets ();
   void startBlitz ();
 };
 

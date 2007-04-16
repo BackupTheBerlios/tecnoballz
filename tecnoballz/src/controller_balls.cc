@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-04-12
+ * @date 2007-04-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.36 $
+ * @version $Revision: 1.37 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.36 2007/04/15 19:20:55 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.37 2007/04/16 16:13:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -147,7 +147,7 @@ controller_balls::run_in_bricks_levels ()
   activate_tilt ();
   check_bricks_collision ();
   vitus_move ();                //move the balls
-  vitus_bump ();                //collisions balls and bumpers
+  check_collisions_with_paddles ();                //collisions balls and bumpers
   vitusrobot ();
   /* collisions between balls and the 3 walls */
   collision_with_walls ();
@@ -548,15 +548,15 @@ controller_balls::vitusmove2 ()
     }
 }
 
-//-------------------------------------------------------------------------------
-// bricks level: collisions balls and bumpers 
-//-------------------------------------------------------------------------------
+/**
+ * Collisions betweeb balls and paddles in bricks level 
+ */
 void
-controller_balls::vitus_bump ()
+controller_balls::check_collisions_with_paddles ()
 {
   Sint32 j, x, y;
   const Sint32 *monPT;
-  sprite_paddle *raket, *bumpX;
+  sprite_paddle *paddle, *touched_paddle;
   paddle_bottom->balleTouch = 0;
   paddle_right->balleTouch = 0;
   paddle_top->balleTouch = 0;
@@ -564,146 +564,135 @@ controller_balls::vitus_bump ()
   right_panel_score *panel = right_panel_score::get_instance ();
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ball *balle = sprites_list[i];
-      if (balle->is_enabled && !balle->colleBallF && balle->directBall < 64)
+      sprite_ball *ball = sprites_list[i];
+      if (!ball->is_enabled || ball->colleBallF || ball->directBall >= 64)
         {
-          //###########################################################
-          // bottom bumper
-          //###########################################################
-          raket = paddle_bottom;
-          bumpX = 0;
-          if (raket->is_enabled)
+          continue;
+        }
+          /* bottom paddle */
+          paddle = paddle_bottom;
+          touched_paddle = NULL;
+          if (paddle->is_enabled)
             {
-              x = raket->x_coord;
-              y = raket->y_coord;
-              if (balle->x_coord + balle->collision_width > x &&
-                  balle->y_coord + balle->collision_height > y &&
-                  balle->x_coord < x + raket->collision_width &&
-                  balle->y_coord < y + raket->collision_height)
+              x = paddle->x_coord;
+              y = paddle->y_coord;
+              if (ball->x_coord + (Sint32)ball->collision_width > x &&
+                  ball->y_coord + (Sint32)ball->collision_height > y &&
+                  ball->x_coord < x + (Sint32)paddle->collision_width &&
+                  ball->y_coord < y + (Sint32)paddle->collision_height)
                 {
-                  balle->y_coord = y - balle->collision_height;
-                  bumpX = raket;
+                  ball->y_coord = y - ball->collision_height;
+                  touched_paddle = paddle;
                   panel->reset_gigablitz_countdown ();
                 }
             }
 
-          //###########################################################
-          // right bumper
-          //###########################################################
-          if (!bumpX)
+          /* right paddle */
+          if (NULL == touched_paddle)
             {
-              raket = paddle_right;
-              if (raket->is_enabled)
+              paddle = paddle_right;
+              if (paddle->is_enabled)
                 {
-                  x = raket->x_coord;
-                  y = raket->y_coord;
-                  if (balle->x_coord + balle->collision_width > x &&
-                      balle->y_coord + balle->collision_height > y &&
-                      balle->x_coord < x + raket->collision_width &&
-                      balle->y_coord < y + raket->collision_height)
+                  x = paddle->x_coord;
+                  y = paddle->y_coord;
+                  if (ball->x_coord + (Sint32)ball->collision_width > x &&
+                      ball->y_coord + (Sint32)ball->collision_height > y &&
+                      ball->x_coord < x + (Sint32)paddle->collision_width &&
+                      ball->y_coord < y + (Sint32)paddle->collision_height)
                     {
-                      balle->x_coord = x - balle->collision_width;
-                      bumpX = raket;
+                      ball->x_coord = x - ball->collision_width;
+                      touched_paddle = paddle;
                     }
                 }
             }
 
-          //###########################################################
-          // top bumper
-          //###########################################################
-          if (!bumpX)
+          /* top paddle */
+          if (NULL == touched_paddle)
             {
-              raket = paddle_top;
-              if (raket->is_enabled)
+              paddle = paddle_top;
+              if (paddle->is_enabled)
                 {
-                  x = raket->x_coord;
-                  y = raket->y_coord;
-                  if (balle->x_coord + balle->collision_width > x &&
-                      balle->y_coord + balle->collision_height > y &&
-                      balle->x_coord < x + raket->collision_width &&
-                      balle->y_coord < y + raket->collision_height)
+                  x = paddle->x_coord;
+                  y = paddle->y_coord;
+                  if (ball->x_coord + (Sint32)ball->collision_width > x &&
+                      ball->y_coord + (Sint32)ball->collision_height > y &&
+                      ball->x_coord < x + (Sint32)paddle->collision_width &&
+                      ball->y_coord < y + (Sint32)paddle->collision_height)
                     {
-                      balle->y_coord = y + raket->collision_height;
-                      bumpX = raket;
+                      ball->y_coord = y + paddle->collision_height;
+                      touched_paddle = paddle;
                     }
                 }
             }
 
-          //###########################################################
-          // left bumper
-          //###########################################################
-          if (!bumpX)
+          /* left paddle */
+          if (NULL == touched_paddle)
             {
-              raket = paddle_left;
-              if (raket->is_enabled)
+              paddle = paddle_left;
+              if (paddle->is_enabled)
                 {
-                  x = raket->x_coord;
-                  y = raket->y_coord;
-                  if (balle->x_coord + balle->collision_width > x &&
-                      balle->y_coord + balle->collision_height > y &&
-                      balle->x_coord < x + raket->collision_width &&
-                      balle->y_coord < y + raket->collision_height)
+                  x = paddle->x_coord;
+                  y = paddle->y_coord;
+                  if (ball->x_coord + (Sint32)ball->collision_width > x &&
+                      ball->y_coord + (Sint32)ball->collision_height > y &&
+                      ball->x_coord < x + (Sint32)paddle->collision_width &&
+                      ball->y_coord < y + (Sint32)paddle->collision_height)
                     {
-                      balle->x_coord = x + raket->collision_width;
-                      bumpX = raket;
+                      ball->x_coord = x + paddle->collision_width;
+                      touched_paddle = paddle;
                     }
                 }
             }
 
-          //###########################################################
-          // does the ball touch a bumper? 
-          //###########################################################
-          if (bumpX)
+          /* does the ball touch a paddle?  */
+          if (NULL != touched_paddle)
             {
-              bumpX->balleTouch = 1;
+              touched_paddle->balleTouch = 1;
 #ifndef SOUNDISOFF
               audio->play_sound (S_TOUCHRAK);
 #endif
-              balle->paddle_touched = bumpX;
-              balle->tilt_delay = 0;
-              j = balle->directBall;
+              ball->paddle_touched = touched_paddle;
+              ball->tilt_delay = 0;
+              j = ball->directBall;
               if (j > 64)
                 {
-                  fprintf (stderr,
-                           "controller_balls::vitus_bump() (1) balle->directBall = %i\n",
-                           j);
+                  std::cerr <<
+                    "controller_balls::check_collisions_with_paddles() "
+                    << "(1) ball->directBall " << j;
                   j = 64;
                 }
-              monPT = bumpX->rebonds_GD;
-              //(char *)monPT += j;
+              monPT = touched_paddle->rebonds_GD;
               monPT = (Sint32 *) ((char *) monPT + j);
               j = *monPT;
 
               if (j > 64)
                 {
                   fprintf (stderr,
-                           "controller_balls::vitus_bump() (2) balle->directBall = %i (%i)\n",
-                           j, balle->directBall);
+                           "controller_balls::check_collisions_with_paddles() (2) ball->directBall = %i (%i)\n",
+                           j, ball->directBall);
                   for (Sint32 v = 0; v < 16; v++)
-                    printf ("%i ; ", bumpX->rebonds_GD[v]);
-                  monPT = bumpX->rebonds_GD;
-                  j = balle->directBall;
+                    printf ("%i ; ", touched_paddle->rebonds_GD[v]);
+                  monPT = touched_paddle->rebonds_GD;
+                  j = ball->directBall;
                   //(char *)monPT += j;
                   monPT = (Sint32 *) ((char *) monPT + j);
-                  /*printf("monPT = %x / bumpX->rebonds_GD = %x / *monPT = %i\n",
-                     (long)monPT, (long)bumpX->rebonds_GD, *monPT);
-                     printf("%i %i\n", bumpX->rebonds_GD[16], bumpX->rebonds_GD[64]); */
+                  /*printf("monPT = %x / touched_paddle->rebonds_GD = %x / *monPT = %i\n",
+                     (long)monPT, (long)touched_paddle->rebonds_GD, *monPT);
+                     printf("%i %i\n", touched_paddle->rebonds_GD[16], touched_paddle->rebonds_GD[64]); */
                   j = 60;
                 }
 
 
-              //balle->directBall = *monPT;
-              balle->directBall = j;
-              if (bumpX->is_glue == 1 && !bumpX->ball_glued)
+              //ball->directBall = *monPT;
+              ball->directBall = j;
+              if (touched_paddle->is_glue == 1 && !touched_paddle->ball_glued)
                 {
-                  bumpX->is_glue = 2;   //ball glued to the bumper 
-                  bumpX->ball_glued = (sprite_ball *) balle;
-                  balle->raket_glue = bumpX;
-                  balle->startCount = glue_delay;       //time of the glue 
-                  balle->colleBallF = raket->paddle_number;
+                  touched_paddle->is_glue = 2;   //ball glued to the bumper 
+                  touched_paddle->ball_glued = (sprite_ball *) ball;
+                  ball->raket_glue = touched_paddle;
+                  ball->startCount = glue_delay;       //time of the glue 
+                  ball->colleBallF = paddle->paddle_number;
                 }
-
-            }
 
         }
     }
@@ -730,10 +719,10 @@ controller_balls::vitusbump2 ()
             {
               x = raket->x_coord;
               y = raket->y_coord;
-              if (balle->x_coord + balle->collision_width > x &&
-                  balle->y_coord + balle->collision_height > y &&
-                  balle->x_coord < x + raket->collision_width &&
-                  balle->y_coord < y + raket->collision_height)
+              if (balle->x_coord + (Sint32)balle->collision_width > x &&
+                  balle->y_coord + (Sint32)balle->collision_height > y &&
+                  balle->x_coord < x + (Sint32)raket->collision_width &&
+                  balle->y_coord < y + (Sint32)raket->collision_height)
                 {
                   balle->y_coord = y - balle->collision_height;
                   bumpX = raket;
@@ -790,8 +779,8 @@ controller_balls::vitusrobot ()
           sprite_ball *balle = sprites_list[i];
           if (balle->is_enabled)
             {
-              if (balle->x_coord + balle->collision_width > x1 &&
-                  balle->y_coord + balle->collision_height > y1 &&
+              if (balle->x_coord + (Sint32)balle->collision_width > x1 &&
+                  balle->y_coord + (Sint32)balle->collision_height > y1 &&
                   balle->x_coord < x2 && balle->y_coord < y2)
                 {
                   balle->y_coord = y1 - balle->collision_height;
@@ -963,7 +952,7 @@ controller_balls::collision_with_walls ()
       Sint32 *monPT = NULL;
 
       /* collision with the bottom wall, if it's enable */
-      if (is_wall && y > (bottom_ycoord - ball->collision_height))
+      if (is_wall && y > (bottom_ycoord - (Sint32)ball->collision_height))
         {
           monPT = rb7;
         }
@@ -1479,12 +1468,14 @@ controller_balls::vitusGuard ()
                           audio->play_sound (S_GARDIENT);
 #endif
                           balle->directBall = x;
-                          guardian->gard_touch = 5;
+                          guardian->recently_touched = 5;
                           guardian->energy_level -= balle->powerBall1;
                           if (guardian->energy_level <= 0)
                             {
+                              /* guardian is dead */
                               guardian->energy_level = 0;
-                              guardian->explo_time = 500;
+                              /* make exploding guardian! */
+                              guardian->explode_delay_counter = 500;
                             }
                           balok = balle;
                         }

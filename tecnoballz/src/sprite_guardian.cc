@@ -2,14 +2,14 @@
  * @file sprite_guardian.cc 
  * @brief The guardian sprite 
  * @created 2003-01-09 
- * @date 2007-02-19
+ * @date 2007-04-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.cc,v 1.8 2007/03/31 21:31:21 gurumeditation Exp $
+ * $Id: sprite_guardian.cc,v 1.9 2007/04/16 16:13:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,24 +34,26 @@
 sprite_guardian::sprite_guardian ()
 {
   energy_level = 0;
-  gard_xcent = 0;
-  gardwaitf1 = 0;
-  gardwaitf2 = 0;
-  gard_speed = 0;
+  canon_xcoord = 0;
+  gigablitz_delay_counter = 0;
+  gigablitz_frequency = 0;
+  speed_of_guardian = 0;
   gard_colx1 = 0;
   gard_coly1 = 0;
   gard_colx2 = 0;
   gard_coly2 = 0;
   gard_ycent = 0;
-  gard_wait1 = 0;
-  gard_wait2 = 0;
+  shot_delay_counter = 0;
+  shoot_frequency = 0;
   gard_lissa = 0;
   gardptfire = 0;
-  gard_touch = 0;
-  gard_clign = 0;
+  recently_touched = 0;
+  is_blinking = false;
   hasardval2 = random_counter;
   if (hasardval2 < 0)
-    hasardval2 = -hasardval2;
+    {
+      hasardval2 = -hasardval2;
+    }
 }
 
 /**
@@ -65,24 +67,24 @@ sprite_guardian::~sprite_guardian ()
  * perform some initializations
  */
 void
-sprite_guardian::init_guard (gardlevel * guard, unsigned char *ptLis, controller_bullets * pMiss)
+sprite_guardian::initialize (gardlevel * guard, unsigned char *ptLis)
 {
   energy_level = guard->para_power * difficulty_level;  //strength 
-  gard_xcent = (guard->para_xcent * resolution) - (11 * resolution / 2);        //middle x from where weapons starts 
-  gardwaitf1 = guard->para_waitf / difficulty_level;  //shoot frequency of gigaBlitz
-  gardwaitf2 = gardwaitf1 / difficulty_level; //shoot frequency of gigaBlitz
-  gard_speed = guard->para_speed;       //speed of moving
+  canon_xcoord = (guard->para_xcent * resolution) - (11 * resolution / 2);        //middle x from where weapons starts 
+  gigablitz_delay_counter = guard->para_waitf / difficulty_level;
+  gigablitz_frequency = gigablitz_delay_counter / difficulty_level;
+  speed_of_guardian = guard->para_speed;
   if (difficulty_level == 4)
     {
-      gard_speed *= 2;
+      speed_of_guardian *= 2;
     }
   gard_colx1 = guard->para_colx1 * resolution;
   gard_coly1 = guard->para_coly1 * resolution;
   gard_colx2 = guard->para_colx2 * resolution;
   gard_coly2 = guard->para_coly2 * resolution;
   gard_ycent = (guard->para_ycent * resolution) - (11 * resolution / 2);
-  gard_wait1 = guard->para_wait2 / difficulty_level;
-  gard_wait2 = guard->para_wait2 / difficulty_level;
+  shot_delay_counter = guard->para_wait2 / difficulty_level;
+  shoot_frequency = guard->para_wait2 / difficulty_level;
   gard_tfire = &guard->para_tfire[0];
   ptr_lissa1 = ptLis;
   ptr_lissa2 = ptLis;
@@ -91,14 +93,13 @@ sprite_guardian::init_guard (gardlevel * guard, unsigned char *ptLis, controller
   x_maximum = screen_width - sprite_width;
   y_maximum = screen_height - sprite_height;
   y_maximum = (232 - 8 - 1 - 16) * resolution;
-  ptMissiles = pMiss;
   if (sprite_width == resolution * 32)
     {
-      explotempo = 7;
+      explode_frequency = 7;
     }
   else
     {
-      explotempo = 3;
+      explode_frequency = 3;
     }
 }
 
@@ -122,93 +123,106 @@ sprite_guardian::run (Uint32 voffset)
       x_coord = x;
       y_coord = y;
       //y_coord = y + voffset;
-      ptr_lissa1 = ptr_lissa1 + gard_speed;
+      ptr_lissa1 = ptr_lissa1 + speed_of_guardian;
       Sint16 *ptest = (Sint16 *) ptr_lissa1;
       if (ptest[0] == -1)
-        ptr_lissa1 = ptr_lissa2;
-      gard_clign = !gard_clign;
-      if (gard_touch > 0 && gard_clign > 0)
         {
-          is_enabled = 0;
-          gard_touch--;
+          ptr_lissa1 = ptr_lissa2;
+        }
+      is_blinking = is_blinking ? false : true;
+      if (recently_touched > 0 && is_blinking)
+        {
+          is_enabled = false;
+          recently_touched--;
         }
       else
-        is_enabled = 1;
-      start_fire ();
+        {
+          is_enabled = true;
+        }
+      fire_bullets ();
       startBlitz ();
     }
   else
     {
-      //###############################################################
-      //      the guard explodes 
-      //###############################################################
-      if (explo_time > 0)
+      /* 
+       * the guard explodes 
+       */
+      if (explode_delay_counter > 0)
         {
-          explo_time--;
-          if (!(explo_time & explotempo))
+          explode_delay_counter--;
+          if (!(explode_delay_counter & explode_frequency))
             {
-              Sint32 pos_x = x_coord;
-              Sint32 pos_y = y_coord;
-              random_counter += pos_x;
+              Sint32 xcoord = x_coord;
+              Sint32 ycoord = y_coord;
+              random_counter += xcoord;
               Sint32 vrand = random_counter;
               if (vrand < 0)
-                vrand = -vrand;
-              Sint32 val_1 = (vrand + explo_time - y_coord) % sprite_width;
-              Sint32 val_2 =
-                (hasardval2 - explo_time + y_coord) % sprite_height;
-              pos_x += val_1;
-              pos_y += val_2;
-              explosions->add (pos_x, pos_y);
+                {
+                  vrand = -vrand;
+                }
+              Sint32 val_1 = (vrand + explode_delay_counter - y_coord) % sprite_width;
+              Sint32 val_2 = (hasardval2 - explode_delay_counter + y_coord) % sprite_height;
+              xcoord += val_1;
+              ycoord += val_2;
+              explosions->add (xcoord, ycoord);
               hasardval2 = vrand;
             }
-          gard_clign = !gard_clign;
-          if (gard_clign > 0)
-            is_enabled = 0;
-          else
-            is_enabled = 1;
-        }
-      //###############################################################
-      // the guard is dead 
-      //###############################################################
-      else
-        is_enabled = 0;
-    }
-}
-
-//-----------------------------------------------------------------------------
-// start a new weapon (composed of several objects "sprite_bullet")
-//-----------------------------------------------------------------------------
-void
-sprite_guardian::start_fire ()
-{
-  if (gard_wait1-- <= 0)
-    {
-      if (y_coord <= (80 * resolution))
-        {
-          gard_wait1 = gard_wait2;
-#ifndef SOUNDISOFF
-          audio->play_sound (S_TIR_GARD);
-#endif
-          Sint32 nfire = gard_tfire[gardptfire];
-          if (nfire < 0)
+          is_blinking = is_blinking ? false : true;
+          if (is_blinking)
             {
-              nfire = gard_tfire[0];
-              gardptfire = 0;
+              is_enabled = false;
             }
-          gardptfire++;         // pt/next weapons
-          ptMissiles->fire (nfire, this);
+          else
+            {
+              is_enabled = true;
+            }
+        }
+      /*
+       * the guard is dead 
+       */
+      else
+        {
+          is_enabled = false;
         }
     }
 }
 
-//-----------------------------------------------------------------------------
-// start a new GigaBlitz
-//-----------------------------------------------------------------------------
+/**
+ * Fire new bullets
+ */
+void
+sprite_guardian::fire_bullets ()
+{
+  if (shot_delay_counter-- > 0)
+    {
+      return;
+    }
+  if (y_coord > (80 * resolution))
+    {
+      return;
+    }
+  shot_delay_counter = shoot_frequency;
+#ifndef SOUNDISOFF
+  audio->play_sound (S_TIR_GARD);
+#endif
+  Sint32 nfire = gard_tfire[gardptfire];
+  if (nfire < 0)
+    {
+      nfire = gard_tfire[0];
+      gardptfire = 0;
+    }
+   gardptfire++;         // pt/next weapons
+   controller_bullets* bullets = controller_bullets::get_instance ();
+   bullets->fire (nfire, this);
+}
+
+/**
+ * Fire a new GigaBlitz
+ */
 void
 sprite_guardian::startBlitz ()
 {
-  controller_gigablitz* gigablitz = controller_gigablitz::get_instance ();
-  if (gardwaitf1-- > 0)
+  if (gigablitz_delay_counter-- > 0)
   {
     return;
   }
@@ -221,9 +235,10 @@ sprite_guardian::startBlitz ()
   {
     v = table_gga2[v];
   }
+  controller_gigablitz* gigablitz = controller_gigablitz::get_instance ();
   if (gigablitz->shoot_guardian (v, x_coord, y_coord, sprite_width, sprite_height))
   {
-    gardwaitf1 = gardwaitf2;
+    gigablitz_delay_counter = gigablitz_frequency;
   } 
 }
 

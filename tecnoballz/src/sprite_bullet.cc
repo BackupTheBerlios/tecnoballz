@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_bullet.cc,v 1.3 2007/03/31 21:31:21 gurumeditation Exp $
+ * $Id: sprite_bullet.cc,v 1.4 2007/04/16 16:13:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -242,7 +242,7 @@ sprite_bullet::trajectory_08 ()
   Sint32 y = tablecosin[flagDepla3] * flagDepla4;
   x = x >> 7;
   y = y >> 7;
-  x_coord = ptguardian->x_coord + ptguardian->gard_xcent + x;
+  x_coord = ptguardian->x_coord + ptguardian->canon_xcoord + x;
   y_coord = ptguardian->y_coord + ptguardian->gard_ycent + y;
   flagDepla4 += resolution;
   screenOver (tir_minixy);

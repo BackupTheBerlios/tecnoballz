@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-04-10
+ * @date 2007-04-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.41 $
+ * @version $Revision: 1.42 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.41 2007/04/10 20:32:40 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.42 2007/04/16 16:13:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,7 +116,7 @@ supervisor_guards_level::first_init ()
    */
   resources->load_sprites_bitmap ();
   bullets->create_sprites_list ();
-  guards->create_guardians_list (bullets, grdP);
+  guards->create_guardians_list (grdP);
   paddles->create_paddles_sprites ();
   balls->create_sprites_list ();
   money_capsules->create_sprites_list ();

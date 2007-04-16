@@ -4,11 +4,11 @@
  * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.12 2007/04/03 13:43:13 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.13 2007/04/16 16:13:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -465,15 +465,15 @@ sprite_display_menu::check_events ()
             }
           break;
 
-          //###########################################################
-          // options
-          //###########################################################
+          /*
+           * options
+           */
         case OPTIONS_SECTION:
           switch (pos_y)
             {
             case 5:
               clear_init (24, 5, 1, 1);
-              if (++number_of_players > handler_players::MAX_OF_PLAYERS)
+              if (++number_of_players > (Sint32)handler_players::MAX_OF_PLAYERS)
                 {
                   number_of_players = 1;
                 }

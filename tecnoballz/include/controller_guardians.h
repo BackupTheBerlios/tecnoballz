@@ -2,14 +2,14 @@
  * @file controller_guardians.h
  * @brief Guardians controller 
  * @created 2003-01-10 
- * @date 2007-02-19
+ * @date 2007-04-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.h,v 1.6 2007/02/19 15:40:26 gurumeditation Exp $
+ * $Id: controller_guardians.h,v 1.7 2007/04/16 16:13:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ private:
 public:
     controller_guardians ();
    ~controller_guardians ();
-  void create_guardians_list (controller_bullets * pMiss, Sint32 grdPt);
+  void create_guardians_list (Sint32 grdPt);
   void run ();
   void killguards (Sint32 numGa = 0);
   bool is_guardians_destroyed ();

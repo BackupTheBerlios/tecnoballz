@@ -4,11 +4,11 @@
  * @date 2007-02-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bullets.cc,v 1.6 2007/02/19 21:03:35 gurumeditation Exp $
+ * $Id: controller_bullets.cc,v 1.7 2007/04/16 16:13:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -206,7 +206,7 @@ void
 controller_bullets::init_fire_01 (sprite_guardian * guardian)
 {
   Uint32 index = max_of_sprites - 1;
-  Sint32 gardx = guardian->x_coord + guardian->gard_xcent - (16 * resolution);
+  Sint32 gardx = guardian->x_coord + guardian->canon_xcoord - (16 * resolution);
   Sint32 gardy = guardian->y_coord;
   Uint32 count = 12;
   Sint32 s = 0;                 //pointeur sur la table sinus
@@ -240,7 +240,7 @@ void
 controller_bullets::init_fire_02 (sprite_guardian * guardian)
 {
   Uint32 t = max_of_sprites - 1;
-  Sint32 gardx = guardian->x_coord + guardian->gard_xcent;
+  Sint32 gardx = guardian->x_coord + guardian->canon_xcoord;
   Sint32 gardy = guardian->y_coord + guardian->gard_ycent;
   Sint32 s = 0;
   Sint32 n = 10;                //10 objets pour ce tir
@@ -285,7 +285,7 @@ controller_bullets::init_fire_03 (sprite_guardian * guardian)
   sprite_paddle *paddle =
     paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
   Uint32 t = max_of_sprites - 1;
-  Sint32 gardx = guardian->x_coord + guardian->gard_xcent;
+  Sint32 gardx = guardian->x_coord + guardian->canon_xcoord;
   Sint32 gardy = guardian->y_coord + guardian->gard_ycent;
   Sint32 n = 5;                 //5 objets pour ce tir
   do
@@ -337,7 +337,7 @@ void
 controller_bullets::init_fire_04 (sprite_guardian * guardian)
 {
   Uint32 t = max_of_sprites - 1;
-  Sint32 gardx = guardian->x_coord + guardian->gard_xcent;
+  Sint32 gardx = guardian->x_coord + guardian->canon_xcoord;
   Sint32 gardy = guardian->y_coord + guardian->gard_ycent;
   Sint32 s = 0;
   Sint32 n = 7;                 //7 objets pour ce tir
@@ -368,7 +368,7 @@ void
 controller_bullets::init_fire_05 (sprite_guardian * guardian)
 {
   Uint32 t = max_of_sprites - 1;
-  Sint32 gardx = guardian->x_coord + guardian->gard_xcent;
+  Sint32 gardx = guardian->x_coord + guardian->canon_xcoord;
   Sint32 gardy = guardian->y_coord + guardian->gard_ycent;
   Sint32 tempo = 10;
   Sint32 incrx = -5 * resolution;
@@ -424,7 +424,7 @@ void
 controller_bullets::init_fire_07 (sprite_guardian * guardian)
 {
   Uint32 t = max_of_sprites - 1;
-  Sint32 gardx = guardian->x_coord + guardian->gard_xcent;
+  Sint32 gardx = guardian->x_coord + guardian->canon_xcoord;
   Sint32 gardy = guardian->y_coord + guardian->gard_ycent;
   Sint32 s = 0;
   Sint32 n = 10;                //10 objets pour ce tir
@@ -453,7 +453,7 @@ void
 controller_bullets::init_fire_08 (sprite_guardian * guardian)
 {
   Uint32 t = max_of_sprites - 1;
-  Sint32 gardx = guardian->x_coord + guardian->gard_xcent;
+  Sint32 gardx = guardian->x_coord + guardian->canon_xcoord;
   Sint32 gardy = guardian->y_coord + guardian->gard_ycent;
   Sint32 s = 0;
   Sint32 n = 10;                //10 objets pour ce tir
@@ -488,7 +488,7 @@ void
 controller_bullets::init_fire_09 (sprite_guardian * guardian)
 {
   Uint32 t = max_of_sprites - 1;
-  Sint32 gardx = guardian->x_coord + guardian->gard_xcent;
+  Sint32 gardx = guardian->x_coord + guardian->canon_xcoord;
   Sint32 gardy = guardian->y_coord + guardian->gard_ycent;
   Sint32 s = 0;
   Sint32 n = 9;                 //10 objets pour ce tir
@@ -529,7 +529,7 @@ void
 controller_bullets::init_fire_10 (sprite_guardian * guardian)
 {
   Uint32 t = max_of_sprites - 1;
-  Sint32 gardx = guardian->x_coord + guardian->gard_xcent - (17 * resolution);
+  Sint32 gardx = guardian->x_coord + guardian->canon_xcoord - (17 * resolution);
   Sint32 gardy = guardian->y_coord + guardian->gard_ycent - (10 * resolution);
   const Sint16 *ptir = tir10_posi;
   Sint32 n = 6;                 //6 objets pour ce tir
@@ -552,7 +552,7 @@ void
 controller_bullets::init_fire_11 (sprite_guardian * guardian)
 {
   Uint32 t = max_of_sprites - 1;
-  Sint32 gardx = guardian->x_coord + guardian->gard_xcent;
+  Sint32 gardx = guardian->x_coord + guardian->canon_xcoord;
   Sint32 gardy = guardian->y_coord + guardian->gard_ycent;
   Sint32 n = 15;                //15 objets pour ce tir
   Sint32 inc_x = 0;

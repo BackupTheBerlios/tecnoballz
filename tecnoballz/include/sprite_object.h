@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.h
  * @brief Draw sprites on the screen 
- * @date 2007-04-10
+ * @date 2007-04-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.32 2007/04/10 20:32:40 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.33 2007/04/16 16:13:27 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -204,9 +204,9 @@ protected:
   /** Y coordinate */
   Sint32 y_coord;
   /** Width of the sprite in pixels */
-  Sint32 sprite_width;
+  Uint32 sprite_width;
   /** Height of the sprite in pixels */
-  Sint32 sprite_height;
+  Uint32 sprite_height;
 
   /** Time delay before next image of the animation */
   Sint32 frame_period;
@@ -246,9 +246,9 @@ protected:
 
 public:
   /** Width used for the collisions */
-  Sint32 collision_width;
+  Uint32 collision_width;
   /** Height used for the collisions */
-  Sint32 collision_height;
+  Uint32 collision_height;
   Sint32 affligFrst;            // premiere ligne a afficher (si afflignesF=1)
   Sint32 affligLast;            // derniere ligne a afficher (si afflignesF=1)
   Sint32 mirrorVert;            // 1=mirror sprite lines in initialise() function
