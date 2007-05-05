@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-04-13
+ * @date 2007-05-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.22 2007/04/15 19:20:55 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.23 2007/05/05 17:10:14 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -340,17 +340,20 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
 void
 controller_bricks::draw_bricks_shadows ()
 {
+  printf("controller_bricks::draw_bricks_shadows\n");
   if (bob_ground)
     {
       return;
     }
+  printf("controller_bricks::draw_bricks_shadows\n");
   brick_info *megaT = bricks_map;
   Sint32 xmax = NB_BRICKSH * brick_width - ombre_deca;
   for (Uint32 j = ombre_deca; j < NB_BRICKSV * brkyoffset + ombre_deca;
        j += brkyoffset)
     {
-      for (Uint32 i = -ombre_deca; i < xmax; i += brick_width)
+      for (Sint32 i = -ombre_deca; i < xmax; i += brick_width)
         {
+	  printf("%i %i %i\n", j, i, megaT->brique_rel);
           if (megaT->brique_rel)
             {
                background_screen->fill_shadow_rect (i, j, brick_width, brick_height);
@@ -367,7 +370,7 @@ void
 controller_bricks::draw_bricks ()
 {
   brick_info *megaT = bricks_map;
-  for (Sint32 j = 0; j < NB_BRICKSV * brkyoffset; j += brkyoffset)
+  for (Uint32 j = 0; j < NB_BRICKSV * brkyoffset; j += brkyoffset)
     {
       for (Uint32 i = 0; i < NB_BRICKSH * brick_width;
            i += brick_width, megaT++)
@@ -459,7 +462,7 @@ controller_bricks::save_background ()
   Sint32 *bufPT = (Sint32 *) brikTampon;
   brick_info *megaT = bricks_map;
   Sint32 offs = game_screen->get_row_size () - brick_width;
-  for (Sint32 j = 0; j < NB_BRICKSV * brkyoffset; j += brkyoffset)
+  for (Uint32 j = 0; j < NB_BRICKSV * brkyoffset; j += brkyoffset)
     {
       for (Uint32 i = 0; i < NB_BRICKSH * brick_width;
            i += brick_width, megaT++)
