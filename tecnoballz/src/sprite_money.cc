@@ -4,11 +4,11 @@
  * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.cc,v 1.11 2007/04/15 19:20:55 gurumeditation Exp $
+ * $Id: sprite_money.cc,v 1.12 2007/05/14 20:34:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -172,7 +172,7 @@ Uint32 sprite_money::move ()
       y_coord += speed_of_moving;
       if (y_coord < y_maximum)
         {
-          if (collision1 (paddle))
+          if (collision (paddle))
             {
               is_enabled = false;
 #ifndef SOUNDISOFF
@@ -191,7 +191,7 @@ Uint32 sprite_money::move ()
       x_coord += speed_of_moving;
       if (x_coord < x_maximum)
         {
-          if (collision1 (paddle))
+          if (collision (paddle))
             {
               is_enabled = false;
 #ifndef SOUNDISOFF
@@ -210,7 +210,7 @@ Uint32 sprite_money::move ()
       y_coord -= speed_of_moving;
       if (y_coord > y_minimum)
         {
-          if (collision1 (paddle))
+          if (collision (paddle))
             {
               is_enabled = false;
 #ifndef SOUNDISOFF
@@ -229,7 +229,7 @@ Uint32 sprite_money::move ()
       x_coord -= speed_of_moving;
       if (x_coord > x_minimum)
         {
-          if (collision1 (paddle))
+          if (collision (paddle))
             {
               is_enabled = false;
 #ifndef SOUNDISOFF
@@ -263,7 +263,7 @@ Uint32 sprite_money::move_bottom ()
       is_enabled = false;
       return 0;
     }
-  if (!collision1 (paddle))
+  if (!collision (paddle))
     {
       return 0;
     }

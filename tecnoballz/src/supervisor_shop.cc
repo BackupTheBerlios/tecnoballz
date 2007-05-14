@@ -4,11 +4,11 @@
  * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.36 $
+ * @version $Revision: 1.37 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.36 2007/04/10 20:32:40 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.37 2007/05/14 20:34:25 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -883,13 +883,14 @@ supervisor_shop::display_box_text ()
                       BOX_LENGTH_STRING);
 }
 
-//-------------------------------------------------------------------------------
-// drag and drop the gadget
-//-------------------------------------------------------------------------------
+/**
+ * Drag and drop the bonus capsule 
+ */
 void
 supervisor_shop::sh_ballade ()
 {
-  if (get_object >= 0)          //pointer to the table "options_prices" (-1 = no drag object)
+  /* index on 'options_prices' list, if -1 no drag objet  */
+  if (get_object >= 0)
     {
       if (keyboard->is_left_button ())
         {
@@ -897,20 +898,22 @@ supervisor_shop::sh_ballade ()
           drag_sprite->set_coordinates (mouse_pointer->get_x_coord (),
                                         mouse_pointer->get_y_coord ());
           if (blink_capsule->is_enabled)
-            blink_capsule->is_enabled = 0;
+            {
+              blink_capsule->is_enabled = false;
+            }
           else
-            blink_capsule->is_enabled = 1;
+            {
+              blink_capsule->is_enabled = true;
+            }
         }
       else
         {
-
-
           drag_sprite->disable ();
-          blink_capsule->is_enabled = 1;
+          blink_capsule->is_enabled = true;
           Sint32 i = cadre_offs;
           if (i >= 0)
             {
-              if (i >= num_of_bought_capsules)
+              if (i >= (Sint32)num_of_bought_capsules)
                 {
                   i = num_of_bought_capsules - 1;
                 }
@@ -921,7 +924,7 @@ supervisor_shop::sh_ballade ()
               Sint32 value = *p1;       //source code
               if (p1 != p2)
                 {
-                  Sint32 i = 0;
+                  Uint32 i = 0;
                   do
                     {
                       if (p0 == p1)     //emplacement source ?

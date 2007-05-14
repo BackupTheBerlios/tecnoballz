@@ -5,11 +5,11 @@
  * @date 2007-02-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: configfile.cc,v 1.23 2007/03/31 21:31:21 gurumeditation Exp $
+ * $Id: configfile.cc,v 1.24 2007/05/14 20:34:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -226,7 +226,7 @@ configfile::loadconfig ()
     bob_ground = true;
   else
     bob_ground = false;
-bob_ground = false;
+//bob_ground = false;
   //read number of lifes: 1 to 9
   if (!reader.read_int ("lifes", &initial_num_of_lifes))
     initial_num_of_lifes = 8;

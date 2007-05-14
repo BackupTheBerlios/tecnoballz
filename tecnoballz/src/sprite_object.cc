@@ -1,14 +1,14 @@
  /**
  * @file sprite_object.cc 
  * @brief Draw sprites on the screen 
- * @date 2007-04-09
+ * @date 2007-05-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.32 2007/04/10 20:32:40 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.33 2007/05/14 20:34:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -448,17 +448,17 @@ sprite_object::create_sprite (Sint32 type_id, surface_sdl * image, bool shadow,
                                     "failed! Coordinates out of range");
        }
 
-      //###############################################################
-      // mirror y if request
-      //###############################################################
+      /*
+       * mirror y if request
+       */
       if (mirrorVert)
         {
           char *gfxHa = image->get_pixel_data (pos_x, pos_y);
           char *gfxBa = image->get_pixel_data (pos_x, pos_y + sprite_height - 1);
           Sint32 iOffs = image->get_row_size ();
-          for (Sint32 j = 0; j < sprite_height / 2; j++)
+          for (Uint32 j = 0; j < sprite_height / 2; j++)
             {
-              for (Sint32 k = 0; k < sprite_width; k++)
+              for (Uint32 k = 0; k < sprite_width; k++)
                 {
                   char c = gfxHa[k];
                   gfxHa[k] = gfxBa[k];
@@ -469,14 +469,14 @@ sprite_object::create_sprite (Sint32 type_id, surface_sdl * image, bool shadow,
             }
         }
 
-      //###################################################################
-      //calculation size of the table
-      //###################################################################
+      /*
+       * calculation size of the table
+       */
       Sint32 npixe = 0;         //counter of the pixels
       char *gfxPT = image->get_pixel_data (pos_x, pos_y);   //graphic address 
-      for (Sint32 j = 0; j < sprite_height; j++)
+      for (Uint32 j = 0; j < sprite_height; j++)
         {
-          for (Sint32 k = 0; k < sprite_width; k++)
+          for (Uint32 k = 0; k < sprite_width; k++)
             {
               char pixel = *(gfxPT++);  //read the pixel
               if (pixel)        //transparent?
@@ -533,7 +533,9 @@ sprite_object::create_sprite (Sint32 type_id, surface_sdl * image, bool shadow,
             drawing_pixels[i] = destW;
         }
 
-      // genere the sprite's table for display ...................................
+      /* 
+       * generate the sprite's table for display
+       */
       Sint32 depla = 0;         // offset
       npixe = 0;                // counter of the pixels
       gfxPT = image->get_pixel_data (pos_x, pos_y); // graphic address 
@@ -546,9 +548,9 @@ sprite_object::create_sprite (Sint32 type_id, surface_sdl * image, bool shadow,
       values_count = 0;                // compteur nombre d'offest et de compteur
       Sint32 nbreO = 0;
       Sint32 flagO = 0;
-      for (Sint32 j = 0; j < sprite_height; j++)
+      for (Uint32 j = 0; j < sprite_height; j++)
         {
-          // special display mode line peer line (gigablitz)
+          /* special display mode line peer line (used for gigablitz) */
           if (draw_method == DRAW_LINE_BY_LINE)
             {
               bb_afligne *p = drawing_peer_line[i];
@@ -557,12 +559,15 @@ sprite_object::create_sprite (Sint32 type_id, surface_sdl * image, bool shadow,
             }
 
           flagO = 0;
-          for (Sint32 k = 0; k < sprite_width; k++)
+          for (Uint32 k = 0; k < sprite_width; k++)
             {
-              char pixel = *(gfxPT++);  //read the pixel
-              if (pixel)        //transparent?
+              /* read the pixel */
+              char pixel = *(gfxPT++);
+              /* transparent? */
+              if (pixel != 0)
                 {
-                  *(destP++) = (Sint16) pixel;  //no, save pixel value
+                  /* no, save pixel value */
+                  *(destP++) = (Sint16) pixel;
                   npixe++;
                 }
               else
@@ -1594,19 +1599,22 @@ sprite_object::aspireBOB2 (sprite_object * bobPT, Sint32 offsX, Sint32 offsY)
 }
 
 
-//-------------------------------------------------------------------------------
-// Test de collision entre deux BOBs
-//-------------------------------------------------------------------------------
-Sint32
-sprite_object::collision1 (sprite_object * bobPT)
+/**
+ * Check collision beetween two sprites
+ * @param sprite a pointer to a sprite object
+ * @return true if collision occurs, otherwise false
+ */
+bool
+sprite_object::collision (sprite_object * sprite)
 {
   Sint32 x1 = x_coord;
   Sint32 y1 = y_coord;
-  Sint32 x2 = bobPT->x_coord;
-  Sint32 y2 = bobPT->y_coord;
-  return (x2 + bobPT->collision_width > x1 &&
-          x2 - collision_width < x1 &&
-          y2 + bobPT->collision_height > y1 && y2 - collision_height < y1);
+  Sint32 x2 = sprite->x_coord;
+  Sint32 y2 = sprite->y_coord;
+  return (x2 + (Sint32)sprite->collision_width > x1 &&
+          x2 - (Sint32)collision_width < x1 &&
+          y2 + (Sint32)sprite->collision_height > y1 &&
+          y2 - (Sint32)collision_height < y1);
 }
 
 /**
@@ -1698,7 +1706,7 @@ sprite_object::clip_coordinates ()
     {
       x_coord = 0;
     }
-  else if (x_coord > screen_width - sprite_width)
+  else if (x_coord > (Sint32)(screen_width - sprite_width))
     {
       x_coord = screen_width - sprite_width;
     }
@@ -1706,7 +1714,7 @@ sprite_object::clip_coordinates ()
     {
       y_coord = 0;
     }
-  else if (y_coord > screen_height - sprite_height)
+  else if (y_coord > (Sint32)(screen_height - sprite_height))
     {
       y_coord = screen_height - sprite_height;
     }

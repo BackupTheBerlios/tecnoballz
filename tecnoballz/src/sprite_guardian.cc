@@ -2,14 +2,14 @@
  * @file sprite_guardian.cc 
  * @brief The guardian sprite 
  * @created 2003-01-09 
- * @date 2007-04-16
+ * @date 2007-05-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.cc,v 1.9 2007/04/16 16:13:27 gurumeditation Exp $
+ * $Id: sprite_guardian.cc,v 1.10 2007/05/14 20:34:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -197,7 +197,7 @@ sprite_guardian::fire_bullets ()
     {
       return;
     }
-  if (y_coord > (80 * resolution))
+  if (y_coord > Sint32(80 * resolution))
     {
       return;
     }

@@ -2,14 +2,14 @@
  * @file controller_sides_bricks.cc 
  * @brief Sides bricks controller. The small bricks on the side, the walls top
  *        left and right
- * @date 2007-04-13
+ * @date 2007-05-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.cc,v 1.9 2007/04/13 22:15:17 gurumeditation Exp $
+ * $Id: controller_sides_bricks.cc,v 1.10 2007/05/14 20:34:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -191,7 +191,7 @@ controller_sides_bricks::initialize ()
     }
 
   /* determine the behavior of the three walls, according to the area */
-//  area = 4; /* test only */
+  //area = 4; /* test only */
   switch (area)
     {
     case 2:
@@ -283,13 +283,13 @@ controller_sides_bricks::create_bricks_sprites ()
       if (i > 0)
         {
           sprites_top[i] = new sprite_object ();
-          horizontal_brick->duplicate_to (sprites_left[i]);
+          horizontal_brick->duplicate_to (sprites_top[i]);
         }
       sprites->add (sprites_top[i]);
-      sprites_top[i]->set_coordinates (xcoord_left_wall, ycoord_left);
+      sprites_top[i]->set_coordinates (xcoord_top, ycoord_top_wall);
       if (map_left_wall[i])
         {
-          sprites_left[i]->enable ();
+          sprites_top[i]->enable ();
         }
       /* right wall */
       if (i > 0)
@@ -305,9 +305,9 @@ controller_sides_bricks::create_bricks_sprites ()
         }
       /* left wall */
       sprites_left[i] = new sprite_object ();
-      horizontal_brick->duplicate_to (sprites_left[i]);
+      vertical_brick->duplicate_to (sprites_left[i]);
       sprites->add (sprites_left[i]);
-      sprites_left[i]->set_coordinates (xcoord_top, ycoord_left_wall);
+      sprites_left[i]->set_coordinates (xcoord_left_wall, ycoord_left);
       if (map_top_wall[i])
         {
           sprites_left[i]->enable ();
@@ -470,11 +470,11 @@ controller_sides_bricks::disable_sprites ()
 {
   for (Uint32 i = 0; i < MAX_OF_SIDES_BRICKS; i++)
     {
-      if (sprites_left[i]->is_enable () && !map_top_wall[i])
+      if (sprites_left[i]->is_enable () && !map_left_wall[i])
         {
           sprites_left[i]->disable ();
         }
-      if (sprites_top[i]->is_enable () && !map_left_wall[i])
+      if (sprites_top[i]->is_enable () && !map_top_wall[i])
         {
           sprites_top[i]->disable ();
         }

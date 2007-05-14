@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-05-05
+ * @date 2007-05-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.23 2007/05/05 17:10:14 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.24 2007/05/14 20:34:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -292,9 +292,11 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
       for (Uint32 i = 0; i < BRICKS_MAP_WIDTH; i++, map++, bobindex++)
         {
           Sint32 adres = 0;
-          char pos_y = *(tabPT++);      // position y dans page brique de 0 a 8
-          char pos_x = *(tabPT++);      // position x dans page brique de 0 a 12 (step 2) 12*8*2=192
-          if (pos_x || pos_y)
+          /* x position in the bitmap source from 0 to 8 */
+          char pos_y = *(tabPT++);
+          /* y position in the bitmap source from 0 to 12, step 2 */
+          char pos_x = *(tabPT++);
+          if (pos_x > 0 || pos_y > 0)
             {                   //pos_x = 12;   // test only
               //pos_y = 1;    // test only
               map->h_pos = pos_x;        // save X-coordinate into bricks_map
@@ -340,12 +342,10 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
 void
 controller_bricks::draw_bricks_shadows ()
 {
-  printf("controller_bricks::draw_bricks_shadows\n");
   if (bob_ground)
     {
       return;
     }
-  printf("controller_bricks::draw_bricks_shadows\n");
   brick_info *megaT = bricks_map;
   Sint32 xmax = NB_BRICKSH * brick_width - ombre_deca;
   for (Uint32 j = ombre_deca; j < NB_BRICKSV * brkyoffset + ombre_deca;
@@ -353,7 +353,6 @@ controller_bricks::draw_bricks_shadows ()
     {
       for (Sint32 i = -ombre_deca; i < xmax; i += brick_width)
         {
-	  printf("%i %i %i\n", j, i, megaT->brique_rel);
           if (megaT->brique_rel)
             {
                background_screen->fill_shadow_rect (i, j, brick_width, brick_height);

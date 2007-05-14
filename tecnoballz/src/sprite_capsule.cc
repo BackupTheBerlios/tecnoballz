@@ -4,11 +4,11 @@
  * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.cc,v 1.10 2007/04/15 19:20:55 gurumeditation Exp $
+ * $Id: sprite_capsule.cc,v 1.11 2007/05/14 20:34:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -241,7 +241,7 @@ sprite_capsule::move ()
       y_coord += resolution;
       if (y_coord < y_maximum)
         {
-          if (collision1 (paddle))
+          if (collision (paddle))
             {
               is_enabled = false;
               current_player->add_score (20);
@@ -258,7 +258,7 @@ sprite_capsule::move ()
       x_coord += resolution;
       if (x_coord < x_maximum)
         {
-          if (collision1 (paddle))
+          if (collision (paddle))
             {
               is_enabled = false;
               current_player->add_score (20);
@@ -275,7 +275,7 @@ sprite_capsule::move ()
       y_coord -= resolution;
       if (y_coord > y_minimum)
         {
-          if (collision1 (paddle))
+          if (collision (paddle))
             {
               is_enabled = false;
               current_player->add_score (20);
@@ -293,7 +293,7 @@ sprite_capsule::move ()
       x_coord -= resolution;
       if (x_coord > x_minimum)
         {
-          if (collision1 (paddle))
+          if (collision (paddle))
             {
               is_enabled = false;
               current_player->add_score (20);

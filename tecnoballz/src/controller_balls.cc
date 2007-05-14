@@ -4,11 +4,11 @@
  * @date 2007-04-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.37 $
+ * @version $Revision: 1.38 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.37 2007/04/16 16:13:27 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.38 2007/05/14 20:34:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -870,7 +870,7 @@ controller_balls::vitusEject ()
           //###########################################################
           else
             {
-              if (balle->collision1 (coin1))    //top-left
+              if (balle->collision (coin1))    //top-left
                 {
                   balle->aspire_BOB (coin1, 10 * resolution, 10 * resolution);
                   balle->eject_ball[0] = 1;
@@ -882,7 +882,7 @@ controller_balls::vitusEject ()
                 }
               else
                 {
-                  if (balle->collision1 (coin2))        //top-right
+                  if (balle->collision (coin2))        //top-right
                     {
                       balle->aspire_BOB (coin2, 5 * resolution,
                                          10 * resolution);
@@ -895,7 +895,7 @@ controller_balls::vitusEject ()
                     }
                   else
                     {
-                      if (balle->collision1 (coin3))    //bottom-left
+                      if (balle->collision (coin3))    //bottom-left
                         {
                           balle->aspire_BOB (coin3, 10 * resolution,
                                              5 * resolution);
@@ -908,7 +908,7 @@ controller_balls::vitusEject ()
                         }
                       else
                         {
-                          if (balle->collision1 (coin4))        //bottom-right
+                          if (balle->collision (coin4))        //bottom-right
                             {
                               balle->aspire_BOB (coin4, 5 * resolution,
                                                  5 * resolution);

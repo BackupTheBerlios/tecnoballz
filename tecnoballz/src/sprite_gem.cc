@@ -5,11 +5,11 @@
  * @date 2007-03-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_gem.cc,v 1.8 2007/03/09 17:18:34 gurumeditation Exp $
+ * $Id: sprite_gem.cc,v 1.9 2007/05/14 20:34:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -162,7 +162,7 @@ sprite_gem::move ()
       y_coord += speed_of_moving;
       if (y_coord < y_maximum)
         {
-          if (collision1 (paddle))
+          if (collision (paddle))
             {
               is_enabled = false;
 #ifndef SOUNDISOFF
@@ -183,7 +183,7 @@ sprite_gem::move ()
       x_coord += speed_of_moving;
       if (x_coord < x_maximum)
         {
-          if (collision1 (paddle))
+          if (collision (paddle))
             {
               is_enabled = false;
 #ifndef SOUNDISOFF
@@ -204,7 +204,7 @@ sprite_gem::move ()
       y_coord -= speed_of_moving;
       if (y_coord > y_minimum)
         {
-          if (collision1 (paddle))
+          if (collision (paddle))
             {
               is_enabled = false;
 #ifndef SOUNDISOFF
@@ -225,7 +225,7 @@ sprite_gem::move ()
       x_coord -= speed_of_moving;
       if (x_coord > x_minimum)
         {
-          if (collision1 (paddle))
+          if (collision (paddle))
             {
               is_enabled = false;
 #ifndef SOUNDISOFF

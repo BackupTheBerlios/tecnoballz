@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.h
  * @brief Draw sprites on the screen 
- * @date 2007-04-16
+ * @date 2007-05-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.33 2007/04/16 16:13:27 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.34 2007/05/14 20:34:24 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -301,7 +301,7 @@ public:
   void MSK_bitclr ();
   void aspire_BOB (sprite_object * bobPT, Sint32 offsX = 0, Sint32 offsY = 0);
   void aspireBOB2 (sprite_object * bobPT, Sint32 offsX = 0, Sint32 offsY = 0);
-  Sint32 collision1 (sprite_object * bobPT);
+  bool collision (sprite_object * sprite);
   void set_frame_delay (Sint32 delay);
   void set_frame_period (Sint32 period);
   bool play_animation_once ();
