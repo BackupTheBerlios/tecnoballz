@@ -5,11 +5,11 @@
  * @date 2007-05-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.cc,v 1.10 2007/05/14 20:34:24 gurumeditation Exp $
+ * $Id: controller_sides_bricks.cc,v 1.11 2007/09/07 15:17:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -225,11 +225,11 @@ controller_sides_bricks::initialize ()
       break;
     }
   /* wall of the top is breakable (test only) */
-//  is_top_wall_breakable = true;
+  //is_top_wall_breakable = true;
   /* wall of the right is breakable (test only) */
-//  is_right_wall_breakable = true;
+  //is_right_wall_breakable = true;
   /* wall of the left is breakable (test only) */
-//  is_left_wall_breakable = true;
+  //is_left_wall_breakable = true;
 
   /* create the sprites of the walls if necessary */
   create_bricks_sprites ();

@@ -5,11 +5,11 @@
  * @date 2007-05-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.24 2007/05/14 20:34:24 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.25 2007/09/07 15:17:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -283,13 +283,16 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
   brick_info *map = bricks_map;
   /* 6 first lines are always empty */
   map += (6 * NB_BRICKSH);
+  Sint32 ycoord = 6 * brkyoffset;
+  Sint32 xcoord = 0;
   Uint32 bobindex = 6 * NB_BRICKSH;
-  for (Uint32 j = 0; j < BRICKS_MAP_HEIGHT; j++, map += 3, bobindex += 3)
+  for (Uint32 j = 0; j < BRICKS_MAP_HEIGHT; j++, map += 3, bobindex += 3, ycoord += brkyoffset)
     {
       /* the first 3 columns are always empty */
       map += 3;
+      xcoord = brick_width * 3;
       bobindex += 3;
-      for (Uint32 i = 0; i < BRICKS_MAP_WIDTH; i++, map++, bobindex++)
+      for (Uint32 i = 0; i < BRICKS_MAP_WIDTH; i++, map++, bobindex++, xcoord += brick_width)
         {
           Sint32 adres = 0;
           /* x position in the bitmap source from 0 to 8 */
@@ -299,8 +302,10 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
           if (pos_x > 0 || pos_y > 0)
             {                   //pos_x = 12;   // test only
               //pos_y = 1;    // test only
-              map->h_pos = pos_x;        // save X-coordinate into bricks_map
-              map->v_pos = pos_y;        // save Y-coordinate into bricks_map
+              /* save X-coordinate into bricks_map */
+              map->h_pos = pos_x;
+              /* save Y-coordinate into bricks_map */
+              map->v_pos = pos_y;
               adres =
                 bitmap_bricks->get_offset (pos_x * 8 * resolution,
                                            pos_y * brick_height);
@@ -317,6 +322,8 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
                   ptbob->create_sprite (BOB_BRICK1, bitmap_bricks, 1, 0);
                   sprites_list[bobindex] = ptbob;
                   sprites->add (ptbob);
+                  ptbob->set_x_coord(xcoord);
+                  ptbob->set_y_coord(ycoord);
                   ptbob->enable ();
                   ptbob->set_image (2);
                 }
@@ -380,8 +387,8 @@ controller_bricks::draw_bricks ()
             {
               pos_x *= 8 * resolution;  // planar -> chunky
               pos_y *= brick_height;
-              char *srcPT = bitmap_bricks->get_pixel_data (pos_x, pos_y);
-              draw_brick (srcPT, megaT->pixel_offset, megaT->color);
+              char *source = bitmap_bricks->get_pixel_data (pos_x, pos_y);
+              draw_brick (source, megaT->pixel_offset, megaT->color);
             }
         }
     }

@@ -2,14 +2,14 @@
  * @file controller_bricks.h
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-04-15
+ * @date 2007-09-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.13 2007/04/15 19:20:55 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.14 2007/09/07 15:17:09 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,10 +68,12 @@ typedef struct
   Sint32 ycoord_collision;
   /** The last paddle touched by the ball or the paddle was fired */
   sprite_paddle *paddle;
-  Sint32 number;            // numero de la brique touchee
+  /** Brick number touched */
+  Sint32 number;
   /** If true restore backgound, redraw brick otherwise */
   bool is_background;
-  Sint32 pixel_offset;            // offset d'affichage ecran de la brique
+  /** Offscreen offset for drawing brick */
+  Sint32 pixel_offset;
   /** Pointer to the brick in the map */
   brick_info *brick_map;
 }
@@ -93,10 +95,14 @@ class controller_bricks:public objects_list < sprite_object, controller_bricks >
 
 public:
 
-  static const Uint32 MAXBRIKCLR = 2 << 8;      //maximum number of bricks to erase 
-  static const Uint32 NB_BRICKSH = 16;  //numbers of bricks peer line
-  static const Uint32 NB_BRICKSV = 30;  //numbers of lines of bricks
-  static const Uint32 NB_BRICKST = NB_BRICKSH * (NB_BRICKSV + 8);       //numbers total of bricks
+  /** Maximum number of bricks to erase */
+  static const Uint32 MAXBRIKCLR = 2 << 8;
+  /** Numbers of bricks peer line */
+  static const Uint32 NB_BRICKSH = 16;
+  /** Numbers of lines of bricks */
+  static const Uint32 NB_BRICKSV = 30;
+  /** Maximum number of bricks */
+  static const Uint32 NB_BRICKST = NB_BRICKSH * (NB_BRICKSV + 8);
 
 private:
   /** Brick width in pixels in low-res */
