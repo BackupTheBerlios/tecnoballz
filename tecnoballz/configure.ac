@@ -34,11 +34,19 @@ AM_PATH_SDL
 dnl  Check for SDL_mixer
 LDFLAGS_save="${LDFLAGS} ${SDL_LIBS}"
 LDFLAGS="${LDFLAGS} ${SDL_LIBS}"
+
 AC_CHECK_LIB(SDL_mixer, Mix_GetChunk, [
   SDL_LIBS="-lSDL_mixer ${SDL_LIBS}"
 ],[
   AC_MSG_ERROR(Could not find -lSDL_mixer)
 ])
+
+AC_CHECK_LIB(SDL_image, main, [
+  SDL_LIBS="-lSDL_image ${SDL_LIBS}"
+],[
+  AC_MSG_ERROR(Could not find -lSDL_image)
+])
+
 LDFLAGS_="${LDFLAGS_save}"
 
 AC_CHECK_LIB(vorbisfile, ov_raw_seek, [
@@ -66,6 +74,10 @@ AC_CHECK_LIB(mikmod, Player_Stop, [
 ])
 AC_SUBST(MIKMOD_FLAGS)
 AC_SUBST(MIKMOD_LIBS)
+
+dnl AC_CHECK_LIB(SDL_image, main, SDL_LIBS="$SDL_LIBS -lSDL_image",
+dnl    AC_MSG_ERROR([*** SDL_image library not found!])
+
 
 dnl  Output makefiles
 AC_OUTPUT(Makefile src/Makefile src/TecnoballZ/Makefile src/TecnoballZ/hires/Makefile src/TecnoballZ/lores/Makefile src/TecnoballZ/textures/Makefile src/TecnoballZ/musics/Makefile src/TecnoballZ/sounds/Makefile)

@@ -5,11 +5,11 @@
  * @date 2007-04-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.19 2007/04/04 16:24:50 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.20 2007/09/11 08:58:15 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ const char *
   "gard_lissa.list",            //RESGCURVES
   /* DATA_BRICKS_LEVELS */
   "tableau.data",
-  "min60map.bmp",                //RES60BACKG
+  "min60map.png",                //RES60BACKG
   /* DATA_LEVELS */
   "levels-data.xml"
 };
@@ -126,31 +126,31 @@ const char *
 const char * handler_resources::bitmap_files[] =
 {
   /* BITMAP_HEAD_ANIMATION */
-  "head_animation.bmp",
+  "head_animation.png",
   /* BITMAP_RIGHT_PANEL */
-  "right_panel.bmp",
+  "right_panel.png",
   /* BITMAP_PADDLES_1 */
-  "paddles_1.bmp",
+  "paddles_1.png",
   /* BITMAP_PADDLES_2 */
-  "paddles_2.bmp",
+  "paddles_2.png",
   /* BITMAP_GAME_FONTS */
-  "game_fonts.bmp",
+  "game_fonts.png",
   /* BITMAP_MENU_FONTS */
-  "menu_fonts.bmp",
+  "menu_fonts.png",
   /* BITMAP_SMALL_FONTS */
-  "small_fonts.bmp",
+  "small_fonts.png",
   /* BITMAP_GIGABLITZ */
-  "gigablitz.bmp",
+  "gigablitz.png",
   /* BITMAP_TILESMAP */
-  "tilesmap.bmp",
+  "tilesmap.png",
   /* BITMAP_SHOP */
-  "shop.bmp",
+  "shop.png",
   /* BITMAP_ALL_SPRITES */
-  "all_sprites.bmp",
+  "all_sprites.png",
   /* BITMAP_BRICKS */
-  "bricks.bmp",
+  "bricks.png",
   /* BITMAP_SCORES_FONTS */
-  "font_score.bmp"
+  "font_score.png"
 };
 
 const char * handler_resources::texts_files[] =
@@ -163,8 +163,7 @@ const char * handler_resources::texts_files[] =
   "scrolltext_%s.txt",
 };
 
-char
-  handler_resources::ze_mapfile[] = "map??.bmp";
+//char handler_resources::ze_mapfile[] = "map??.png";
 
 /** 
  * Create the resources manager object
@@ -270,7 +269,7 @@ handler_resources::get_sound_filename (Uint32 resource_id)
 char *
 handler_resources::get_tilemaps_filename (Uint32 title_num)
 {
-  sprintf(tmp_filename, "textures/map%02d.bmp", title_num);
+  sprintf(tmp_filename, "textures/map%02d.png", title_num);
   return tmp_filename;
 }
 

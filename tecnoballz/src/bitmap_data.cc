@@ -2,14 +2,14 @@
  * @file bitmap_data.cc 
  * @brief Handle the bitmap 
  * @created 1996-06-29 
- * @date 2007-04-09
+ * @date 2007-09-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: bitmap_data.cc,v 1.18 2007/04/09 19:55:54 gurumeditation Exp $
+ * $Id: bitmap_data.cc,v 1.19 2007/09/11 08:58:15 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
+#include <SDL/SDL_image.h>
 #include "../include/bitmap_data.h"
 #include "../include/handler_resources.h"
 #include "../include/handler_display.h"
@@ -243,7 +244,8 @@ void
 bitmap_data::sdl_load_bmp (char *fpath)
 {
   release ();
-  surface = SDL_LoadBMP (fpath);
+  //surface = SDL_LoadBMP (fpath);
+  surface = IMG_Load (fpath);
   if (NULL == surface)
     {
       std::cerr << "(!)bitmap_data::sdl_load_bmp() "

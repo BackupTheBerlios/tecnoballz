@@ -5,11 +5,11 @@
  * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.15 2007/04/10 20:32:40 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.16 2007/09/11 08:58:15 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ class handler_resources:public virtual tecnoballz
     static char *fnamescore;
     static char tmp_filename[512];
     static char pathstring[512];
-    static char ze_mapfile[];
+    //static char ze_mapfile[];
 
     static const Uint32 TEXTS_OFFSET = 2048;
     static const Uint32 BITMAP_OFFSET = 4096;

@@ -1,17 +1,17 @@
 NULL =
 pkgdatadir = $(datadir)/tecnoballz/hires
 dist_pkgdata_DATA = \
-	all_sprites.bmp \
-	bricks.bmp \
-	font_score.bmp \
-	game_fonts.bmp \
-	gigablitz.bmp \
-	head_animation.bmp \
-	menu_fonts.bmp \
-	paddles_1.bmp \
-	paddles_2.bmp \
-	right_panel.bmp \
-	shop.bmp \
-	small_fonts.bmp \
-	tilesmap.bmp \
+	all_sprites.png \
+	bricks.png \
+	font_score.png \
+	game_fonts.png \
+	gigablitz.png \
+	head_animation.png \
+	menu_fonts.png \
+	paddles_1.png \
+	paddles_2.png \
+	right_panel.png \
+	shop.png \
+	small_fonts.png \
+	tilesmap.png \
 	$(NULL)
