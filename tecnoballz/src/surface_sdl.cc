@@ -2,14 +2,14 @@
  * @file surface_sdl.cc 
  * @brief an drawing surface
  * @created 2007-02-15
- * @date 2007-04-09
+ * @date 2007-09-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: surface_sdl.cc,v 1.10 2007/04/09 19:55:54 gurumeditation Exp $
+ * $Id: surface_sdl.cc,v 1.11 2007/09/11 16:01:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ surface_sdl::create_surface (Uint32 w, Uint32 h, Sint32 depth, Uint32 flags, Uin
 {
   if (is_verbose)
     {
-      std::cout << "surface_sdl::create_surface() width: " << w << 
+      std::cout << " surface_sdl::create_surface() width: " << w << 
         " height: " << h << " depth: " << depth << std::endl;
     } 
   surface = SDL_CreateRGBSurface (flags, w, h, depth, red_mask, green_mask, blue_mask, alpha_mask);
@@ -319,7 +319,7 @@ surface_sdl::set_palette (surface_sdl *dest)
     {
       return;
     }
-  std::cout << "surface_sdl::set_palette surface_sdl" << std::endl;
+  std::cout << " surface_sdl::set_palette surface_sdl" << std::endl;
   if (!SDL_SetPalette (dest->get_surface (), SDL_LOGPAL | SDL_PHYSPAL, surface->format->palette->colors, 0, 256))
    {
       std::cerr << "(!)surface_sdl::set_palette() " <<

@@ -5,11 +5,11 @@
  * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.24 2007/04/10 20:32:40 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.25 2007/09/11 16:01:01 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,7 @@ tecnoballz::first_init (configfile * pConf)
   if (is_verbose)
     {
       std::cout << ">tecnoballz::first_init() start!" << std::endl;
+      std::cout << " bob_ground:" << bob_ground << std::endl;
     }
 #if __WORDSIZE == 64
   random_counter = (long) first_init;

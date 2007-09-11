@@ -1,14 +1,14 @@
 /** 
  * @file sprite_capsule.cc
  * @brief The capsule sprite which contains a bonus or a penalty 
- * @date 2007-04-13
+ * @date 2007-09-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.cc,v 1.11 2007/05/14 20:34:24 gurumeditation Exp $
+ * $Id: sprite_capsule.cc,v 1.12 2007/09/11 16:01:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ sprite_capsule::init_members ()
   frame_period = 6;
   /* time delay before each image */
   frame_delay = 1;
-  set_draw_method (sprite_object::CYCLE_PTAB);
+  set_draw_method (sprite_object::DRAW_CAPSULE);
 }
 
 /**
@@ -134,7 +134,7 @@ sprite_capsule::set_new_capsule (Uint32 id, const Sint16 *frames, Uint32 xcoord,
 {
   if (GAD_MEGA00 == id || GAD_RANDOM == id)
     {
-      set_draw_method (sprite_object::CYCLE_PTAB);
+      set_draw_method (sprite_object::DRAW_CAPSULE);
     }
   else
     {

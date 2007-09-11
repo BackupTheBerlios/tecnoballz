@@ -4,11 +4,11 @@
  * @date 2007-05-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.33 2007/05/14 20:34:24 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.34 2007/09/11 16:01:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1011,10 +1011,10 @@ sprite_object::draw ()
       draw_vertically_repeated ();
       break;
     case DRAW_COLOR_CYCLING_MASK:
-      afficheCyc ();
+      draw_cycling_color ();
       break;
-    case CYCLE_PTAB:
-      cycle_ptab ();
+    case DRAW_CAPSULE:
+      draw_capsule ();
       break;
     }
 }
@@ -1061,98 +1061,125 @@ sprite_object::draw_with_tables ()
       screen32 = (Sint32 *) screen8;
     }
 #else
-  char *adres = game_screen->get_pixel_data (x_coord, y_coord);
-  screen_ptr = adres;
-  char *gfxP2 = current_drawing_data;     //pixels (sprite data)
-  Uint16 *gfxP1 = (Uint16 *) current_drawing_values;        //offset and loop counter
-  Uint32 t = (Uint32) * (gfxP1++);      //height of sprite
+  char *screen = game_screen->get_pixel_data (x_coord, y_coord);
+  screen_ptr = screen;
+  /* pixels data of the sprite image */
+  char *pixels = current_drawing_data;
+  /* offsets and counters of loops for copies */
+  Uint16 *counters = (Uint16 *) current_drawing_values;
+  /* height of the sprite in pixels */
+  Uint32 t = (Uint32) * (counters++);
   for (Uint32 i = 0; i < t; i++)
     {
-      Sint16 o = *(gfxP1++);    //offset
-      adres += o;
-      gfxP1++;
-      o = *(gfxP1++);           //number of pixels contigus
-      for (Sint32 k = 0; k < o; k++)
+      /* offset */
+      Sint16 k = *(counters++);
+      screen += k;
+      counters++;
+      /* number of contiguous bytes */
+      k = *(counters++);
+      for (Sint32 j = 0; j < k; j++)
         {
-          *(adres++) = *(gfxP2++);
+          *(screen++) = *(pixels++);
         }
     }
 #endif
 }
 
-//------------------------------------------------------------------------------
-// display a color cycling sprite mask (bumper's fire and guards's fire)
-//------------------------------------------------------------------------------
+/**
+ * Draw a color cycling sprite mask (paddle's fires and guardian's fires) 
+ */
 void
-sprite_object::afficheCyc ()
+sprite_object::draw_cycling_color ()
 {
   indexCycle &= 7;
   Sint32 pixel = pt_cycling[indexCycle++];
   restore_ptr = background_screen->get_pixel_data (x_coord, y_coord);
 #ifndef BYTES_COPY
-  Sint32 *adres = (Sint32 *) game_screen->get_pixel_data (x_coord, y_coord);
-  screen_ptr = (char *) adres;
-  Sint32 *gfxP2 = (Sint32 *) current_drawing_data;        //pixels
-  Uint16 *gfxP1 = (Uint16 *) current_drawing_values;        //offset and loop counter
-  Uint32 t = (Uint32) * (gfxP1++);
-  for (Uint32 i = 0; i < t; i++)
+  Sint32 *screen32 = (Sint32 *) game_screen->get_pixel_data (x_coord, y_coord);
+  screen_ptr = (char *) screen32;
+  /* pixels data of the sprite image */
+  Sint32 *pixels32 = (Sint32 *) current_drawing_data;
+  /* offsets and counters of loops for copies */
+  Uint16 *counters = (Uint16 *) current_drawing_values;
+  /* height of the sprite in pixels */
+  Uint32 h = (Uint32) * (counters++);
+  for (Uint32 i = 0; i < h; i++)
     {
-      Sint16 o = *(gfxP1++);    //offset
-      adres = (Sint32 *) ((char *) adres + o);
-      o = *(gfxP1++);           //number of pixels contigus
-      for (Sint32 k = 0; k < o; k++)
-        *(adres++) = pixel;
-      o = *(gfxP1++);           //number of pixels contigus
-      char *gfxpb = (char *) gfxP2;
-      char *adreb = (char *) adres;
-      for (Sint32 k = 0; k < o; k++)
-        *(adreb++) = pixel;
-      gfxP2 = (Sint32 *) gfxpb;
-      adres = (Sint32 *) adreb;
+      /* offset */
+      Sint16 k = *(counters++);
+      screen32 = (Sint32 *) ((char *) screen32 + k);
+      /* number of contiguous long words */
+      k = *(counters++);
+      for (Sint32 j = 0; j < k; j++)
+        {
+          *(screen32++) = pixel;
+        }
+      /* number of contiguous bytes */
+      k = *(counters++);
+      char *pixels8 = (char *) pixels32;
+      char *screen8 = (char *) screen32;
+      for (Sint32 j = 0; j < k; j++)
+        {
+          *(screen8++) = pixel;
+        }
+      pixels32 = (Sint32 *) pixels8;
+      screen32 = (Sint32 *) screen8;
     }
 #else
-  char *adres = game_screen->get_pixel_data (x_coord, y_coord);
-  screen_ptr = adres;
-  Uint16 *gfxP1 = (Uint16 *) current_drawing_values;        //offset and loop counter
-  Uint32 t = (Uint32) * (gfxP1++);
+  char *screen = game_screen->get_pixel_data (x_coord, y_coord);
+  screen_ptr = screen;
+  /* offsets and counters of loops for copies */
+  Uint16 *counters = (Uint16 *) current_drawing_values;
+  Uint32 t = (Uint32) * (counters++);
   for (Uint32 i = 0; i < t; i++)
     {
-      Sint16 o = *(gfxP1++);    //offset
-      adres += o;
-      gfxP1++;
-      o = *(gfxP1++);           //number of pixels contigus
-      for (Sint32 k = 0; k < o; k++)
-        *(adres++) = pixel;
+      /* offset */
+      Sint16 k = *(counters++);
+      screen += k;
+      counters++;
+      /* number of contiguous bytes */
+      k = *(counters++);
+      for (Sint32 j = 0; j < k; j++)
+        {
+          *(screen++) = pixel;
+        }
     }
 #endif
 }
 
-//------------------------------------------------------------------------------
-// guards weapons: display mask pixel by pixel with color cylcling
-//------------------------------------------------------------------------------
+/**
+ * Draw somes capsules with color cyling  
+ */
 void
-sprite_object::cycle_ptab ()
+sprite_object::draw_capsule ()
 {
   indexCycle &= 7;
-  Sint32 pixel = pt_cycling[indexCycle++];
-  char *adres = game_screen->get_pixel_data (x_coord, y_coord);
+  Sint32 color = pt_cycling[indexCycle++];
+  char *screen = game_screen->get_pixel_data (x_coord, y_coord);
   restore_ptr = background_screen->get_pixel_data (x_coord, y_coord);
-  screen_ptr = (char *) adres;
-  char *gfxP2 = current_drawing_data;     //pixels
-  Uint16 *gfxP3 = (Uint16 *) current_drawing_pixels;        //offset and loop counter
-  Uint32 t = (Uint32) * (gfxP3++);
-  for (Uint32 i = 0; i < t; i++)
+  /* pixels data of the sprite image */
+  char *pixels = current_drawing_data;
+  /* offsets and counters of loops for copies */
+  Uint16 *counters = (Uint16 *) current_drawing_pixels;
+  Uint32 h = (Uint32) * (counters++);
+  for (Uint32 i = 0; i < h; i++)
     {
-      Sint16 o = *(gfxP3++);    //offset
-      adres = adres + o;
-      o = *(gfxP3++);           //number of pixels contigus
-      for (Sint32 k = 0; k < o; k++)
+      /* offset */
+      Sint16 k = *(counters++);
+      screen = screen + k;
+      /* number of contiguous bytes */
+      k = *(counters++);
+      for (Sint32 j = 0; j < k; j++)
         {
-          char p = *(gfxP2++);
+          char p = *(pixels++);
           if (p == 29)
-            *(adres++) = pixel;
+            {
+              *(screen++) = color;
+            }
           else
-            *(adres++) = p;
+            {
+              *(screen++) = p;
+            }
         }
     }
 }

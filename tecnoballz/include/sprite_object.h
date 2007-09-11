@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.h
  * @brief Draw sprites on the screen 
- * @date 2007-05-14
+ * @date 2007-09-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.34 $
+ * @version $Revision: 1.35 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.34 2007/05/14 20:34:24 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.35 2007/09/11 16:01:00 gurumeditation Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -143,7 +143,8 @@ public:
     DRAW_LINE_BY_LINE,
     DRAW_REPEAT_SPRITE,
     DRAW_COLOR_CYCLING_MASK,
-    CYCLE_PTAB
+    DRAW_CAPSULE,
+    DRAW_BRICK
   }
   DRAW_METHOD_ENUM;
 
@@ -293,8 +294,7 @@ public:
   void restore_background_under_shadow ();
   void afficheSHA ();
   void draw_to_brackground ();
-  void afficheCyc ();
-  void cycle_ptab ();
+  void draw_capsule ();
   void draw_shadow_to_brackground ();
   void draw_copy_from_bitmap ();
   void MSKbitcopy ();
@@ -327,6 +327,8 @@ private:
   void draw_line_by_line ();
   void draw_with_tables ();
   void draw_vertically_repeated ();
+  void draw_cycling_color ();
+  void draw_brick ();
 
 };
 #endif
