@@ -38,7 +38,7 @@ SOURCES_MAIN = \
   display_text_bitmap.cc \
   handler_audio.cc \
   handler_display.cc \
-	handler_high_score.cc \
+  handler_high_score.cc \
   handler_keyboard.cc \
   handler_players.cc \
   handler_popup_menu.cc \
@@ -53,6 +53,7 @@ SOURCES_MAIN = \
   short_info_messages.cc \
   sprite_ball.cc \
   sprite_bullet.cc \
+  sprite_brick.cc \
   sprite_capsule.cc \
   sprite_display_menu.cc \
   sprite_display_scores.cc \

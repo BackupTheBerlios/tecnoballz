@@ -2,21 +2,21 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-05-14
+ * @date 2007-09-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.25 2007/09/07 15:17:09 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.26 2007/09/12 06:32:48 gurumeditation Exp $
  *
- * This program is free software; you can redistribute it and/or modify
+ * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but
+ * TecnoballZ is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -318,7 +318,7 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
 
               if (bob_ground)
                 {
-                  sprite_object *ptbob = new sprite_object ();
+                  sprite_brick *ptbob = new sprite_brick ();
                   ptbob->create_sprite (BOB_BRICK1, bitmap_bricks, 1, 0);
                   sprites_list[bobindex] = ptbob;
                   sprites->add (ptbob);

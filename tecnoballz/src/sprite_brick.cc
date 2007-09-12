@@ -1,14 +1,15 @@
 /** 
- * @file sprite_gigablitz.h
- * @brief The sprite of the Gigablitz 
- * @date 2007-02-05
+ * @file sprite_brick.cc
+ * @brief The sprite of the brick 
+ * @created 2007-09-12
+ * @date 2007-09-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.1 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_gigablitz.h,v 1.2 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_brick.cc,v 1.1 2007/09/12 06:32:48 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,19 +26,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-#ifndef __SPRITE_GIGABLITZ__
-#define __SPRITE_GIGABLITZ__
+#include "../include/sprite_brick.h"
 
-class sprite_gigablitz;
-
-#include "../include/sprite_object.h"
-#include "../include/objects_list.h"
-class sprite_gigablitz:public sprite_object
+/**
+ * Create the Gigablitz sprite
+ */
+sprite_brick::sprite_brick ()
 {
-private:
+  clear_sprite_members ();
+}
 
-public:
-  sprite_gigablitz ();
-  ~sprite_gigablitz ();
-};
-#endif
+/**
+ * Release the Gigablitz sprite
+ */
+sprite_brick::~sprite_brick ()
+{
+}
