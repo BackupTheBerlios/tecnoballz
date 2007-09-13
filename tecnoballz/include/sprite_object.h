@@ -4,11 +4,11 @@
  * @date 2007-09-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.36 $
+ * @version $Revision: 1.37 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.36 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.37 2007/09/13 05:33:21 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -158,8 +158,10 @@ private:
   char *screen_ptr;
   /** Pointer to the background in restore offscreen */
   char *restore_ptr;
-  char *adresseEC2;             // adresse ecran ombre
-  char *adresseTA2;             // adresse tampon ombre
+  /** Pointer to sprite shadow in game offscreen for sprite */
+  char *shadow_screen_ptr;
+  /** Pointer to the background in restore offscreen for shadow */
+  char *shadow_restore_ptr;
   Sint32 offsetSrce;            // offset source
   Sint32 offsetDest;            // offset destination
 
@@ -194,11 +196,13 @@ private:
 protected:
   /** The pixel data of the sprite */
   char *pixel_data;
+  /** Width in bytes of bitmap in which is the sprite */
   Uint32 row_size;
-  Uint32 destNextLn;
-  /** true if the sprite is enabled and drawn */
+  /** Width in bytes of offscreen */
+  Uint32 offscreen_pitch;
+  /** True if the sprite is enabled and drawn */
   Sint32 is_enabled;
-  /** true if the sprite has a shadow */
+  /** True if the sprite has a shadow */
   bool sprite_has_shadow;
   /** X coordinate */
   Sint32 x_coord;
@@ -208,7 +212,6 @@ protected:
   Uint32 sprite_width;
   /** Height of the sprite in pixels */
   Uint32 sprite_height;
-
   /** Time delay before next image of the animation */
   Sint32 frame_period;
   /** Counter time delay before next image */
@@ -217,8 +220,8 @@ protected:
   Sint32 frame_index;
   Sint32 frame_index_max;
   Sint32 frame_index_min;
-  
-  Sint32 display_pos;           // numero identificateur BOB
+  /** Position of sprite in global list of all sprites */
+  Sint32 display_pos;
   /** Width of the game screen in pixels */
   Sint32 screen_width;
   /** Height of the game screen in pixels */
@@ -235,9 +238,10 @@ protected:
   Uint32 sprite_type_id;
   Sint32 affligFrSv;            // premiere ligne a afficher (si afflignesF=1)
   Sint32 affligLaSv;            // derniere ligne a afficher (si afflignesF=1)
-  /** If true, object has allocated memory */
+  /** If true, object has allocated memory for pixels of sprite */
   bool has_allocated_memory;
-  Sint32 object_pos;            // Numero du BOB dans la liste
+  /** Position of sprite in its list from 0 to n */
+  Sint32 object_pos;
  /** true if the object must release
   * the pixel data memory at its destruction */
   bool is_release_pixel_data;
@@ -254,12 +258,13 @@ public:
   Sint32 affligLast;            // derniere ligne a afficher (si afflignesF=1)
   Sint32 mirrorVert;            // 1=mirror sprite lines in initialise() function
   Sint32 num_of_repeats;            // > 1 repeat
+  /** Current draw method used to display sprite */
   Uint32 draw_method;
-
-
-  Sint32 indexCycle;
-  const Sint32 *pt_cycling;
-  Sint32 thecounter;            // 
+  /** Current cycling color table index */
+  Sint32 cycling_index;
+  /** Current cycling color table used for projectiles */
+  const Sint32 *current_cycling;
+  Sint32 thecounter; 
 
 public:
     sprite_object ();

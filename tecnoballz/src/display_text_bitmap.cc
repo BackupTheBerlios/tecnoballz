@@ -1,14 +1,14 @@
 /** 
  * @file display_text_bitmap.cc 
  * @brief Display bitmap strings 
- * @date 2007-03-17
+ * @date 2007-09-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: display_text_bitmap.cc,v 1.9 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: display_text_bitmap.cc,v 1.10 2007/09/13 05:33:21 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -295,7 +295,7 @@ display_text_bitmap::string2bob (const char *ptStr)
   ptBob->sprite_height = bmp->get_height ();
   ptBob->row_size = bmp->get_row_size ();
   ptBob->max_of_images = 1;
-  ptBob->destNextLn = game_screen->get_row_size ();
+  ptBob->offscreen_pitch = game_screen->get_row_size ();
   delete bmp;
   return ptBob;
 }

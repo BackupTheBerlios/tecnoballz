@@ -1,14 +1,14 @@
  /**
  * @file sprite_object.cc 
  * @brief Draw sprites on the screen 
- * @date 2007-05-14
+ * @date 2007-09-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.35 $
+ * @version $Revision: 1.36 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.35 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.36 2007/09/13 05:33:21 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -126,7 +126,7 @@ sprite_object::clear_sprite_members ()
   pixel_data = (char *) NULL;
   images_pixel_data = (char **) NULL;
   screen_ptr = (char *) NULL;
-  adresseEC2 = (char *) NULL;
+  shadow_screen_ptr = (char *) NULL;
   frame_delay = 1;
   max_of_images = 0;
   frame_index = 0;
@@ -165,8 +165,8 @@ sprite_object::clear_sprite_members ()
   has_allocated_memory = false;
   object_pos = -1;
   num_of_repeats = 0;
-  indexCycle = 0;
-  pt_cycling = &cycling_01[0];
+  cycling_index = 0;
+  current_cycling = &cycling_01[0];
   thecounter = 0;
   draw_method = COPY_FROM_BITMAP;
   is_release_pixel_data = false;
@@ -182,7 +182,7 @@ sprite_object::duplicate_to (sprite_object * sprite_dest)
   sprite_dest->pixel_data = pixel_data;
   sprite_dest->images_pixel_data = images_pixel_data;
   sprite_dest->screen_ptr = screen_ptr;
-  sprite_dest->adresseEC2 = adresseEC2;
+  sprite_dest->shadow_screen_ptr = shadow_screen_ptr;
   sprite_dest->frame_delay = frame_delay;
   sprite_dest->max_of_images = max_of_images;
   sprite_dest->frame_index = frame_index;
@@ -214,7 +214,7 @@ sprite_object::duplicate_to (sprite_object * sprite_dest)
   sprite_dest->sprite_has_shadow = sprite_has_shadow;
   sprite_dest->sprite_type_id = sprite_type_id;
   sprite_dest->row_size = row_size;
-  sprite_dest->destNextLn = destNextLn;
+  sprite_dest->offscreen_pitch = offscreen_pitch;
   sprite_dest->draw_method = draw_method;
   sprite_dest->is_draw_pixel_by_pixel = is_draw_pixel_by_pixel;
   sprite_dest->has_allocated_memory = false;
@@ -296,10 +296,10 @@ sprite_object::init_common (surface_sdl * bitmap, bool shadow)
   screen_width = display->get_width ();
   screen_height = display->get_height ();
   row_size = bitmap->get_row_size ();
-  destNextLn = game_screen->get_row_size ();
+  offscreen_pitch = game_screen->get_row_size ();
   sprite_has_shadow = shadow;
   screen_ptr = (char *) NULL;
-  adresseEC2 = (char *) NULL;
+  shadow_screen_ptr = (char *) NULL;
   sprite_width = bitmap->get_width ();
   sprite_height = bitmap->get_height ();
   max_of_images = 1;
@@ -788,58 +788,60 @@ sprite_object::restore_background_under_sprite ()
     }
 
 #ifndef BYTES_COPY
-  Sint32 *srcPT = (Sint32 *) restore_ptr;
-  Sint32 *adres = (Sint32 *) screen_ptr;
+  Sint32 *restore32 = (Sint32 *) restore_ptr;
+  Sint32 *screen32 = (Sint32 *) screen_ptr;
   screen_ptr = (char *) NULL;
-  Sint16 *gfxPT = current_drawing_values;
-  Uint32 s = (Uint32) * (gfxPT++);
-  for (Uint32 i = 0; i < s; i++)
+  Sint16 *counters = current_drawing_values;
+  Uint32 h = (Uint32) * (counters++);
+  for (Uint32 i = 0; i < h; i++)
     {
-      Sint16 o = *(gfxPT++);    //offset
-      adres = (Sint32 *) ((char *) adres + o);
-      srcPT = (Sint32 *) ((char *) srcPT + o);
+      /* offset */
+      Sint16 k = *(counters++);
+      screen32 = (Sint32 *) ((char *) screen32 + k);
+      restore32 = (Sint32 *) ((char *) restore32 + k);
       /* number of contiguous bytes */
-      o = *(gfxPT++);
-      for (Sint32 k = 0; k < o; k++)
+      k = *(counters++);
+      for (Sint32 j = 0; j < k; j++)
         {
-          *(adres++) = *(srcPT++);
+          *(screen32++) = *(restore32++);
         }
       /* number of contiguous long words */
-      o = *(gfxPT++);
-      char *adreb = (char *) adres;
-      char *srcPB = (char *) srcPT;
-      for (Sint32 k = 0; k < o; k++)
+      k = *(counters++);
+      char *screen8 = (char *) screen32;
+      char *restore8 = (char *) restore32;
+      for (Sint32 j = 0; j < k; j++)
         {
-          *(adreb++) = *(srcPB++);
+          *(screen8++) = *(restore8++);
         }
-      adres = (Sint32 *) adreb;
-      srcPT = (Sint32 *) srcPB;
+      screen32 = (Sint32 *) screen8;
+      restore32 = (Sint32 *) restore8;
     }
 #else
-  char *srcPT = restore_ptr;
-  char *adres = screen_ptr;
+  char *restore = restore_ptr;
+  char *screen = screen_ptr;
   screen_ptr = (char *) NULL;
-  Sint16 *gfxPT = current_drawing_values;
-  Uint32 t = (Uint32) * (gfxPT++);
-  for (Uint32 i = 0; i < t; i++)
+  Sint16 *counters = current_drawing_values;
+  Uint32 h = (Uint32) * (counters++);
+  for (Uint32 i = 0; i < h; i++)
     {
-      Sint16 o = *(gfxPT++);    //offset
-      adres += o;
-      srcPT += o;
-      gfxPT++;
+      /* offset */
+      Sint16 k = *(counters++);
+      screen += k;
+      restore += k;
+      counters++;
       /* number of contiguous bytes */
-      o = *(gfxPT++);
-      for (Sint32 k = 0; k < o; k++)
+      k = *(counters++);
+      for (Sint32 j = 0; j < k; j++)
         {
-          *(adres++) = *(srcPT++);
+          *(screen++) = *(restore++);
         }
     }
 #endif
 }
 
-// -----------------------------------------------------------------------------
-// efface le BOB : restaure le decor 
-// -----------------------------------------------------------------------------
+/**
+ * Restore background where line by line (used for gigablitz) 
+ */
 void
 sprite_object::efface_lin ()
 {
@@ -941,47 +943,58 @@ sprite_object::get_frame_index ()
 void
 sprite_object::restore_background_under_shadow ()
 {
-  if (NULL == adresseEC2)
+  if (NULL == shadow_screen_ptr)
     {
       return;
     }
 #ifndef BYTES_COPY
-      Sint32 *srcPT = (Sint32 *) adresseTA2;
-      Sint32 *adres = (Sint32 *) adresseEC2;
-      adresseEC2 = (char *) NULL;
-      Sint16 *gfxPT = current_drawing_values;
-      Uint32 t = (Uint32) * (gfxPT++);
-      for (Uint32 i = 0; i < t; i++)
+      Sint32 *restore32 = (Sint32 *) shadow_restore_ptr;
+      Sint32 *screen32 = (Sint32 *) shadow_screen_ptr;
+      shadow_screen_ptr = (char *) NULL;
+      Sint16 *counters = current_drawing_values;
+      Uint32 h = (Uint32) * (counters++);
+      for (Uint32 i = 0; i < h; i++)
         {
-          Sint16 o = *(gfxPT++);        //offset
-          adres = (Sint32 *) ((char *) adres + o);
-          srcPT = (Sint32 *) ((char *) srcPT + o);
-          o = *(gfxPT++);       //number of pixels contigus
-          for (Sint32 k = 0; k < o; k++)
-            *(adres++) = *(srcPT++);
-          o = *(gfxPT++);       //number of pixels contigus
-          char *adreb = (char *) adres;
-          char *srcPB = (char *) srcPT;
-          for (Sint32 k = 0; k < o; k++)
-            *(adreb++) = *(srcPB++);
-          adres = (Sint32 *) adreb;
-          srcPT = (Sint32 *) srcPB;
+	  /* offset */
+          Sint16 k = *(counters++);
+          screen32 = (Sint32 *) ((char *) screen32 + k);
+          restore32 = (Sint32 *) ((char *) restore32 + k);
+	  /* number of contiguous 32-bit words */
+          k = *(counters++);
+          for (Sint32 j = 0; j < k; j++)
+	    {
+              *(screen32++) = *(restore32++);
+	    }
+	  /* number of contiguous bytes */
+          k = *(counters++);
+          char *screen8 = (char *) screen32;
+          char *restore8 = (char *) restore32;
+          for (Sint32 j = 0; j < k; j++)
+	    {
+              *(screen8++) = *(restore8++);
+	    }
+          screen32 = (Sint32 *) screen8;
+          restore32 = (Sint32 *) restore8;
         }
 #else
-      char *srcPT = adresseTA2;
-      char *adres = adresseEC2;
-      adresseEC2 = (char *) NULL;
-      Sint16 *gfxPT = current_drawing_values;
-      Uint32 t = (Uint32) * (gfxPT++);
-      for (Uint32 i = 0; i < t; i++)
+      char *srcPT = shadow_restore_ptr;
+      char *screen = shadow_screen_ptr;
+      shadow_screen_ptr = (char *) NULL;
+      Sint16 *counters = current_drawing_values;
+      Uint32 h = (Uint32) * (counters++);
+      for (Uint32 i = 0; i < h; i++)
         {
-          Sint16 o = *(gfxPT++);        //offset
-          adres += o;
-          srcPT += o;
-          gfxPT++;
-          o = *(gfxPT++);       //number of pixels contigus
-          for (Sint32 k = 0; k < o; k++)
-            *(adres++) = *(srcPT++);
+	  /* offset */
+          Sint16 k = *(counters++);
+          screen += k;
+          srcPT += k;
+          counters++;
+	  /* number of contiguous bytes */
+          k = *(counters++);
+          for (Sint32 j = 0; j < k; j++)
+	    {
+              *(screen++) = *(srcPT++);
+	    }
         }
 #endif
 }
@@ -1043,7 +1056,7 @@ sprite_object::draw_with_tables ()
       screen32 = (Sint32 *) ((char *) screen32 + k);
       /* number of contiguous long words */
       k = *(counters++);
-      for (Sint32 j = 0; j < k; k++)
+      for (Sint32 j = 0; j < k; j++)
         {
           Sint32 p = *(pixels32++);
           *(screen32++) = p;
@@ -1052,7 +1065,7 @@ sprite_object::draw_with_tables ()
       k = *(counters++);
       char *pixels8 = (char *) pixels32;
       char *screen8 = (char *) screen32;
-      for (Sint32 j = 0; j < k; k++)
+      for (Sint32 j = 0; j < k; j++)
         {
           char p = *(pixels8++);
           *(screen8++) = p;
@@ -1091,8 +1104,8 @@ sprite_object::draw_with_tables ()
 void
 sprite_object::draw_cycling_color ()
 {
-  indexCycle &= 7;
-  Sint32 pixel = pt_cycling[indexCycle++];
+  cycling_index &= 7;
+  Sint32 pixel = current_cycling[cycling_index++];
   restore_ptr = background_screen->get_pixel_data (x_coord, y_coord);
 #ifndef BYTES_COPY
   Sint32 *screen32 = (Sint32 *) game_screen->get_pixel_data (x_coord, y_coord);
@@ -1153,8 +1166,8 @@ sprite_object::draw_cycling_color ()
 void
 sprite_object::draw_capsule ()
 {
-  indexCycle &= 7;
-  Sint32 color = pt_cycling[indexCycle++];
+  cycling_index &= 7;
+  Sint32 color = current_cycling[cycling_index++];
   char *screen = game_screen->get_pixel_data (x_coord, y_coord);
   restore_ptr = background_screen->get_pixel_data (x_coord, y_coord);
   /* pixels data of the sprite image */
@@ -1359,7 +1372,7 @@ sprite_object::afficheSHA ()
   if (!is_enabled || !sprite_has_shadow)
     return;
   char j = ombrepixel;
-  adresseTA2 =
+  shadow_restore_ptr =
     background_screen->get_pixel_data (x_coord + ombredecax, y_coord + ombredecay);
   Uint16 *gfxPT = (Uint16 *) current_drawing_values;
   Uint32 t = (Uint32) * (gfxPT++);
@@ -1368,7 +1381,7 @@ sprite_object::afficheSHA ()
   Sint32 *adres =
     (Sint32 *) game_screen->get_pixel_data (x_coord + ombredecax,
                                     y_coord + ombredecay);
-  adresseEC2 = (char *) adres;
+  shadow_screen_ptr = (char *) adres;
   for (Uint32 i = 0; i < t; i++)
     {
       Sint16 o = *(gfxPT++);    //offset
@@ -1385,7 +1398,7 @@ sprite_object::afficheSHA ()
 #else
   char *adres =
     game_screen->get_pixel_data (x_coord + ombredecax, y_coord + ombredecay);
-  adresseEC2 = adres;
+  shadow_screen_ptr = adres;
   for (Uint32 i = 0; i < t; i++)
     {
       Sint16 o = *(gfxPT++);    //offset
@@ -1465,7 +1478,7 @@ sprite_object::draw_to_brackground ()
 void
 sprite_object::draw_shadow_to_brackground ()
 {
-  adresseTA2 = background_screen->get_pixel_data (x_coord + ombredecax,
+  shadow_restore_ptr = background_screen->get_pixel_data (x_coord + ombredecax,
                                     y_coord + ombredecay);
   Uint16 *counters = (Uint16 *) current_drawing_values;
   /* height of the sprite in pixels */
@@ -1473,7 +1486,7 @@ sprite_object::draw_shadow_to_brackground ()
 #ifndef BYTES_COPY
   Sint32 *background32 = (Sint32 *) background_screen->get_pixel_data (x_coord + ombredecax,
                                                   y_coord + ombredecay);
-  adresseEC2 = (char *) adres;
+  shadow_screen_ptr = (char *) background32;
   Sint32 p = ombrepixe4;
   for (Uint32 i = 0; i < h; i++)
     {
@@ -1488,7 +1501,7 @@ sprite_object::draw_shadow_to_brackground ()
         }
       /* number of contiguous bytes */
       k = *(counters++);
-      char *background8 = (char *) background8;
+      char *background8 = (char *) background32;
       for (Sint32 j = 0; j < k; j++)
         {
           *(background8++) |= p;
@@ -1499,7 +1512,7 @@ sprite_object::draw_shadow_to_brackground ()
   char p = ombrepixel;
   char *background = background_screen->get_pixel_data (x_coord + ombredecax,
                                      y_coord + ombredecay);
-  adresseEC2 = background;
+  shadow_screen_ptr = background;
   for (Uint32 i = 0; i < h; i++)
     {
       /* offset */
@@ -1531,7 +1544,7 @@ sprite_object::draw_copy_from_bitmap ()
   restore_ptr = background_screen->get_pixel_data (x_coord, y_coord);
   screen_ptr = d;
   Sint32 m = row_size;
-  Sint32 n = destNextLn;
+  Sint32 n = offscreen_pitch;
   Sint32 h = sprite_height;
   Sint32 l = sprite_width;
   for (Sint32 i = 0; i < h; i++)
@@ -1565,7 +1578,7 @@ sprite_object::MSKbitcopy ()
   restore_ptr = background_screen->get_pixel_data (x_coord, y_coord);
   screen_ptr = d;
   Sint32 m = row_size;
-  Sint32 n = destNextLn;
+  Sint32 n = offscreen_pitch;
   Sint32 h = sprite_height;
   Sint32 l = sprite_width;
   for (Sint32 i = 0; i < h; i++)
@@ -1590,14 +1603,17 @@ sprite_object::MSK_bitclr ()
   char *s = restore_ptr;
   char *d = screen_ptr;
   screen_ptr = (char *) NULL;
-  Sint32 m = destNextLn;
-  Sint32 n = destNextLn;
+  Sint32 m = offscreen_pitch;
+  Sint32 n = offscreen_pitch;
   Sint32 h = sprite_height;
   Sint32 l = sprite_width;
   for (Sint32 i = 0; i < h; i++)
     {
       for (Sint32 j = 0; j < l; j++)
-        d[j] = s[j];            //restore the pixel
+	{
+	  /* restore the pixel */
+          d[j] = s[j];
+	}
       s += m;
       d += n;
     }
@@ -1816,18 +1832,17 @@ sprite_object::set_pixel_data (char *pixel, bool is_release)
   is_release_pixel_data = is_release;
 }
 
-//==============================================================================
-// MEMBRES STATIQUES 
-//==============================================================================
+/*
+ * Statics members
+ */
 
+/** Color cylcing from paddle's projectiles of fire 1 */
 const Sint32
   sprite_object::cycling_01[] =
-//{     126, 126, 75, 75, 122, 122, 24, 90};
 { 0x7e7e7e7e, 0x7e7e7e7e, 0x4b4b4b4b, 0x4b4b4b4b,
   0x7a7a7a7a, 0x7a7a7a7a, 0x18181818, 0x5a5a5a5a
 };
-
-//{     63, 63, 23, 23, 53, 53, 24, 34};
+/** Color cylcing from paddle's projectiles of fire 2 */
 const Sint32
   sprite_object::cycling_02[] =
   { 0x3f3f3f3f, 0x3f3f3f3f, 0x17171717, 0x17171717, 0x35353535,
@@ -2201,14 +2216,12 @@ bbPosition
 BOB_POS045[1] = { {12, 392} };
 bb_describ
 BOB_NUM045 = { 32, 85, 1, BOB_POS045 };
-
-// raquette 
+/* paddle */
 bbPosition
 BOB_POS046[1] = { {16, 246} };
 bb_describ
 BOB_NUM046 = { 32, 8, 1, BOB_POS046 };
-
-// tirs des gardiens
+/* bullet fired by a guardian */
 bbPosition
 BOB_POS047[16] =
   { {19, 141}, {8, 460}, {19, 152}, {9, 460}, {19, 163}, {10, 460}, {19, 174},

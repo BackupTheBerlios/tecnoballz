@@ -4,11 +4,11 @@
  * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.13 2007/09/12 06:32:49 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.14 2007/09/13 05:33:21 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ sprite_projectile::set_power1 ()
   frame_index = 4;
   can_destroy_indestructible = false;
   power = 1;
-  pt_cycling = &sprite_object::cycling_02[0];
+  current_cycling = &sprite_object::cycling_02[0];
 }
 
 /**
@@ -72,7 +72,7 @@ sprite_projectile::set_power2 ()
   frame_index = 0;
   can_destroy_indestructible = true;
   power = 2;
-  pt_cycling = &sprite_object::cycling_01[0];
+  current_cycling = &sprite_object::cycling_01[0];
 }
 
 /**

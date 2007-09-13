@@ -1,14 +1,14 @@
 /** 
  * @file sprite_capsule.cc
  * @brief The capsule sprite which contains a bonus or a penalty 
- * @date 2007-09-11
+ * @date 2007-09-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.cc,v 1.13 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_capsule.cc,v 1.14 2007/09/13 05:33:21 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ sprite_capsule::sprite_capsule ()
   towards = 0;
   capsule_identifier = 0;
   paddle = NULL;
-  pt_cycling = &sprite_object::cycling_01[0];
+  current_cycling = &sprite_object::cycling_01[0];
 }
 
 /**
