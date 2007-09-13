@@ -4,11 +4,11 @@
  * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.9 2007/09/12 06:32:49 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.10 2007/09/13 15:51:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ sprite_paddle::sprite_paddle (bool has_projectiles)
   is_glue = 0;
   bump_speed = 0;
   bump_actif = 0;
-  balleTouch = 0;
+  touch_ball = false;
   paddle_number = 0;
   ball_glued = (sprite_ball *) NULL;
   if (has_projectiles)

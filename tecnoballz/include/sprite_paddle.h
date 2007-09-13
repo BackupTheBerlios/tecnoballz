@@ -4,11 +4,11 @@
  * @date 2007-02-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.13 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.14 2007/09/13 15:51:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,7 +68,8 @@ private:
   Sint32 *direct_tab;           // table direction si la balle collee
 
   sprite_ball *ball_glued;      // ptr  : l'objet balle collee
-  Sint32 balleTouch;            // flag : balle touche raquette
+  /** If true the paddle touched a ball */
+  bool touch_ball;
   Sint32 invincible;            // > 0 bumper is invincible (guards phase)
   Sint32 flickerval;            // flag flicker
 

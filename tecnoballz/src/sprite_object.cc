@@ -4,11 +4,11 @@
  * @date 2007-09-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.36 $
+ * @version $Revision: 1.37 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.36 2007/09/13 05:33:21 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.37 2007/09/13 15:51:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1619,32 +1619,36 @@ sprite_object::MSK_bitclr ()
     }
 }
 
-//-------------------------------------------------------------------------------
-// position sprite on the other one
-//-------------------------------------------------------------------------------
+/**
+ * Position sprite on the other one
+ * @param sprite Pointer to a sprite object
+ * @param xoffset
+ * @param yoffset
+ */
 void
-sprite_object::aspire_BOB (sprite_object * bobPT, Sint32 offsX, Sint32 offsY)
+sprite_object::pull (sprite_object * sprite, Sint32 xoffset, Sint32 yoffset)
 {
-  x_coord = (bobPT->x_coord) + offsX - (collision_width >> 1);
-  y_coord = (bobPT->y_coord) + offsY - (collision_height >> 1);
+  x_coord = (sprite->x_coord) + xoffset - (collision_width >> 1);
+  y_coord = (sprite->y_coord) + yoffset - (collision_height >> 1);
 }
 
-//-------------------------------------------------------------------------------
-// position sprite on the other one
-//-------------------------------------------------------------------------------
+/**
+ * Position sprite on the other one
+ * @param sprite Pointer to a sprite object
+ * @param xoffset
+ * @param yoffset
+ */
 void
-sprite_object::aspireBOB2 (sprite_object * bobPT, Sint32 offsX, Sint32 offsY)
+sprite_object::attract (sprite_object * sprite, Sint32 xoffset, Sint32 yoffset)
 {
-  x_coord =
-    (bobPT->x_coord) + offsX - ((collision_width - bobPT->collision_width) >> 1);
-  y_coord =
-    (bobPT->y_coord) + offsY - ((collision_height - bobPT->collision_height) >> 1);
+  x_coord = (sprite->x_coord) + xoffset - ((collision_width - sprite->collision_width) >> 1);
+  y_coord = (sprite->y_coord) + yoffset - ((collision_height - sprite->collision_height) >> 1);
 }
 
 
 /**
  * Check collision beetween two sprites
- * @param sprite a pointer to a sprite object
+ * @param sprite Pointer to a sprite object
  * @return true if collision occurs, otherwise false
  */
 bool
@@ -1729,14 +1733,15 @@ sprite_object::play_animation_loop ()
     }
 }
 
-//-------------------------------------------------------------------------------
-// Change l'offset du BOB
-//-------------------------------------------------------------------------------
+/**
+ * Change the current image of the sprite
+ * @param index Index of the current image 
+ */
 void
-sprite_object::new_offset (Sint32 numer)
+sprite_object::new_offset (Sint32 index)
 {
-  frame_index = numer;
-  set_image (numer);
+  frame_index = index;
+  set_image (index);
 }
 
 /**

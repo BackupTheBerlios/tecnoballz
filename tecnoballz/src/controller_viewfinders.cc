@@ -1,14 +1,14 @@
 /** 
  * @file controller_viewfinders.cc 
  * @brief Paddles viewfinders controller 
- * @date 2007-02-18
+ * @date 2007-09-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_viewfinders.cc,v 1.4 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_viewfinders.cc,v 1.5 2007/09/13 15:51:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,14 +66,11 @@ controller_viewfinders::initialize ()
       /* the robot paddle does not have a viewfinder */
       num_of_paddles--;
     }
-  printf("num_of_paddles: %i\n", num_of_paddles);
-
   if (num_of_paddles == 0)
     {
       throw std::runtime_error ("(!)controller_viewfinders::initialize() "
           "failed! Number of paddles must be higher than 0!");
     }
-
   try 
   {
     paddles_list = new sprite_paddle *[num_of_paddles];
@@ -103,7 +100,7 @@ controller_viewfinders::run ()
       sprite_ball *ball = paddles_list[i]->ball_glued;
       if (NULL != ball && ball->is_enabled)
         {
-          sprites_list[i]->aspireBOB2 (ball);
+          sprites_list[i]->attract (ball);
           sprites_list[i]->enable ();
           sprites_list[i]->set_image (ball->directBall / 4);
         }

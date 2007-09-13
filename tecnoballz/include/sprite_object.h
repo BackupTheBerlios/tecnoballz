@@ -4,11 +4,11 @@
  * @date 2007-09-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.37 $
+ * @version $Revision: 1.38 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.37 2007/09/13 05:33:21 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.38 2007/09/13 15:51:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -304,8 +304,8 @@ public:
   void draw_copy_from_bitmap ();
   void MSKbitcopy ();
   void MSK_bitclr ();
-  void aspire_BOB (sprite_object * bobPT, Sint32 offsX = 0, Sint32 offsY = 0);
-  void aspireBOB2 (sprite_object * bobPT, Sint32 offsX = 0, Sint32 offsY = 0);
+  void pull (sprite_object * sprite, Sint32 xoffset = 0, Sint32 yoffset = 0);
+  void attract (sprite_object * sprite, Sint32 xoffset = 0, Sint32 yoffset = 0);
   bool collision (sprite_object * sprite);
   void set_frame_delay (Sint32 delay);
   void set_frame_period (Sint32 period);

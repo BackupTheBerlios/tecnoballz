@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.h
  * @brief Control the balls. Move and collisions 
- * @date 2007-04-10
+ * @date 2007-09-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.22 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.23 2007/09/13 15:51:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,10 +65,10 @@ private:
   sprite_object *ptBob_wall;
 
 private:
-  static Sint32 ballEject1[];
-  static Sint32 ballEject2[];
-  static Sint32 ballEject3[];
-  static Sint32 ballEject4[];
+  static Sint32 ball_eject1[];
+  static Sint32 ball_eject2[];
+  static Sint32 ball_eject3[];
+  static Sint32 ball_eject4[];
   static Sint32 rb0[16];
   static Sint32 rb1[16];
   static Sint32 rb2[16];
@@ -99,8 +99,8 @@ private:
   void vitusmove2 ();
   void check_collisions_with_paddles ();
   void vitusbump2 ();
-  void vitusrobot ();
-  void vitusEject ();
+  void check_collisions_with_robot ();
+  void handle_ejectors ();
   void collision_with_walls ();
   void vituscote2 ();
   void vitusbound ();

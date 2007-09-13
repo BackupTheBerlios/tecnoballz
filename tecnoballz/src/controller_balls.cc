@@ -4,11 +4,11 @@
  * @date 2007-04-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.39 $
+ * @version $Revision: 1.40 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.39 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.40 2007/09/13 15:51:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -148,10 +148,10 @@ controller_balls::run_in_bricks_levels ()
   check_bricks_collision ();
   vitus_move ();                //move the balls
   check_collisions_with_paddles ();                //collisions balls and bumpers
-  vitusrobot ();
+  check_collisions_with_robot ();
   /* collisions between balls and the 3 walls */
   collision_with_walls ();
-  vitusEject ();                //collisions balls and ejectors
+  handle_ejectors ();                //collisions balls and ejectors
   check_collisions_with_ships ();
   check_collisions_with_eyes ();
   /* control balls with the left mouse button */
@@ -557,10 +557,10 @@ controller_balls::check_collisions_with_paddles ()
   Sint32 j, x, y;
   const Sint32 *monPT;
   sprite_paddle *paddle, *touched_paddle;
-  paddle_bottom->balleTouch = 0;
-  paddle_right->balleTouch = 0;
-  paddle_top->balleTouch = 0;
-  paddle_left->balleTouch = 0;
+  paddle_bottom->touch_ball = false;
+  paddle_right->touch_ball = false;
+  paddle_top->touch_ball = false;
+  paddle_left->touch_ball = false;
   right_panel_score *panel = right_panel_score::get_instance ();
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
@@ -647,7 +647,7 @@ controller_balls::check_collisions_with_paddles ()
           /* does the ball touch a paddle?  */
           if (NULL != touched_paddle)
             {
-              touched_paddle->balleTouch = 1;
+              touched_paddle->touch_ball = true;
 #ifndef SOUNDISOFF
               audio->play_sound (S_TOUCHRAK);
 #endif
@@ -707,7 +707,7 @@ controller_balls::vitusbump2 ()
   Sint32 j, x, y;
   const Sint32 *monPT;
   sprite_paddle *raket, *bumpX;
-  paddle_bottom->balleTouch = 0;
+  paddle_bottom->touch_ball = false;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = sprites_list[i];
@@ -734,7 +734,7 @@ controller_balls::vitusbump2 ()
           //###########################################################
           if (bumpX)
             {
-              bumpX->balleTouch = 1;
+              bumpX->touch_ball = true;
 #ifndef SOUNDISOFF
               audio->play_sound (S_TOUCHRAK);
 #endif
@@ -758,51 +758,53 @@ controller_balls::vitusbump2 ()
     }
 }
 
-//-------------------------------------------------------------------------------
-// bricks level: collisions balls and robot bumper
-//-------------------------------------------------------------------------------
+/**
+ * Handle collisions balls with robot paddle
+ */
 void
-controller_balls::vitusrobot ()
+controller_balls::check_collisions_with_robot ()
 {
-  if (tec_robot0->bump_actif)
+  if (!tec_robot0->bump_actif)
     {
-      sprite_paddle *raket = tec_robot0;
-      raket->balleTouch = 0;
-      Sint32 x1 = raket->x_coord;
-      Sint32 y1 = raket->y_coord;
-      Sint32 x2 = raket->x_coord + raket->collision_width;
-      Sint32 y2 = raket->y_coord + raket->collision_height + 8;
-      const Sint32 *monPT;
-      Sint32 j;
-      for (Uint32 i = 0; i < max_of_sprites; i++)
-        {
-          sprite_ball *balle = sprites_list[i];
-          if (balle->is_enabled)
-            {
-              if (balle->x_coord + (Sint32)balle->collision_width > x1 &&
-                  balle->y_coord + (Sint32)balle->collision_height > y1 &&
-                  balle->x_coord < x2 && balle->y_coord < y2)
-                {
-                  balle->y_coord = y1 - balle->collision_height;
-                  raket->balleTouch = 1;
-                  j = balle->directBall;
-                  monPT = raket->rebonds_GD;
-                  monPT = (Sint32 *) ((char *) monPT + j);
-                  balle->directBall = *monPT;
-#ifndef SOUNDISOFF
-                  audio->play_sound (S_TOUCHRAK);
-#endif
-                }
-            }
-        }
+      return;
     }
+  sprite_paddle *paddle = tec_robot0;
+  paddle->touch_ball = false;
+  Sint32 x1 = paddle->x_coord;
+  Sint32 y1 = paddle->y_coord;
+  Sint32 x2 = paddle->x_coord + paddle->collision_width;
+  Sint32 y2 = paddle->y_coord + paddle->collision_height + 8;
+  const Sint32 *monPT;
+  Sint32 j;
+  for (Uint32 i = 0; i < max_of_sprites; i++)
+  {
+    sprite_ball *ball = sprites_list[i];
+    if (!ball->is_enabled)
+    {
+      continue;
+    }
+    if (ball->x_coord + (Sint32)ball->collision_width > x1 &&
+        ball->y_coord + (Sint32)ball->collision_height > y1 &&
+        ball->x_coord < x2 && ball->y_coord < y2)
+    {
+      ball->y_coord = y1 - ball->collision_height;
+      paddle->touch_ball = true;
+      j = ball->directBall;
+      monPT = paddle->rebonds_GD;
+      monPT = (Sint32 *) ((char *) monPT + j);
+      ball->directBall = *monPT;
+#ifndef SOUNDISOFF
+      audio->play_sound (S_TOUCHRAK);
+#endif
+    }
+  }
 }
 
-//-----------------------------------------------------------------------------
-// bricks levels: handle ejectos/balls collisions
-//-----------------------------------------------------------------------------
+/**
+ * Handle ejectors in bricks level
+ */
 void
-controller_balls::vitusEject ()
+controller_balls::handle_ejectors ()
 {
   controller_ejectors *ejectors = controller_ejectors::get_instance ();
   sprite_object *coin1 =
@@ -815,116 +817,127 @@ controller_balls::vitusEject ()
     ejectors->get_ejector (controller_ejectors::BOTTOM_RIGHT_EJECTOR);
 
   for (Uint32 i = 0; i < max_of_sprites; i++)
+  {
+    sprite_ball *ball = sprites_list[i];
+    if (!ball->is_enabled)
     {
-      sprite_ball *balle = sprites_list[i];
-      if (balle->is_enabled)
+      continue;
+    }
+    /* test if the ball is already into an ejector */
+    Sint32 *flag_pt = ball->eject_ball;
+    Sint32 *table = NULL;
+    if (*(flag_pt++))
+      {
+        table = ball_eject1;
+      }
+    else
+    {
+      if (*(flag_pt++))
         {
-
-          //###############################################################
-          // test if the ball is already into an ejector
-          //###############################################################
-          Sint32 *monPT = balle->eject_ball;
-          Sint32 *table = 0;
-          if (*(monPT++))
-            table = ballEject1;
-          else
+          table = ball_eject2;
+        }
+      else
+      {
+        if (*(flag_pt++))
+          {
+            table = ball_eject3;
+          }
+        else
+        {
+          if (*(flag_pt++))
             {
-              if (*(monPT++))
-                table = ballEject2;
-              else
-                {
-                  if (*(monPT++))
-                    table = ballEject3;
-                  else
-                    {
-                      if (*(monPT++))
-                        table = ballEject4;
-                    }
-                }
-            }
-
-          //###########################################################
-          // the ball is into an ejector
-          //###########################################################
-          if (table)
-            {
-              Sint32 j = ++(*(--monPT));
-              if (j == 160)     // time before ejection
-                {
-                  Sint32 j = random_counter & 0xF;
-                  table += j;
-                  balle->directBall = *table;
-#ifndef SOUNDISOFF
-                  audio->play_sound (S_COINEJEC);
-#endif
-                }
-              else
-                {
-                  if (j == 200)
-                    *monPT = 0;
-                }
-            }
-
-          //###########################################################
-          // If not test if a ball is aspired by an ejector 
-          //###########################################################
-          else
-            {
-              if (balle->collision (coin1))    //top-left
-                {
-                  balle->aspire_BOB (coin1, 10 * resolution, 10 * resolution);
-                  balle->eject_ball[0] = 1;
-                  balle->directBall = 64;
-                  current_player->add_score (10);
-#ifndef SOUNDISOFF
-                  audio->play_sound (S_COINASPI);
-#endif
-                }
-              else
-                {
-                  if (balle->collision (coin2))        //top-right
-                    {
-                      balle->aspire_BOB (coin2, 5 * resolution,
-                                         10 * resolution);
-                      balle->eject_ball[3] = 1;
-                      balle->directBall = 64;
-                      current_player->add_score (10);
-#ifndef SOUNDISOFF
-                      audio->play_sound (S_COINASPI);
-#endif
-                    }
-                  else
-                    {
-                      if (balle->collision (coin3))    //bottom-left
-                        {
-                          balle->aspire_BOB (coin3, 10 * resolution,
-                                             5 * resolution);
-                          balle->eject_ball[2] = 1;
-                          balle->directBall = 64;
-                          current_player->add_score (10);
-#ifndef SOUNDISOFF
-                          audio->play_sound (S_COINASPI);
-#endif
-                        }
-                      else
-                        {
-                          if (balle->collision (coin4))        //bottom-right
-                            {
-                              balle->aspire_BOB (coin4, 5 * resolution,
-                                                 5 * resolution);
-                              balle->eject_ball[1] = 1;
-                              balle->directBall = 64;
-                              current_player->add_score (10);
-#ifndef SOUNDISOFF
-                              audio->play_sound (S_COINASPI);
-#endif
-                            }
-                        }
-                    }
-                }
+              table = ball_eject4;
             }
         }
+      }
     }
+
+    /*
+     * the ball is in an ejector
+     */
+    if (table != NULL)
+    {
+      Sint32 j = ++(*(--flag_pt));
+      /* time before ejection */
+      if (j == 160)
+      {
+        Sint32 j = random_counter & 0xF;
+        table += j;
+        ball->directBall = *table;
+#ifndef SOUNDISOFF
+        audio->play_sound (S_COINEJEC);
+#endif
+      }
+      else
+      {
+        if (j == 200)
+          {
+            *flag_pt = 0;
+          }
+      }
+      return;
+    }
+
+    /*
+     * if not test if a ball is aspired by an ejector
+     */
+      /* top-left */
+      if (ball->collision (coin1))
+      {
+        ball->pull (coin1, 10 * resolution, 10 * resolution);
+        ball->eject_ball[0] = 1;
+        ball->directBall = 64;
+        current_player->add_score (10);
+#ifndef SOUNDISOFF
+        audio->play_sound (S_COINASPI);
+#endif
+      }
+      else
+      {
+        /* top-right */
+        if (ball->collision (coin2))
+        {
+          ball->pull (coin2, 5 * resolution,
+              10 * resolution);
+          ball->eject_ball[3] = 1;
+          ball->directBall = 64;
+          current_player->add_score (10);
+#ifndef SOUNDISOFF
+          audio->play_sound (S_COINASPI);
+#endif
+        }
+        else
+        {
+          /* bottom-left */
+          if (ball->collision (coin3))
+          {
+            ball->pull (coin3, 10 * resolution,
+                5 * resolution);
+            ball->eject_ball[2] = 1;
+            ball->directBall = 64;
+            current_player->add_score (10);
+#ifndef SOUNDISOFF
+            audio->play_sound (S_COINASPI);
+#endif
+          }
+          else
+          {
+            /* bottom-right */
+            if (ball->collision (coin4))
+            {
+              ball->pull (coin4, 5 * resolution,
+                  5 * resolution);
+              ball->eject_ball[1] = 1;
+              ball->directBall = 64;
+              current_player->add_score (10);
+#ifndef SOUNDISOFF
+              audio->play_sound (S_COINASPI);
+#endif
+            }
+          }
+        }
+      }
+  }
 }
 
 /**
@@ -1787,25 +1800,25 @@ controller_balls::least_glue ()
 //------------------------------------------------------------------------------
 // top-left
 Sint32
-  controller_balls::ballEject1[] = {
+  controller_balls::ball_eject1[] = {
   52, 56, 60, 60, 52, 56, 60, 60, 52, 52, 56, 52, 52, 60, 56, 52, 56, 56
 };
 
 // bottom-left
 Sint32
-  controller_balls::ballEject2[] = {
+  controller_balls::ball_eject2[] = {
   8, 4, 12, 12, 8, 4, 4, 12, 8, 4, 12, 4, 8, 12, 4, 8, 12, 4, 4
 };
 
 // bottom-right
 Sint32
-  controller_balls::ballEject3[] = {
+  controller_balls::ball_eject3[] = {
   20, 28, 24, 20, 20, 28, 28, 24, 20, 28, 24, 24, 28, 28, 20, 20, 24, 24, 28
 };
 
 // top-right 
 Sint32
-  controller_balls::ballEject4[] = {
+  controller_balls::ball_eject4[] = {
   36, 44, 40, 36, 36, 44, 44, 40, 40, 36, 44, 40, 40, 36, 36, 44, 44, 40, 36
 };
 
