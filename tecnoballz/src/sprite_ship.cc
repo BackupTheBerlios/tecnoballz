@@ -4,11 +4,11 @@
  * @date 2007-04-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ship.cc,v 1.10 2007/09/12 06:32:49 gurumeditation Exp $
+ * $Id: sprite_ship.cc,v 1.11 2007/09/15 19:20:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,11 +53,11 @@ sprite_ship::~sprite_ship ()
 void
 sprite_ship::gere_atome ()
 {
-  //###################################################################
-  // explosion of the BouiBoui
-  //###################################################################
+  /* explosion of the ship */
   if (atom_explo)
-    atom_explo = play_animation_once ();
+    {
+      atom_explo = play_animation_once ();
+    }
 
   else
     {
@@ -193,7 +193,7 @@ sprite_ship::littleInit (Sint32 time0, Sint32 appar, Sint32 index,
   x_coord = pos_x;
   y_coord = pos_y;
   atom_oexpl = offst;           //number of the image's explosion
-  atom_explo = 0;
+  atom_explo = false;
   atom_ghost = 0;               //pointer on "tableGhost"
   atom_deplX = 0;               //offset X
   atom_deplY = 0;               //offset Y

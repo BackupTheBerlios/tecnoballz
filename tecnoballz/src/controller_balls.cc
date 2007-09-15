@@ -4,11 +4,11 @@
  * @date 2007-04-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.41 $
+ * @version $Revision: 1.42 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.41 2007/09/15 08:45:16 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.42 2007/09/15 19:20:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1112,9 +1112,12 @@ controller_balls::check_bricks_collision ()
 {
   controller_bricks *bricks = controller_bricks::get_instance ();
 
-  Uint32 brick_width = bricks->get_brick_width ();    //brick's width in pixels
-  Sint32 byoff = bricks->getYOffset (); //y-offset between 2 bricks
-  Sint32 indus = bricks->getBkIndus (); //first indestructible brick
+  /* brick's width in pixels */
+  Uint32 brick_width = bricks->get_brick_width ();
+  /* y-offset between 2 bricks */
+  Sint32 byoff = bricks->getYOffset ();
+  /* first indestructible brick */
+  Sint32 indus = bricks->getBkIndus ();
 
   sprite_ball **balls = sprites_list;
   brick_info *bricks_map = bricks->get_bricks_map ();
@@ -1146,34 +1149,36 @@ controller_balls::check_bricks_collision ()
           x += y;
           brick_info *brick = (bricks_map + x);
           x = brick->brique_rel;
-          /* collision between balls and brick? */
+          /* collision between a ball and a brick? */
 	  if (0 == x)
             {
 	      /* no collision */
               continue;
             }
-	  redraw->is_gigablitz_destroyed = false;
+          redraw->is_gigablitz_destroyed = false;
           redraw->paddle = ball->paddle_touched;
-
           x = x - indus;
           if (x >= 0)
             {
               /* 
                * indestructible brick touched!
                */
-              indes = 1;        //collision with indestructible 
-              if ((x -= brick_width) > 0)     //indestructible-destructible bricks?
+              /* collision with indestructible brick */
+              indes = 1;
+              /* indestructible/destructible bricks? */
+              if ((x -= brick_width) > 0)
                 {
                   if (ball->ballPowerX == sprite_ball::BALLPOWER2)
                     {
                       redraw->pixel_offset = brick->pixel_offset;
                       redraw->brick_map = brick;
-		      redraw->is_indestructible = true;
-                      //redraw->xcoord_collision = -1;
-                      brick->brique_rel = 0;    //reset code brick
+                      redraw->is_indestructible = true;
                       redraw->number = brick->number;
-		      /* restore background under brick */
+                      redraw->sprite = brick->sprite;
                       redraw->is_background = true;
+                      /* clear brick code */
+                      brick->brique_rel = 0;
+		      /* restore background under brick */
 		      bricks->bricks_redraw_next ();
                     }
                   else
@@ -1199,43 +1204,43 @@ controller_balls::check_bricks_collision ()
            */
           else
             {
-	      redraw->is_indestructible = false;
+              redraw->is_indestructible = false;
               redraw->pixel_offset = brick->pixel_offset;
               redraw->brick_map = brick;
+              redraw->sprite = brick->sprite;
               brick->h_pos = brick->h_pos - (ball->powerBall1 * 2);
               if (brick->h_pos <= 0)
                 {
                   brick->h_pos = 0;
-                  brick->brique_rel = 0;        //reset code brick
+                  /* clear brick code */
+                  brick->brique_rel = 0;
                   redraw->number = brick->number;
-		  /* restore background */
+                  /* restore background */
                   redraw->is_background = true;
                 }
               else
                 {
                   brick->brique_rel = brick->brique_rel - ball->powerBall2;
                   redraw->number = brick->brique_rel;
-		  /* redraw a new brick */
+                  /* redraw a new brick */
                   redraw->is_background = false;
                 }
 	      bricks->bricks_redraw_next ();
             }
-          rebon += incre;       // incremente le flag rebond
-          //incre = incre + incre;
-        }                       // boucle 4 points de collision
+          /* inc. rebound flag */
+          rebon += incre;
 
-      // 
       if (--rebon >= 0)
         {
           if (indes > 0 || ball->ballPowerX == sprite_ball::BALLNORMAL)
             {
               Sint32 *rebPT = *(brick_jump + rebon);
-              //(char *)rebPT += ball->directBall;
               rebPT = (Sint32 *) ((char *) rebPT + ball->directBall);
               ball->directBall = *rebPT;
             }
         }
-    }                           // ball loop
+    }
+  }
 }
 
 /**

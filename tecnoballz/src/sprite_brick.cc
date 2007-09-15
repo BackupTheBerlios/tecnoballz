@@ -5,11 +5,11 @@
  * @date 2007-09-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_brick.cc,v 1.2 2007/09/15 08:45:16 gurumeditation Exp $
+ * $Id: sprite_brick.cc,v 1.3 2007/09/15 19:20:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,8 @@
  */
 sprite_brick::sprite_brick ()
 {
+  current_cycling = &sprite_object::cycling_01[0];
+  set_draw_method (sprite_object::DRAW_CAPSULE);
   clear_sprite_members ();
 }
 
@@ -43,13 +45,43 @@ sprite_brick::~sprite_brick ()
 {
 }
 
+/**
+ *
+ * @param h_pos Brick vertical position in the bricks bitmap
+ *              0, 1, 2, 3, 4, 5, 6, 7, or 8  
+ */
+
+void
+sprite_brick::update_image (Uint32 h_pos)
+{
+   Sint32 index = frame_index - frame_index % 7 + (h_pos >> 1); 
+   /* 4 3 => 22
+    * 2 3 => 21
+    * */
+   set_image (index);
+    /*
+     *  0  1  2  3  4  5  6
+     *  7  8  9 10 11 12 13
+     * 14 15 16 17 18 19 20   
+     * 21 *22 23 24 25 26 27
+     * 28 29 30 31 32 33 34
+     * 35 36 37 38 39 40 41  
+     * 42 43 44 45 46 47 48
+     */
+
+}
+
 void
 sprite_brick::draw ()
 {
+  if (!is_enabled || frame_index >= max_of_images)
+    {
+      return;
+    }
   cycling_index &= 7;
   Sint32 color = current_cycling[cycling_index++];
-  printf("color: %i\n", color);
   char *screen = game_screen->get_pixel_data (x_coord, y_coord);
+  screen_ptr = screen;
   restore_ptr = background_screen->get_pixel_data (x_coord, y_coord);
   /* pixels data of the sprite image */
   char *pixels = current_drawing_data;
@@ -66,7 +98,7 @@ sprite_brick::draw ()
       for (Sint32 j = 0; j < k; j++)
         {
           char p = *(pixels++);
-          if (p == 0)
+          if (p == 29)
             {
               *(screen++) = color;
             }

@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-04-10
+ * @date 2007-09-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.45 $
+ * @version $Revision: 1.46 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.45 2007/09/12 06:32:49 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.46 2007/09/15 19:20:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -131,7 +131,6 @@ supervisor_bricks_level::first_init ()
   /*
    * generate the data of the spites
    */
-  //wall of bottom 
   bottom_wall->create_sprite (BOB_WALLBO, sprites_bitmap, 0);
   sprites->add (bottom_wall);
   bottom_wall->set_coordinates (32 * resolution, 232 * resolution);
@@ -162,7 +161,6 @@ supervisor_bricks_level::first_init ()
   head_anim->load_bitmap ();
   init_level ();
   /* draw ejectors and side walls */
-  //initialize_background ();
   paddles->init_paddles (gigablitz, balls);
 
   /* balls initialization */
@@ -269,7 +267,9 @@ supervisor_bricks_level::main_loop ()
           game_over->execution1 ();
         }
       if (!bricks->update () && isgameover < 2) //restore bricks
-        isgameover = 2;
+        {
+          isgameover = 2;
+        }
       sides_bricks->run ();
       viewfinders_paddles->run ();
       ships->move ();
@@ -280,7 +280,9 @@ supervisor_bricks_level::main_loop ()
       panel_score->text_refresh ();
       display->bufferCTab ();
       if (keyboard->is_left_button () && isgameover > 60)
-        current_player = handler_players::nextplayer (current_player, &end_return, 1);
+        {
+          current_player = handler_players::nextplayer (current_player, &end_return, 1);
+        }
     }
 
   /*
@@ -296,17 +298,17 @@ supervisor_bricks_level::main_loop ()
       sides_bricks->run ();
       display->lock_surfaces ();
       sprites->clear ();
-      bricks->update ();        //restore bricks
+      /* draw or clear bricks
+       * send a money and/or a capsule */
+      bricks->update ();
       changebkgd ();
 
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
         {
           info_messages->run ();
           gigablitz->run_in_bricks_levels ();
-
-          //handle the "less bricks" option
+          /* handle the "less bricks" option */
           bricks->less_bricks ();
-
           paddles->move_paddles ();
           if (panel_score->get_bricks_counter () > 0)
             {
@@ -337,7 +339,9 @@ supervisor_bricks_level::main_loop ()
           player_indicators->display_money_and_reverse ();
         }
 
+      //display->unlock_surfaces ();
       //tiles_ground->draw();
+      //display->lock_surfaces ();
       sprites->draw ();
       Ecode = popup_menu->execution1 ();
       display->unlock_surfaces ();
@@ -390,9 +394,7 @@ supervisor_bricks_level::main_loop ()
         }
     }
 
-  //###################################################################
-  // escape key to quit the game !
-  //###################################################################
+  /* escape key to quit the game! */
   if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG) ||
       Ecode == handler_popup_menu::WEQUITGAME)
     {
@@ -409,9 +411,7 @@ supervisor_bricks_level::main_loop ()
       end_return = MAIN_MENU;
     }
 
-  //###################################################################
-  // control position music's module
-  //###################################################################
+  /* control position music's module */
 #ifndef SOUNDISOFF
   Uint32 phase = audio->get_portion_music_played ();
   if (phase == handler_audio::LOST_PORTION &&

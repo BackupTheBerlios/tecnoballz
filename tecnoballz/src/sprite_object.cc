@@ -4,11 +4,11 @@
  * @date 2007-09-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.37 $
+ * @version $Revision: 1.38 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.37 2007/09/13 15:51:53 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.38 2007/09/15 19:20:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1169,6 +1169,7 @@ sprite_object::draw_capsule ()
   cycling_index &= 7;
   Sint32 color = current_cycling[cycling_index++];
   char *screen = game_screen->get_pixel_data (x_coord, y_coord);
+  screen_ptr = screen;
   restore_ptr = background_screen->get_pixel_data (x_coord, y_coord);
   /* pixels data of the sprite image */
   char *pixels = current_drawing_data;
@@ -2317,15 +2318,17 @@ BOB_NUM056 = { 32, 29, 32, BOB_POS056 };
 
 // bricks
 bbPosition
-BOB_POS058[] = { {0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {6, 0},
-{0, 7}, {1, 7}, {2, 7}, {3, 7}, {4, 7}, {5, 7}, {6, 7},
-{0, 14}, {1, 14}, {2, 14}, {3, 14}, {4, 14}, {5, 14}, {6, 14},
-{0, 21}, {1, 21}, {2, 21}, {3, 21}, {4, 21}, {5, 21}, {6, 21},
-{0, 28}, {1, 28}, {2, 28}, {3, 28}, {4, 28}, {5, 28}, {6, 28},
-{0, 35}, {1, 35}, {2, 35}, {3, 35}, {4, 35}, {5, 35}, {6, 35},
-{0, 42}, {1, 42}, {2, 42}, {3, 42}, {4, 42}, {5, 42}, {6, 42},
-{0, 49}, {1, 49}, {2, 49}, {3, 49}, {4, 49}, {5, 49}, {6, 49},
-{0, 56}, {1, 56}, {2, 56}, {3, 56}, {4, 56}, {5, 56}, {6, 56}
+BOB_POS058[] =
+{
+  {0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {6, 0},
+  {0, 7}, {1, 7}, {2, 7}, {3, 7}, {4, 7}, {5, 7}, {6, 7},
+  {0, 14}, {1, 14}, {2, 14}, {3, 14}, {4, 14}, {5, 14}, {6, 14},
+  {0, 21}, {1, 21}, {2, 21}, {3, 21}, {4, 21}, {5, 21}, {6, 21},
+  {0, 28}, {1, 28}, {2, 28}, {3, 28}, {4, 28}, {5, 28}, {6, 28},
+  {0, 35}, {1, 35}, {2, 35}, {3, 35}, {4, 35}, {5, 35}, {6, 35},
+  {0, 42}, {1, 42}, {2, 42}, {3, 42}, {4, 42}, {5, 42}, {6, 42},
+  {0, 49}, {1, 49}, {2, 49}, {3, 49}, {4, 49}, {5, 49}, {6, 49},
+  {0, 56}, {1, 56}, {2, 56}, {3, 56}, {4, 56}, {5, 56}, {6, 56}
 };
 bb_describ
 BOB_NUM058 = { 16, 7, 63, BOB_POS058 };

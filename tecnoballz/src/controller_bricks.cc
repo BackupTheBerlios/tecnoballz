@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-09-14
+ * @date 2007-09-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.27 2007/09/15 03:49:46 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.28 2007/09/15 19:20:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -172,6 +172,7 @@ controller_bricks::initialize ()
               map->brique_rel = 0;
               map->is_displayed = false;
               map->pixel_offset = game_screen->get_offset (i, j);
+              map->sprite = NULL;
               map->h_pos = 0;
               map->v_pos = 0;
               map->number = c++;
@@ -204,17 +205,28 @@ controller_bricks::initialize ()
         }
       bposx = i * 112 * resolution;
 
-      //bposx = 0 * 112 * resolution;     //test only
-      //bposy = 1 * 63 * resolution;      //test only
+      bposx = 0 * 112 * resolution;     //test only
+      bposy = 1 * 63 * resolution;      //test only
 
       if (is_verbose)
         {
-          std::cout << "controller_bricks::initialize() " <<
+          std::cout << "**** controller_bricks::initialize() " <<
           "bposx: " << bposx << " bposy: " << bposy << std::endl;
         }
       bitmap_bricks =
         bmp_bricks->cut_to_surface (bposx, bposy, bricks_height, bricks_width);
       delete bmp_bricks;
+
+      /* replace color 0 by color 29 for color cycling */ 
+      char *pixels = bitmap_bricks->get_pixel_data ();
+      Uint32 count = bitmap_bricks->get_height() * bitmap_bricks->get_width();
+      for (Uint32 i  = 0; i < count; i++, pixels++)
+        {
+          if (*pixels == 0)
+            {
+              *pixels = 29;
+            }
+        }
 
       /* load one bricks level from the file "tableau.data" */
       Uint32 area_num = current_player->get_area_number ();
@@ -230,9 +242,10 @@ controller_bricks::initialize ()
 
       set_bricks_palette ();
     }
-  save_background ();           // save background under bricks
-  draw_bricks_shadows ();       // display bricks shadows
-  draw_bricks ();               // display bricks
+  /* save background under bricks */
+  save_background ();
+  draw_bricks_shadows ();
+  draw_bricks ();
 }
 
 /**
@@ -286,6 +299,8 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
   Sint32 ycoord = 6 * brkyoffset;
   Sint32 xcoord = 0;
   Uint32 bobindex = 6 * NB_BRICKSH;
+  sprite_brick *sprite_template = NULL;
+
   for (Uint32 j = 0; j < BRICKS_MAP_HEIGHT; j++, map += 3, bobindex += 3, ycoord += brkyoffset)
     {
       /* the first 3 columns are always empty */
@@ -318,14 +333,23 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
 
               if (bob_ground)
                 {
-                  sprite_brick *ptbob = new sprite_brick ();
-                  ptbob->create_sprite (BOB_BRICK1, bitmap_bricks, 1, 0);
-                  sprites_list[bobindex] = ptbob;
-                  sprites->add (ptbob);
-                  ptbob->set_x_coord(xcoord);
-                  ptbob->set_y_coord(ycoord);
-                  ptbob->enable ();
-                  ptbob->set_image (2);
+                  sprite_brick *sprite = new sprite_brick ();
+                  if (sprite_template == NULL)
+                    {
+                      sprite->create_sprite (BOB_BRICK1, bitmap_bricks, true, true);
+                      sprite_template = sprite;
+                    }
+                  else
+                    {
+                      sprite_template->duplicate_to (sprite);
+                    }
+                  sprites_list[bobindex] = sprite;
+                  sprites->add (sprite);
+                  sprite->set_x_coord(xcoord);
+                  sprite->set_y_coord(ycoord);
+                  sprite->enable ();
+                  sprite->set_image (pos_y * 7 + (pos_x >> 1));
+                  map->sprite = sprite;
                 }
             }
           map->brique_rel = adres;
@@ -353,18 +377,18 @@ controller_bricks::draw_bricks_shadows ()
     {
       return;
     }
-  brick_info *megaT = bricks_map;
+  brick_info *map = bricks_map;
   Sint32 xmax = NB_BRICKSH * brick_width - ombre_deca;
   for (Uint32 j = ombre_deca; j < NB_BRICKSV * brkyoffset + ombre_deca;
        j += brkyoffset)
     {
       for (Sint32 i = -ombre_deca; i < xmax; i += brick_width)
         {
-          if (megaT->brique_rel)
+          if (map->brique_rel)
             {
               background_screen->fill_shadow_rect (i, j, brick_width, brick_height);
             }
-          megaT++;
+          map++;
         }
     }
 }
@@ -375,20 +399,23 @@ controller_bricks::draw_bricks_shadows ()
 void
 controller_bricks::draw_bricks ()
 {
-  brick_info *megaT = bricks_map;
+  if (bob_ground)
+    {
+      return;
+    }
+  brick_info *map = bricks_map;
   for (Uint32 j = 0; j < NB_BRICKSV * brkyoffset; j += brkyoffset)
     {
-      for (Uint32 i = 0; i < NB_BRICKSH * brick_width;
-           i += brick_width, megaT++)
+      for (Uint32 i = 0; i < NB_BRICKSH * brick_width; i += brick_width, map++)
         {
-          Sint32 pos_x = megaT->h_pos;     // x >= 0 and x < 14
-          Sint32 pos_y = megaT->v_pos;     // y >= 0 and y < 9
+          Sint32 pos_x = map->h_pos;     // x >= 0 and x < 14
+          Sint32 pos_y = map->v_pos;     // y >= 0 and y < 9
           if (pos_x || pos_y)
             {
               pos_x *= 8 * resolution;  // planar -> chunky
               pos_y *= brick_height;
               char *source = bitmap_bricks->get_pixel_data (pos_x, pos_y);
-              draw_brick (source, megaT->pixel_offset, megaT->color);
+              draw_brick (source, map->pixel_offset, map->color);
             }
         }
     }
@@ -405,8 +432,10 @@ controller_bricks::draw_brick (char *pixels, Sint32 offset, Sint32 color)
 {
   Sint32 offset_src = offsSource;
   Sint32 offset_dst = offsDestin;
-  char *screen1 = (char *) adr_desti1;  // pointer to the "buffer"
-  char *screen2 = (char *) adr_desti2;  // pointer to the "tampon"
+  /* pointer to the game offscreen */
+  char *screen1 = (char *) adr_desti1;
+  /* pointer to offscreen used to restore background */
+  char *screen2 = (char *) adr_desti2;
   screen1 += offset;
   screen2 += offset;
   for (Uint32 j = 0; j < brick_height; j++)
@@ -414,8 +443,8 @@ controller_bricks::draw_brick (char *pixels, Sint32 offset, Sint32 color)
       for (Uint32 i = 0; i < brick_width; i++)
         {
           char p = *(pixels++);
-          /* color 0 */
-          if (p == 0)
+          /* check color 29 */
+          if (p == 29)
             {
               /* replace by the color of the bricks */
               p = color;
@@ -466,15 +495,15 @@ void
 controller_bricks::save_background ()
 {
   Sint32 *bufPT = (Sint32 *) brikTampon;
-  brick_info *megaT = bricks_map;
+  brick_info *map = bricks_map;
   Sint32 offs = game_screen->get_row_size () - brick_width;
   for (Uint32 j = 0; j < NB_BRICKSV * brkyoffset; j += brkyoffset)
     {
       for (Uint32 i = 0; i < NB_BRICKSH * brick_width;
-           i += brick_width, megaT++)
+           i += brick_width, map++)
         {
           Sint32 *monPT = (Sint32 *) background_screen->get_pixel_data (i, j);
-          megaT->briqueFond = bufPT;
+          map->briqueFond = bufPT;
           for (Uint32 k = 0; k < brick_height;
                k++, monPT = (Sint32 *) ((char *) monPT + offs))
             {
@@ -518,149 +547,163 @@ controller_bricks::less_bricks ()
 bool controller_bricks::update ()
 {
 
-  right_panel_score *
-  panel = right_panel_score::get_instance ();
-  controller_capsules *
-  capsules = controller_capsules::get_instance ();
-  controller_moneys *
-  moneys = controller_moneys::get_instance ();
+  right_panel_score * panel = right_panel_score::get_instance ();
+  controller_capsules * capsules = controller_capsules::get_instance ();
+  controller_moneys * moneys = controller_moneys::get_instance ();
 
 
-  brick_redraw *
-  briPT = bricks_redraw + brique_clr;
-  Sint32 adres = briPT->pixel_offset;  // adresse affichage relative
+  brick_redraw * redraw = bricks_redraw + brique_clr;
+  /* offscreen offset for drawing brick */
+  Sint32 adres = redraw->pixel_offset;
   if (0 == adres)
     {
       return false;
     }
-  brique_clr += 1;              // augmente le pointeur sur la table brique a effacer
-  brique_clr &= (MAXBRIKCLR - 1);       // limite le compte a 512 (de 0 a 511)
-  briPT->pixel_offset = 0;
-  brick_info *
-  megaT = briPT->brick_map;
+  /* inc. index on the next brick to draw or to clear */
+  brique_clr += 1;
+  /* index from 0 to 511 */
+  brique_clr &= (MAXBRIKCLR - 1);
+  redraw->pixel_offset = 0;
+  brick_info *map = redraw->brick_map;
 
-  /**
-   * restaure background
+  /*
+   * redraw a new brick
    */
-  if (briPT->is_background)
+  if (!redraw->is_background)
     {
-      Sint32
-      line2 = offsDestin;
-      Sint32 *
-      desP1 = adr_desti1;
-      Sint32 *
-      desP2 = adr_desti2;
-      desP1 = (Sint32 *) ((char *) desP1 + adres);
-      desP2 = (Sint32 *) ((char *) desP2 + adres);
-      Sint32 *
-      srcPT = megaT->briqueFond;
-
-
-      megaT->is_displayed = 0;
-      for (Uint32 j = 0; j < brick_height; j++)
-        {
-          for (Uint32 i = 0; i < brick_width / 4; i++)
-            {
-              *(desP1++) = *srcPT;
-              *(desP2++) = *(srcPT++);
-            }
-          desP1 = (Sint32 *) ((char *) desP1 + line2);
-          desP2 = (Sint32 *) ((char *) desP2 + line2);
-        }
-      Sint32
-      j;
-
-      //##########################################################
-      // clear drop shadow (if needed)
-      //##########################################################
-
-      // 1. bottom
-      if ((megaT + offBri_BB)->is_displayed)
-        j = ombre_yoff;         // brique en bas (2 lignes)
-      else
-        j = ombre_deca;         // pas de brique en bas (6 lignes)
-      Sint32
-      decal = display->ecran_next (adres, 0, brick_height);
-      display->clr_shadow (decal, brick_width - ombre_deca, j);
-
-      // 2. left-bottom
-      if ((megaT + offBri_BG)->is_displayed)
-        j = ombre_yoff;
-      else
-        j = ombre_deca;
-      decal = display->ecran_next (adres, -ombre_deca, brick_height);
-      display->clr_shadow (decal, ombre_deca, j);
-
-      // 3. left
-      if (!(megaT + offBri_GG)->is_displayed)
-        {
-          decal = display->ecran_next (adres, -ombre_deca, ombre_deca);
-          display->clr_shadow (decal, ombre_deca, ombre_left);
-        }
-
-      //##########################################################
-      // redraw drop shadow (if needed)
-      //##########################################################
-
-      // 1. exist top brick ?
-      if ((megaT + offBri_HH)->is_displayed)
-        display->set_shadow (adres, brick_width - ombre_deca, ombre_top1);
-
-      // Il existe une brique en haut a droite ?
-      if ((megaT + offBri_HD)->is_displayed)
-        {
-          decal = display->ecran_next (adres, brick_width - ombre_deca, 0);
-          display->set_shadow (decal, ombre_deca, ombre_top1);
-        }
-
-      // Il existe une brique a droite ?
-      if ((megaT + offBri_DD)->is_displayed)
-        {
-          decal =
-            display->ecran_next (adres, brick_width - ombre_deca, ombre_deca);
-          display->set_shadow (decal, ombre_deca, ombre_left);
-        }
-
-      /* destroyed indestructible brick */
-      if (briPT->is_indestructible)
-        {
-          current_player->add_score (100);
-#ifndef SOUNDISOFF
-          audio->play_sound (S_CASSEIND);
-#endif
-        }
-      else
-        {
-          current_player->add_score (20);
-          panel->decrease_bricks_counter (1);
-#ifndef SOUNDISOFF
-          audio->play_sound (S_TOUBRIK1);
-#endif
-          //if (briPT->xcoord_collision != 512)
-          if (!briPT->is_gigablitz_destroyed)
-            {
-              moneys->send_money_from_brick (briPT);
-              capsules->send_capsule_from_bricks (briPT);
-            }
-        }
-    }
-
-  //###############################################################
-  // redraw a new brick
-  //###############################################################
-  else
-    {
-      char *
-      gfxad = bitmap_bricks->get_pixel_data ();
-      brick_info *
-      megaT = briPT->brick_map;
-      draw_brick (gfxad + briPT->number, adres, megaT->color);
       current_player->add_score (10);
 #ifndef SOUNDISOFF
       audio->play_sound (S_TOUBRIK1);
 #endif
-      moneys->send_money_from_brick (briPT);
+      moneys->send_money_from_brick (redraw);
+      if (bob_ground)
+        {
+            map->sprite->update_image(redraw->brick_map->h_pos);     
+        }
+      else
+        {
+          char * pixels = bitmap_bricks->get_pixel_data ();
+          draw_brick (pixels + redraw->number, adres, map->color);
+        }
+      return true;
     }
+ 
+
+  /*
+  * a brick is destroyed
+  */
+  
+  /* destroyed indestructible brick */
+  if (redraw->is_indestructible)
+    {
+      current_player->add_score (100);
+#ifndef SOUNDISOFF
+      audio->play_sound (S_CASSEIND);
+#endif
+    }
+  else
+    {
+      current_player->add_score (20);
+      panel->decrease_bricks_counter (1);
+#ifndef SOUNDISOFF
+      audio->play_sound (S_TOUBRIK1);
+#endif
+      if (!redraw->is_gigablitz_destroyed)
+        {
+          moneys->send_money_from_brick (redraw);
+          capsules->send_capsule_from_bricks (redraw);
+        }
+    }
+
+  if (bob_ground)
+    {
+      map->sprite->disable();
+      return true;
+    }
+
+  /**
+   * restaure background
+   */
+  Sint32 line2 = offsDestin;
+  Sint32 * desP1 = adr_desti1;
+  Sint32 * desP2 = adr_desti2;
+  desP1 = (Sint32 *) ((char *) desP1 + adres);
+  desP2 = (Sint32 *) ((char *) desP2 + adres);
+  Sint32 *
+    srcPT = map->briqueFond;
+
+
+  map->is_displayed = 0;
+  for (Uint32 j = 0; j < brick_height; j++)
+    {
+      for (Uint32 i = 0; i < brick_width / 4; i++)
+        {
+          *(desP1++) = *srcPT;
+          *(desP2++) = *(srcPT++);
+        }
+      desP1 = (Sint32 *) ((char *) desP1 + line2);
+      desP2 = (Sint32 *) ((char *) desP2 + line2);
+    }
+  Sint32 j;
+
+  /*
+   * clear drop shadow (if needed)
+   */
+  /* bottom */
+  if ((map + offBri_BB)->is_displayed)
+    {
+      j = ombre_yoff;         // brique en bas (2 lignes)
+    }
+  else
+    {
+      j = ombre_deca;         // pas de brique en bas (6 lignes)
+    }
+  Sint32
+    decal = display->ecran_next (adres, 0, brick_height);
+  display->clr_shadow (decal, brick_width - ombre_deca, j);
+  /* left-bottom */
+  if ((map + offBri_BG)->is_displayed)
+    {
+      j = ombre_yoff;
+    }
+  else
+    {
+      j = ombre_deca;
+    }
+  decal = display->ecran_next (adres, -ombre_deca, brick_height);
+  display->clr_shadow (decal, ombre_deca, j);
+
+  /* left */
+  if (!(map + offBri_GG)->is_displayed)
+    {
+      decal = display->ecran_next (adres, -ombre_deca, ombre_deca);
+      display->clr_shadow (decal, ombre_deca, ombre_left);
+    }
+
+   /*
+    * redraw drop shadow (if needed)
+    */
+  /* exist top brick? */
+  if ((map + offBri_HH)->is_displayed)
+    {
+      display->set_shadow (adres, brick_width - ombre_deca, ombre_top1);
+    }
+
+  // Il existe une brique en haut a droite ?
+  if ((map + offBri_HD)->is_displayed)
+    {
+      decal = display->ecran_next (adres, brick_width - ombre_deca, 0);
+      display->set_shadow (decal, ombre_deca, ombre_top1);
+    }
+
+  // Il existe une brique a droite ?
+  if ((map + offBri_DD)->is_displayed)
+    {
+      decal =
+        display->ecran_next (adres, brick_width - ombre_deca, ombre_deca);
+      display->set_shadow (decal, ombre_deca, ombre_left);
+    }
+
   return true;
 }
 

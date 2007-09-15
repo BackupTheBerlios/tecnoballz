@@ -5,11 +5,11 @@
  * @date 2007-09-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.15 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.16 2007/09/15 19:20:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,9 +39,14 @@ class sprite_paddle;
 typedef struct
 {
   Sint32 brique_rel;            // adresse source relative Gfx de la brique (collision)
-  bool is_displayed;            // adresse source relative Gfx de la brique (reaffichage)
-  Sint32 number;            // numero de la brique par rapport a la premiere
-  Sint32 pixel_offset;            // adresse ecran relative d'affichage
+  /** Brick is currently display */
+  bool is_displayed;
+  /** Brick counter */
+  Sint32 number;
+  /** Offscreen offset for drawing brick */
+  Sint32 pixel_offset;
+  /** Sprite used to display brick if bob_ground = true */
+  sprite_brick *sprite;
   /** Brick horizontal position in the bricks bitmap
    * 0, 2, 4, 6, 8, 10 or 12  */
   Sint32 h_pos;
@@ -75,6 +80,8 @@ typedef struct
   bool is_background;
   /** Offscreen offset for drawing brick */
   Sint32 pixel_offset;
+  /** Sprite used to display brick if bob_ground = true */
+  sprite_brick *sprite;
   /** Pointer to the brick in the map */
   brick_info *brick_map;
 }

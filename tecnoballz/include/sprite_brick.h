@@ -5,11 +5,11 @@
  * @date 2007-09-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_brick.h,v 1.2 2007/09/15 08:45:16 gurumeditation Exp $
+ * $Id: sprite_brick.h,v 1.3 2007/09/15 19:20:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ private:
 public:
   sprite_brick ();
   ~sprite_brick ();
-  void draw ();
+  void update_image (Uint32 h_pos);
+  virtual void draw ();
 };
 #endif

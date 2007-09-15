@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.h
  * @brief Draw sprites on the screen 
- * @date 2007-09-11
+ * @date 2007-09-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.39 $
+ * @version $Revision: 1.40 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.39 2007/09/15 08:45:16 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.40 2007/09/15 19:20:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -149,8 +149,6 @@ public:
   DRAW_METHOD_ENUM;
 
 private:
-  /** Maximum number of images in the animation */
-  Sint32 max_of_images;
   /** List of tables of the drawing pixels data. Used for drawing sprite
    * pixel by pixel, with color cycling.
    * Only used for the chance capsule sprite */
@@ -158,8 +156,6 @@ private:
   /** List of pointers of all images of the sprite
    * in the source bitmap page */
   char **images_pixel_data;
-  /** Pointer to sprite in game offscreen */
-  char *screen_ptr;
   /** Pointer to sprite shadow in game offscreen for sprite */
   char *shadow_screen_ptr;
   /** Pointer to the background in restore offscreen for shadow */
@@ -192,6 +188,8 @@ protected:
   char *current_drawing_data;
  /** Table of drawing data for current sprite image frame */
   Sint16 *current_drawing_pixels;
+  /** Pointer to sprite in game offscreen */
+  char *screen_ptr;
   /** Pointer to the background in restore offscreen */
   char *restore_ptr;
   /** The pixel data of the sprite */
@@ -216,6 +214,8 @@ protected:
   Sint32 frame_period;
   /** Counter time delay before next image */
   Sint32 frame_delay;
+  /** Maximum number of images in the animation */
+  Sint32 max_of_images;
   /** Index of the current image */
   Sint32 frame_index;
   Sint32 frame_index_max;
@@ -268,7 +268,7 @@ public:
 
 public:
     sprite_object ();
-   ~sprite_object ();
+  virtual ~sprite_object ();
   void clear_sprite_members ();
   void release_sprite ();
   void enable ();
@@ -295,7 +295,7 @@ public:
   Sint32 get_frame_index ();
   void restore_background_under_sprite ();
   void efface_lin ();
-  void draw ();
+  virtual void draw ();
   void restore_background_under_shadow ();
   void afficheSHA ();
   void draw_to_brackground ();
@@ -326,11 +326,11 @@ public:
   static const Sint32 cycling_02[8];
   static const bb_describ *zelistBOB[];
 
+  void draw_with_tables ();
 private:
   void init_common (surface_sdl * image, bool shadow);
   void alloc_drawing_tables (Sint32 num_images);
   void draw_line_by_line ();
-  void draw_with_tables ();
   void draw_vertically_repeated ();
   void draw_cycling_color ();
   void draw_brick ();
