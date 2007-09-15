@@ -4,11 +4,11 @@
  * @date 2007-09-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.38 $
+ * @version $Revision: 1.39 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.38 2007/09/13 15:51:53 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.39 2007/09/15 08:45:16 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -151,13 +151,15 @@ public:
 private:
   /** Maximum number of images in the animation */
   Sint32 max_of_images;
+  /** List of tables of the drawing pixels data. Used for drawing sprite
+   * pixel by pixel, with color cycling.
+   * Only used for the chance capsule sprite */
+  Sint16 **drawing_pixels; 
   /** List of pointers of all images of the sprite
    * in the source bitmap page */
   char **images_pixel_data;
   /** Pointer to sprite in game offscreen */
   char *screen_ptr;
-  /** Pointer to the background in restore offscreen */
-  char *restore_ptr;
   /** Pointer to sprite shadow in game offscreen for sprite */
   char *shadow_screen_ptr;
   /** Pointer to the background in restore offscreen for shadow */
@@ -175,14 +177,6 @@ private:
   Sint16 *current_drawing_values;
   /** List of tables of the drawing pixels data */
   char **drawing_data;
-  /** Table of drawing pixels data for current sprite image frame */
-  char *current_drawing_data;
-  /** List of tables of the drawing pixels data. Used for drawing sprite
-   * pixel by pixel, with color cycling.
-   * Only used for the chance capsule sprite */
-  Sint16 **drawing_pixels; 
-  /** Table of drawing data for current sprite image frame */
-  Sint16 *current_drawing_pixels;
   /** Data structure of drawing sprite line by line.
    * Only used for the Gigablitz sprite */
   bb_afligne **drawing_peer_line;
@@ -194,6 +188,12 @@ private:
 
 
 protected:
+  /** Table of drawing pixels data for current sprite image frame */
+  char *current_drawing_data;
+ /** Table of drawing data for current sprite image frame */
+  Sint16 *current_drawing_pixels;
+  /** Pointer to the background in restore offscreen */
+  char *restore_ptr;
   /** The pixel data of the sprite */
   char *pixel_data;
   /** Width in bytes of bitmap in which is the sprite */

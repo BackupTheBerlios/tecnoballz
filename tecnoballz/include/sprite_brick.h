@@ -2,14 +2,14 @@
  * @file sprite_brick.h
  * @brief The sprite of the brick 
  * @created 2007-09-12
- * @date 2007-09-12
+ * @date 2007-09-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_brick.h,v 1.1 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_brick.h,v 1.2 2007/09/15 08:45:16 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,5 +40,6 @@ private:
 public:
   sprite_brick ();
   ~sprite_brick ();
+  void draw ();
 };
 #endif

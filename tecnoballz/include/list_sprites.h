@@ -1,13 +1,13 @@
 /** 
  * @file list_sprites.h
  * @brief Call the drawing methods of all sprites
- * @date 2007-04-10
+ * @date 2007-09-15
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: list_sprites.h,v 1.6 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: list_sprites.h,v 1.7 2007/09/15 08:45:16 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

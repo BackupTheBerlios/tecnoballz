@@ -4,11 +4,11 @@
  * @date 2007-04-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.40 $
+ * @version $Revision: 1.41 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.40 2007/09/13 15:51:53 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.41 2007/09/15 08:45:16 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1776,9 +1776,10 @@ controller_balls::controll_balls ()
     }
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: check if there remains at least a ball glue
-//------------------------------------------------------------------------------
+/**
+ * Check if there remains at least a ball glue
+ * @return True if remains at least a ball glue
+ */
 Sint32
 controller_balls::least_glue ()
 {
@@ -1822,55 +1823,45 @@ Sint32
   36, 44, 40, 36, 36, 44, 44, 40, 40, 36, 44, 40, 40, 36, 36, 44, 44, 40, 36
 };
 
-//------------------------------------------------------------------------------
-// directions of the ball after a rebound on a brick. 
-//------------------------------------------------------------------------------
-Sint32
-  controller_balls::rb0[16] = {
+/*
+ * directions of the ball after a rebound on a brick
+ */
+Sint32 controller_balls::rb0[16] =
+{
   64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64
 };
-
-// right
-Sint32
-  controller_balls::rb1[16] = {
+/* right rebound */
+Sint32 controller_balls::rb1[16] =
+{
   32, 28, 24, 20, 20, 24, 24, 28, 32, 36, 40, 40, 44, 44, 40, 36
 };
-
-Sint32
-  controller_balls::rb2[16] = {
+Sint32 controller_balls::rb2[16] =
+{
   48, 36, 40, 44, 32, 44, 24, 28, 32, 36, 40, 44, 48, 48, 44, 40
 };
-
-//top
-Sint32
-  controller_balls::rb3[16] = {
+/* top rebond */
+Sint32 controller_balls::rb3[16] = {
   60, 60, 56, 52, 48, 44, 40, 36, 36, 40, 40, 44, 48, 52, 56, 56
 };
-
-Sint32
-  controller_balls::rb4[16] = {
+Sint32 controller_balls::rb4[16] =
+{
   0, 4, 8, 0, 0, 52, 56, 60, 48, 52, 56, 44, 48, 52, 56, 60
 };
-
-// left
-Sint32
-  controller_balls::rb5[16] = {
+/* left rebond */
+Sint32 controller_balls::rb5[16] =
+{
   0, 4, 8, 8, 12, 12, 8, 4, 0, 60, 56, 52, 52, 36, 56, 60
 };
-
-Sint32
-  controller_balls::rb6[16] = {
+Sint32 controller_balls::rb6[16] = {
   0, 4, 8, 12, 16, 20, 24, 12, 16, 12, 8, 4, 0, 4, 8, 60
 };
-
-// bottom
-Sint32
-  controller_balls::rb7[16] = {
+/* bottom rebond */
+Sint32 controller_balls::rb7[16] =
+{
   4, 8, 12, 12, 16, 20, 20, 24, 28, 28, 24, 20, 16, 12, 8, 4
 };
-
-Sint32
-  controller_balls::rb8[16] = {
+Sint32 controller_balls::rb8[16] =
+{
   16, 20, 24, 12, 16, 20, 24, 28, 32, 36, 40, 28, 32, 20, 24, 28
 };
 Sint32 *
