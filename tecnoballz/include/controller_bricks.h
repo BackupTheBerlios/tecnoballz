@@ -2,14 +2,14 @@
  * @file controller_bricks.h
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-09-07
+ * @date 2007-09-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.16 2007/09/15 19:20:52 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.17 2007/09/16 10:01:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ class sprite_paddle;
 #include "../include/sprite_brick.h"
 
 /**
- * Structure of one simple bricks into current level
+ * Structure of one simple bricks into the map of current level
  */
 typedef struct
 {
@@ -48,16 +48,16 @@ typedef struct
   /** Sprite used to display brick if bob_ground = true */
   sprite_brick *sprite;
   /** Brick horizontal position in the bricks bitmap
-   * 0, 2, 4, 6, 8, 10 or 12  */
+   * 0, 2, 4, 6, 8, 10 or 12 */
   Sint32 h_pos;
   /** Brick vertical position in the bricks bitmap
-   * 0, 1, 2, 3, 4, 5, 6, 7, or 8  */
+   * 0, 1, 2, 3, 4, 5, 6, 7, or 8 */
   Sint32 v_pos;
   Sint32 *briqueFond;           // adresse du fond de la brique (modulo 0)
   /** Brick color, 17 colors possibles */
   Uint32 color;
 }
-brick_info;                     // used into "bricks_map"
+brick_info;
 
 /**
  * Structure for draw brick or restore the background
@@ -178,10 +178,11 @@ public:
    ~controller_bricks ();
   void first_init ();
   void initialize ();
+  void color_cycling();
   bool update ();
   Uint32 get_num_of_bricks ();
   void less_bricks ();
-  void draw_brick (char *srcPT, Sint32 adres, Sint32 colbr);
+  void draw_brick (char *pixels, Sint32 offset, Sint32 color);
   void clr_bricks ();
   brick_info* get_bricks_map ();
   brick_redraw* get_bricks_redraw (); 
@@ -198,7 +199,7 @@ private:
   void draw_bricks_shadows ();
   void draw_bricks ();
   void set_bricks_palette ();
-  void save_background ();           // save background under bricks
+  void save_background ();
 };
 #endif
 

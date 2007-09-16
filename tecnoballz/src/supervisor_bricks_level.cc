@@ -4,11 +4,11 @@
  * @date 2007-09-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.46 $
+ * @version $Revision: 1.47 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.46 2007/09/15 19:20:52 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.47 2007/09/16 10:01:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -300,6 +300,7 @@ supervisor_bricks_level::main_loop ()
       sprites->clear ();
       /* draw or clear bricks
        * send a money and/or a capsule */
+      bricks->color_cycling ();
       bricks->update ();
       changebkgd ();
 

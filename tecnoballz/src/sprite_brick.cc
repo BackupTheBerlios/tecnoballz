@@ -5,11 +5,11 @@
  * @date 2007-09-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_brick.cc,v 1.3 2007/09/15 19:20:52 gurumeditation Exp $
+ * $Id: sprite_brick.cc,v 1.4 2007/09/16 10:01:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,30 +46,51 @@ sprite_brick::~sprite_brick ()
 }
 
 /**
- *
+ * Set the brick color
+ * @param color Palette index from 239 to 255
+ */
+void 
+sprite_brick::set_color (Uint32 color) 
+{
+  original_color = current_color = color;
+}
+
+void 
+sprite_brick::touch ()
+{
+  current_color = original_color + 1;
+  if(current_color > 255)
+    {
+      current_color = 239;
+    }
+}
+
+bool
+sprite_brick::is_cycling()
+{
+  if (current_color == original_color)
+    {
+      return false;
+    }
+  else
+    {
+      return true;
+    }
+}
+
+/**
+ * Change image of brick
  * @param h_pos Brick vertical position in the bricks bitmap
  *              0, 1, 2, 3, 4, 5, 6, 7, or 8  
  */
-
 void
 sprite_brick::update_image (Uint32 h_pos)
 {
    Sint32 index = frame_index - frame_index % 7 + (h_pos >> 1); 
-   /* 4 3 => 22
-    * 2 3 => 21
-    * */
    set_image (index);
-    /*
-     *  0  1  2  3  4  5  6
-     *  7  8  9 10 11 12 13
-     * 14 15 16 17 18 19 20   
-     * 21 *22 23 24 25 26 27
-     * 28 29 30 31 32 33 34
-     * 35 36 37 38 39 40 41  
-     * 42 43 44 45 46 47 48
-     */
-
 }
+
+
 
 void
 sprite_brick::draw ()
@@ -78,8 +99,15 @@ sprite_brick::draw ()
     {
       return;
     }
-  cycling_index &= 7;
-  Sint32 color = current_cycling[cycling_index++];
+  Uint32 color = current_color; 
+  if (color != original_color)
+    {
+      if(++current_color > 255)
+	{
+	  current_color = 239;
+	}
+    }
+
   char *screen = game_screen->get_pixel_data (x_coord, y_coord);
   screen_ptr = screen;
   restore_ptr = background_screen->get_pixel_data (x_coord, y_coord);

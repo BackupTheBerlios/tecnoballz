@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-09-15
+ * @date 2007-09-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.28 2007/09/15 19:20:52 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.29 2007/09/16 10:01:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -314,6 +314,8 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
           char pos_y = *(tabPT++);
           /* y position in the bitmap source from 0 to 12, step 2 */
           char pos_x = *(tabPT++);
+	  pos_x = 12; pos_y = 1; //test only
+
           if (pos_x > 0 || pos_y > 0)
             {                   //pos_x = 12;   // test only
               //pos_y = 1;    // test only
@@ -349,6 +351,7 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
                   sprite->set_y_coord(ycoord);
                   sprite->enable ();
                   sprite->set_image (pos_y * 7 + (pos_x >> 1));
+		  sprite->set_color (map->color);
                   map->sprite = sprite;
                 }
             }
@@ -408,11 +411,14 @@ controller_bricks::draw_bricks ()
     {
       for (Uint32 i = 0; i < NB_BRICKSH * brick_width; i += brick_width, map++)
         {
-          Sint32 pos_x = map->h_pos;     // x >= 0 and x < 14
-          Sint32 pos_y = map->v_pos;     // y >= 0 and y < 9
+	  /* range from x >=0 to x <= 14 */
+          Sint32 pos_x = map->h_pos;
+	  /* range from y >=0 to y <= 8 */
+          Sint32 pos_y = map->v_pos;
           if (pos_x || pos_y)
             {
-              pos_x *= 8 * resolution;  // planar -> chunky
+	      /* convert planar to chunky */
+              pos_x *= 8 * resolution;
               pos_y *= brick_height;
               char *source = bitmap_bricks->get_pixel_data (pos_x, pos_y);
               draw_brick (source, map->pixel_offset, map->color);
@@ -456,6 +462,30 @@ controller_bricks::draw_brick (char *pixels, Sint32 offset, Sint32 color)
       screen1 += offset_dst;
       screen2 += offset_dst;
     }
+}
+
+void
+controller_bricks::color_cycling()
+{
+  if (!bob_ground)
+    {
+      return;
+    }
+  brick_info *map = bricks_map;
+  map += ((6 + BRICKS_MAP_HEIGHT - 9) * NB_BRICKSH + 3) - 1;
+  // NB_BRICKSH = 16 / BRICKS_MAP_WIDTH = 10 
+  // NB_BRICKSV = 30 / BRICKS_MAP_HEIGHT = 17
+  map = bricks_map + ((6 + BRICKS_MAP_HEIGHT - 1) * NB_BRICKSH) + 3 + BRICKS_MAP_WIDTH - 1; 
+  if (map->sprite == NULL)
+    {
+      printf("controller_bricks::color_cycling NULL !!!!!\n");
+      return;
+    }
+  if (!map->sprite->is_cycling ())
+    {
+      map->sprite->touch();
+    }
+    
 }
 
 /**

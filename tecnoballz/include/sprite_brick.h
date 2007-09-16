@@ -5,11 +5,11 @@
  * @date 2007-09-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_brick.h,v 1.3 2007/09/15 19:20:52 gurumeditation Exp $
+ * $Id: sprite_brick.h,v 1.4 2007/09/16 10:01:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,11 +36,17 @@ class sprite_brick;
 class sprite_brick:public sprite_object
 {
 private:
+  /** Color of brick */
+  Uint32 original_color;
+  Uint32 current_color;
 
 public:
   sprite_brick ();
   ~sprite_brick ();
   void update_image (Uint32 h_pos);
+  void set_color (Uint32 color); 
+  void touch ();
+  bool is_cycling();
   virtual void draw ();
 };
 #endif
