@@ -5,11 +5,11 @@
  * @date 2007-09-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.29 2007/09/16 10:01:12 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.30 2007/09/16 16:48:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,6 +65,9 @@ controller_bricks::controller_bricks ()
   ombre_left = (BRICK_HEIGHT * resolution) - ombre_deca;
   ombre_yoff = (BRKYOFFSET - BRICK_HEIGHT) * resolution;
   ombre_top1 = ombre_deca - ombre_yoff;
+  cycling_count = 0;
+  is_cycling = true;
+  were_sprites_added = false;
 }
 
 /**
@@ -205,8 +208,8 @@ controller_bricks::initialize ()
         }
       bposx = i * 112 * resolution;
 
-      bposx = 0 * 112 * resolution;     //test only
-      bposy = 1 * 63 * resolution;      //test only
+      //bposx = 0 * 112 * resolution;     //test only
+      //bposy = 1 * 63 * resolution;      //test only
 
       if (is_verbose)
         {
@@ -314,7 +317,7 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
           char pos_y = *(tabPT++);
           /* y position in the bitmap source from 0 to 12, step 2 */
           char pos_x = *(tabPT++);
-	  pos_x = 12; pos_y = 1; //test only
+	  //pos_x = 12; pos_y = 1; //test only
 
           if (pos_x > 0 || pos_y > 0)
             {                   //pos_x = 12;   // test only
@@ -346,7 +349,7 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
                       sprite_template->duplicate_to (sprite);
                     }
                   sprites_list[bobindex] = sprite;
-                  sprites->add (sprite);
+                  //sprites->add (sprite);
                   sprite->set_x_coord(xcoord);
                   sprite->set_y_coord(ycoord);
                   sprite->enable ();
@@ -368,6 +371,30 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
   /* Initialize the number of total bricks to destroy */
   right_panel_score *panel = right_panel_score::get_instance ();
   panel->set_bricks_counter (num_of_bricks);
+}
+
+
+
+/**
+ * Add bricks sprites to the sprites global list
+ */
+void
+controller_bricks::add_to_sprites_list ()
+{
+  if (were_sprites_added  || !bob_ground)
+    {
+      return;
+    }
+  for (Uint32 i = 0; i < max_of_sprites; i++)
+    {
+      sprite_object *sprite = sprites_list[i];
+      if (sprite == NULL)
+        {
+          continue;
+        }
+      sprites->add (sprite);
+    }
+  were_sprites_added = true;
 }
 
 /**
@@ -464,28 +491,58 @@ controller_bricks::draw_brick (char *pixels, Sint32 offset, Sint32 color)
     }
 }
 
+
+/**
+ * Enable the bricks color cycling
+ */
+void controller_bricks::start_cycling() {
+  if (!bob_ground)
+    {
+      return;
+    }
+  is_cycling = true;
+}
+
+/**
+ * Cycle color of all bricks
+ */
 void
 controller_bricks::color_cycling()
 {
-  if (!bob_ground)
+  if (!bob_ground or !is_cycling)
     {
       return;
     }
   brick_info *map = bricks_map;
   map += ((6 + BRICKS_MAP_HEIGHT - 9) * NB_BRICKSH + 3) - 1;
-  // NB_BRICKSH = 16 / BRICKS_MAP_WIDTH = 10 
-  // NB_BRICKSV = 30 / BRICKS_MAP_HEIGHT = 17
   map = bricks_map + ((6 + BRICKS_MAP_HEIGHT - 1) * NB_BRICKSH) + 3 + BRICKS_MAP_WIDTH - 1; 
-  if (map->sprite == NULL)
+  Uint32 count = cycling_count++;
+  for(Uint32 i = 0; i < BRICKS_MAP_HEIGHT; i++, map-=NB_BRICKSH)
     {
-      printf("controller_bricks::color_cycling NULL !!!!!\n");
-      return;
+      if (count >= BRICKS_MAP_WIDTH)
+        {
+          if (i == BRICKS_MAP_HEIGHT - 1)
+            {
+              cycling_count = 0;
+              is_cycling = false;
+            }
+        }
+      else
+        {
+          if (map[-count].sprite != NULL)
+            {
+               if (!map[-count].sprite->is_cycling ())
+                 {
+                   map[-count].sprite->touch();
+                 }
+            }
+        }
+      if (count == 0)
+        {
+          break;
+        }
+      count--;
     }
-  if (!map->sprite->is_cycling ())
-    {
-      map->sprite->touch();
-    }
-    
 }
 
 /**

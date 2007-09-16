@@ -4,11 +4,11 @@
  * @date 2007-09-15
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.47 $
+ * @version $Revision: 1.48 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.47 2007/09/16 10:01:12 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.48 2007/09/16 16:48:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,6 +137,10 @@ supervisor_bricks_level::first_init ()
   paddles->init_robot ();
   sides_bricks->initialize ();
   ejectors_corners->create_ejectors_sprites ();
+
+  initialize_background ();
+  bricks->add_to_sprites_list();
+
   game_over->create_sprites_list ();
   balls->create_sprites_list ();
   ships->create_sprites_list ();
@@ -152,7 +156,6 @@ supervisor_bricks_level::first_init ()
   resources->release_sprites_bitmap ();
   panel_score->first_init (balls);
 
-  initialize_background ();
   display->lock_surfaces ();
 
   /* initialize controller of the big letters animated composing the word
@@ -184,9 +187,7 @@ supervisor_bricks_level::first_init ()
   money_capsules->initialize (level_desc->moneys_frequency * difficulty_level,
                           panel_score, player_indicators);
 
-  //##############################################################
-  //Initialize the object which handles gadgets (bonus and malus)
-  //##############################################################
+  /* initialize the object which handles bonus and penalties capsules */
   power_up_capsules->initialize (
                            //frequency of appearance of malus 
                            level_desc->penalties_frequency * difficulty_level,
@@ -201,6 +202,7 @@ supervisor_bricks_level::first_init ()
   /* initialize sprite fonts "LEVEL x COMPLETED" */
   fontes_game->initialise (level_number);
 
+
   viewfinders_paddles->initialize ();
 
   display->unlock_surfaces ();
@@ -212,9 +214,9 @@ supervisor_bricks_level::first_init ()
   info_messages->send_message_request (short_info_messages::ARE_YOU_READY);
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels : reads the parameters of the current level
-//-------------------------------------------------------------------------------
+/**
+ * Reads the parameters of the current level
+ */
 void
 supervisor_bricks_level::init_level ()
 {
@@ -266,7 +268,7 @@ supervisor_bricks_level::main_loop ()
           isgameover++;
           game_over->execution1 ();
         }
-      if (!bricks->update () && isgameover < 2) //restore bricks
+      if (!bricks->update () && isgameover < 2)
         {
           isgameover = 2;
         }
@@ -298,9 +300,9 @@ supervisor_bricks_level::main_loop ()
       sides_bricks->run ();
       display->lock_surfaces ();
       sprites->clear ();
+      bricks->color_cycling ();
       /* draw or clear bricks
        * send a money and/or a capsule */
-      bricks->color_cycling ();
       bricks->update ();
       changebkgd ();
 
@@ -476,7 +478,9 @@ supervisor_bricks_level::changebkgd ()
   if (keyboard->key_is_pressed (SDLK_n))
     head_anim->start_interference ();
   if (keyboard->key_is_pressed (SDLK_g))
-    gigablitz->shoot_paddle ();
+    {
+      gigablitz->shoot_paddle ();
+    }
 /* 
 
 	if(keyboard->key_is_pressed(SDLK_w))

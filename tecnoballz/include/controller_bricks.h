@@ -5,11 +5,11 @@
  * @date 2007-09-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.17 2007/09/16 10:01:12 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.18 2007/09/16 16:48:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -164,6 +164,11 @@ private:
   brick_redraw * bricks_redraw;    // table de reaffichage 
   Sint32 briqueSave;            // pointeur sur "bricks_redraw"
 
+  /** If true sprites were added to sprites list */
+  bool were_sprites_added;
+  bool is_cycling;
+  Uint32 cycling_count;
+
 protected:
   Sint32 brique_clr;            // pointeur sur "bricks_redraw"
   char *brikTampon;             // sauvegarde briques
@@ -178,6 +183,8 @@ public:
    ~controller_bricks ();
   void first_init ();
   void initialize ();
+  void add_to_sprites_list ();
+  void start_cycling();
   void color_cycling();
   bool update ();
   Uint32 get_num_of_bricks ();

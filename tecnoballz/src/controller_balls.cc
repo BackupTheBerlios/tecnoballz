@@ -4,11 +4,11 @@
  * @date 2007-04-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.43 $
+ * @version $Revision: 1.44 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.43 2007/09/16 10:01:12 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.44 2007/09/16 16:48:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -146,12 +146,13 @@ controller_balls::run_in_bricks_levels ()
   check_outside_balls ();
   activate_tilt ();
   check_bricks_collision ();
-  vitus_move ();                //move the balls
-  check_collisions_with_paddles ();                //collisions balls and bumpers
+  vitus_move ();
+  check_collisions_with_paddles ();
   check_collisions_with_robot ();
   /* collisions between balls and the 3 walls */
   collision_with_walls ();
-  handle_ejectors ();                //collisions balls and ejectors
+  /* collisions between balls and the 4 ejectors */
+  handle_ejectors ();
   check_collisions_with_ships ();
   check_collisions_with_eyes ();
   /* control balls with the left mouse button */
@@ -258,6 +259,8 @@ controller_balls::check_outside_balls ()
       messages->send_message_request (short_info_messages::LOST_FILE);
       messages->send_message_request (short_info_messages::ARE_YOU_READY);
       panel->reset_gigablitz_countdown ();
+      controller_bricks *bricks = controller_bricks::get_instance ();
+      bricks->start_cycling ();
     }
 }
 
