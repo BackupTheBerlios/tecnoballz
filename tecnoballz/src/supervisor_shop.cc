@@ -1,14 +1,14 @@
 /**
  * @file supervisor_shop.cc 
  * @brief Shop supervisor
- * @date 2007-04-10
+ * @date 2007-09-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.38 $
+ * @version $Revision: 1.39 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.38 2007/09/12 06:32:49 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.39 2007/09/17 05:40:35 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,9 +72,10 @@ supervisor_shop::supervisor_shop ()
   cadre_haut = 9 * resolution;
   box_colour = 0;
   angleValue = 0;
-
+  /* last key pressed */
   previous_key_code_down = 0;   //last key pressed
-  triche_etb = 0;               //input (triche_etb == cheat_code then is_enabled_cheat_mode = 1)
+  /* if triche_etb == cheat_code then is_enabled_cheat_mode = 1 */
+  triche_etb = 0;
   cheat_code = SDLK_e << 24 | SDLK_t << 16 | SDLK_b << 8 | SDLK_RETURN;
   box_texts = NULL;
 }
@@ -395,37 +396,45 @@ supervisor_shop::display_capsules_bought ()
     }
 }
 
-//------------------------------------------------------------------------------
-// return index of the selected bonus, and calculate position of LED indicator
-//      input   =>      x: abscissa of the mouse pointer
-//              =>      y: ordinate of the mouse pointer
-//      output  <=      index: 0 to 24 (-1: disable)
-//------------------------------------------------------------------------------
+/**
+ * Return selected bonus, and calculate position of LED indicator
+ * @input x X-coordinate of the mouse pointer
+ * @input y Y-coordinate of the mouse pointer
+ * @return index of the selected bonus from 0 to 24
+ *         or otherwise -1 if no bonus is selected
+ * */
 Sint32 supervisor_shop::testkursor (Sint32 x, Sint32 y)
 {
   if (x < shop_xmini || x > shop_xmaxi || y > shop_ymax2 ||
       (x > shop_xmax2 && y > shop_ymax1))
-    return -1;
+    {
+      return -1;
+    }
   else
     {
       x = (x - (6 * resolution)) / (48 * resolution);
       y = (y / (44 * resolution));
       if (y > 4)
-        x = 0;
+	{
+          x = 0;
+	}
       Sint32
       i = x + 6 * y;
       mouse_x_coord = (x * (48 * resolution)) + (17 * resolution);
-
       if (resolution == 1)
-        mouse_y_coord = (y * (44 * resolution)) + (36 * resolution);
+	{
+          mouse_y_coord = (y * (44 * resolution)) + (36 * resolution);
+	}
       else
-        mouse_y_coord = (y * (44 * resolution)) + (35 * resolution);
+	{
+          mouse_y_coord = (y * (44 * resolution)) + (35 * resolution);
+	}
       return i;
     }
 }
 
 /**
- * set LED indicator, and gadget indicator
+ * Set LED indicator, and gadget indicator
  * @param index index of the selected bonus; 0 to 24 (-1: disable)
       input   =>      index: index of the selected bonus; 0 to 24 (-1: disable)
       output  <=      price: price of the selected bonus 
@@ -435,16 +444,14 @@ Sint32 supervisor_shop::led_moving (Sint32 index)
   if (index < 0)
     {
       led_indicator->disable ();
-      Sint32
-      i = 0;
+      Sint32 i = 0;
       power_up_capsules->set_overview_capsule (0);
       return i;
     }
   else
     {
-      // set gadget indicator
-      Sint32
-      i = case_types[index];
+      /* set gadget indicator */
+      Sint32 i = case_types[index];
       power_up_capsules->set_overview_capsule (i);
 
       /* set LED indicator */
@@ -459,7 +466,7 @@ Sint32 supervisor_shop::led_moving (Sint32 index)
           i = options_prices[index];
         }
 
-      // info already seen at least once ?
+      /* info already seen at least once? */
       if (index == 10 && is_already_view_info)
         {
           i = 0;
@@ -481,108 +488,77 @@ supervisor_shop::faitcourse (Sint32 gadnu)
 
   switch (gadnu)
     {
-
-      //###############################################################
-      // expand bumper
-      //###############################################################
+      /* expand the paddle(s) */
     case GAD_SIZE_P:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // fire power 1
-      //###############################################################
+      /* fire power 1 */
     case GAD_FIRE01:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // fire power 2
-      //###############################################################
+      /* fire power 2 */
     case GAD_FIRE02:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // extra balls
-      //###############################################################
+     /* extra balls */
     case GAD_BALLE2:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // multi balls
-      //###############################################################
+      /* multi balls */
     case GAD_BALLE3:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // power ball 1
-      //###############################################################
+      /* power ball 1 */
     case GAD_POWER1:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // power ball 2
-      //###############################################################
+      /* power ball 2 */
     case GAD_POWER2:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // extra life
-      //###############################################################
+      /* extra life */
     case GAD_LIFE_P:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // extra life
-      //###############################################################
+      /* bottom wall */ 
     case GAD_WALL01:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // ball size 2
-      //###############################################################
+      /* ball size 2 */
     case GAD_SIZE01:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // ball size 3
-      //###############################################################
+      /* ball size 3 */
     case GAD_SIZE02:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // robot bumper option
-      //###############################################################
+      /* robot paddle option */
     case GAD_ROBOT1:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // balls control option
-      //###############################################################
+      /* balls control option */
     case GAD_CONTRO:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // glue option
-      //###############################################################
+      /* glue option */
     case GAD_GLUE00:
-      achete_gad (gadnu);
+      purchase_bonus_capsule (gadnu);
       break;
 
-      //###############################################################
-      // somes infos
-      //###############################################################
+      /* somes infos */
     case GAD_INFORM:
       {
         display_info ();
@@ -809,9 +785,10 @@ bool supervisor_shop::decrease_money_amount ()
 
 /**
  * Purchase a bonus capsule if possible
+ * @param bonus_num
  */
 void
-supervisor_shop::achete_gad (Sint32 gadnb)
+supervisor_shop::purchase_bonus_capsule (Sint32 bonus_num)
 {
   /* maximum number of capsules reached */
   if (num_of_bought_capsules >= MAX_OF_CAPSULES_BOUGHT)
@@ -820,18 +797,18 @@ supervisor_shop::achete_gad (Sint32 gadnb)
       return;
     }
 
-  //  purchase is possible ?
+  /* purchase is possible? */
   if (!decrease_money_amount ())
     {
       return;
     }
 
   Sint32 *p = current_player->get_shopping_cart ();
-  p[num_of_bought_capsules] = gadnb;
+  p[num_of_bought_capsules] = bonus_num;
   sh_tablept[num_of_bought_capsules] = shop_point;
   sprite_capsule **liste = power_up_capsules->get_sprites_list ();
   sprite_capsule *gadgt = liste[num_of_bought_capsules++];
-  gadgt->set_in_shop (gadnb);
+  gadgt->set_in_shop (bonus_num);
   message_ok ();
   current_player->set_cou_nb (num_of_bought_capsules);
 }

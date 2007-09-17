@@ -4,11 +4,11 @@
  * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.20 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.21 2007/09/17 05:40:35 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -159,7 +159,7 @@ private:
   void faitcourse (Sint32 gadnu);
   void display_info(); 
   void display_capsules_bought ();
-  void achete_gad (Sint32 gadnb);
+  void purchase_bonus_capsule (Sint32 option_num);
   void message_ok ();
   Sint32 led_moving (Sint32 point);
 
