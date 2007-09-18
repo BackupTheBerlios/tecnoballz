@@ -4,11 +4,11 @@
  * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.h,v 1.9 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_paddles.h,v 1.10 2007/09/18 13:39:11 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -150,7 +150,7 @@ public:
   void deactrobot ();
   void move_robot ();
   sprite_paddle *get_paddle (Uint32 id);
-  void maxi_bumps ();
+  void set_maximum_paddles_size ();
   void expand_paddles ();
   void shrink_paddles ();
   void set_reverse_counter (Uint32 counter);

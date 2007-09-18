@@ -1,14 +1,14 @@
 /** 
  * @file sprite_ball.h
  * @brief The ball sprite
- * @date 2007-02-13
+ * @date 2007-09-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.h,v 1.15 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_ball.h,v 1.16 2007/09/18 13:39:11 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,7 +91,8 @@ private:
   Sint32 powerBall1;            //value decreasing bouiboui strength
   Sint32 powerBall2;            //value decreasing brick strength (2 4 or 6) 
   Sint32 eject_ball[4];         //flag pour coins haut-gauche/bas-gauche/bas_droite/haut-droite
-  Sint32 colleBallF;            //sticky ball flag
+  /** Paddle number on which the ball is stuck */
+  Uint32 sticky_paddle_num;
   Sint32 tilt_delay;            //counter before a tilt is possible 
   Sint32 speedCount;            //temps que dure la vitesse
   Sint32 speed_init;            //temps que dure la vitesse (valeur initiale)

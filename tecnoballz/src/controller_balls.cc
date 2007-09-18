@@ -4,11 +4,11 @@
  * @date 2007-04-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.44 $
+ * @version $Revision: 1.45 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.44 2007/09/16 16:48:29 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.45 2007/09/18 13:39:11 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
  * MA  02110-1301, USA.
  */
 #include "../include/controller_balls.h"
+#include "../include/controller_paddles.h"
 #include "../include/handler_players.h"
 #include "../include/handler_keyboard.h"
 #include "../include/handler_display.h"
@@ -358,117 +359,115 @@ controller_balls::accelerate ()
     }
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels: displacement of the balls glued on the bumper 
-//-------------------------------------------------------------------------------
+/**
+ * Displacement of the balls sticked to the paddle in bricks levels
+ */
 void
 controller_balls::vitus_move ()
 {
-
   Sint32 j;
   Sint32 *monPT;
-  sprite_paddle *raket;
+  sprite_paddle *paddle;
   for (Uint32 i = 0; i < max_of_sprites; i++)
+  {
+    sprite_ball *ball = sprites_list[i];
+    if (!ball->is_enabled)
     {
-      sprite_ball *balle = sprites_list[i];
-      if (balle->is_enabled)
-        {
-
-          //###########################################################
-          // the ball is glued 
-          //###########################################################
-          if (balle->colleBallF)
-            {
-              raket = balle->paddle_touched;
-              if (!(--balle->startCount))
-                {
-                  balle->colleBallF = 0;
-                  if (raket->is_glue == 2)
-                    raket->is_glue = 1;
-                  raket->ball_glued = (sprite_ball *) NULL;
-                }
-              else
-                {
-                  switch (balle->colleBallF)
-                    {
-                    case 1:
-                      j = (raket->collision_width >> 1) -
-                        ((balle->collision_width >> 1) + 1);
-                      j += raket->x_coord;
-                      balle->x_coord = j;
-                      j = (raket->y_coord) - (balle->collision_height + 1);
-                      balle->y_coord = j;
-                      break;
-
-                    case 2:
-                      j = (raket->x_coord) - (balle->collision_width - 1);
-                      balle->x_coord = j;
-                      j =
-                        (raket->collision_height >> 1) -
-                        ((balle->collision_height >> 1) + 1);
-                      j += raket->y_coord;
-                      balle->y_coord = j;
-                      break;
-
-                    case 3:
-                      j =
-                        (raket->collision_width >> 1) -
-                        ((balle->collision_width >> 1) + 1);
-                      j += raket->x_coord;
-                      balle->x_coord = j;
-                      j = (raket->y_coord) + raket->collision_height + 1;
-                      balle->y_coord = j;
-                      break;
-
-                    case 4:
-                      j = (raket->x_coord) + (raket->collision_width) + 1;
-                      balle->x_coord = j;
-                      j =
-                        (raket->collision_height >> 1) -
-                        ((balle->collision_height >> 1) + 1);
-                      j += raket->y_coord;
-                      balle->y_coord = j;
-                      break;
-
-                    }
-
-
-                  if (--balle->tempo_rota < 0)
-                    {
-                      balle->tempo_rota = 8;
-                      if (++balle->balle_rota > 13)
-                        balle->balle_rota = 0;
-                      raket = balle->paddle_touched;
-                      monPT = raket->direct_tab + balle->balle_rota;
-                      balle->directBall = *monPT;
-                    }
-
-                }
-            }
-
-          //###########################################################
-          // the ball is not glued
-          //###########################################################
-          else
-            {
-              j = balle->directBall;    //ball is moving
-              if (j > 64)
-                {
-                  fprintf (stderr,
-                           "controller_balls::vitus_move() balle->directBall = %i\n",
-                           j);
-                  j = 60;
-                }
-              Sint16 *table = balle->speedBallT;
-              table = (Sint16 *) ((char *) table + j);
-              Sint32 k;
-              k = *(table++);
-              balle->x_coord += (k * resolution);
-              k = *table;
-              balle->y_coord += (k * resolution);
-            }
-        }
+      continue;
     }
+
+    /*  the ball is not sticked */
+    if (ball->sticky_paddle_num == 0)
+    {
+      /* the balle moves */
+      j = ball->directBall;
+      if (j > 64)
+      {
+        fprintf (stderr,
+            "controller_balls::vitus_move() ball->directBall = %i\n",
+            j);
+        j = 60;
+      }
+      Sint16 *table = ball->speedBallT;
+      table = (Sint16 *) ((char *) table + j);
+      Sint32 k = *(table++);
+      ball->x_coord += (k * resolution);
+      k = *table;
+      ball->y_coord += (k * resolution);
+      continue;
+    }
+
+    paddle = ball->paddle_touched;
+    if (--ball->startCount == 0)
+    {
+      tiles_background *tiles = tiles_background::get_instance ();
+      tiles->set_scroll_type(tiles_background::TILES_NO_SCROLL);
+      ball->sticky_paddle_num = 0;
+      if (paddle->is_glue == 2)
+        {
+          paddle->is_glue = 1;
+        }
+      paddle->ball_glued = (sprite_ball *) NULL;
+      continue;
+    }
+    
+    /* the ball is sticked */
+    switch (ball->sticky_paddle_num)
+    {
+      case controller_paddles::BOTTOM_PADDLE:
+        j = (paddle->collision_width >> 1) -
+          ((ball->collision_width >> 1) + 1);
+        j += paddle->x_coord;
+        ball->x_coord = j;
+        j = (paddle->y_coord) - (ball->collision_height + 1);
+        ball->y_coord = j;
+        break;
+
+      case controller_paddles::RIGHT_PADDLE:
+        j = (paddle->x_coord) - (ball->collision_width - 1);
+        ball->x_coord = j;
+        j =
+          (paddle->collision_height >> 1) -
+          ((ball->collision_height >> 1) + 1);
+        j += paddle->y_coord;
+        ball->y_coord = j;
+        break;
+
+      case controller_paddles::TOP_PADDLE:
+        j =
+          (paddle->collision_width >> 1) -
+          ((ball->collision_width >> 1) + 1);
+        j += paddle->x_coord;
+        ball->x_coord = j;
+        j = (paddle->y_coord) + paddle->collision_height + 1;
+        ball->y_coord = j;
+        break;
+
+      case controller_paddles::LEFT_PADDLE:
+        j = (paddle->x_coord) + (paddle->collision_width) + 1;
+        ball->x_coord = j;
+        j =
+          (paddle->collision_height >> 1) -
+          ((ball->collision_height >> 1) + 1);
+        j += paddle->y_coord;
+        ball->y_coord = j;
+        break;
+
+    }
+
+
+    if (--ball->tempo_rota < 0)
+    {
+      ball->tempo_rota = 8;
+      if (++ball->balle_rota > 13)
+      {
+        ball->balle_rota = 0;
+      } 
+      paddle = ball->paddle_touched;
+      monPT = paddle->direct_tab + ball->balle_rota;
+      ball->directBall = *monPT;
+    }
+  }
 }
 
 //-------------------------------------------------------------------------------
@@ -489,19 +488,21 @@ controller_balls::vitusmove2 ()
           //###########################################################
           // the ball is glued 
           //###########################################################
-          if (balle->colleBallF)
+          if (balle->sticky_paddle_num > 0)
             {
               raket = balle->paddle_touched;
               if (!(--balle->startCount))
                 {
-                  balle->colleBallF = 0;
+                  balle->sticky_paddle_num = 0;
                   if (raket->is_glue == 2)
-                    raket->is_glue = 1;
+                    {
+                      raket->is_glue = 1;
+                    }
                   raket->ball_glued = (sprite_ball *) NULL;
                 }
               else
                 {
-                  switch (balle->colleBallF)
+                  switch (balle->sticky_paddle_num)
                     {
                     case 1:
                       j = (raket->collision_width >> 1) -
@@ -517,7 +518,9 @@ controller_balls::vitusmove2 ()
                     {
                       balle->tempo_rota = 8;
                       if (++balle->balle_rota > 13)
+                        {
                         balle->balle_rota = 0;
+                        }
                       raket = balle->paddle_touched;
                       monPT = raket->direct_tab + balle->balle_rota;
                       balle->directBall = *monPT;
@@ -568,7 +571,7 @@ controller_balls::check_collisions_with_paddles ()
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];
-      if (!ball->is_enabled || ball->colleBallF || ball->directBall >= 64)
+      if (!ball->is_enabled || ball->sticky_paddle_num > 0 || ball->directBall >= 64)
         {
           continue;
         }
@@ -694,7 +697,7 @@ controller_balls::check_collisions_with_paddles ()
                   touched_paddle->ball_glued = (sprite_ball *) ball;
                   ball->raket_glue = touched_paddle;
                   ball->startCount = glue_delay;       //time of the glue 
-                  ball->colleBallF = paddle->paddle_number;
+                  ball->sticky_paddle_num = paddle->paddle_number;
                 }
 
         }
@@ -754,7 +757,7 @@ controller_balls::vitusbump2 ()
                   bumpX->ball_glued = (sprite_ball *) balle;
                   balle->raket_glue = bumpX;
                   balle->startCount = glue_delay;       //time of the glue 
-                  balle->colleBallF = raket->paddle_number;
+                  balle->sticky_paddle_num = raket->paddle_number;
                 }
             }
         }
@@ -1708,7 +1711,7 @@ controller_balls::time_2tilt ()
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = *(balls++);
-      if (!ball->is_enabled || ball->colleBallF)
+      if (!ball->is_enabled || ball->sticky_paddle_num > 0)
         {
           continue;
         }
@@ -1724,9 +1727,9 @@ controller_balls::time_2tilt ()
     }
 }
 
-//------------------------------------------------------------------------------
-// guards levels: test if the player can use the tilt 
-//------------------------------------------------------------------------------
+/**
+ * Check if the player can use the tilt in guards level
+ */
 void
 controller_balls::time2tilt2 ()
 {
@@ -1738,7 +1741,7 @@ controller_balls::time2tilt2 ()
       sprite_ball *balle = *(liste++);
       if (balle->is_enabled)
         {
-          if (!balle->colleBallF)
+          if (!balle->sticky_paddle_num)
             {
               if (balle->tilt_delay == v)
                 {
@@ -1799,7 +1802,7 @@ controller_balls::least_glue ()
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = *(balls++);
-      if (ball->colleBallF)
+      if (ball->sticky_paddle_num > 0)
         {
           return 1;
         }

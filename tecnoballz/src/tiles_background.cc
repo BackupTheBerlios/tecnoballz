@@ -1,14 +1,14 @@
 /** 
  * @file tiles_background.cc 
  * @brief Draw tiles background in bricks levels 
- * @date 2007-04-10
+ * @date 2007-09-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.16 2007/09/12 06:32:49 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.17 2007/09/18 13:39:11 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,8 @@
 #include "../include/tiles_background.h"
 #include "../include/handler_keyboard.h"
 #include "../include/handler_resources.h"
+
+tiles_background * tiles_background::tiles_background_singleton = NULL;
 
 /** 
  * Create the tiles background object
@@ -53,8 +55,16 @@ tiles_background::tiles_background ()
   map_ymax = 0;
   tiles_width = 0;
   tiles_height = 0;
-  map_move_num = 0;
+  
+  map_scroll_num = 1;
   map_move_angle = 0;
+
+
+  map_delay_direction = 0;
+  map_angle_direction = 0;
+  map_velocity = 0.0;
+  map_angle_speed = 0.0;
+
 }
 
 /** 
@@ -73,6 +83,22 @@ tiles_background::~tiles_background ()
       map_tiles = NULL;
     }
   object_free ();
+  tiles_background_singleton = NULL;
+}
+
+/**
+ * Get the object instance
+ * tiles_background is a singleton
+ * @return the tiles_background object 
+ */
+tiles_background *
+tiles_background::get_instance ()
+{
+  if (NULL == tiles_background_singleton)
+    {
+      tiles_background_singleton = new tiles_background ();
+    }
+  return tiles_background_singleton;
 }
 
 /**
@@ -176,8 +202,17 @@ tiles_background::setup (Uint32 tiles_num)
   map_xcoord = random_counter % map_xmax;
   map_ycoord = random_counter * frame_counter % map_ymax;
   draw (background_screen);
+  draw_shadows ();
+ }
 
-  /* draw top shadow */
+
+/**
+ * Draw shadows on the top and the right of screen
+ */
+void
+tiles_background::draw_shadows ()
+{
+ /* draw top shadow */
   Uint32 hscreen = display->get_width () - (64 * resolution);
   for (Uint32 det_Y = 0; det_Y < (handler_display::SHADOWOFFY * resolution);
        det_Y++)
@@ -200,7 +235,6 @@ tiles_background::setup (Uint32 tiles_num)
           *detPT |= handler_display::SHADOW_PIX;
         }
     }
-
 }
 
 /**
@@ -277,6 +311,13 @@ tiles_background::generate_map ()
     }
 }
 
+void
+tiles_background::set_scroll_type(Uint32 type)
+{
+  map_scroll_num = type;
+
+}
+
 /**
  * Draw the tiles background
  */
@@ -284,18 +325,57 @@ void
 tiles_background::draw ()
 {
 
-  switch (map_move_num)
+  switch (map_scroll_num)
     {
+     case TILES_NO_SCROLL:
+        if (map_velocity > -0.01)
+        {
+          map_velocity =- 0.01;
+        }
+        else if (map_velocity < -0.01)
+        {
+          map_velocity =+ 0.01;
+        }
+        else
+        {
+          map_velocity = 0.0;
+        }
+       break;
+
+    case TILES_SCROLL_BEGIN:
+
+         //if (map_delay_direction < 1)
+         if (map_velocity > -0.01 && map_velocity < 0.01)
+          {
+            double pi = 4 * atan (1.0);
+            Uint32 i = random_counter & 31;
+            map_angle_direction = (pi * 2 / 32) * i;
+            map_delay_direction = 100;
+            Uint32 a = map_move_angle + 1;
+            a &= SINUS_MASK;
+            map_move_angle = a;
+          }
+         map_velocity = cos(map_angle_speed) * 6;
+         map_angle_speed += 0.01;
+        map_delay_direction--;
+
     default:
         {
-          Uint32 a = map_move_angle + 5;
+          /*
+          Uint32 a = map_move_angle + 1;
           a &= SINUS_MASK;
           map_move_angle = a;
-          map_ycoord = (table_sinL[a] * 20 * resolution) >> SINUS_DECA;
-          map_xcoord = (table_cosL[a] * 20 * resolution) >> SINUS_DECA;
+          map_ycoord = (table_sinL[a] * 100 * resolution) >> SINUS_DECA;
+          map_xcoord = (table_cosL[a] * 100 * resolution) >> SINUS_DECA;
+          */
         }
+ 
+
     }
+  map_ycoord = map_ycoord + (Uint32)(map_velocity * cos(map_angle_direction)); 
+  map_xcoord = map_xcoord + (Uint32)(map_velocity * sin(map_angle_direction)); 
   draw (game_screen);
+  draw_shadows ();
 }
 /**
  * Draw the tiles background

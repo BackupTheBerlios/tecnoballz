@@ -4,11 +4,11 @@
  * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.22 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.23 2007/09/18 13:39:11 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -567,7 +567,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #ifndef SOUNDISOFF
       audio->play_sound (S_GADGETGO);
 #endif
-      paddles->maxi_bumps ();
+      paddles->set_maximum_paddles_size ();
       balls->run_nballs ();
       balls->set_power_2 ();
       balls->set_size_3 ();

@@ -2,14 +2,14 @@
  * @file controller_guardians.cc 
  * @brief Guardians controller 
  * @created 2003-01-10 
- * @date 2007-04-16
+ * @date 2007-09-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.cc,v 1.11 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_guardians.cc,v 1.12 2007/09/18 13:39:11 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -342,7 +342,7 @@ controller_guardians::get_scrolling_speed (Uint32 ntype, Sint32 speed,
     case 4:
       if (guard1->energy_level)
         {
-          if (ball->colleBallF || !ball->is_enabled)
+          if (ball->sticky_paddle_num > 0 || !ball->is_enabled)
             {
               speed = -1;
               scrollTemp = 0;

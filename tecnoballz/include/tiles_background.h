@@ -1,14 +1,14 @@
-/** 
+/**
  * @file tiles_background.h
  * @brief Draw tiles background in bricks levels 
- * @date 2007-03-31
+ * @date 2007-09-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.h,v 1.8 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: tiles_background.h,v 1.9 2007/09/18 13:39:11 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,57 +29,78 @@
 #define __TILES_BACKGROUND__
 class tiles_background;
 #include "../include/tecnoballz.h"
+
 class tiles_background:public virtual tecnoballz
-{
-private:
-  static Sint32 table_pos1[16];
-  static Sint32 table_pos2[16];
-  static char couleurs[448];
-  static const Sint32 TILES_32_WIDTH = 32;
-  static const Sint32 TILES_32_HEIGHT = 32;
-  static const Sint32 TILES_64_WIDTH = 64;
-  static const Sint32 TILES_64_HEIGHT = 64;
+  {
+  public:
+    typedef enum
+    {
+      TILES_NO_SCROLL,
+      TILES_SCROLL_BEGIN,
+      TILES_SCROLL_LOST,
+      TILES_SCROLL_WIN
+    }
+    TYPES_OF_SCROLL;
 
-  typedef enum {
-    TILES_32x32_WITH_4_COLORS,
-    TILES_64x64_WITH_16_COLORS
-  }
-  TYPES_OF_TILES;
-  /** Type of tiles TILES_64x64_WITH_16_COLORS
-   * or TILES_32x32_WITH_4_COLORS */
-  Uint32 type_of_tiles;
-  /** 4 color palette index */
-  Uint32 palette_index;
+  private:
+    static tiles_background* tiles_background_singleton;
+    static Sint32 table_pos1[16];
+    static Sint32 table_pos2[16];
+    static char couleurs[448];
+    static const Sint32 TILES_32_WIDTH = 32;
+    static const Sint32 TILES_32_HEIGHT = 32;
+    static const Sint32 TILES_64_WIDTH = 64;
+    static const Sint32 TILES_64_HEIGHT = 64;
 
-  bitmap_data *current_tiles;
-  Uint32 *map_tiles;
-  Uint32 map_height;
-  Uint32 map_width;
-  Uint32 map_row_size;
-  Uint32 map_xcoord;
-  Uint32 map_ycoord;
-  Uint32 map_xmax;
-  Uint32 map_ymax;
-  Uint32 tiles_width;
-  Uint32 tiles_height;
+    typedef enum
+    {
+      TILES_32x32_WITH_4_COLORS,
+      TILES_64x64_WITH_16_COLORS
+    }
+    TYPES_OF_TILES;
+    /** Type of tiles TILES_64x64_WITH_16_COLORS
+     * or TILES_32x32_WITH_4_COLORS */
+    Uint32 type_of_tiles;
+    /** 4 color palette index */
+    Uint32 palette_index;
 
-  Uint32 map_move_num;
-  Uint32 map_move_angle;
+    bitmap_data *current_tiles;
+    Uint32 *map_tiles;
+    Uint32 map_height;
+    Uint32 map_width;
+    Uint32 map_row_size;
+    Uint32 map_xcoord;
+    Uint32 map_ycoord;
+    Uint32 map_xmax;
+    Uint32 map_ymax;
+    Uint32 tiles_width;
+    Uint32 tiles_height;
+
+    Uint32 map_scroll_num;
+    Uint32 map_move_angle;
+
+    Sint32 map_delay_direction;
+    double map_angle_direction;
+    double map_angle_speed;
+    double map_velocity;
 
 
-private:
-  void generate_map ();
-  void set_palette ();
-  void set_4_color_palette (Uint32 pal_index);
-
-public:
+  private:
     tiles_background ();
-   ~tiles_background ();
-  void setup (Uint32 titles_num);
-  void draw ();
-  void draw (offscreen_surface * offscreen);
-  void set_4_color_palette ();
-  void next_4_color_palette ();
-  void prev_4_color_palette ();
-};
+    void draw_shadows ();
+    void generate_map ();
+    void set_palette ();
+    void set_4_color_palette (Uint32 pal_index);
+
+  public:
+    ~tiles_background ();
+    static tiles_background *get_instance ();
+    void setup (Uint32 titles_num);
+    void set_scroll_type(Uint32 type);
+    void draw ();
+    void draw (offscreen_surface * offscreen);
+    void set_4_color_palette ();
+    void next_4_color_palette ();
+    void prev_4_color_palette ();
+  };
 #endif

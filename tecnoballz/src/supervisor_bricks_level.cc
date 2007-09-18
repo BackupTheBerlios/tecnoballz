@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-09-15
+ * @date 2007-09-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.48 $
+ * @version $Revision: 1.49 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.48 2007/09/16 16:48:29 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.49 2007/09/18 13:39:11 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
 {
   initialise ();
   sides_bricks = controller_sides_bricks::get_instance ();
-  tiles_ground = new tiles_background ();
+  tiles_ground = tiles_background::get_instance ();
   panel_score = right_panel_score::get_instance ();
   ejectors_corners = controller_ejectors::get_instance ();
   money_capsules = controller_moneys::get_instance ();
@@ -342,9 +342,10 @@ supervisor_bricks_level::main_loop ()
           player_indicators->display_money_and_reverse ();
         }
 
-      //display->unlock_surfaces ();
-      //tiles_ground->draw();
-      //display->lock_surfaces ();
+      /* draw the tiles background */
+      display->unlock_surfaces ();
+      tiles_ground->draw();
+      display->lock_surfaces ();
       sprites->draw ();
       Ecode = popup_menu->execution1 ();
       display->unlock_surfaces ();

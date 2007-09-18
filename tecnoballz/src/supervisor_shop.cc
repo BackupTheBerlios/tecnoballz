@@ -4,11 +4,11 @@
  * @date 2007-09-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.39 $
+ * @version $Revision: 1.40 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.39 2007/09/17 05:40:35 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.40 2007/09/18 13:39:11 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,8 @@
 supervisor_shop::supervisor_shop ()
 {
   initialise ();
-  tiles_ground = new tiles_background ();
+  //tiles_ground = new tiles_background ();
+  tiles_ground = tiles_background::get_instance ();
   mouse_pointer = new sprite_mouse_pointer ();
   led_indicator = new sprite_object ();
   power_up_capsules = controller_capsules::get_instance ();

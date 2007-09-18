@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.cc
  * @brief Paddles controller 
- * @date 2007-04-13
+ * @date 2007-09-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.19 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.20 2007/09/18 13:39:11 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -387,6 +387,8 @@ controller_paddles::check_if_release_balls ()
       if (keyboard->is_right_button () ||
 	  keyboard->key_is_pressed (SDLK_SPACE))
         {
+          tiles_background *tiles = tiles_background::get_instance ();
+          tiles->set_scroll_type(tiles_background::TILES_NO_SCROLL);
           paddle_bottom->release_ball ();
           paddle_right->release_ball ();
           paddle_top->release_ball ();
@@ -595,15 +597,23 @@ controller_paddles::move_robot ()
           Sint32 ballx = balle->x_coord - 64;
           Sint32 offsx = bumpx - ballx;
           if (offsx > 10)
-            offsx = 10;
+            {
+              offsx = 10;
+            }
           if (offsx < -10)
+            {
             offsx = -10;
+            }
           bumpx = bumpx - offsx;
 
           if (bumpx < 64)
-            bumpx = 64;
+            {
+              bumpx = 64;
+            }
           if (bumpx > 320)
-            bumpx = 320;
+            {
+              bumpx = 320;
+            }
 
           offsx = tec_robot0->x_coord;
           tec_robot0->x_coord = bumpx;
@@ -615,7 +625,9 @@ controller_paddles::move_robot ()
               tabB1 = tec_robot0->rebonds_Ga;
             }
           else
-            tabB1 = tec_robot0->rebonds_Dr;
+            {
+              tabB1 = tec_robot0->rebonds_Dr;
+            }
           tec_robot0->rebonds_GD = *(tabB1 + offsx);
         }
     }
@@ -645,14 +657,16 @@ controller_paddles::get_paddle (Uint32 id)
   return NULL;
 }
 
-//------------------------------------------------------------------------------
-// bricks levels: set max bumpers size
-//------------------------------------------------------------------------------
+/**
+ * Set the maximum paddles size in the bricks levels
+ */
 void
-controller_paddles::maxi_bumps ()
+controller_paddles::set_maximum_paddles_size ()
 {
   if (paddle_length >= 64 * resolution)
-    return;
+    {
+      return;
+    }
   paddle_length = 64 * resolution;
   Sint32 x = paddle_bottom->get_x_coord ();
   Sint32 i = bumperMaxi - paddle_length;
@@ -669,7 +683,6 @@ controller_paddles::maxi_bumps ()
   paddle_top->set_width (paddle_length);
   paddle_left->set_height (paddle_length);
   current_player->set_paddle_length (paddle_length);
-
 }
 
 /**

@@ -4,11 +4,11 @@
  * @date 2007-01-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.13 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.14 2007/09/18 13:39:11 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ sprite_ball::once_init (Sint32 start, Sint32 speed,
   speed_init = speed;
   speedBallZ = table;
   disable ();
-  colleBallF = 0;
+  sticky_paddle_num = 0;
   startCount = 0;
   brick_width = bwght;
   set_initial_values (raket);
@@ -74,7 +74,7 @@ sprite_ball::reStarting (sprite_paddle * paddle)
 {
   enable ();
   startCount = start_init;
-  colleBallF = paddle->get_paddle_number ();
+  sticky_paddle_num = paddle->get_paddle_number ();
   set_initial_values (paddle);
   select_image ();
 }
@@ -86,7 +86,7 @@ void
 sprite_ball::remove (sprite_paddle * paddle)
 {
   disable ();
-  colleBallF = 0;
+  sticky_paddle_num = 0;
   startCount = 0;
   set_initial_values (paddle);
   select_image ();
@@ -138,13 +138,13 @@ sprite_ball::startBalle (Sint32 large)
   y_coord = raket->get_y_coord () - collision_height - 1;
 }
 
-//-------------------------------------------------------------------------------
-// disbable sticked ball
-//-------------------------------------------------------------------------------
+/**
+ * Disable sticked ball
+ */
 void
 sprite_ball::glueLibere ()
 {
-  colleBallF = 0;
+  sticky_paddle_num = 0;
   startCount = 0;
 }
 
@@ -190,7 +190,7 @@ sprite_ball::duplicate_from (sprite_ball * ball, Uint32 angle)
   x_coord = ball->x_coord;
   y_coord = ball->y_coord;
   directBall = angle;
-  colleBallF = 0;
+  sticky_paddle_num = 0;
   tilt_delay = 0;
   ball_sizeX = ball->ball_sizeX;
   ballPowerX = ball->ballPowerX;
