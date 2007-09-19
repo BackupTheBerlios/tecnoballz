@@ -4,11 +4,11 @@
  * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.23 2007/09/18 13:39:11 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.24 2007/09/19 05:56:37 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,9 +165,10 @@ controller_capsules::send_capsule_from_bricks (brick_redraw * briPT)
         }
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels: send a malus (from BouiBoui)
-//-------------------------------------------------------------------------------
+/**
+ * Send a penalty from a ship in bricks level
+ * @param ball Pointer to the ball sprite which touched the ship 
+ */
 void
 controller_capsules::send_malus (sprite_ball * ball)
 {

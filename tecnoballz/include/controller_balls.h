@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.h
  * @brief Control the balls. Move and collisions 
- * @date 2007-09-13
+ * @date 2007-09-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.23 2007/09/13 15:51:53 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.24 2007/09/19 05:56:37 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,8 @@ class controller_balls:public objects_list < sprite_ball, controller_balls >
 
 private:
   Sint32 num_erreur;
-  Uint32 glue_delay;            //duration of the glue
+  /** Time delay of the glue */
+  Uint32 glue_delay;
   Sint16 *balleVites;           // table premiere vitesse
   Sint32 tempoVites;            // temps avant changement vitesse
   Sint32 startCount;            // Temps avant que la balle ne parte
@@ -94,19 +95,19 @@ private:
   void check_outside_balls ();
   void vitussort2 ();
   void activate_tilt ();
-  void vitus_move ();
+  void move_balls ();
   void accelerate ();
-  void vitusmove2 ();
-  void check_collisions_with_paddles ();
-  void vitusbump2 ();
-  void check_collisions_with_robot ();
+  void move_balls_in_guards_level ();
+  void collisions_with_paddles ();
+  void collisions_with_paddle ();
+  void collisions_with_robot ();
   void handle_ejectors ();
-  void collision_with_walls ();
-  void vituscote2 ();
-  void vitusbound ();
-  void check_bricks_collision ();
-  void check_collisions_with_ships ();
-  void check_collisions_with_eyes ();
+  void collisions_with_walls ();
+  void collisions_with_sides ();
+  void prevent_horizontal_blocking ();
+  void bricks_collision ();
+  void collisions_with_ships ();
+  void collisions_with_eyes ();
   void vitusGuard ();
   void controll_balls ();
 
