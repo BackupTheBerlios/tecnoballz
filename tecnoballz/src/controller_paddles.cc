@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.cc
  * @brief Paddles controller 
- * @date 2007-09-18
+ * @date 2007-09-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.20 2007/09/18 13:39:11 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.21 2007/09/20 04:55:32 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -580,7 +580,7 @@ controller_paddles::move_robot ()
           sprite_ball *b = *(aList++);
           if (b->is_enabled)
             {
-              if (b->directBall >= 36 && b->directBall <= 60)
+              if (b->direction >= 36 && b->direction <= 60)
                 {
                   if (b->y_coord > pos_y)
                     {

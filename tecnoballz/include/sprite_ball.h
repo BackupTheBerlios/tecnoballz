@@ -4,11 +4,11 @@
  * @date 2007-09-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.h,v 1.16 2007/09/18 13:39:11 gurumeditation Exp $
+ * $Id: sprite_ball.h,v 1.17 2007/09/20 04:55:32 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ class sprite_ball:public sprite_object
   friend class sprite_money;
   friend class sprite_gem;
   friend class controller_guardians;
-  friend class directBall;
+  friend class direction;
 
 public:
   static const Sint32 BALLNORMAL = 0;
@@ -79,20 +79,26 @@ public:
 
 
 private:
-  Sint32 directBall;          //ball direction (0 to 56 step 4)
-  Sint32 save_Dball;            //last directBall (0 to 56 step 4)
-  Sint32 countDball;            //counter before rebound forcing
+  /** Ball direction from 0 to 64 step 4
+   * 64 = immobile ball */
+  Sint32 direction;
+  /** Previous ball direction */
+  Sint32 previous_direction;
+  /** Delay counter before change ball direction
+   * Avoid the horizontal blockings */
+  Sint32 change_direction_count;
   /** The last paddle touched by the ball */
   sprite_paddle *paddle_touched;
-  sprite_paddle *raket_glue;    //pointer to the bumper sticked
+  /** Padlle on witch is stuck the ball */
+  sprite_paddle *stick_paddle;
+  /** Paddle number on which the ball is stuck */
+  Uint32 sticky_paddle_num;
   Sint16 *speedBallT;           //pt/speed table
   Sint16 *speedBallZ;           //pt/speed table
   Sint32 *collisionT;           //pt/bricks collisions table
   Sint32 powerBall1;            //value decreasing bouiboui strength
   Sint32 powerBall2;            //value decreasing brick strength (2 4 or 6) 
   Sint32 eject_ball[4];         //flag pour coins haut-gauche/bas-gauche/bas_droite/haut-droite
-  /** Paddle number on which the ball is stuck */
-  Uint32 sticky_paddle_num;
   Sint32 tilt_delay;            //counter before a tilt is possible 
   Sint32 speedCount;            //temps que dure la vitesse
   Sint32 speed_init;            //temps que dure la vitesse (valeur initiale)

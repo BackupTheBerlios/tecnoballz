@@ -1,14 +1,14 @@
 /** 
  * @file sprite_ball.cc 
  * @brief The ball sprite
- * @date 2007-01-26
+ * @date 2007-09-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.14 2007/09/18 13:39:11 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.15 2007/09/20 04:55:32 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,11 +102,11 @@ sprite_ball::set_initial_values (sprite_paddle * paddle)
   speedCount = speed_init;
   collision_width = BALLWIDTH1 * resolution;
   collision_height = BALLWIDTH1 * resolution;
-  directBall = 0;
-  save_Dball = 0;
-  countDball = 0;
+  direction = 0;
+  previous_direction = direction;
+  change_direction_count = 0;
   paddle_touched = paddle;
-  raket_glue = paddle;
+  stick_paddle = paddle;
   speedBallT = speedBallZ;
   collisionT = brikPoint1;
   powerBall1 = 1;
@@ -131,7 +131,7 @@ void
 sprite_ball::startBalle (Sint32 large)
 {
   enable ();
-  sprite_paddle *raket = raket_glue;
+  sprite_paddle *raket = stick_paddle;
   reStarting (raket);
   x_coord =
     raket->get_x_coord () + ((large >> 1) - ((collision_width >> 1) + 1));
@@ -189,7 +189,7 @@ sprite_ball::duplicate_from (sprite_ball * ball, Uint32 angle)
   is_enabled = true;
   x_coord = ball->x_coord;
   y_coord = ball->y_coord;
-  directBall = angle;
+  direction = angle;
   sticky_paddle_num = 0;
   tilt_delay = 0;
   ball_sizeX = ball->ball_sizeX;
@@ -197,7 +197,7 @@ sprite_ball::duplicate_from (sprite_ball * ball, Uint32 angle)
   collision_width = ball->collision_width;
   collision_height = ball->collision_height;
   paddle_touched = ball->paddle_touched;
-  raket_glue = ball->raket_glue;
+  stick_paddle = ball->stick_paddle;
   speedBallT = ball->speedBallT;
   collisionT = ball->collisionT;
   powerBall1 = ball->powerBall1;
@@ -310,7 +310,8 @@ sprite_ball::enbale_on_ejector (Uint32 ejector_id, Uint32 delay)
     }
   x_coord = monPT->x_coord;
   y_coord = monPT->y_coord;
-  directBall = 64;              //the ball's motionless 
+  /* the ball's motionless */
+  direction = 64;
 }
 
 /** 

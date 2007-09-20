@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-00-19
+ * @date 2007-09-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.46 $
+ * @version $Revision: 1.47 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.46 2007/09/19 05:56:37 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.47 2007/09/20 04:55:32 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -326,10 +326,10 @@ controller_balls::activate_tilt ()
         {
           continue;
         }
-      if (ball->directBall < 64)
+      if (ball->direction < 64)
         {
-          Sint32 d = (ball->directBall >> 2) & 0xf;
-          ball->directBall = sprite_ball::tilt_table[d][rand];
+          Sint32 d = (ball->direction >> 2) & 0xf;
+          ball->direction = sprite_ball::tilt_table[d][rand];
         }
       ball->tilt_delay = 0;
       if (!ftilt)
@@ -381,11 +381,11 @@ controller_balls::move_balls ()
       if (ball->sticky_paddle_num == 0)
 	{
 	  /* the balle moves */
-	  j = ball->directBall;
+	  j = ball->direction;
 	  if (j > 64)
 	    {
 	      fprintf (stderr,
-		       "controller_balls::move_balls() ball->directBall = %i\n",
+		       "controller_balls::move_balls() ball->direction = %i\n",
 		       j);
 	      j = 60;
 	    }
@@ -466,7 +466,7 @@ controller_balls::move_balls ()
 	    } 
 	  paddle = ball->paddle_touched;
 	  monPT = paddle->direct_tab + ball->balle_rota;
-	  ball->directBall = *monPT;
+	  ball->direction = *monPT;
 	}
     }
 }
@@ -492,11 +492,11 @@ controller_balls::move_balls_in_guards_level ()
       if (ball->sticky_paddle_num == 0)
 	{
 	  /* the balle moves */
-	  j = ball->directBall;
+	  j = ball->direction;
 	  if (j > 64)
 	    {
 	      std::cerr << "controller_balls::" <<
-		"move_balls_in_guards_level() ball->directBall = " <<
+		"move_balls_in_guards_level() ball->direction = " <<
 		j << std::endl;
 	      j = 60;
 	    }
@@ -544,7 +544,7 @@ controller_balls::move_balls_in_guards_level ()
 	    }
 	  paddle = ball->paddle_touched;
 	  monPT = paddle->direct_tab + ball->balle_rota;
-	  ball->directBall = *monPT;
+	  ball->direction = *monPT;
 	}
     }
 }
@@ -566,7 +566,7 @@ controller_balls::collisions_with_paddles ()
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];
-      if (!ball->is_enabled || ball->sticky_paddle_num > 0 || ball->directBall >= 64)
+      if (!ball->is_enabled || ball->sticky_paddle_num > 0 || ball->direction >= 64)
         {
           continue;
         }
@@ -654,12 +654,12 @@ controller_balls::collisions_with_paddles ()
 #endif
               ball->paddle_touched = touched_paddle;
               ball->tilt_delay = 0;
-              j = ball->directBall;
+              j = ball->direction;
               if (j > 64)
                 {
                   std::cerr <<
                     "controller_balls::collisions_with_paddles() "
-                    << "(1) ball->directBall " << j;
+                    << "(1) ball->direction " << j;
                   j = 64;
                 }
               monPT = touched_paddle->rebonds_GD;
@@ -669,12 +669,12 @@ controller_balls::collisions_with_paddles ()
               if (j > 64)
                 {
                   fprintf (stderr,
-                           "controller_balls::collisions_with_paddles() (2) ball->directBall = %i (%i)\n",
-                           j, ball->directBall);
+                           "controller_balls::collisions_with_paddles() (2) ball->direction = %i (%i)\n",
+                           j, ball->direction);
                   for (Sint32 v = 0; v < 16; v++)
                     printf ("%i ; ", touched_paddle->rebonds_GD[v]);
                   monPT = touched_paddle->rebonds_GD;
-                  j = ball->directBall;
+                  j = ball->direction;
                   //(char *)monPT += j;
                   monPT = (Sint32 *) ((char *) monPT + j);
                   /*printf("monPT = %x / touched_paddle->rebonds_GD = %x / *monPT = %i\n",
@@ -684,13 +684,13 @@ controller_balls::collisions_with_paddles ()
                 }
 
 
-              //ball->directBall = *monPT;
-              ball->directBall = j;
+              //ball->direction = *monPT;
+              ball->direction = j;
               if (touched_paddle->is_glue == 1 && !touched_paddle->ball_glued)
                 {
                   touched_paddle->is_glue = 2;   //ball glued to the bumper 
                   touched_paddle->ball_glued = (sprite_ball *) ball;
-                  ball->raket_glue = touched_paddle;
+                  ball->stick_paddle = touched_paddle;
                   ball->startCount = glue_delay;       //time of the glue 
                   ball->sticky_paddle_num = paddle->paddle_number;
                 }
@@ -741,16 +741,16 @@ controller_balls::collisions_with_paddle ()
 #endif
               balle->paddle_touched = bumpX;
               balle->tilt_delay = 0;
-              j = balle->directBall;
+              j = balle->direction;
               monPT = bumpX->rebonds_GD;
               //(char *)monPT += j;
               monPT = (Sint32 *) ((char *) monPT + j);
-              balle->directBall = *monPT;
+              balle->direction = *monPT;
               if (bumpX->is_glue == 1)
                 {
                   bumpX->is_glue = 2;   //ball glued to the bumper 
                   bumpX->ball_glued = (sprite_ball *) balle;
-                  balle->raket_glue = bumpX;
+                  balle->stick_paddle = bumpX;
                   balle->startCount = glue_delay;       //time of the glue 
                   balle->sticky_paddle_num = raket->paddle_number;
                 }
@@ -790,10 +790,10 @@ controller_balls::collisions_with_robot ()
     {
       ball->y_coord = y1 - ball->collision_height;
       paddle->touch_ball = true;
-      j = ball->directBall;
+      j = ball->direction;
       monPT = paddle->rebonds_GD;
       monPT = (Sint32 *) ((char *) monPT + j);
-      ball->directBall = *monPT;
+      ball->direction = *monPT;
 #ifndef SOUNDISOFF
       audio->play_sound (S_TOUCHRAK);
 #endif
@@ -864,7 +864,7 @@ controller_balls::handle_ejectors ()
       {
         Sint32 j = random_counter & 0xF;
         table += j;
-        ball->directBall = *table;
+        ball->direction = *table;
 #ifndef SOUNDISOFF
         audio->play_sound (S_COINEJEC);
 #endif
@@ -887,7 +887,7 @@ controller_balls::handle_ejectors ()
       {
         ball->pull (coin1, 10 * resolution, 10 * resolution);
         ball->eject_ball[0] = 1;
-        ball->directBall = 64;
+        ball->direction = 64;
         current_player->add_score (10);
 #ifndef SOUNDISOFF
         audio->play_sound (S_COINASPI);
@@ -901,7 +901,7 @@ controller_balls::handle_ejectors ()
           ball->pull (coin2, 5 * resolution,
               10 * resolution);
           ball->eject_ball[3] = 1;
-          ball->directBall = 64;
+          ball->direction = 64;
           current_player->add_score (10);
 #ifndef SOUNDISOFF
           audio->play_sound (S_COINASPI);
@@ -915,7 +915,7 @@ controller_balls::handle_ejectors ()
             ball->pull (coin3, 10 * resolution,
                 5 * resolution);
             ball->eject_ball[2] = 1;
-            ball->directBall = 64;
+            ball->direction = 64;
             current_player->add_score (10);
 #ifndef SOUNDISOFF
             audio->play_sound (S_COINASPI);
@@ -929,7 +929,7 @@ controller_balls::handle_ejectors ()
               ball->pull (coin4, 5 * resolution,
                   5 * resolution);
               ball->eject_ball[1] = 1;
-              ball->directBall = 64;
+              ball->direction = 64;
               current_player->add_score (10);
 #ifndef SOUNDISOFF
               audio->play_sound (S_COINASPI);
@@ -1004,8 +1004,8 @@ controller_balls::collisions_with_walls ()
       /* collision dectected */
       if (NULL != monPT)
         {
-          monPT = (Sint32 *) ((char *) monPT + ball->directBall);
-          ball->directBall = *monPT;
+          monPT = (Sint32 *) ((char *) monPT + ball->direction);
+          ball->direction = *monPT;
 #ifndef SOUNDISOFF
           audio->play_sound (S_BRICOTES);
 #endif
@@ -1071,8 +1071,8 @@ controller_balls::collisions_with_sides ()
 	}
       if (monPT != NULL)
 	{
-	  monPT = (Sint32 *) ((char *) monPT + ball->directBall);
-	  ball->directBall = *monPT;
+	  monPT = (Sint32 *) ((char *) monPT + ball->direction);
+	  ball->direction = *monPT;
 	}
     }
 }
@@ -1090,27 +1090,27 @@ controller_balls::prevent_horizontal_blocking ()
 	{
           continue;
 	}
-      Sint32 dball = ball->directBall;
-      if (dball >= 32)
+      Sint32 direction = ball->direction;
+      if (direction >= 32)
 	{
-          dball -= 32;
+          direction -= 32;
 	}
-      if (dball == ball->save_Dball)
+      if (direction == ball->previous_direction)
         {
-          if (ball->countDball++ > 360 && dball == 0 && ball->colli_wall)
-            if (ball->directBall == 32)
+          if (ball->change_direction_count++ > 360 && direction == 0 && ball->colli_wall)
+            if (ball->direction == 32)
 	      {
-                ball->directBall = 28;
+                ball->direction = 28;
 	      }
             else
 	      {
-                ball->directBall = 4;
+                ball->direction = 4;
 	      }
         }
       else
         {
-          ball->save_Dball = dball;
-          ball->countDball = 0;
+          ball->previous_direction = direction;
+          ball->change_direction_count = 0;
         }
     }
 }
@@ -1250,8 +1250,8 @@ controller_balls::bricks_collision ()
           if (indes > 0 || ball->ballPowerX == sprite_ball::BALLNORMAL)
             {
               Sint32 *rebPT = *(brick_jump + rebon);
-              rebPT = (Sint32 *) ((char *) rebPT + ball->directBall);
-              ball->directBall = *rebPT;
+              rebPT = (Sint32 *) ((char *) rebPT + ball->direction);
+              ball->direction = *rebPT;
             }
         }
     }
@@ -1301,11 +1301,11 @@ controller_balls::collisions_with_eyes ()
             {
               if (delta_x < 0)
                {
-                  ball->directBall = 32;
+                  ball->direction = 32;
                }
               else
                {
-                  ball->directBall = 0;
+                  ball->direction = 0;
                }
             }
 
@@ -1313,37 +1313,37 @@ controller_balls::collisions_with_eyes ()
             {
               if (delta_x == 0)
                 {
-                  ball->directBall = 48;
+                  ball->direction = 48;
                 }
               if (delta_x < 0)
                 {
                   delta_x = -delta_x;
                   if (delta_x == delta_y)
                     {
-                      ball->directBall = 40;
+                      ball->direction = 40;
                     }
                   if (delta_x < delta_y)
                     {
-                      ball->directBall = 44;
+                      ball->direction = 44;
                     }
                   else
                     {
-                      ball->directBall = 36;
+                      ball->direction = 36;
                     }
                 }
               else
                 {
                   if (delta_x == delta_y)
                     {
-                      ball->directBall = 56;
+                      ball->direction = 56;
                     }
                   if (delta_x < delta_y)
                     {
-                      ball->directBall = 52;
+                      ball->direction = 52;
                     }
                   else
                     {
-                      ball->directBall = 56;
+                      ball->direction = 56;
                     }
                 }
             }
@@ -1353,37 +1353,37 @@ controller_balls::collisions_with_eyes ()
               delta_y = -delta_y;
               if (delta_x == 0)
                 {
-                  ball->directBall = 16;
+                  ball->direction = 16;
                 }
               if (delta_x < 0)
                 {
                   delta_x = -delta_x;
                   if (delta_x == delta_y)
                     {
-                      ball->directBall = 24;
+                      ball->direction = 24;
                     }
                   if (delta_x < delta_y)
                     {
-                      ball->directBall = 20;
+                      ball->direction = 20;
                     }
                   else
                     {
-                      ball->directBall = 28;
+                      ball->direction = 28;
                     }
                 }
               else
                 {
                   if (delta_x == delta_y)
                     {
-                      ball->directBall = 8;
+                      ball->direction = 8;
                     }
                   if (delta_x < delta_y)
                     {
-                      ball->directBall = 12;
+                      ball->direction = 12;
                     }
                   else
                     {
-                      ball->directBall = 4;
+                      ball->direction = 4;
                     }
                 }
             }
@@ -1440,7 +1440,7 @@ controller_balls::collisions_with_ships ()
                   ship->atom_power -= k;
                   if (ship->atom_power < 1)
                     ship->explosion1 (ball);
-                  ball->directBall = nouve;
+                  ball->direction = nouve;
                 }
             }
         }
@@ -1500,7 +1500,7 @@ controller_balls::vitusGuard ()
 #ifndef SOUNDISOFF
                           audio->play_sound (S_GARDIENT);
 #endif
-                          balle->directBall = x;
+                          balle->direction = x;
                           guardian->recently_touched = 5;
                           guardian->energy_level -= balle->powerBall1;
                           if (guardian->energy_level <= 0)
@@ -1599,7 +1599,7 @@ controller_balls::run_3balls ()
 {
   sprite_ball *model = first_ball ();
   /* direction of the current ball */
-  Uint32 j = model->directBall;
+  Uint32 j = model->direction;
   Uint32 i = 0;
   Uint32 count = 0;
   sprite_ball **balls = sprites_list;
@@ -1786,12 +1786,12 @@ controller_balls::controll_balls ()
         {
           continue;
         }
-      Sint32 dball = ball->directBall;
+      Sint32 dball = ball->direction;
       if (dball < 64)
         {
           dball = dball + 4;
           dball = dball & 60;
-          ball->directBall = dball;
+          ball->direction = dball;
         }
     }
 }
