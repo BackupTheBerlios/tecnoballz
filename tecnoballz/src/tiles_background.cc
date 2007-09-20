@@ -4,11 +4,11 @@
  * @date 2007-09-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.17 2007/09/18 13:39:11 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.18 2007/09/20 16:06:57 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -212,26 +212,57 @@ tiles_background::setup (Uint32 tiles_num)
 void
 tiles_background::draw_shadows ()
 {
- /* draw top shadow */
+ 
+
   Uint32 hscreen = display->get_width () - (64 * resolution);
+  Uint32 vscreen = display->get_height ();
+  offscreen_surface* screen = game_screen;
+  
+  char *dest = screen->get_pixel_data();
+  Uint32 size = screen->get_row_size();
+
+  unsigned char mask = handler_display::SHADOW_PIX;
+  
+ /* draw top shadow */
+  for (Uint32 i = 0; i < (handler_display::SHADOWOFFY * resolution);
+       i++, dest+=size)
+  {
+      for (Uint32 j = 0; j < hscreen; j++)
+        {
+          dest[j] |= mask; 
+        }
+  }
+
+  dest = screen->get_pixel_data(252 * resolution, 0);
+  for (Uint32 i = 0; i < vscreen / 2; i++)
+    {
+      for (Uint32 j = 0; j < 4; j++, dest+=size)
+        {
+          dest[j] |= mask; 
+        }
+    }
+
+
+
+  return;
+  
   for (Uint32 det_Y = 0; det_Y < (handler_display::SHADOWOFFY * resolution);
        det_Y++)
     {
       for (Uint32 det_X = 0; det_X < hscreen; det_X++)
         {
-          char *detPT = background_screen->get_pixel_data (det_X, det_Y);
+          char *detPT = game_screen->get_pixel_data (det_X, det_Y);
           *detPT |= handler_display::SHADOW_PIX;
         }
     }
 
   /* draw right shadow */
-  Uint32 vscreen = display->get_height ();
   for (Uint32 det_Y = 0; det_Y < vscreen; det_Y++)
     {
       for (Uint32 det_X = (252 * resolution); det_X < (256 * resolution);
            det_X++)
         {
-          char *detPT = background_screen->get_pixel_data (det_X, det_Y);
+          char *detPT = game_screen->get_pixel_data (det_X, det_Y);
           *detPT |= handler_display::SHADOW_PIX;
         }
     }
