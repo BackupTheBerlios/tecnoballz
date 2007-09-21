@@ -2,14 +2,14 @@
  * @file controller_sides_bricks.cc 
  * @brief Sides bricks controller. The small bricks on the side, the walls top
  *        left and right
- * @date 2007-05-14
+ * @date 2007-09-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.cc,v 1.12 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_sides_bricks.cc,v 1.13 2007/09/21 05:17:03 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ controller_sides_bricks::controller_sides_bricks ()
   xcoord_top_wall = XCOORD_TOP_WALL * resolution;
   ycoord_top_wall = YCOORD_TOP_WALL * resolution;
 
-  if (bob_ground)
+  if (!has_background)
     {
       max_of_sprites = (MAX_OF_SIDES_BRICKS + 4) * 3;
     }
@@ -264,7 +264,7 @@ controller_sides_bricks::initialize ()
 void
 controller_sides_bricks::create_bricks_sprites ()
 {
-  if (!bob_ground)
+  if (has_background)
     {
       return;
     }
@@ -365,7 +365,7 @@ controller_sides_bricks::save_background ()
 void
 controller_sides_bricks::run ()
 {
-  if (!bob_ground)
+  if (has_background)
     {
       /* sides bricks are drawing to background */
       restore ();
@@ -491,7 +491,7 @@ controller_sides_bricks::disable_sprites ()
 void
 controller_sides_bricks::draw_shadows_to_brackground ()
 {
-  if (bob_ground)
+  if (!has_background)
     {
       return;
     }
@@ -530,7 +530,7 @@ controller_sides_bricks::draw_shadows_to_brackground ()
 void
 controller_sides_bricks::draw_to_brackground ()
 {
-  if (bob_ground)
+  if (!has_background)
     {
       return;
     }

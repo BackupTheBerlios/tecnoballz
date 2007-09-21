@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-09-20
+ * @date 2007-09-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.47 $
+ * @version $Revision: 1.48 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.47 2007/09/20 04:55:32 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.48 2007/09/21 05:17:03 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1168,7 +1168,7 @@ controller_balls::bricks_collision ()
             }
           redraw->is_gigablitz_destroyed = false;
           redraw->paddle = ball->paddle_touched;
-	  if (bob_ground)
+	  if (!has_background)
 	    {
 	       brick->sprite->touch();
 	    }

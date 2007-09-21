@@ -2,14 +2,14 @@
  * @file configfile.cc 
  * @brief Config file handler 
  * @created 2005-01-22
- * @date 2007-02-17
+ * @date 2007-09-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: configfile.cc,v 1.25 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: configfile.cc,v 1.26 2007/09/21 05:17:03 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,9 +74,9 @@ configfile::~configfile ()
 {
 }
 
-//------------------------------------------------------------------------------
-// reset all values
-//------------------------------------------------------------------------------
+/**
+ * Reset all values
+ */
 void
 configfile::resetvalue ()
 {
@@ -84,7 +84,7 @@ configfile::resetvalue ()
   handler_audio::is_audio_enable = 1;
 #endif
   resolution = 2;
-  bob_ground = true;
+  has_background = false;
   is_verbose = 0;
   handler_display::optionfull = 0;
   difficulty_level = 1;
@@ -223,10 +223,14 @@ configfile::loadconfig ()
   if (resolution < 1 || resolution > 2)
     resolution = 2;
   if (resolution == 2)
-    bob_ground = true;
+    {
+      has_background = false;
+    }
   else
-    bob_ground = false;
-//bob_ground = false;
+    {
+      has_background = true;
+    }
+//has_background = true;
   //read number of lifes: 1 to 9
   if (!reader.read_int ("lifes", &initial_num_of_lifes))
     initial_num_of_lifes = 8;
@@ -465,7 +469,7 @@ configfile::scanZeArgs (Sint32 nbArg, char **ptArg)
       // use 4 colors background in 640x480
       if (!strcmp (ptArg[_iIndex], "--bg4"))
         {
-          bg4_colors = true;
+          force_4_colors_tiles = true;
           continue;
         }
 

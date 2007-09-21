@@ -1,14 +1,14 @@
 /** 
  * @file controller_ejectors.cc 
  * @brief Ejectors corners controller 
- * @date 2007-04-10
+ * @date 2007-09-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_ejectors.cc,v 1.6 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_ejectors.cc,v 1.7 2007/09/21 05:17:03 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,8 +104,8 @@ controller_ejectors::create_ejectors_sprites ()
                                                        get_sprite_height () /
                                                        2);
 
-  /* bob_ground = 1: ejectors are managed like sprites */  
-  if (bob_ground)
+  /* has_background = false: ejectors are managed like sprites */  
+  if (!has_background)
     {
       sprites->add (sprites_list[TOP_LEFT_EJECTOR]);
       sprites->add (sprites_list[TOP_RIGHT_EJECTOR]);
@@ -124,7 +124,7 @@ controller_ejectors::create_ejectors_sprites ()
 void
 controller_ejectors::draw_shadow ()
 {
-  if (bob_ground)
+  if (!has_background)
     {
       return;
     }
@@ -140,7 +140,7 @@ controller_ejectors::draw_shadow ()
 void
 controller_ejectors::draw ()
 {
-  if (bob_ground)
+  if (!has_background)
     {
       return;
     }

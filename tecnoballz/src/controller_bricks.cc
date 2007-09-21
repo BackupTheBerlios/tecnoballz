@@ -5,11 +5,11 @@
  * @date 2007-09-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.30 2007/09/16 16:48:29 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.31 2007/09/21 05:17:03 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
 controller_bricks::controller_bricks ()
 {
   littleInit ();
-  if (bob_ground)
+  if (!has_background)
     {
       max_of_sprites = NB_BRICKSH * NB_BRICKSV;
     }
@@ -136,7 +136,7 @@ controller_bricks::initialize ()
     {
       std::cout << ">controller_bricks::initialize() start!" << std::endl;
     }
-  if (bob_ground)
+  if (!has_background)
     {
       alloc_sprites_list ();
     }
@@ -336,7 +336,7 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
                   num_of_bricks++;
                 }
 
-              if (bob_ground)
+              if (!has_background)
                 {
                   sprite_brick *sprite = new sprite_brick ();
                   if (sprite_template == NULL)
@@ -381,7 +381,7 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
 void
 controller_bricks::add_to_sprites_list ()
 {
-  if (were_sprites_added  || !bob_ground)
+  if (were_sprites_added  || has_background)
     {
       return;
     }
@@ -403,7 +403,7 @@ controller_bricks::add_to_sprites_list ()
 void
 controller_bricks::draw_bricks_shadows ()
 {
-  if (bob_ground)
+  if (!has_background)
     {
       return;
     }
@@ -429,7 +429,7 @@ controller_bricks::draw_bricks_shadows ()
 void
 controller_bricks::draw_bricks ()
 {
-  if (bob_ground)
+  if (!has_background)
     {
       return;
     }
@@ -496,7 +496,7 @@ controller_bricks::draw_brick (char *pixels, Sint32 offset, Sint32 color)
  * Enable the bricks color cycling
  */
 void controller_bricks::start_cycling() {
-  if (!bob_ground)
+  if (has_background)
     {
       return;
     }
@@ -509,7 +509,7 @@ void controller_bricks::start_cycling() {
 void
 controller_bricks::color_cycling()
 {
-  if (!bob_ground or !is_cycling)
+  if (has_background or !is_cycling)
     {
       return;
     }
@@ -663,7 +663,7 @@ bool controller_bricks::update ()
       audio->play_sound (S_TOUBRIK1);
 #endif
       moneys->send_money_from_brick (redraw);
-      if (bob_ground)
+      if (!has_background)
         {
             map->sprite->update_image(redraw->brick_map->h_pos);     
         }
@@ -702,7 +702,7 @@ bool controller_bricks::update ()
         }
     }
 
-  if (bob_ground)
+  if (!has_background)
     {
       map->sprite->disable();
       return true;

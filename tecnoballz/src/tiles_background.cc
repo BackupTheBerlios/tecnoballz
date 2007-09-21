@@ -1,14 +1,14 @@
 /** 
  * @file tiles_background.cc 
  * @brief Draw tiles background in bricks levels 
- * @date 2007-09-19
+ * @date 2007-09-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.18 2007/09/20 16:06:57 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.19 2007/09/21 05:17:04 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ tiles_background::tiles_background ()
   object_init ();
   type_of_tiles = TILES_64x64_WITH_16_COLORS;
   palette_index = 0;
-  if (resolution == 1 || bg4_colors)
+  if (resolution == 1 || force_4_colors_tiles)
     {
       type_of_tiles = TILES_32x32_WITH_4_COLORS;
     }
@@ -212,20 +212,23 @@ tiles_background::setup (Uint32 tiles_num)
 void
 tiles_background::draw_shadows ()
 {
- 
-
-  Uint32 hscreen = display->get_width () - (64 * resolution);
-  Uint32 vscreen = display->get_height ();
-  offscreen_surface* screen = game_screen;
-  
-  char *dest = screen->get_pixel_data();
+  offscreen_surface* screen;
+  if (has_background)
+    {
+      screen = background_screen;
+    }
+  else
+    {
+      screen = game_screen;
+    }
   Uint32 size = screen->get_row_size();
-
   unsigned char mask = handler_display::SHADOW_PIX;
   
- /* draw top shadow */
-  for (Uint32 i = 0; i < (handler_display::SHADOWOFFY * resolution);
-       i++, dest+=size)
+  /* draw top shadow */
+  char *dest = screen->get_pixel_data();
+  Uint32 hscreen = display->get_width () - (64 * resolution);
+  Uint32 k = handler_display::SHADOWOFFY * resolution;
+  for (Uint32 i = 0; i < k; i++, dest+=size)
   {
       for (Uint32 j = 0; j < hscreen; j++)
         {
@@ -233,10 +236,13 @@ tiles_background::draw_shadows ()
         }
   }
 
-  dest = screen->get_pixel_data(252 * resolution, 0);
-  for (Uint32 i = 0; i < vscreen / 2; i++)
+  /* draw right shadow */
+  dest = screen->get_pixel_data(252 * resolution, k);
+  Uint32 vscreen = display->get_height () - k;
+  k = 4 * resolution;
+  for (Uint32 i = 0; i < vscreen;  i++, dest+=size)
     {
-      for (Uint32 j = 0; j < 4; j++, dest+=size)
+      for (Uint32 j = 0; j < k ; j++)
         {
           dest[j] |= mask; 
         }

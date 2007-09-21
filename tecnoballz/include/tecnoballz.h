@@ -2,14 +2,14 @@
  * @file tecnoballz.h
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-09-20
+ * @date 2007-09-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.46 $
+ * @version $Revision: 1.47 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.46 2007/09/20 04:55:32 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.47 2007/09/21 05:17:03 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-09-20)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-09-21)"
 /** To define only under development  */
 #define UNDER_DEVELOPMENT
 /** Force bytes copy (SPARC unaligned memory access) */
@@ -116,9 +116,13 @@ public:
 public:
   /** True if verbose enable */
   static bool is_verbose;
-  static Sint32 bg4_colors;     //1 = force 4 colors background
-  static Uint32 resolution;     //1:320*240 or 2:640*480 pixels
-  static bool bob_ground;       //1 = background is sprites 
+  /** Force 4 colors tiles set in bricks level */
+  static bool force_4_colors_tiles;
+  /** 1=320x240 or 2=640x480 pixels */ 
+  static Uint32 resolution;
+  /** True if static background tiles with bricks and ejectors
+   * draw inside. False if bricks and ejectors are sprites */
+  static bool has_background;
   static Sint32 arg_jumper;
 
 protected:
@@ -150,7 +154,8 @@ protected:
    * corner, and type [E], [T], [B] and [ENTER].
    */
   static bool is_enabled_cheat_mode;
-  static bool birth_flag;     //1 = all names is 040670
+  /** True if six names of menu initialized to 040670 */
+  static bool birth_flag;
   /** Number of initial lifes */
   static Sint32 initial_num_of_lifes;
   /** Number of players from 1 to 6 */

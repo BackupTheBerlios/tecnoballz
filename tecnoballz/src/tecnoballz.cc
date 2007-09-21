@@ -5,11 +5,11 @@
  * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.26 2007/09/12 06:32:49 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.27 2007/09/21 05:17:04 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ tecnoballz::first_init (configfile * pConf)
   if (is_verbose)
     {
       std::cout << ">tecnoballz::first_init() start!" << std::endl;
-      std::cout << " bob_ground:" << bob_ground << std::endl;
+      std::cout << " has_background:" << has_background << std::endl;
     }
 #if __WORDSIZE == 64
   random_counter = (long) first_init;
@@ -356,7 +356,7 @@ tecnoballz::big_endian_to_int (Uint32 * ptsrc, Uint32 * ptdes)
 
 
 Sint32 tecnoballz::arg_jumper = -1;
-Sint32 tecnoballz::bg4_colors = 0;
+bool tecnoballz::force_4_colors_tiles = false;
 bool tecnoballz::is_verbose = false;
 Uint32 tecnoballz::objects_counter = 0;
 Sint32 tecnoballz::random_counter = 0;
@@ -384,7 +384,7 @@ Sint32 tecnoballz::initial_num_of_lifes = 8;
 Sint32 tecnoballz::number_of_players = 1;
 const char tecnoballz::nomprefix[] = PREFIX;
 Uint32 tecnoballz::resolution = 2;
-bool tecnoballz::bob_ground = false;
+bool tecnoballz::has_background = false;
 offscreen_surface * tecnoballz::game_screen = NULL;
 offscreen_surface * tecnoballz::background_screen = NULL;
 configfile *tecnoballz::config_file;
