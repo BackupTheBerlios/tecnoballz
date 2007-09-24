@@ -4,11 +4,11 @@
  * @date 2007-09-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.15 2007/09/20 04:55:32 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.16 2007/09/24 16:00:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,24 +45,24 @@ sprite_ball::~sprite_ball ()
 
 /**
  * perform some initializations
- * @param start time before the ball leaves the bumper (first time)
- * @param speed time before the ball accelerates
- * @param raket default bumper
- * @param table speed ball (1 to 4)
- * @param bwgth width of brick in pixels 
+ * @param start Time before the ball leaves the bumper (first time)
+ * @param speed Time before the ball accelerates
+ * @param paddle Default paddle
+ * @param table Speed of the ball from 1 to 4
+ * @param w Width of a brick in pixels 
 */
 void
 sprite_ball::once_init (Sint32 start, Sint32 speed,
-                         sprite_paddle * raket, Sint16 * table, Sint32 bwght)
+                         sprite_paddle * paddle, Sint16 * table, Sint32 w)
 {
   start_init = start;
-  speed_init = speed;
-  speedBallZ = table;
+  accelerate_delay = speed;
+  initial_velocity = table;
   disable ();
   sticky_paddle_num = 0;
   startCount = 0;
-  brick_width = bwght;
-  set_initial_values (raket);
+  brick_width = w;
+  set_initial_values (paddle);
 }
 
 /**
@@ -70,7 +70,7 @@ sprite_ball::once_init (Sint32 start, Sint32 speed,
  * @param paddle pointer to a paddle sprite
  */
 void
-sprite_ball::reStarting (sprite_paddle * paddle)
+sprite_ball::starts_again (sprite_paddle * paddle)
 {
   enable ();
   startCount = start_init;
@@ -99,7 +99,7 @@ sprite_ball::remove (sprite_paddle * paddle)
 void
 sprite_ball::set_initial_values (sprite_paddle * paddle)
 {
-  speedCount = speed_init;
+  accelerate_delay_counter = accelerate_delay;
   collision_width = BALLWIDTH1 * resolution;
   collision_height = BALLWIDTH1 * resolution;
   direction = 0;
@@ -107,7 +107,7 @@ sprite_ball::set_initial_values (sprite_paddle * paddle)
   change_direction_count = 0;
   paddle_touched = paddle;
   stick_paddle = paddle;
-  speedBallT = speedBallZ;
+  velocity = initial_velocity;
   collisionT = brikPoint1;
   powerBall1 = 1;
   powerBall2 = brick_width;
@@ -124,35 +124,38 @@ sprite_ball::set_initial_values (sprite_paddle * paddle)
   colli_wall = 0;
 }
 
-//-----------------------------------------------------------------------------
-// initialize a simple ball (sticked on the bumper)
-//-----------------------------------------------------------------------------
+/**
+ * Initialize a first ball in a level sticked on the paddle
+ * @param w Width of the paddle
+ */
 void
-sprite_ball::startBalle (Sint32 large)
+sprite_ball::init_first_ball (Sint32 w)
 {
   enable ();
-  sprite_paddle *raket = stick_paddle;
-  reStarting (raket);
+  sprite_paddle *paddle = stick_paddle;
+  starts_again (paddle);
   x_coord =
-    raket->get_x_coord () + ((large >> 1) - ((collision_width >> 1) + 1));
-  y_coord = raket->get_y_coord () - collision_height - 1;
+    paddle->get_x_coord () + ((w >> 1) - ((collision_width >> 1) + 1));
+  y_coord = paddle->get_y_coord () - collision_height - 1;
 }
 
 /**
  * Disable sticked ball
  */
 void
-sprite_ball::glueLibere ()
+sprite_ball::disable_stick ()
 {
   sticky_paddle_num = 0;
   startCount = 0;
 }
 
-//-------------------------------------------------------------------------------
-// get speed ball table
-//-------------------------------------------------------------------------------
+/**
+ * Return speed ball
+ * @param speed Speed of the ball from 1 to 4
+ * @return Pointer to speed ball table
+ */
 Sint16 *
-sprite_ball::donneSpeed (Sint32 speed)
+sprite_ball::get_speed_table (Sint32 speed)
 {
   switch (speed)
     {
@@ -198,7 +201,7 @@ sprite_ball::duplicate_from (sprite_ball * ball, Uint32 angle)
   collision_height = ball->collision_height;
   paddle_touched = ball->paddle_touched;
   stick_paddle = ball->stick_paddle;
-  speedBallT = ball->speedBallT;
+  velocity = ball->velocity;
   collisionT = ball->collisionT;
   powerBall1 = ball->powerBall1;
   powerBall2 = ball->powerBall2;
@@ -262,7 +265,7 @@ sprite_ball::set_size_3 ()
 void
 sprite_ball::set_maximum_speed ()
 {
-  speedBallT = ballSpeed3;
+  velocity = ballSpeed3;
 }
 
 /**
@@ -324,34 +327,31 @@ sprite_ball::select_image ()
   set_image (frame_index);
 }
 
-//-------------------------------------------------------------------------------
-// accelerate the ball
-//-------------------------------------------------------------------------------
+/**
+ * Accelerate the ball
+ */
 void
 sprite_ball::accelerate ()
 {
-  if (--speedCount > 1)
-    return;
-  speedCount = speed_init;
-  if (speedBallT == ballSpeed1)
+  if (--accelerate_delay_counter > 1)
     {
-      speedBallT = ballSpeed2;
-      //printf("sprite_ball::accelerate() : ballSpeed2\n");
       return;
     }
-  if (speedBallT == ballSpeed2)
+  accelerate_delay_counter = accelerate_delay;
+  if (velocity == ballSpeed1)
     {
-      speedBallT = ballSpeed3;
-      //printf("sprite_ball::accelerate() : ballSpeed3\n");
+      velocity = ballSpeed2;
       return;
     }
-  if (speedBallT == ballSpeed3)
+  if (velocity == ballSpeed2)
     {
-      speedBallT = ballSpeed4;
-      //printf("sprite_ball::accelerate() : ballSpeed4\n");
+      velocity = ballSpeed3;
       return;
     }
-  //printf("sprite_ball::accelerate() : maxi speed\n");
+  if (velocity == ballSpeed3)
+    {
+      velocity = ballSpeed4;
+    }
 }
 
 //-------------------------------------------------------------------------------

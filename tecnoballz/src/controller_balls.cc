@@ -4,11 +4,11 @@
  * @date 2007-09-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.48 $
+ * @version $Revision: 1.49 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.48 2007/09/21 05:17:03 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.49 2007/09/24 16:00:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ controller_balls::controller_balls (sprite_object * pwall)
   glue_delay = 60;
   tempoVites = 60;
   balle_tilt = 60;
-  balleVites = sprite_ball::donneSpeed (1);
+  balleVites = sprite_ball::get_speed_table (1);
   max_of_sprites = 20;
   sprites_have_shades = true;
   balls_are_controlled = false;
@@ -64,7 +64,7 @@ controller_balls::controller_balls ()
   glue_delay = 60;
   tempoVites = 60;
   balle_tilt = 60;
-  balleVites = sprite_ball::donneSpeed (1);
+  balleVites = sprite_ball::get_speed_table (1);
   max_of_sprites = 20;
   sprites_have_shades = true;
   balls_are_controlled = false;
@@ -99,7 +99,7 @@ controller_balls::init (Uint32 start,
   glue_delay = glueC;
   tempoVites = speed;
   balle_tilt = tiltC;
-  balleVites = sprite_ball::donneSpeed (table);
+  balleVites = sprite_ball::get_speed_table (table);
   paddle_bottom = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
 
   Sint32 w;
@@ -128,7 +128,7 @@ controller_balls::init (Uint32 start,
   /* first ball special initialization */
   sprite_ball *ball = sprites_list[0];
   paddle_bottom->ball_glued = ball;
-  ball->startBalle (paddle_bottom->collision_width);
+  ball->init_first_ball (paddle_bottom->collision_width);
   /* one ball on the screen */
   num_of_sprites = 1;
   if (super_jump == BRICKS_LEVEL)
@@ -249,7 +249,7 @@ controller_balls::check_outside_balls ()
       /* one starts again with only one ball  */
       num_of_sprites = 1;
       ball->paddle_touched->attachBall (ball);
-      ball->reStarting (ball->paddle_touched);
+      ball->starts_again (ball->paddle_touched);
       head_anim->start_interference ();
       current_player->remove_life (1);
       ships->force_explosion ();
@@ -296,7 +296,7 @@ controller_balls::vitussort2 ()
       /* one starts again with only one ball */
       num_of_sprites = 1;
       paddle_bottom->attachBall (ball);
-      ball->reStarting (paddle_bottom);
+      ball->starts_again (paddle_bottom);
       ball->set_power_2 ();
       current_player->remove_life (1);
 #ifndef SOUNDISOFF
@@ -389,7 +389,7 @@ controller_balls::move_balls ()
 		       j);
 	      j = 60;
 	    }
-	  Sint16 *table = ball->speedBallT;
+	  Sint16 *table = ball->velocity;
 	  table = (Sint16 *) ((char *) table + j);
 	  Sint32 k = *(table++);
 	  ball->x_coord += (k * resolution);
@@ -500,7 +500,7 @@ controller_balls::move_balls_in_guards_level ()
 		j << std::endl;
 	      j = 60;
 	    }
-	  Sint16 *table = ball->speedBallT;
+	  Sint16 *table = ball->velocity;
 	  table = (Sint16 *) ((char *) table + j);
 	  Sint32 k;
 	  k = *(table++);

@@ -1,14 +1,14 @@
 /** 
  * @file sprite_paddle.cc 
  * @brief A paddle sprite 
- * @date 2007-02-09
+ * @date 2007-09-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.10 2007/09/13 15:51:53 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.11 2007/09/24 16:00:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -249,7 +249,7 @@ sprite_paddle::release_ball ()
   if (NULL != ball)
     {
       ball_glued = (sprite_ball *) NULL;
-      ball->glueLibere ();
+      ball->disable_stick ();
     }
 }
 
@@ -262,7 +262,7 @@ sprite_paddle::attachBall (sprite_ball * ball)
 {
   if (ball_glued != NULL)
     {
-      ball_glued->glueLibere ();
+      ball_glued->disable_stick ();
     }
   ball_glued = ball;
   if (is_glue)
@@ -323,5 +323,7 @@ sprite_paddle::flickerRun ()
         }
     }
   else
-    is_enabled = 1;
+    {
+      is_enabled = 1;
+    }
 }

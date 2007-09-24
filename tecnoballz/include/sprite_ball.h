@@ -4,11 +4,11 @@
  * @date 2007-09-14
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.h,v 1.17 2007/09/20 04:55:32 gurumeditation Exp $
+ * $Id: sprite_ball.h,v 1.18 2007/09/24 16:00:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -93,15 +93,19 @@ private:
   sprite_paddle *stick_paddle;
   /** Paddle number on which the ball is stuck */
   Uint32 sticky_paddle_num;
-  Sint16 *speedBallT;           //pt/speed table
-  Sint16 *speedBallZ;           //pt/speed table
+  /** Pointer to the current velocity table */
+  Sint16 *velocity;
+  /** Pointer to the current velocity table */
+  Sint16 *initial_velocity;
   Sint32 *collisionT;           //pt/bricks collisions table
   Sint32 powerBall1;            //value decreasing bouiboui strength
   Sint32 powerBall2;            //value decreasing brick strength (2 4 or 6) 
   Sint32 eject_ball[4];         //flag pour coins haut-gauche/bas-gauche/bas_droite/haut-droite
   Sint32 tilt_delay;            //counter before a tilt is possible 
-  Sint32 speedCount;            //temps que dure la vitesse
-  Sint32 speed_init;            //temps que dure la vitesse (valeur initiale)
+  /** Counter delay before accelerating the ball */
+  Sint32 accelerate_delay_counter;
+  /** Time delay before accelerating the ball */
+  Sint32 accelerate_delay;
   Sint32 startCount;            //temps avant que la balle parte
   Sint32 start_init;            //temps avant que la balle parte (valeur initiale)
   Sint32 balle_rota;            //pointeur sur table ballePets 
@@ -127,12 +131,12 @@ public:
     sprite_ball ();
    ~sprite_ball ();
   void once_init (Sint32 start, Sint32 speed,
-                   sprite_paddle * raket, Sint16 * table, Sint32 bwght);
-  void reStarting (sprite_paddle * raket);
-  void remove (sprite_paddle * raket);
-  void startBalle (Sint32 large);
+                   sprite_paddle * paddle, Sint16 * table, Sint32 w);
+  void starts_again (sprite_paddle * paddle);
+  void remove (sprite_paddle * paddle);
+  void init_first_ball (Sint32 h);
   void duplicate_from (sprite_ball * ball, Uint32 angle);
-  static short *donneSpeed (Sint32 speed);
+  static Sint16 *get_speed_table (Sint32 speed);
   sprite_paddle *get_last_paddle_touched ();
   void set_power_1 ();
   void set_power_2 ();
@@ -140,7 +144,7 @@ public:
   void set_size_3 ();
   void set_maximum_speed ();
   void enbale_on_ejector (Uint32 eject_id, Uint32 otime = 1);
-  void glueLibere ();
+  void disable_stick ();
   void accelerate ();
 
 private:

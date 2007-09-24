@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-09-18
+ * @date 2007-09-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.49 $
+ * @version $Revision: 1.50 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.49 2007/09/18 13:39:11 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.50 2007/09/24 16:00:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -236,7 +236,7 @@ supervisor_bricks_level::main_loop ()
    */
   if (current_player->get_num_of_lifes () <= 0)
     {
-      if (!isgameover)
+      if (isgameover == 0)
         {
 #ifndef SOUNDISOFF
           audio->disable_sound ();
@@ -251,6 +251,7 @@ supervisor_bricks_level::main_loop ()
           balls->disable_sprites ();
           sprite_projectile::disable_sprites ();
           info_messages->clear_messages_request ();
+          tiles_ground->set_scroll_type(tiles_background::TILES_SCROLL_GAMEOVER);
           isgameover++;
         }
       info_messages->run ();
@@ -275,6 +276,10 @@ supervisor_bricks_level::main_loop ()
       sides_bricks->run ();
       viewfinders_paddles->run ();
       ships->move ();
+      /* draw the tiles background */
+      display->unlock_surfaces ();
+      tiles_ground->draw();
+      display->lock_surfaces ();
       sprites->draw ();
       panel_score->draw_gigablizt_gauge ();
       player_indicators->display_money_and_reverse ();
@@ -393,6 +398,7 @@ supervisor_bricks_level::main_loop ()
 #ifndef SOUNDISOFF
               audio->disable_sound ();
 #endif
+              tiles_ground->set_scroll_type(tiles_background::TILES_SCROLL_WIN);
               count_next = 1;
             }
         }

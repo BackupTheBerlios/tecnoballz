@@ -1,14 +1,14 @@
-/** 
+/**
  * @file tiles_background.cc 
  * @brief Draw tiles background in bricks levels 
- * @date 2007-09-21
+ * @date 2007-09-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.19 2007/09/21 05:17:04 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.20 2007/09/24 16:00:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 
 tiles_background * tiles_background::tiles_background_singleton = NULL;
 
-/** 
+/**
  * Create the tiles background object
  */
 tiles_background::tiles_background ()
@@ -55,19 +55,13 @@ tiles_background::tiles_background ()
   map_ymax = 0;
   tiles_width = 0;
   tiles_height = 0;
-  
   map_scroll_num = 1;
-  map_move_angle = 0;
-
-
-  map_delay_direction = 0;
   map_angle_direction = 0;
   map_velocity = 0.0;
   map_angle_speed = 0.0;
-
 }
 
-/** 
+/**
  * Release the titles background object
  */
 tiles_background::~tiles_background ()
@@ -111,8 +105,8 @@ tiles_background::setup (Uint32 tiles_num)
   if (is_verbose)
     {
       std::
-        cout << "tiles_background::setup() tiles_num:" << tiles_num << std::
-        endl;
+      cout << "tiles_background::setup() tiles_num:" << tiles_num << std::
+      endl;
     }
   if (type_of_tiles > TILES_64x64_WITH_16_COLORS)
     {
@@ -122,72 +116,72 @@ tiles_background::setup (Uint32 tiles_num)
   switch (type_of_tiles)
     {
     case TILES_32x32_WITH_4_COLORS:
-      {
-        bitmap_data *bmp = new bitmap_data ();
-        if (is_verbose)
-          {
-            std::cout << "tiles_background::setup() "
-              "load 32x32 tiles with 4 colors" << std::endl;
-          }
-        bmp->load (handler_resources::RES60BACKG);
-        tiles_width = TILES_32_WIDTH;
-        tiles_height = TILES_32_HEIGHT;
+    {
+      bitmap_data *bmp = new bitmap_data ();
+      if (is_verbose)
+        {
+          std::cout << "tiles_background::setup() "
+          "load 32x32 tiles with 4 colors" << std::endl;
+        }
+      bmp->load (handler_resources::RES60BACKG);
+      tiles_width = TILES_32_WIDTH;
+      tiles_height = TILES_32_HEIGHT;
 
-        /* select one of the 60 backgrounds */
-        /* value from 0 to 63 */
-        Uint32 x;
-        Uint32 y = random_counter & 0x3F;
-        if (y >= 60)
-          {
-            y -= 60;
-          }
-        if (y & 0x1)
-          {
-            /* right side */
-            x = bmp->get_width () / 2;
-          }
-        else
-          {
-            x = 0;
-          }
-        y >>= 1;
-        y = y * tiles_height;
-        current_tiles = (bitmap_data *)
-          bmp->cut_to_bitmap (x, y, 5 * tiles_width, tiles_height);
-        delete bmp;
-      }
-      break;
+      /* select one of the 60 backgrounds */
+      /* value from 0 to 63 */
+      Uint32 x;
+      Uint32 y = random_counter & 0x3F;
+      if (y >= 60)
+        {
+          y -= 60;
+        }
+      if (y & 0x1)
+        {
+          /* right side */
+          x = bmp->get_width () / 2;
+        }
+      else
+        {
+          x = 0;
+        }
+      y >>= 1;
+      y = y * tiles_height;
+      current_tiles = (bitmap_data *)
+                      bmp->cut_to_bitmap (x, y, 5 * tiles_width, tiles_height);
+      delete bmp;
+    }
+    break;
 
     case TILES_64x64_WITH_16_COLORS:
     default:
-      {
-        if (tiles_num < 1)
-          {
-            tiles_num = (random_counter & 127) + 1;
-          }
-        if (tiles_num > 77)
-          {
-            tiles_num = tiles_num - 77;
-          }
-        char *pathname = resources->get_tilemaps_filename (tiles_num);
-        if (is_verbose)
-          {
-            std::cout << "tiles_background::setup() " <<
-              "try to initialize" << pathname << std::endl;
-          }
-        current_tiles = new bitmap_data ();
-        current_tiles->load (pathname);
-        tiles_width = TILES_64_WIDTH;
-        tiles_height = TILES_64_HEIGHT;
-      }
-      break;
+    {
+      if (tiles_num < 1)
+        {
+          tiles_num = (random_counter & 127) + 1;
+        }
+      if (tiles_num > 77)
+        {
+          tiles_num = tiles_num - 77;
+        }
+      char *pathname = resources->get_tilemaps_filename (tiles_num);
+      if (is_verbose)
+        {
+          std::cout << "tiles_background::setup() " <<
+          "try to initialize" << pathname << std::endl;
+        }
+      current_tiles = new bitmap_data ();
+      current_tiles->load (pathname);
+      tiles_width = TILES_64_WIDTH;
+      tiles_height = TILES_64_HEIGHT;
+    }
+    break;
     }
 
   map_width = (game_screen->get_width () - 64 * resolution) / tiles_width;
-  Sint32 mVert = (240 * resolution) % tiles_height - 1;
+  Sint32 h = (240 * resolution) % tiles_height - 1;
   map_height = (240 * resolution) / tiles_height;
   map_xmax = tiles_width * map_width;
-  if (mVert > 0)
+  if (h > 0)
     {
       map_height++;
     }
@@ -203,7 +197,7 @@ tiles_background::setup (Uint32 tiles_num)
   map_ycoord = random_counter * frame_counter % map_ymax;
   draw (background_screen);
   draw_shadows ();
- }
+}
 
 
 /**
@@ -223,18 +217,18 @@ tiles_background::draw_shadows ()
     }
   Uint32 size = screen->get_row_size();
   unsigned char mask = handler_display::SHADOW_PIX;
-  
+
   /* draw top shadow */
   char *dest = screen->get_pixel_data();
   Uint32 hscreen = display->get_width () - (64 * resolution);
   Uint32 k = handler_display::SHADOWOFFY * resolution;
   for (Uint32 i = 0; i < k; i++, dest+=size)
-  {
+    {
       for (Uint32 j = 0; j < hscreen; j++)
         {
-          dest[j] |= mask; 
+          dest[j] |= mask;
         }
-  }
+    }
 
   /* draw right shadow */
   dest = screen->get_pixel_data(252 * resolution, k);
@@ -244,32 +238,7 @@ tiles_background::draw_shadows ()
     {
       for (Uint32 j = 0; j < k ; j++)
         {
-          dest[j] |= mask; 
-        }
-    }
-
-
-
-  return;
-  
-  for (Uint32 det_Y = 0; det_Y < (handler_display::SHADOWOFFY * resolution);
-       det_Y++)
-    {
-      for (Uint32 det_X = 0; det_X < hscreen; det_X++)
-        {
-          char *detPT = game_screen->get_pixel_data (det_X, det_Y);
-          *detPT |= handler_display::SHADOW_PIX;
-        }
-    }
-
-  /* draw right shadow */
-  for (Uint32 det_Y = 0; det_Y < vscreen; det_Y++)
-    {
-      for (Uint32 det_X = (252 * resolution); det_X < (256 * resolution);
-           det_X++)
-        {
-          char *detPT = game_screen->get_pixel_data (det_X, det_Y);
-          *detPT |= handler_display::SHADOW_PIX;
+          dest[j] |= mask;
         }
     }
 }
@@ -289,13 +258,13 @@ tiles_background::generate_map ()
           map_tiles = new Uint32[map_width * map_height * 4];
         }
       catch (std::bad_alloc &)
-      {
-        std::
+        {
+          std::
           cerr << "(!)tiles_background::generate_map() "
           "not enough memory to allocate " <<
           map_width * map_height << " bytes!" << std::endl;
-        throw;
-      }
+          throw;
+        }
     }
 
 
@@ -331,7 +300,7 @@ tiles_background::generate_map ()
           random_counter = random_counter + rand1 + rand2 + 1 + keyboard->get_mouse_x ();
           rand1 = rand1 + frame_counter + v;
           rand2 = rand2 + display->get_frames_per_second ();
-          
+
           Uint32 x = random_counter;
           /* table index, from 0 to  15 */
           x &= 0x0f;
@@ -348,11 +317,15 @@ tiles_background::generate_map ()
     }
 }
 
+
+/**
+ *
+ */
 void
 tiles_background::set_scroll_type(Uint32 type)
 {
   map_scroll_num = type;
-
+  printf("tiles_background::set_scroll_type(%i)\n", type);
 }
 
 /**
@@ -364,56 +337,65 @@ tiles_background::draw ()
 
   switch (map_scroll_num)
     {
-     case TILES_NO_SCROLL:
-        if (map_velocity > -0.01)
+    case TILES_NO_SCROLL:
+      if (map_velocity >= -0.001
+          &&  map_velocity <= 0.001)
         {
-          map_velocity =- 0.01;
+          map_velocity = 0;
         }
-        else if (map_velocity < -0.01)
+      else if (map_velocity > -0.01)
         {
-          map_velocity =+ 0.01;
+          map_velocity -= 0.1;
         }
-        else
+      else
         {
-          map_velocity = 0.0;
+          map_velocity += 0.1;
         }
-       break;
+      break;
+
+    case TILES_SCROLL_WIN:
+      map_angle_direction = 3.14;
+      map_velocity = 5.0;
+      break;
+
+    case TILES_SCROLL_GAMEOVER:
+      if (map_velocity > -0.01 && map_velocity < 0.01)
+        {
+          double pi = 4 * atan (1.0);
+          Uint32 i = random_counter & 64;
+          map_angle_direction = (pi * 2 / 64) * i;
+        }
+      map_velocity = cos(map_angle_speed) * 2;
+      map_angle_speed += 0.05;
+      break;
+
+    case TILES_SCROLL_LOST:
+      if (map_velocity > -0.01 && map_velocity < 0.01)
+        {
+          double pi = 4 * atan (1.0);
+          Uint32 i = random_counter & 31;
+          map_angle_direction = (pi * 2 / 32) * i;
+        }
+      map_velocity = cos(map_angle_speed) * 3;
+      map_angle_speed += 0.02;
+      break;
 
     case TILES_SCROLL_BEGIN:
-
-         //if (map_delay_direction < 1)
-         if (map_velocity > -0.01 && map_velocity < 0.01)
-          {
-            double pi = 4 * atan (1.0);
-            Uint32 i = random_counter & 31;
-            map_angle_direction = (pi * 2 / 32) * i;
-            map_delay_direction = 100;
-            Uint32 a = map_move_angle + 1;
-            a &= SINUS_MASK;
-            map_move_angle = a;
-          }
-         map_velocity = cos(map_angle_speed) * 6;
-         map_angle_speed += 0.01;
-        map_delay_direction--;
-
-    default:
+      if (map_velocity > -0.01 && map_velocity < 0.01)
         {
-          /*
-          Uint32 a = map_move_angle + 1;
-          a &= SINUS_MASK;
-          map_move_angle = a;
-          map_ycoord = (table_sinL[a] * 100 * resolution) >> SINUS_DECA;
-          map_xcoord = (table_cosL[a] * 100 * resolution) >> SINUS_DECA;
-          */
+          double pi = 4 * atan (1.0);
+          Uint32 i = random_counter & 31;
+          map_angle_direction = (pi * 2 / 32) * i;
         }
- 
-
+      map_velocity = cos(map_angle_speed) * 6;
+      map_angle_speed += 0.01;
     }
-  map_ycoord = map_ycoord + (Uint32)(map_velocity * cos(map_angle_direction)); 
-  map_xcoord = map_xcoord + (Uint32)(map_velocity * sin(map_angle_direction)); 
+  map_ycoord = map_ycoord + (Uint32)(map_velocity * cos(map_angle_direction));
+  map_xcoord = map_xcoord + (Uint32)(map_velocity * sin(map_angle_direction));
   draw (game_screen);
   draw_shadows ();
 }
+
 /**
  * Draw the tiles background
  * @param offscreen pointer to a offscreen_surface object
@@ -423,11 +405,11 @@ tiles_background::draw (offscreen_surface *offscreen)
 {
   map_xcoord = map_xcoord % map_xmax;
   map_ycoord = map_ycoord % map_ymax;
-  
+
   SDL_Surface *screen_surface = offscreen->get_surface ();
   SDL_Surface *tiles_surface = current_tiles->get_surface ();
   Uint32 voffset = offscreen->get_vertical_offset ();
-  
+
   /* width and height of the visible window */
   Uint32 width_box = offscreen->get_width () - 64 * resolution;
   Uint32 height_box = offscreen->get_height () - voffset * 2;
@@ -441,10 +423,10 @@ tiles_background::draw (offscreen_surface *offscreen)
   /* calculate the height of the tiles of the first line */
   Uint32 modulo_y = map_ycoord % tiles_height;
   Uint32 first_height = tiles_height - modulo_y;
-  /* calculate the width of the tiles of the last column, 
+  /* calculate the width of the tiles of the last column,
    * zero value is * possible */
   Uint32 last_width = (width_box - first_width) % tiles_width;
-  /* calculate the height of the tiles of the last line, 
+  /* calculate the height of the tiles of the last line,
    * zero value is * possible */
   Uint32 last_height = (height_box - first_height) % tiles_height;
 
@@ -478,7 +460,7 @@ tiles_background::draw (offscreen_surface *offscreen)
                 }
               else
                 {
-                 continue;
+                  continue;
                 }
             }
         }
@@ -506,7 +488,7 @@ tiles_background::draw (offscreen_surface *offscreen)
                     }
                   else
                     {
-                     continue;
+                      continue;
                     }
                 }
             }
@@ -514,7 +496,7 @@ tiles_background::draw (offscreen_surface *offscreen)
               (tiles_surface, &rect_src, screen_surface, &rect_dst) < 0)
             {
               std::cerr << "(!)tiles_background::draw() " <<
-                "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
+              "SDL_BlitSurface() return " << SDL_GetError () << std::endl;
             }
           rect_dst.x += rect_dst.w;
         }
@@ -527,14 +509,14 @@ tiles_background::draw (offscreen_surface *offscreen)
  * x-coordinates of sources in the tiles bitmap
  */
 Sint32 tiles_background::table_pos1[16] =
-{
-  3, 0, 0, 3, 4, 2, 1, 4, 3, 2, 1, 1, 0, 0, 2, 4
-};
+  {
+    3, 0, 0, 3, 4, 2, 1, 4, 3, 2, 1, 1, 0, 0, 2, 4
+  };
 
 Sint32 tiles_background::table_pos2[16] =
-{
-  3, 0, 0, 3, 4, 2, 1, 4, 3, 2, 1, 1, 5, 0, 5, 4
-};
+  {
+    3, 0, 0, 3, 4, 2, 1, 4, 3, 2, 1, 1, 5, 0, 5, 4
+  };
 
 void
 tiles_background::set_palette ()
@@ -632,8 +614,8 @@ tiles_background::set_4_color_palette (Uint32 pal_index)
 {
   if (is_verbose)
     {
-      std::cout << "tiles_background::set_4_color_palette() " << 
-	"pal_index:" << pal_index << std::endl;
+      std::cout << "tiles_background::set_4_color_palette() " <<
+      "pal_index:" << pal_index << std::endl;
 
     }
   palette_index = pal_index;
@@ -677,46 +659,46 @@ tiles_background::set_4_color_palette (Uint32 pal_index)
  * 112 * 4  : 448 composantes
 */
 char
-  tiles_background::couleurs[448] = {
-  0x00, 0x40, 0x20, 0x40, 0x00, 0x60, 0x40, 0x60, 0x00, 0x80, 0x60, 0x80,
-  0x00, 0xA0, 0x80, 0xA0, 0x00, 0x00, 0x20, 0x40, 0x00, 0x20,
-  0x40, 0x60, 0x00, 0x40, 0x60, 0x80, 0x00, 0x60, 0x80, 0xA0, 0x00, 0x00,
-  0x20, 0x20, 0x00, 0x20, 0x40, 0x40, 0x00, 0x40, 0x60, 0x60,
-  0x00, 0x60, 0x80, 0x80, 0x00, 0x00, 0x20, 0x40, 0x00, 0x00, 0x40, 0x60,
-  0x00, 0x20, 0x60, 0x80, 0x00, 0x40, 0x80, 0xA0, 0x00, 0x30,
-  0x40, 0x30, 0x00, 0x50, 0x60, 0x50, 0x00, 0x70, 0x80, 0x70, 0x00, 0x90,
-  0xA0, 0x90, 0x00, 0x20, 0x20, 0x40, 0x00, 0x40, 0x40, 0x60,
-  0x00, 0x60, 0x60, 0x80, 0x00, 0x80, 0x80, 0xA0, 0x00, 0x00, 0x40, 0x40,
-  0x00, 0x20, 0x60, 0x60, 0x00, 0x40, 0x80, 0x80, 0x00, 0x60,
-  0xA0, 0xA0, 0x00, 0x20, 0x00, 0x20, 0x00, 0x40, 0x20, 0x40, 0x00, 0x60,
-  0x40, 0x60, 0x00, 0x80, 0x60, 0x80, 0x00, 0x00, 0x40, 0x20,
-  0x00, 0x00, 0x60, 0x40, 0x00, 0x20, 0x80, 0x60, 0x00, 0x40, 0xA0, 0x80,
-  0x00, 0x40, 0x20, 0x00, 0x00, 0x60, 0x40, 0x20, 0x00, 0x80,
-  0x60, 0x40, 0x00, 0xA0, 0x80, 0x60, 0x00, 0x40, 0x00, 0x00, 0x00, 0x60,
-  0x20, 0x20, 0x00, 0x80, 0x40, 0x40, 0x00, 0xA0, 0x60, 0x60,
-  0x00, 0x40, 0x00, 0x40, 0x00, 0x60, 0x20, 0x60, 0x00, 0x80, 0x40, 0x80,
-  0x00, 0xA0, 0x60, 0xA0, 0x00, 0x00, 0x20, 0x00, 0x00, 0x20,
-  0x40, 0x20, 0x00, 0x40, 0x60, 0x40, 0x00, 0x60, 0x80, 0x60, 0x00, 0x20,
-  0x40, 0x20, 0x00, 0x40, 0x60, 0x40, 0x00, 0x60, 0x80, 0x60,
-  0x00, 0x80, 0xA0, 0x80, 0x00, 0x40, 0x40, 0x00, 0x00, 0x60, 0x60, 0x20,
-  0x00, 0x80, 0x80, 0x40, 0x00, 0xA0, 0xA0, 0x60, 0x00, 0x00,
-  0x40, 0x00, 0x00, 0x20, 0x60, 0x20, 0x00, 0x40, 0x80, 0x40, 0x00, 0x60,
-  0xA0, 0x60, 0x00, 0x20, 0x20, 0x20, 0x00, 0x40, 0x40, 0x40,
-  0x00, 0x60, 0x60, 0x60, 0x00, 0x80, 0x80, 0x80, 0x00, 0x40, 0x20, 0x60,
-  0x00, 0x60, 0x40, 0x80, 0x00, 0x80, 0x60, 0xA0, 0x00, 0xA0,
-  0x80, 0xC0, 0x00, 0x20, 0x20, 0x00, 0x00, 0x40, 0x40, 0x20, 0x00, 0x60,
-  0x60, 0x40, 0x00, 0x80, 0x80, 0x60, 0x00, 0x20, 0x40, 0x60,
-  0x00, 0x40, 0x60, 0x80, 0x00, 0x60, 0x80, 0xA0, 0x00, 0x80, 0xA0, 0xC0,
-  0x00, 0x60, 0x40, 0x20, 0x00, 0x80, 0x60, 0x40, 0x00, 0xA0,
-  0x80, 0x60, 0x00, 0xC0, 0xA0, 0x80, 0x00, 0x40, 0x00, 0x60, 0x00, 0x60,
-  0x20, 0x80, 0x00, 0x80, 0x40, 0xA0, 0x00, 0xA0, 0x60, 0xC0,
-  0x00, 0x40, 0x00, 0x20, 0x00, 0x60, 0x20, 0x40, 0x00, 0x80, 0x40, 0x60,
-  0x00, 0xA0, 0x60, 0x80, 0x00, 0x20, 0x20, 0x60, 0x00, 0x40,
-  0x40, 0x80, 0x00, 0x60, 0x60, 0xA0, 0x00, 0x80, 0x80, 0xC0, 0x00, 0x60,
-  0x40, 0x00, 0x00, 0x80, 0x60, 0x20, 0x00, 0xA0, 0x80, 0x40,
-  0x00, 0xC0, 0x80, 0x60, 0x00, 0x20, 0x40, 0x00, 0x00, 0x40, 0x60, 0x20,
-  0x00, 0x60, 0x80, 0x40, 0x00, 0x80, 0xA0, 0x60, 0x00, 0x40,
-  0x20, 0x20, 0x00, 0x60, 0x40, 0x40, 0x00, 0x80, 0x60, 0x60, 0x00, 0xA0,
-  0x80, 0x80, 0x00, 0x20, 0x40, 0x40, 0x00, 0x40, 0x60, 0x60,
-  0x00, 0x60, 0x80, 0x80, 0x00, 0x80, 0xA0, 0xA0
-};
+tiles_background::couleurs[448] = {
+                                    0x00, 0x40, 0x20, 0x40, 0x00, 0x60, 0x40, 0x60, 0x00, 0x80, 0x60, 0x80,
+                                    0x00, 0xA0, 0x80, 0xA0, 0x00, 0x00, 0x20, 0x40, 0x00, 0x20,
+                                    0x40, 0x60, 0x00, 0x40, 0x60, 0x80, 0x00, 0x60, 0x80, 0xA0, 0x00, 0x00,
+                                    0x20, 0x20, 0x00, 0x20, 0x40, 0x40, 0x00, 0x40, 0x60, 0x60,
+                                    0x00, 0x60, 0x80, 0x80, 0x00, 0x00, 0x20, 0x40, 0x00, 0x00, 0x40, 0x60,
+                                    0x00, 0x20, 0x60, 0x80, 0x00, 0x40, 0x80, 0xA0, 0x00, 0x30,
+                                    0x40, 0x30, 0x00, 0x50, 0x60, 0x50, 0x00, 0x70, 0x80, 0x70, 0x00, 0x90,
+                                    0xA0, 0x90, 0x00, 0x20, 0x20, 0x40, 0x00, 0x40, 0x40, 0x60,
+                                    0x00, 0x60, 0x60, 0x80, 0x00, 0x80, 0x80, 0xA0, 0x00, 0x00, 0x40, 0x40,
+                                    0x00, 0x20, 0x60, 0x60, 0x00, 0x40, 0x80, 0x80, 0x00, 0x60,
+                                    0xA0, 0xA0, 0x00, 0x20, 0x00, 0x20, 0x00, 0x40, 0x20, 0x40, 0x00, 0x60,
+                                    0x40, 0x60, 0x00, 0x80, 0x60, 0x80, 0x00, 0x00, 0x40, 0x20,
+                                    0x00, 0x00, 0x60, 0x40, 0x00, 0x20, 0x80, 0x60, 0x00, 0x40, 0xA0, 0x80,
+                                    0x00, 0x40, 0x20, 0x00, 0x00, 0x60, 0x40, 0x20, 0x00, 0x80,
+                                    0x60, 0x40, 0x00, 0xA0, 0x80, 0x60, 0x00, 0x40, 0x00, 0x00, 0x00, 0x60,
+                                    0x20, 0x20, 0x00, 0x80, 0x40, 0x40, 0x00, 0xA0, 0x60, 0x60,
+                                    0x00, 0x40, 0x00, 0x40, 0x00, 0x60, 0x20, 0x60, 0x00, 0x80, 0x40, 0x80,
+                                    0x00, 0xA0, 0x60, 0xA0, 0x00, 0x00, 0x20, 0x00, 0x00, 0x20,
+                                    0x40, 0x20, 0x00, 0x40, 0x60, 0x40, 0x00, 0x60, 0x80, 0x60, 0x00, 0x20,
+                                    0x40, 0x20, 0x00, 0x40, 0x60, 0x40, 0x00, 0x60, 0x80, 0x60,
+                                    0x00, 0x80, 0xA0, 0x80, 0x00, 0x40, 0x40, 0x00, 0x00, 0x60, 0x60, 0x20,
+                                    0x00, 0x80, 0x80, 0x40, 0x00, 0xA0, 0xA0, 0x60, 0x00, 0x00,
+                                    0x40, 0x00, 0x00, 0x20, 0x60, 0x20, 0x00, 0x40, 0x80, 0x40, 0x00, 0x60,
+                                    0xA0, 0x60, 0x00, 0x20, 0x20, 0x20, 0x00, 0x40, 0x40, 0x40,
+                                    0x00, 0x60, 0x60, 0x60, 0x00, 0x80, 0x80, 0x80, 0x00, 0x40, 0x20, 0x60,
+                                    0x00, 0x60, 0x40, 0x80, 0x00, 0x80, 0x60, 0xA0, 0x00, 0xA0,
+                                    0x80, 0xC0, 0x00, 0x20, 0x20, 0x00, 0x00, 0x40, 0x40, 0x20, 0x00, 0x60,
+                                    0x60, 0x40, 0x00, 0x80, 0x80, 0x60, 0x00, 0x20, 0x40, 0x60,
+                                    0x00, 0x40, 0x60, 0x80, 0x00, 0x60, 0x80, 0xA0, 0x00, 0x80, 0xA0, 0xC0,
+                                    0x00, 0x60, 0x40, 0x20, 0x00, 0x80, 0x60, 0x40, 0x00, 0xA0,
+                                    0x80, 0x60, 0x00, 0xC0, 0xA0, 0x80, 0x00, 0x40, 0x00, 0x60, 0x00, 0x60,
+                                    0x20, 0x80, 0x00, 0x80, 0x40, 0xA0, 0x00, 0xA0, 0x60, 0xC0,
+                                    0x00, 0x40, 0x00, 0x20, 0x00, 0x60, 0x20, 0x40, 0x00, 0x80, 0x40, 0x60,
+                                    0x00, 0xA0, 0x60, 0x80, 0x00, 0x20, 0x20, 0x60, 0x00, 0x40,
+                                    0x40, 0x80, 0x00, 0x60, 0x60, 0xA0, 0x00, 0x80, 0x80, 0xC0, 0x00, 0x60,
+                                    0x40, 0x00, 0x00, 0x80, 0x60, 0x20, 0x00, 0xA0, 0x80, 0x40,
+                                    0x00, 0xC0, 0x80, 0x60, 0x00, 0x20, 0x40, 0x00, 0x00, 0x40, 0x60, 0x20,
+                                    0x00, 0x60, 0x80, 0x40, 0x00, 0x80, 0xA0, 0x60, 0x00, 0x40,
+                                    0x20, 0x20, 0x00, 0x60, 0x40, 0x40, 0x00, 0x80, 0x60, 0x60, 0x00, 0xA0,
+                                    0x80, 0x80, 0x00, 0x20, 0x40, 0x40, 0x00, 0x40, 0x60, 0x60,
+                                    0x00, 0x60, 0x80, 0x80, 0x00, 0x80, 0xA0, 0xA0
+                                  };

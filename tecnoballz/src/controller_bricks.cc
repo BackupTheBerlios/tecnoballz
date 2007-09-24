@@ -5,11 +5,11 @@
  * @date 2007-09-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.31 2007/09/21 05:17:03 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.32 2007/09/24 16:00:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -438,13 +438,13 @@ controller_bricks::draw_bricks ()
     {
       for (Uint32 i = 0; i < NB_BRICKSH * brick_width; i += brick_width, map++)
         {
-	  /* range from x >=0 to x <= 14 */
+	        /* range from x >=0 to x <= 14 */
           Sint32 pos_x = map->h_pos;
-	  /* range from y >=0 to y <= 8 */
+	        /* range from y >=0 to y <= 8 */
           Sint32 pos_y = map->v_pos;
           if (pos_x || pos_y)
             {
-	      /* convert planar to chunky */
+	            /* convert planar to chunky */
               pos_x *= 8 * resolution;
               pos_y *= brick_height;
               char *source = bitmap_bricks->get_pixel_data (pos_x, pos_y);

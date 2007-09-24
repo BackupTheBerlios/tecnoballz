@@ -1,14 +1,14 @@
 /**
  * @file tiles_background.h
  * @brief Draw tiles background in bricks levels 
- * @date 2007-09-18
+ * @date 2007-09-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.h,v 1.9 2007/09/18 13:39:11 gurumeditation Exp $
+ * $Id: tiles_background.h,v 1.10 2007/09/24 16:00:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,8 @@ class tiles_background:public virtual tecnoballz
       TILES_NO_SCROLL,
       TILES_SCROLL_BEGIN,
       TILES_SCROLL_LOST,
-      TILES_SCROLL_WIN
+      TILES_SCROLL_WIN,
+      TILES_SCROLL_GAMEOVER
     }
     TYPES_OF_SCROLL;
 
@@ -75,13 +76,11 @@ class tiles_background:public virtual tecnoballz
     Uint32 map_ymax;
     Uint32 tiles_width;
     Uint32 tiles_height;
-
+    /** Type of scrolling TILES_NO_SCROLL, TILES_SCROLL_BEGIN, ... */
     Uint32 map_scroll_num;
-    Uint32 map_move_angle;
-
-    Sint32 map_delay_direction;
     double map_angle_direction;
     double map_angle_speed;
+    /** Velocity of the tiles background */
     double map_velocity;
 
 
