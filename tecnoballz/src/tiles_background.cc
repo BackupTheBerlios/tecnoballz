@@ -4,11 +4,11 @@
  * @date 2007-09-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tiles_background.cc,v 1.20 2007/09/24 16:00:01 gurumeditation Exp $
+ * $Id: tiles_background.cc,v 1.21 2007/09/25 05:43:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,6 +59,7 @@ tiles_background::tiles_background ()
   map_angle_direction = 0;
   map_velocity = 0.0;
   map_angle_speed = 0.0;
+  map_scroll_delay = 0;
 }
 
 /**
@@ -319,13 +320,17 @@ tiles_background::generate_map ()
 
 
 /**
- *
+ * Set a type of displacement for the tilesmap scrolling
  */
 void
 tiles_background::set_scroll_type(Uint32 type)
 {
   map_scroll_num = type;
-  printf("tiles_background::set_scroll_type(%i)\n", type);
+  map_scroll_delay = 0;
+  if(type != TILES_NO_SCROLL)
+    {
+      map_velocity = 0.0;
+    } 
 }
 
 /**
@@ -365,8 +370,21 @@ tiles_background::draw ()
           Uint32 i = random_counter & 64;
           map_angle_direction = (pi * 2 / 64) * i;
         }
-      map_velocity = cos(map_angle_speed) * 2;
-      map_angle_speed += 0.05;
+      map_velocity = cos(map_angle_speed) * 5;
+      if (map_scroll_delay < 1)
+        {
+          map_angle_speed -= 0.01;
+          if ((map_velocity > 1 - 0.1 && map_velocity < 1 + 0.1)
+              || (map_velocity > -3 - 0.1 && map_velocity < -3 + 0.1)
+             )
+            {
+              map_scroll_delay = 100;
+            }
+        }
+      else
+        {
+          map_scroll_delay--;
+        }
       break;
 
     case TILES_SCROLL_LOST:
@@ -376,8 +394,21 @@ tiles_background::draw ()
           Uint32 i = random_counter & 31;
           map_angle_direction = (pi * 2 / 32) * i;
         }
-      map_velocity = cos(map_angle_speed) * 3;
-      map_angle_speed += 0.02;
+      map_velocity = cos(map_angle_speed) * 5;
+      if (map_scroll_delay < 1)
+        {
+          map_angle_speed -= 0.01;
+          if ((map_velocity > 2 - 0.1 && map_velocity < 2 + 0.1)
+              || (map_velocity > -2 - 0.1 && map_velocity < -2 + 0.1)
+             )
+            {
+              map_scroll_delay = 10;
+            }
+        }
+      else
+        {
+          map_scroll_delay--;
+        }
       break;
 
     case TILES_SCROLL_BEGIN:
@@ -388,7 +419,20 @@ tiles_background::draw ()
           map_angle_direction = (pi * 2 / 32) * i;
         }
       map_velocity = cos(map_angle_speed) * 6;
-      map_angle_speed += 0.01;
+      if (map_scroll_delay < 1)
+        {
+          map_angle_speed += 0.01;
+          if ((map_velocity > 3 - 0.1 && map_velocity < 3 + 0.1)
+              || (map_velocity > -3 - 0.1 && map_velocity < -3 + 0.1)
+             )
+            {
+              map_scroll_delay = 50;
+            }
+        }
+      else
+        {
+          map_scroll_delay--;
+        }
     }
   map_ycoord = map_ycoord + (Uint32)(map_velocity * cos(map_angle_direction));
   map_xcoord = map_xcoord + (Uint32)(map_velocity * sin(map_angle_direction));

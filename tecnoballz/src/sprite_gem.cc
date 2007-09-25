@@ -2,14 +2,14 @@
  * @file sprite_gem.cc 
  * @brief The gem sprite 
  * @created 2004-04-12 
- * @date 2007-03-09
+ * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_gem.cc,v 1.10 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_gem.cc,v 1.11 2007/09/25 05:43:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -167,7 +167,7 @@ sprite_gem::move ()
               is_enabled = false;
 #ifndef SOUNDISOFF
 
-              audio->play_sound (S_MONNAIES);
+              audio->play_sound (COLLECT_MONEY);
 #endif
 
               return gem_id;
@@ -188,7 +188,7 @@ sprite_gem::move ()
               is_enabled = false;
 #ifndef SOUNDISOFF
 
-              audio->play_sound (S_MONNAIES);
+              audio->play_sound (COLLECT_MONEY);
 #endif
 
               return gem_id;
@@ -209,7 +209,7 @@ sprite_gem::move ()
               is_enabled = false;
 #ifndef SOUNDISOFF
 
-              audio->play_sound (S_MONNAIES);
+              audio->play_sound (COLLECT_MONEY);
 #endif
 
               return gem_id;
@@ -230,7 +230,7 @@ sprite_gem::move ()
               is_enabled = false;
 #ifndef SOUNDISOFF
 
-              audio->play_sound (S_MONNAIES);
+              audio->play_sound (COLLECT_MONEY);
 #endif
 
               return gem_id;

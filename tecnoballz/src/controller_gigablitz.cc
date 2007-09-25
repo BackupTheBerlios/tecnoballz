@@ -1,14 +1,14 @@
 /**
  * @file controller_gigablitz.cc 
  * @brief Gigablitz controller 
- * @date 2007-09-21
+ * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.15 2007/09/21 05:17:03 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.16 2007/09/25 05:43:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -351,8 +351,8 @@ controller_gigablitz::collision_with_paddle ()
       return;
     }
 #ifndef SOUNDISOFF
-  audio->play_sound (S_RAKEXPLO);
-  audio->play_sound (S_ENLEVVIE);
+  audio->play_sound (PADDLE_EXPLOSION);
+  audio->play_sound (LOST_LIFE);
 #endif
 
   controller_explosions *explosions = controller_explosions::get_instance ();

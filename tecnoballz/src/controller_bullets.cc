@@ -1,14 +1,14 @@
 /** 
  * @file controller_bullets.cc 
  * @brief Bullets controller 
- * @date 2007-02-19
+ * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bullets.cc,v 1.8 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_bullets.cc,v 1.9 2007/09/25 05:43:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -136,8 +136,8 @@ controller_bullets::check_paddle_collisions ()
       paddle->set_invincibility (100);
       current_player->remove_life (1);
 #ifndef SOUNDISOFF
-      audio->play_sound (S_RAKEXPLO);
-      audio->play_sound (S_ENLEVVIE);
+      audio->play_sound (PADDLE_EXPLOSION);
+      audio->play_sound (LOST_LIFE);
 #endif
       explosions->add
         (x1_paddle + paddle->get_length () / 2,

@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-09-21
+ * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.49 $
+ * @version $Revision: 1.50 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.49 2007/09/24 16:00:01 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.50 2007/09/25 05:43:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -255,7 +255,7 @@ controller_balls::check_outside_balls ()
       ships->force_explosion ();
 #ifndef SOUNDISOFF
       audio->play_lost_music ();
-      audio->play_sound (S_ENLEVVIE);
+      audio->play_sound (LOST_LIFE);
 #endif
       short_info_messages* messages = short_info_messages::get_instance ();
       messages->send_message_request (short_info_messages::LOST_FILE);
@@ -263,6 +263,8 @@ controller_balls::check_outside_balls ()
       panel->reset_gigablitz_countdown ();
       controller_bricks *bricks = controller_bricks::get_instance ();
       bricks->start_cycling ();
+      tiles_background *tiles = tiles_background::get_instance ();
+      tiles->set_scroll_type(tiles_background::TILES_SCROLL_LOST);
     }
 }
 
@@ -300,7 +302,7 @@ controller_balls::vitussort2 ()
       ball->set_power_2 ();
       current_player->remove_life (1);
 #ifndef SOUNDISOFF
-      audio->play_sound (S_ENLEVVIE);
+      audio->play_sound (LOST_LIFE);
 #endif
     }
 }
@@ -336,7 +338,7 @@ controller_balls::activate_tilt ()
         {
           ftilt = true;
 #ifndef SOUNDISOFF
-          audio->play_sound (S_TECNOBAL);
+          audio->play_sound (TECNOBALL);
 #endif
         }
     }
@@ -1421,7 +1423,7 @@ controller_balls::collisions_with_ships ()
       for (Uint32 j = 0; j < t; j++)
         {
           sprite_ship *ship = *(ships++);
-          if (ship->atom_actif > 0)
+          if (ship->enable_counter > 0)
             {
               continue;
             }
@@ -1724,7 +1726,7 @@ controller_balls::time_2tilt ()
         {
           head_anim->start_yawn ();
 #ifndef SOUNDISOFF
-          audio->play_sound (S_TILTALAR);
+          audio->play_sound (TILT_ALARM);
 #endif
           tilt = true;
         }
@@ -1754,7 +1756,7 @@ controller_balls::time2tilt2 ()
                     {
                       tilt = 1;
 #ifndef SOUNDISOFF
-                      audio->play_sound (S_TILTALAR);
+                      audio->play_sound (TILT_ALARM);
 #endif
                     }
                   balle->tilt_delay++;

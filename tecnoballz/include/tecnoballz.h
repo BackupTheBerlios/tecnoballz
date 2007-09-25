@@ -2,14 +2,14 @@
  * @file tecnoballz.h
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-09-24
+ * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.48 $
+ * @version $Revision: 1.49 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.48 2007/09/24 16:00:01 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.49 2007/09/25 05:43:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-09-24)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-09-25)"
 /** To define only under development  */
 #define UNDER_DEVELOPMENT
 /** Force bytes copy (SPARC unaligned memory access) */

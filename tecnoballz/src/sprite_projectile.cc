@@ -4,11 +4,11 @@
  * @date 2007-09-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.16 2007/09/21 05:17:04 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.17 2007/09/25 05:43:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -322,7 +322,7 @@ sprite_projectile::check_collisions_with_ships ()
       for (Sint32 j = 0; j < t; j++)
         {
           sprite_ship *atome = *(monPT++);
-          if (atome->atom_actif > 0)
+          if (atome->enable_counter > 0)
             {
               continue;
             }

@@ -4,11 +4,11 @@
  * @date 2007-04-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ship.cc,v 1.11 2007/09/15 19:20:52 gurumeditation Exp $
+ * $Id: sprite_ship.cc,v 1.12 2007/09/25 05:43:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,30 +47,30 @@ sprite_ship::~sprite_ship ()
 {
 }
 
-//-----------------------------------------------------------------------------
-// displacement of the "Bouiboui"
-//-----------------------------------------------------------------------------
+/**
+ * Displacement of the ship
+ */
 void
 sprite_ship::gere_atome ()
 {
   /* explosion of the ship */
-  if (atom_explo)
+  if (is_exploding)
     {
-      atom_explo = play_animation_once ();
+      is_exploding = play_animation_once ();
+      return;
     }
 
-  else
-    {
-      //###############################################################
-      // BouiBoui appears
-      //###############################################################
-      if (atom_actif)           // atom_actif > 0 BouiBoui's not active
+      /*
+       * the ship is not currently enable 
+       */
+      if (enable_counter > 0)
         {
-          if (!(--atom_actif))
+	  /* the ship appears ? */
+          if (--enable_counter == 0)
             {
               if (!is_collisions_with_bricks (x_coord, y_coord))
                 {
-                  is_enabled = 1;
+                  is_enabled = true;
                   Sint32 *monPT = ghost_bobs + (random_counter & 31);
 #if __WORDSIZE == 64
                   random_counter += (long) this;
@@ -84,29 +84,32 @@ sprite_ship::gere_atome ()
                   sprite_has_shadow = 1;
                   set_image (k);
 #ifndef SOUNDISOFF
-                  audio->play_sound (S_ATOMAPPA);
+                  audio->play_sound (SHIP_APPEAR);
 #endif
                 }
               else
-                atom_actif = 1;
+		{
+                  enable_counter = 1;
+		}
             }
         }
 
-      //###############################################################
-      // BouiBoui change its trajectory 
-      //###############################################################
+      /*
+       * the ship change its trajectory
+       */
       if (!(--atom_count))
         {
           atom_ghost++;
-          atom_ghost &= 15;     //16 values possible of standby
+	  /* 16 values possible of standby */
+          atom_ghost &= 15;
           Sint32 *depla = tableGhost + atom_ghost;
           atom_count = *depla;
           atom_traje += 2;
-          atom_traje &= 30;     //16 values possible of trajectory
+	  /* 16 values possible of trajectory */
+          atom_traje &= 30;
           depla = ghost_traj + atom_traje;
           atom_deplX = *(depla++) * resolution;
           atom_deplY = *depla * resolution;
-
           if (object_pos > 3)
             {
               atom_deplX = -atom_deplX;
@@ -130,12 +133,11 @@ sprite_ship::gere_atome ()
         y = atom_ymini;
       else if (y > atom_ymaxi)
         y = atom_ymaxi;
-      if (!is_collisions_with_bricks (x, y) || atom_actif)
+      if (!is_collisions_with_bricks (x, y) || enable_counter)
         {
           x_coord = x;
           y_coord = y;
         }
-    }
 }
 
 /**
@@ -185,7 +187,7 @@ sprite_ship::littleInit (Sint32 time0, Sint32 appar, Sint32 index,
                          Sint32 power, Sint32 pos_x, Sint32 pos_y,
                          Sint32 offst)
 {
-  atom_actif = appar;           //time before activation
+  enable_counter = appar;           //time before activation
   apparition = time0;
   tableGhost = ghost_wait[index];       //table of the 16 standby values 
   atom_power = power;           //strength
@@ -193,7 +195,7 @@ sprite_ship::littleInit (Sint32 time0, Sint32 appar, Sint32 index,
   x_coord = pos_x;
   y_coord = pos_y;
   atom_oexpl = offst;           //number of the image's explosion
-  atom_explo = false;
+  is_exploding = false;
   atom_ghost = 0;               //pointer on "tableGhost"
   atom_deplX = 0;               //offset X
   atom_deplY = 0;               //offset Y
@@ -234,8 +236,10 @@ sprite_ship::littleInit (Sint32 time0, Sint32 appar, Sint32 index,
 void
 sprite_ship::explosion1 (sprite_projectile * blast)
 {
-  if (atom_actif > 0)
-    return;
+  if (enable_counter > 0)
+    {
+      return;
+    }
   explosion2 ();
   Sint32 h = codeBounty[random_counter & 0xF];
   //h = CODE_GEMME; //test only
@@ -269,7 +273,7 @@ sprite_ship::explosion1 (sprite_projectile * blast)
 void
 sprite_ship::explosion1 (sprite_ball * ball)
 {
-  if (atom_actif > 0)
+  if (enable_counter > 0)
     {
       return;
     }
@@ -307,9 +311,9 @@ sprite_ship::explosion2 ()
 {
   sprite_has_shadow = 0;        // no shadow
   random_counter = random_counter + frame_index;
-  atom_explo = 1;
+  is_exploding = true;
   atom_power = init_power;      // strength
-  atom_actif = apparition + (random_counter & 63);  // time before activation
+  enable_counter = apparition + (random_counter & 63);  // time before activation
   frame_index = atom_oexpl;
   frame_index_min = atom_oexpl;
   frame_index_max = atom_oexpl + ATOM_ANIMA - 1;

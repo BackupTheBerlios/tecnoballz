@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.h 
  * @brief Bricks levels supervisor 
- * @date 2007-04-10
+ * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.25 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.26 2007/09/25 05:43:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,15 +103,20 @@ private:
   /** Level number from 1 to 12 */
   Sint32 level_number;
   const bricks_level_desc *level_desc;
-  Sint32 next_level;
+  //Sint32 next_level;
   /** Time delay before next level */
   Sint32 count_next;
-  Sint32 isgameover;
+  /** Counter used to handle the different phases of the game over */
+  Sint32 gameover_counter;
 
-  Sint32 devel_keyx;            //next backgound
-  Sint32 devel_keyw;            //previous backgound
 
-  Sint32 indexbgrnd;
+#ifdef UNDER_DEVELOPMENT
+  /** Key flag to switch to the next backgound */
+  bool devel_keyx;
+  /** Key flag to switch to the previous backgound */
+  bool devel_keyw;
+  Sint32 backgound_index;
+#endif
 public:
     supervisor_bricks_level ();
    ~supervisor_bricks_level ();
@@ -120,7 +125,8 @@ public:
 
 private:
   void init_level ();
-  void changebkgd ();
+  void switch_background ();
+  void draw_tilesmap();
   void initialize_background (Sint32 bkg_num = -1);
 };
 #endif

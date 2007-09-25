@@ -1,14 +1,14 @@
 /** 
  * @file sprite_ship.cc 
  * @brief A flying enemy ships sprite 
- * @date 2007-02-13
+ * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ship.h,v 1.7 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_ship.h,v 1.8 2007/09/25 05:43:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,8 +66,9 @@ private:
   Sint32 atom_count;            // trajectory change counter
   Sint32 atom_ghost;            // pointer on "tableGhost"
   Sint32 *tableGhost;           // table time keep same trajectory
-  Sint32 atom_actif;            // counter activation (0 = active) 
-  Sint32 atom_explo;            // 1 = current explosion
+  Sint32 enable_counter;            // counter activation (0 = active) 
+  /** True if the ship exploding */
+  bool is_exploding;
   Sint32 atom_oexpl;            // number of the first image's explosion
   Sint32 atom_traje;            // pointeur sur la trajectoir 
   Sint32 apparition;            // time before reactivation

@@ -5,11 +5,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.h,v 1.6 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_audio.h,v 1.7 2007/09/25 05:43:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,14 +69,17 @@ typedef struct
 
 // numbers of the sounds
 typedef enum
-{ S_ENLEVVIE,                   //lose a life
-  S_RAKEXPLO,                   //explosion of the bumper
-  S_AJOUTVIE,                   //extra life
-  S_MONNAIES,                   //collect money
-  S_TILTALAR,                   //alarm 
-  S_GADGETGO,                   //collect option (extra balls, power balls)
-  S_TECNOBAL,                   //"tecno" sound
-  S_ATOMAPPA,
+{ LOST_LIFE,
+  PADDLE_EXPLOSION,
+  EXTRA_LIFE,
+  /** Collect money or gem */
+  COLLECT_MONEY,
+  TILT_ALARM,
+  /** Collect penalty or bonus capsule */
+  COLLECT_CAPSULE,
+  /** Vocal "tecnoball" */
+  TECNOBALL,
+  SHIP_APPEAR,
   S_TRANSFOR,                   //bumper transformation (expand, glue)
   S_TIR_GARD,                   //guard's fire
   S_RAK_TIRS,                   //bumper's fire

@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-09-24
+ * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.50 $
+ * @version $Revision: 1.51 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.50 2007/09/24 16:00:01 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.51 2007/09/25 05:43:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,10 +60,13 @@ supervisor_bricks_level::supervisor_bricks_level ()
   sprite_projectile::start_list (bricks, ships);
   level_number = 1;
   area_number = 1;
-  next_level = 0;
-  isgameover = 0;
-  devel_keyw = 0;
-  devel_keyx = 0;
+  //next_level = 0;
+  gameover_counter = 0;
+#ifdef UNDER_DEVELOPMENT
+  backgound_index = 0;
+  devel_keyw = false;
+  devel_keyx = false;
+#endif
 }
 
 /** 
@@ -111,7 +114,7 @@ supervisor_bricks_level::first_init ()
 
   count_next = 0;
   end_return = 0;
-  isgameover = 0;
+  gameover_counter = 0;
   if (is_verbose)
     {
       std::cout << "supervisor_bricks_level::first_init() area_number:"
@@ -236,7 +239,7 @@ supervisor_bricks_level::main_loop ()
    */
   if (current_player->get_num_of_lifes () <= 0)
     {
-      if (isgameover == 0)
+      if (gameover_counter == 0)
         {
 #ifndef SOUNDISOFF
           audio->disable_sound ();
@@ -252,41 +255,41 @@ supervisor_bricks_level::main_loop ()
           sprite_projectile::disable_sprites ();
           info_messages->clear_messages_request ();
           tiles_ground->set_scroll_type(tiles_background::TILES_SCROLL_GAMEOVER);
-          isgameover++;
+          gameover_counter++;
         }
       info_messages->run ();
       display->wait_frame ();
       head_anim->play ();
       display->lock_surfaces ();
       gigablitz->run_in_bricks_levels ();
-      sprites->clear ();
+      if (!has_background)
+	{
+          sprites->clear ();
+	}
       if (!(random_counter & 0x00f))
         {
           head_anim->start_interference ();
         }
-      if (isgameover >= 2)
+      if (gameover_counter >= 2)
         {
-          isgameover++;
+          gameover_counter++;
           game_over->execution1 ();
         }
-      if (!bricks->update () && isgameover < 2)
+      if (!bricks->update () && gameover_counter < 2)
         {
-          isgameover = 2;
+          gameover_counter = 2;
         }
       sides_bricks->run ();
       viewfinders_paddles->run ();
       ships->move ();
-      /* draw the tiles background */
-      display->unlock_surfaces ();
-      tiles_ground->draw();
-      display->lock_surfaces ();
+      draw_tilesmap ();
       sprites->draw ();
       panel_score->draw_gigablizt_gauge ();
       player_indicators->display_money_and_reverse ();
       display->unlock_surfaces ();
       panel_score->text_refresh ();
       display->bufferCTab ();
-      if (keyboard->is_left_button () && isgameover > 60)
+      if (keyboard->is_left_button () && gameover_counter > 60)
         {
           current_player = handler_players::nextplayer (current_player, &end_return, 1);
         }
@@ -304,12 +307,15 @@ supervisor_bricks_level::main_loop ()
         }
       sides_bricks->run ();
       display->lock_surfaces ();
-      sprites->clear ();
+      if (!has_background)
+	{
+          sprites->clear ();
+	}
       bricks->color_cycling ();
       /* draw or clear bricks
        * send a money and/or a capsule */
       bricks->update ();
-      changebkgd ();
+      switch_background ();
 
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
         {
@@ -347,10 +353,7 @@ supervisor_bricks_level::main_loop ()
           player_indicators->display_money_and_reverse ();
         }
 
-      /* draw the tiles background */
-      display->unlock_surfaces ();
-      tiles_ground->draw();
-      display->lock_surfaces ();
+      draw_tilesmap ();
       sprites->draw ();
       Ecode = popup_menu->execution1 ();
       display->unlock_surfaces ();
@@ -438,7 +441,7 @@ supervisor_bricks_level::main_loop ()
  * Change the tiles background
  */
 void
-supervisor_bricks_level::changebkgd ()
+supervisor_bricks_level::switch_background ()
 {
 #ifdef UNDER_DEVELOPMENT
   if (keyboard->key_is_pressed (SDLK_RSHIFT) ||
@@ -447,12 +450,18 @@ supervisor_bricks_level::changebkgd ()
       keyboard->key_is_pressed (SDLK_LCTRL) ||
       keyboard->key_is_pressed (SDLK_RALT) ||
       !keyboard->key_is_pressed (SDLK_LALT))
-    return;
+    {
+      return;
+    }
 
   if (keyboard->key_is_pressed (SDLK_w))
-    devel_keyw = 1;
+    {
+      devel_keyw = true;
+    }
   if (keyboard->key_is_pressed (SDLK_x))
-    devel_keyx = 1;
+    {
+      devel_keyx = true;
+    }
 
   if ((keyboard->key_is_released (SDLK_w) && devel_keyw) ||
       (keyboard->key_is_released (SDLK_x) && devel_keyx))
@@ -461,29 +470,41 @@ supervisor_bricks_level::changebkgd ()
 
       if (devel_keyw)
         {
-          devel_keyw = 0;
-          if (--indexbgrnd < 0)
-            indexbgrnd = 49;
+          devel_keyw = false;
+          if (--backgound_index < 0)
+	    {
+              backgound_index = 49;
+	    }
         }
       if (devel_keyx)
         {
-          devel_keyx = 0;
-          if (++indexbgrnd > 49)
-            indexbgrnd = 0;
+          devel_keyx = false;
+          if (++backgound_index > 49)
+	    {
+              backgound_index = 0;
+	    }
         }
       if (is_verbose)
-        printf ("supervisor_bricks_level::background() : changebkgd:%i\n",
-                indexbgrnd);
-      initialize_background (indexbgrnd);
+	{
+	  std::cout << ">supervisor_bricks_level::switch_background: " <<
+	    "backgound_index: " << backgound_index << std::endl;
+	}
+      initialize_background (backgound_index);
       background_screen->blit_to_surface (game_screen);
     }
 
   if (keyboard->key_is_pressed (SDLK_v))
-    head_anim->start_yawn ();
+    {
+      head_anim->start_yawn ();
+    }
   if (keyboard->key_is_pressed (SDLK_b))
-    head_anim->start_yawn ();
+    {
+      head_anim->start_yawn ();
+    }
   if (keyboard->key_is_pressed (SDLK_n))
-    head_anim->start_interference ();
+    {
+      head_anim->start_interference ();
+    }
   if (keyboard->key_is_pressed (SDLK_g))
     {
       gigablitz->shoot_paddle ();
@@ -559,3 +580,19 @@ supervisor_bricks_level::initialize_background (Sint32 bkg_num)
       std::cout << "/supervisor_bricks_level::initialize_background() start! " << std::endl;
     }
 }
+
+/**
+ * Draw the tiles background 
+ */
+void
+supervisor_bricks_level::draw_tilesmap()
+{
+  if (has_background)
+    {
+      return;
+    }
+  display->unlock_surfaces ();
+  tiles_ground->draw();
+  display->lock_surfaces ();
+}
+

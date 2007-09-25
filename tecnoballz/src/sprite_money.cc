@@ -1,14 +1,14 @@
 /** 
  * @file sprite_money.cc 
  * @brief The money sprite 
- * @date 2007-04-13
+ * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_money.cc,v 1.13 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_money.cc,v 1.14 2007/09/25 05:43:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -176,7 +176,7 @@ Uint32 sprite_money::move ()
             {
               is_enabled = false;
 #ifndef SOUNDISOFF
-              audio->play_sound (S_MONNAIES);
+              audio->play_sound (COLLECT_MONEY);
 #endif
               return (money_amount);
             }
@@ -195,7 +195,7 @@ Uint32 sprite_money::move ()
             {
               is_enabled = false;
 #ifndef SOUNDISOFF
-              audio->play_sound (S_MONNAIES);
+              audio->play_sound (COLLECT_MONEY);
 #endif
               return (money_amount);
             }
@@ -214,7 +214,7 @@ Uint32 sprite_money::move ()
             {
               is_enabled = false;
 #ifndef SOUNDISOFF
-              audio->play_sound (S_MONNAIES);
+              audio->play_sound (COLLECT_MONEY);
 #endif
               return (money_amount);
             }
@@ -233,7 +233,7 @@ Uint32 sprite_money::move ()
             {
               is_enabled = false;
 #ifndef SOUNDISOFF
-              audio->play_sound (S_MONNAIES);
+              audio->play_sound (COLLECT_MONEY);
 #endif
               return (money_amount);
             }
@@ -269,7 +269,7 @@ Uint32 sprite_money::move_bottom ()
     }
   is_enabled = false;
 #ifndef SOUNDISOFF
-  audio->play_sound (S_MONNAIES);
+  audio->play_sound (COLLECT_MONEY);
 #endif
   return money_amount;
 }
