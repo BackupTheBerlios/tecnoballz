@@ -1,14 +1,14 @@
 /** 
  * @file controller_ships.cc 
  * @brief Ship controller 
- * @date 2007-02-13
+ * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_ships.cc,v 1.4 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_ships.cc,v 1.5 2007/09/25 12:11:48 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,17 +96,16 @@ controller_ships::initialise (Sint32 time0, Sint32 time1, Sint32 time2,
     }
 }
 
-//-------------------------------------------------------------------------------
-// move all BouiBoui
-//-------------------------------------------------------------------------------
+/**
+ * Move all ships
+ */
 void
 controller_ships::move ()
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ship *atome = sprites_list[i];
-      atome->gere_atome ();
-      //return; //test only
+      sprite_ship *ship = sprites_list[i];
+      ship->move ();
     }
 }
 
@@ -118,7 +117,7 @@ controller_ships::force_explosion ()
 {
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_ship *atome = sprites_list[i];
-      atome->explosion2 ();
+      sprite_ship *ship = sprites_list[i];
+      ship->explode ();
     }
 }

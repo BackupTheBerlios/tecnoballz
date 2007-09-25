@@ -4,11 +4,11 @@
  * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.50 $
+ * @version $Revision: 1.51 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.50 2007/09/25 05:43:20 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.51 2007/09/25 12:11:48 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1152,7 +1152,7 @@ controller_balls::bricks_collision ()
           x += *(colTB++);
           Sint32 y = ball->y_coord;
           y += *(colTB++);
-	  /* list of bricks to clear or redraw */
+          /* list of bricks to clear or redraw */
           brick_redraw *redraw = bricks->get_bricks_redraw ();
           redraw->xcoord_collision = x;
           redraw->ycoord_collision = y;
@@ -1163,7 +1163,7 @@ controller_balls::bricks_collision ()
           brick_info *brick = (bricks_map + x);
           x = brick->brique_rel;
           /* collision between a ball and a brick? */
-	  if (0 == x)
+          if (0 == x)
             {
 	      /* no collision */
               continue;
@@ -1439,9 +1439,11 @@ controller_balls::collisions_with_ships ()
                   audio->play_sound (S_TO_ATOMS);
 #endif
                   k = (ball->ballPowerX + 1) * 4;
-                  ship->atom_power -= k;
-                  if (ship->atom_power < 1)
-                    ship->explosion1 (ball);
+                  ship->strength -= k;
+                  if (ship->strength < 1)
+                    {
+                      ship->destroy (ball);
+                    }
                   ball->direction = nouve;
                 }
             }

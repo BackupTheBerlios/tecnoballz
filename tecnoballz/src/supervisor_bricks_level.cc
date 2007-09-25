@@ -4,11 +4,11 @@
  * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.51 $
+ * @version $Revision: 1.52 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.51 2007/09/25 05:43:20 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.52 2007/09/25 12:11:48 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
 
   popup_menu = new handler_popup_menu ();
 
-  sprite_projectile::start_list (bricks, ships);
+  sprite_projectile::start_list ();
   level_number = 1;
   area_number = 1;
   //next_level = 0;

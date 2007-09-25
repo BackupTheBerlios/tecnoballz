@@ -4,11 +4,11 @@
  * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ship.h,v 1.8 2007/09/25 05:43:20 gurumeditation Exp $
+ * $Id: sprite_ship.h,v 1.9 2007/09/25 12:11:48 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,14 +59,17 @@ private:
   static const Sint32 ATOM_ANIMA = 8;
 
 private:
-  Sint32 atom_power;            // strength
-  Sint32 init_power;            // strength
-  Sint32 atom_deplX;            // offset X
-  Sint32 atom_deplY;            // offset Y
+  /** Strength delay counter */
+  Sint32 strength;
+  /** Initial strength delay */
+  Sint32 strength_initial;
+  Sint32 x_offset;            // offset X
+  Sint32 y_offset;            // offset Y
   Sint32 atom_count;            // trajectory change counter
   Sint32 atom_ghost;            // pointer on "tableGhost"
   Sint32 *tableGhost;           // table time keep same trajectory
-  Sint32 enable_counter;            // counter activation (0 = active) 
+  /** counter activation, if 0 ship is enabled */
+  Sint32 enable_counter;
   /** True if the ship exploding */
   bool is_exploding;
   Sint32 atom_oexpl;            // number of the first image's explosion
@@ -85,17 +88,17 @@ private:
   static Sint32 *ghost_wait[4];
   static Sint32 ghost_traj[32];
   static Sint32 ghost_bobs[32]; // index animations images of sprites
-  static Sint32 codeBounty[16];
+  static Sint32 bonus_or_penalty[16];
 
 public:
   sprite_ship ();
    ~sprite_ship ();
-  void gere_atome ();
+  void move ();
   void littleInit (Sint32 time0, Sint32 appar, Sint32 index,
                    Sint32 power, Sint32 pos_x, Sint32 pos_y, Sint32 offst);
-  void explosion1 (sprite_projectile *);
-  void explosion1 (sprite_ball *);
-  void explosion2 ();
+  void destroy (sprite_projectile *);
+  void destroy (sprite_ball *);
+  void explode ();
 
 private:
   bool is_collisions_with_bricks (Uint32 xcoord, Uint32 ycoord);

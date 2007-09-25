@@ -1,14 +1,14 @@
 /**
  * @file sprite_projectile.cc 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-09-21
+ * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.17 2007/09/25 05:43:20 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.18 2007/09/25 12:11:48 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,11 +98,8 @@ sprite_projectile::init_members (sprite_paddle * pad)
  * Static method which initialize all projectiles before a bricks level
  */
 void
-sprite_projectile::start_list (controller_bricks * brick,
-                               controller_ships * atoms)
+sprite_projectile::start_list ()
 {
-  brickObjet = brick;
-  atomsObjet = atoms;
   total_fire = 0;
   for (Uint32 i = 0; i < MAXI_TOTAL_OF_PROJECTILES; i++)
     {
@@ -303,8 +300,9 @@ void
 sprite_projectile::check_collisions_with_ships ()
 {
   sprite_projectile **projectiles = projectiles_list;
-  Sint32 t = atomsObjet->get_max_of_sprites ();
-  sprite_ship **aList = atomsObjet->get_sprites_list ();
+  controller_ships *ships = controller_ships::get_instance ();
+  Sint32 t = ships->get_max_of_sprites ();
+  sprite_ship **ships_list = ships->get_sprites_list ();
   for (Uint32 i = 0; i < total_fire; i++)
     {
       sprite_projectile *blast = *(projectiles++);
@@ -312,7 +310,7 @@ sprite_projectile::check_collisions_with_ships ()
         {
           continue;
         }
-      sprite_ship **monPT = aList;
+      sprite_ship **ships = ships_list;
       Sint32 y1 = blast->y_coord;
       Sint32 y2 = y1 + 3;
       y1 -= 26;
@@ -321,31 +319,31 @@ sprite_projectile::check_collisions_with_ships ()
       x1 -= 20;
       for (Sint32 j = 0; j < t; j++)
         {
-          sprite_ship *atome = *(monPT++);
-          if (atome->enable_counter > 0)
+          sprite_ship *ship = *(ships++);
+          if (ship->enable_counter > 0)
             {
               continue;
             }
-          Sint32 k = atome->y_coord;
+          Sint32 k = ship->y_coord;
           if (k >= y2 || k <= y1)
             {
               continue;
             }
-          k = atome->x_coord;
+          k = ship->x_coord;
           if (k >= x2 || k <= x1)
             {
               continue;
             }
-          if (blast->is_enabled == 1)
+          if (blast->is_enabled)
             {
-              blast->is_enabled = 0;
+              blast->is_enabled = false;
             }
           current_player->add_score (100);
           k = blast->power;
-          atome->atom_power -= k;
-          if (atome->atom_power < 1)
+          ship->strength -= k;
+          if (ship->strength < 1)
             {
-              atome->explosion1 (blast);
+              ship->destroy (blast);
             }
         }
     }
@@ -367,5 +365,3 @@ sprite_projectile::disable_sprites ()
 
 Uint32 sprite_projectile::total_fire = 0;
 sprite_projectile * sprite_projectile::projectiles_list[MAXI_TOTAL_OF_PROJECTILES];
-controller_bricks * sprite_projectile::brickObjet;
-controller_ships * sprite_projectile::atomsObjet;

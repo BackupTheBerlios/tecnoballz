@@ -1,14 +1,14 @@
 /** 
  * @file sprite_projectile.h 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-02-21
+ * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.h,v 1.13 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_projectile.h,v 1.14 2007/09/25 12:11:48 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,8 +48,6 @@ private:
   static const Uint32 MAXI_TOTAL_OF_PROJECTILES = 200;
   static Uint32 total_fire;
   static sprite_projectile *projectiles_list[MAXI_TOTAL_OF_PROJECTILES];
-  static controller_bricks *brickObjet;
-  static controller_ships *atomsObjet;
   Sint32 indexSinus;
   Sint32 fire_Xscie;
   Sint32 fire_Yscie;
@@ -67,8 +65,7 @@ public:
   void init_members (sprite_paddle * pad);
   void set_power1 ();
   void set_power2 ();
-  static void start_list (controller_bricks * brick,
-                          controller_ships * atoms);
+  static void start_list ();
   static void gestionTir ();
   static void check_outside ();
   static void disable_sprites ();
