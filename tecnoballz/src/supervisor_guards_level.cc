@@ -5,11 +5,11 @@
  * @date 2007-04-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.43 $
+ * @version $Revision: 1.44 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.43 2007/09/12 06:32:49 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.44 2007/09/25 16:00:44 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -181,7 +181,7 @@ supervisor_guards_level::first_init ()
   display->unlock_surfaces ();
   keyboard->clear_command_keys ();
   keyboard->set_grab_input (true);
-  sprite_display_scores *pOver = game_over->gtScorOver ();
+  sprite_display_scores *pOver = game_over->get_sprite_high_score ();
   sprite_playername = pOver->string2bob (current_player->get_name ());
   sprites->add (sprite_playername);
   sprite_playername->enable ();
@@ -248,7 +248,7 @@ supervisor_guards_level::main_loop ()
 
       if (gameover_counter >= 1)
         {
-          game_over->execution1 (is_victory);
+          game_over->run (is_victory);
           if (is_victory)
             {
               /* animate the metal spheres */

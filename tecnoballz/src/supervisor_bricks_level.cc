@@ -1,14 +1,14 @@
-/** 
+/**
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
  * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.52 $
+ * @version $Revision: 1.53 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.52 2007/09/25 12:11:48 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.53 2007/09/25 16:00:44 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 #include "../include/supervisor_bricks_level.h"
 #include "../include/handler_resources.h"
 
-/** 
+/**
  * Create the bricks level supervisor
  */
 supervisor_bricks_level::supervisor_bricks_level ()
@@ -69,7 +69,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
 #endif
 }
 
-/** 
+/**
  * Release the bricks level supervisor
  */
 supervisor_bricks_level::~supervisor_bricks_level ()
@@ -98,7 +98,7 @@ supervisor_bricks_level::~supervisor_bricks_level ()
   liberation ();
 }
 
-/** 
+/**
  * Initialization of a bricks level
  */
 void
@@ -118,8 +118,8 @@ supervisor_bricks_level::first_init ()
   if (is_verbose)
     {
       std::cout << "supervisor_bricks_level::first_init() area_number:"
-        << area_number << "level_number:" << level_number
-        << " difficulty_level:" << difficulty_level << std::endl;
+      << area_number << "level_number:" << level_number
+      << " difficulty_level:" << difficulty_level << std::endl;
     }
 
   /* generation of paddles graphics shapes tables */
@@ -171,14 +171,14 @@ supervisor_bricks_level::first_init ()
 
   /* balls initialization */
   balls->init (
-      /* time before the ball leaves paddle, at the level beginning */
-      level_desc->ball_release_time,
-      /* time before the ball leaves (glue option) */
-      level_desc->glue_time / difficulty_level,
-      /* time before the ball accelerates */
-      level_desc->acceleration_delay / difficulty_level,
-      /* time before "tilt" is available */
-      level_desc->tilt_delay, level_desc->starting_speed);
+    /* time before the ball leaves paddle, at the level beginning */
+    level_desc->ball_release_time,
+    /* time before the ball leaves (glue option) */
+    level_desc->glue_time / difficulty_level,
+    /* time before the ball accelerates */
+    level_desc->acceleration_delay / difficulty_level,
+    /* time before "tilt" is available */
+    level_desc->tilt_delay, level_desc->starting_speed);
 
   ships->initialise (level_desc->reappearance / difficulty_level,
                      level_desc->ship_appearance_delay1 / difficulty_level,
@@ -188,17 +188,17 @@ supervisor_bricks_level::first_init ()
                      level_desc->ships_strength * difficulty_level);
 
   money_capsules->initialize (level_desc->moneys_frequency * difficulty_level,
-                          panel_score, player_indicators);
+                              panel_score, player_indicators);
 
   /* initialize the object which handles bonus and penalties capsules */
   power_up_capsules->initialize (
-                           //frequency of appearance of malus 
-                           level_desc->penalties_frequency * difficulty_level,
-                           //the list of malus
-                           level_desc->malusListe,
-                           //the object which handles the balls
-                           balls,
-                           bottom_wall);
+    //frequency of appearance of malus
+    level_desc->penalties_frequency * difficulty_level,
+    //the list of malus
+    level_desc->malusListe,
+    //the object which handles the balls
+    balls,
+    bottom_wall);
 
   gem_stones->initialize ();
 
@@ -227,7 +227,8 @@ supervisor_bricks_level::init_level ()
 }
 
 /**
- * main loop in the bricks level
+ * Main loop in the bricks level
+ * @return
  */
 Sint32
 supervisor_bricks_level::main_loop ()
@@ -248,7 +249,7 @@ supervisor_bricks_level::main_loop ()
           paddles->disable_all_paddles ();
           bricks->clr_bricks ();
           fontes_game->disable_sprites ();
-          gem_stones->disable_sprites (); 
+          gem_stones->disable_sprites ();
           power_up_capsules->disable_sprites ();
           money_capsules->disable_sprites ();
           balls->disable_sprites ();
@@ -262,28 +263,32 @@ supervisor_bricks_level::main_loop ()
       head_anim->play ();
       display->lock_surfaces ();
       gigablitz->run_in_bricks_levels ();
-      if (!has_background)
-	{
+      if (has_background)
+        {
           sprites->clear ();
-	}
+        }
       if (!(random_counter & 0x00f))
         {
           head_anim->start_interference ();
         }
-      if (gameover_counter >= 2)
-        {
-          gameover_counter++;
-          game_over->execution1 ();
-        }
-      if (!bricks->update () && gameover_counter < 2)
-        {
-          gameover_counter = 2;
-        }
+
       sides_bricks->run ();
       viewfinders_paddles->run ();
       ships->move ();
       draw_tilesmap ();
       sprites->draw ();
+
+      if (gameover_counter >= 2)
+        {
+          gameover_counter++;
+          game_over->run ();
+        }
+      if (!bricks->update () && gameover_counter < 2)
+        {
+          gameover_counter = 2;
+        }
+
+
       panel_score->draw_gigablizt_gauge ();
       player_indicators->display_money_and_reverse ();
       display->unlock_surfaces ();
@@ -307,10 +312,10 @@ supervisor_bricks_level::main_loop ()
         }
       sides_bricks->run ();
       display->lock_surfaces ();
-      if (!has_background)
-	{
+      if (has_background)
+        {
           sprites->clear ();
-	}
+        }
       bricks->color_cycling ();
       /* draw or clear bricks
        * send a money and/or a capsule */
@@ -360,7 +365,7 @@ supervisor_bricks_level::main_loop ()
       panel_score->text_refresh ();
       display->bufferCTab ();
 
-      /* 
+      /*
        * jump to next level or next player
        */
       if (panel_score->get_bricks_counter () == 0)
@@ -381,7 +386,7 @@ supervisor_bricks_level::main_loop ()
                 {
                   sides_bricks->save_state_of_walls ();
                   current_player = handler_players::nextplayer (current_player,
-                                                       &end_return, 1);
+                                   &end_return, 1);
 #ifndef SOUNDISOFF
                   audio->stop_music ();
 #endif
@@ -472,23 +477,23 @@ supervisor_bricks_level::switch_background ()
         {
           devel_keyw = false;
           if (--backgound_index < 0)
-	    {
+            {
               backgound_index = 49;
-	    }
+            }
         }
       if (devel_keyx)
         {
           devel_keyx = false;
           if (++backgound_index > 49)
-	    {
+            {
               backgound_index = 0;
-	    }
+            }
         }
       if (is_verbose)
-	{
-	  std::cout << ">supervisor_bricks_level::switch_background: " <<
-	    "backgound_index: " << backgound_index << std::endl;
-	}
+        {
+          std::cout << ">supervisor_bricks_level::switch_background: " <<
+          "backgound_index: " << backgound_index << std::endl;
+        }
       initialize_background (backgound_index);
       background_screen->blit_to_surface (game_screen);
     }
@@ -509,32 +514,32 @@ supervisor_bricks_level::switch_background ()
     {
       gigablitz->shoot_paddle ();
     }
-/* 
-
-	if(keyboard->key_is_pressed(SDLK_w))
- { 
- }
-
- if(keyboard->key_is_pressed(SDLK_w))
- { keyw = 1;
- }
-
-
- if(keyboard->key_is_released(SDLK_w) && keyw == 1)
- { tiles_ground->prev_color();
- keyw = 0;
- }
- if(keyboard->key_is_released(SDLK_x) && keyx == 1)
- { tiles_ground->next_color();
- keyx = 0;
- }
-*/
+  /*
+   
+  	if(keyboard->key_is_pressed(SDLK_w))
+   { 
+   }
+   
+   if(keyboard->key_is_pressed(SDLK_w))
+   { keyw = 1;
+   }
+   
+   
+   if(keyboard->key_is_released(SDLK_w) && keyw == 1)
+   { tiles_ground->prev_color();
+   keyw = 0;
+   }
+   if(keyboard->key_is_released(SDLK_x) && keyx == 1)
+   { tiles_ground->next_color();
+   keyx = 0;
+   }
+  */
 
 
 #endif
 }
 
-/** 
+/**
  * Initialize the background, draw tiles side bricks and bicks
  * @param bkg_num tileset number, if negative then the
  *                tilesset number depends on the current level number 
@@ -544,7 +549,8 @@ supervisor_bricks_level::initialize_background (Sint32 bkg_num)
 {
   if (is_verbose)
     {
-      std::cout << ">supervisor_bricks_level::initialize_background() start! " << std::endl;
+      std::cout << ">supervisor_bricks_level::initialize_background() start! "
+      << std::endl;
     }
   if (bkg_num < 0)
     {
@@ -556,7 +562,7 @@ supervisor_bricks_level::initialize_background (Sint32 bkg_num)
       if (is_verbose)
         {
           std::cout << "supervisor_bricks_level::initialize_background() " <<
-            "background number: " <<bkg_num << std::endl;
+          "background number: " << bkg_num << std::endl;
         }
     }
   /* initialize and draw the tiles background */
@@ -577,7 +583,8 @@ supervisor_bricks_level::initialize_background (Sint32 bkg_num)
   bricks->initialize ();
   if (is_verbose)
     {
-      std::cout << "/supervisor_bricks_level::initialize_background() start! " << std::endl;
+      std::cout << "/supervisor_bricks_level::initialize_background() start! " 
+      << std::endl;
     }
 }
 

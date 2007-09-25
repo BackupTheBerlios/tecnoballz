@@ -5,11 +5,11 @@
  * @date 2007-09-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: configfile.cc,v 1.26 2007/09/21 05:17:03 gurumeditation Exp $
+ * $Id: configfile.cc,v 1.27 2007/09/25 16:00:44 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -230,7 +230,7 @@ configfile::loadconfig ()
     {
       has_background = true;
     }
-//has_background = true;
+  has_background = false;
   //read number of lifes: 1 to 9
   if (!reader.read_int ("lifes", &initial_num_of_lifes))
     initial_num_of_lifes = 8;
