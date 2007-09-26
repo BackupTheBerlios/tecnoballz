@@ -2,14 +2,14 @@
  * @file configfile.h
  * @brief Config file handler 
  * @created 2005-01-22
- * @date 2007-02-17
+ * @date 2007-09-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: configfile.h,v 1.9 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: configfile.h,v 1.10 2007/09/26 16:00:06 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,13 +56,6 @@
 
 class configfile:public virtual tecnoballz
 {
-public:
-  /*bool          fullscreen;     //0=windowed mode / 1=full screen
-     bool         nosound;        //1=force no sound
-     bool         resolution;     //320 or 640
-     bool         is_verbose;     //1=verbose mode 
-     Uint32               difficulty; */
-
 private:
   typedef enum
   {
@@ -91,15 +84,15 @@ public:
     configfile ();
    ~configfile ();
   void configinfo ();
-  void loadconfig ();
-  void saveconfig ();
-  Sint32 scanZeArgs (Sint32 nbArg, char **ptArg);
-  char *get_player (Uint32);
-  void set_player (Uint32 nplay, char *pChar);
+  void load ();
+  void save ();
+  Sint32 scan_arguments (Sint32 arg_count, char **arg_values);
+  char *get_player_name (Uint32 playernum);
+  void set_player_name (Uint32 playernum, char *name);
   const char * get_language ();
 
 private:
-  Sint32 tocheckdir ();
+  bool check_and_create_dir ();
   void resetvalue ();
   FILE *fopen_data (const char *rel_filename, const char *mode);
 

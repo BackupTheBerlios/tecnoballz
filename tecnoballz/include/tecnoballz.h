@@ -5,11 +5,11 @@
  * @date 2007-09-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.50 $
+ * @version $Revision: 1.51 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.50 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.51 2007/09/26 16:00:06 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,6 +123,8 @@ public:
   /** True if static background tiles with bricks and ejectors
    * draw inside. False if bricks and ejectors are sprites */
   static bool has_background;
+  /** Control paddle with absolute mouse position */
+  static bool absolute_mouse_positioning;
   static Sint32 arg_jumper;
 
 protected:
