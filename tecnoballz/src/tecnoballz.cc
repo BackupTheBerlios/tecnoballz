@@ -5,11 +5,11 @@
  * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.27 2007/09/21 05:17:04 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.28 2007/09/26 15:57:40 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,9 +75,9 @@ tecnoballz::first_init (configfile * pConf)
   current_player = handler_players::create_all_players (handler_players::MAX_OF_PLAYERS);
   
   /* retrieve player names */
-  for (Uint32 i = 0; i < 6; i++)
+  for (Uint32 i = 0; i < handler_players::MAX_OF_PLAYERS; i++)
     {
-      handler_players::players_list[i]->set_name (pConf->get_player (i));
+      handler_players::players_list[i]->set_name (pConf->get_player_name (i));
     }
   super_jump = MAIN_MENU;
 
@@ -156,7 +156,7 @@ tecnoballz::release_all_objects (configfile * pConf)
   /* save player names into config file */
   for (Uint32 i = 0; i < handler_players::MAX_OF_PLAYERS; i++)
     {
-      pConf->set_player (i, handler_players::players_list[i]->get_name ());
+      pConf->set_player_name (i, handler_players::players_list[i]->get_name ());
     }
   if (is_verbose)
     {
@@ -385,6 +385,7 @@ Sint32 tecnoballz::number_of_players = 1;
 const char tecnoballz::nomprefix[] = PREFIX;
 Uint32 tecnoballz::resolution = 2;
 bool tecnoballz::has_background = false;
+bool tecnoballz::absolute_mouse_positioning = false;
 offscreen_surface * tecnoballz::game_screen = NULL;
 offscreen_surface * tecnoballz::background_screen = NULL;
 configfile *tecnoballz::config_file;

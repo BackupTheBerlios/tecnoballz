@@ -5,11 +5,11 @@
  * @date 2007-09-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: configfile.cc,v 1.27 2007/09/25 16:00:44 gurumeditation Exp $
+ * $Id: configfile.cc,v 1.28 2007/09/26 15:57:40 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,13 +42,9 @@ configfile::language_to_string[MAX_OF_LANGUAGES] =
   "fr"
 };
 
-
-
-//..............................................................................
-
-//------------------------------------------------------------------------------
-// create object
-//------------------------------------------------------------------------------
+/** 
+ * Create object
+ */
 configfile::configfile ()
 {
   thePlayers[0] = &thePlayer1[0];
@@ -57,19 +53,20 @@ configfile::configfile ()
   thePlayers[3] = &thePlayer4[3];
   thePlayers[4] = &thePlayer5[4];
   thePlayers[5] = &thePlayer6[5];
-  for (Uint32 i = 0; i < 6; i++)
+  for (Uint32 i = 0; i < handler_players::MAX_OF_PLAYERS; i++)
     {
       char *p = thePlayers[i];
       for (Uint32 j = 0; j < 8; j++)
-        p[j] = 0;
+        {
+          p[j] = 0;
+        }
     }
   resetvalue ();
 }
 
-
-//------------------------------------------------------------------------------
-// destroy object
-//------------------------------------------------------------------------------
+/**
+ * Destroy object
+ */
 configfile::~configfile ()
 {
 }
@@ -85,17 +82,22 @@ configfile::resetvalue ()
 #endif
   resolution = 2;
   has_background = false;
-  is_verbose = 0;
+  is_verbose = false;
   handler_display::optionfull = 0;
-  difficulty_level = 1;
-  initial_num_of_lifes = 8;
+  difficulty_level = DIFFICULTY_NORMAL;
+  initial_num_of_lifes = 5;
   number_of_players = 1;
-  char *pUser = getenv ("USER");
-  if (!pUser)
-    pUser = stringname;
+  char *user = getenv ("USER");
+  if (user != NULL)
+    {
+      user = stringname;
+    }
   for (Uint32 i = 0; i < 6; i++)
-    strncpy (thePlayers[i], pUser, 6);
+    {
+      strncpy (thePlayers[i], user, 6);
+    }
   language = LANGUAGE_EN;
+  absolute_mouse_positioning = false;
 }
 
 //------------------------------------------------------------------------------
@@ -117,18 +119,16 @@ configfile::configinfo ()
            is_verbose, difficulty_level);
 }
 
-//------------------------------------------------------------------------------
-// check if config directory exists; if not create it and set config_dir 
-//------------------------------------------------------------------------------
-Sint32
-configfile::tocheckdir ()
+/**
+ * Check if config directory exists; if not create it and set config_dir 
+ */
+bool
+configfile::check_and_create_dir ()
 {
 #ifdef _WIN32
-
-  // opendir don't exist on windows
-  // create directory if not exist
+  /* opendir don't exist on windows
+   * create directory if not exist */
   MKDIR (config_dir, S_IRWXU);
-
 #else
   /* test and create .tlkgames */
   if (!opendir (config_dir))
@@ -140,25 +140,27 @@ configfile::tocheckdir ()
       if (!opendir (config_dir))
         {
           fprintf (stderr, "failed\n");
-          return 0;
+          return false;
         }
       else
-        fprintf (stderr, "ok\n");
+        {
+          fprintf (stderr, "ok\n");
+        }
     }
 #endif
-  return 1;
+  return true;
 }
 
-//------------------------------------------------------------------------------
-// load config file "~/.tlkgames/tecnoballz.conf"
-//------------------------------------------------------------------------------
+/**
+ * Load configuration file in "~/.tlkgames/tecnoballz.conf"
+ */
 void
-configfile::loadconfig ()
+configfile::load ()
 {
   //reset all values
   resetvalue ();
 
-  //generate user directory name
+  /* generate user directory name */
 #ifdef _WIN32
   _snprintf (config_dir, sizeof (config_dir) - 1, "%s/%s",
              (getenv ("HOME") ? getenv ("HOME") : "."), CONFIG_DIR_NAME);
@@ -167,12 +169,14 @@ configfile::loadconfig ()
             (getenv ("HOME") ? getenv ("HOME") : "."), CONFIG_DIR_NAME);
 #endif
 
-  //read config from user directory       
+  /* read configuration file from a user directory */       
   FILE *pfile = NULL;
   sprintf (configname, "%s/%s", config_dir, CONFIG_FILE_NAME);
   pfile = fopen_data (configname, "r");
   if (pfile == NULL)
-    return;
+    {
+      return;
+    }
 
   lisp_stream_t stream;
   lisp_object_t *root_obj = NULL;
@@ -195,33 +199,46 @@ configfile::loadconfig ()
 
   std::string ptStr;
   if (!reader.read_string ("lang", &ptStr))
-    language = LANGUAGE_EN;
+    {
+      language = LANGUAGE_EN;
+    }
   else
     {
       if (ptStr == "fr")
-        language = LANGUAGE_FR;
+        {
+          language = LANGUAGE_FR;
+        }
       else
-        language = LANGUAGE_EN;
+        {
+          language = LANGUAGE_EN;
+        }
     }
- 
-
-
   if (!reader.read_bool ("fullscreen", &handler_display::optionfull))
-    handler_display::optionfull = -1;
+    {
+      handler_display::optionfull = -1;
+    }
 #ifndef SOUNDISOFF
   if (!reader.read_bool ("sound", &handler_audio::is_audio_enable))
-    handler_audio::is_audio_enable = 1;
+    {
+      handler_audio::is_audio_enable = true;
+    }
 #endif
   if (!reader.read_bool ("verbose", &is_verbose))
-    is_verbose = 0;
+    {
+      is_verbose = false;
+    }
 
   /* read window resolution: 1 = 320*240; 2 = 640*480 */
   Sint32 res = 0;
   if (!reader.read_int ("resolution", &res))
-    res = 2;
+    {
+      res = 2;
+    }
   resolution = res;
   if (resolution < 1 || resolution > 2)
-    resolution = 2;
+    {
+      resolution = 2;
+    }
   if (resolution == 2)
     {
       has_background = false;
@@ -231,61 +248,82 @@ configfile::loadconfig ()
       has_background = true;
     }
   has_background = false;
-  //read number of lifes: 1 to 9
+
+  /* read number of lifes from 1 to 9 */
   if (!reader.read_int ("lifes", &initial_num_of_lifes))
-    initial_num_of_lifes = 8;
+    {
+      initial_num_of_lifes = 5;
+    }
   if (initial_num_of_lifes < 1 || initial_num_of_lifes > 9)
-    initial_num_of_lifes = 8;
+    {
+      initial_num_of_lifes = 5;
+    }
 
-  //read difficulty 1 (easy), 2 (hard), 3 (madness) or 4 (suicidal)
+  /* read difficulty DIFFICULTY_EASY, DIFFICULTY_NORMAL,
+   * DIFFICULTY_MEDIUM or DIFFICULTY_HARD */
   if (!reader.read_int ("difficulty", &difficulty_level))
-    difficulty_level = 1;
-  if (difficulty_level < 1 || difficulty_level > 4)
-    difficulty_level = 1;
+    {
+      difficulty_level = DIFFICULTY_NORMAL;
+    }
+  if (difficulty_level < DIFFICULTY_EASY || difficulty_level > DIFFICULTY_HARD)
+    {
+      difficulty_level = DIFFICULTY_NORMAL;
+    }
 
-  //read number of players: 1 to 6
+  /* read number of players from 1 to 6 */
   if (!reader.read_int ("players", &number_of_players))
-    number_of_players = 1;
-  if (number_of_players < 1 || number_of_players > 6)
-    number_of_players = 1;
+    {
+      number_of_players =  handler_players::MAX_OF_PLAYERS;
+    }
+  if (number_of_players < 1 
+    || number_of_players > (Sint32)handler_players::MAX_OF_PLAYERS)
+    {
+      number_of_players = 1;
+    }
 
-  //read players names
+  /* read players names */
   std::string sName (6, ' ');
   char cName[8] = { "......." };
   for (Uint32 i = 0; i < 6; i++)
-    {                           //sprintf(cName, "%s%01d", "player", i + 1);
+    {
       sprintf (cName, "player%01d", i + 1);
       if (reader.read_string (cName, &sName))
-        {                       //printf("LOAD : <%s> => <%s> \n", cName, sName.c_str());
+        {
           strncpy (thePlayers[i], sName.c_str (), 6);
         }
 
     }
   lisp_free (root_obj);
-  //for(Uint32 i = 0; i < 6; i++) 
-  //      printf("name %i: %s\n", i,thePlayers[i]);
 }
 
-//------------------------------------------------------------------------------
-// return current player name, which read from config file
-//------------------------------------------------------------------------------
+/**
+ * Return current player name, which read from config file
+ * @param playernum Player number from 0 to 5
+ * @return Pointer to a player name 
+ */
 char *
-configfile::get_player (Uint32 nplay)
+configfile::get_player_name (Uint32 playernum)
 {
-  if (nplay >= 6)
-    nplay = 6 - 1;
-  return thePlayers[nplay];
+  if (playernum >= handler_players::MAX_OF_PLAYERS)
+    {
+      playernum = handler_players::MAX_OF_PLAYERS - 1;
+    }
+  return thePlayers[playernum];
 }
 
-//------------------------------------------------------------------------------
-// set player name
-//------------------------------------------------------------------------------
+/**
+ * Set player name
+ * @param playernum Player number from 0 to 5
+ * @param name Pointer to a string
+ */
 void
-configfile::set_player (Uint32 nplay, char *pChar)
+configfile::set_player_name (Uint32 playernum, char *name)
 {
-  if (nplay >= 6)
-    nplay = 6 - 1;
-  strncpy (thePlayers[nplay], pChar, 6);
+  if (playernum >= handler_players::MAX_OF_PLAYERS)
+    {
+      playernum = handler_players::MAX_OF_PLAYERS - 1;
+    }
+  strncpy (thePlayers[playernum], name, 6);
 }
 
 /*
@@ -298,13 +336,11 @@ configfile::get_language ()
     return language_to_string[language];
 }
 
-
-
-//------------------------------------------------------------------------------
-// save config file "~/.tlkgames/tecnoballz.conf"
-//------------------------------------------------------------------------------
+/**
+ * Save config file "~/.tlkgames/tecnoballz.conf"
+ */
 void
-configfile::saveconfig ()
+configfile::save ()
 {
   bool audio;
 #ifndef SOUNDISOFF
@@ -312,8 +348,10 @@ configfile::saveconfig ()
 #else
   audio = false;
 #endif
-  if (!tocheckdir ())
-    return;
+  if (!check_and_create_dir ())
+    {
+      return;
+    }
   FILE *config = fopen_data (configname, "w");
   if (config)
     {
@@ -334,8 +372,10 @@ configfile::saveconfig ()
       fprintf (config, "\n\t;; number of players (1 to 6)\n");
       fprintf (config, "\t(players   %d)\n", number_of_players);
       fprintf (config, "\n\t;; players names\n");
-      for (Uint32 i = 0; i < 6; i++)
-        fprintf (config, "\t(player%i      \"%s\")\n", i + 1, thePlayers[i]);
+      for (Uint32 i = 0; i < handler_players::MAX_OF_PLAYERS; i++)
+        {
+          fprintf (config, "\t(player%i      \"%s\")\n", i + 1, thePlayers[i]);
+        }
      fprintf (config, "\n\t;; language en or fr\n");
       fprintf (config, "\t(lang      ");
       switch (language)
@@ -348,14 +388,15 @@ configfile::saveconfig ()
           break;
         }
       fprintf (config, ")\n");
-
     }
-
 }
 
-//------------------------------------------------------------------------------
-// open a file
-//------------------------------------------------------------------------------
+/** 
+ * Open a file
+ * @param fname
+ * @param fmode
+ * @return
+ */
 FILE *
 configfile::fopen_data (const char *fname, const char *fmode)
 {
@@ -366,27 +407,36 @@ configfile::fopen_data (const char *fname, const char *fmode)
       fprintf (stderr, "configfile::fopen_data(): Warning: Unable "
                "to open the file \"%s\" ", fname);
       if (strcmp (fmode, "r") == 0)
-        fprintf (stderr, "for read!!!\n");
+        {
+          fprintf (stderr, "for read!!!\n");
+        }
       else if (strcmp (fmode, "w") == 0)
-        fprintf (stderr, "for write!!!\n");
+        {
+          fprintf (stderr, "for write!!!\n");
+        }
     }
   return (fi);
 }
 
-//------------------------------------------------------------------------------
-// analyse command line paramaters
-//------------------------------------------------------------------------------
+/** 
+ * Scan command line arguments
+ * @param arg_count the number of arguments
+ * @param arg_values he command line arguments
+ * @return FALSE if exit, TRUE otherwise 
+ */
 Sint32
-configfile::scanZeArgs (Sint32 nbArg, char **ptArg)
+configfile::scan_arguments (Sint32 arg_count, char **arg_values)
 {
-  Sint32 _iIndex;
-  for (_iIndex = 1; _iIndex < nbArg; _iIndex++)
+  Sint32 i;
+  for (i = 1; i < arg_count; i++)
     {
-      if (*ptArg[_iIndex] != '-')
-        continue;
+      if (*arg_values[i] != '-')
+        {
+          continue;
+        }
 
-      if (!strcmp (ptArg[_iIndex], "-h") ||
-          !strcmp (ptArg[_iIndex], "--help"))
+      if (!strcmp (arg_values[i], "-h") ||
+          !strcmp (arg_values[i], "--help"))
         {
           printf ("\noptions:\n");
           printf ("-h, --help     print Help (this message) and exit\n");
@@ -410,83 +460,84 @@ configfile::scanZeArgs (Sint32 nbArg, char **ptArg)
           return 0;
         }
 
-      if (!strcmp (ptArg[_iIndex], "--version"))
+      if (!strcmp (arg_values[i], "--version"))
         {
           printf (TECNOBALLZ_VERSION);
           printf ("\n");
-          printf ("copyright (c) 1991-2006 TLK Games\n");
-          printf ("website: http://linux.tlk.fr\n");
+          printf ("copyright (c) 1991-2007 TLK Games\n");
+          printf ("website: http://linux.tlk.fr/games/TecnoballZ/\n");
           return 0;
         }
 
-      if (!strcmp (ptArg[_iIndex], "--full"))
+      if (!strcmp (arg_values[i], "--full"))
         {
           handler_display::optionfull = true;
           continue;
         }
 
-      if (!strcmp (ptArg[_iIndex], "--window"))
+      if (!strcmp (arg_values[i], "--window"))
         {
           handler_display::optionfull = false;
           continue;
         }
 
-      if (!strcmp (ptArg[_iIndex], "--verbose") ||
-          !strcmp (ptArg[_iIndex], "-v"))
+      if (!strcmp (arg_values[i], "--verbose") ||
+          !strcmp (arg_values[i], "-v"))
         {
           is_verbose = true;
           continue;
         }
 
-      if (!strcmp (ptArg[_iIndex], "--320"))
+      if (!strcmp (arg_values[i], "--320"))
         {
           resolution = 1;
           continue;
         }
-      if (!strcmp (ptArg[_iIndex], "--640"))
+      if (!strcmp (arg_values[i], "--640"))
         {
           resolution = 2;
           continue;
         }
 
-      if (!strcmp (ptArg[_iIndex], "--nosync"))
+      if (!strcmp (arg_values[i], "--nosync"))
         {
           handler_display::optionsync = false;
           continue;
         }
 #ifndef SOUNDISOFF
-      if (!strcmp (ptArg[_iIndex], "--sound"))
+      if (!strcmp (arg_values[i], "--sound"))
         {
           handler_audio::is_audio_enable = true;
           continue;
         }
-      if (!strcmp (ptArg[_iIndex], "--nosound"))
+      if (!strcmp (arg_values[i], "--nosound"))
         {
           handler_audio::is_audio_enable = false;
           continue;
         }
 #endif
-      // use 4 colors background in 640x480
-      if (!strcmp (ptArg[_iIndex], "--bg4"))
+      /* use 4 colors background in 640x480 */
+      if (!strcmp (arg_values[i], "--bg4"))
         {
           force_4_colors_tiles = true;
           continue;
         }
 
-      //start at brick or guard level
-      if (!strcmp (ptArg[_iIndex], "--guard"))
+#ifdef UNDER_DEVELOPMENT
+      /* start at brick or guard level */
+      if (!strcmp (arg_values[i], "--guard"))
         {
           arg_jumper = 3;
           continue;
         }
-      if (!strcmp (ptArg[_iIndex], "--brick"))
+      if (!strcmp (arg_values[i], "--brick"))
         {
           arg_jumper = 1;
           continue;
         }
+#endif
     }
   return 1;
 }
 
-char
-  configfile::stringname[7] = "YANIS ";
+char configfile::stringname[7] = "YANIS ";

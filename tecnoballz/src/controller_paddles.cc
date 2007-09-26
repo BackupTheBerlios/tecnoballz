@@ -4,11 +4,11 @@
  * @date 2007-09-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.21 2007/09/20 04:55:32 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.22 2007/09/26 15:57:40 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -441,6 +441,17 @@ controller_paddles::move_paddles ()
   const Sint32 **tabB1, **tabB2, **tabB3, **tabB4;
   Sint32 x = paddle_bottom->x_coord;
   Sint32 off_x = keyboard->get_mouse_x_offset ();
+  
+  if (keyboard->key_is_released(SDLK_LEFT))
+    {
+      off_x+= 6; 
+    }
+  if (keyboard->key_is_released(SDLK_RIGHT))
+    {
+      off_x-= 6; 
+    }
+
+
   // Mode Solo
   if (!is_team_mode)
     {

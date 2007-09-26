@@ -2,14 +2,14 @@
  * @file main.cc 
  * @brief The main function is where the program starts execution 
  * @created 2002-08-21 
- * @date 2007-04-11
+ * @date 2007-09-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.56 $
+ * @version $Revision: 1.57 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.56 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: main.cc,v 1.57 2007/09/26 15:57:40 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,14 +33,16 @@
 configfile configuration;
 
 /**
- *  The main function is where the program starts execution
+ * The main function is where the program starts execution
  */
 Sint32
-main (Sint32 nbArg, char **ptArg)
+main (Sint32 arg_count, char **arg_values)
 {
-  configuration.loadconfig ();
-  if (!configuration.scanZeArgs (nbArg, ptArg))
-    return 0;
+  configuration.load ();
+  if (!configuration.scan_arguments (arg_count, arg_values))
+    {
+      return 0;
+    }
   if (tecnoballz::is_verbose)
     {
       std::cout << "================================" << std::endl
@@ -73,7 +75,7 @@ main (Sint32 nbArg, char **ptArg)
     {
       std::cout << "TecnoballZ is finished! ========" << std::endl;
     }
-  configuration.saveconfig ();
+  configuration.save ();
   return error;
 }
 
@@ -81,7 +83,7 @@ main (Sint32 nbArg, char **ptArg)
 /*
  
  a faire
- ** desactiver le tilt pour les balles controles
+[OK] desactiver le tilt pour les balles controles
 [OK] utiliser les tilemaps de 16x16 originales dans le definlement menu/gardiens pour eviter
      d'utiliser les tilemaps 32x32 (qui ont ete doubles avec GIMP) refaire donc un mapeditor
      special pour le 640x480

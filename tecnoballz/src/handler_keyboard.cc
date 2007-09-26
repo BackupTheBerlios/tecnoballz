@@ -4,11 +4,11 @@
  * @date 2007-03-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.7 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.8 2007/09/26 15:57:40 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -107,7 +107,9 @@ handler_keyboard::set_grab_input (bool mode)
     {
       is_grab_input = true;
       SDL_WM_GrabInput (SDL_GRAB_ON);
-      SDL_GetRelativeMouseState (0, 0);
+      SDL_EventState( SDL_MOUSEMOTION, SDL_IGNORE );
+      SDL_WarpMouse(display->get_width() >> 1, display->get_height() >> 1);
+      SDL_EventState( SDL_MOUSEMOTION, SDL_ENABLE );
     }
   else
     {
@@ -366,8 +368,7 @@ handler_keyboard::read_events ()
  */
 bool handler_keyboard::key_is_pressed (Sint32 code)
 {
-  Uint8 *
-    keys;
+  Uint8 * keys;
   keys = SDL_GetKeyState (NULL);
   if (keys[code] == SDL_PRESSED)
     {
@@ -386,8 +387,7 @@ bool handler_keyboard::key_is_pressed (Sint32 code)
  */
 bool handler_keyboard::key_is_released (Sint32 code)
 {
-  Uint8 *
-    keys;
+  Uint8 * keys;
   keys = SDL_GetKeyState (NULL);
   if (keys[code] == SDL_RELEASED)
     {
@@ -435,8 +435,7 @@ handler_keyboard::clear_command_keys ()
  */
 bool handler_keyboard::command_is_pressed (Uint32 code, bool clear)
 {
-  bool
-    is_pressed = command_keys[code];
+  bool is_pressed = command_keys[code];
   if (clear)
     {
       command_keys[code] = false;
@@ -539,27 +538,27 @@ Sint32 handler_keyboard::get_mouse_x ()
 
 /**
  * Set new pressed key for handle string input
- * @param kCode key code of the pressed key
+ * @param kcode key code of the pressed key
  */
 void
-handler_keyboard::set_key_code_down (Uint32 kCode)
+handler_keyboard::set_key_code_down (Uint32 kcode)
 {
-  if (kCode != SDLK_LSHIFT && kCode != SDLK_RSHIFT && kCode != SDLK_LCTRL &&
-      kCode != SDLK_RCTRL)
-    key_code_down = kCode;
+  if (kcode != SDLK_LSHIFT && kcode != SDLK_RSHIFT && kcode != SDLK_LCTRL &&
+      kcode != SDLK_RCTRL)
+    key_code_down = kcode;
 }
 
 /**
  * Set new relased key for handle string input
- * @param kCode key code of the pressed key
+ * @param kcode key code of the pressed key
  */
 void
-handler_keyboard::set_keycode_up (Uint32 kCode)
+handler_keyboard::set_keycode_up (Uint32 kcode)
 {
-  if (kCode != SDLK_LSHIFT && kCode != SDLK_RSHIFT && kCode != SDLK_LCTRL &&
-      kCode != SDLK_RCTRL)
+  if (kcode != SDLK_LSHIFT && kcode != SDLK_RSHIFT && kcode != SDLK_LCTRL &&
+      kcode != SDLK_RCTRL)
     {
-      code_keyup = kCode;
+      code_keyup = kcode;
       if (code_keyup == key_code_down)
         {
           key_code_down = 0;
@@ -575,10 +574,10 @@ handler_keyboard::set_keycode_up (Uint32 kCode)
 void
 handler_keyboard::input_string ()
 {
-  Sint32 kCode = 0;
+  Sint32 kcode = 0;
   if (key_delay < 1)
     {
-      kCode = key_code_down;
+      kcode = key_code_down;
       if (key_code_down > 0)
         {
           /* it is key pressed for the first time? */
@@ -596,30 +595,30 @@ handler_keyboard::input_string ()
     }
   else
     {
-      kCode = 0;
+      kcode = 0;
       key_delay--;
     }
   if (current_input_string)
     {
-      input_string (kCode);
+      input_string (kcode);
     }
 }
 
 /**
  * Handle input string
- * @param kCode key code enter
+ * @param kcode Key code enter
  */
 void
-handler_keyboard::input_string (Uint32 kCode)
+handler_keyboard::input_string (Uint32 kcode)
 {
   Sint32 j, i;
-  if (0 == kCode)
+  if (0 == kcode)
     {
       return;
     }
 
   /* check pressed key */
-  switch (kCode)
+  switch (kcode)
     {
     case SDLK_LEFT:
       string_cursor_pos--;
@@ -631,9 +630,13 @@ handler_keyboard::input_string (Uint32 kCode)
       /* backspace key pressed */
     case SDLK_BACKSPACE:
       if (string_cursor_pos > 0)
-        j = string_cursor_pos;
+        {
+          j = string_cursor_pos;
+        }
       else
-        j = 1;
+        {
+          j = 1;
+        }
       for (i = j; i < string_input_size; i++)
         {
           current_input_string[i - 1] = current_input_string[i];
@@ -658,10 +661,10 @@ handler_keyboard::input_string (Uint32 kCode)
       break;
 
     default:
-      kCode = kCode & 127;
-      if (kCode >= 'a' && kCode <= 'z')
+      kcode = kcode & 127;
+      if (kcode >= 'a' && kcode <= 'z')
         {
-          kCode = kCode - 32;
+          kcode = kcode - 32;
         }
 
       /* space (32) / ! (33) 
@@ -669,16 +672,16 @@ handler_keyboard::input_string (Uint32 kCode)
        * : (58) / 0-9 (48-57) 
        * A-Z (65 to 90)
        */
-      if ((kCode >= ' ' && kCode <= '!') ||
-          (kCode >= '-' && kCode <= '.') ||
-          (kCode >= '0' && kCode <= ':') ||
-          (kCode >= 'A' && kCode <= 'Z') || kCode == '\'')
+      if ((kcode >= ' ' && kcode <= '!') ||
+          (kcode >= '-' && kcode <= '.') ||
+          (kcode >= '0' && kcode <= ':') ||
+          (kcode >= 'A' && kcode <= 'Z') || kcode == '\'')
         {
           for (i = string_input_size - 1; i > string_cursor_pos; i--)
             {
               current_input_string[i] = current_input_string[i - 1];
             }
-          current_input_string[string_cursor_pos] = kCode;
+          current_input_string[string_cursor_pos] = kcode;
           string_cursor_pos++;
         }
     }
