@@ -1,14 +1,14 @@
 /**
  * @file controller_gigablitz.cc 
  * @brief Gigablitz controller 
- * @date 2007-09-25
+ * @date 2007-09-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.16 2007/09/25 05:43:20 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.17 2007/09/26 06:02:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -146,7 +146,7 @@ controller_gigablitz::shoot_paddle  ()
     y++;
   num_of_bricks = y;
 #ifndef SOUNDISOFF
-  audio->play_sound (S_TIR_GARD);
+  audio->play_sound (handler_audio::GUARDIAN_FIRE);
 #endif
   head_animation *head_anim = head_animation::get_instance ();
   head_anim->start_laugh ();
@@ -315,9 +315,13 @@ controller_gigablitz::run_in_guardians_level ()
   current_gigablitz->affligLast = l;
   l = bitz_miniy - y;
   if (l >= h)
-    l = h - 1;
+    {
+      l = h - 1;
+    }
   if (l < 0)
-    l = 0;
+    {
+      l = 0;
+    }
   current_gigablitz->affligFrst = l;
   if (y >= 240 * res)
     {
@@ -351,8 +355,8 @@ controller_gigablitz::collision_with_paddle ()
       return;
     }
 #ifndef SOUNDISOFF
-  audio->play_sound (PADDLE_EXPLOSION);
-  audio->play_sound (LOST_LIFE);
+  audio->play_sound (handler_audio::PADDLE_EXPLOSION);
+  audio->play_sound (handler_audio::LOST_LIFE);
 #endif
 
   controller_explosions *explosions = controller_explosions::get_instance ();
@@ -393,8 +397,7 @@ controller_gigablitz::shoot_guardian (Uint32 id, Sint32 xcoord,
     }
   current_gigablitz->set_coordinates (xcoord, ycoord);
 #ifndef SOUNDISOFF
-
-  audio->play_sound (S_TIR_GARD);
+  audio->play_sound (handler_audio::GUARDIAN_FIRE);
 #endif
 
   current_gigablitz->enable ();

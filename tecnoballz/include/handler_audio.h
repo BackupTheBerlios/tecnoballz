@@ -2,14 +2,14 @@
  * @file handler_audio.h
  * @brief Handler of the sound and music
  * @created 2004-03-22
- * @date 2007-03-06
+ * @date 2007-09-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.h,v 1.7 2007/09/25 05:43:20 gurumeditation Exp $
+ * $Id: handler_audio.h,v 1.8 2007/09/26 06:02:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,40 @@
 class handler_audio;
 #include "tecnoballz.h"
 
-/* numbers of the music */
+/** Module's positions in a area music */
+typedef struct
+{
+  /** First music of a bricks level */
+  Uint32 music_1;
+  /** Restart first music */
+  Uint32 music_1_loop;
+  /** Second music of a bricks level */
+  Uint32 music_2;
+  /** Restart second music */
+  Uint32 music_2_loop;
+  /** bricks level completed */
+  Uint32 level_completed;
+  /** Lost ball in bricks level */
+  Uint32 pos_losing;
+  /** Shop music */
+  Uint32 shop_music;
+} musics_pos;
+
+class handler_audio:public virtual tecnoballz
+{
+public:
+
+/* Differents portions in a area music */
+typedef enum
+{ MUSIC_UNDIVIDED,
+  GAME_PORTION,
+  WIN_PORTION,
+  LOST_PORTION,
+  SHOP_PORTION,
+  MUSIC_IS_OFF
+} MUSIC_PORTIONS;
+
+/** Enumeration of all the musics */
 typedef enum
 {
   MUSICAREA1,
@@ -53,21 +86,9 @@ typedef enum
   IN_GAME_MUSIC,
   FRIDGE_IN_SPACE_MUSIC,
   MON_LAPIN_MUSIC
-} music_code;
+} MUSIC_ENUM;
 
-// module's positions in a area music
-typedef struct
-{
-  Uint32 pos_music1;
-  Uint32 loopmusic1;
-  Uint32 pos_music2;
-  Uint32 loopmusic2;
-  Uint32 pos_winner;
-  Uint32 pos_losing;
-  Uint32 pos_zeshop;
-} musics_pos;
-
-// numbers of the sounds
+/** Enumeration of all the sound effects */
 typedef enum
 { LOST_LIFE,
   PADDLE_EXPLOSION,
@@ -80,41 +101,29 @@ typedef enum
   /** Vocal "tecnoball" */
   TECNOBALL,
   SHIP_APPEAR,
-  S_TRANSFOR,                   //bumper transformation (expand, glue)
-  S_TIR_GARD,                   //guard's fire
-  S_RAK_TIRS,                   //bumper's fire
-  S_BIGEXPLO,                   //guard's explosion
-  S_CASSEIND,                   //break a indestructible brick
-  S_ATOM_EXP,                   //
-  S_GARDIENT,                   //hit the guard
-  S_TO_ATOMS,                   //
-  S_TOINDES1,                   //hit the indestructible brick 1
-  S_TOINDES2,                   //hit the indestructible brick 2
-  S_TOUCHRAK,
-  S_BRICOTES,
-  S_TOUBRIK1,
-  S_TOUBRIK2,
-  S_TOUBRIK3,
-  S_TOUBRIK4,
-  S_TOUBRIK5,
-  S_COINEJEC,
-  S_COINASPI,
+  /** Paddle transformation */
+  PADDLE_TRANSFORMATION,
+  GUARDIAN_FIRE,
+  PADDLE_FIRE,
+  /** Guardian's explosion */
+  BIG_EXPLOSION,
+  DESTROY_INDESTRUCTIBLE_BRICK,
+  SHIP_EXPLODE,
+  HIT_GUARDIAN,
+  HIT_SHIP,
+  HIT_INDESTRUCTIBLE_BRICK1,
+  HIT_INDESTRUCTIBLE_BRICK2,
+  BALL_HIT_PADDLE,
+  BALL_HIT_SIDE,
+  BALL_HIT_BRICK1,
+  BALL_HIT_BRICK2,
+  BALL_HIT_BRICK3,
+  BALL_HIT_BRICK4,
+  BALL_HIT_BRICK5,
+  EJECTOR_OUT,
+  ECJECTOR_IN,
   NUM_OF_SOUNDS
-} sound_code;
-
-class handler_audio:public virtual tecnoballz
-{
-
-public:
-/* differents portions in a area music */
-typedef enum
-{ MUSIC_UNDIVIDED,
-  GAME_PORTION,
-  WIN_PORTION,
-  LOST_PORTION,
-  SHOP_PORTION,
-  MUSIC_IS_OFF
-} MUSIC_PORTIONS;
+} SOUNDS_ENUM;
 
 public:
   /* true if SDL_mixer is enable */
@@ -157,13 +166,18 @@ private:
   Uint32 aera_number;
   /** Current level number (1 to 12) */
   Uint32 level_number;
-
-  Sint32 position_1;
-  Sint32 modposloop;
-  Sint32 position_2;
-  /** */
-  Uint32 current_portion_music;            //normal / level / shop / ...
-
+  /** Position of the first music of a bricks level
+   * in the Protraker module */
+  Sint32 music_1_position;
+  /** Position of the restart of the current music in
+   * the Protraker module */
+  Sint32 restart_position;
+  /** Position of the second music of a bricks level
+   * in the Protraker module */
+  Sint32 music_2_position;
+  /** Part of the music module currently played: GAME_PORTION,
+   * WIN_PORTION, LOST_PORTION or SHOP_PORTION */
+  Uint32 current_portion_music;
   /** True if only the music must be played,
    * and not the sound effects, during the phases of intro,
    * shop and game over */
@@ -174,16 +188,18 @@ private:
   /** True if sound effect are enabled. [Ctrl] + [F] or
    * [Ctrl] + [S] keys toggle the sound effects on and off */
   bool is_sound_enable;
-
+  /** Current music volume */
   Uint32 music_volume;
   /** Identifier of the current music loaded and played */
   Sint32 current_music_id;
+  /** Pointer to the current music loaded and played */
   Mix_Music *current_music;
-  /** Amiga song module */
+  /** Pointer to the Amiga song module (Protracker format) */
   MODULE *song_module;
-  Uint32 waves_size;            //size fo all waves
+  /** Size of all waves used for sounds effect */
+  Uint32 waves_size;
+  /** Current position in the Protraker module */
   Sint32 song_pos;
-  Sint32 lastpatpos;
 
 };
 #endif

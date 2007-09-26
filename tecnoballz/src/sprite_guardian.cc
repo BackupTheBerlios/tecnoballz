@@ -2,14 +2,14 @@
  * @file sprite_guardian.cc 
  * @brief The guardian sprite 
  * @created 2003-01-09 
- * @date 2007-05-14
+ * @date 2007-09-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_guardian.cc,v 1.11 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_guardian.cc,v 1.12 2007/09/26 06:02:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -203,7 +203,7 @@ sprite_guardian::fire_bullets ()
     }
   shot_delay_counter = shoot_frequency;
 #ifndef SOUNDISOFF
-  audio->play_sound (S_TIR_GARD);
+  audio->play_sound (handler_audio::GUARDIAN_FIRE);
 #endif
   Sint32 nfire = gard_tfire[gardptfire];
   if (nfire < 0)
@@ -211,7 +211,8 @@ sprite_guardian::fire_bullets ()
       nfire = gard_tfire[0];
       gardptfire = 0;
     }
-   gardptfire++;         // pt/next weapons
+   /** Index of the next weapons */
+   gardptfire++;
    controller_bullets* bullets = controller_bullets::get_instance ();
    bullets->fire (nfire, this);
 }

@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-09-25
+ * @date 2007-09-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.51 $
+ * @version $Revision: 1.52 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.51 2007/09/25 12:11:48 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.52 2007/09/26 06:02:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -158,7 +158,10 @@ controller_balls::run_in_bricks_levels ()
   collisions_with_eyes ();
   /* control balls with the left mouse button */
   controll_balls ();
-  time_2tilt ();
+  if (!balls_are_controlled)
+    {
+      time_2tilt ();
+    }
   accelerate ();
 }
 
@@ -255,7 +258,7 @@ controller_balls::check_outside_balls ()
       ships->force_explosion ();
 #ifndef SOUNDISOFF
       audio->play_lost_music ();
-      audio->play_sound (LOST_LIFE);
+      audio->play_sound (handler_audio::LOST_LIFE);
 #endif
       short_info_messages* messages = short_info_messages::get_instance ();
       messages->send_message_request (short_info_messages::LOST_FILE);
@@ -302,7 +305,7 @@ controller_balls::vitussort2 ()
       ball->set_power_2 ();
       current_player->remove_life (1);
 #ifndef SOUNDISOFF
-      audio->play_sound (LOST_LIFE);
+      audio->play_sound (handler_audio::LOST_LIFE);
 #endif
     }
 }
@@ -338,7 +341,7 @@ controller_balls::activate_tilt ()
         {
           ftilt = true;
 #ifndef SOUNDISOFF
-          audio->play_sound (TECNOBALL);
+          audio->play_sound (handler_audio::TECNOBALL);
 #endif
         }
     }
@@ -652,7 +655,7 @@ controller_balls::collisions_with_paddles ()
             {
               touched_paddle->touch_ball = true;
 #ifndef SOUNDISOFF
-              audio->play_sound (S_TOUCHRAK);
+              audio->play_sound (handler_audio::BALL_HIT_PADDLE);
 #endif
               ball->paddle_touched = touched_paddle;
               ball->tilt_delay = 0;
@@ -739,7 +742,7 @@ controller_balls::collisions_with_paddle ()
             {
               bumpX->touch_ball = true;
 #ifndef SOUNDISOFF
-              audio->play_sound (S_TOUCHRAK);
+              audio->play_sound (handler_audio::BALL_HIT_PADDLE);
 #endif
               balle->paddle_touched = bumpX;
               balle->tilt_delay = 0;
@@ -797,7 +800,7 @@ controller_balls::collisions_with_robot ()
       monPT = (Sint32 *) ((char *) monPT + j);
       ball->direction = *monPT;
 #ifndef SOUNDISOFF
-      audio->play_sound (S_TOUCHRAK);
+      audio->play_sound (handler_audio::BALL_HIT_PADDLE);
 #endif
     }
   }
@@ -868,7 +871,7 @@ controller_balls::handle_ejectors ()
         table += j;
         ball->direction = *table;
 #ifndef SOUNDISOFF
-        audio->play_sound (S_COINEJEC);
+        audio->play_sound (handler_audio::EJECTOR_OUT);
 #endif
       }
       else
@@ -892,7 +895,7 @@ controller_balls::handle_ejectors ()
         ball->direction = 64;
         current_player->add_score (10);
 #ifndef SOUNDISOFF
-        audio->play_sound (S_COINASPI);
+        audio->play_sound (handler_audio::ECJECTOR_IN);
 #endif
       }
       else
@@ -906,7 +909,7 @@ controller_balls::handle_ejectors ()
           ball->direction = 64;
           current_player->add_score (10);
 #ifndef SOUNDISOFF
-          audio->play_sound (S_COINASPI);
+          audio->play_sound (handler_audio::ECJECTOR_IN);
 #endif
         }
         else
@@ -920,7 +923,7 @@ controller_balls::handle_ejectors ()
             ball->direction = 64;
             current_player->add_score (10);
 #ifndef SOUNDISOFF
-            audio->play_sound (S_COINASPI);
+            audio->play_sound (handler_audio::ECJECTOR_IN);
 #endif
           }
           else
@@ -934,7 +937,7 @@ controller_balls::handle_ejectors ()
               ball->direction = 64;
               current_player->add_score (10);
 #ifndef SOUNDISOFF
-              audio->play_sound (S_COINASPI);
+              audio->play_sound (handler_audio::ECJECTOR_IN);
 #endif
             }
           }
@@ -1009,7 +1012,7 @@ controller_balls::collisions_with_walls ()
           monPT = (Sint32 *) ((char *) monPT + ball->direction);
           ball->direction = *monPT;
 #ifndef SOUNDISOFF
-          audio->play_sound (S_BRICOTES);
+          audio->play_sound (handler_audio::BALL_HIT_SIDE);
 #endif
         }
     }
@@ -1039,7 +1042,7 @@ controller_balls::collisions_with_sides ()
 	  monPT = rb5;
 	  ball->x_coord = left_xcoord;
 #ifndef SOUNDISOFF
-	  audio->play_sound (S_BRICOTES);
+	  audio->play_sound (handler_audio::BALL_HIT_SIDE);
 #endif
 	  ball->colli_wall = 4;
 	}
@@ -1050,7 +1053,7 @@ controller_balls::collisions_with_sides ()
 	      monPT = rb1;
 	      ball->x_coord = right_xcoord;
 #ifndef SOUNDISOFF
-	      audio->play_sound (S_BRICOTES);
+	      audio->play_sound (handler_audio::BALL_HIT_SIDE);
 #endif
 	      ball->colli_wall = 2;
 	    }
@@ -1061,7 +1064,7 @@ controller_balls::collisions_with_sides ()
 		  monPT = rb3;
 		  ball->y_coord = top_ycoord;
 #ifndef SOUNDISOFF
-		  audio->play_sound (S_BRICOTES);
+		  audio->play_sound (handler_audio::BALL_HIT_SIDE);
 #endif
 		  ball->colli_wall = 3;
 		}
@@ -1202,7 +1205,7 @@ controller_balls::bricks_collision ()
                     {
                       x = 2;
 #ifndef SOUNDISOFF
-                      audio->play_sound (S_TOINDES2);
+                      audio->play_sound (handler_audio::HIT_INDESTRUCTIBLE_BRICK2);
 #endif
                     }
                 }
@@ -1211,7 +1214,7 @@ controller_balls::bricks_collision ()
 		  /* brick's really indestructible */
                   x = 1; 
 #ifndef SOUNDISOFF
-                  audio->play_sound (S_TOINDES1);
+                  audio->play_sound (handler_audio::HIT_INDESTRUCTIBLE_BRICK1);
 #endif
                 }
             }
@@ -1436,7 +1439,7 @@ controller_balls::collisions_with_ships ()
                 {
                   current_player->add_score (100);
 #ifndef SOUNDISOFF
-                  audio->play_sound (S_TO_ATOMS);
+                  audio->play_sound (handler_audio::HIT_SHIP);
 #endif
                   k = (ball->ballPowerX + 1) * 4;
                   ship->strength -= k;
@@ -1474,7 +1477,7 @@ controller_balls::vitusGuard ()
         {
           continue;
         }
-      sprite_ball *balok = NULL;
+      sprite_ball *ball_hit = NULL;
       Sint32 grdx1 = guardian->x_coord;
       Sint32 grdx2 = grdx1 + guardian->gard_colx2;
       grdx1 += guardian->gard_colx1;
@@ -1483,30 +1486,30 @@ controller_balls::vitusGuard ()
       grdy1 += guardian->gard_coly1;
       for (Uint32 i = 0; i < numof_balls; i++)
         {
-          sprite_ball *balle = balls[i];
-          if (!balle->is_enabled)
+          sprite_ball *ball = balls[i];
+          if (!ball->is_enabled)
             {
               continue;
             }
-          Sint32 x = balle->x_coord;
+          Sint32 x = ball->x_coord;
           if (x <= grdx2)
             {
-              Sint32 y = balle->y_coord;
+              Sint32 y = ball->y_coord;
               if (y <= grdy2)
                 {
-                  x += balle->collision_width;
+                  x += ball->collision_width;
                   if (x > grdx1)
                     {
-                      y += balle->collision_width;
+                      y += ball->collision_width;
                       if (y > grdy1)
                         {
                           x = ((random_counter + i) & 0xF) << 2;
 #ifndef SOUNDISOFF
-                          audio->play_sound (S_GARDIENT);
+                          audio->play_sound (handler_audio::HIT_GUARDIAN);
 #endif
-                          balle->direction = x;
+                          ball->direction = x;
                           guardian->recently_touched = 5;
-                          guardian->energy_level -= balle->powerBall1;
+                          guardian->energy_level -= ball->powerBall1;
                           if (guardian->energy_level <= 0)
                             {
                               /* guardian is dead */
@@ -1514,17 +1517,17 @@ controller_balls::vitusGuard ()
                               /* make exploding guardian! */
                               guardian->explode_delay_counter = 500;
                             }
-                          balok = balle;
+                          ball_hit = ball;
                         }
                     }
                 }
             }
         }
-      if (NULL != balok)
+      if (NULL != ball_hit)
         {
 
-          moneys->send_money_from_guardian (balok);
-          capsules->check_if_send_capsule (balok);
+          moneys->send_money_from_guardian (ball_hit);
+          capsules->check_if_send_capsule (ball_hit);
         }
     }
 }
@@ -1728,7 +1731,7 @@ controller_balls::time_2tilt ()
         {
           head_anim->start_yawn ();
 #ifndef SOUNDISOFF
-          audio->play_sound (TILT_ALARM);
+          audio->play_sound (handler_audio::TILT_ALARM);
 #endif
           tilt = true;
         }
@@ -1758,7 +1761,7 @@ controller_balls::time2tilt2 ()
                     {
                       tilt = 1;
 #ifndef SOUNDISOFF
-                      audio->play_sound (TILT_ALARM);
+                      audio->play_sound (handler_audio::TILT_ALARM);
 #endif
                     }
                   balle->tilt_delay++;

@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-09-16
+ * @date 2007-09-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.32 2007/09/24 16:00:01 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.33 2007/09/26 06:02:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -623,7 +623,7 @@ controller_bricks::less_bricks ()
   right_panel_score *panel = right_panel_score::get_instance ();
   panel->decrease_bricks_counter (1);
 #ifndef SOUNDISOFF
-  audio->play_sound (S_TOUBRIK1);
+  audio->play_sound (handler_audio::BALL_HIT_BRICK1);
 #endif
 }
 
@@ -660,7 +660,7 @@ bool controller_bricks::update ()
     {
       current_player->add_score (10);
 #ifndef SOUNDISOFF
-      audio->play_sound (S_TOUBRIK1);
+      audio->play_sound (handler_audio::BALL_HIT_BRICK1);
 #endif
       moneys->send_money_from_brick (redraw);
       if (!has_background)
@@ -685,7 +685,7 @@ bool controller_bricks::update ()
     {
       current_player->add_score (100);
 #ifndef SOUNDISOFF
-      audio->play_sound (S_CASSEIND);
+      audio->play_sound (handler_audio::DESTROY_INDESTRUCTIBLE_BRICK);
 #endif
     }
   else
@@ -693,7 +693,7 @@ bool controller_bricks::update ()
       current_player->add_score (20);
       panel->decrease_bricks_counter (1);
 #ifndef SOUNDISOFF
-      audio->play_sound (S_TOUBRIK1);
+      audio->play_sound (handler_audio::BALL_HIT_BRICK1);
 #endif
       if (!redraw->is_gigablitz_destroyed)
         {

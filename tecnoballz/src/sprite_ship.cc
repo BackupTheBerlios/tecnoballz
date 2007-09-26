@@ -1,14 +1,14 @@
 /**
  * @file sprite_ship.cc 
  * @brief A flying enemy ships sprite 
- * @date 2007-09-25
+ * @date 2007-09-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ship.cc,v 1.13 2007/09/25 12:11:48 gurumeditation Exp $
+ * $Id: sprite_ship.cc,v 1.14 2007/09/26 06:02:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ sprite_ship::move ()
               sprite_has_shadow = 1;
               set_image (k);
 #ifndef SOUNDISOFF
-              audio->play_sound (SHIP_APPEAR);
+              audio->play_sound (handler_audio::SHIP_APPEAR);
 #endif
             }
           else
@@ -328,31 +328,29 @@ sprite_ship::explode ()
   set_image (frame_index);
   frame_delay = frame_period;
 #ifndef SOUNDISOFF
-  audio->play_sound (S_ATOM_EXP);
+  audio->play_sound (handler_audio::SHIP_EXPLODE);
 #endif
 }
 
-//-----------------------------------------------------------------------------
-// values of possible time during which a BouiBoui keep the same trajectory
-//-----------------------------------------------------------------------------
-Sint32
-sprite_ship::ghostWait1[16] =
-  { 50, 50, 30, 50, 20, 12, 8, 50, 45, 32, 12, 56, 33, 22, 22, 20
+/** Values of possible time during which a BouiBoui keep the same 
+ *  trajectory */
+Sint32 sprite_ship::ghostWait1[16] =
+  { 50, 50, 30, 50, 20, 12, 8, 50,
+    45, 32, 12, 56, 33, 22, 22, 20
   };
-Sint32
-sprite_ship::ghostWait2[16] =
-  { 40, 20, 30, 47, 22, 33, 50, 50, 55, 52, 42, 32, 42, 32, 42, 32
+Sint32 sprite_ship::ghostWait2[16] =
+  { 40, 20, 30, 47, 22, 33, 50, 50,
+    55, 52, 42, 32, 42, 32, 42, 32
   };
-Sint32
-sprite_ship::ghostWait3[16] =
-  { 10, 10, 20, 27, 12, 13, 20, 10, 10, 20, 10, 25, 26, 12, 32, 33
+Sint32 sprite_ship::ghostWait3[16] =
+  { 10, 10, 20, 27, 12, 13, 20, 10,
+    10, 20, 10, 25, 26, 12, 32, 33
   };
-Sint32
-sprite_ship::ghostWait4[16] =
-  { 60, 20, 50, 37, 42, 33, 33, 20, 20, 22, 33, 70, 20, 22, 32, 32
+Sint32 sprite_ship::ghostWait4[16] =
+  { 60, 20, 50, 37, 42, 33, 33, 20,
+    20, 22, 33, 70, 20, 22, 32, 32
   };
-Sint32 *
-sprite_ship::ghost_wait[4] =
+Sint32 * sprite_ship::ghost_wait[4] =
   { ghostWait1, ghostWait2, ghostWait3, ghostWait4
   };
 

@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.cc 
  * @brief Capsules controller 
- * @date 2007-09-25
+ * @date 2007-09-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.25 2007/09/25 05:43:20 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.26 2007/09/26 06:02:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -397,7 +397,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       /* glue paddle */
     case GAD_GLUE00:
 #ifndef SOUNDISOFF
-      audio->play_sound (S_TRANSFOR);
+      audio->play_sound (handler_audio::PADDLE_TRANSFORMATION);
 #endif
       messages->send_message_request (short_info_messages::GLUE_OPTION);
       paddle->set_glue ();
@@ -415,7 +415,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       // fire power 1
     case GAD_FIRE01:
 #ifndef SOUNDISOFF
-      audio->play_sound (S_TRANSFOR);
+      audio->play_sound (handler_audio::PADDLE_TRANSFORMATION);
 #endif
       messages->send_message_request (short_info_messages::SIMPLE_FIRE);
       paddle->set_fire_1 ();
@@ -424,25 +424,25 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       // fire power 2
     case GAD_FIRE02:
 #ifndef SOUNDISOFF
-      audio->play_sound (S_TRANSFOR);
+      audio->play_sound (handler_audio::PADDLE_TRANSFORMATION);
 #endif
       messages->send_message_request (short_info_messages::COOL_FIRE);
       paddle->set_fire_2 ();
       break;
 
-      // shrink bumper
+      /* shrink paddle */
     case GAD_SIZE_M:
 #ifndef SOUNDISOFF
-      audio->play_sound (S_TRANSFOR);
+      audio->play_sound (handler_audio::PADDLE_TRANSFORMATION);
 #endif
       messages->send_message_request (short_info_messages::SMALL_PADDLE);
       paddles->shrink_paddles ();
       break;
 
-      // expand bumper
+     /* expand paddle */
     case GAD_SIZE_P:
 #ifndef SOUNDISOFF
-      audio->play_sound (S_TRANSFOR);
+      audio->play_sound (handler_audio::PADDLE_TRANSFORMATION);
 #endif
       messages->send_message_request (short_info_messages::BIG_PADDLE);
       paddles->expand_paddles ();
@@ -451,7 +451,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       // lose a life
     case GAD_LIFE_M:
 #ifndef SOUNDISOFF
-      audio->play_sound (LOST_LIFE);
+      audio->play_sound (handler_audio::LOST_LIFE);
 #endif
       messages->send_message_request (short_info_messages::LOST_FILE);
       current_player->remove_life (1);
@@ -460,7 +460,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       // extra life
     case GAD_LIFE_P:
 #ifndef SOUNDISOFF
-      audio->play_sound (EXTRA_LIFE);
+      audio->play_sound (handler_audio::EXTRA_LIFE);
 #endif
       messages->send_message_request (short_info_messages::WIN_LIFE);
       current_player->add_life (1);
@@ -469,7 +469,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       // extra balls
     case GAD_BALLE2:
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       messages->send_message_request (short_info_messages::EXTRA_BALLS);
       balls->run_2balls ();
@@ -478,7 +478,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       // multi balls
     case GAD_BALLE3:
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       messages->send_message_request (short_info_messages::MULTI_BALLS);
       balls->run_3balls ();
@@ -488,7 +488,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
     case GAD_POWER1:
       messages->send_message_request (short_info_messages::POWERBALLS);
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       balls->set_power_1 ();
       break;
@@ -497,7 +497,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
     case GAD_POWER2:
       messages->send_message_request (short_info_messages::MEGA_POWERBALLS);
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       balls->set_power_2 ();
       break;
@@ -544,7 +544,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
     case GAD_SIZE01:
       messages->send_message_request (short_info_messages::BIG_BALLS);
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       balls->set_size_2 ();
       break;
@@ -553,7 +553,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
     case GAD_SIZE02:
       messages->send_message_request (short_info_messages::HUGE_BALLS);
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       balls->set_size_3 ();
       break;
@@ -566,7 +566,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
     case GAD_MEGA00:
       messages->send_message_request (short_info_messages::MAXIMUM_OPTIONS);
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       paddles->set_maximum_paddles_size ();
       balls->run_nballs ();
@@ -597,7 +597,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
     case GAD_PRICE1:
       messages->send_message_request (short_info_messages::BUDGET_PRICES);
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       current_player->set_budget_prices (true);
       break;
@@ -606,7 +606,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
     case GAD_WALL01:
       messages->send_message_request (short_info_messages::WALL_ENABLE);
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       ptBob_wall->enable ();
       ptBob_wall->thecounter += 500;
@@ -617,7 +617,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
     case GAD_ROBOT1:
       messages->send_message_request (short_info_messages::ROBOT_ENABLE);
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       paddles->activrobot ();
       ptBob_wall->disable ();
@@ -629,7 +629,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       balls->enable_balls_control ();
       messages->send_message_request (short_info_messages::CONTROL_BALLS);
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       break;
 
@@ -662,7 +662,7 @@ controller_capsules::gadgetrun2 (sprite_paddle * raket, Sint32 nuGad)
       /* extra life */
     case GAD_LIFE_P:
 #ifndef SOUNDISOFF
-      audio->play_sound (EXTRA_LIFE);
+      audio->play_sound (handler_audio::EXTRA_LIFE);
 #endif
       current_player->add_life (1);
       break;
@@ -670,7 +670,7 @@ controller_capsules::gadgetrun2 (sprite_paddle * raket, Sint32 nuGad)
       // multi balls
     case GAD_BALLE3:
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       oBall->run_3balls ();
       break;
@@ -678,7 +678,7 @@ controller_capsules::gadgetrun2 (sprite_paddle * raket, Sint32 nuGad)
       // power ball 1 (ball size 2)
     case GAD_POWER1:
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       oBall->set_size_2 ();
       break;
@@ -686,7 +686,7 @@ controller_capsules::gadgetrun2 (sprite_paddle * raket, Sint32 nuGad)
       // power ball 2 (ball size 3)
     case GAD_POWER2:
 #ifndef SOUNDISOFF
-      audio->play_sound (COLLECT_CAPSULE);
+      audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       oBall->set_size_3 ();
       break;

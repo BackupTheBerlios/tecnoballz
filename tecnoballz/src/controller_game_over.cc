@@ -5,11 +5,11 @@
  * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_game_over.cc,v 1.9 2007/09/25 16:00:44 gurumeditation Exp $
+ * $Id: controller_game_over.cc,v 1.10 2007/09/26 06:02:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -110,17 +110,17 @@ controller_game_over::enable_game_over (bool is_victory)
   bool is_ranked = high_score->is_player_ranked ();
   if (is_victory)
     {
-      audio->play_music (MUSICCONGR);
+      audio->play_music (handler_audio::MUSICCONGR);
     }
   else
     {
       if (is_ranked)
         {
-          audio->play_music (MUSICSCORE);
+          audio->play_music (handler_audio::MUSICSCORE);
         }
       else
         {
-          audio->play_music (MUSICGOVER);
+          audio->play_music (handler_audio::MUSICGOVER);
         }
     }
 #else

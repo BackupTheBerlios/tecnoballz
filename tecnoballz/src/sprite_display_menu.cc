@@ -1,14 +1,14 @@
 /** 
  * @file sprite_display_menu.cc 
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-04-03
+ * @date 2007-09-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.14 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.15 2007/09/26 06:02:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -426,25 +426,27 @@ sprite_display_menu::check_events ()
               current_menu_section = OPTIONS_SECTION;
               break;
             case LINE_ABOUT:
-              audio->play_music (FRIDGE_IN_SPACE_MUSIC);
+#ifndef WIN32
+              audio->play_music (handler_audio::FRIDGE_IN_SPACE_MUSIC);
+#endif
               clear_text_offscreen ();
               clear_stop ();
               current_menu_section = ABOUT_SECTION;
               break;
             case LINE_SALUT:
-              audio->play_music (MON_LAPIN_MUSIC);
+              audio->play_music (handler_audio::MON_LAPIN_MUSIC);
               clear_text_offscreen ();
               clear_stop ();
               current_menu_section = GREETINGS_SECTION;
               break;
             case LINE_INFOS:
-              audio->play_music (IN_GAME_MUSIC);
+              audio->play_music (handler_audio::IN_GAME_MUSIC);
               clear_text_offscreen ();
               clear_stop ();
               current_menu_section = INFOS_SECTION;
               break;
             case LINE_SCORE:
-              audio->play_music (TERMIGATOR_MUSIC);
+              audio->play_music (handler_audio::TERMIGATOR_MUSIC);
               clear_text_offscreen ();
               clear_stop ();
               copyScores ();

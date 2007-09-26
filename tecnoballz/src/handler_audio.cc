@@ -2,14 +2,14 @@
  * @file handler_audio.cc 
  * @brief Handler of the sound and music
  * @created 2004-03-22
- * @date 2007-03-06
+ * @date 2007-09-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.cc,v 1.7 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_audio.cc,v 1.8 2007/09/26 06:02:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,26 +35,31 @@ handler_audio * handler_audio::audio_singleton = NULL;
 bool handler_audio::is_audio_enable = true;
 
 /** Positions in music modules */
-const musics_pos
-  handler_audio::ptMusicpos[] = { {0,   // first music of a "bricks level"
-                                   2,   // restart first music
-
-                                   11,  // second music of a "bricks level"
-                                   11,  // restart second music
-
-                                   23,  // "bricks level" completed
-                                   24,  // lost ball in "bricks level"
-                                   25   // shop music
-                                   },
-{0, 0, 15, 15, 22, 23, 24},
-{0, 0, 15, 15, 28, 29, 30},
-{0, 0, 11, 11, 18, 19, 20},
-{0, 0, 15, 15, 30, 31, 32}
+const musics_pos handler_audio::ptMusicpos[] =
+  {
+    {
+      /* first music of a bricks level */
+      0,
+      /* restart first music */
+      2,
+      /* second music of a bricks level */
+      11,
+      /* restart second music */
+      11,
+      /* "bricks level" completed */
+      23,
+      /* lost ball in "bricks level" */
+      24,
+      /* shop music */
+      25
+    },
+    {0, 0, 15, 15, 22, 23, 24},
+    {0, 0, 15, 15, 28, 29, 30},
+    {0, 0, 11, 11, 18, 19, 20},
+    {0, 0, 15, 15, 30, 31, 32}
 };
 
-//######################################################################
-// list of sounds pointers
-//######################################################################
+/** Pointers of all sound effects */
 Mix_Chunk * handler_audio::sound_list[NUM_OF_SOUNDS];
 char handler_audio::sounds_play[NUM_OF_SOUNDS];
 
@@ -143,13 +148,17 @@ handler_audio::initialize ()
     }
   if (Mix_OpenAudio (44100, AUDIO_S16, 2, 4096))
     {
-      std::cerr << "handler_audio::initialize() " <<
+      std::cerr << "(!)handler_audio::initialize() " <<
         "Mix_OpenAudio() return " << SDL_GetError () << std::endl;
       is_audio_enable = false;
       SDL_Quit ();
       return;
     }
-  //query_spec();
+
+  if (is_verbose)
+    {
+      query_spec();
+    }
   music_volume = Mix_VolumeMusic (-1);
   Mix_AllocateChannels (8);
 
@@ -164,8 +173,9 @@ handler_audio::initialize ()
       char *pathname = resources->get_sound_filename (i);
       if (NULL == pathname)
         {
-          fprintf (stderr,
-                   "handler_audio::initialize() file %i not found\n", i);
+          std::cerr << "handler_audio::initialize() " << 
+	    "(!)handler_audio::initialize() file " << i << 
+	    "not found"  << std::endl;
           is_audio_enable = false;
           return;
         }
@@ -173,7 +183,7 @@ handler_audio::initialize ()
       Mix_Chunk *ptWav = Mix_LoadWAV (pathname);
       if (NULL == ptWav)
         {
-          std::cerr << "handler_audio::initialize() " << 
+          std::cerr << "(!)handler_audio::initialize() " << 
             "Mix_LoadWAV(" << pathname << ") return " <<
             SDL_GetError () << std::endl;
           is_audio_enable = false;
@@ -192,44 +202,49 @@ handler_audio::initialize ()
     }
 }
 
-//------------------------------------------------------------------------------
-// display some infos
-//------------------------------------------------------------------------------
+/**
+ * Display some infos
+ */
 void
 handler_audio::query_spec ()
 {
-  Sint32 nopen, frequ, nchan;
-  Uint16 fmNum;
-  nopen = Mix_QuerySpec (&frequ, &fmNum, &nchan);
-  if (!nopen)
-    fprintf (stderr, "Mix_QuerySpec: %s\n", Mix_GetError ());
-  else
+  Sint32 result, frequency, channels;
+  Uint16 format_id;
+  result = Mix_QuerySpec (&frequency, &format_id, &channels);
+  if (result == 0)
     {
-      char *fmStr = "Unknown";
-      switch (fmNum)
+      std::cerr <<  "handler_audio::query_spec() " <<
+	"Mix_QuerySpec return " << Mix_GetError ()
+	<< std::endl;
+    return;
+    }
+      char *format = "Unknown";
+      switch (format_id)
         {
         case AUDIO_U8:
-          fmStr = "U8";
+          format = "U8";
           break;
         case AUDIO_S8:
-          fmStr = "S8";
+          format = "S8";
           break;
         case AUDIO_U16LSB:
-          fmStr = "U16LSB";
+          format = "U16LSB";
           break;
         case AUDIO_S16LSB:
-          fmStr = "S16LSB";
+          format = "S16LSB";
           break;
         case AUDIO_U16MSB:
-          fmStr = "U16MSB";
+          format = "U16MSB";
           break;
         case AUDIO_S16MSB:
-          fmStr = "S16MSB";
+          format = "S16MSB";
           break;
         }
-      printf ("opened=%d times frequency=%dHz format=%s channels=%d",
-              nopen, frequ, fmStr, nchan);
-    }
+      std::cout << "handler_audio::query_spec()" <<
+	" times frequencyency: " <<  frequency <<
+	" format: " << format <<
+	" channels: " << channels
+	<< std::endl;
 }
 
 /**
@@ -251,18 +266,18 @@ handler_audio::play_level_music (Uint32 aera_num, Uint32 level)
   Uint32 paire = level & 0x1;
   if ((level <= 5 && paire) || (level > 5 && !paire))
     {
-      modposloop = ptMusicpos[music].loopmusic1;
-      position_1 = ptMusicpos[music].pos_music1;
-      position_2 = ptMusicpos[music].pos_music2 - 1;
+      restart_position = ptMusicpos[music].music_1_loop;
+      music_1_position = ptMusicpos[music].music_1;
+      music_2_position = ptMusicpos[music].music_2 - 1;
     }
   else
     {
-      modposloop = ptMusicpos[music].loopmusic2;
-      position_1 = ptMusicpos[music].pos_music2;
-      position_2 = ptMusicpos[music].pos_winner - 1;
+      restart_position = ptMusicpos[music].music_2_loop;
+      music_1_position = ptMusicpos[music].music_2;
+      music_2_position = ptMusicpos[music].level_completed - 1;
     }
   play_music (music);
-  Mix_SetMusicPosition (position_1);
+  Mix_SetMusicPosition (music_1_position);
   current_portion_music = GAME_PORTION;
   Player_Stop ();
 }
@@ -280,11 +295,11 @@ handler_audio::play_shop_music (Uint32 aera_num)
     }
   aera_number = aera_num;
   Uint32 music = area_music (aera_num);
-  position_1 = ptMusicpos[music].pos_zeshop;
-  position_2 = song_module->numpos - 1;
-  modposloop = position_1;
+  music_1_position = ptMusicpos[music].shop_music;
+  music_2_position = song_module->numpos - 1;
+  restart_position = music_1_position;
   play_music (music);
-  Mix_SetMusicPosition (position_1);
+  Mix_SetMusicPosition (music_1_position);
   current_portion_music = SHOP_PORTION;
 }
 
@@ -299,10 +314,10 @@ handler_audio::play_win_music ()
       return;
     }
   Uint32 music = area_music (aera_number);
-  position_1 = ptMusicpos[music].pos_winner;
-  position_2 = ptMusicpos[music].pos_losing - 1;
-  modposloop = position_1;
-  Mix_SetMusicPosition (position_1);
+  music_1_position = ptMusicpos[music].level_completed;
+  music_2_position = ptMusicpos[music].pos_losing - 1;
+  restart_position = music_1_position;
+  Mix_SetMusicPosition (music_1_position);
   current_portion_music = WIN_PORTION;
 }
 
@@ -317,10 +332,10 @@ handler_audio::play_lost_music ()
       return;
     }
   Uint32 music = area_music (aera_number);
-  position_1 = ptMusicpos[music].pos_losing;
-  position_2 = ptMusicpos[music].pos_zeshop - 1;
-  modposloop = position_1;
-  Mix_SetMusicPosition (position_1);
+  music_1_position = ptMusicpos[music].pos_losing;
+  music_2_position = ptMusicpos[music].shop_music - 1;
+  restart_position = music_1_position;
+  Mix_SetMusicPosition (music_1_position);
   current_portion_music = LOST_PORTION;
 }
 
@@ -432,7 +447,6 @@ handler_audio::play_music (Uint32 music_id)
 
   current_portion_music = MUSIC_UNDIVIDED;
   song_pos = -1;
-  lastpatpos = -1;
   current_music_id = music_id;
   if (is_verbose)
     {
@@ -578,41 +592,43 @@ handler_audio::control_music_position ()
     {
     case GAME_PORTION:
     case SHOP_PORTION:
-      if (song_module->sngpos < position_1)
+      if (song_module->sngpos < music_1_position)
         {
-          posgo = position_1;
+          posgo = music_1_position;
         }
-      if (song_module->sngpos > position_2)
+      if (song_module->sngpos > music_2_position)
         {
-          posgo = modposloop;
+          posgo = restart_position;
         }
-      if (song_module->patpos >= 63 && song_module->sngpos == position_2)
+      if (song_module->patpos >= 63 && song_module->sngpos == music_2_position)
         {
-          posgo = modposloop;
+          posgo = restart_position;
         }
       if (posgo >= 0)
         {
           if (is_verbose)
-            fprintf (stdout,
-                     "handler_audio::execution1() - Player_SetPosition(%i)\n",
-                     posgo);
+	    {
+	      std::cout << "handler_audio::execution1() " <<
+		" - Player_SetPosition(" << posgo << ")"
+		<< std::endl;
+	    }
           Mix_SetMusicPosition (posgo);
         }
       break;
 
     case LOST_PORTION:
-      if (song_module->sngpos < position_1 ||
-          song_module->sngpos > position_2 ||
-          (song_module->patpos >= 63 && song_module->sngpos == position_2))
+      if (song_module->sngpos < music_1_position ||
+          song_module->sngpos > music_2_position ||
+          (song_module->patpos >= 63 && song_module->sngpos == music_2_position))
         {
           play_level_music (aera_number, level_number);
         }
       break;
 
     case WIN_PORTION:
-      if (song_module->sngpos < position_1 ||
-          song_module->sngpos > position_2 ||
-          (song_module->patpos >= 63 && song_module->sngpos == position_2))
+      if (song_module->sngpos < music_1_position ||
+          song_module->sngpos > music_2_position ||
+          (song_module->patpos >= 63 && song_module->sngpos == music_2_position))
         {
           if (!Player_Paused ())
             {
@@ -625,9 +641,9 @@ handler_audio::control_music_position ()
 }
 
 /**
-  return music aera identifier
-  @param narea area number, form 1 to 5
-  @return music aera identifier
+  * Return music aera identifier
+  * @param narea area number, form 1 to 5
+  * @return music aera identifier
 */
 Uint32
 handler_audio::area_music (Uint32 narea)
@@ -666,7 +682,7 @@ handler_audio::disable_sound ()
     }
 }
 
-/* 
+/** 
  * Enable the sound effect
  */
 void

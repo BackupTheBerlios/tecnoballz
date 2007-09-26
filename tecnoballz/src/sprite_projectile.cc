@@ -4,11 +4,11 @@
  * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.18 2007/09/25 12:11:48 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.19 2007/09/26 06:02:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -249,7 +249,7 @@ sprite_projectile::check_collisions_with_bricks ()
                 {
                   x = 2;
 #ifndef SOUNDISOFF
-                  audio->play_sound (S_TOINDES2);
+                  audio->play_sound (handler_audio::HIT_INDESTRUCTIBLE_BRICK2);
 #endif
                 }
             }
@@ -258,7 +258,7 @@ sprite_projectile::check_collisions_with_bricks ()
               /* the brick is really indestructible */
               x = 1;
 #ifndef SOUNDISOFF
-              audio->play_sound (S_TOINDES1);
+              audio->play_sound (handler_audio::HIT_INDESTRUCTIBLE_BRICK1);
 #endif
             }
         }

@@ -1,14 +1,14 @@
 /** 
  * @file controller_projectiles.cc 
  * @brief Projectiles controller for a single paddle! 
- * @date 2007-02-20
+ * @date 2007-02-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_projectiles.cc,v 1.5 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_projectiles.cc,v 1.6 2007/09/26 06:02:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,9 +89,7 @@ controller_projectiles::disponible ()
   Uint32 t = max_of_sprites;
   sprite_projectile **liste = sprites_list;
 
-  //###################################################################
-  // special fire 7 (circular fire)
-  //###################################################################
+  /* special fire 7 (circular fire) */
   if (gun_paddle->length == gun_paddle->width_maxi)
     {
       Sint32 j = 1;
@@ -99,26 +97,29 @@ controller_projectiles::disponible ()
         {
           sprite_projectile *xFire = *(liste++);
           if (xFire->is_enabled == j)
-            return;
+	    {
+              return;
+	    }
         }
     }
 
-  //###################################################################
-  // other fires
-  //###################################################################
+  /* other fires */
   else
     {
       for (Uint32 i = 0; i < t; i++)
         {
           sprite_projectile *xFire = *(liste++);
           if (xFire->is_enabled)
-            return;
+	    {
+              return;
+	    }
         }
     }
   countTempo = 0;
-  gun_paddle->bumperFire = 3;   //fire is requested
+  /** fire is requested */
+  gun_paddle->bumperFire = 3;
 #ifndef SOUNDISOFF
-  audio->play_sound (S_RAK_TIRS);
+  audio->play_sound (handler_audio::PADDLE_FIRE);
 #endif
 }
 
@@ -161,9 +162,9 @@ controller_projectiles::fire ()
     }
 }
 
-//-----------------------------------------------------------------------------
-// fire 1: 16/32 pixels bumper's whidth
-//-----------------------------------------------------------------------------
+/**
+ * Fire 1: 16/32 pixels paddle's whidth
+ */
 void
 controller_projectiles::init_type1 ()
 {
@@ -173,10 +174,15 @@ controller_projectiles::init_type1 ()
       raket->bumperFire = 1;
       Sint32 x = raket->x_coord;
       Sint32 y = raket->y_coord;
-      if (raket->bumperType)    //vertical bumper ?
-        y += (paddle_length / 2) - (SIZE_OF_PROJECTILE / 2);
+      /* vertical bumper */
+      if (raket->bumperType)
+	{
+          y += (paddle_length / 2) - (SIZE_OF_PROJECTILE / 2);
+	}
       else
-        x += (paddle_length / 2) - (SIZE_OF_PROJECTILE / 2);
+	{
+          x += (paddle_length / 2) - (SIZE_OF_PROJECTILE / 2);
+	}
       sprite_projectile *xFire = sprites_list[0];
       xFire->is_enabled = 1;
       xFire->x_coord = x;

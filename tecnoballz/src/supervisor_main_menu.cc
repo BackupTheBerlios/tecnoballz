@@ -4,11 +4,11 @@
  * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.20 2007/09/12 06:32:49 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.21 2007/09/26 06:02:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ supervisor_main_menu::first_init ()
     }
   sprites->reset ();
 #ifndef SOUNDISOFF
-  audio->play_music (MUSICINTRO);
+  audio->play_music (handler_audio::MUSICINTRO);
 #endif
 
   /*
