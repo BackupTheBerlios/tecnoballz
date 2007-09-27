@@ -1,14 +1,14 @@
 /** 
  * @file sprite_object.h
  * @brief Draw sprites on the screen 
- * @date 2007-09-15
+ * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.40 $
+ * @version $Revision: 1.41 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.40 2007/09/15 19:20:52 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.41 2007/09/27 10:51:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -199,7 +199,7 @@ protected:
   /** Width in bytes of offscreen */
   Uint32 offscreen_pitch;
   /** True if the sprite is enabled and drawn */
-  Sint32 is_enabled;
+  bool is_enabled;
   /** True if the sprite has a shadow */
   bool sprite_has_shadow;
   /** X coordinate */
@@ -273,7 +273,7 @@ public:
   void release_sprite ();
   void enable ();
   void disable ();
-  Sint32 is_enable ();
+  bool is_enable ();
   Uint32 get_sprite_type_id ();
   void set_display_pos (Sint32 num);
   void set_object_pos (Sint32 num);

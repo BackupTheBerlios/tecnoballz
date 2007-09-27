@@ -1,14 +1,14 @@
 /** 
  * @file sprite_bullet.h
  * @brief The bullet sprite from a guardian 
- * @date 2007-02-18
+ * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_bullet.h,v 1.5 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_bullet.h,v 1.6 2007/09/27 10:51:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,9 +39,10 @@ class sprite_bullet:public sprite_object
   friend class controller_bullets;
 
 private:
-  Sint32 type_depla;
-  Uint32 flagDepla1;
-  Uint32 flagDepla2;
+  /** Type of displacement from 1 to 7 */
+  Uint32 displacement;
+  Sint32 flagDepla1;
+  Sint32 flagDepla2;
   Sint32 flagDepla3;
   Sint32 flagDepla4;
   Sint32 flagDepla5;
@@ -49,7 +50,7 @@ private:
   Sint32 flagDepla7;
   const short *tablesinus;
   const short *tablecosin;
-  sprite_paddle *ptbumper01;
+  sprite_paddle *paddle_target;
   sprite_guardian *ptguardian;
   Sint32 tir_maxi_x;
   Sint32 tir_maxi_y;

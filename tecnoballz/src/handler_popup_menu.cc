@@ -2,14 +2,14 @@
  * @file handler_popup_menu.cc 
  * @brief popup menu handler (When the [Esc] is pressed)
  * @created 2004-08-08 
- * @date 2007-02-02
+ * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.6 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.7 2007/09/27 10:51:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -210,17 +210,15 @@ handler_popup_menu::displayBOB (char *ptSrc, Sint32 pos_x, Sint32 pos_y,
     }
 }
 
-//------------------------------------------------------------------------------
-// display and handle menu
-//------------------------------------------------------------------------------
+/**
+ * Display and handle menu
+ */
 Sint32
 handler_popup_menu::execution1 ()
 {
   Sint32 event = -1;
 
-  //##############################################################
-  // [ESC] key: enable / disable menu box
-  //##############################################################
+  /* [ESC] key: enable / disable menu box */
   if (keyboard->command_is_pressed (handler_keyboard::ESCAPEMENU))
     {
       is_enabled = true;
@@ -228,23 +226,23 @@ handler_popup_menu::execution1 ()
   else
     {
       if (is_enabled && is_restore_background)
-        MSK_bitclr ();
+        {
+          MSK_bitclr ();
+        }
       is_enabled = false;
       return event;
     }
 
-  //##############################################################
-  // check if right or left button are pressed
-  //##############################################################
+  /* check if right or left button are pressed */
   Sint32 mposx, pos_y, freeL, freeR;
   Sint32 presL = keyboard->is_left_button ();
   Sint32 presR = keyboard->is_right_button ();
 
-  //##############################################################
-  // read y where is pressed 
-  //##############################################################
+  /* read y where is pressed */
   if (presL && yPressLeft == YCOORDNULL)
-    yPressLeft = keyboard->get_mouse_y ();
+    {
+      yPressLeft = keyboard->get_mouse_y ();
+    }
   else
     {
       if (presR && yPressRigh == YCOORDNULL)
@@ -279,33 +277,41 @@ handler_popup_menu::execution1 ()
     yPressRigh = YCOORDNULL;
 
 
-  //###################################################################
-  // read color table offset (color line hover by mouse )
-  //###################################################################
+  /* read color table offset (color line hover by mouse ) */
   if (menu_color++ > 32)
-    menu_color = 0;
+    {
+      menu_color = 0;
+    }
   if (resolution == 1)
-    display320 ();
+    {
+      display320 ();
+    }
   else
-    display640 ();
+    {
+      display640 ();
+    }
 
-  //###################################################################
-  // copy menu box into screen
-  //###################################################################
+  /* copy menu box into screen */
   MSKbitcopy ();
 
   if (event >= WECONTINUE && event <= WEQUITGAME)
     {
       if (is_enabled && is_restore_background)
-        MSK_bitclr ();
-      is_enabled = 0;
+        {
+          MSK_bitclr ();
+        }
+      is_enabled = false;
       keyboard->clear_command_keys ();
     }
 
   if (menu_number == 1 && event >= GOGAMEOVER)
-    event++;
+    {
+      event++;
+    }
   if (event > 0)
-    SDL_ShowCursor (SDL_DISABLE);
+    {
+      SDL_ShowCursor (SDL_DISABLE);
+    }
   return event;
 }
 

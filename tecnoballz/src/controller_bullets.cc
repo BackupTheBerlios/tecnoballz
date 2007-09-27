@@ -4,11 +4,11 @@
  * @date 2007-09-25
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bullets.cc,v 1.10 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: controller_bullets.cc,v 1.11 2007/09/27 10:51:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -215,7 +215,8 @@ controller_bullets::init_fire_01 (sprite_guardian * guardian)
       sprite_bullet *bullet = sprites_list[index];
       if (!bullet->is_enabled)
         {
-          bullet->is_enabled = 1;
+          bullet->is_enabled = true;
+          bullet->displacement = 1;
           bullet->x_coord = tir01_posi[s] * resolution + gardx;
           bullet->tablesinus = tir01_posi;
           bullet->flagDepla1 = s;        //pointeur table sinus x
@@ -249,20 +250,23 @@ controller_bullets::init_fire_02 (sprite_guardian * guardian)
       sprite_bullet *bullet = sprites_list[t];
       if (!bullet->is_enabled)
         {
+          bullet->is_enabled = true;
           if (n > 3)
             {
-              bullet->is_enabled = 2;
+              bullet->displacement = 2;
               bullet->flagDepla3 = s;
               s = s + 2;
               bullet->flagDepla1 = gardx;
               bullet->flagDepla2 = gardy;
               bullet->tablesinus = fire_sinus;
               if (--n == 3)
-                gardx = gardx - 10 * resolution;
+                {
+                  gardx = gardx - 10 * resolution;
+                }
             }
           else
             {
-              bullet->is_enabled = 3;
+              bullet->displacement = 3;
               bullet->x_coord = gardx;
               bullet->y_coord = gardy;
               gardx = gardx + 10 * resolution;
@@ -276,7 +280,7 @@ controller_bullets::init_fire_02 (sprite_guardian * guardian)
 
 /**
  * Initialize the "xevious" fire composed of 4 bullets
- * @param guardian a guardian sprite
+ * @param guardian A guardian sprite
  */
 void
 controller_bullets::init_fire_03 (sprite_guardian * guardian)
@@ -287,22 +291,24 @@ controller_bullets::init_fire_03 (sprite_guardian * guardian)
   Uint32 t = max_of_sprites - 1;
   Sint32 gardx = guardian->x_coord + guardian->canon_xcoord;
   Sint32 gardy = guardian->y_coord + guardian->gard_ycent;
-  Sint32 n = 5;                 //5 objets pour ce tir
+  /* fire composed of 5 objects */
+  Sint32 n = 5;
   do
     {
       sprite_bullet *bullet = sprites_list[t];
       if (!bullet->is_enabled)
         {
-          bullet->ptbumper01 = paddle;
+          bullet->paddle_target = paddle;
+          bullet->is_enabled = true;
           if (n == 1)
             {
-              bullet->is_enabled = 7;
+              bullet->displacement = 7;
               bullet->x_coord = gardx;
               bullet->y_coord = gardy;
             }
           else
             {
-              bullet->is_enabled = 6;
+              bullet->displacement = 6;
               bullet->flagDepla1 = gardx;
               bullet->flagDepla2 = gardy;
               switch (n)
@@ -325,7 +331,6 @@ controller_bullets::init_fire_03 (sprite_guardian * guardian)
                   break;
                 }
             }
-          //printf("controller_bullets::init_fire_02() %ld, %ld %ld %ld %ld \n", n, bullet->is_enabled, bullet->flagDepla1, bullet->flagDepla2, bullet->flagDepla3);
           n--;
         }
     }
@@ -347,7 +352,8 @@ controller_bullets::init_fire_04 (sprite_guardian * guardian)
       sprite_bullet *bullet = sprites_list[t];
       if (!bullet->is_enabled)
         {
-          bullet->is_enabled = 4;
+          bullet->is_enabled = true;
+          bullet->displacement = 4;
           bullet->flagDepla1 = gardx;
           bullet->flagDepla2 = gardy;
           bullet->flagDepla3 = s;
@@ -378,7 +384,8 @@ controller_bullets::init_fire_05 (sprite_guardian * guardian)
       sprite_bullet *bullet = sprites_list[t];
       if (!bullet->is_enabled)
         {
-          bullet->is_enabled = 5;
+          bullet->is_enabled = true;
+          bullet->displacement = 5;
           bullet->x_coord = gardx;
           bullet->y_coord = gardy;
           bullet->flagDepla1 = tempo;
@@ -405,7 +412,8 @@ controller_bullets::init_fire_06 (sprite_guardian * guardian)
       sprite_bullet *bullet = sprites_list[t];
       if (!bullet->is_enabled)
         {
-          bullet->is_enabled = 8;
+          bullet->is_enabled = true;
+          bullet->displacement = 8;
           bullet->ptguardian = guardian;
           bullet->flagDepla3 = s;
           bullet->flagDepla4 = 2 * resolution;
@@ -433,7 +441,8 @@ controller_bullets::init_fire_07 (sprite_guardian * guardian)
       sprite_bullet *bullet = sprites_list[t];
       if (!bullet->is_enabled)
         {
-          bullet->is_enabled = 9;
+          bullet->is_enabled = true;
+          bullet->displacement = 9;
           bullet->flagDepla1 = gardx;
           bullet->flagDepla2 = gardy;
           bullet->flagDepla3 = s;
@@ -463,7 +472,8 @@ controller_bullets::init_fire_08 (sprite_guardian * guardian)
       sprite_bullet *bullet = sprites_list[t];
       if (!bullet->is_enabled)
         {
-          bullet->is_enabled = 10;
+          bullet->is_enabled = true;
+          bullet->displacement = 10;
           bullet->flagDepla1 = gardx;
           bullet->flagDepla2 = gardy;
           bullet->flagDepla3 = s;
@@ -497,7 +507,8 @@ controller_bullets::init_fire_09 (sprite_guardian * guardian)
       sprite_bullet *bullet = sprites_list[t];
       if (!bullet->is_enabled)
         {
-          bullet->is_enabled = 11;
+          bullet->is_enabled = true;
+          bullet->displacement = 11;
           bullet->flagDepla1 = gardx;
           bullet->flagDepla2 = gardy;
           bullet->tablesinus = handler_resources::cosinus360;
@@ -538,7 +549,8 @@ controller_bullets::init_fire_10 (sprite_guardian * guardian)
       sprite_bullet *bullet = sprites_list[t];
       if (!bullet->is_enabled)
         {
-          bullet->is_enabled = 3;
+          bullet->is_enabled = true;
+          bullet->displacement = 3;
           bullet->x_coord = gardx + (*(ptir++) * bullet->sprite_width);
           bullet->y_coord = gardy + (*(ptir++) * bullet->sprite_height);
           n--;
@@ -563,7 +575,8 @@ controller_bullets::init_fire_11 (sprite_guardian * guardian)
       sprite_bullet *bullet = sprites_list[t];
       if (!bullet->is_enabled)
         {
-          bullet->is_enabled = 12;
+          bullet->is_enabled = true;
+          bullet->displacement = 12;
           bullet->flagDepla1 = gardx;
           bullet->flagDepla2 = gardy;
           bullet->flagDepla3 = s;

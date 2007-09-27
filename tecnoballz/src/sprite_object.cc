@@ -1,14 +1,14 @@
  /**
  * @file sprite_object.cc 
  * @brief Draw sprites on the screen 
- * @date 2007-09-13
+ * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.38 $
+ * @version $Revision: 1.39 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.cc,v 1.38 2007/09/15 19:20:52 gurumeditation Exp $
+ * $Id: sprite_object.cc,v 1.39 2007/09/27 10:51:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -130,7 +130,7 @@ sprite_object::clear_sprite_members ()
   frame_delay = 1;
   max_of_images = 0;
   frame_index = 0;
-  is_enabled = 0;
+  is_enabled = false;
   sprite_height = 0;
   sprite_width = 0;
   drawing_values = (Sint16 **) NULL;
@@ -227,7 +227,7 @@ sprite_object::duplicate_to (sprite_object * sprite_dest)
 void
 sprite_object::enable ()
 {
-  is_enabled = 1;
+  is_enabled = true;
 }
 
 /**
@@ -236,14 +236,14 @@ sprite_object::enable ()
 void
 sprite_object::disable ()
 {
-  is_enabled = 0;
+  is_enabled = false;
 }
 
 /**
  * Check if the sprite is enable
  * @return true if the sprite is enable
  */
-Sint32 sprite_object::is_enable ()
+bool sprite_object::is_enable ()
 {
   return is_enabled;
 }
@@ -1701,7 +1701,7 @@ sprite_object::play_animation_once ()
   if (frame_index == frame_index_max)
     {
       frame_index = frame_index_min;
-      is_enabled = 0;
+      is_enabled = false;
     }
   else
     {

@@ -4,11 +4,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_bullet.cc,v 1.5 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_bullet.cc,v 1.6 2007/09/27 10:51:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 sprite_bullet::sprite_bullet ()
 {
   clear_sprite_members ();
-  type_depla = 0;
+  displacement = 0;
   flagDepla1 = 0;
   flagDepla2 = 0;
   flagDepla3 = 0;
@@ -63,7 +63,7 @@ sprite_bullet::move ()
     {
       return;
     }
-      switch (is_enabled)
+      switch (displacement)
         {
         case 1:
           trajectory_01 ();
@@ -199,15 +199,21 @@ void
 sprite_bullet::trajectory_06 ()
 {
   flagDepla3 = flagDepla3 + 2;
-  if (tablesinus[flagDepla3] == 99)     //end of the table?
-    flagDepla3 = 0;
-  flagDepla2 = flagDepla2 + (3 * resolution);   //new position y 
+  /* end of the table */
+  if (tablesinus[flagDepla3] == 99)
+    {
+      flagDepla3 = 0;
+    }
+  /* update y-coordinate */
+  flagDepla2 = flagDepla2 + (3 * resolution);
   y_coord = flagDepla2 + (tablesinus[flagDepla3 + 1] * resolution);
-  if (flagDepla2 < (150 * resolution))
+  if (flagDepla2 < (Sint32)(150 * resolution))
     {
       flagDepla1 = flagDepla1 + 2 * resolution;
-      if (ptbumper01->x_coord < (Sint32)flagDepla1)
-        flagDepla1 = flagDepla1 - 4 * resolution;
+      if (paddle_target->x_coord < (Sint32)flagDepla1)
+        {
+          flagDepla1 = flagDepla1 - 4 * resolution;
+        }
     }
   x_coord = flagDepla1 + (tablesinus[flagDepla3] * resolution);
   screenOver (tir_minixy);
@@ -219,12 +225,15 @@ sprite_bullet::trajectory_06 ()
 void
 sprite_bullet::trajectory_07 ()
 {
-  y_coord = y_coord + (3 * resolution); //new position y 
+  /* update y-coordinate */
+  y_coord = y_coord + (3 * resolution);
   if (y_coord < Sint32(150 * resolution))
     {
       x_coord = x_coord + 2 * resolution;
-      if (ptbumper01->x_coord < x_coord)
-        x_coord = x_coord - 4 * resolution;
+      if (paddle_target->x_coord < x_coord)
+        {
+          x_coord = x_coord - 4 * resolution;
+        }
     }
   screenOver (tir_minixy);
 }
@@ -249,15 +258,17 @@ sprite_bullet::trajectory_08 ()
 }
 
 
-//------------------------------------------------------------------------------
-// weapons: trajectory number 9 - sucker circle (circle which rebounds )
-//------------------------------------------------------------------------------
+/**
+ * Weapon  trajectory number 9 - sucker circle (circle which rebounds )
+ */
 void
 sprite_bullet::trajectory_09 ()
 {
   flagDepla3 = flagDepla3 + 4;
   if (flagDepla3 >= 360)
-    flagDepla3 = 0;
+    {
+      flagDepla3 = 0;
+    }
   Sint32 r = (16 * resolution);
   Sint32 x = tablesinus[flagDepla3] * r;
   Sint32 y = tablecosin[flagDepla3] * r;
@@ -269,14 +280,18 @@ sprite_bullet::trajectory_09 ()
   if (flagDepla4 > 0)
     {
       flagDepla1 += (5 * resolution);
-      if (flagDepla1 > (284 * resolution))
-        flagDepla4 = 0;
+      if (flagDepla1 > (Sint32)(284 * resolution))
+        {
+          flagDepla4 = 0;
+        }
     }
   else
     {
       flagDepla1 -= (5 * resolution);
-      if (flagDepla1 < (-80 * resolution))
-        flagDepla4 = 1;
+      if (flagDepla1 < (Sint32)(-80 * resolution))
+        {
+          flagDepla4 = 1;
+        }
     }
   screenStop (tir_minixy);
 }
@@ -356,7 +371,7 @@ sprite_bullet::screenOver (Sint32 vmini)
 {
   if (x_coord > tir_maxi_x || x_coord < vmini ||
       y_coord < vmini || y_coord > tir_maxi_y)
-    is_enabled = 0;
+    is_enabled = false;
 }
 
 //------------------------------------------------------------------------------
@@ -366,7 +381,9 @@ void
 sprite_bullet::screenStop (Sint32 vmini)
 {
   if (y_coord > tir_maxi_y)
-    is_enabled = 0;
+    {
+      is_enabled = false;
+    }
   else
     {
       if (y_coord < vmini)

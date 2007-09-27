@@ -1,14 +1,14 @@
 /**
  * @file sprite_projectile.cc 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-09-25
+ * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.19 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.20 2007/09/27 10:51:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ sprite_projectile::sprite_projectile ()
       total_fire++;
     }
   set_draw_method (DRAW_COLOR_CYCLING_MASK);
+  on_paddle = false;
 }
 
 /**
@@ -177,7 +178,7 @@ sprite_projectile::play_projectiles_animations ()
 
 /**
  * Static method which check collision projectiles between bricks  
- */ 
+ */
 void
 sprite_projectile::check_collisions_with_bricks ()
 {
@@ -186,19 +187,21 @@ sprite_projectile::check_collisions_with_bricks ()
 
   /* brick's width in pixels */
   Uint32 brick_width = bricks->get_brick_width ();
-  Uint32 byoff = bricks->getYOffset (); //y-offset between 2 bricks
-  Sint32 indus = bricks->getBkIndus (); //first indestructible brick
+  /* y-offset between 2 bricks */
+  Uint32 byoff = bricks->getYOffset ();
+  /* first indestructible brick */
+  Sint32 indus = bricks->getBkIndus ();
   sprite_projectile **projectiles = projectiles_list;
   brick_info *bricks_map = bricks->get_bricks_map ();
   for (Uint32 i = 0; i < total_fire; i++)
     {
-      sprite_projectile *projectile = *(projectiles++);
-      if (!projectile->is_enabled)
+      sprite_projectile *blast = *(projectiles++);
+      if (!blast->is_enabled)
         {
           continue;
         }
-      Sint32 x = projectile->x_coord + 2;
-      Sint32 y = projectile->y_coord + 2;
+      Sint32 x = blast->x_coord + 2;
+      Sint32 y = blast->y_coord + 2;
       brick_redraw *redraw = bricks->get_bricks_redraw ();
       redraw->xcoord_collision = x;
       redraw->ycoord_collision = y;
@@ -208,48 +211,48 @@ sprite_projectile::check_collisions_with_bricks ()
       x += y;
       brick_info *map = (bricks_map + x);
       x = map->brique_rel;
-      /* collision between a projectile and a brick? */
+      /* collision between a blast and a brick? */
       if (x == 0)
         {
           /* no collision */
           continue;
         }
-      if (projectile->is_enabled == 1)
+      if (!blast->on_paddle)
         {
-          projectile->is_enabled = 0;
+          blast->is_enabled = false;
         }
-      redraw->paddle = projectile->paddle;
+      redraw->paddle = blast->paddle;
       redraw->is_gigablitz_destroyed = false;
       if (!has_background)
         {
-          map->sprite->touch();
+          map->sprite->touch ();
         }
       if ((x -= indus) >= 0)
         {
           /* 
            * indestructible brick touched!
            */
-	  /* indestructible-destructible bricks? */
-          if ((x -= brick_width) > 0) 
+          /* indestructible-destructible bricks? */
+          if ((x -= brick_width) > 0)
             {
               /* fire destroys the indestructibles-destructibles bricks? */
-              if (projectile->can_destroy_indestructible)
+              if (blast->can_destroy_indestructible)
                 {
-                  //redraw->xcoord_collision = -1;
-		  redraw->is_indestructible = true;
+                  redraw->is_indestructible = true;
                   redraw->pixel_offset = map->pixel_offset;
                   redraw->brick_map = map;
-                  map->brique_rel = 0;        // RAZ code brique
+                  map->brique_rel = 0;
                   redraw->number = map->number;
-		  /* restore background under brick */
+                  /* restore background under brick */
                   redraw->is_background = true;
-		  bricks->bricks_redraw_next ();
+                  bricks->bricks_redraw_next ();
                 }
               else
                 {
                   x = 2;
 #ifndef SOUNDISOFF
-                  audio->play_sound (handler_audio::HIT_INDESTRUCTIBLE_BRICK2);
+                  audio->
+                    play_sound (handler_audio::HIT_INDESTRUCTIBLE_BRICK2);
 #endif
                 }
             }
@@ -263,22 +266,22 @@ sprite_projectile::check_collisions_with_bricks ()
             }
         }
       /* 
-       * normal brick touched
+       * Normal brick touched
        */
       else
         {
-	  redraw->is_indestructible = false;
+          redraw->is_indestructible = false;
           redraw->pixel_offset = map->pixel_offset;
           redraw->brick_map = map;
-	  /* fire power: 1 or 2 */
-          x = projectile->power;
+          /* fire power: 1 or 2 */
+          x = blast->power;
           map->h_pos = map->h_pos - (x * 2);
           if (map->h_pos <= 0)
             {
               map->h_pos = 0;
               map->brique_rel = 0;
               redraw->number = map->number;
-	      /* restore background under brick */
+              /* restore background under brick */
               redraw->is_background = true;
             }
           else
@@ -286,16 +289,16 @@ sprite_projectile::check_collisions_with_bricks ()
               map->brique_rel = map->brique_rel - (x * brick_width);
               redraw->number = map->brique_rel;
               /* redraw a new brick */
-	      redraw->is_background = false;
+              redraw->is_background = false;
             }
-	  bricks->bricks_redraw_next ();
+          bricks->bricks_redraw_next ();
         }
     }
 }
 
 /**
  * Static method which check collisions between projectiles and ships 
- */ 
+ */
 void
 sprite_projectile::check_collisions_with_ships ()
 {
@@ -334,7 +337,7 @@ sprite_projectile::check_collisions_with_ships ()
             {
               continue;
             }
-          if (blast->is_enabled)
+          if (!blast->on_paddle)
             {
               blast->is_enabled = false;
             }
@@ -351,7 +354,7 @@ sprite_projectile::check_collisions_with_ships ()
 
 /**
  * Static method which disables all projectiles
- */ 
+ */
 void
 sprite_projectile::disable_sprites ()
 {
@@ -363,5 +366,7 @@ sprite_projectile::disable_sprites ()
     }
 }
 
-Uint32 sprite_projectile::total_fire = 0;
-sprite_projectile * sprite_projectile::projectiles_list[MAXI_TOTAL_OF_PROJECTILES];
+Uint32
+  sprite_projectile::total_fire = 0;
+sprite_projectile *
+  sprite_projectile::projectiles_list[MAXI_TOTAL_OF_PROJECTILES];

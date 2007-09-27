@@ -4,11 +4,11 @@
  * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.12 2007/09/27 06:05:36 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.13 2007/09/27 10:51:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,17 +122,17 @@ void
 sprite_paddle::bumpActive (Sint32 rTeam, Sint32 large, Sint32 actif)
 {
   length = large;
-  is_enabled = 0;
+  is_enabled = false;
   bump_actif = actif;
   if (bump_actif > 0)
     {
       bump_actif--;
-      is_enabled = 1;
+      is_enabled = true;
     }
   if (paddle_number == 1 || (paddle_number == 4 && rTeam == 1))
     {
       bump_actif = 1;
-      is_enabled = 1;
+      is_enabled = true;
     }
   select_image (large);
 }
@@ -313,17 +313,17 @@ sprite_paddle::flickerRun ()
       invincible--;
       if (flickerval > 0)
         {
-          is_enabled = 0;
+          is_enabled = false;
           flickerval = 0;
         }
       else
         {
-          is_enabled = 1;
+          is_enabled = true;
           flickerval = 1;
         }
     }
   else
     {
-      is_enabled = 1;
+      is_enabled = true;
     }
 }
