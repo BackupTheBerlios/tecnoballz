@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.h
  * @brief Control the balls. Move and collisions 
- * @date 2007-09-19
+ * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.24 2007/09/19 05:56:37 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.25 2007/09/27 06:05:36 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ private:
   sprite_paddle *paddle_right;
   sprite_paddle *paddle_top;
   sprite_paddle *paddle_left;
-  sprite_paddle *tec_robot0;
+  sprite_paddle *paddle_robot;
   sprite_object *ptBob_wall;
 
 private:

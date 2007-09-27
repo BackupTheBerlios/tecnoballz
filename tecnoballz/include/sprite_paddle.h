@@ -1,14 +1,14 @@
 /** 
  * @file sprite_paddle.h
  * @brief A paddle sprite 
- * @date 2007-02-09
+ * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.14 2007/09/13 15:51:53 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.15 2007/09/27 06:05:36 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,20 +45,30 @@ class sprite_paddle:public sprite_object
   friend class sprite_bullet;
   friend class controller_viewfinders;
   friend class controller_gigablitz;
+public:
+  typedef enum
+   {
+     NOT_OWN_GUN,
+     OWN_GUN,
+     FIRE = 3
+   } FIRE_PADDLE_STATUS;
 
 private:
   Sint32 bump_actif;          // flag : raquette active
-  Sint32 bumperType;            // flag : type 0=horizontal / 1=vertical                
+  /** True if the paddle is vertical, otherwise horizontal */
+  bool is_vertical;
   /** Paddle number from 0 to 5 */
   Uint32 paddle_number;
   /** Paddle length in pixels */
   Sint32 length;
-  Sint32 width_mini;            //bumper mini width (32 or 64)
-  Sint32 width_maxi;            //bumper maxi width (64 or 128)
+  /** Minimum with of the paddle 32 or 64 pixels */
+  Sint32 width_mini;
+  /** Maximum with of the paddle 64 or 128 pixels */
+  Sint32 width_maxi;
   Sint32 width_deca;            //3 or 4; offset between 2 size (2^3)
 
   Sint32 bumperNorm;            // flag : raquette normale
-  Sint32 bumperFire;            // flag : raquette tireuse
+  Sint32 fire_state;            // flag : raquette tireuse
   Sint32 is_glue;            // flag : 1=raquette colle libre
 
   const Sint32 **rebonds_Ga;    //ball rebounds table (move on the left)
@@ -89,7 +99,6 @@ private:
   Sint32 bump_speed;            // vitesse deplacement (maximum 10)
 
 public:
-    //sprite_paddle (controller_projectiles * fBump);
     sprite_paddle (bool has_projectiles = true);
    ~sprite_paddle ();
   void create_projectiles_list ();

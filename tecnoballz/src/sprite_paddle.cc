@@ -1,14 +1,14 @@
 /** 
  * @file sprite_paddle.cc 
  * @brief A paddle sprite 
- * @date 2007-09-24
+ * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.11 2007/09/24 16:00:01 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.12 2007/09/27 06:05:36 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,9 +36,9 @@ sprite_paddle::sprite_paddle (bool has_projectiles)
 {
   clear_sprite_members ();
   length = 32 * resolution;
-  bumperType = 0;
+  is_vertical = false;
   bumperNorm = 2;
-  bumperFire = 0;
+  fire_state = NOT_OWN_GUN;
   is_glue = 0;
   bump_speed = 0;
   bump_actif = 0;
@@ -96,7 +96,7 @@ sprite_paddle::create_projectiles_list ()
 void
 sprite_paddle::fire_projectiles ()
 {
-  if (bumperFire != 0)
+  if (fire_state != NOT_OWN_GUN)
     {
       projectiles->disponible ();
     }
@@ -171,7 +171,7 @@ void
 sprite_paddle::select_image (Sint32 l)
 {
   Sint32 i = (l >> width_deca) - 2;
-  if (bumperFire)
+  if (fire_state != NOT_OWN_GUN)
     {
       i += 7;
     }
@@ -217,7 +217,7 @@ sprite_paddle::set_glue ()
 void
 sprite_paddle::set_fire_1 ()
 {
-  bumperFire = 1;
+  fire_state = OWN_GUN;
   select_image ();
   projectiles->fire1RunOn ();
 }
@@ -228,7 +228,7 @@ sprite_paddle::set_fire_1 ()
 void
 sprite_paddle::set_fire_2 ()
 {
-  bumperFire = 1;
+  fire_state = OWN_GUN;
   select_image ();
   projectiles->fire2RunOn ();
 }

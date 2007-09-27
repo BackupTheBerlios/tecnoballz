@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.cc 
  * @brief Capsules controller 
- * @date 2007-09-26
+ * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.26 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.27 2007/09/27 06:05:36 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -375,7 +375,7 @@ controller_capsules::check_cheat_keys ()
  * Enable an option, bonus or penalty, which can possibly come from
  * a capsule collected by a paddle in the bricks levels
  * @param paddle paddle which collected the caspule 
- * @param nuGad option identifier
+ * @param nuGad Option identifier
  */
 void
 controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
@@ -602,7 +602,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       current_player->set_budget_prices (true);
       break;
 
-      // bottom wall enable
+      /* enable the bottom wall */
     case GAD_WALL01:
       messages->send_message_request (short_info_messages::WALL_ENABLE);
 #ifndef SOUNDISOFF
@@ -610,21 +610,21 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #endif
       ptBob_wall->enable ();
       ptBob_wall->thecounter += 500;
-      paddles->deactrobot ();
+      paddles->disable_robot ();
       break;
 
-      // robot bumper enable
+      /* enable the paddle robot */
     case GAD_ROBOT1:
       messages->send_message_request (short_info_messages::ROBOT_ENABLE);
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
-      paddles->activrobot ();
+      paddles->enable_robot ();
       ptBob_wall->disable ();
       ptBob_wall->thecounter = 0;
       break;
 
-      // balls control 
+      /* enable the balls control */
     case GAD_CONTRO:
       balls->enable_balls_control ();
       messages->send_message_request (short_info_messages::CONTROL_BALLS);
@@ -633,7 +633,8 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 #endif
       break;
 
-      // enable eye (no gadget)
+      /* enable the magnetic eye, no capsule exists to activate it 
+       * this bonus is only available as a part of chance capsule */
     case GAD_OEIL00:
       {
         controller_magnetic_eyes* eyes = controller_magnetic_eyes::get_instance ();

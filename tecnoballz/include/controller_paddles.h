@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.h
  * @brief Paddles controller 
- * @date 2007-03-31
+ * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.h,v 1.10 2007/09/18 13:39:11 gurumeditation Exp $
+ * $Id: controller_paddles.h,v 1.11 2007/09/27 06:05:36 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,16 +39,22 @@ class controller_paddles:public objects_list < sprite_paddle, controller_paddles
   friend class sprite_paddle;
 
 private:
-  Sint32 width_mini;          //bumper mini width (32 or 64)
-  Sint32 width_maxi;            //bumper maxi width (64 or 128)
-
-  Sint32 bumperMini;
-  Sint32 bumperMaxi;
-  Sint32 bumperYhau;
-  Sint32 bumperYbas;
-  Sint32 bumperXgau;
-  Sint32 bumperXdro;
-  list_sprites *objet_draw;
+  /** Minimum widh of a paddle: 32 or 64 pixels */
+  Sint32 width_mini;
+  /** Maximum widh of a paddle: 32 or 64 pixels */
+  Sint32 width_maxi;
+  /** Minimum x/y coordinate of a paddle */ 
+  Sint32 min_coordinate;
+  /** Maximum x/y coordinate of a paddle */ 
+  Sint32 max_coordinate;
+  /** Y-coordinate of the top paddle */
+  Sint32 top_y_coord;
+  /** Y-coordinate of the bottom paddle */
+  Sint32 bottom_y_coord;
+  /** X-coordinate of the left paddle */
+  Sint32 left_x_coord;
+  /** X-coordinate of the right paddle */
+  Sint32 right_x_coord;
   /** True if the mode team is enable, no implemented 
    * (on Amiga I had two mice simultaneously) */
   bool is_team_mode;
@@ -64,7 +70,7 @@ private:
   sprite_paddle *paddle_right;
   sprite_paddle *paddle_top;
   sprite_paddle *paddle_left;
-  sprite_paddle *tec_robot0;
+  sprite_paddle *paddle_robot;
   controller_gigablitz *gigablitz;
   controller_balls *balls;
 
@@ -145,9 +151,9 @@ public:
   void move_paddles ();
   void move_paddle ();
   void init_paddles (controller_gigablitz * blitz, controller_balls * balls);
-  void init_robot ();
-  void activrobot ();
-  void deactrobot ();
+  void initialize_robot ();
+  void enable_robot ();
+  void disable_robot ();
   void move_robot ();
   sprite_paddle *get_paddle (Uint32 id);
   void set_maximum_paddles_size ();

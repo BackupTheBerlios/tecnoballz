@@ -4,11 +4,11 @@
  * @date 2007-09-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.52 $
+ * @version $Revision: 1.53 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.52 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.53 2007/09/27 06:05:36 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -113,7 +113,7 @@ controller_balls::init (Uint32 start,
       paddle_right = paddles->get_paddle (controller_paddles::RIGHT_PADDLE);
       paddle_top = paddles->get_paddle (controller_paddles::TOP_PADDLE);
       paddle_left = paddles->get_paddle (controller_paddles::LEFT_PADDLE);
-      tec_robot0 = paddles->get_paddle (controller_paddles::ROBOT_PADDLE);
+      paddle_robot = paddles->get_paddle (controller_paddles::ROBOT_PADDLE);
       controller_bricks *bricks = controller_bricks::get_instance ();
       w = bricks->get_brick_width ();
     }
@@ -770,11 +770,11 @@ controller_balls::collisions_with_paddle ()
 void
 controller_balls::collisions_with_robot ()
 {
-  if (!tec_robot0->bump_actif)
+  if (!paddle_robot->bump_actif)
     {
       return;
     }
-  sprite_paddle *paddle = tec_robot0;
+  sprite_paddle *paddle = paddle_robot;
   paddle->touch_ball = false;
   Sint32 x1 = paddle->x_coord;
   Sint32 y1 = paddle->y_coord;

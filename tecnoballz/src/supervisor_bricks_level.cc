@@ -1,14 +1,14 @@
 /**
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-09-25
+ * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.53 $
+ * @version $Revision: 1.54 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.53 2007/09/25 16:00:44 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.54 2007/09/27 06:05:36 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,7 +137,7 @@ supervisor_bricks_level::first_init ()
   bottom_wall->create_sprite (BOB_WALLBO, sprites_bitmap, 0);
   sprites->add (bottom_wall);
   bottom_wall->set_coordinates (32 * resolution, 232 * resolution);
-  paddles->init_robot ();
+  paddles->initialize_robot ();
   sides_bricks->initialize ();
   ejectors_corners->create_ejectors_sprites ();
 

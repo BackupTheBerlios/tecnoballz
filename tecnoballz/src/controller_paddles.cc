@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.cc
  * @brief Paddles controller 
- * @date 2007-09-20
+ * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.22 2007/09/26 15:57:40 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.23 2007/09/27 06:05:36 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,13 +52,13 @@ controller_paddles::controller_paddles ()
       paddle_right = NULL;
       paddle_top = NULL;
       paddle_left = NULL;
-      tec_robot0 = NULL;
+      paddle_robot = NULL;
 
       width_maxi = 32 * resolution;
       width_mini = 32 * resolution;
-      bumperYbas = (232 - 8) * resolution;
-      bumperMini = 16 * resolution;
-      bumperMaxi = 300 * resolution;
+      bottom_y_coord = (232 - 8) * resolution;
+      min_coordinate = 16 * resolution;
+      max_coordinate = 300 * resolution;
     }
  else
     {
@@ -69,14 +69,14 @@ controller_paddles::controller_paddles ()
       paddle_right = new sprite_paddle ();
       paddle_top = new sprite_paddle ();
       paddle_left = new sprite_paddle ();
-      tec_robot0 = new sprite_paddle (false);
+      paddle_robot = new sprite_paddle (false);
 
-      bumperMini = 32 * resolution;
-      bumperMaxi = 224 * resolution;
-      bumperYhau = (20 - 8) * resolution;
-      bumperYbas = (232 - 8) * resolution;
-      bumperXgau = 20 * resolution;
-      bumperXdro = 228 * resolution;
+      min_coordinate = 32 * resolution;
+      max_coordinate = 224 * resolution;
+      top_y_coord = (20 - 8) * resolution;
+      bottom_y_coord = (232 - 8) * resolution;
+      left_x_coord = 20 * resolution;
+      right_x_coord = 228 * resolution;
       width_maxi = 64 * resolution;
       width_mini = 16 * resolution;
       reverse_counter = 0;
@@ -120,11 +120,11 @@ controller_paddles::create_paddles_sprites ()
       paddle_bottom->create_sprite (sprite_type_id, sprites_bitmap, 1, 0);
       sprites->add (paddle_bottom);
       sprites_list[0] = paddle_bottom;
-      paddle_bottom->set_coordinates (keyboard->get_mouse_x (), bumperYbas);
+      paddle_bottom->set_coordinates (keyboard->get_mouse_x (), bottom_y_coord);
       /* width of the paddle in pixels */
       paddle_bottom->collision_width = paddle_length;
       paddle_bottom->paddle_number = 1;
-      paddle_bottom->bumperType = 0;
+      paddle_bottom->is_vertical = 0;
       /* ball rebounds table */
       paddle_bottom->rebonds_Ga = midi1_left;
       paddle_bottom->rebonds_Dr = midi1Right;
@@ -177,40 +177,40 @@ controller_paddles::create_paddles_sprites ()
     }
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels: generate robot bumper sprite
-//-------------------------------------------------------------------------------
+/**
+ * Create and initialize the robot paddle sprite
+ */
 void
-controller_paddles::init_robot ()
+controller_paddles::initialize_robot ()
 {
-  tec_robot0->set_object_pos (4);
-  tec_robot0->create_sprite (BOB_ROBOT0, sprites_bitmap, 1, 0);
-  sprites->add (tec_robot0);
-  sprites_list[4] = tec_robot0;
+  paddle_robot->set_object_pos (4);
+  paddle_robot->create_sprite (BOB_ROBOT0, sprites_bitmap, true, 0);
+  sprites->add (paddle_robot);
+  sprites_list[4] = paddle_robot;
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels: activate robot bumper
-//-------------------------------------------------------------------------------
+/**
+ * Activate robot paddle in bricks level
+ */
 void
-controller_paddles::activrobot ()
+controller_paddles::enable_robot ()
 {
-  Sint32 centre;
-  tec_robot0->enable ();
-  centre = bumperMini + (bumperMaxi - bumperMini) / 2 -
-    (tec_robot0->collision_width / 2);
-  tec_robot0->set_coordinates (centre, 232 * resolution);
-  tec_robot0->bump_actif = 1;
+  Sint32 center;
+  paddle_robot->enable ();
+  center = min_coordinate + (max_coordinate - min_coordinate) / 2 -
+    (paddle_robot->collision_width / 2);
+  paddle_robot->set_coordinates (center, 232 * resolution);
+  paddle_robot->bump_actif = 1;
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels: deactivate robot bumper
-//-------------------------------------------------------------------------------
+/**
+ * Deactivate robot paddle in bricks level
+ */
 void
-controller_paddles::deactrobot ()
+controller_paddles::disable_robot ()
 {
-  tec_robot0->disable ();
-  tec_robot0->bump_actif = 0;
+  paddle_robot->disable ();
+  paddle_robot->bump_actif = 0;
 }
 
 /**
@@ -225,14 +225,14 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   balls = ball;
 
   paddle_length = current_player->get_paddle_length ();
-  Sint32 centre = (bumperMaxi - bumperMini) / 2 - (paddle_length / 2);
+  Sint32 center = (max_coordinate - min_coordinate) / 2 - (paddle_length / 2);
 
   /* initialize bottom paddle */ 
-  paddle_bottom->set_coordinates (centre, bumperYbas);
+  paddle_bottom->set_coordinates (center, bottom_y_coord);
   /* paddles width: 8, 16, 24, 32, 40, 48, 56 or 64 pixels */
   paddle_bottom->collision_width = paddle_length;
-  paddle_bottom->paddle_number = 1;
-  paddle_bottom->bumperType = 0;
+  paddle_bottom->paddle_number = BOTTOM_PADDLE;
+  paddle_bottom->is_vertical = false;
   paddle_bottom->bumpActive (is_team_mode, paddle_length, 3);
   paddle_bottom->bump_TFIRE = 2;
   paddle_bottom->bumper_FX0 = 0;
@@ -252,10 +252,10 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   paddle_bottom->width_maxi = width_maxi;
 
   /* initialize right paddle */ 
-  paddle_right->set_coordinates (bumperXdro, centre);
+  paddle_right->set_coordinates (right_x_coord, center);
   paddle_right->collision_height = paddle_length;
   paddle_right->paddle_number = RIGHT_PADDLE;
-  paddle_right->bumperType = 1;
+  paddle_right->is_vertical = true;
   paddle_right->bumpActive (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (RIGHT_PADDLE));
   paddle_right->bump_TFIRE = 2;
   paddle_right->bumper_FX0 = -5 * resolution;
@@ -276,10 +276,10 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   current_player->set_paddle_alive_counter (2, paddle_right->bump_actif);
 
   /* initialize top paddle */ 
-  paddle_top->set_coordinates (centre, bumperYhau);
+  paddle_top->set_coordinates (center, top_y_coord);
   paddle_top->collision_width = paddle_length;
   paddle_top->paddle_number = TOP_PADDLE;
-  paddle_top->bumperType = 0;
+  paddle_top->is_vertical = false;
   paddle_top->bumpActive (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (TOP_PADDLE));
   paddle_top->bump_TFIRE = 2;
   paddle_top->bumper_FX0 = 0;
@@ -300,10 +300,10 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   current_player->set_paddle_alive_counter (3, paddle_top->bump_actif);
 
   /* initialize left paddle */ 
-  paddle_left->set_coordinates (bumperXgau, centre);
+  paddle_left->set_coordinates (left_x_coord, center);
   paddle_left->collision_height = paddle_length;
   paddle_left->paddle_number = LEFT_PADDLE;
-  paddle_left->bumperType = 1;
+  paddle_left->is_vertical = true;
   paddle_left->bumpActive (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (LEFT_PADDLE));
   paddle_left->bump_TFIRE = 2;
   paddle_left->bumper_FX0 = 5 * resolution;
@@ -324,25 +324,25 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   current_player->set_paddle_alive_counter (4, paddle_left->bump_actif);
 
   /* initialize robot paddle */
-  tec_robot0->set_coordinates (centre, bumperYbas);
+  paddle_robot->set_coordinates (center, bottom_y_coord);
   /* paddle width always 128 pixels */
-  tec_robot0->collision_width = width_maxi;
-  tec_robot0->paddle_number = ROBOT_PADDLE;
-  tec_robot0->bumperType = 0;
-  tec_robot0->bump_TFIRE = 2;
-  tec_robot0->bumper_FX0 = 0;
-  tec_robot0->bumper_FY0 = -5 * resolution;
-  tec_robot0->bumper_FX1 = -1 * resolution;
-  tec_robot0->bumper_FY1 = -4 * resolution;
-  tec_robot0->bumper_FX2 = 1 * resolution;
-  tec_robot0->bumper_FY2 = -4 * resolution;
-  tec_robot0->bump_Xscie = 32 * resolution;
-  tec_robot0->bump_Yscie = -20 * resolution;
-  tec_robot0->bump_xdeca = 0;
-  tec_robot0->bump_ydeca = -10 * resolution;
-  tec_robot0->rebonds_Ga = midi1_left;  // rebonds raquette va a gauche
-  tec_robot0->rebonds_Dr = midi1Right;  // rebonds raquette va a droite
-  tec_robot0->direct_tab = ballePets1;  // table direction balle collee
+  paddle_robot->collision_width = width_maxi;
+  paddle_robot->paddle_number = ROBOT_PADDLE;
+  paddle_robot->is_vertical = false;
+  paddle_robot->bump_TFIRE = 2;
+  paddle_robot->bumper_FX0 = 0;
+  paddle_robot->bumper_FY0 = -5 * resolution;
+  paddle_robot->bumper_FX1 = -1 * resolution;
+  paddle_robot->bumper_FY1 = -4 * resolution;
+  paddle_robot->bumper_FX2 = 1 * resolution;
+  paddle_robot->bumper_FY2 = -4 * resolution;
+  paddle_robot->bump_Xscie = 32 * resolution;
+  paddle_robot->bump_Yscie = -20 * resolution;
+  paddle_robot->bump_xdeca = 0;
+  paddle_robot->bump_ydeca = -10 * resolution;
+  paddle_robot->rebonds_Ga = midi1_left;  // rebonds raquette va a gauche
+  paddle_robot->rebonds_Dr = midi1Right;  // rebonds raquette va a droite
+  paddle_robot->direct_tab = ballePets1;  // table direction balle collee
 }
 
 /**
@@ -470,8 +470,8 @@ controller_paddles::move_paddles ()
           x += off_x;
           if (off_x < 0)
             {
-              if (x <= bumperMini)
-                x = bumperMini;
+              if (x <= min_coordinate)
+                x = min_coordinate;
               raketDepla = 1;   // deplacement a gauche 
               rakVgauche = -off_x;
               speed = rakVgauche;
@@ -482,7 +482,7 @@ controller_paddles::move_paddles ()
             }
           else
             {
-              Sint32 i = bumperMaxi - paddle_length;
+              Sint32 i = max_coordinate - paddle_length;
               if (x >= i)
                 x = i;
               raketDepla = 2;   // deplacement a droite
@@ -539,8 +539,10 @@ controller_paddles::move_paddle ()
       x += off_x;
       if (off_x < 0)
         {
-          if (x <= bumperMini)
-            x = bumperMini;
+          if (x <= min_coordinate)
+	    {
+              x = min_coordinate;
+	    }
           raketDepla = 1;       //moving on the left
           rakVgauche = -off_x;
           speed = rakVgauche;
@@ -548,7 +550,7 @@ controller_paddles::move_paddle ()
         }
       else
         {
-          Sint32 i = bumperMaxi - paddle_length;
+          Sint32 i = max_coordinate - paddle_length;
           if (x >= i)
             x = i;
           raketDepla = 2;       //moving on the right
@@ -580,7 +582,7 @@ controller_paddles::move_paddle ()
 void
 controller_paddles::move_robot ()
 {
-  if (tec_robot0->bump_actif)
+  if (paddle_robot->bump_actif)
     {
       Sint32 t = balls->get_max_of_sprites ();
       sprite_ball **aList = balls->get_sprites_list ();
@@ -604,7 +606,7 @@ controller_paddles::move_robot ()
 
       if (pos_y > 0)
         {
-          Sint32 bumpx = tec_robot0->x_coord;
+          Sint32 bumpx = paddle_robot->x_coord;
           Sint32 ballx = balle->x_coord - 64;
           Sint32 offsx = bumpx - ballx;
           if (offsx > 10)
@@ -626,20 +628,20 @@ controller_paddles::move_robot ()
               bumpx = 320;
             }
 
-          offsx = tec_robot0->x_coord;
-          tec_robot0->x_coord = bumpx;
+          offsx = paddle_robot->x_coord;
+          paddle_robot->x_coord = bumpx;
           offsx = bumpx - offsx;
           const Sint32 **tabB1;
           if (offsx < 0)
             {
               offsx = -offsx;
-              tabB1 = tec_robot0->rebonds_Ga;
+              tabB1 = paddle_robot->rebonds_Ga;
             }
           else
             {
-              tabB1 = tec_robot0->rebonds_Dr;
+              tabB1 = paddle_robot->rebonds_Dr;
             }
-          tec_robot0->rebonds_GD = *(tabB1 + offsx);
+          paddle_robot->rebonds_GD = *(tabB1 + offsx);
         }
     }
 }
@@ -663,7 +665,7 @@ controller_paddles::get_paddle (Uint32 id)
     case LEFT_PADDLE:
       return paddle_left;
     case ROBOT_PADDLE:
-      return tec_robot0;
+      return paddle_robot;
     }
   return NULL;
 }
@@ -680,7 +682,7 @@ controller_paddles::set_maximum_paddles_size ()
     }
   paddle_length = 64 * resolution;
   Sint32 x = paddle_bottom->get_x_coord ();
-  Sint32 i = bumperMaxi - paddle_length;
+  Sint32 i = max_coordinate - paddle_length;
   if (x >= i)
     {
       x = i;
@@ -708,7 +710,7 @@ controller_paddles::expand_paddles ()
     }
   paddle_length += (8 * resolution);
   Sint32 x = paddle_bottom->get_x_coord ();
-  Sint32 i = bumperMaxi - paddle_length;
+  Sint32 i = max_coordinate - paddle_length;
   if (x >= i)
     {
       x = i;
