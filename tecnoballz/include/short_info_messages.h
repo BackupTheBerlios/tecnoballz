@@ -1,15 +1,15 @@
-/** 
+/**
  * @file short_info_messages.h 
  * @brief Display short info messages in bricks levels 
  * @created 2002-12-30
- * @date 2007-02-26
+ * @date 2007-09-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: short_info_messages.h,v 1.4 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: short_info_messages.h,v 1.5 2007/09/28 05:34:09 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,9 +34,9 @@ class short_info_messages;
 #include "../include/bitmap_data.h"
 
 class short_info_messages:public virtual tecnoballz
-{
-public:
-  typedef enum
+  {
+  public:
+    typedef enum
     {
       ARE_YOU_READY,
       YEAH_YOU_WHERE,
@@ -69,44 +69,58 @@ public:
       MAX_OF_MESSAGES
     } MESSAGES_ENUM;
 
-private:
-  static short_info_messages* info_messages_singleton;
-  char **messages;
-  bitmap_data * bitmap_small_fonts;
-  bitmap_data *messa_fond;
-  static const Uint32 MESSAGEPOSX = 96;
-  static const Uint32 MESSAGEPOSY = 37;
-  /** Maximum number of chars of a message */
-  static const Uint32 MAX_OF_CHARS = 16;
+  private:
+    static short_info_messages *info_messages_singleton;
+    /** All message strings loaded from a text file */
+    char **messages;
+    /** Bitmap used to restore the background under message,
+     * if has_background == true */
+    bitmap_data *restore_surface;
+    /** Pointer to the pixels from the restore surface */
+    char *restore_pixels;
+    static const Uint32 XCOORD_MESSAGE = 96;
+    static const Uint32 YCOORD_MESSAGE = 37;
+    /** Maximum number of chars of a message */
+    static const Uint32 MAX_OF_CHARS = 16;
+    /** Time delay counter, if < 5 then clear the message */
+    Uint32 delay_counter;
+    /** Current char to draw from 0 to 15 */
+    Sint32 current_char;
+    /** Current required message string */
+    const char *required_message;
+    /** Modulo destination in the game offscreen */
+    Sint32 dest_offset;
+    /** Modulo source in the font bitmap */
+    Sint32 src_offset;
+    /** Font bitmap used to draw a message */
+    bitmap_data *bitmap_small_fonts;
+    /** Pointer to the pixels of the font bitmap */
+    char *font_pixels;
+    /** Pointer to the message in the game offscreen */
+    char *screen;
+    /** Pointer to the message in the background offscreen */
+    char *background;
+    /** Height of a character in pixels */
+    Uint32 height_font;
+    /** Width of a character in pixels, 4 or 8 */
+    Uint32 width_font;
+    /** Width of message's surface 64 or 128 pixels */
+    Uint32 width_surface;
+    bool messages_request[MAX_OF_MESSAGES];
 
-  /** Time delay counter, if < 5 then clear the message */
-  Uint32 delay_counter;
-  Sint32 mess_pnter;            //number of the chars to display 0 to 15
-  const char *mess_reque;
-  Sint32 off_desti1;            // modulo destination (buffer)
-  Sint32 off_source;            // modulo source (graphic page)
-  char *ptr_fontes;
-  char *ptr_buffer;
-  char *ptr_tampon;
-  char *pt_mesfond;
-  /** Height of a character in pixels */
-  Uint32 height_font;
-  /** Width of a character in pixels */
-  Uint32 width_font;
-  Uint32 fonteslarg;            //width of message's buffer  
-  bool messages_request[MAX_OF_MESSAGES];
-
-private:
+  private:
     short_info_messages ();
-  void draw ();
-  void displaymes ();
-  void clear_mess ();
-public:
-   ~short_info_messages ();
-  static short_info_messages * get_instance ();
-  void clear_messages_request ();
-  void intialize ();
-  void send_message_request (Uint32 id);
-  void run ();
-};
+    void init_with_background ();
+    void draw ();
+    void display_in_background ();
+    void display (Uint32 height);
+    void clear_message ();
+  public:
+    ~short_info_messages ();
+    static short_info_messages *get_instance ();
+    void clear_messages_request ();
+    void initialize ();
+    void send_message_request (Uint32 id);
+    void run ();
+  };
 #endif

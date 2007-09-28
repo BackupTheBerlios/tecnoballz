@@ -1,12 +1,17 @@
-2007-02-10
+2007-09-28
 TecnoballZ 0.91++
 Autoconf and automake was improved
-Compile with GCC 4.0.1
-Clean up the code
-Change the names of C++ classes
+The code was compiled with GCC 4.1.2
+The code was considerably cleaned up and rewritten
+The source code files and C++ classes were renamed
 The names and variables names and comments are now in English 
-The simple copies now use SDL_BlitSurface
-
+The simple copies use now SDL_BlitSurface
+French language support was added
+Resources files were renamed
+The graphic files were converted from BMP to PNG
+New graphics was realized for the mode 640x480
+The license was changed to the GPLv3
+Various bugs were fixed
 
 2005-02-04
 TecnoballZ 0.91

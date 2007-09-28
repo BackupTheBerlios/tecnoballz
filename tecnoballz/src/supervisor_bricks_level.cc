@@ -1,14 +1,14 @@
 /**
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-09-27
+ * @date 2007-09-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.54 $
+ * @version $Revision: 1.55 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.54 2007/09/27 06:05:36 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.55 2007/09/28 05:34:09 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -258,7 +258,10 @@ supervisor_bricks_level::main_loop ()
           tiles_ground->set_scroll_type(tiles_background::TILES_SCROLL_GAMEOVER);
           gameover_counter++;
         }
-      info_messages->run ();
+      if (has_background)
+	{
+          info_messages->run ();
+	}
       display->wait_frame ();
       head_anim->play ();
       display->lock_surfaces ();
@@ -324,7 +327,10 @@ supervisor_bricks_level::main_loop ()
 
       if (!keyboard->command_is_pressed (handler_keyboard::COMMAND_KEY_PAUSE))
         {
-          info_messages->run ();
+	  if (has_background)
+	    {
+              info_messages->run ();
+	    }
           gigablitz->run_in_bricks_levels ();
           /* handle the "less bricks" option */
           bricks->less_bricks ();
@@ -568,7 +574,7 @@ supervisor_bricks_level::initialize_background (Sint32 bkg_num)
   /* initialize and draw the tiles background */
   tiles_ground->setup (bkg_num);
   /* short info messages displayed */
-  info_messages->intialize ();
+  info_messages->initialize ();
   /* draw shadows of ejectors */
   ejectors_corners->draw_shadow ();
   /* save background under small bricks */
@@ -578,7 +584,7 @@ supervisor_bricks_level::initialize_background (Sint32 bkg_num)
   /* draw small bricks of the three walls */
   sides_bricks->draw_to_brackground ();
   ejectors_corners->draw ();
-  /* intialize the bricks level */
+  /* initialize the bricks level */
   bricks->first_init ();
   bricks->initialize ();
   if (is_verbose)
@@ -600,6 +606,7 @@ supervisor_bricks_level::draw_tilesmap()
     }
   display->unlock_surfaces ();
   tiles_ground->draw();
+  info_messages->run ();
   display->lock_surfaces ();
 }
 
