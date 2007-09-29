@@ -4,11 +4,11 @@
  * @date 2007-09-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.17 2007/09/29 08:53:48 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.18 2007/09/29 11:12:51 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,15 +59,11 @@ sprite_ball::init_collisions_points ()
       return;
     }
   is_collisions_point_initialized = true;
-  if (resolution == 2)
-    {
-      return;
-    }
   for (Uint32 i = 0; i < 8; i++)
     {
-      brikPoint1[i] /= 2;
-      brikPoint2[i] /= 2;
-      brikPoint3[i] /= 2;
+      brikPoint1[i] *= resolution;
+      brikPoint2[i] *= resolution;
+      brikPoint3[i] *= resolution;
     }
 }
 
@@ -369,13 +365,38 @@ sprite_ball::accelerate ()
 
 /** Collision points of the ball 1 with brick */
 Sint32 sprite_ball::brikPoint1[8] =
+{
+  5,3,
+  3,0,
+  0,3,
+  3,5 
+};
+/** Collision points of the ball 2 with brick */
+Sint32 sprite_ball::brikPoint2[8] =
+{
+  7,4,
+  4,0,
+  0,4,
+  4,7 
+};
+/** Collision points of the ball 3 with brick */
+Sint32 sprite_ball::brikPoint3[8] =
+{
+  9,5,
+  5,0,
+  0,5,
+  5,9
+};
+
+
+/*
+Sint32 sprite_ball::brikPoint1[8] =
   { 
     10, 6, //XMAXIM,MILIEU (balle1)
     6, 0,                         //MILIEU,YMINIM
     0, 6,                         //XMINIM,MILIEU
     6, 10                         //MILIEU,YMAXIM
   };
-/** Collision points of the ball 2 with brick */
 Sint32 sprite_ball::brikPoint2[8] =
   { 
     14, 8, // XMAXIM,MILIEU (balle2)
@@ -383,7 +404,6 @@ Sint32 sprite_ball::brikPoint2[8] =
     0, 8,                         // XMINIM,MILIEU
     8, 14                         // MILIEU,YMAXIM
   };
-/** Collision points of the ball 3 with brick */
 Sint32 sprite_ball::brikPoint3[8] =
   { 
     18, 10,        // XMAXIM,MILIEU (balle3)
@@ -391,6 +411,7 @@ Sint32 sprite_ball::brikPoint3[8] =
     0, 10,                        // XMINIM,MILIEU
     10, 18                        // MILIEU,YMAXIM
   };
+*/
 
 // Table des differentes vitesses de balle
 //              16
