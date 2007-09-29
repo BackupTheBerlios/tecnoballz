@@ -1,14 +1,14 @@
 /** 
  * @file sprite_ball.h
  * @brief The ball sprite
- * @date 2007-09-14
+ * @date 2007-09-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.h,v 1.18 2007/09/24 16:00:01 gurumeditation Exp $
+ * $Id: sprite_ball.h,v 1.19 2007/09/29 08:53:47 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,18 +29,13 @@
 #define __SPRITE_BALL__
 class sprite_ball;
 #include "../include/sprite_object.h"
-//-------------------------------------------------------------------------------
-// structure of ball start coordinates (ejectors)
-//-------------------------------------------------------------------------------
+
+/** Coordinates of the ball on the ejectors */
 typedef struct
 {
-  Sint32 ejectBall1;
-  Sint32 ejectBall2;
-  Sint32 ejectBall3;
-  Sint32 ejectBall4;
   Sint32 x_coord;
   Sint32 y_coord;
-} furaxEject;
+} ball_ejector_coords;
 
 
 #include "../include/sprite_paddle.h"
@@ -100,13 +95,21 @@ private:
   Sint32 *collisionT;           //pt/bricks collisions table
   Sint32 powerBall1;            //value decreasing bouiboui strength
   Sint32 powerBall2;            //value decreasing brick strength (2 4 or 6) 
-  Sint32 eject_ball[4];         //flag pour coins haut-gauche/bas-gauche/bas_droite/haut-droite
-  Sint32 tilt_delay;            //counter before a tilt is possible 
+
+  /** Identify in which ejector is the ball */
+  /** Time delay befor ejection of the ball */
+  Sint32 ejector_delay;
+  /** Table of directions possible that a ball can
+   * set when it leave a ejector */
+  Sint32 *ejector_table;
+  /** counter before a tilt is possible */
+  Sint32 tilt_delay_counter;
   /** Counter delay before accelerating the ball */
   Sint32 accelerate_delay_counter;
   /** Time delay before accelerating the ball */
   Sint32 accelerate_delay;
-  Sint32 startCount;            //temps avant que la balle parte
+  /** Delay counter before the ball leaves the paddle */
+  Sint32 start_delay_counter;
   Sint32 start_init;            //temps avant que la balle parte (valeur initiale)
   Sint32 balle_rota;            //pointeur sur table ballePets 
   Sint32 tempo_rota;            //Tempo rotation du point autour de la balle
@@ -117,6 +120,8 @@ private:
   Sint32 brick_width;
   Sint32 colli_wall;            //collision with one wall
 
+  /** True if collision point of ball with bricks were corrected */
+  static bool is_collisions_point_initialized;
   static Sint32 brikPoint1[8];  //Points collision balle taille 1
   static Sint32 brikPoint2[8];  //Points collision balle taille 2
   static Sint32 brikPoint3[8];  //Points collision balle taille 3
@@ -124,12 +129,19 @@ private:
   static Sint16 ballSpeed2[];   //Table deplacement balle vitesse 2
   static Sint16 ballSpeed3[];   //Table deplacement balle vitesse 3
   static Sint16 ballSpeed4[];   //Table deplacement balle vitesse 4
-  static furaxEject furaxTable[];       //Table d'apparition des balles dans les ejecteurs
+  /** Coordinates of the balls on the ejectors */
+  static ball_ejector_coords ejector_coords[];
   static const Sint32 tilt_table[16][16];
+  static Sint32 ball_eject1[];
+  static Sint32 ball_eject2[];
+  static Sint32 ball_eject3[];
+  static Sint32 ball_eject4[];
+  static Sint32* ball_ejectors[];
 
 public:
     sprite_ball ();
    ~sprite_ball ();
+  static void init_collisions_points ();
   void once_init (Sint32 start, Sint32 speed,
                    sprite_paddle * paddle, Sint16 * table, Sint32 w);
   void starts_again (sprite_paddle * paddle);
@@ -143,7 +155,8 @@ public:
   void set_size_2 ();
   void set_size_3 ();
   void set_maximum_speed ();
-  void enbale_on_ejector (Uint32 eject_id, Uint32 otime = 1);
+  void enbale_on_ejector (Uint32 eject_id, Uint32 otime);
+  void set_on_ejector (Uint32 eject_id, Uint32 otime = 1);
   void disable_stick ();
   void accelerate ();
 

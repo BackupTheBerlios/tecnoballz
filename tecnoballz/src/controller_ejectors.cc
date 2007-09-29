@@ -1,14 +1,14 @@
 /** 
  * @file controller_ejectors.cc 
  * @brief Ejectors corners controller 
- * @date 2007-09-21
+ * @date 2007-09-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_ejectors.cc,v 1.7 2007/09/21 05:17:03 gurumeditation Exp $
+ * $Id: controller_ejectors.cc,v 1.8 2007/09/29 08:53:48 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -174,11 +174,11 @@ controller_ejectors::get_ejector (Uint32 id)
 
 /**
  * Initialize the table of the positions of the balls on the ejectors. 
+ * @param table Pointer to the structure of the ball ejectors
  */
-bool
-  controller_ejectors::is_pos_ball_initialized = false;
+bool controller_ejectors::is_pos_ball_initialized = false;
 void
-controller_ejectors::ballPosIni (furaxEject * table)
+controller_ejectors::initialize_ball_positions (ball_ejector_coords * table)
 {
   /* is the position of the balls already initialized? */
   if (is_pos_ball_initialized)

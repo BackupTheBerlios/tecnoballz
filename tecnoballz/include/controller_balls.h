@@ -4,11 +4,11 @@
  * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.25 2007/09/27 06:05:36 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.26 2007/09/29 08:53:47 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,10 +66,6 @@ private:
   sprite_object *ptBob_wall;
 
 private:
-  static Sint32 ball_eject1[];
-  static Sint32 ball_eject2[];
-  static Sint32 ball_eject3[];
-  static Sint32 ball_eject4[];
   static Sint32 rb0[16];
   static Sint32 rb1[16];
   static Sint32 rb2[16];

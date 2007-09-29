@@ -4,11 +4,11 @@
  * @date 2007-09-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.16 2007/09/24 16:00:01 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.17 2007/09/29 08:53:48 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,34 @@ sprite_ball::~sprite_ball ()
 {
 }
 
+bool  sprite_ball::is_collisions_point_initialized = false;
+
+
+/** 
+ * Correct the collisions point of ball adapted from 
+ * resolution
+ */
+void
+sprite_ball::init_collisions_points ()
+
+{
+  if (is_collisions_point_initialized)
+    {
+      return;
+    }
+  is_collisions_point_initialized = true;
+  if (resolution == 2)
+    {
+      return;
+    }
+  for (Uint32 i = 0; i < 8; i++)
+    {
+      brikPoint1[i] /= 2;
+      brikPoint2[i] /= 2;
+      brikPoint3[i] /= 2;
+    }
+}
+
 /**
  * perform some initializations
  * @param start Time before the ball leaves the bumper (first time)
@@ -60,7 +88,7 @@ sprite_ball::once_init (Sint32 start, Sint32 speed,
   initial_velocity = table;
   disable ();
   sticky_paddle_num = 0;
-  startCount = 0;
+  start_delay_counter = 0;
   brick_width = w;
   set_initial_values (paddle);
 }
@@ -73,7 +101,7 @@ void
 sprite_ball::starts_again (sprite_paddle * paddle)
 {
   enable ();
-  startCount = start_init;
+  start_delay_counter = start_init;
   sticky_paddle_num = paddle->get_paddle_number ();
   set_initial_values (paddle);
   select_image ();
@@ -87,7 +115,7 @@ sprite_ball::remove (sprite_paddle * paddle)
 {
   disable ();
   sticky_paddle_num = 0;
-  startCount = 0;
+  start_delay_counter = 0;
   set_initial_values (paddle);
   select_image ();
 }
@@ -111,11 +139,9 @@ sprite_ball::set_initial_values (sprite_paddle * paddle)
   collisionT = brikPoint1;
   powerBall1 = 1;
   powerBall2 = brick_width;
-  eject_ball[0] = 0;
-  eject_ball[1] = 0;
-  eject_ball[2] = 0;
-  eject_ball[3] = 0;
-  tilt_delay = 0;
+  ejector_delay = 0;
+  ejector_table = NULL;
+  tilt_delay_counter = 0;
   balle_rota = 1;
   tempo_rota = 1;
   ball_sizeX = BALL_SIZE1;
@@ -146,7 +172,7 @@ void
 sprite_ball::disable_stick ()
 {
   sticky_paddle_num = 0;
-  startCount = 0;
+  start_delay_counter = 0;
 }
 
 /**
@@ -194,7 +220,7 @@ sprite_ball::duplicate_from (sprite_ball * ball, Uint32 angle)
   y_coord = ball->y_coord;
   direction = angle;
   sticky_paddle_num = 0;
-  tilt_delay = 0;
+  tilt_delay_counter = 0;
   ball_sizeX = ball->ball_sizeX;
   ballPowerX = ball->ballPowerX;
   collision_width = ball->collision_width;
@@ -270,51 +296,38 @@ sprite_ball::set_maximum_speed ()
 
 /**
  * Enable a ball on a ejector
- * @param ejector_id ejector identifier from 0 to 3
- * @param delay before the ejection of the ball
+ * @param id Ejector identifier from 0 to 3
+ * @param delay Time delay before the ejection of the ball
  */
 void
-sprite_ball::enbale_on_ejector (Uint32 ejector_id, Uint32 delay)
+sprite_ball::enbale_on_ejector (Uint32 id, Uint32 delay)
 {
   is_enabled = true;
-  ejector_id &= 3;
-  furaxEject *monPT = furaxTable + ejector_id;
-  if (monPT->ejectBall1)
-    {
-      eject_ball[0] = delay;
-    }
-  else
-    {
-      eject_ball[0] = 0;
-    }
-  if (monPT->ejectBall2)
-    {
-      eject_ball[1] = delay;
-    }
-  else
-    {
-      eject_ball[1] = 0;
-    }
-  if (monPT->ejectBall3)
-    {
-      eject_ball[2] = delay;
-    }
-  else
-    {
-      eject_ball[2] = 0;
-    }
-  if (monPT->ejectBall4)
-    {
-      eject_ball[3] = delay;
-    }
-  else
-    {
-      eject_ball[3] = 0;
-    }
-  x_coord = monPT->x_coord;
-  y_coord = monPT->y_coord;
+  id &= 3;
+  ejector_delay = delay;
+  ejector_table = ball_ejectors[id];
+  x_coord = ejector_coords[id].x_coord;
+  y_coord = ejector_coords[id].y_coord;
   /* the ball's motionless */
   direction = 64;
+}
+
+/**
+ * Set the ball on an ejector
+ * @param id Ejector identifier from 0 to 3
+ * @param delay Time delay before the ejection of the ball
+ */
+void
+sprite_ball::set_on_ejector(Uint32 id, Uint32 delay)
+{
+  id &= 3;
+  ejector_table = ball_ejectors[id];
+  ejector_delay = delay;
+  direction = 64;
+  current_player->add_score (10);
+#ifndef SOUNDISOFF
+  audio->play_sound (handler_audio::ECJECTOR_IN);
+#endif
 }
 
 /** 
@@ -354,27 +367,30 @@ sprite_ball::accelerate ()
     }
 }
 
-//-------------------------------------------------------------------------------
-// Liste des points de collision de la balle (avec les briques) ================
-//-------------------------------------------------------------------------------
-Sint32
-  sprite_ball::brikPoint1[8] = { 10, 6, //XMAXIM,MILIEU (balle1)
-  6, 0,                         //MILIEU,YMINIM
-  0, 6,                         //XMINIM,MILIEU
-  6, 10                         //MILIEU,YMAXIM
-};
-Sint32
-  sprite_ball::brikPoint2[8] = { 14, 8, // XMAXIM,MILIEU (balle2)
-  8, 0,                         // MILIEU,YMINIM
-  0, 8,                         // XMINIM,MILIEU
-  8, 14                         // MILIEU,YMAXIM
-};
-Sint32
-  sprite_ball::brikPoint3[8] = { 18, 10,        // XMAXIM,MILIEU (balle3)
-  10, 0,                        // MILIEU,YMINIM
-  0, 10,                        // XMINIM,MILIEU
-  10, 18                        // MILIEU,YMAXIM
-};
+/** Collision points of the ball 1 with brick */
+Sint32 sprite_ball::brikPoint1[8] =
+  { 
+    10, 6, //XMAXIM,MILIEU (balle1)
+    6, 0,                         //MILIEU,YMINIM
+    0, 6,                         //XMINIM,MILIEU
+    6, 10                         //MILIEU,YMAXIM
+  };
+/** Collision points of the ball 2 with brick */
+Sint32 sprite_ball::brikPoint2[8] =
+  { 
+    14, 8, // XMAXIM,MILIEU (balle2)
+    8, 0,                         // MILIEU,YMINIM
+    0, 8,                         // XMINIM,MILIEU
+    8, 14                         // MILIEU,YMAXIM
+  };
+/** Collision points of the ball 3 with brick */
+Sint32 sprite_ball::brikPoint3[8] =
+  { 
+    18, 10,        // XMAXIM,MILIEU (balle3)
+    10, 0,                        // MILIEU,YMINIM
+    0, 10,                        // XMINIM,MILIEU
+    10, 18                        // MILIEU,YMAXIM
+  };
 
 // Table des differentes vitesses de balle
 //              16
@@ -425,15 +441,19 @@ Sint16
   -5, 0, -5, 2, -4, 4, -2, 5, 0, 5, 2, 5, 4, 4, 5, 2, 0, 0
 };
 
-furaxEject
-sprite_ball::furaxTable[] = { {1, 0, 0, 0, 8, 8}
-,                               //1 top-left
-{0, 1, 0, 0, 8, 3}
-,                               //3 bottom-left
-{0, 0, 1, 0, 3, 3}
-,                               //4 bottom-right
-{0, 0, 0, 1, 3, 8}              //2 top-right
-};
+/** Coordinates of the balls on the ejectors */
+ball_ejector_coords
+sprite_ball::ejector_coords[] =
+  {
+    /* 1: top-left */
+    {8, 8},
+    /* 3: bottom-left */
+    {8, 3},
+    /* 4: bottom-right */
+    {3, 3},
+    /* 2: top-right */
+    {3, 8}
+  };
 
 const Sint32
 sprite_ball::tilt_table[16][16] = { {4, 4, 8, 12, 16, 20, 24, 28, 28, 36, 40, 44, 48, 52, 56, 60},      //0     32
@@ -453,3 +473,43 @@ sprite_ball::tilt_table[16][16] = { {4, 4, 8, 12, 16, 20, 24, 28, 28, 36, 40, 44
 {4, 4, 8, 12, 16, 20, 20, 28, 28, 36, 40, 44, 48, 52, 52, 60},  //56    24
 {4, 4, 8, 12, 16, 20, 24, 24, 36, 36, 40, 44, 48, 52, 56, 56}   //60    28
 };
+
+
+/** Directions possible that a ball can set when it leave
+ * the top-left ejector */
+Sint32 sprite_ball::ball_eject1[] =
+{
+  52, 56, 60, 60, 52, 56, 60, 60, 52,
+  52, 56, 52, 52, 60, 56, 52, 56, 56
+};
+/** Directions possible that a ball can set when it leave
+ * the bottom-left ejector */
+Sint32 sprite_ball::ball_eject2[] =
+{
+  8, 4, 12, 12, 8, 4, 4, 12, 8,
+  4, 12, 4, 8, 12, 4, 8, 12, 4, 4
+};
+/** Directions possible that a ball can set when it leave
+ * the bottom-right ejector */
+Sint32 sprite_ball::ball_eject3[] =
+{
+  20, 28, 24, 20, 20, 28, 28, 24, 20, 28,
+  24, 24, 28, 28, 20, 20, 24, 24, 28
+};
+/** Directions possible that a ball can set when it leave
+ * the top-right ejector */
+Sint32 sprite_ball::ball_eject4[] =
+{
+  36, 44, 40, 36, 36, 44, 44, 40, 40,
+  36, 44, 40, 40, 36, 36, 44, 44, 40, 36
+};
+
+Sint32 *sprite_ball::ball_ejectors[4] =
+{
+    ball_eject1,
+    ball_eject2,
+    ball_eject3,
+    ball_eject4
+};
+
+

@@ -1,14 +1,14 @@
 /** 
  * @file controller_ejectors.h
  * @brief Ejectors corners controller 
- * @date 2007-02-13
+ * @date 2007-09-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_ejectors.h,v 1.5 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_ejectors.h,v 1.6 2007/09/29 08:53:47 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,6 +60,6 @@ public:
   void draw_shadow ();
   void draw ();
   sprite_object *get_ejector (Uint32 eject);
-  void ballPosIni (furaxEject * table);
+  void initialize_ball_positions (ball_ejector_coords * table);
 };
 #endif

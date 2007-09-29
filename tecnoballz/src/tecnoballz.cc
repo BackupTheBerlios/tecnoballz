@@ -5,11 +5,11 @@
  * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.28 2007/09/26 15:57:40 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.29 2007/09/29 08:53:48 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,6 +73,7 @@ tecnoballz::first_init (configfile * pConf)
   sprites->init (400);
   ptLev_data = new handler_levels ();
   current_player = handler_players::create_all_players (handler_players::MAX_OF_PLAYERS);
+  sprite_ball::init_collisions_points ();
   
   /* retrieve player names */
   for (Uint32 i = 0; i < handler_players::MAX_OF_PLAYERS; i++)
