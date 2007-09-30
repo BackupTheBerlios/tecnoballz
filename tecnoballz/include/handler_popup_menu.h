@@ -2,14 +2,14 @@
  * @file handler_popup_menu.h
  * @brief popup menu handler (When the [Esc] is pressed)
  * @created 2004-08-08 
- * @date 2007-02-08
+ * @date 2007-09-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.h,v 1.5 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_popup_menu.h,v 1.6 2007/09/30 07:23:38 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,18 +41,22 @@ private:
   static const Sint32 YCOORDNULL = -10240;
 
 private:
-  bitmap_data * graphTexte;
+  /** Pointer to the text file loaded */
+  char **texts_of_menus;
+  bitmap_data * screen_menu;
   Uint32 num_of_columns;
   Uint32 num_of_lines;
   Uint32 vertical_space;
   Sint32 yPressLeft;
   Sint32 yPressRigh;
   Sint32 menu_color;
-  bool is_restore_background;            //1: restore background when leave menu
+  /** Trur if restore background when leave menu */
+  bool is_restore_background;
   Uint32 menu_number;
 
 public:
-  typedef enum {
+  typedef enum
+   {
     WECONTINUE = 1,
     GOGAMEOVER,
     EXITTOMENU,
@@ -60,15 +64,25 @@ public:
   }
   MENU_ITEMS_ENUM;
 
+  typedef enum
+   {
+    MENU_00,
+    MENU_01 = 5,
+    MAX_OF_LINES = 8,
+   }
+  MENU_TEXTS_ENUM;
+
+  static const Uint32 MAX_OF_CHARS = 25;
+
 public:
     handler_popup_menu ();
    ~handler_popup_menu ();
 
-  void first_init (bitmap_data * bmp, Uint32 menu_num, Uint32 w,
-                     bool is_restore = true, bool is_palette = false);
+  void first_init (bitmap_data * bmp);
   Sint32 execution1 ();
 
 private:
+  void load_text_file();
   void displayBOB (char *ptSrc, Sint32 pos_x, Sint32 pos_y, Sint32 NxLine,
                    Sint32 width, Sint32 heigh);
   void display640 ();

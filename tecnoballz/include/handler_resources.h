@@ -5,11 +5,11 @@
  * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.17 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.18 2007/09/30 07:23:39 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,6 +70,7 @@ class handler_resources:public virtual tecnoballz
       TEXTS_SHOP = TEXTS_OFFSET,
       TEXTS_MESSAGES,
       TEXTS_SCROLL_MENU,
+      TEXTS_POPUP_MENU,
 
       BITMAP_HEAD_ANIMATION = BITMAP_OFFSET,
       BITMAP_RIGHT_PANEL,

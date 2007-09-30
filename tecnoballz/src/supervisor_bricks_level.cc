@@ -4,11 +4,11 @@
  * @date 2007-09-28
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.55 $
+ * @version $Revision: 1.56 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.55 2007/09/28 05:34:09 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.56 2007/09/30 07:23:39 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -155,7 +155,7 @@ supervisor_bricks_level::first_init ()
   paddles->create_projectiles_list ();
   player_indicators->create_indicators_sprites ();
   viewfinders_paddles->create_sprites_list ();
-  popup_menu->first_init (sprites_bitmap, 0, 256 * resolution);
+  popup_menu->first_init (sprites_bitmap);
   resources->release_sprites_bitmap ();
   panel_score->first_init (balls);
 

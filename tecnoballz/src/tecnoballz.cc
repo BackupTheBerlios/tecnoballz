@@ -5,11 +5,11 @@
  * @date 2007-04-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.29 2007/09/29 08:53:48 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.30 2007/09/30 07:23:39 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -377,7 +377,7 @@ Sint16 * tecnoballz::table_sinL = NULL;
 
 Uint32 tecnoballz::super_jump = BRICKS_LEVEL;
 bool tecnoballz::is_exit_game = false;
-bitmap_data * tecnoballz::sprites_bitmap = 0;
+bitmap_data * tecnoballz::sprites_bitmap = NULL;
 bool tecnoballz::is_enabled_cheat_mode = false;
 bool tecnoballz::birth_flag = 0;
 Sint32 tecnoballz::difficulty_level = DIFFICULTY_EASY;

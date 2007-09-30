@@ -5,11 +5,11 @@
  * @date 2007-04-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.45 $
+ * @version $Revision: 1.46 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.45 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.46 2007/09/30 07:23:39 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -129,12 +129,8 @@ supervisor_guards_level::first_init ()
   game_over->create_sprites_list ();
   metallic_spheres->create_sprites_list ();
 
-  // intialize escape menu
-  popup_menu->first_init (sprites_bitmap, 0,    //menu number
-                          320 * resolution,     //width of screen (center)
-                          0,    //don't restaure background where leaves
-                          1     //initialize color table
-    );
+  /* initialize escape menu */
+  popup_menu->first_init (sprites_bitmap);
   resources->release_sprites_bitmap ();
 
  /* initialize controller of the big letters animated composing the word

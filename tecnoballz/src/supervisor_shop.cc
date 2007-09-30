@@ -1,14 +1,14 @@
 /**
  * @file supervisor_shop.cc 
  * @brief Shop supervisor
- * @date 2007-09-17
+ * @date 2007-09-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.40 $
+ * @version $Revision: 1.41 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.40 2007/09/18 13:39:11 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.41 2007/09/30 07:23:39 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@
 supervisor_shop::supervisor_shop ()
 {
   initialise ();
-  //tiles_ground = new tiles_background ();
   tiles_ground = tiles_background::get_instance ();
   mouse_pointer = new sprite_mouse_pointer ();
   led_indicator = new sprite_object ();
@@ -74,7 +73,7 @@ supervisor_shop::supervisor_shop ()
   box_colour = 0;
   angleValue = 0;
   /* last key pressed */
-  previous_key_code_down = 0;   //last key pressed
+  previous_key_code_down = 0;
   /* if triche_etb == cheat_code then is_enabled_cheat_mode = 1 */
   triche_etb = 0;
   cheat_code = SDLK_e << 24 | SDLK_t << 16 | SDLK_b << 8 | SDLK_RETURN;
@@ -114,73 +113,64 @@ supervisor_shop::first_init ()
   box_texts =
     resources->load_texts (handler_resources::TEXTS_SHOP, 0,
                            BOX_LENGTH_STRING, 3);
-  for (Uint32 i = 0; i < 36; i++)
-    {
-      printf ("%02d): %s \n", i, box_texts[i]);
-    }
+  //for (Uint32 i = 0; i < 36; i++)
+  //  {
+  //    printf ("%02d): %s \n", i, box_texts[i]);
+  //  }
 
 
-  Uint32
-  area_num = current_player->get_area_number ();
-  Uint32
-  level_num = current_player->get_level_number ();
+  Uint32 area_num = current_player->get_area_number ();
+  Uint32 level_num = current_player->get_level_number ();
 #ifndef SOUNDISOFF
-
   audio->play_level_music (area_num, level_num);
   audio->play_shop_music (area_num);
 #endif
-
   sprites->reset ();
 
   /* copy name player into menu text */
   display_text->print_to_string (current_player->get_name (),
                                  box_texts[TEXT_WELCOME]);
-  char *
-  ptDes;
-  const char *
-  ptSrc;
-  ptDes = current_player->get_name ();
-  for (Uint32 i = 0; i < 6; i++)
+  char * dest;
+  dest = current_player->get_name ();
+  for (Uint32 i = 0; i < handler_players::PLAYER_NAME_LENGTH; i++)
     {
-      shoptext00[8 + i] = ptDes[i];
+      shoptext00[8 + i] = dest[i];
     }
-  //intToASCII (MAX_OF_CAPSULES_BOUGHT, &shoptext63[48], 1);
-  //intToASCII (current_player->get_num_of_lifes (),
-  //            &info_text1[BOX_LENGTH_STRING * 4 + 5], 1);
-
   display_text->print_int_to_string (current_player->get_num_of_lifes (),
                                      2, box_texts[TEXT_LIVES_LEFT]);
   display_text->print_int_to_string (MAX_OF_CAPSULES_BOUGHT, 2,
                                      box_texts[TEXT_CANNOT_BUY_MORE]);
 
 
+  const char * source;
   if (area_num > 1)
     {
-      const char *
-      pPass =
+      const char * code =
         supervisor_main_menu::get_area_code (area_num, difficulty_level);
-      ptDes = &info_text3[1 * BOX_LENGTH_STRING + 10];
-      for (Sint32 i = 0; i < 10; i++)
+      dest = &info_text3[1 * BOX_LENGTH_STRING + 10];
+      for (Sint32 i = 0; i < supervisor_main_menu::AREA_CODE_LENGTH; i++)
         {
-          ptDes[i] = pPass[i];
+          dest[i] = code[i];
         }
-      ptSrc = &info_text3[0];
+      source = &info_text3[0];
     }
   else
     {
-      ptSrc = &info_text3[BOX_LENGTH_STRING * 2];
+      source = &info_text3[BOX_LENGTH_STRING * 2];
     }
-  ptDes = &info_text1[6 * BOX_LENGTH_STRING];
+  dest = &info_text1[6 * BOX_LENGTH_STRING];
   for (Uint32 i = 0; i < (BOX_LENGTH_STRING * 2); i++)
     {
-      ptDes[i] = ptSrc[i];
+      dest[i] = source[i];
     }
 
 
-  ptSrc = &sprite_display_menu::difficulte[(difficulty_level - 1) * 4];
-  ptDes = &info_text1[8 * BOX_LENGTH_STRING + 16];
+  source = &sprite_display_menu::difficulte[(difficulty_level - 1) * 4];
+  dest = &info_text1[8 * BOX_LENGTH_STRING + 16];
   for (Sint32 i = 0; i < 4; i++)
-    ptDes[i] = ptSrc[i];
+    {
+      dest[i] = source[i];
+    }
 
   resources->load_sprites_bitmap ();
 
@@ -193,15 +183,13 @@ supervisor_shop::first_init ()
     {
       led_indicator->create_sprite (BOB_LEDSH2, sprites_bitmap, false);
     }
-  sprites->add
-  (led_indicator);
+  sprites->add (led_indicator);
   led_indicator->enable ();
 
   /* initialize the power-up capsules  */
   power_up_capsules->create_shop_sprites_list ();
   current_player->clear_shopping_cart ();
-  Sint32 *
-  tp = coursetemp;
+  Sint32 * tp = coursetemp;
   for (Uint32 i = 0; i < MAX_OF_CAPSULES_BOUGHT; i++)
     {
       *(tp++) = 0;
@@ -213,15 +201,8 @@ supervisor_shop::first_init ()
   /* initialize the mouse pointer */
   mouse_pointer->create_pointer_sprite (sprites_bitmap);
 
-  //###################################################################
-  // intialize the "escape menu"
-  //###################################################################
-  popup_menu->first_init (sprites_bitmap, 1,    //menu number
-                          320 * resolution,     //width of screen (center)
-                          1,    //restaure background where leaves
-                          1     //initialize color table
-                         );
-
+  /* intialize the "escape menu" */
+  popup_menu->first_init (sprites_bitmap);
   resources->release_sprites_bitmap ();
   display_text->initialize ();
 

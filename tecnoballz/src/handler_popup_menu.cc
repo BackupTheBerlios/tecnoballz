@@ -5,11 +5,11 @@
  * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.7 2007/09/27 10:51:33 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.8 2007/09/30 07:23:39 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ handler_popup_menu::handler_popup_menu ()
   yPressRigh = YCOORDNULL;
   menu_color = 0;
   menu_number = 0;
+  texts_of_menus = NULL;
 }
 
 /**
@@ -47,30 +48,85 @@ handler_popup_menu::handler_popup_menu ()
  */
 handler_popup_menu::~handler_popup_menu ()
 {
-  if (graphTexte)
-    delete graphTexte;
-  if (bitmap_fonts)
-    delete bitmap_fonts;
-  bitmap_fonts = (bitmap_data *) NULL;
-  graphTexte = (bitmap_data *) NULL;
+  if (screen_menu != NULL)
+    {
+      delete screen_menu;
+      screen_menu = (bitmap_data *) NULL;
+    }
+  if (bitmap_fonts != NULL)
+    {
+      delete bitmap_fonts;
+      bitmap_fonts = (bitmap_data *) NULL;
+    }
+  if (texts_of_menus != NULL)
+    {
+      delete[](char *) texts_of_menus;
+      texts_of_menus = NULL;
+    }
 }
 
 /**
  * Initialize the popup menu
- * @param bmp
- * @param menu_num menu number 0
- * @param w 
- * @param is_restore true if restore background when leave menu 
- * @param is_palette true if initialize color palette
- *
+ * @param bmp Bitmap where are graphic elements of the menu
  */
 void
-handler_popup_menu::first_init (bitmap_data * bmp, Uint32 menu_num,
-                                Uint32 w, bool is_restore, bool is_palette)
+handler_popup_menu::load_text_file ()
 {
+  if (texts_of_menus != NULL)
+    {
+      return;
+    }
+  texts_of_menus =
+    resources->load_texts (handler_resources::TEXTS_POPUP_MENU,
+			   MAX_OF_LINES, MAX_OF_CHARS, 0);
 
-  /* determine if restore background (bricks levels and shop only) */
-  is_restore_background = is_restore;
+  //menu_texts[0] = texts_of_menus[MENU_00 * MAX_OF_CHARS];
+  //menu_texts[1] = texts_of_menus[MENU_01 * MAX_OF_CHARS];
+}
+
+/**
+ * Initialize the popup menu
+ * @param bmp Bitmap where are graphic elements of the menu
+ */
+void
+handler_popup_menu::first_init (bitmap_data * bmp)
+{
+  load_text_file();
+  Uint32 w;
+  bool is_palette;
+  switch (super_jump)
+    {
+    case BRICKS_LEVEL:
+      /* determine if restore background (bricks levels and shop only) */
+      if (has_background)
+	{
+          is_restore_background = true;
+	}
+      else
+	{
+          is_restore_background = false;
+	}
+      menu_number = 0;
+      w = 256 * resolution;
+      is_palette = false;
+      break;
+
+    case SHOP:
+      is_restore_background = true;
+      menu_number = 1;
+      w = 320 * resolution;
+      is_palette = true;
+      break;
+
+    case GUARDS_LEVEL:
+    default: 
+      is_restore_background = false;
+      menu_number = 0;
+      w = 320 * resolution;
+      is_palette = true;
+      break;
+    }
+
 
   /* initialize palette color chars, if necessary (shop only) */
   if (is_palette)
@@ -79,7 +135,9 @@ handler_popup_menu::first_init (bitmap_data * bmp, Uint32 menu_num,
       SDL_Color *palP1 = palPT + 239;
       Sint32 i = random_counter & 0x0F;
       if (i >= 10)
-        i = i - 10;
+        {
+          i = i - 10;
+	}
       const Uint32 *ptpal = (handler_resources::tabledegas + i * 18);
       for (i = 0; i < 17; i++)
         {
@@ -111,7 +169,6 @@ handler_popup_menu::first_init (bitmap_data * bmp, Uint32 menu_num,
   load_bitmap_fonts (handler_resources::BITMAP_MENU_FONTS);
 
   /* determine height of the menu box */
-  menu_number = menu_num;
   if (menu_number == 1)
     {
       num_of_lines = 3;
@@ -120,14 +177,13 @@ handler_popup_menu::first_init (bitmap_data * bmp, Uint32 menu_num,
     {
       num_of_lines = 4;
     }
-  num_of_columns = 25;
+  num_of_columns = MAX_OF_CHARS;
   Uint32 numof_lines = num_of_lines + 2;
 
   /* allocate graphic buffer of menu box */ 
-  graphTexte = new bitmap_data ();
-  //graphTexte->create ((num_of_columns + 2) * char_height, numof_lines * vertical_space, 1);
-  graphTexte->create_surface ((num_of_columns + 2) * char_height, numof_lines * vertical_space);
-  graphTexte->clear ();
+  screen_menu = new bitmap_data ();
+  screen_menu->create_surface ((num_of_columns + 2) * char_height, numof_lines * vertical_space);
+  screen_menu->clear ();
 
   /* save coordinates of the sprites */
   char *ptAdd[8];
@@ -150,7 +206,7 @@ handler_popup_menu::first_init (bitmap_data * bmp, Uint32 menu_num,
   Sint32 NxLine = bmp->get_row_size ();
 
   /* initialize sprite object */
-  make_sprite (graphTexte);
+  make_sprite (screen_menu);
   Sint32 y = (240 * resolution - numof_lines * vertical_space) / 2;
   y = (y / vertical_space) * vertical_space;
   set_coordinates ((w - sprite_width) / 2, y);
@@ -158,9 +214,9 @@ handler_popup_menu::first_init (bitmap_data * bmp, Uint32 menu_num,
   //###################################################################
   // build the frame of menu box (with sprites)
   //###################################################################
-  Sint32 m = graphTexte->get_width () / width - 2;
+  Sint32 m = screen_menu->get_width () / width - 2;
   Sint32 x = width;
-  y = graphTexte->get_height () - heigh;
+  y = screen_menu->get_height () - heigh;
   displayBOB (ptAdd[0], 0, 0, NxLine, width, heigh);
   displayBOB (ptAdd[3], 0, y, NxLine, width, heigh);
   for (Sint32 i = 0; i < m; i++, x += width)
@@ -171,11 +227,11 @@ handler_popup_menu::first_init (bitmap_data * bmp, Uint32 menu_num,
   displayBOB (ptAdd[1], x, 0, NxLine, width, heigh);
   displayBOB (ptAdd[2], x, y, NxLine, width, heigh);
 
-  m = graphTexte->get_height () / heigh - 2;
-  if (graphTexte->get_height () % heigh)
+  m = screen_menu->get_height () / heigh - 2;
+  if (screen_menu->get_height () % heigh)
     m++;
 
-  x = graphTexte->get_width () - width;
+  x = screen_menu->get_width () - width;
   y = heigh;
   for (Sint32 i = 0; i < m; i++, y += heigh)
     {
@@ -184,17 +240,17 @@ handler_popup_menu::first_init (bitmap_data * bmp, Uint32 menu_num,
     }
 }
 
-//------------------------------------------------------------------------------
-// display a sprite into the "buffer" (copy byte to byte)
-//------------------------------------------------------------------------------
+/**
+ * Display a sprite into the "buffer" (copy byte to byte)
+ */
 void
 handler_popup_menu::displayBOB (char *ptSrc, Sint32 pos_x, Sint32 pos_y,
                                 Sint32 NxLine, Sint32 width, Sint32 heigh)
 {
   char *s = ptSrc;
-  char *d = graphTexte->get_pixel_data (pos_x, pos_y);
+  char *d = screen_menu->get_pixel_data (pos_x, pos_y);
   Sint32 m = NxLine;
-  Sint32 n = graphTexte->get_row_size ();
+  Sint32 n = screen_menu->get_row_size ();
   Sint32 h = width;
   Sint32 l = heigh;
   for (Sint32 i = 0; i < h; i++)

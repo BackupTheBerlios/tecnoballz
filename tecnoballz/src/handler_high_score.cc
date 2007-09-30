@@ -2,14 +2,14 @@
  * @file handler_high_score.cc 
  * @brief high score handler 
  * @created 2004-04-30 
- * @date 2007-03-09
+ * @date 2007-09-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_high_score.cc,v 1.4 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_high_score.cc,v 1.5 2007/09/30 07:23:39 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,8 @@
 #include "../include/handler_resources.h"
 #include "../include/handler_players.h"
 
-handler_high_score * handler_high_score::high_score_singleton = NULL;
+handler_high_score *
+handler_high_score::high_score_singleton = NULL;
 
 /**
  * Create a high score handler 
@@ -40,10 +41,8 @@ handler_high_score::handler_high_score ()
 {
   scores_tables = (player_score **) NULL;
   scores_table_size =
-    (sizeof (Uint32) * 3 + 8) * MAX_OF_HIGH_SCORES * MAX_OF_DIFFICULTY_LEVELS +
-    sizeof (Uint32);
-
-  printf("%i => %i \n", scores_table_size, sizeof(player_score) * MAX_OF_HIGH_SCORES * MAX_OF_DIFFICULTY_LEVELS);
+    (sizeof (Uint32) * 3 +
+     8) * MAX_OF_HIGH_SCORES * MAX_OF_DIFFICULTY_LEVELS + sizeof (Uint32);
   first_init ();
 }
 
@@ -75,11 +74,11 @@ handler_high_score::~handler_high_score ()
     {
       if (NULL != scores_tables[i])
         {
-          delete[](char *)scores_tables[i];
+          delete[](char *) scores_tables[i];
           scores_tables[i] = NULL;
         }
     }
-  delete[](char *)scores_tables;
+  delete[](char *) scores_tables;
   scores_tables = NULL;
 }
 
@@ -91,7 +90,7 @@ handler_high_score::first_init ()
 {
   try
     {
-      scores_tables = new player_score*[MAX_OF_DIFFICULTY_LEVELS];
+      scores_tables = new player_score *[MAX_OF_DIFFICULTY_LEVELS];
 
       /* allocate and fill scores tables */
       for (Uint32 i = 0; i < MAX_OF_DIFFICULTY_LEVELS; i++)
@@ -131,10 +130,10 @@ handler_high_score::first_init ()
  * Load high score file and copy data in high score structure
  * @return true if the high score file is successfully loaded or false otherwise
  */
-bool
-handler_high_score::load_high_score ()
+bool handler_high_score::load_high_score ()
 {
-  char *file_data = resources->load_high_score_file ();
+  char *
+  file_data = resources->load_high_score_file ();
   if (NULL == file_data)
     {
       return false;
@@ -152,10 +151,10 @@ handler_high_score::load_high_score ()
   /* verify the checksum */
   Uint32 read_sum;
   big_endian_to_int ((Uint32 *) file_data, &read_sum);
-  Uint32 *ptr32 = (Uint32 *) file_data;
+  Uint32 * ptr32 = (Uint32 *) file_data;
   Uint32 calculated_sum = calculate_checksum (ptr32 + 1,
-                                     (scores_table_size -
-                                      sizeof (Uint32)) / sizeof (Uint32));
+                                       (scores_table_size -
+                                        sizeof (Uint32)) / sizeof (Uint32));
   if (calculated_sum != read_sum)
     {
       std::cerr << "(!)handler_high_score::load_high_score() " <<
@@ -166,10 +165,11 @@ handler_high_score::load_high_score ()
     }
 
   /* copy data into the structures */
-  char *addr = file_data + sizeof (Uint32);
+  char * addr = file_data + sizeof (Uint32);
   for (Uint32 i = 0; i < MAX_OF_DIFFICULTY_LEVELS; i++)
     {
-      player_score *score = scores_tables[i];
+      player_score *
+      score = scores_tables[i];
       for (Uint32 j = 0; j < MAX_OF_HIGH_SCORES; j++)
         {
           ptr32 = (Uint32 *) addr;
@@ -243,7 +243,7 @@ handler_high_score::save_high_score ()
  * @return checksum value
  */
 Uint32
-handler_high_score::calculate_checksum (Uint32 *addr, Uint32 data_size)
+handler_high_score::calculate_checksum (Uint32 * addr, Uint32 data_size)
 {
   Uint32 value = 0;
   for (Uint32 i = 0; i < data_size; i++)
@@ -259,13 +259,13 @@ handler_high_score::calculate_checksum (Uint32 *addr, Uint32 data_size)
  * Check if the current player can be inserted in the scores table
  * @return true if the player score is ranked, otherwise false
  */
-bool
-handler_high_score::is_player_ranked ()
+bool handler_high_score::is_player_ranked ()
 {
-  bool is_ranked = is_player_ranked (&current_player->player_name[0],
-                             current_player->score_value,
-                             current_player->level_number,
-                             current_player->area_number);
+  bool
+  is_ranked = is_player_ranked (&current_player->player_name[0],
+                                current_player->score_value,
+                                current_player->level_number,
+                                current_player->area_number);
   if (is_ranked)
     {
       sort_scores ();
@@ -274,7 +274,7 @@ handler_high_score::is_player_ranked ()
   return is_ranked;
 }
 
-/** 
+/**
  * Insert a player in the score table if this player get a good score
  * @param playername a name of player
  * @param score_value a score
@@ -283,8 +283,8 @@ handler_high_score::is_player_ranked ()
  * @return true if the player score is ranked, otherwise false
  */
 bool
-handler_high_score::is_player_ranked (char *playername, Uint32 score_value, Uint32 level_num,
-                                Uint32 area_num)
+handler_high_score::is_player_ranked (char *playername, Uint32 score_value,
+                                      Uint32 level_num, Uint32 area_num)
 {
   /* exit if cheat mode! */
   if (is_enabled_cheat_mode || birth_flag)
@@ -327,9 +327,9 @@ handler_high_score::is_player_ranked (char *playername, Uint32 score_value, Uint
             }
           if (is_verbose)
             {
-              std::cout << "handler_high_score::is_player_ranked() " << 
-                "rank:" << i << " player name:" << score[i].player_name
-                << std::endl;
+              std::cout << "handler_high_score::is_player_ranked() " <<
+              "rank:" << i << " player name:" << score[i].player_name
+              << std::endl;
             }
           return true;
         }
@@ -346,7 +346,7 @@ handler_high_score::sort_scores ()
   if (is_verbose)
     {
       std::cout << "handler_high_score::sort_scores() " <<
-        "difficulty_level:" << difficulty_level << std::endl;
+      "difficulty_level:" << difficulty_level << std::endl;
     }
   bool is_sorted;
   player_score *score = scores_tables[difficulty_level - 1];
@@ -359,33 +359,34 @@ handler_high_score::sort_scores ()
             {
               continue;
             }
-              Uint32 tmp = score[i].value;
-              score[i].value = score[i + 1].value;
-              score[i + 1].value = tmp;
+          Uint32 tmp = score[i].value;
+          score[i].value = score[i + 1].value;
+          score[i + 1].value = tmp;
 
-              tmp = score[i].level_number;
-              score[i].level_number = score[i + 1].level_number;
-              score[i + 1].level_number = tmp;
+          tmp = score[i].level_number;
+          score[i].level_number = score[i + 1].level_number;
+          score[i + 1].level_number = tmp;
 
-              tmp = score[i].area_number;
-              score[i].area_number = score[i + 1].area_number;
-              score[i + 1].area_number = tmp;
+          tmp = score[i].area_number;
+          score[i].area_number = score[i + 1].area_number;
+          score[i + 1].area_number = tmp;
 
-              for (Uint32 j = 0; j < 6; j++)
-                {
-                  tmp = score[i].player_name[j];
-                  score[i].player_name[j] = score[i + 1].player_name[j];
-                  score[i + 1].player_name[j] = tmp;
-                }
-              is_sorted = true;
+          for (Uint32 j = 0; j < 6; j++)
+            {
+              tmp = score[i].player_name[j];
+              score[i].player_name[j] = score[i + 1].player_name[j];
+              score[i + 1].player_name[j] = tmp;
+            }
+          is_sorted = true;
         }
     }
   while (is_sorted);
 }
 
-//------------------------------------------------------------------------------
-// return pointer to the scores list structure
-//------------------------------------------------------------------------------
+/**
+ * Return pointer to the scores list structure
+ * @return Pointer to a 'player_score' structure
+ */
 player_score *
 handler_high_score::get_high_score_table ()
 {
@@ -407,9 +408,9 @@ handler_high_score::get_best_playername ()
  * Return the best player score
  * @return the best player score value
  */
-Uint32
-handler_high_score::get_best_score ()
+Uint32 handler_high_score::get_best_score ()
 {
-  player_score *score = scores_tables[difficulty_level - 1];
+  player_score *
+  score = scores_tables[difficulty_level - 1];
   return score[0].value;
 }

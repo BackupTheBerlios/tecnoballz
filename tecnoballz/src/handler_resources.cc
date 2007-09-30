@@ -5,11 +5,11 @@
  * @date 2007-04-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.21 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.22 2007/09/30 07:23:39 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -161,6 +161,8 @@ const char * handler_resources::texts_files[] =
   "short_info_messages_%s.txt",
   /* TEXTS_SCROLL_MENU */
   "scrolltext_%s.txt",
+  /* TEXTS_POPUP_MENU */
+  "popup_menu_%s.txt",
 };
 
 //char handler_resources::ze_mapfile[] = "map??.png";
