@@ -2,14 +2,14 @@
  * @file sprite_brick.cc
  * @brief The sprite of the brick 
  * @created 2007-09-12
- * @date 2007-09-15
+ * @date 2007-09-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_brick.cc,v 1.4 2007/09/16 10:01:12 gurumeditation Exp $
+ * $Id: sprite_brick.cc,v 1.5 2007/09/30 18:59:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,8 +86,12 @@ sprite_brick::is_cycling()
 void
 sprite_brick::update_image (Uint32 h_pos)
 {
-   Sint32 index = frame_index - frame_index % 7 + (h_pos >> 1); 
-   set_image (index);
+  if (h_pos == 0)
+    {
+      return;
+    }
+  Sint32 index = frame_index - frame_index % 7 + (h_pos >> 1); 
+  set_image (index);
 }
 
 

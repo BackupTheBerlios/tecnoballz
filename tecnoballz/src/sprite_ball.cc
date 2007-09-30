@@ -4,11 +4,11 @@
  * @date 2007-09-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.18 2007/09/29 11:12:51 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.19 2007/09/30 18:59:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,9 +61,9 @@ sprite_ball::init_collisions_points ()
   is_collisions_point_initialized = true;
   for (Uint32 i = 0; i < 8; i++)
     {
-      brikPoint1[i] *= resolution;
-      brikPoint2[i] *= resolution;
-      brikPoint3[i] *= resolution;
+      brick_collision_points_1[i] *= resolution;
+      brick_collision_points_2[i] *= resolution;
+      brick_collision_points_3[i] *= resolution;
     }
 }
 
@@ -79,7 +79,7 @@ void
 sprite_ball::once_init (Sint32 start, Sint32 speed,
                          sprite_paddle * paddle, Sint16 * table, Sint32 w)
 {
-  start_init = start;
+  start_delay = start;
   accelerate_delay = speed;
   initial_velocity = table;
   disable ();
@@ -97,7 +97,7 @@ void
 sprite_ball::starts_again (sprite_paddle * paddle)
 {
   enable ();
-  start_delay_counter = start_init;
+  start_delay_counter = start_delay;
   sticky_paddle_num = paddle->get_paddle_number ();
   set_initial_values (paddle);
   select_image ();
@@ -124,26 +124,25 @@ void
 sprite_ball::set_initial_values (sprite_paddle * paddle)
 {
   accelerate_delay_counter = accelerate_delay;
-  collision_width = BALLWIDTH1 * resolution;
-  collision_height = BALLWIDTH1 * resolution;
+  collision_width = WIDTH_1 * resolution;
+  collision_height = WIDTH_1 * resolution;
   direction = 0;
   previous_direction = direction;
   change_direction_count = 0;
   paddle_touched = paddle;
   stick_paddle = paddle;
   velocity = initial_velocity;
-  collisionT = brikPoint1;
-  powerBall1 = 1;
-  powerBall2 = brick_width;
+  brick_collision_points = brick_collision_points_1;
+  strength1 = 1;
+  strength2 = brick_width;
   ejector_delay = 0;
   ejector_table = NULL;
   tilt_delay_counter = 0;
   balle_rota = 1;
   tempo_rota = 1;
-  ball_sizeX = BALL_SIZE1;
-  ballPowerX = BALLNORMAL;
-  oeilRotate = 0;
-  colli_wall = 0;
+  size_id = SIZE_1;
+  type = NORMAL;
+  last_hited_wall = 0;
 }
 
 /**
@@ -217,17 +216,16 @@ sprite_ball::duplicate_from (sprite_ball * ball, Uint32 angle)
   direction = angle;
   sticky_paddle_num = 0;
   tilt_delay_counter = 0;
-  ball_sizeX = ball->ball_sizeX;
-  ballPowerX = ball->ballPowerX;
+  size_id = ball->size_id;
+  type = ball->type;
   collision_width = ball->collision_width;
   collision_height = ball->collision_height;
   paddle_touched = ball->paddle_touched;
   stick_paddle = ball->stick_paddle;
   velocity = ball->velocity;
-  collisionT = ball->collisionT;
-  powerBall1 = ball->powerBall1;
-  powerBall2 = ball->powerBall2;
-  oeilRotate = 0;
+  brick_collision_points = ball->brick_collision_points;
+  strength1 = ball->strength1;
+  strength2 = ball->strength2;
   select_image ();
 }
 
@@ -237,7 +235,7 @@ sprite_ball::duplicate_from (sprite_ball * ball, Uint32 angle)
 void
 sprite_ball::set_power_1 ()
 {
-  ballPowerX = BALLPOWER1;
+  type = POWER_1;
   select_image ();
 }
 
@@ -247,7 +245,7 @@ sprite_ball::set_power_1 ()
 void
 sprite_ball::set_power_2 ()
 {
-  ballPowerX = BALLPOWER2;
+  type = POWER_2;
   select_image ();
 }
 
@@ -257,12 +255,12 @@ sprite_ball::set_power_2 ()
 void
 sprite_ball::set_size_2 ()
 {
-  powerBall1 = 2;
-  powerBall2 = brick_width * 2;
-  collision_width = BALLWIDTH2 * resolution;
-  collision_height = BALLWIDTH2 * resolution;
-  ball_sizeX = BALL_SIZE2;
-  collisionT = brikPoint2;
+  strength1 = 2;
+  strength2 = brick_width * 2;
+  collision_width = WIDTH_2 * resolution;
+  collision_height = WIDTH_2 * resolution;
+  size_id = SIZE_2;
+  brick_collision_points = brick_collision_points_2;
   select_image ();
 }
 
@@ -272,12 +270,12 @@ sprite_ball::set_size_2 ()
 void
 sprite_ball::set_size_3 ()
 {
-  powerBall1 = 3;
-  powerBall2 = brick_width * 3;
-  collision_width = BALLWIDTH3 * resolution;
-  collision_height = BALLWIDTH3 * resolution;
-  ball_sizeX = BALL_SIZE3;
-  collisionT = brikPoint3;
+  strength1 = 3;
+  strength2 = brick_width * 3;
+  collision_width = WIDTH_3 * resolution;
+  collision_height = WIDTH_3 * resolution;
+  size_id = SIZE_3;
+  brick_collision_points = brick_collision_points_3;
   select_image ();
 }
 
@@ -332,7 +330,7 @@ sprite_ball::set_on_ejector(Uint32 id, Uint32 delay)
 void
 sprite_ball::select_image ()
 {
-  frame_index = ball_sizeX + ballPowerX;
+  frame_index = size_id + type;
   set_image (frame_index);
 }
 
@@ -363,24 +361,24 @@ sprite_ball::accelerate ()
     }
 }
 
-/** Collision points of the ball 1 with brick */
-Sint32 sprite_ball::brikPoint1[8] =
+/** Collision points of the ball 1 with a brick */
+Sint32 sprite_ball::brick_collision_points_1[8] =
 {
   5,3,
   3,0,
   0,3,
   3,5 
 };
-/** Collision points of the ball 2 with brick */
-Sint32 sprite_ball::brikPoint2[8] =
+/** Collision points of the ball 2 with a brick */
+Sint32 sprite_ball::brick_collision_points_2[8] =
 {
   7,4,
   4,0,
   0,4,
   4,7 
 };
-/** Collision points of the ball 3 with brick */
-Sint32 sprite_ball::brikPoint3[8] =
+/** Collision points of the ball 3 with a brick */
+Sint32 sprite_ball::brick_collision_points_3[8] =
 {
   9,5,
   5,0,
@@ -389,44 +387,20 @@ Sint32 sprite_ball::brikPoint3[8] =
 };
 
 
-/*
-Sint32 sprite_ball::brikPoint1[8] =
-  { 
-    10, 6, //XMAXIM,MILIEU (balle1)
-    6, 0,                         //MILIEU,YMINIM
-    0, 6,                         //XMINIM,MILIEU
-    6, 10                         //MILIEU,YMAXIM
-  };
-Sint32 sprite_ball::brikPoint2[8] =
-  { 
-    14, 8, // XMAXIM,MILIEU (balle2)
-    8, 0,                         // MILIEU,YMINIM
-    0, 8,                         // XMINIM,MILIEU
-    8, 14                         // MILIEU,YMAXIM
-  };
-Sint32 sprite_ball::brikPoint3[8] =
-  { 
-    18, 10,        // XMAXIM,MILIEU (balle3)
-    10, 0,                        // MILIEU,YMINIM
-    0, 10,                        // XMINIM,MILIEU
-    10, 18                        // MILIEU,YMAXIM
-  };
+/* directionis of a ball from 0 to 60
+*              16
+*            20/\ 12
+*          24  ||   08
+*        28    ||     04
+*      32<=====64=====> 00
+*        36    ||    60
+*          40  ||  56
+*            44\/52 
+*              48
 */
 
-// Table des differentes vitesses de balle
-//              16
-//            20/\ 12
-//          24  ||   08
-//        28    ||     04
-//      32<=====64=====> 00
-//        36    ||    60
-//          40  ||  56
-//            44\/52 
-//              48
-//==============================================================================
-
-Sint16
-  sprite_ball::ballSpeed1[] = { +2, 0,  //00
+Sint16 sprite_ball::ballSpeed1[] =
+{ +2, 0,  //00
   +2, -1,                       //04
   +2, -2,                       //08
   +1, -2,                       //12

@@ -2,14 +2,14 @@
  * @file controller_sides_bricks.h
  * @brief Sides bricks controller. The small bricks on the side, the walls top
  *        left and right
- * @date 2007-04-12
+ * @date 2007-09-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.h,v 1.7 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_sides_bricks.h,v 1.8 2007/09/30 18:59:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,6 @@ class controller_sides_bricks:public objects_list < sprite_object,
     /** Maximum number of bricks per wall */
     static const Uint32 MAX_OF_SIDES_BRICKS = 12;
 
-  private:
     typedef enum
     {
       TOP_WALL = 1,
@@ -50,6 +49,7 @@ class controller_sides_bricks:public objects_list < sprite_object,
       LEFT_WALL
     } WALLS_ENUM;
 
+  private:
     /**
      * Structure for redraw side bricks
      */

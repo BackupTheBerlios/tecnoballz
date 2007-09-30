@@ -4,11 +4,11 @@
  * @date 2007-09-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.54 $
+ * @version $Revision: 1.55 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.54 2007/09/29 08:53:47 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.55 2007/09/30 18:59:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -189,10 +189,10 @@ controller_balls::run_in_guardians_level ()
 void
 controller_balls::check_outside_balls ()
 {
-  Sint32 min_x = sprite_ball::MINIMUM_PX * resolution;
-  Sint32 max_x = sprite_ball::MAXIMUM_PX * resolution;
-  Sint32 min_y = sprite_ball::MINIMUM_PY * resolution;
-  Sint32 max_y = sprite_ball::MAXIMUM_PY * resolution;
+  Sint32 min_x = sprite_ball::X_MINIMUM * resolution;
+  Sint32 max_x = sprite_ball::X_MAXIMUM * resolution;
+  Sint32 min_y = sprite_ball::Y_MINIMUM * resolution;
+  Sint32 max_y = sprite_ball::Y_MAXIMUM * resolution;
   controller_ships *ships = controller_ships::get_instance ();
   right_panel_score *panel = right_panel_score::get_instance ();
   head_animation *head_anim = head_animation::get_instance ();
@@ -277,7 +277,7 @@ controller_balls::check_outside_balls ()
 void
 controller_balls::vitussort2 ()
 {
-  Sint32 max_y = sprite_ball::MAXIMUM_PY * resolution;
+  Sint32 max_y = sprite_ball::Y_MAXIMUM * resolution;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];
@@ -389,9 +389,9 @@ controller_balls::move_balls ()
 	  j = ball->direction;
 	  if (j > 64)
 	    {
-	      fprintf (stderr,
-		       "controller_balls::move_balls() ball->direction = %i\n",
-		       j);
+	      std::cerr << "controller_balls::" <<
+		"move_balls() ball->direction = " <<
+		j << std::endl;
 	      j = 60;
 	    }
 	  Sint16 *table = ball->velocity;
@@ -722,7 +722,7 @@ controller_balls::collisions_with_paddle ()
           continue;
         }
       paddle = paddle_bottom;
-      if (!paddle->is_enabled);
+      if (!paddle->is_enabled)
         {
           continue;
         }
@@ -842,7 +842,7 @@ controller_balls::handle_ejectors ()
 	    ball->ejector_table = NULL;
 	  }
 	/* time before ejection */
-	else if (ball->ejector_delay >= 160)
+	else if (ball->ejector_delay == 160)
 	  {
              ball->direction = ball->ejector_table[random_counter & 0xF];
 	  }
@@ -969,8 +969,18 @@ controller_balls::collisions_with_walls ()
 void
 controller_balls::collisions_with_sides ()
 {
-  Sint32 left_xcoord = 16 * resolution;
-  Sint32 right_xcoord = 300 * resolution;
+  Sint32 left_xcoord, right_xcoord;
+  if (resolution == 1)
+    {
+      left_xcoord = 16;
+      right_xcoord = 300;
+    }
+  else
+    {
+      left_xcoord = 20;
+      right_xcoord = 612;
+    }
+
   Sint32 top_ycoord = 8 * resolution;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
@@ -981,48 +991,48 @@ controller_balls::collisions_with_sides ()
 	}
       Sint32 x = ball->x_coord;
       Sint32 y = ball->y_coord;
-      Sint32 *monPT = NULL;
+      Sint32 *bounce = NULL;
       if (x < left_xcoord)
 	{
-	  monPT = rb5;
+	  bounce = rb5;
 	  ball->x_coord = left_xcoord;
 #ifndef SOUNDISOFF
 	  audio->play_sound (handler_audio::BALL_HIT_SIDE);
 #endif
-	  ball->colli_wall = 4;
+	  ball->last_hited_wall = controller_sides_bricks::LEFT_WALL;
 	}
       else
 	{
 	  if (x > right_xcoord)
 	    {
-	      monPT = rb1;
+	      bounce = rb1;
 	      ball->x_coord = right_xcoord;
 #ifndef SOUNDISOFF
 	      audio->play_sound (handler_audio::BALL_HIT_SIDE);
 #endif
-	      ball->colli_wall = 2;
+	      ball->last_hited_wall = controller_sides_bricks::RIGHT_WALL;
 	    }
 	  else
 	    {
 	      if (y < top_ycoord)
 		{
-		  monPT = rb3;
+		  bounce = rb3;
 		  ball->y_coord = top_ycoord;
 #ifndef SOUNDISOFF
 		  audio->play_sound (handler_audio::BALL_HIT_SIDE);
 #endif
-		  ball->colli_wall = 3;
+		  ball->last_hited_wall = controller_sides_bricks::TOP_WALL;
 		}
 	      else
 		{
-		  ball->colli_wall = 0;
+		  ball->last_hited_wall = 0;
 		}
 	    }
 	}
-      if (monPT != NULL)
+      if (bounce != NULL)
 	{
-	  monPT = (Sint32 *) ((char *) monPT + ball->direction);
-	  ball->direction = *monPT;
+	  bounce = (Sint32 *) ((char *) bounce + ball->direction);
+	  ball->direction = *bounce;
 	}
     }
 }
@@ -1047,15 +1057,17 @@ controller_balls::prevent_horizontal_blocking ()
 	}
       if (direction == ball->previous_direction)
         {
-          if (ball->change_direction_count++ > 360 && direction == 0 && ball->colli_wall)
-            if (ball->direction == 32)
-	      {
-                ball->direction = 28;
-	      }
-            else
-	      {
-                ball->direction = 4;
-	      }
+          if (ball->change_direction_count++ > 360 && direction == 0 && ball->last_hited_wall > 0)
+            {
+              if (ball->direction == 32)
+                {
+                  ball->direction = 28;
+                }
+              else
+                {
+                  ball->direction = 4;
+                }
+            }
         }
       else
         {
@@ -1072,14 +1084,12 @@ void
 controller_balls::bricks_collision ()
 {
   controller_bricks *bricks = controller_bricks::get_instance ();
-
   /* brick's width in pixels */
   Uint32 brick_width = bricks->get_brick_width ();
   /* y-offset between 2 bricks: 8 or 16 pixels */
   Sint32 byoff = bricks->getYOffset ();
   /* first indestructible brick */
   Sint32 indus = bricks->getBkIndus ();
-
   sprite_ball **balls = sprites_list;
   brick_info *bricks_map = bricks->get_bricks_map ();
   for (Uint32 i = 0; i < max_of_sprites; i++)
@@ -1089,17 +1099,20 @@ controller_balls::bricks_collision ()
         {
           continue;
         }
-      Sint32 indes = 0;         // flag brique indestructible touchee
-      Sint32 *colTB = ball->collisionT; // table des 4 points de collision 
-      Sint32 incre = 1;         // incremente flag rebond
-      Sint32 rebon = 0;         // flag rebond
+      /* true if collision with a indestructible brick */
+      bool indes_col = false;
+      /* 4 points of collision with a brick */
+      Sint32 *points = ball->brick_collision_points;
+      Sint32 bounce_inc = 1;
+      /* index used for bounce */
+      Sint32 bounce_index = 0;
       /* for the 4 collision pointof the ball */
-      for (Sint32 j = 0; j < 4; j++, incre += incre)
+      for (Sint32 j = 0; j < 4; j++, bounce_inc += bounce_inc)
         {
           Sint32 x = ball->x_coord;
-          x += *(colTB++);
+          x += *(points++);
           Sint32 y = ball->y_coord;
-          y += *(colTB++);
+          y += *(points++);
           /* list of bricks to clear or redraw */
           brick_redraw *redraw = bricks->get_bricks_redraw ();
           redraw->xcoord_collision = x;
@@ -1117,7 +1130,6 @@ controller_balls::bricks_collision ()
 	      /* no collision */
               continue;
             }
-	  //printf("collision %i %i\n", ball->x_coord + colTB[-2], ball->y_coord + colTB[-1]);
           redraw->is_gigablitz_destroyed = false;
           redraw->paddle = ball->paddle_touched;
 	  if (!has_background)
@@ -1131,11 +1143,11 @@ controller_balls::bricks_collision ()
                * indestructible brick touched!
                */
               /* collision with indestructible brick */
-              indes = 1;
+              indes_col = true;
               /* indestructible/destructible bricks? */
               if ((x -= brick_width) > 0)
                 {
-                  if (ball->ballPowerX == sprite_ball::BALLPOWER2)
+                  if (ball->type == sprite_ball::POWER_2)
                     {
                       redraw->pixel_offset = brick->pixel_offset;
                       redraw->brick_map = brick;
@@ -1175,7 +1187,7 @@ controller_balls::bricks_collision ()
               redraw->pixel_offset = brick->pixel_offset;
               redraw->brick_map = brick;
               redraw->sprite = brick->sprite;
-              brick->h_pos = brick->h_pos - (ball->powerBall1 * 2);
+              brick->h_pos = brick->h_pos - (ball->strength1 * 2);
               if (brick->h_pos <= 0)
                 {
                   brick->h_pos = 0;
@@ -1187,26 +1199,25 @@ controller_balls::bricks_collision ()
                 }
               else
                 {
-                  brick->brique_rel = brick->brique_rel - ball->powerBall2;
+                  brick->brique_rel = brick->brique_rel - ball->strength2;
                   redraw->number = brick->brique_rel;
                   /* redraw a new brick */
                   redraw->is_background = false;
                 }
 	      bricks->bricks_redraw_next ();
             }
-          /* inc. rebound flag */
-          rebon += incre;
-
-      if (--rebon >= 0)
+          /* inc. bounce index */
+          bounce_index += bounce_inc;
+        }
+      if (--bounce_index >= 0)
         {
-          if (indes > 0 || ball->ballPowerX == sprite_ball::BALLNORMAL)
+          if (indes_col || ball->type == sprite_ball::NORMAL)
             {
-              Sint32 *rebPT = *(brick_jump + rebon);
+              Sint32 *rebPT = *(brick_jump + bounce_index);
               rebPT = (Sint32 *) ((char *) rebPT + ball->direction);
               ball->direction = *rebPT;
             }
         }
-    }
   }
 }
 
@@ -1388,7 +1399,7 @@ controller_balls::collisions_with_ships ()
 #ifndef SOUNDISOFF
                   audio->play_sound (handler_audio::HIT_SHIP);
 #endif
-                  k = (ball->ballPowerX + 1) * 4;
+                  k = (ball->type + 1) * 4;
                   ship->strength -= k;
                   if (ship->strength < 1)
                     {
@@ -1456,7 +1467,7 @@ controller_balls::vitusGuard ()
 #endif
                           ball->direction = x;
                           guardian->recently_touched = 5;
-                          guardian->energy_level -= ball->powerBall1;
+                          guardian->energy_level -= ball->strength1;
                           if (guardian->energy_level <= 0)
                             {
                               /* guardian is dead */

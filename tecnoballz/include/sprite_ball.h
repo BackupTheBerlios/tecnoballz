@@ -1,14 +1,14 @@
 /** 
  * @file sprite_ball.h
  * @brief The ball sprite
- * @date 2007-09-29
+ * @date 2007-09-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.h,v 1.19 2007/09/29 08:53:47 gurumeditation Exp $
+ * $Id: sprite_ball.h,v 1.20 2007/09/30 18:59:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,24 +54,36 @@ class sprite_ball:public sprite_object
   friend class direction;
 
 public:
-  static const Sint32 BALLNORMAL = 0;
-  static const Sint32 BALLPOWER1 = 1;
-  static const Sint32 BALLPOWER2 = 2;
-  static const Sint32 BALL_SIZE1 = 0;
-  static const Sint32 BALL_SIZE2 = 3;
-  static const Sint32 BALL_SIZE3 = 6;
-
-  // width and height of collision of the three sizes of ball (low-res)
-  static const Sint32 BALLWIDTH1 = 5;
-  static const Sint32 BALLWIDTH2 = 7;
-  static const Sint32 BALLWIDTH3 = 9;
-
-  // balls moving limits (low-res)
-  static const Sint32 MINIMUM_PX = 5;   //left limit
-  static const Sint32 MAXIMUM_PX = 250; //right limit
-  static const Sint32 MINIMUM_PY = 0;   //top limit
-  static const Sint32 MAXIMUM_PY = 230; //bottom limit
-
+  /** Different types of ball */
+  typedef enum
+    {
+      NORMAL,
+      POWER_1,
+      POWER_2
+    }
+   TYPES_OF_BALL;
+  /** Different sizes of ball */
+   typedef enum
+     {
+       SIZE_1 = 0,
+       SIZE_2 = 3,
+       SIZE_3 = 6
+     }
+   SIZES_OF_BALL;
+  /** Width and height of collision of the ball size 1 in low-res */
+  static const Sint32 WIDTH_1 = 5;
+  /** Width and height of collision of the ball size 2 in low-res */
+  static const Sint32 WIDTH_2 = 7;
+  /** Width and height of collision of the ball size 3 in low-res */
+  static const Sint32 WIDTH_3 = 9;
+  /** Left limit of ball */
+  static const Sint32 X_MINIMUM = 5;
+  /** Right limit of ball */
+  static const Sint32 X_MAXIMUM = 250;
+  /** Top limit of ball */
+  static const Sint32 Y_MINIMUM = 0;
+  /** Bottom limit of ball */
+  static const Sint32 Y_MAXIMUM = 230;
 
 private:
   /** Ball direction from 0 to 64 step 4
@@ -92,11 +104,12 @@ private:
   Sint16 *velocity;
   /** Pointer to the current velocity table */
   Sint16 *initial_velocity;
-  Sint32 *collisionT;           //pt/bricks collisions table
-  Sint32 powerBall1;            //value decreasing bouiboui strength
-  Sint32 powerBall2;            //value decreasing brick strength (2 4 or 6) 
-
-  /** Identify in which ejector is the ball */
+  /** Pointer to the current points of collision with a brick */
+  Sint32 *brick_collision_points;
+  /* Strength of ball 1, 2 or 3 to decreasing brick strength */
+  Sint32 strength1;
+  /* Strength of ball 32, 64 or 96 to decreasing brick address */
+  Sint32 strength2;
   /** Time delay befor ejection of the ball */
   Sint32 ejector_delay;
   /** Table of directions possible that a ball can
@@ -110,21 +123,27 @@ private:
   Sint32 accelerate_delay;
   /** Delay counter before the ball leaves the paddle */
   Sint32 start_delay_counter;
-  Sint32 start_init;            //temps avant que la balle parte (valeur initiale)
+  /** Initial delay before the ball leaves the paddle */
+  Sint32 start_delay;
   Sint32 balle_rota;            //pointeur sur table ballePets 
   Sint32 tempo_rota;            //Tempo rotation du point autour de la balle
-  Sint32 ball_sizeX;            //Pointeur Gfx 
-  Sint32 ballPowerX;            //Pointeur Gfx
-  Sint32 oeilRotate;            //1=rotation autour de l'oeil  
+  /** Size identfier SIZE_1, SIZE_2 or SIZE_3 */
+  Sint32 size_id;
+  /** Type of ball NORMAL, POWER_1 or POWER_2 */
+  Sint32 type; 
   /** Brick's width in pixels 16 or 32 */
   Sint32 brick_width;
-  Sint32 colli_wall;            //collision with one wall
+  /** Previous hited wall RIGHT_WALL, LEFT_WALL, TOP_WALL or 0 if not */
+  Sint32 last_hited_wall;
 
   /** True if collision point of ball with bricks were corrected */
   static bool is_collisions_point_initialized;
-  static Sint32 brikPoint1[8];  //Points collision balle taille 1
-  static Sint32 brikPoint2[8];  //Points collision balle taille 2
-  static Sint32 brikPoint3[8];  //Points collision balle taille 3
+  /** Collision points of the ballz size 1 with a brick */
+  static Sint32 brick_collision_points_1[8];
+  /** Collision points of the ballz size 2 with a brick */
+  static Sint32 brick_collision_points_2[8];
+  /** Collision points of the ballz size 3 with a brick */
+  static Sint32 brick_collision_points_3[8];
   static Sint16 ballSpeed1[];   //Table deplacement balle vitesse 1
   static Sint16 ballSpeed2[];   //Table deplacement balle vitesse 2
   static Sint16 ballSpeed3[];   //Table deplacement balle vitesse 3
