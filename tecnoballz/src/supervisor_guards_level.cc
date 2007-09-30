@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-04-16
+ * @date 2007-09-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.46 $
+ * @version $Revision: 1.47 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.46 2007/09/30 07:23:39 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.47 2007/09/30 11:48:07 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -307,7 +307,7 @@ supervisor_guards_level::main_loop ()
       // display all sprites in the buffer's memory
       //###################################################################
       sprites->draw ();
-      Ecode = popup_menu->execution1 ();
+      Ecode = popup_menu->run ();
       display->unlock_surfaces ();
       display->bufferCTab ();   //copy buffer's memory in the screen
     }
@@ -350,26 +350,22 @@ supervisor_guards_level::main_loop ()
         }
     }
 
-  //###################################################################
-  // cheat mode: F2=destroyed the two guards / F3=guard 1 / F4=guard 2 
-  //###################################################################
+  /* cheat mode: F2=destroyed the two guards / F3=guard 1 / F4=guard 2 */
   cheat_keys ();
 
-  //###################################################################
-  // escape key to quit the game !
-  //###################################################################
+  /* escape key to quit the game! */
   if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG) ||
-      Ecode == handler_popup_menu::WEQUITGAME)
+      Ecode == handler_popup_menu::QUIT_TECNOBALLZ)
     {
       end_return = LEAVE_TECNOBALLZ;
     }
   if (keyboard->command_is_pressed (handler_keyboard::TOOVERFLAG) ||
-      Ecode == handler_popup_menu::GOGAMEOVER)
+      Ecode == handler_popup_menu::CAUSE_GAME_OVER)
     {
       current_player->remove_all_lifes ();
     }
   if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
-      Ecode == handler_popup_menu::EXITTOMENU)
+      Ecode == handler_popup_menu::QUIT_TO_MAIN_MENU)
     {
       end_return = MAIN_MENU;
     }

@@ -4,11 +4,11 @@
  * @date 2007-09-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.41 $
+ * @version $Revision: 1.42 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.41 2007/09/30 07:23:39 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.42 2007/09/30 11:48:07 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -148,7 +148,7 @@ supervisor_shop::first_init ()
       const char * code =
         supervisor_main_menu::get_area_code (area_num, difficulty_level);
       dest = &info_text3[1 * BOX_LENGTH_STRING + 10];
-      for (Sint32 i = 0; i < supervisor_main_menu::AREA_CODE_LENGTH; i++)
+      for (Uint32 i = 0; i < supervisor_main_menu::AREA_CODE_LENGTH; i++)
         {
           dest[i] = code[i];
         }
@@ -332,7 +332,7 @@ Sint32 supervisor_shop::main_loop ()
   draw_select_cursor ();
   sprites->draw ();
   display_capsules_bought ();
-  Ecode = popup_menu->execution1 ();
+  Ecode = popup_menu->run ();
 
   //###################################################################
   // copy buffer surface to screen surface
@@ -344,12 +344,12 @@ Sint32 supervisor_shop::main_loop ()
   // escape key to quit the game !
   //###################################################################
   if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG) ||
-      Ecode == handler_popup_menu::WEQUITGAME)
+      Ecode == handler_popup_menu::QUIT_TECNOBALLZ)
     {
       end_return = LEAVE_TECNOBALLZ;
     }
   if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
-      Ecode == handler_popup_menu::EXITTOMENU)
+      Ecode == handler_popup_menu::QUIT_TO_MAIN_MENU)
     {
       end_return = MAIN_MENU;
     }
