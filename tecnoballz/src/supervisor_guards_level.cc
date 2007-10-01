@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-09-30
+ * @date 2007-10-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.47 $
+ * @version $Revision: 1.48 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.47 2007/09/30 11:48:07 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.48 2007/10/01 15:57:47 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -400,13 +400,13 @@ supervisor_guards_level::run_scroll ()
       return;
     }
   sprite_bullet *bullet = bullets->get_last_bullet ();
-  sprite_ball *ball = balls->first_ball ();
+  sprite_ball *ball = balls->get_first_ball ();
   scroll_speed = guards->get_scrolling_speed (scroll_type, scroll_speed, ball, bullet);
 }
 
-//------------------------------------------------------------------------------
-// cheat mode: F2=destroyed the two guards / F3=guard 1 / F4=guard 2 
-//------------------------------------------------------------------------------
+/** 
+ * Cheat mode: F2=destroyed the two guards / F3=guard 1 / F4=guard 2 
+ */
 void
 supervisor_guards_level::cheat_keys ()
 {

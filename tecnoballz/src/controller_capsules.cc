@@ -4,11 +4,11 @@
  * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.27 2007/09/27 06:05:36 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.28 2007/10/01 15:57:47 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -472,7 +472,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       messages->send_message_request (short_info_messages::EXTRA_BALLS);
-      balls->run_2balls ();
+      balls->extra_balls ();
       break;
 
       // multi balls
@@ -481,7 +481,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       messages->send_message_request (short_info_messages::MULTI_BALLS);
-      balls->run_3balls ();
+      balls->multi_balls ();
       break;
 
       // power ball 1
@@ -508,10 +508,11 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       paddles->set_reverse_counter (50 * 4);
       break;
 
-      // maxi ball speed (no gadget)
+      /* increase the speed of the balls to the maximum 
+       * this bonus is only available as a part of chance capsule */
     case GAD_SPEEDM:
       messages->send_message_request (short_info_messages::MAXIMUM_ACCELERATION);
-      balls->maxi_speed ();
+      balls->set_maximum_speed ();
       break;
 
       // bottom bumper[1] enable (no gadget)
@@ -569,7 +570,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
       paddles->set_maximum_paddles_size ();
-      balls->run_nballs ();
+      balls->add_balls ();
       balls->set_power_2 ();
       balls->set_size_3 ();
 
@@ -644,20 +645,19 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
     }
 }
 
-//-------------------------------------------------------------------------------
-// guards levels: active a gadget (bonus)
-//-------------------------------------------------------------------------------
+/**
+ * Enable the capsule option in guardians level
+ */
 void
-controller_capsules::gadgetrun2 (sprite_paddle * raket, Sint32 nuGad)
+controller_capsules::gadgetrun2 (sprite_paddle * paddle, Sint32 nuGad)
 {
-  paddle_selected = raket;
-  controller_balls *oBall = ptNewBalls;
+  paddle_selected = paddle;
+  controller_balls *ball = ptNewBalls;
   switch (nuGad)
     {
-
-      // bumper protect
+      /* paddle invincibility */
     case GAD_PROTEC:
-      raket->set_invincibility (200);
+      paddle->set_invincibility (200);
       break;
 
       /* extra life */
@@ -668,28 +668,28 @@ controller_capsules::gadgetrun2 (sprite_paddle * raket, Sint32 nuGad)
       current_player->add_life (1);
       break;
 
-      // multi balls
+      /* multi balls */
     case GAD_BALLE3:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
-      oBall->run_3balls ();
+      ball->multi_balls ();
       break;
 
-      // power ball 1 (ball size 2)
+     /* power ball 1 (ball size 2) */
     case GAD_POWER1:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
-      oBall->set_size_2 ();
+      ball->set_size_2 ();
       break;
 
-      // power ball 2 (ball size 3)
+      /* power ball 2 (ball size 3) */
     case GAD_POWER2:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
-      oBall->set_size_3 ();
+      ball->set_size_3 ();
       break;
     }
 }

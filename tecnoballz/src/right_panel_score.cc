@@ -1,14 +1,14 @@
 /** 
  * @file right_panel_score.cc 
  * @brief The right panel score in the bricks levels 
- * @date 2007-03-17
+ * @date 2007-10-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.18 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.19 2007/10/01 15:57:47 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -160,7 +160,7 @@ right_panel_score::draw_gigablizt_gauge ()
 {
   controller_gigablitz *gigablitz = controller_gigablitz::get_instance ();
   if (keyboard->is_right_left_buttons () && !gigablitz->is_enable () &&
-      !balls->least_glue ())
+      !balls->is_sticky_balls_remains ())
     {
       if (++delay_gigablitz_countdown >= DELAY_GIGABLITZ_COUNTDOWN)
         {

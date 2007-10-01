@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.h
  * @brief Control the balls. Move and collisions 
- * @date 2007-09-27
+ * @date 2007-10-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.26 2007/09/29 08:53:47 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.27 2007/10/01 15:57:47 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,13 +49,10 @@ class controller_balls:public objects_list < sprite_ball, controller_balls >
   friend class sprite_ball;
 
 private:
-  Sint32 num_erreur;
   /** Time delay of the glue */
   Uint32 glue_delay;
-  Sint16 *balleVites;           // table premiere vitesse
-  Sint32 tempoVites;            // temps avant changement vitesse
-  Sint32 startCount;            // Temps avant que la balle ne parte
-  Sint32 balle_tilt;            // Temps avant que le tilt soit possible
+  /** Time delay before a tilt be possible */
+  Sint32 tilt_delay;
   /** True if ball controlled by the left mouse button */
   bool balls_are_controlled;
   sprite_paddle *paddle_bottom;
@@ -85,7 +82,7 @@ public:
                    Uint32 speed, Uint32 tiltC, Uint32 table);
   void run_in_bricks_levels ();
   void run_in_guardians_level ();
-  sprite_ball *first_ball ();
+  sprite_ball *get_first_ball ();
 
 private:
   void check_outside_balls ();
@@ -104,23 +101,22 @@ private:
   void bricks_collision ();
   void collisions_with_ships ();
   void collisions_with_eyes ();
-  void vitusGuard ();
+  void collisions_with_guardians ();
   void controll_balls ();
 
 
 public:
   void enable_balls_control ();
-  void run_2balls ();
-  void run_nballs (Uint32 nball = 0);
-  void run_3balls ();
+  void extra_balls ();
+  void add_balls (Uint32 nball = 0);
+  void multi_balls ();
   void set_power_1 ();
   void set_power_2 ();
   void set_size_2 ();
   void set_size_3 ();
-  void maxi_speed ();
-  void time_2tilt ();
-  void time2tilt2 ();
-  Sint32 least_glue ();
+  void set_maximum_speed ();
+  void check_tilt_availability ();
+  bool is_sticky_balls_remains ();
 
 };
 #endif

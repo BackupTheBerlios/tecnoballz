@@ -4,11 +4,11 @@
  * @date 2007-10-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.56 $
+ * @version $Revision: 1.57 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.56 2007/10/01 05:27:01 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.57 2007/10/01 15:57:47 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,13 +39,9 @@
 controller_balls::controller_balls (sprite_object * pwall)
 {
   littleInit ();
-  num_erreur = 0;
   ptBob_wall = pwall;
-  startCount = 60;
   glue_delay = 60;
-  tempoVites = 60;
-  balle_tilt = 60;
-  balleVites = sprite_ball::get_speed_table (1);
+  tilt_delay = 60;
   max_of_sprites = 20;
   sprites_have_shades = true;
   balls_are_controlled = false;
@@ -58,13 +54,9 @@ controller_balls::controller_balls (sprite_object * pwall)
 controller_balls::controller_balls ()
 {
   littleInit ();
-  num_erreur = 0;
   ptBob_wall = NULL;
-  startCount = 60;
   glue_delay = 60;
-  tempoVites = 60;
-  balle_tilt = 60;
-  balleVites = sprite_ball::get_speed_table (1);
+  tilt_delay = 60;
   max_of_sprites = 20;
   sprites_have_shades = true;
   balls_are_controlled = false;
@@ -95,11 +87,9 @@ controller_balls::init (Uint32 start,
 
   controller_paddles *paddles = controller_paddles::get_instance ();
 
-  startCount = start;
   glue_delay = glueC;
-  tempoVites = speed;
-  balle_tilt = tiltC;
-  balleVites = sprite_ball::get_speed_table (table);
+  tilt_delay = tiltC;
+  Sint16* velocities = sprite_ball::get_velocities (table);
   paddle_bottom = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
 
   Sint32 w;
@@ -122,7 +112,7 @@ controller_balls::init (Uint32 start,
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];
-      ball->once_init (start, speed, paddle_bottom, balleVites, w);
+      ball->once_init (start, speed, paddle_bottom, velocities, w);
     }
 
   /* first ball special initialization */
@@ -160,7 +150,7 @@ controller_balls::run_in_bricks_levels ()
   controll_balls ();
   if (!balls_are_controlled)
     {
-      time_2tilt ();
+      check_tilt_availability ();
     }
   accelerate ();
 }
@@ -178,8 +168,9 @@ controller_balls::run_in_guardians_level ()
   /* prevent that the ball remains blocked horizontally */
   prevent_horizontal_blocking ();
   collisions_with_paddle ();
-  vitusGuard ();
-  time2tilt2 ();
+  collisions_with_guardians ();
+  //time2tilt2 ();
+  check_tilt_availability ();
   accelerate ();
 }
 
@@ -321,7 +312,7 @@ controller_balls::activate_tilt ()
       return;
     }
   bool is_tilt = false;
-  Sint32 delay = balle_tilt;
+  Sint32 delay = tilt_delay;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];
@@ -1426,7 +1417,7 @@ controller_balls::collisions_with_ships ()
  * Collision of balls with the guardians in the guardians levels
  */
 void
-controller_balls::vitusGuard ()
+controller_balls::collisions_with_guardians ()
 {
   controller_guardians *guards = controller_guardians::get_instance ();
   controller_capsules *capsules = controller_capsules::get_instance ();
@@ -1505,7 +1496,7 @@ controller_balls::vitusGuard ()
  * @return a pointer to ball sprite
  */
 sprite_ball *
-controller_balls::first_ball ()
+controller_balls::get_first_ball ()
 {
   sprite_ball **balls = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
@@ -1528,13 +1519,13 @@ controller_balls::enable_balls_control ()
   balls_are_controlled = true;
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels: extra balls; add 2 balls into ejectors
-//-------------------------------------------------------------------------------
+/**
+ * Add 2 ball into the ejectors in the bricks levels
+ */
 void
-controller_balls::run_2balls ()
+controller_balls::extra_balls ()
 {
-  run_nballs (2);
+  add_balls (2);
 }
 
 /**
@@ -1542,7 +1533,7 @@ controller_balls::run_2balls ()
  * @param nball from 1 to n
  */
 void
-controller_balls::run_nballs (Uint32 nball)
+controller_balls::add_balls (Uint32 nball)
 {
   if (nball < 1)
     {
@@ -1570,9 +1561,9 @@ controller_balls::run_nballs (Uint32 nball)
  * Add 3 balls starting from the first enable ball
  */
 void
-controller_balls::run_3balls ()
+controller_balls::multi_balls ()
 {
-  sprite_ball *model = first_ball ();
+  sprite_ball *model = get_first_ball ();
   /* direction of the current ball */
   Uint32 j = model->direction;
   Uint32 i = 0;
@@ -1665,7 +1656,7 @@ controller_balls::set_size_3 ()
  * Increase the speed of the balls to the maximum
  */
 void
-controller_balls::maxi_speed ()
+controller_balls::set_maximum_speed ()
 {
   sprite_ball **balls = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
@@ -1679,15 +1670,14 @@ controller_balls::maxi_speed ()
 }
 
 /**
- * Check if the player can use the tilt in the bricks levels
+ * Check if the player can use the tilt
  */
 void
-controller_balls::time_2tilt ()
+controller_balls::check_tilt_availability ()
 {
-  bool tilt = false;
-  head_animation *head_anim = head_animation::get_instance ();
+  bool is_tilted = false;
   sprite_ball **balls = sprites_list;
-  Sint32 delay = balle_tilt;
+  Sint32 delay = tilt_delay;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = *(balls++);
@@ -1695,27 +1685,38 @@ controller_balls::time_2tilt ()
         {
           continue;
         }
-      if (ball->tilt_delay_counter == delay && !tilt)
+      if (ball->tilt_delay_counter == delay)
         {
-          head_anim->start_yawn ();
-#ifndef SOUNDISOFF
-          audio->play_sound (handler_audio::TILT_ALARM);
-#endif
-          tilt = true;
+          is_tilted = true;
+          printf("controller_balls::check_tilt_availability %i %i\n" , delay, i);
         }
       ball->tilt_delay_counter++;
+    }
+  if (is_tilted)
+    {
+      printf("controller_balls::check_tilt_availability! %i %i \n", super_jump, BRICKS_LEVEL);
+      if (super_jump == BRICKS_LEVEL)
+        {
+          printf("controller_balls::check_tilt_availability !!!! \n");
+          head_animation *head_anim = head_animation::get_instance ();
+          head_anim->start_yawn ();
+        }
+#ifndef SOUNDISOFF
+      audio->play_sound (handler_audio::TILT_ALARM);
+#endif
     }
 }
 
 /**
  * Check if the player can use the tilt in guards level
  */
+/*
 void
 controller_balls::time2tilt2 ()
 {
   Uint32 tilt = 0;
   sprite_ball **liste = sprites_list;
-  Sint32 v = balle_tilt;
+  Sint32 v = tilt_delay;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *balle = *(liste++);
@@ -1742,6 +1743,7 @@ controller_balls::time2tilt2 ()
         balle->tilt_delay_counter++;
     }
 }
+*/
 
 /**
  * Handle the control of the balls with the left mouse button
@@ -1775,8 +1777,8 @@ controller_balls::controll_balls ()
  * Check if there remains at least a ball glue
  * @return True if remains at least a ball glue
  */
-Sint32
-controller_balls::least_glue ()
+bool
+controller_balls::is_sticky_balls_remains ()
 {
   sprite_ball **balls = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
