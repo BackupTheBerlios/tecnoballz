@@ -1,14 +1,14 @@
 /** 
  * @file sprite_ball.h
  * @brief The ball sprite
- * @date 2007-09-30
+ * @date 2007-10-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.h,v 1.20 2007/09/30 18:59:52 gurumeditation Exp $
+ * $Id: sprite_ball.h,v 1.21 2007/10/01 05:27:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,13 +76,13 @@ public:
   static const Sint32 WIDTH_2 = 7;
   /** Width and height of collision of the ball size 3 in low-res */
   static const Sint32 WIDTH_3 = 9;
-  /** Left limit of ball */
+  /** Left limit of ball in low-res */
   static const Sint32 X_MINIMUM = 5;
-  /** Right limit of ball */
+  /** Right limit of ball in low-res */
   static const Sint32 X_MAXIMUM = 250;
-  /** Top limit of ball */
+  /** Top limit of ball in low-res */
   static const Sint32 Y_MINIMUM = 0;
-  /** Bottom limit of ball */
+  /** Bottom limit of ball low-res */
   static const Sint32 Y_MAXIMUM = 230;
 
 private:
@@ -100,22 +100,22 @@ private:
   sprite_paddle *stick_paddle;
   /** Paddle number on which the ball is stuck */
   Uint32 sticky_paddle_num;
-  /** Pointer to the current velocity table */
-  Sint16 *velocity;
-  /** Pointer to the current velocity table */
-  Sint16 *initial_velocity;
+  /** Pointer to the current velocities table */
+  Sint16 *velocities;
+  /** Pointer to the current velocities table */
+  Sint16 *initial_velocities;
   /** Pointer to the current points of collision with a brick */
   Sint32 *brick_collision_points;
   /* Strength of ball 1, 2 or 3 to decreasing brick strength */
   Sint32 strength1;
   /* Strength of ball 32, 64 or 96 to decreasing brick address */
   Sint32 strength2;
-  /** Time delay befor ejection of the ball */
+  /** Time delay before ejection of the ball */
   Sint32 ejector_delay;
   /** Table of directions possible that a ball can
    * set when it leave a ejector */
   Sint32 *ejector_table;
-  /** counter before a tilt is possible */
+  /** Counter before a tilt is possible */
   Sint32 tilt_delay_counter;
   /** Counter delay before accelerating the ball */
   Sint32 accelerate_delay_counter;
@@ -125,8 +125,11 @@ private:
   Sint32 start_delay_counter;
   /** Initial delay before the ball leaves the paddle */
   Sint32 start_delay;
-  Sint32 balle_rota;            //pointeur sur table ballePets 
-  Sint32 tempo_rota;            //Tempo rotation du point autour de la balle
+  /** Direction of the viewfinder when the ball is sticked
+   * on a paddle: from 0 to 13 */
+  Sint32 viewfinder_direction;
+  /** Counter delay before change direction of the viewfinder */
+  Sint32 viewfinder_delay;
   /** Size identfier SIZE_1, SIZE_2 or SIZE_3 */
   Sint32 size_id;
   /** Type of ball NORMAL, POWER_1 or POWER_2 */
@@ -135,7 +138,6 @@ private:
   Sint32 brick_width;
   /** Previous hited wall RIGHT_WALL, LEFT_WALL, TOP_WALL or 0 if not */
   Sint32 last_hited_wall;
-
   /** True if collision point of ball with bricks were corrected */
   static bool is_collisions_point_initialized;
   /** Collision points of the ballz size 1 with a brick */
@@ -144,16 +146,30 @@ private:
   static Sint32 brick_collision_points_2[8];
   /** Collision points of the ballz size 3 with a brick */
   static Sint32 brick_collision_points_3[8];
-  static Sint16 ballSpeed1[];   //Table deplacement balle vitesse 1
-  static Sint16 ballSpeed2[];   //Table deplacement balle vitesse 2
-  static Sint16 ballSpeed3[];   //Table deplacement balle vitesse 3
-  static Sint16 ballSpeed4[];   //Table deplacement balle vitesse 4
+  /** Displacement offsets of speed 1 */
+  static Sint16 velocities_speed_1[];
+  /** Displacement offsets of speed 2 */
+  static Sint16 velocities_speed_2[];
+  /** Displacement offsets of speed 3 */
+  static Sint16 velocities_speed_3[];
+  /** Displacement offsets of speed 1 */
+  static Sint16 velocities_speed_4[];
   /** Coordinates of the balls on the ejectors */
   static ball_ejector_coords ejector_coords[];
-  static const Sint32 tilt_table[16][16];
+  /** Possible directions of a ball when
+   * a player activates the tilt */
+  static const Sint32 tilt_directions[16][16];
+  /** Directions possible that a ball can set when it leave
+   * the top-left ejector */
   static Sint32 ball_eject1[];
+  /** Directions possible that a ball can set when it leave
+   * the bottom-left ejector */
   static Sint32 ball_eject2[];
+  /** Directions possible that a ball can set when it leave
+   * the bottom-right ejector */
   static Sint32 ball_eject3[];
+  /** Directions possible that a ball can set when it leave
+   * the top-right ejector */
   static Sint32 ball_eject4[];
   static Sint32* ball_ejectors[];
 

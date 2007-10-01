@@ -1,14 +1,14 @@
 /** 
  * @file sprite_ball.cc 
  * @brief The ball sprite
- * @date 2007-09-20
+ * @date 2007-10-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.19 2007/09/30 18:59:52 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.20 2007/10/01 05:27:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 sprite_ball::sprite_ball ()
 {
   clear_sprite_members ();
-  once_init (0, 0, (sprite_paddle *) NULL, ballSpeed1, 0);
+  once_init (0, 0, (sprite_paddle *) NULL, velocities_speed_1, 0);
 }
 
 /**
@@ -81,7 +81,7 @@ sprite_ball::once_init (Sint32 start, Sint32 speed,
 {
   start_delay = start;
   accelerate_delay = speed;
-  initial_velocity = table;
+  initial_velocities = table;
   disable ();
   sticky_paddle_num = 0;
   start_delay_counter = 0;
@@ -131,15 +131,15 @@ sprite_ball::set_initial_values (sprite_paddle * paddle)
   change_direction_count = 0;
   paddle_touched = paddle;
   stick_paddle = paddle;
-  velocity = initial_velocity;
+  velocities = initial_velocities;
   brick_collision_points = brick_collision_points_1;
   strength1 = 1;
   strength2 = brick_width;
   ejector_delay = 0;
   ejector_table = NULL;
   tilt_delay_counter = 0;
-  balle_rota = 1;
-  tempo_rota = 1;
+  viewfinder_direction = 1;
+  viewfinder_delay = 1;
   size_id = SIZE_1;
   type = NORMAL;
   last_hited_wall = 0;
@@ -173,7 +173,7 @@ sprite_ball::disable_stick ()
 /**
  * Return speed ball
  * @param speed Speed of the ball from 1 to 4
- * @return Pointer to speed ball table
+ * @return Pointer to a displacement offsets table 
  */
 Sint16 *
 sprite_ball::get_speed_table (Sint32 speed)
@@ -181,15 +181,15 @@ sprite_ball::get_speed_table (Sint32 speed)
   switch (speed)
     {
     case 1:
-      return ballSpeed1;
+      return velocities_speed_1;
     case 2:
-      return ballSpeed2;
+      return velocities_speed_2;
     case 3:
-      return ballSpeed3;
+      return velocities_speed_3;
     case 4:
-      return ballSpeed4;
+      return velocities_speed_4;
     }
-  return ballSpeed1;
+  return velocities_speed_1;
 }
 
 /**
@@ -222,7 +222,7 @@ sprite_ball::duplicate_from (sprite_ball * ball, Uint32 angle)
   collision_height = ball->collision_height;
   paddle_touched = ball->paddle_touched;
   stick_paddle = ball->stick_paddle;
-  velocity = ball->velocity;
+  velocities = ball->velocities;
   brick_collision_points = ball->brick_collision_points;
   strength1 = ball->strength1;
   strength2 = ball->strength2;
@@ -285,7 +285,7 @@ sprite_ball::set_size_3 ()
 void
 sprite_ball::set_maximum_speed ()
 {
-  velocity = ballSpeed3;
+  velocities = velocities_speed_3;
 }
 
 /**
@@ -345,19 +345,19 @@ sprite_ball::accelerate ()
       return;
     }
   accelerate_delay_counter = accelerate_delay;
-  if (velocity == ballSpeed1)
+  if (velocities == velocities_speed_1)
     {
-      velocity = ballSpeed2;
+      velocities = velocities_speed_2;
       return;
     }
-  if (velocity == ballSpeed2)
+  if (velocities == velocities_speed_2)
     {
-      velocity = ballSpeed3;
+      velocities = velocities_speed_3;
       return;
     }
-  if (velocity == ballSpeed3)
+  if (velocities == velocities_speed_3)
     {
-      velocity = ballSpeed4;
+      velocities = velocities_speed_4;
     }
 }
 
@@ -386,8 +386,7 @@ Sint32 sprite_ball::brick_collision_points_3[8] =
   5,9
 };
 
-
-/* directionis of a ball from 0 to 60
+/* directions of a ball from 0 to 60
 *              16
 *            20/\ 12
 *          24  ||   08
@@ -399,39 +398,58 @@ Sint32 sprite_ball::brick_collision_points_3[8] =
 *              48
 */
 
-Sint16 sprite_ball::ballSpeed1[] =
-{ +2, 0,  //00
-  +2, -1,                       //04
-  +2, -2,                       //08
-  +1, -2,                       //12
-  0, -2,                        //16
-  -1, -2,                       //20
-  -2, -2,                       //24
-  -2, -1,                       //28
-  -2, 0,                        //32
-  -2, +1,                       //36
-  -2, +2,                       //40
-  -1, +2,                       //44
-  0, +2,                        //48
-  +1, +2,                       //52
-  +2, +2,                       //56
-  +2, +1,                       //60
-  0, 0                          //64
+/** Displacement offsets of speed 1 */
+Sint16 sprite_ball::velocities_speed_1[] =
+{ 
+  /* 0 */
+  +2, 0,
+  /* 4 */
+  +2, -1,
+  /* 8 */
+  +2, -2,
+  /* 12 */
+  +1, -2,
+  /* 16 */
+  0, -2,
+  /* 20 */
+  -1, -2,
+  /* 24 */
+  -2, -2,
+  /* 28 */
+  -2, -1,
+  /* 32 */
+  -2, 0,
+  /* 36 */
+  -2, +1,
+  /* 40 */
+  -2, +2,
+  /* 44 */
+  -1, +2,
+  /* 48 */
+  0, +2,
+  /* 52 */
+  +1, +2,
+  /* 56 */
+  +2, +2,
+  /* 60 */
+  +2, +1,
+  /* 64 */
+  0, 0
 };
 Sint16
-  sprite_ball::ballSpeed2[] =
+  sprite_ball::velocities_speed_2[] =
   { 3, 0, 3, -1, 2, -2, 1, -3, 0, -3, -1, -3, -2, -2, -3, -1, -3,
   0, -3, 1, -2, 2, -1, 3, 0, 3, 1, 3, 2, 2, 3, 1, 0, 0
 };
 
 Sint16
-  sprite_ball::ballSpeed3[] =
+  sprite_ball::velocities_speed_3[] =
   { 4, 0, 4, -1, 3, -3, 1, -4, 0, -4, -1, -4, -3, -3, -4, -1, -4,
   0, -4, 1, -3, 3, -1, 4, 0, 4, 1, 4, 3, 3, 4, 1, 0, 0
 };
 
 Sint16
-  sprite_ball::ballSpeed4[] =
+  sprite_ball::velocities_speed_4[] =
   { 5, 0, 5, -2, 4, -4, 2, -5, 0, -5, -2, -5, -4, -4, -5, -2,
   -5, 0, -5, 2, -4, 4, -2, 5, 0, 5, 2, 5, 4, 4, 5, 2, 0, 0
 };
@@ -451,13 +469,17 @@ sprite_ball::ejector_coords[] =
   };
 
 const Sint32
-sprite_ball::tilt_table[16][16] = { {4, 4, 8, 12, 16, 20, 24, 28, 28, 36, 40, 44, 48, 52, 56, 60},      //0     32
-{8, 8, 8, 12, 16, 20, 24, 28, 28, 40, 40, 44, 48, 52, 56, 60},  //4     36
-{4, 4, 12, 12, 16, 20, 24, 28, 28, 36, 44, 44, 48, 52, 56, 60}, //8     40
-{4, 4, 8, 16, 16, 20, 24, 28, 28, 36, 40, 48, 48, 52, 56, 60},  //12    44
-{4, 4, 8, 12, 20, 20, 24, 28, 28, 36, 40, 44, 52, 52, 56, 60},  //16    48
-{4, 4, 8, 12, 16, 24, 24, 28, 28, 36, 40, 44, 48, 56, 56, 60},  //20    52
-{4, 4, 8, 12, 16, 20, 20, 28, 28, 36, 40, 44, 48, 52, 60, 60},  //24    56
+sprite_ball::tilt_directions[16][16] =
+{
+  {
+    4, 4, 8, 12, 16, 20, 24, 28, 28, 36, 40, 44, 48, 52, 56, 60
+  },      //0     32
+  {8, 8, 8, 12, 16, 20, 24, 28, 28, 40, 40, 44, 48, 52, 56, 60},  //4     36
+  {4, 4, 12, 12, 16, 20, 24, 28, 28, 36, 44, 44, 48, 52, 56, 60}, //8     40
+  {4, 4, 8, 16, 16, 20, 24, 28, 28, 36, 40, 48, 48, 52, 56, 60},  //12    44
+  {4, 4, 8, 12, 20, 20, 24, 28, 28, 36, 40, 44, 52, 52, 56, 60},  //16    48
+  {4, 4, 8, 12, 16, 24, 24, 28, 28, 36, 40, 44, 48, 56, 56, 60},  //20    52
+  {4, 4, 8, 12, 16, 20, 20, 28, 28, 36, 40, 44, 48, 52, 60, 60},  //24    56
 {4, 4, 8, 12, 16, 20, 24, 24, 36, 36, 40, 44, 48, 52, 56, 56},  //28    60
 {4, 4, 8, 12, 16, 20, 24, 28, 28, 36, 40, 44, 48, 52, 56, 60},  //32    0
 {8, 8, 8, 12, 16, 20, 24, 28, 28, 40, 40, 44, 48, 52, 56, 60},  //36    4
@@ -498,7 +520,8 @@ Sint32 sprite_ball::ball_eject4[] =
   36, 44, 40, 36, 36, 44, 44, 40, 40,
   36, 44, 40, 40, 36, 36, 44, 44, 40, 36
 };
-
+/** Pointers of directions possible that a ball can
+ * set when it leave one a ejector */
 Sint32 *sprite_ball::ball_ejectors[4] =
 {
     ball_eject1,

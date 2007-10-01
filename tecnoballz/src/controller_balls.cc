@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-09-29
+ * @date 2007-10-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.55 $
+ * @version $Revision: 1.56 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.55 2007/09/30 18:59:52 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.56 2007/10/01 05:27:01 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -320,35 +320,46 @@ controller_balls::activate_tilt ()
     {
       return;
     }
-  bool ftilt = false;
-  Sint32 t = balle_tilt;
+  bool is_tilt = false;
+  Sint32 delay = balle_tilt;
+  for (Uint32 i = 0; i < max_of_sprites; i++)
+    {
+      sprite_ball *ball = sprites_list[i];
+      if (!ball->is_enabled  || ball->tilt_delay_counter < delay)
+        {
+          continue;
+        }
+      is_tilt = true;
+      break;
+    }
+
+  if (!is_tilt)
+    {
+      return;
+    }
+
+
   Sint32 rand = random_counter;
   rand = rand & 15;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];
-      if (!ball->is_enabled || ball->tilt_delay_counter < t)
+      if (!ball->is_enabled)
         {
           continue;
         }
       if (ball->direction < 64)
         {
           Sint32 d = (ball->direction >> 2) & 0xf;
-          ball->direction = sprite_ball::tilt_table[d][rand];
+          ball->direction = sprite_ball::tilt_directions[d][rand];
         }
       ball->tilt_delay_counter = 0;
-      if (!ftilt)
-        {
-          ftilt = true;
+    }
+  
 #ifndef SOUNDISOFF
-          audio->play_sound (handler_audio::TECNOBALL);
+  audio->play_sound (handler_audio::TECNOBALL);
 #endif
-        }
-    }
-  if (ftilt)
-    {
-      display->tilt_screen ();
-    }
+  display->tilt_screen ();
 }
 
 /**
@@ -394,12 +405,12 @@ controller_balls::move_balls ()
 		j << std::endl;
 	      j = 60;
 	    }
-	  Sint16 *table = ball->velocity;
-	  table = (Sint16 *) ((char *) table + j);
-	  Sint32 k = *(table++);
-	  ball->x_coord += (k * resolution);
-	  k = *table;
-	  ball->y_coord += (k * resolution);
+	  Sint16 *velocities = ball->velocities;
+	  velocities = (Sint16 *) ((char *) velocities + j);
+	  Sint32 offset = *(velocities++);
+	  ball->x_coord += (offset * resolution);
+	  offset = *velocities;
+	  ball->y_coord += (offset * resolution);
 	  continue;
 	}
 
@@ -462,15 +473,15 @@ controller_balls::move_balls ()
 	}
 
 
-      if (--ball->tempo_rota < 0)
+      if (--ball->viewfinder_delay < 0)
 	{
-	  ball->tempo_rota = 8;
-	  if (++ball->balle_rota > 13)
+	  ball->viewfinder_delay = 8;
+	  if (++ball->viewfinder_direction > 13)
 	    {
-	      ball->balle_rota = 0;
+	      ball->viewfinder_direction = 0;
 	    } 
 	  paddle = ball->paddle_touched;
-	  monPT = paddle->direct_tab + ball->balle_rota;
+	  monPT = paddle->direct_tab + ball->viewfinder_direction;
 	  ball->direction = *monPT;
 	}
     }
@@ -505,13 +516,12 @@ controller_balls::move_balls_in_guards_level ()
 		j << std::endl;
 	      j = 60;
 	    }
-	  Sint16 *table = ball->velocity;
-	  table = (Sint16 *) ((char *) table + j);
-	  Sint32 k;
-	  k = *(table++);
-	  ball->x_coord += (k * resolution);
-	  k = *table;
-	  ball->y_coord += (k * resolution);
+	  Sint16 *velocities = ball->velocities;
+	  velocities = (Sint16 *) ((char *) velocities + j);
+	  Sint32 offset = *(velocities++);
+	  ball->x_coord += (offset * resolution);
+	  offset = *velocities;
+	  ball->y_coord += (offset * resolution);
 	  continue;
 	}
 
@@ -540,15 +550,15 @@ controller_balls::move_balls_in_guards_level ()
 	  break;
 	}
 
-      if (--ball->tempo_rota < 0)
+      if (--ball->viewfinder_delay < 0)
 	{
-	  ball->tempo_rota = 8;
-	  if (++ball->balle_rota > 13)
+	  ball->viewfinder_delay = 8;
+	  if (++ball->viewfinder_direction > 13)
 	    {
-	      ball->balle_rota = 0;
+	      ball->viewfinder_direction = 0;
 	    }
 	  paddle = ball->paddle_touched;
-	  monPT = paddle->direct_tab + ball->balle_rota;
+	  monPT = paddle->direct_tab + ball->viewfinder_direction;
 	  ball->direction = *monPT;
 	}
     }
