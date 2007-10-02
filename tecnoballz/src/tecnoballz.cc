@@ -2,14 +2,14 @@
  * @file tecnoballz.cc 
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-04-10
+ * @date 2007-10-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.30 2007/09/30 07:23:39 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.31 2007/10/02 04:50:34 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,11 +80,11 @@ tecnoballz::first_init (configfile * pConf)
     {
       handler_players::players_list[i]->set_name (pConf->get_player_name (i));
     }
-  super_jump = MAIN_MENU;
+  current_phase = MAIN_MENU;
 
   if (arg_jumper > 0)
     {
-      super_jump = arg_jumper;
+      current_phase = arg_jumper;
     }
   if (is_verbose)
     {
@@ -98,51 +98,52 @@ tecnoballz::first_init (configfile * pConf)
 void
 tecnoballz::game_begin ()
 {
-  supervisor *current_phase = NULL;
+  supervisor *stage = NULL;
   do
     {
       if (is_verbose)
         {
-          std::cout << ">tecnoballz::game_begin() phase:" << super_jump
+          std::cout << ">tecnoballz::game_begin() phase:" << current_phase
             << std::endl;
         }
-      switch (super_jump)
+      switch (current_phase)
         {
         case LEAVE_TECNOBALLZ:
           is_exit_game = true;
           break;
         case BRICKS_LEVEL:
-          current_phase = new supervisor_bricks_level ();
+          stage = new supervisor_bricks_level ();
           break;
         case SHOP: 
-          current_phase = new supervisor_shop ();
+          stage = new supervisor_shop ();
           break;
         case GUARDS_LEVEL:
-          current_phase = new supervisor_guards_level ();
+          stage = new supervisor_guards_level ();
           break;
         case MAIN_MENU:
-          current_phase = new supervisor_main_menu ();
+          stage = new supervisor_main_menu ();
           break;
         case MAP_EDITOR:
-          current_phase = new supervisor_map_editor (); 
+          stage = new supervisor_map_editor (); 
           break;
          default:
            std::cerr << "(!)tecnoballz::game_begin() phase number " << 
-             super_jump << "is invalid!" << std::endl;
+             current_phase << "is invalid!" << std::endl;
            throw std::runtime_error ("(!)tecnoballz::game_begin() " 
              "invalid phase number!");
         }
-      if (NULL != current_phase) 
+      if (NULL != stage) 
         {
-          current_phase->first_init ();
-          super_jump = 0;
+          stage->first_init ();
+	  Uint32 next = 0;
           do
             {
-              super_jump = current_phase->main_loop ();
+              next = stage->main_loop ();
             }
-          while (!super_jump);
-          delete current_phase;
-          current_phase = NULL;
+          while (!next);
+	  current_phase = next;
+          delete stage;
+          stage = NULL;
         }
     }
   while (!is_exit_game);
@@ -375,7 +376,7 @@ handler_players * tecnoballz::current_player = NULL;
 Sint16 * tecnoballz::table_cosL = NULL;
 Sint16 * tecnoballz::table_sinL = NULL;
 
-Uint32 tecnoballz::super_jump = BRICKS_LEVEL;
+Uint32 tecnoballz::current_phase = BRICKS_LEVEL;
 bool tecnoballz::is_exit_game = false;
 bitmap_data * tecnoballz::sprites_bitmap = NULL;
 bool tecnoballz::is_enabled_cheat_mode = false;

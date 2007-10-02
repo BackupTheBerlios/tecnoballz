@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.cc
  * @brief Paddles controller 
- * @date 2007-09-27
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.23 2007/09/27 06:05:36 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.24 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ controller_paddles::controller_paddles ()
   is_draw_pixel_by_pixel = false;
   is_team_mode = false;
   
-  if (super_jump == GUARDS_LEVEL)
+  if (current_phase == GUARDS_LEVEL)
     {
       max_of_sprites = 1;
       sprite_type_id = BOB_BUMPER;

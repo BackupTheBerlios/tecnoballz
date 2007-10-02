@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.h 
  * @brief Bricks levels supervisor 
- * @date 2007-09-25
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.26 2007/09/25 05:43:20 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.27 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -121,7 +121,7 @@ public:
     supervisor_bricks_level ();
    ~supervisor_bricks_level ();
   void first_init ();
-  Sint32 main_loop ();
+  Uint32 main_loop ();
 
 private:
   void init_level ();

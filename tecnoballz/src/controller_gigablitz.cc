@@ -1,14 +1,14 @@
 /**
  * @file controller_gigablitz.cc 
  * @brief Gigablitz controller 
- * @date 2007-09-29
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.17 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.18 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ controller_gigablitz::create_gigablitz_sprites ()
 {
   controller_paddles* paddles = controller_paddles::get_instance ();
   paddle_bottom = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
-  if (BRICKS_LEVEL == super_jump)
+  if (BRICKS_LEVEL == current_phase)
     {
       paddle_top = paddles->get_paddle (controller_paddles::TOP_PADDLE);
     }
@@ -86,7 +86,7 @@ controller_gigablitz::create_gigablitz_sprites ()
       sprite_gigablitz *gigablitz_sprite = new sprite_gigablitz ();
       gigablitz_sprite->set_object_pos (i);
       gigablitz_sprite->set_draw_method (sprite_object::DRAW_LINE_BY_LINE);
-      if (GUARDS_LEVEL == super_jump)
+      if (GUARDS_LEVEL == current_phase)
         {
           gigablitz_sprite->mirrorVert = 1;
         }

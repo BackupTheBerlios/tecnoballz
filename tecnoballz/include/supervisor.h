@@ -1,14 +1,14 @@
 /** 
  * @file supervisor.h
  * @brief Virtual class for all supervisors 
- * @date 2007-04-10
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor.h,v 1.3 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: supervisor.h,v 1.4 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,14 +31,14 @@
 class supervisor:public virtual tecnoballz
 {
 protected:
-  Sint32 end_return;
+  Uint32 next_phase;
 
 public:
   supervisor ();
   virtual ~ supervisor ();
-  void initialise ();
-  void liberation ();
+  void initialize ();
+  void release ();
   virtual void first_init ();
-  virtual Sint32 main_loop ();
+  virtual Uint32 main_loop ();
 };
 #endif

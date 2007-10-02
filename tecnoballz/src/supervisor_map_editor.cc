@@ -2,14 +2,14 @@
  * @file supervisor_map_editor.cc 
  * @brief The tile map editor for the menu and guardians levels 
  * @created 2004-09-13 
- * @date 2007-04-10
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.21 2007/09/12 06:32:49 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.22 2007/10/02 04:50:34 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@
  */
 supervisor_map_editor::supervisor_map_editor ()
 {
-  initialise ();
+  initialize ();
   /*  vertical background scrolling */
   tiles_map = new tilesmap_scrolling ();
   mouse_pointer = new sprite_mouse_pointer ();
@@ -93,7 +93,7 @@ supervisor_map_editor::~supervisor_map_editor ()
       delete brush_bitmap;
       brush_bitmap = NULL;
     }
-  liberation ();
+  release ();
 }
 
 /**
@@ -151,7 +151,7 @@ supervisor_map_editor::first_init ()
 /**
  * Main loop
  */
-Sint32
+Uint32
 supervisor_map_editor::main_loop ()
 {
   display->wait_frame ();
@@ -181,14 +181,14 @@ supervisor_map_editor::main_loop ()
   /* [ctrl] + escape key to leave! */
   if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG))
     {
-      end_return = LEAVE_TECNOBALLZ;
+      next_phase = LEAVE_TECNOBALLZ;
     }
 
   check_keys ();
   /* back to menu */
   if (keyboard->key_is_pressed (SDLK_F10))
     {
-      end_return = MAIN_MENU;
+      next_phase = MAIN_MENU;
     }
 
   if (keyboard->key_is_pressed (SDLK_F1))
@@ -214,7 +214,7 @@ supervisor_map_editor::main_loop ()
       is_s_key_down = false;
       save_tilesmap ();
     }
-  return end_return;
+  return next_phase;
 }
 
 /**

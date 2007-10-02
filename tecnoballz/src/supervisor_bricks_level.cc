@@ -4,11 +4,11 @@
  * @date 2007-09-30
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.57 $
+ * @version $Revision: 1.58 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.57 2007/09/30 11:48:07 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.58 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
  */
 supervisor_bricks_level::supervisor_bricks_level ()
 {
-  initialise ();
+  initialize ();
   sides_bricks = controller_sides_bricks::get_instance ();
   tiles_ground = tiles_background::get_instance ();
   panel_score = right_panel_score::get_instance ();
@@ -95,7 +95,7 @@ supervisor_bricks_level::~supervisor_bricks_level ()
   delete panel_score;
   delete tiles_ground;
   delete sides_bricks;
-  liberation ();
+  release ();
 }
 
 /**
@@ -113,7 +113,7 @@ supervisor_bricks_level::first_init ()
 #endif
 
   count_next = 0;
-  end_return = 0;
+  next_phase = 0;
   gameover_counter = 0;
   if (is_verbose)
     {
@@ -230,7 +230,7 @@ supervisor_bricks_level::init_level ()
  * Main loop in the bricks level
  * @return
  */
-Sint32
+Uint32
 supervisor_bricks_level::main_loop ()
 {
   Sint32 Ecode = -1;
@@ -299,7 +299,7 @@ supervisor_bricks_level::main_loop ()
       display->bufferCTab ();
       if (keyboard->is_left_button () && gameover_counter > 60)
         {
-          current_player = handler_players::nextplayer (current_player, &end_return, 1);
+          current_player = handler_players::get_next_player (current_player, &next_phase, 1);
         }
     }
 
@@ -391,8 +391,8 @@ supervisor_bricks_level::main_loop ()
                   keyboard->key_is_pressed (SDLK_SPACE) || music_finished)
                 {
                   sides_bricks->save_state_of_walls ();
-                  current_player = handler_players::nextplayer (current_player,
-                                   &end_return, 1);
+                  current_player = handler_players::get_next_player (current_player,
+                                   &next_phase);
 #ifndef SOUNDISOFF
                   audio->stop_music ();
 #endif
@@ -422,7 +422,7 @@ supervisor_bricks_level::main_loop ()
   if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG) ||
       Ecode == handler_popup_menu::QUIT_TECNOBALLZ)
     {
-      end_return = LEAVE_TECNOBALLZ;
+      next_phase = LEAVE_TECNOBALLZ;
     }
   if (keyboard->command_is_pressed (handler_keyboard::TOOVERFLAG) ||
       Ecode == handler_popup_menu::CAUSE_GAME_OVER)
@@ -432,7 +432,7 @@ supervisor_bricks_level::main_loop ()
   if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
       Ecode == handler_popup_menu::QUIT_TO_MAIN_MENU)
     {
-      end_return = MAIN_MENU;
+      next_phase = MAIN_MENU;
     }
 
   /* control position music's module */
@@ -445,7 +445,7 @@ supervisor_bricks_level::main_loop ()
       paddles->release_all_balls ();
     }
 #endif
-  return end_return;
+  return next_phase;
 }
 
 /**

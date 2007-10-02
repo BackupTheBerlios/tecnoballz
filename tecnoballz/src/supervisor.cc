@@ -1,14 +1,14 @@
 /** 
  * @file supervisor.cc 
  * @brief Virtual class for all supervisors 
- * @date 2007-02-04
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor.cc,v 1.4 2007/09/12 06:32:49 gurumeditation Exp $
+ * $Id: supervisor.cc,v 1.5 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
  */
 supervisor::supervisor ()
 {
-  initialise ();
+  initialize ();
 }
 
 /**
@@ -40,18 +40,18 @@ supervisor::supervisor ()
  */
 supervisor::~supervisor ()
 {
-  liberation ();
+  release ();
 }
 
 void
-supervisor::initialise ()
+supervisor::initialize ()
 {
   object_init ();
-  end_return = 0;
+  next_phase = 0;
 }
 
 void
-supervisor::liberation ()
+supervisor::release ()
 {
   object_free ();
 }
@@ -61,7 +61,7 @@ supervisor::first_init ()
 {
 }
 
-Sint32
+Uint32
 supervisor::main_loop ()
 {
   return MAIN_MENU;

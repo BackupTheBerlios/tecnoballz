@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-10-01
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.57 $
+ * @version $Revision: 1.58 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.57 2007/10/01 15:57:47 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.58 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -93,7 +93,7 @@ controller_balls::init (Uint32 start,
   paddle_bottom = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
 
   Sint32 w;
-  if (super_jump == GUARDS_LEVEL)
+  if (current_phase == GUARDS_LEVEL)
     {
       /* the width of a brick in pixels */
       w = 16 * resolution;
@@ -121,7 +121,7 @@ controller_balls::init (Uint32 start,
   ball->init_first_ball (paddle_bottom->collision_width);
   /* one ball on the screen */
   num_of_sprites = 1;
-  if (super_jump == BRICKS_LEVEL)
+  if (current_phase == BRICKS_LEVEL)
     {
       controller_ejectors *ejectors = controller_ejectors::get_instance ();
       ejectors->initialize_ball_positions (&sprite_ball::ejector_coords[0]);
@@ -1688,16 +1688,13 @@ controller_balls::check_tilt_availability ()
       if (ball->tilt_delay_counter == delay)
         {
           is_tilted = true;
-          printf("controller_balls::check_tilt_availability %i %i\n" , delay, i);
         }
       ball->tilt_delay_counter++;
     }
   if (is_tilted)
     {
-      printf("controller_balls::check_tilt_availability! %i %i \n", super_jump, BRICKS_LEVEL);
-      if (super_jump == BRICKS_LEVEL)
+      if (current_phase == BRICKS_LEVEL)
         {
-          printf("controller_balls::check_tilt_availability !!!! \n");
           head_animation *head_anim = head_animation::get_instance ();
           head_anim->start_yawn ();
         }

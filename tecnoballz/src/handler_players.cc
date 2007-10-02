@@ -1,14 +1,14 @@
 /** 
  * @file handler_players.cc 
  * @brief players handler 
- * @date 2007-03-09
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.15 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.16 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -699,13 +699,12 @@ handler_players::remove_all_lifes ()
  * Static method which return next player and determine the next phase
  * @param player the current "handler_players" object
  * @param next_phase pointer to "end_return"
- * @param current_phase current phase: BRICKS_LEVEL, SHOP or GUARDS_LEVEL 
  * @param grdNx pointer to "level_list" of the guards (NULL by default)
  * @return the new player object
  */
 handler_players *
-handler_players::nextplayer (handler_players * player, Sint32 * next_phase,
-                             Sint32 current_phase, Sint32 grdNx)
+handler_players::get_next_player (handler_players * player, Uint32 * next_phase,
+                             Sint32 grdNx)
 {
   Uint32 start = player->player_num;
   Uint32 index = start;

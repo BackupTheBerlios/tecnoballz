@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.h
  * @brief Shop supervisor 
- * @date 2007-04-10
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.21 2007/09/17 05:40:35 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.22 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,9 +92,6 @@ private:
   Uint32 current_price;
   /** The number of bought capsules */
   Uint32 num_of_bought_capsules;
-  //char *shop_line1;
-  //char *shop_line2;
-  //char *shop_line3;
   char *text_lines[3];
   Sint32 mouse_x_coord;
   Sint32 mouse_y_coord;
@@ -140,10 +137,8 @@ private:
   static Uint32 options_prices[];
   static char shoptext00[];
   static char shoptext41[];
-  //static char shoptext63[];
   static char shoptext56[];
   static char shoptextPT[];
- // static char shoptext12[];
   static char info_text1[];
   static char info_text2[];
   static char info_text3[];
@@ -152,7 +147,7 @@ public:
     supervisor_shop ();
    ~supervisor_shop ();
   void first_init ();
-  Sint32 main_loop ();
+  Uint32 main_loop ();
 
 private:
   Sint32 testkursor (Sint32 x, Sint32 y);

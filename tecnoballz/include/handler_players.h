@@ -1,14 +1,14 @@
 /** 
  * @file handler_players.h
  * @brief players handler 
- * @date 2007-03-09
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.h,v 1.16 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_players.h,v 1.17 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -156,7 +156,7 @@ public:
 
   static void release_all_players ();
   static handler_players *create_all_players (Uint32 numof);
-  static handler_players *nextplayer (handler_players *, Sint32 *, Sint32,
+  static handler_players *get_next_player (handler_players *, Uint32 *,
                                       Sint32 grdNx = 0);
 
 

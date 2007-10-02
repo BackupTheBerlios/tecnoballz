@@ -1,14 +1,14 @@
 /**
  * @file supervisor_shop.cc 
  * @brief Shop supervisor
- * @date 2007-09-30
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.42 $
+ * @version $Revision: 1.43 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.42 2007/09/30 11:48:07 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.43 2007/10/02 04:50:34 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
  */
 supervisor_shop::supervisor_shop ()
 {
-  initialise ();
+  initialize ();
   tiles_ground = tiles_background::get_instance ();
   mouse_pointer = new sprite_mouse_pointer ();
   led_indicator = new sprite_object ();
@@ -100,7 +100,7 @@ supervisor_shop::~supervisor_shop ()
     }
   delete mouse_pointer;
   delete tiles_ground;
-  liberation ();
+  release ();
 }
 
 /**
@@ -236,7 +236,8 @@ supervisor_shop::first_init ()
 /**
  * The main loop of the shop
  */
-Sint32 supervisor_shop::main_loop ()
+Uint32
+supervisor_shop::main_loop ()
 {
   Sint32
   Ecode = -1;
@@ -272,7 +273,7 @@ Sint32 supervisor_shop::main_loop ()
 
 
 
-  end_return = 0;
+  next_phase = 0;
   sprites->clear ();
 
 
@@ -346,16 +347,16 @@ Sint32 supervisor_shop::main_loop ()
   if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG) ||
       Ecode == handler_popup_menu::QUIT_TECNOBALLZ)
     {
-      end_return = LEAVE_TECNOBALLZ;
+      next_phase = LEAVE_TECNOBALLZ;
     }
   if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
       Ecode == handler_popup_menu::QUIT_TO_MAIN_MENU)
     {
-      end_return = MAIN_MENU;
+      next_phase = MAIN_MENU;
     }
 
   check_if_enable_cheat ();
-  return end_return;
+  return next_phase;
 }
 
 /**
@@ -638,7 +639,7 @@ supervisor_shop::faitcourse (Sint32 gadnu)
     case GAD_EXITSH:
       current_player->set_budget_prices (false);
       current_player =
-        handler_players::nextplayer (current_player, &end_return, 2);
+        handler_players::get_next_player (current_player, &next_phase);
       break;
 
     default:

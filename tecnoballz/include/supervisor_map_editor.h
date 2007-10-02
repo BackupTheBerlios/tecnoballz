@@ -2,14 +2,14 @@
  * @file supervisor_map_editor.cc 
  * @brief The tile map editor for the menu and guardians levels 
  * @created 2004-09-13 
- * @date 2007-04-10
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.h,v 1.15 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: supervisor_map_editor.h,v 1.16 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -111,7 +111,7 @@ public:
     supervisor_map_editor ();
    ~supervisor_map_editor ();
   void first_init ();
-  Sint32 main_loop ();
+  Uint32 main_loop ();
 
 private:
   void view_map_editor ();

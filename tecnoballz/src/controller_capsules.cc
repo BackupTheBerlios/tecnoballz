@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.cc 
  * @brief Capsules controller 
- * @date 2007-09-27
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.28 2007/10/01 15:57:47 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.29 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ controller_capsules::initialize (Sint32 mStep,
     }
   frame_period = capsule->frame_period;
 
-  if (super_jump == BRICKS_LEVEL)
+  if (current_phase == BRICKS_LEVEL)
     {
       controller_bricks *bricks = controller_bricks::get_instance ();
       Uint32 numof_bricks = bricks->get_num_of_bricks ();

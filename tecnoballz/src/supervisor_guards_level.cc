@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-10-01
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.48 $
+ * @version $Revision: 1.49 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.48 2007/10/01 15:57:47 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.49 2007/10/02 04:50:34 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
  */
 supervisor_guards_level::supervisor_guards_level ()
 {
-  initialise ();
+  initialize ();
   tiles_map = new tilesmap_scrolling ();
   guards = controller_guardians::get_instance ();
   paddles = controller_paddles::get_instance ();
@@ -78,7 +78,7 @@ supervisor_guards_level::~supervisor_guards_level ()
   delete paddles;
   delete guards;
   delete tiles_map;
-  liberation ();
+  release ();
 }
 
 /** 
@@ -92,7 +92,7 @@ supervisor_guards_level::first_init ()
   audio->enable_sound ();
 #endif
   sprites->reset ();
-  end_return = 0;
+  next_phase = 0;
   gameover_counter = 0;
   count_next = 0;
   is_victory_initialized = false;
@@ -194,7 +194,7 @@ supervisor_guards_level::first_init ()
 /**
  * The main loop of the guardians phase
  */
-Sint32
+Uint32
 supervisor_guards_level::main_loop ()
 {
   Sint32 Ecode = -1;
@@ -259,9 +259,8 @@ supervisor_guards_level::main_loop ()
       display->bufferCTab ();
       if (keyboard->is_left_button () && gameover_counter > 150)
         {
-          current_player = handler_players::nextplayer (current_player,
-                                                    &end_return,
-                                                    1,
+          current_player = handler_players::get_next_player (current_player,
+                                                    &next_phase,
                                                     guards->
                                                     get_max_of_sprites () +
                                                     1);
@@ -334,9 +333,9 @@ supervisor_guards_level::main_loop ()
                 }
               else
                 {
-                  current_player = handler_players::nextplayer
+                  current_player = handler_players::get_next_player
                     (current_player,
-                     &end_return, 1, guards->get_max_of_sprites () + 1);
+                     &next_phase, guards->get_max_of_sprites () + 1);
                 }
             }
         }
@@ -357,7 +356,7 @@ supervisor_guards_level::main_loop ()
   if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG) ||
       Ecode == handler_popup_menu::QUIT_TECNOBALLZ)
     {
-      end_return = LEAVE_TECNOBALLZ;
+      next_phase = LEAVE_TECNOBALLZ;
     }
   if (keyboard->command_is_pressed (handler_keyboard::TOOVERFLAG) ||
       Ecode == handler_popup_menu::CAUSE_GAME_OVER)
@@ -367,12 +366,12 @@ supervisor_guards_level::main_loop ()
   if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
       Ecode == handler_popup_menu::QUIT_TO_MAIN_MENU)
     {
-      end_return = MAIN_MENU;
+      next_phase = MAIN_MENU;
     }
 
 
 
-  return end_return;
+  return next_phase;
 }
 
 //------------------------------------------------------------------------------

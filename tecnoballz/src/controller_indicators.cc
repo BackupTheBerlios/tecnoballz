@@ -2,14 +2,14 @@
  * @file controller_indicators.cc 
  * @brief Controller of money amount, reverse penalty   
  * @created 2002-11-28 
- * @date 2007-02-27
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_indicators.cc,v 1.7 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_indicators.cc,v 1.8 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ controller_indicators::create_indicators_sprites ()
    */
   controller_capsules *capsules = controller_capsules::get_instance ();
   sprite_capsule *caps = capsules->get_first_sprite ();
-  if (super_jump == BRICKS_LEVEL)
+  if (current_phase == BRICKS_LEVEL)
     {
       reverse_sprite = new sprite_capsule ();
       caps->duplicate_to (reverse_sprite);
@@ -112,7 +112,7 @@ controller_indicators::create_indicators_sprites ()
   /*
    * life sprite is only enable in the guards levels
    */
-  if (super_jump == GUARDS_LEVEL)
+  if (current_phase == GUARDS_LEVEL)
     {
       life_sprite = new sprite_capsule ();
       caps->duplicate_to (life_sprite);

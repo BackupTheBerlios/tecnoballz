@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.h
  * @brief Guardians level supervisor 
  * @created 2003-01-11
- * @date 2007-04-10
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.22 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.23 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,7 +86,8 @@ private:
   /** Mettalic spheres used in congratulisation */
   controller_spheres *metallic_spheres;
   Uint32 gameover_counter;
-  Sint32 count_next;            //temporisation before next level 
+  /** Delay counter before next phase */
+  Sint32 count_next;
   /** If true game is finished, play game over with congratulations */
   bool is_victory; 
   /** If true congratulations was already initialized  */
@@ -102,6 +103,6 @@ public:
     supervisor_guards_level ();
    ~supervisor_guards_level ();
   void first_init ();
-  Sint32 main_loop ();
+  Uint32 main_loop ();
 };
 #endif

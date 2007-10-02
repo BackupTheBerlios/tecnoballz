@@ -2,14 +2,14 @@
  * @file handler_popup_menu.cc 
  * @brief popup menu handler (When the [Esc] is pressed)
  * @created 2004-08-08 
- * @date 2007-09-27
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.9 2007/09/30 11:48:07 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.10 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,7 +122,7 @@ handler_popup_menu::first_init (bitmap_data * bmp)
 {
   load_text_file();
   Uint32 w;
-  switch (super_jump)
+  switch (current_phase)
     {
     case BRICKS_LEVEL:
       /* determine if restore background (bricks levels and shop only) */

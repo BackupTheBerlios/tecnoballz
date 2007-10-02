@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_main_menu.h
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-04-10
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.h,v 1.10 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: supervisor_main_menu.h,v 1.11 2007/10/02 04:50:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ public:
     supervisor_main_menu ();
    ~supervisor_main_menu ();
   void first_init ();
-  Sint32 main_loop ();
+  Uint32 main_loop ();
   static const char *get_area_code (Uint32 aera_num, Uint32 difficulty);
   static char *get_current_area_code ();
   static void copy_current_area_code (char *destination);

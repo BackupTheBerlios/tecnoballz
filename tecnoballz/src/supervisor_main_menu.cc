@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_main_menu.cc 
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-04-03
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.21 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.22 2007/10/02 04:50:34 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
  */
 supervisor_main_menu::supervisor_main_menu ()
 {
-  initialise ();
+  initialize ();
   /* vertical background scrolling */
   tiles_map = new tilesmap_scrolling ();
   /*  big logo "TecnoballZ" */
@@ -57,7 +57,7 @@ supervisor_main_menu::~supervisor_main_menu ()
   delete fonts_scrolling;
   delete tecnoballz_logo;
   delete tiles_map;
-  liberation ();
+  release ();
 }
 
 /**
@@ -100,7 +100,7 @@ supervisor_main_menu::first_init ()
 /**
  * Main loop of the main menu
  */
-Sint32
+Uint32
 supervisor_main_menu::main_loop ()
 {
 
@@ -119,18 +119,18 @@ supervisor_main_menu::main_loop ()
   switch (text_menu->check_and_display ())
     {
     case sprite_display_menu::PROGRAM_EXIT:
-      end_return = LEAVE_TECNOBALLZ;
+      next_phase = LEAVE_TECNOBALLZ;
       break;
     case sprite_display_menu::START_GAME:
-      end_return = start_new_game ();
+      next_phase = start_new_game ();
       break;
     }
 
   text_menu->draw_copy_from_bitmap ();
   if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG))
     {
-      end_return = LEAVE_TECNOBALLZ;
-      printf("end_return %i\n", end_return);
+      next_phase = LEAVE_TECNOBALLZ;
+      printf("next_phase %i\n", next_phase);
     }
   display->unlock_surfaces ();
 
@@ -143,10 +143,10 @@ supervisor_main_menu::main_loop ()
 #ifdef UNDER_DEVELOPMENT
   if (keyboard->key_is_pressed (SDLK_F5))
     {
-      end_return = MAP_EDITOR;
+      next_phase = MAP_EDITOR;
     }
 #endif
-  return end_return;
+  return next_phase;
 }
 
 //------------------------------------------------------------------------------
