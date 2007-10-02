@@ -4,11 +4,11 @@
  * @date 2007-09-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_viewfinders.cc,v 1.6 2007/09/20 04:55:32 gurumeditation Exp $
+ * $Id: controller_viewfinders.cc,v 1.7 2007/10/02 11:25:37 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,7 +97,7 @@ controller_viewfinders::run ()
 {
   for (Uint32 i = 0; i < num_of_paddles; i++)
     {
-      sprite_ball *ball = paddles_list[i]->ball_glued;
+      sprite_ball *ball = paddles_list[i]->stuck_ball;
       if (NULL != ball && ball->is_enabled)
         {
           sprites_list[i]->attract (ball);

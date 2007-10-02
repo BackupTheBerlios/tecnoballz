@@ -1,14 +1,14 @@
 /** 
  * @file sprite_paddle.cc 
  * @brief A paddle sprite 
- * @date 2007-09-27
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.13 2007/09/27 10:51:33 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.14 2007/10/02 11:25:37 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,12 +39,12 @@ sprite_paddle::sprite_paddle (bool has_projectiles)
   is_vertical = false;
   bumperNorm = 2;
   fire_state = NOT_OWN_GUN;
-  is_glue = 0;
+  sticky_state = NOT_STICKY_PADDLE;
   bump_speed = 0;
   bump_actif = 0;
   touch_ball = false;
   paddle_number = 0;
-  ball_glued = (sprite_ball *) NULL;
+  stuck_ball = (sprite_ball *) NULL;
   if (has_projectiles)
     {
       projectiles = new controller_projectiles (); 
@@ -106,7 +106,7 @@ sprite_paddle::fire_projectiles ()
  * Move the paddle's projectiles 
  */
 void
-sprite_paddle::deplaceTir ()
+sprite_paddle::move_projectiles ()
 {
   projectiles->fire ();
   projectiles->move ();
@@ -175,7 +175,7 @@ sprite_paddle::select_image (Sint32 l)
     {
       i += 7;
     }
-  if (is_glue)
+  if (sticky_state != NOT_STICKY_PADDLE)
     {
       i += 14;
     }
@@ -207,7 +207,7 @@ sprite_paddle::get_paddle_number ()
 void
 sprite_paddle::set_glue ()
 {
-  is_glue = 1;
+  sticky_state = FREE_STICKY_PADDLE;
   select_image ();
 }
 
@@ -240,15 +240,15 @@ void
 sprite_paddle::release_ball ()
 {
   /* is the ball glued on bumper? */
-  if (is_glue > 1)
+  if (sticky_state == BUSY_STICKY_PADDLE)
     {
       /* paddle is free */
-      is_glue = 1;
+      sticky_state = FREE_STICKY_PADDLE;
     }
-  sprite_ball *ball = ball_glued;
+  sprite_ball *ball = stuck_ball;
   if (NULL != ball)
     {
-      ball_glued = (sprite_ball *) NULL;
+      stuck_ball = (sprite_ball *) NULL;
       ball->disable_stick ();
     }
 }
@@ -258,19 +258,18 @@ sprite_paddle::release_ball ()
  * @param ball pointer to sprite_ball object
  */
 void
-sprite_paddle::attachBall (sprite_ball * ball)
+sprite_paddle::stick_ball (sprite_ball * ball)
 {
-  if (ball_glued != NULL)
+  if (stuck_ball != NULL)
     {
-      ball_glued->disable_stick ();
+      stuck_ball->disable_stick ();
     }
-  ball_glued = ball;
-  if (is_glue)
+  stuck_ball = ball;
+  if (sticky_state == FREE_STICKY_PADDLE)
     {
-      is_glue = 2;
+      sticky_state = BUSY_STICKY_PADDLE;
     }
 }
-
 
 /**
  * Return paddle's length

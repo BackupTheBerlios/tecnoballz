@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.24 2007/10/02 04:50:33 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.25 2007/10/02 11:25:37 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -367,10 +367,10 @@ controller_paddles::fire_projectiles ()
     /* mode team no implemented */
     {
     }
-  paddle_bottom->deplaceTir ();
-  paddle_right->deplaceTir ();
-  paddle_top->deplaceTir ();
-  paddle_left->deplaceTir ();
+  paddle_bottom->move_projectiles ();
+  paddle_right->move_projectiles ();
+  paddle_top->move_projectiles ();
+  paddle_left->move_projectiles ();
 }
 
 /**

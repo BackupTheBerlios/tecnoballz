@@ -4,11 +4,11 @@
  * @date 2007-10-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.27 2007/10/01 15:57:47 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.28 2007/10/02 11:25:37 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ private:
   sprite_paddle *paddle_top;
   sprite_paddle *paddle_left;
   sprite_paddle *paddle_robot;
-  sprite_object *ptBob_wall;
+  sprite_object *wall_sprite;
 
 private:
   static Sint32 rb0[16];
@@ -86,7 +86,7 @@ public:
 
 private:
   void check_outside_balls ();
-  void vitussort2 ();
+  void check_outside_balls_guards_level ();
   void activate_tilt ();
   void move_balls ();
   void accelerate ();

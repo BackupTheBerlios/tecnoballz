@@ -1,14 +1,14 @@
 /** 
  * @file sprite_paddle.h
  * @brief A paddle sprite 
- * @date 2007-09-27
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.15 2007/09/27 06:05:36 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.16 2007/10/02 11:25:37 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,14 @@ public:
      FIRE = 3
    } FIRE_PADDLE_STATUS;
 
+   typedef enum 
+   {
+    NOT_STICKY_PADDLE,
+    FREE_STICKY_PADDLE,
+    BUSY_STICKY_PADDLE
+   } STICKY_PADDLE_STATUS;
+
+
 private:
   Sint32 bump_actif;          // flag : raquette active
   /** True if the paddle is vertical, otherwise horizontal */
@@ -68,8 +76,11 @@ private:
   Sint32 width_deca;            //3 or 4; offset between 2 size (2^3)
 
   Sint32 bumperNorm;            // flag : raquette normale
-  Sint32 fire_state;            // flag : raquette tireuse
-  Sint32 is_glue;            // flag : 1=raquette colle libre
+  /** Fire state: NOT_OWN_GUN, OWN_GUN, or FIRE */
+  Sint32 fire_state;
+  /** Stick paddle state: NOT_STICKY_PADDLE, FREE_STICKY_PADDLE, or
+   * BUSY_STICKY_PADDLE */
+  Uint32 sticky_state;
 
   const Sint32 **rebonds_Ga;    //ball rebounds table (move on the left)
   const Sint32 **rebonds_Dr;    //ball rebounds table (move on the right)
@@ -77,7 +88,7 @@ private:
 
   Sint32 *direct_tab;           // table direction si la balle collee
 
-  sprite_ball *ball_glued;      // ptr  : l'objet balle collee
+  sprite_ball *stuck_ball;      // ptr  : l'objet balle collee
   /** If true the paddle touched a ball */
   bool touch_ball;
   Sint32 invincible;            // > 0 bumper is invincible (guards phase)
@@ -103,7 +114,7 @@ public:
    ~sprite_paddle ();
   void create_projectiles_list ();
   void fire_projectiles ();
-  void deplaceTir ();
+  void move_projectiles ();
   void bumpActive (Sint32 rTeam, Sint32 large, Sint32 actif);
   void set_width (Sint32 w);
   void set_height (Sint32 h);
@@ -114,7 +125,7 @@ public:
   void set_fire_1 ();
   void set_fire_2 ();
   void release_ball ();
-  void attachBall (sprite_ball * xBall);
+  void stick_ball (sprite_ball * ball);
   void directBall ();
   Uint32 get_length ();
   bool is_invincible ();
