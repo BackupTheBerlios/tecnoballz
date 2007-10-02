@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.18 2007/10/02 04:50:33 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.19 2007/10/02 15:51:31 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -115,7 +115,7 @@ controller_gigablitz::shoot_paddle  ()
   /* smallest bumper is of 16 or 32 pixels width */
   l -= paddle_bottom->width_mini;
   /* size of bumper step by 8 or 16 pixels */
-  l >>= paddle_bottom->width_deca;
+  l >>= paddle_bottom->shift_width;
   l = MAX_OF_GIGABLITZ - l - 1;
   current_gigablitz = sprites_list[l];
   gigablitz_height = current_gigablitz->get_sprite_height ();

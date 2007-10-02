@@ -4,11 +4,11 @@
  * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_projectiles.cc,v 1.8 2007/09/27 10:51:33 gurumeditation Exp $
+ * $Id: controller_projectiles.cc,v 1.9 2007/10/02 15:51:31 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,7 +135,7 @@ controller_projectiles::fire ()
       /* smallest paddle is of 16/32 pixels width */
       i -= gun_paddle->width_mini;
       /* size of paddle step by 8/16 pixels */
-      i >>= gun_paddle->width_deca;
+      i >>= gun_paddle->shift_width;
       switch (i)
         {
         case 0:
@@ -539,7 +539,7 @@ controller_projectiles::move ()
   /* smallest paddle width is of 16/32 pixels */
   i -= gun_paddle->width_mini;
   /* size of paddle step by 8/16 pixels */
-  i >>= gun_paddle->width_deca;
+  i >>= gun_paddle->shift_width;
   switch (i)
     {
     case 0:

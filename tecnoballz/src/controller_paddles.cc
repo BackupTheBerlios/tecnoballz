@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.25 2007/10/02 11:25:37 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.26 2007/10/02 15:51:31 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -128,7 +128,7 @@ controller_paddles::create_paddles_sprites ()
       /* ball rebounds table */
       paddle_bottom->rebonds_Ga = midi1_left;
       paddle_bottom->rebonds_Dr = midi1Right;
-      paddle_bottom->bump_actif = 1;
+      paddle_bottom->enable_counter = 1;
       paddle_bottom->enable ();
       paddle_bottom->direct_tab = ballePets1;      // table direction balle collee
     }
@@ -200,7 +200,7 @@ controller_paddles::enable_robot ()
   center = min_coordinate + (max_coordinate - min_coordinate) / 2 -
     (paddle_robot->collision_width / 2);
   paddle_robot->set_coordinates (center, 232 * resolution);
-  paddle_robot->bump_actif = 1;
+  paddle_robot->enable_counter = 1;
 }
 
 /**
@@ -210,7 +210,7 @@ void
 controller_paddles::disable_robot ()
 {
   paddle_robot->disable ();
-  paddle_robot->bump_actif = 0;
+  paddle_robot->enable_counter = 0;
 }
 
 /**
@@ -233,7 +233,7 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   paddle_bottom->collision_width = paddle_length;
   paddle_bottom->paddle_number = BOTTOM_PADDLE;
   paddle_bottom->is_vertical = false;
-  paddle_bottom->bumpActive (is_team_mode, paddle_length, 3);
+  paddle_bottom->enable_if_ok (is_team_mode, paddle_length, 3);
   paddle_bottom->bump_TFIRE = 2;
   paddle_bottom->bumper_FX0 = 0;
   paddle_bottom->bumper_FY0 = -5 * resolution;
@@ -256,7 +256,7 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   paddle_right->collision_height = paddle_length;
   paddle_right->paddle_number = RIGHT_PADDLE;
   paddle_right->is_vertical = true;
-  paddle_right->bumpActive (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (RIGHT_PADDLE));
+  paddle_right->enable_if_ok (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (RIGHT_PADDLE));
   paddle_right->bump_TFIRE = 2;
   paddle_right->bumper_FX0 = -5 * resolution;
   paddle_right->bumper_FY0 = 0;
@@ -273,14 +273,14 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   paddle_right->direct_tab = ballePets2;
   paddle_right->width_mini = width_mini;
   paddle_right->width_maxi = width_maxi;
-  current_player->set_paddle_alive_counter (2, paddle_right->bump_actif);
+  current_player->set_paddle_alive_counter (2, paddle_right->enable_counter);
 
   /* initialize top paddle */ 
   paddle_top->set_coordinates (center, top_y_coord);
   paddle_top->collision_width = paddle_length;
   paddle_top->paddle_number = TOP_PADDLE;
   paddle_top->is_vertical = false;
-  paddle_top->bumpActive (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (TOP_PADDLE));
+  paddle_top->enable_if_ok (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (TOP_PADDLE));
   paddle_top->bump_TFIRE = 2;
   paddle_top->bumper_FX0 = 0;
   paddle_top->bumper_FY0 = 5 * resolution;
@@ -297,14 +297,14 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   paddle_top->direct_tab = ballePets3;
   paddle_top->width_mini = width_mini;
   paddle_top->width_maxi = width_maxi;
-  current_player->set_paddle_alive_counter (3, paddle_top->bump_actif);
+  current_player->set_paddle_alive_counter (3, paddle_top->enable_counter);
 
   /* initialize left paddle */ 
   paddle_left->set_coordinates (left_x_coord, center);
   paddle_left->collision_height = paddle_length;
   paddle_left->paddle_number = LEFT_PADDLE;
   paddle_left->is_vertical = true;
-  paddle_left->bumpActive (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (LEFT_PADDLE));
+  paddle_left->enable_if_ok (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (LEFT_PADDLE));
   paddle_left->bump_TFIRE = 2;
   paddle_left->bumper_FX0 = 5 * resolution;
   paddle_left->bumper_FY0 = 0 * resolution;
@@ -321,7 +321,7 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   paddle_left->direct_tab = ballePets4;
   paddle_left->width_mini = width_mini;
   paddle_left->width_maxi = width_maxi;
-  current_player->set_paddle_alive_counter (4, paddle_left->bump_actif);
+  current_player->set_paddle_alive_counter (4, paddle_left->enable_counter);
 
   /* initialize robot paddle */
   paddle_robot->set_coordinates (center, bottom_y_coord);
@@ -471,7 +471,9 @@ controller_paddles::move_paddles ()
           if (off_x < 0)
             {
               if (x <= min_coordinate)
-                x = min_coordinate;
+                {
+                  x = min_coordinate;
+                }
               raketDepla = 1;   // deplacement a gauche 
               rakVgauche = -off_x;
               speed = rakVgauche;
@@ -484,7 +486,9 @@ controller_paddles::move_paddles ()
             {
               Sint32 i = max_coordinate - paddle_length;
               if (x >= i)
-                x = i;
+                {
+                  x = i;
+                }
               raketDepla = 2;   // deplacement a droite
               rakVdroite = off_x;
               speed = rakVdroite;
@@ -528,7 +532,7 @@ controller_paddles::move_paddle ()
   const Sint32 **tabB1;
   Sint32 x = paddle_bottom->x_coord;
   Sint32 off_x = keyboard->get_mouse_x_offset ();
-  // mode solo
+  /* mode solo */
   if (!is_team_mode)
     {
       raketDepla = 0;           //no move
@@ -563,10 +567,8 @@ controller_paddles::move_paddle ()
       if (speed > 10)
         speed = 10;
       paddle_bottom->rebonds_GD = *(tabB1 + speed);
-
-      //change position of bumpers
-      paddle_bottom->set_x_coord (x);      //bottom bumper
-      paddle_bottom->flickerRun ();        //flick the bumper
+      paddle_bottom->set_x_coord (x);
+      paddle_bottom->blink ();
     }
 
   // mode team, no implemented (on Amiga I had two mice simultaneously)
@@ -576,74 +578,79 @@ controller_paddles::move_paddle ()
     }
 }
 
-//------------------------------------------------------------------------------
-// move the bottom robot bumper
-//------------------------------------------------------------------------------
+/** 
+ * Move the bottom robot paddle 
+ */
 void
 controller_paddles::move_robot ()
 {
-  if (paddle_robot->bump_actif)
+  if (paddle_robot->enable_counter == 0)
+  {
+    return;
+  }
+
+  Sint32 t = balls->get_max_of_sprites ();
+  sprite_ball **balls_list = balls->get_sprites_list ();
+  Sint32 pos_y = 0;
+  sprite_ball *target_ball = NULL;
+  for (Sint32 i = 0; i < t; i++)
+  {
+    sprite_ball *ball = *(balls_list++);
+    if (!ball->is_enabled)
     {
-      Sint32 t = balls->get_max_of_sprites ();
-      sprite_ball **aList = balls->get_sprites_list ();
-      Sint32 pos_y = 0;
-      sprite_ball *balle = 0x0;
-      for (Sint32 i = 0; i < t; i++)
-        {
-          sprite_ball *b = *(aList++);
-          if (b->is_enabled)
-            {
-              if (b->direction >= 36 && b->direction <= 60)
-                {
-                  if (b->y_coord > pos_y)
-                    {
-                      pos_y = b->y_coord;
-                      balle = b;
-                    }
-                }
-            }
-        }
-
-      if (pos_y > 0)
-        {
-          Sint32 bumpx = paddle_robot->x_coord;
-          Sint32 ballx = balle->x_coord - 64;
-          Sint32 offsx = bumpx - ballx;
-          if (offsx > 10)
-            {
-              offsx = 10;
-            }
-          if (offsx < -10)
-            {
-            offsx = -10;
-            }
-          bumpx = bumpx - offsx;
-
-          if (bumpx < 64)
-            {
-              bumpx = 64;
-            }
-          if (bumpx > 320)
-            {
-              bumpx = 320;
-            }
-
-          offsx = paddle_robot->x_coord;
-          paddle_robot->x_coord = bumpx;
-          offsx = bumpx - offsx;
-          const Sint32 **tabB1;
-          if (offsx < 0)
-            {
-              offsx = -offsx;
-              tabB1 = paddle_robot->rebonds_Ga;
-            }
-          else
-            {
-              tabB1 = paddle_robot->rebonds_Dr;
-            }
-          paddle_robot->rebonds_GD = *(tabB1 + offsx);
-        }
+      continue;
     }
+    if (ball->direction >= 36 && ball->direction <= 60)
+    {
+      if (ball->y_coord > pos_y)
+      {
+        pos_y = ball->y_coord;
+        target_ball = ball;
+      }
+    }
+  }
+
+  if (pos_y <= 0)
+  {
+    return; 
+  }
+  Sint32 x_paddle = paddle_robot->x_coord;
+  Sint32 x_ball = target_ball->x_coord + target_ball->collision_width / 2 - paddle_robot->collision_width / 2; 
+  Sint32 offset = x_paddle - x_ball;
+  Sint32 max = 5 * resolution;
+  if (offset > max)
+  {
+    offset = max;
+  }
+  if (offset < -max)
+  {
+    offset = -max;
+  }
+  x_paddle = x_paddle - offset;
+
+  if (x_paddle < min_coordinate)
+  {
+    x_paddle = min_coordinate;
+  }
+  if (x_paddle > (Sint32)(max_coordinate - paddle_robot->collision_width))
+  {
+    x_paddle = max_coordinate - paddle_robot->collision_width;
+  }
+
+  offset = paddle_robot->x_coord;
+  paddle_robot->x_coord = x_paddle;
+  offset = x_paddle - offset;
+  const Sint32 **tabB1;
+  if (offset < 0)
+  {
+    offset = -offset;
+    tabB1 = paddle_robot->rebonds_Ga;
+  }
+  else
+  {
+    tabB1 = paddle_robot->rebonds_Dr;
+  }
+  paddle_robot->rebonds_GD = *(tabB1 + offset);
 }
 
 /**

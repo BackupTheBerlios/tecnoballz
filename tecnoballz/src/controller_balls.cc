@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.59 $
+ * @version $Revision: 1.60 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.59 2007/10/02 11:25:37 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.60 2007/10/02 15:51:31 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -559,10 +559,10 @@ controller_balls::collisions_with_paddles ()
 {
   Sint32 j, x, y;
   sprite_paddle *paddle, *touched_paddle;
-  paddle_bottom->touch_ball = false;
-  paddle_right->touch_ball = false;
-  paddle_top->touch_ball = false;
-  paddle_left->touch_ball = false;
+  paddle_bottom->is_hit_ball = false;
+  paddle_right->is_hit_ball = false;
+  paddle_top->is_hit_ball = false;
+  paddle_left->is_hit_ball = false;
   right_panel_score *panel = right_panel_score::get_instance ();
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
@@ -649,7 +649,7 @@ controller_balls::collisions_with_paddles ()
           /* does the ball touch a paddle?  */
           if (NULL != touched_paddle)
             {
-              touched_paddle->touch_ball = true;
+              touched_paddle->is_hit_ball = true;
 #ifndef SOUNDISOFF
               audio->play_sound (handler_audio::BALL_HIT_PADDLE);
 #endif
@@ -690,7 +690,7 @@ controller_balls::collisions_with_paddle ()
   Sint32 j, x, y;
   const Sint32 *monPT;
   sprite_paddle *paddle, *touched_paddle;
-  paddle_bottom->touch_ball = false;
+  paddle_bottom->is_hit_ball = false;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];
@@ -720,7 +720,7 @@ controller_balls::collisions_with_paddle ()
         {
           continue;
         }
-      touched_paddle->touch_ball = true;
+      touched_paddle->is_hit_ball = true;
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::BALL_HIT_PADDLE);
 #endif
@@ -749,12 +749,12 @@ controller_balls::collisions_with_paddle ()
 void
 controller_balls::collisions_with_robot ()
 {
-  if (!paddle_robot->bump_actif)
+  if (paddle_robot->enable_counter == 0)
     {
       return;
     }
   sprite_paddle *paddle = paddle_robot;
-  paddle->touch_ball = false;
+  paddle->is_hit_ball = false;
   Sint32 x1 = paddle->x_coord;
   Sint32 y1 = paddle->y_coord;
   Sint32 x2 = paddle->x_coord + paddle->collision_width;
@@ -773,7 +773,7 @@ controller_balls::collisions_with_robot ()
         ball->x_coord < x2 && ball->y_coord < y2)
     {
       ball->y_coord = y1 - ball->collision_height;
-      paddle->touch_ball = true;
+      paddle->is_hit_ball = true;
       j = ball->direction;
       monPT = paddle->rebonds_GD;
       monPT = (Sint32 *) ((char *) monPT + j);

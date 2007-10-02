@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.14 2007/10/02 11:25:37 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.15 2007/10/02 15:51:31 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,12 +37,11 @@ sprite_paddle::sprite_paddle (bool has_projectiles)
   clear_sprite_members ();
   length = 32 * resolution;
   is_vertical = false;
-  bumperNorm = 2;
   fire_state = NOT_OWN_GUN;
   sticky_state = NOT_STICKY_PADDLE;
   bump_speed = 0;
-  bump_actif = 0;
-  touch_ball = false;
+  enable_counter = 0;
+  is_hit_ball = false;
   paddle_number = 0;
   stuck_ball = (sprite_ball *) NULL;
   if (has_projectiles)
@@ -53,18 +52,18 @@ sprite_paddle::sprite_paddle (bool has_projectiles)
     {
       projectiles = NULL;
     }
-  invincible = 0;
-  flickerval = 0;
+  invincible_counter = 0;
+  blink_counter = 0;
   width_mini = 0;
   width_maxi = 0;
-  width_deca = 0;
+  shift_width = 0;
   if (resolution == 1)
     {
-      width_deca = 3;
+      shift_width = 3;
     }
   else
     {
-      width_deca = 4;
+      shift_width = 4;
     }
 }
 
@@ -112,26 +111,26 @@ sprite_paddle::move_projectiles ()
   projectiles->move ();
 }
 
-//------------------------------------------------------------------------------
-// determine if the bumper must to be activated
-// input => rTeam: 1 = mode team
-//       => large: bumper's width (8,16,24,32,40,48,56 or 64)
-//       => actif: if >0 bumper's active
-//------------------------------------------------------------------------------
+/**
+ * Determine if the paddle must to be enabled and enable it if ok
+ * @param rTeam True if mode team enabled
+ * @param large Paddle's width (8,16,24,32,40,48,56 or 64)
+ * @param actif Counter
+ */
 void
-sprite_paddle::bumpActive (Sint32 rTeam, Sint32 large, Sint32 actif)
+sprite_paddle::enable_if_ok (Sint32 rTeam, Sint32 large, Sint32 actif)
 {
   length = large;
   is_enabled = false;
-  bump_actif = actif;
-  if (bump_actif > 0)
+  enable_counter = actif;
+  if (enable_counter > 0)
     {
-      bump_actif--;
+      enable_counter--;
       is_enabled = true;
     }
   if (paddle_number == 1 || (paddle_number == 4 && rTeam == 1))
     {
-      bump_actif = 1;
+      enable_counter = 1;
       is_enabled = true;
     }
   select_image (large);
@@ -170,7 +169,7 @@ sprite_paddle::set_height (Sint32 h)
 void
 sprite_paddle::select_image (Sint32 l)
 {
-  Sint32 i = (l >> width_deca) - 2;
+  Sint32 i = (l >> shift_width) - 2;
   if (fire_state != NOT_OWN_GUN)
     {
       i += 7;
@@ -283,12 +282,12 @@ sprite_paddle::get_length ()
 
 /**
  * Check if the paddle is invincible (into guards levels)
- * @return true the paddle is invincible, false otherwise
+ * @return True the paddle is invincible, false otherwise
  */
 bool
 sprite_paddle::is_invincible ()
 {
-  return invincible > 0 ? true : false;
+  return invincible_counter > 0 ? true : false;
 }
 
 /**
@@ -298,27 +297,27 @@ sprite_paddle::is_invincible ()
 void
 sprite_paddle::set_invincibility (Sint32 delay)
 {
-  invincible = delay;
+  invincible_counter = delay;
 }
 
-//------------------------------------------------------------------------------
-// guards levels: handle invincible bumper
-//------------------------------------------------------------------------------
+/**
+ * Handle invincible paddle in the guardians level 
+ */
 void
-sprite_paddle::flickerRun ()
+sprite_paddle::blink ()
 {
-  if (invincible > 0)
+  if (invincible_counter > 0)
     {
-      invincible--;
-      if (flickerval > 0)
+      invincible_counter--;
+      if (blink_counter > 0)
         {
           is_enabled = false;
-          flickerval = 0;
+          blink_counter = 0;
         }
       else
         {
           is_enabled = true;
-          flickerval = 1;
+          blink_counter = 1;
         }
     }
   else

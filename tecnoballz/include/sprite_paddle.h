@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.16 2007/10/02 11:25:37 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.17 2007/10/02 15:51:30 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,8 @@ public:
 
 
 private:
-  Sint32 bump_actif;          // flag : raquette active
+  /** Paddle is enabled if the counter is greater than zero */
+  Sint32 enable_counter;
   /** True if the paddle is vertical, otherwise horizontal */
   bool is_vertical;
   /** Paddle number from 0 to 5 */
@@ -73,26 +74,27 @@ private:
   Sint32 width_mini;
   /** Maximum with of the paddle 64 or 128 pixels */
   Sint32 width_maxi;
-  Sint32 width_deca;            //3 or 4; offset between 2 size (2^3)
-
-  Sint32 bumperNorm;            // flag : raquette normale
+  /** Shift binary right value (3 or 4 ) used to convert the length to
+   * convert the paddle's length in a interger from 0 to 6 */
+  Sint32 shift_width;
   /** Fire state: NOT_OWN_GUN, OWN_GUN, or FIRE */
   Sint32 fire_state;
   /** Stick paddle state: NOT_STICKY_PADDLE, FREE_STICKY_PADDLE, or
    * BUSY_STICKY_PADDLE */
   Uint32 sticky_state;
-
   const Sint32 **rebonds_Ga;    //ball rebounds table (move on the left)
   const Sint32 **rebonds_Dr;    //ball rebounds table (move on the right)
   const Sint32 *rebonds_GD;     //ball rebounds table (left and right)
-
   Sint32 *direct_tab;           // table direction si la balle collee
-
-  sprite_ball *stuck_ball;      // ptr  : l'objet balle collee
+  /** Current stuck ball, NULL if not */
+  sprite_ball *stuck_ball;
   /** If true the paddle touched a ball */
-  bool touch_ball;
-  Sint32 invincible;            // > 0 bumper is invincible (guards phase)
-  Sint32 flickerval;            // flag flicker
+  bool is_hit_ball;
+  /** Paddle is invinciblei f  the counter is greater than zero
+   * available only in the guadians phase */
+  Sint32 invincible_counter;
+  /** Counter used to blink the padde when it is invincible */
+  Sint32 blink_counter;
 
   /** Used for fire power 1 or fire power 2 */
   controller_projectiles *projectiles;
@@ -115,7 +117,7 @@ public:
   void create_projectiles_list ();
   void fire_projectiles ();
   void move_projectiles ();
-  void bumpActive (Sint32 rTeam, Sint32 large, Sint32 actif);
+  void enable_if_ok (Sint32 rTeam, Sint32 large, Sint32 actif);
   void set_width (Sint32 w);
   void set_height (Sint32 h);
   void select_image (Sint32 l);
@@ -130,6 +132,6 @@ public:
   Uint32 get_length ();
   bool is_invincible ();
   void set_invincibility (Sint32 delay);
-  void flickerRun ();
+  void blink ();
 };
 #endif
