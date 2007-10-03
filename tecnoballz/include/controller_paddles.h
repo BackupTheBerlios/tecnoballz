@@ -4,11 +4,11 @@
  * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.h,v 1.11 2007/09/27 06:05:36 gurumeditation Exp $
+ * $Id: controller_paddles.h,v 1.12 2007/10/03 16:00:09 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,10 @@ class controller_paddles:public objects_list < sprite_paddle, controller_paddles
   friend class sprite_paddle;
 
 private:
+  
+  float kb_paddle_speed;
+ 
+
   /** Minimum widh of a paddle: 32 or 64 pixels */
   Sint32 width_mini;
   /** Maximum widh of a paddle: 32 or 64 pixels */

@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.27 2007/10/03 06:25:33 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.28 2007/10/03 16:00:09 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -442,15 +442,37 @@ controller_paddles::move_paddles ()
   Sint32 speed = 0;
   const Sint32 **tabB1, **tabB2, **tabB3, **tabB4;
   Sint32 x = paddle_bottom->x_coord;
-  Sint32 off_x = keyboard->get_mouse_x_offset ();
+  Sint32 off_x = 0; 
   
   if (keyboard->control_is_pressed(handler_keyboard::K_LEFT))
     {
-      off_x+= 6; 
+      if (kb_paddle_speed > 0)
+        {
+          kb_paddle_speed = 0;
+        }
+      kb_paddle_speed -= 2;
+      if (int(kb_paddle_speed) < 1) {
+         kb_paddle_speed *= 0.9; 
+      }
+      off_x = (Sint32)kb_paddle_speed; 
+      printf("<== %i\n", off_x);
     }
-  if (keyboard->control_is_pressed(handler_keyboard::K_RIGHT))
-    {
-      off_x-= 6; 
+    else if (keyboard->control_is_pressed(handler_keyboard::K_RIGHT))
+      {
+      if (int(kb_paddle_speed) < 0)
+        {
+          kb_paddle_speed = 0;
+        }
+      kb_paddle_speed += 2;
+      if (int(kb_paddle_speed) > 1) {
+         kb_paddle_speed *= 0.9; 
+      }
+      off_x = (Sint32)kb_paddle_speed; 
+      printf("==> %i\n", off_x);
+      }
+    else {
+      kb_paddle_speed = 0;
+      off_x = keyboard->get_mouse_x_offset ();
     }
 
 
