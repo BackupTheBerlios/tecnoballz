@@ -1,14 +1,14 @@
 /** 
  * @file handler_keyboard.cc 
  * @brief Handler of the keyboard and mouse
- * @date 2007-03-20
+ * @date 2007-10-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.8 2007/09/26 15:57:40 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.9 2007/10/03 06:25:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,21 @@
 
 bool handler_keyboard::command_keys[NUMOFFLAGS];
 bool handler_keyboard::last_command_keys[NUMOFFLAGS];
+Uint32 handler_keyboard::key_codes[K_MAXOF] =
+{
+  SDLK_LEFT,
+  SDLK_RIGHT,
+  SDLK_UP,
+  SDLK_DOWN,
+  SDLK_SPACE,
+  SDLK_LCTRL,
+  SDLK_LALT,
+  SDLK_y,
+  SDLK_x,
+  SDLK_ESCAPE,
+  SDLK_PAGEUP,
+  SDLK_PAGEDOWN
+};
 handler_keyboard * handler_keyboard::keyboard_singleton = NULL;
 
 /**
@@ -390,6 +405,26 @@ bool handler_keyboard::key_is_released (Sint32 code)
   Uint8 * keys;
   keys = SDL_GetKeyState (NULL);
   if (keys[code] == SDL_RELEASED)
+    {
+      return true;
+    }
+  else
+    {
+      return false;
+    }
+}
+
+/**
+ * Check if a control key is pressed
+ * @param code A code of key 
+ * @return true if the key is pressed 
+ */
+bool
+handler_keyboard::control_is_pressed (Uint32 code)
+{
+  Uint8 * keys;
+  keys = SDL_GetKeyState (NULL);
+  if (keys[key_codes[code]] == SDL_PRESSED)
     {
       return true;
     }

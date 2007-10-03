@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.17 2007/10/02 15:51:30 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.18 2007/10/03 06:25:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ private:
   Sint32 width_mini;
   /** Maximum with of the paddle 64 or 128 pixels */
   Sint32 width_maxi;
-  /** Shift binary right value (3 or 4 ) used to convert the length to
+  /** Shift binary right value (3 or 4) used to convert the length to
    * convert the paddle's length in a interger from 0 to 6 */
   Sint32 shift_width;
   /** Fire state: NOT_OWN_GUN, OWN_GUN, or FIRE */
@@ -95,7 +95,6 @@ private:
   Sint32 invincible_counter;
   /** Counter used to blink the padde when it is invincible */
   Sint32 blink_counter;
-
   /** Used for fire power 1 or fire power 2 */
   controller_projectiles *projectiles;
   Sint32 bumper_FX0;            // tir inc0. X

@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.26 2007/10/02 15:51:31 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.27 2007/10/03 06:25:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -355,7 +355,8 @@ controller_paddles::fire_projectiles ()
   /* mode  solo */
   if (!is_team_mode)
     {
-      if (keyboard->is_left_button ())
+      if (keyboard->is_left_button () 
+	  || keyboard->control_is_pressed(handler_keyboard::K_FIRE))
         {
           paddle_bottom->fire_projectiles ();
           paddle_right->fire_projectiles ();
@@ -385,7 +386,7 @@ controller_paddles::check_if_release_balls ()
   if (!is_team_mode)
     {
       if (keyboard->is_right_button () ||
-	  keyboard->key_is_pressed (SDLK_SPACE))
+	  keyboard->control_is_pressed (handler_keyboard::K_RELEASE_BALL))
         {
           tiles_background *tiles = tiles_background::get_instance ();
           tiles->set_scroll_type(tiles_background::TILES_NO_SCROLL);
@@ -413,7 +414,8 @@ controller_paddles::check_if_release_balls ()
 void
 controller_paddles::check_if_release_ball ()
 {
-  if (keyboard->is_right_button ())
+  if (keyboard->is_right_button ()
+      || keyboard->control_is_pressed(handler_keyboard::K_RELEASE_BALL))
     {
       paddle_bottom->release_ball ();
     }
@@ -442,25 +444,26 @@ controller_paddles::move_paddles ()
   Sint32 x = paddle_bottom->x_coord;
   Sint32 off_x = keyboard->get_mouse_x_offset ();
   
-  if (keyboard->key_is_released(SDLK_LEFT))
+  if (keyboard->control_is_pressed(handler_keyboard::K_LEFT))
     {
       off_x+= 6; 
     }
-  if (keyboard->key_is_released(SDLK_RIGHT))
+  if (keyboard->control_is_pressed(handler_keyboard::K_RIGHT))
     {
       off_x-= 6; 
     }
 
 
-  // Mode Solo
+  /* one player mode */
   if (!is_team_mode)
     {
-      raketDepla = 0;           // pas de deplacement
       rakVgauche = 0;
       rakVdroite = 0;
 
       /* if 2 mouse buttons are pressed or GigaBlitz run also no test */
-      if (!keyboard->is_right_left_buttons () && !gigablitz->is_enable ())
+      if (!keyboard->is_right_left_buttons () 
+	  && !keyboard->control_is_pressed (handler_keyboard::K_GIGABLITZ) 
+	  && !gigablitz->is_enable ())
         {
           if (reverse_counter > 0)
             {
@@ -474,7 +477,6 @@ controller_paddles::move_paddles ()
                 {
                   x = min_coordinate;
                 }
-              raketDepla = 1;   // deplacement a gauche 
               rakVgauche = -off_x;
               speed = rakVgauche;
               tabB1 = paddle_bottom->rebonds_Ga;
@@ -489,7 +491,6 @@ controller_paddles::move_paddles ()
                 {
                   x = i;
                 }
-              raketDepla = 2;   // deplacement a droite
               rakVdroite = off_x;
               speed = rakVdroite;
               tabB1 = paddle_bottom->rebonds_Dr;
@@ -500,17 +501,19 @@ controller_paddles::move_paddles ()
 
           // selectionne table de rebond balle suivant le deplacement
           if (speed > 10)
-            speed = 10;
+	    {
+              speed = 10;
+	    }
           paddle_bottom->rebonds_GD = *(tabB1 + speed);
           paddle_right->rebonds_GD = *(tabB2 + speed);
           paddle_top->rebonds_GD = *(tabB3 + speed);
           paddle_left->rebonds_GD = *(tabB4 + speed);
 
-          // Change position des raquettes
-          paddle_bottom->set_x_coord (x);  // raquette du bas
-          paddle_right->set_y_coord (x - 16);     // raquette de droite
-          paddle_top->set_x_coord (x);  // raquette du haut
-          paddle_left->set_y_coord (x - 16);     // raquette de gauche
+          /** Update x or y coordinates of the paddles */
+	  paddle_bottom->set_x_coord (x);
+          paddle_right->set_y_coord (x - 16);
+          paddle_top->set_x_coord (x);
+          paddle_left->set_y_coord (x - 16);
         }
 
     }
@@ -535,11 +538,10 @@ controller_paddles::move_paddle ()
   /* mode solo */
   if (!is_team_mode)
     {
-      raketDepla = 0;           //no move
-      rakVgauche = 0;
-      rakVdroite = 0;
       if (reverse_counter > 0)
-        off_x = -off_x;
+	{
+          off_x = -off_x;
+	}
       x += off_x;
       if (off_x < 0)
         {
@@ -547,9 +549,7 @@ controller_paddles::move_paddle ()
 	    {
               x = min_coordinate;
 	    }
-          raketDepla = 1;       //moving on the left
-          rakVgauche = -off_x;
-          speed = rakVgauche;
+          speed = -off_x;
           tabB1 = paddle_bottom->rebonds_Ga;
         }
       else
@@ -557,9 +557,7 @@ controller_paddles::move_paddle ()
           Sint32 i = max_coordinate - paddle_length;
           if (x >= i)
             x = i;
-          raketDepla = 2;       //moving on the right
-          rakVdroite = off_x;
-          speed = rakVdroite;
+          speed = off_x;
           tabB1 = paddle_bottom->rebonds_Dr;
         }
 

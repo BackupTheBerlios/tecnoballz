@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.60 $
+ * @version $Revision: 1.61 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.60 2007/10/02 15:51:31 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.61 2007/10/03 06:25:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -669,7 +669,7 @@ controller_balls::collisions_with_paddles ()
               ball->direction = j;
               if (touched_paddle->sticky_state == sprite_paddle::FREE_STICKY_PADDLE && !touched_paddle->stuck_ball)
                 {
-                  /* ball is sticked to the bumper */
+                  /* ball is sticked on the bumper */
                   touched_paddle->sticky_state = sprite_paddle::BUSY_STICKY_PADDLE;
                   touched_paddle->stuck_ball = (sprite_ball *) ball;
                   ball->stick_paddle = touched_paddle;

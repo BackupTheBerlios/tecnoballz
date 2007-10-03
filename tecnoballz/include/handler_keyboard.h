@@ -1,14 +1,14 @@
 /** 
  * @file handler_keyboard.cc 
  * @brief Handler of the keyboard and mouse
- * @date 2007-03-20
+ * @date 2007-10-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.h,v 1.4 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_keyboard.h,v 1.5 2007/10/03 06:25:33 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,9 +50,28 @@ public:
     }
     COMAND_KEYS_ENUM;
 
+    typedef enum
+     {
+        K_LEFT,
+        K_RIGHT,
+        K_UP,
+        K_DOWN,
+        K_FIRE,
+        K_RELEASE_BALL,
+        K_GIGABLITZ,
+        K_TILT,
+        K_TURBO,
+        K_ESC,
+        K_VOLUME_UP,
+        K_VOLUME_DOWN,
+        K_MAXOF
+     } KEY_CODES_ENUM;
+
 private:
   static bool last_command_keys[NUMOFFLAGS];
   static bool command_keys[NUMOFFLAGS];
+  /** Predefinded keys to control the paddle */
+  static Uint32 key_codes[K_MAXOF];
   static handler_keyboard* keyboard_singleton;
 
 private:
@@ -107,6 +126,7 @@ public:
   Sint32 get_mouse_y ();
   bool key_is_pressed (Sint32 code);
   bool key_is_released (Sint32 code);
+  bool control_is_pressed (Uint32 code);
 
   void set_input_string (char *str, Uint32 size);
   Sint32 get_input_cursor_pos ();
