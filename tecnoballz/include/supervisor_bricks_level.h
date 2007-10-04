@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.h 
  * @brief Bricks levels supervisor 
- * @date 2007-10-02
+ * @date 2007-10-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.27 2007/10/02 04:50:33 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.28 2007/10/04 05:54:41 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ class supervisor_bricks_level;
 #include "../include/handler_display.h"
 #include "../include/handler_audio.h"
 #include "../include/sprite_object.h"
+#include "../include/sprite_wall.h"
 #include "../include/bitmap_data.h"
 #include "../include/list_sprites.h"
 #include "../include/objects_list.h"
@@ -95,7 +96,7 @@ private:
   controller_fontes_game *fontes_game;
   controller_gigablitz *gigablitz;
   controller_game_over *game_over;
-  sprite_object *bottom_wall;
+  sprite_wall *bottom_wall;
   sprite_object *money_indicator;
   handler_popup_menu *popup_menu;
   /** Area number from 1 to 2 */

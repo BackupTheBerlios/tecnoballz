@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.43 $
+ * @version $Revision: 1.44 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.43 2007/10/02 04:50:34 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.44 2007/10/04 05:54:41 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -466,83 +466,83 @@ Sint32 supervisor_shop::led_moving (Sint32 index)
 void
 supervisor_shop::faitcourse (Sint32 gadnu)
 {
-  if (gadnu != GAD_INFORM)
+  if (gadnu != sprite_capsule::SOME_INFOS)
     optioninfo = 0;
 
   switch (gadnu)
     {
       /* expand the paddle(s) */
-    case GAD_SIZE_P:
+    case sprite_capsule::EXPAND_PADDLE:
       purchase_bonus_capsule (gadnu);
       break;
 
       /* fire power 1 */
-    case GAD_FIRE01:
+    case sprite_capsule::FIRE_POWER_1:
       purchase_bonus_capsule (gadnu);
       break;
 
       /* fire power 2 */
-    case GAD_FIRE02:
+    case sprite_capsule::FIRE_POWER_2:
       purchase_bonus_capsule (gadnu);
       break;
 
      /* extra balls */
-    case GAD_BALLE2:
+    case sprite_capsule::EXTRA_BALLS:
       purchase_bonus_capsule (gadnu);
       break;
 
       /* multi balls */
-    case GAD_BALLE3:
+    case sprite_capsule::MULTI_BALLS:
       purchase_bonus_capsule (gadnu);
       break;
 
       /* power ball 1 */
-    case GAD_POWER1:
+    case sprite_capsule::POWER_BALL_1:
       purchase_bonus_capsule (gadnu);
       break;
 
       /* power ball 2 */
-    case GAD_POWER2:
+    case sprite_capsule::POWER_BALL_2:
       purchase_bonus_capsule (gadnu);
       break;
 
       /* extra life */
-    case GAD_LIFE_P:
+    case sprite_capsule::EXTRA_LIFE:
       purchase_bonus_capsule (gadnu);
       break;
 
       /* bottom wall */ 
-    case GAD_WALL01:
+    case sprite_capsule::BOTTOM_WALL:
       purchase_bonus_capsule (gadnu);
       break;
 
       /* ball size 2 */
-    case GAD_SIZE01:
+    case sprite_capsule::BALL_SIZE_2:
       purchase_bonus_capsule (gadnu);
       break;
 
       /* ball size 3 */
-    case GAD_SIZE02:
+    case sprite_capsule::BALL_SIZE_3:
       purchase_bonus_capsule (gadnu);
       break;
 
       /* robot paddle option */
-    case GAD_ROBOT1:
+    case sprite_capsule::ROBOT_PADDLE:
       purchase_bonus_capsule (gadnu);
       break;
 
       /* balls control option */
-    case GAD_CONTRO:
+    case sprite_capsule::BALLS_CONTROL:
       purchase_bonus_capsule (gadnu);
       break;
 
       /* glue option */
-    case GAD_GLUE00:
+    case sprite_capsule::GLUE:
       purchase_bonus_capsule (gadnu);
       break;
 
       /* somes infos */
-    case GAD_INFORM:
+    case sprite_capsule::SOME_INFOS:
       {
         display_info ();
         return;
@@ -605,7 +605,7 @@ supervisor_shop::faitcourse (Sint32 gadnu)
       break;
 
       /* rebuild the wall */
-    case GAD_REBUIL:
+    case sprite_capsule::REBUILD_THE_WALL:
       if (current_player->get_area_number () < 5)
         {
           putthetext (box_texts[TEXT_ONLY_FOR_AREA_5]);
@@ -624,7 +624,7 @@ supervisor_shop::faitcourse (Sint32 gadnu)
       break;
 
       /* less bricks option */
-    case GAD_LESSBR:
+    case sprite_capsule::LESS_BRICKS:
       if (current_player->get_less_bricks () <= 0)
         {
           if (decrease_money_amount ())
@@ -636,7 +636,7 @@ supervisor_shop::faitcourse (Sint32 gadnu)
       break;
 
       /* exit from the shop */
-    case GAD_EXITSH:
+    case sprite_capsule::LEAVE_SHOP:
       current_player->set_budget_prices (false);
       current_player =
         handler_players::get_next_player (current_player, &next_phase);
@@ -647,9 +647,9 @@ supervisor_shop::faitcourse (Sint32 gadnu)
         //############################################################
         // buy a right, up or left bumper
         //############################################################
-        if (gadnu >= GAD_BUMP02 && gadnu <= GAD_BUMP04)
+        if (gadnu >= sprite_capsule::ENABLE_RIGHT_PADDLE && gadnu <= sprite_capsule::ENABLE_LEFT_PADDLE)
           {
-            Sint32 i = (gadnu - GAD_BUMP02) / 2 + 2;
+            Sint32 i = (gadnu - sprite_capsule::ENABLE_RIGHT_PADDLE) / 2 + 2;
             if (current_player->get_paddle_alive_counter (i) <= 0)
               {
                 if (decrease_money_amount ())
@@ -948,7 +948,7 @@ supervisor_shop::sh_ballade ()
                 }
               else
                 {
-                  while (case_types[i] != GAD_EXITSH)
+                  while (case_types[i] != sprite_capsule::LEAVE_SHOP)
                     {
                       if (case_types[i] == gadnu)
                         {
@@ -1128,11 +1128,22 @@ supervisor_shop::check_if_enable_cheat ()
 //-------------------------------------------------------------------------------
 Sint32 supervisor_shop::case_types[] =
   {
-    GAD_SIZE_P, GAD_FIRE01, GAD_FIRE02, GAD_REBUIL, GAD_BALLE2, GAD_BALLE3,
-    GAD_POWER1, GAD_POWER2, GAD_LESSBR, GAD_LIFE_P, GAD_INFORM, GAD_WALL01,
-    GAD_BUMP04, GAD_BUMP03, GAD_BUMP02, GAD_SIZE01, GAD_SIZE02, GAD_ROBOT1,
-    GAD_CONTRO, GAD_GLUE00, GAD_EXITSH, GAD_EXITSH, GAD_EXITSH, GAD_EXITSH,
-    GAD_EXITSH, GAD_EXITSH, GAD_EXITSH, GAD_EXITSH, GAD_EXITSH, GAD_EXITSH};
+    sprite_capsule::EXPAND_PADDLE,
+    sprite_capsule::FIRE_POWER_1,
+    sprite_capsule::FIRE_POWER_2,
+    sprite_capsule::REBUILD_THE_WALL,
+    sprite_capsule::EXTRA_BALLS,
+    sprite_capsule::MULTI_BALLS,
+    sprite_capsule::POWER_BALL_1, sprite_capsule::POWER_BALL_2,
+    sprite_capsule::LESS_BRICKS, sprite_capsule::EXTRA_LIFE,
+    sprite_capsule::SOME_INFOS, sprite_capsule::BOTTOM_WALL,
+    sprite_capsule::ENABLE_LEFT_PADDLE,
+    sprite_capsule::ENABLE_TOP_PADDLE,
+    sprite_capsule::ENABLE_RIGHT_PADDLE,
+    sprite_capsule::BALL_SIZE_2,
+    sprite_capsule::BALL_SIZE_3, sprite_capsule::ROBOT_PADDLE,
+    sprite_capsule::BALLS_CONTROL, sprite_capsule::GLUE, sprite_capsule::LEAVE_SHOP, sprite_capsule::LEAVE_SHOP, sprite_capsule::LEAVE_SHOP, sprite_capsule::LEAVE_SHOP,
+    sprite_capsule::LEAVE_SHOP, sprite_capsule::LEAVE_SHOP, sprite_capsule::LEAVE_SHOP, sprite_capsule::LEAVE_SHOP, sprite_capsule::LEAVE_SHOP, sprite_capsule::LEAVE_SHOP};
 
 //-------------------------------------------------------------------------------
 //

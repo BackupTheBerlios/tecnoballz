@@ -2,14 +2,14 @@
  * @file controller_indicators.cc 
  * @brief Controller of money amount, reverse penalty   
  * @created 2002-11-28 
- * @date 2007-10-02
+ * @date 2007-10-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_indicators.cc,v 1.8 2007/10/02 04:50:33 gurumeditation Exp $
+ * $Id: controller_indicators.cc,v 1.9 2007/10/04 05:54:41 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,7 +97,7 @@ controller_indicators::create_indicators_sprites ()
       sprites->add (reverse_sprite);
 
       Sint32 x = 215 * resolution;
-      reverse_sprite->enable_indicator_capsule (GAD_INVERS);
+      reverse_sprite->enable_indicator_capsule (sprite_capsule::INVERSE_CONTROL);
       reverse_sprite->set_coordinates (x, money_posy);
       reverse_sprite->set_frame_delay (5);
       x += reverse_sprite->get_sprite_width ();
@@ -119,7 +119,7 @@ controller_indicators::create_indicators_sprites ()
       sprites->add (life_sprite);
       life_sprite->set_shadow (false);
       Sint32 x = 264 * resolution;
-      life_sprite->enable_indicator_capsule (GAD_LIFE_P);
+      life_sprite->enable_indicator_capsule (sprite_capsule::EXTRA_LIFE);
       life_sprite->set_coordinates (x, money_posy);
       life_sprite->set_frame_delay (5);
       x += life_sprite->get_sprite_width ();
@@ -133,7 +133,6 @@ controller_indicators::create_indicators_sprites ()
         }
     }
 }
-
 
 /**
  * initialize credit of money sprites

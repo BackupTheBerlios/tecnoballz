@@ -4,11 +4,11 @@
  * @date 2007-09-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.cc,v 1.14 2007/09/13 05:33:21 gurumeditation Exp $
+ * $Id: sprite_capsule.cc,v 1.15 2007/10/04 05:54:41 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -132,7 +132,7 @@ sprite_capsule::enable_guardian_capsule (sprite_ball * ball, Uint32 id)
 void
 sprite_capsule::set_new_capsule (Uint32 id, const Sint16 *frames, Uint32 xcoord, Uint32 ycoord, sprite_paddle *pad)
 {
-  if (GAD_MEGA00 == id || GAD_RANDOM == id)
+  if (ENABLE_HUGELY_OPTIONS == id || CHANCE == id)
     {
       set_draw_method (sprite_object::DRAW_CAPSULE);
     }

@@ -69,6 +69,7 @@ SOURCES_MAIN = \
   sprite_paddle.cc \
   sprite_projectile.cc \
   sprite_ship.cc \
+  sprite_wall.cc \
   supervisor.c \
   supervisor_bricks_level.cc \
   supervisor_main_menu.cc \

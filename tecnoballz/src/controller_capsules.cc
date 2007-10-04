@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.cc 
  * @brief Capsules controller 
- * @date 2007-10-02
+ * @date 2007-10-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.29 2007/10/02 04:50:33 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.30 2007/10/04 05:54:41 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ void
 controller_capsules::initialize (Sint32 mStep,
                                  const Uint32 * table,
                                  controller_balls * pBall,
-                                 sprite_object * pWall)
+                                 sprite_wall * pWall)
 {
   ptNewBalls = pBall;
   ptBob_wall = pWall;
@@ -374,28 +374,24 @@ controller_capsules::check_cheat_keys ()
 /**
  * Enable an option, bonus or penalty, which can possibly come from
  * a capsule collected by a paddle in the bricks levels
- * @param paddle paddle which collected the caspule 
- * @param nuGad Option identifier
+ * @param paddle Paddle which collected the caspule 
+ * @param capsule_id Option identifier
  */
 void
-controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
+controller_capsules::gadget_run (sprite_paddle * paddle, Uint32 capsule_id)
 {
   paddle_selected = paddle;
   controller_paddles* paddles = controller_paddles::get_instance ();
   short_info_messages *messages = short_info_messages::get_instance ();
-
   controller_balls *balls = ptNewBalls;
-
-  if (nuGad == GAD_RANDOM)
+  if (capsule_id == sprite_capsule::CHANCE)
     {
-      nuGad = randomlist[random_counter & 127];
+      capsule_id = randomlist[random_counter & 127];
     }
 
-  switch (nuGad)
+  switch (capsule_id)
     {
-
-      /* glue paddle */
-    case GAD_GLUE00:
+    case sprite_capsule::GLUE:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::PADDLE_TRANSFORMATION);
 #endif
@@ -403,8 +399,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       paddle->set_glue ();
       break;
 
-      /* next level */
-    case GAD_NEXTLV:
+    case sprite_capsule::NEXT_LEVEL:
       {
         messages->send_message_request (short_info_messages::NEXT_LEVEL);
         right_panel_score* panel = right_panel_score::get_instance ();
@@ -412,8 +407,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       }
       break;
 
-      // fire power 1
-    case GAD_FIRE01:
+    case sprite_capsule::FIRE_POWER_1:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::PADDLE_TRANSFORMATION);
 #endif
@@ -421,8 +415,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       paddle->set_fire_1 ();
       break;
 
-      // fire power 2
-    case GAD_FIRE02:
+    case sprite_capsule::FIRE_POWER_2:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::PADDLE_TRANSFORMATION);
 #endif
@@ -430,8 +423,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       paddle->set_fire_2 ();
       break;
 
-      /* shrink paddle */
-    case GAD_SIZE_M:
+    case sprite_capsule::SHRINK_PADDLE:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::PADDLE_TRANSFORMATION);
 #endif
@@ -439,8 +431,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       paddles->shrink_paddles ();
       break;
 
-     /* expand paddle */
-    case GAD_SIZE_P:
+    case sprite_capsule::EXPAND_PADDLE:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::PADDLE_TRANSFORMATION);
 #endif
@@ -448,8 +439,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       paddles->expand_paddles ();
       break;
 
-      // lose a life
-    case GAD_LIFE_M:
+    case sprite_capsule::LOSE_A_LIFE:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::LOST_LIFE);
 #endif
@@ -457,8 +447,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       current_player->remove_life (1);
       break;
 
-      // extra life
-    case GAD_LIFE_P:
+    case sprite_capsule::EXTRA_LIFE:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::EXTRA_LIFE);
 #endif
@@ -466,8 +455,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       current_player->add_life (1);
       break;
 
-      // extra balls
-    case GAD_BALLE2:
+    case sprite_capsule::EXTRA_BALLS:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
@@ -475,8 +463,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       balls->extra_balls ();
       break;
 
-      // multi balls
-    case GAD_BALLE3:
+    case sprite_capsule::MULTI_BALLS:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
@@ -484,8 +471,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       balls->multi_balls ();
       break;
 
-      // power ball 1
-    case GAD_POWER1:
+    case sprite_capsule::POWER_BALL_1:
       messages->send_message_request (short_info_messages::POWERBALLS);
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
@@ -493,8 +479,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       balls->set_power_1 ();
       break;
 
-      // power ball 2
-    case GAD_POWER2:
+    case sprite_capsule::POWER_BALL_2:
       messages->send_message_request (short_info_messages::MEGA_POWERBALLS);
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
@@ -502,47 +487,48 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       balls->set_power_2 ();
       break;
 
-      // inverse control
-    case GAD_INVERS:
+    case sprite_capsule::INVERSE_CONTROL:
       messages->send_message_request (short_info_messages::INVERSE_COMMANDS);
       paddles->set_reverse_counter (50 * 4);
       break;
 
       /* increase the speed of the balls to the maximum 
-       * this bonus is only available as a part of chance capsule */
-    case GAD_SPEEDM:
+       * this option is only available as a part of chance capsule */
+    case sprite_capsule::MAXIMUM_SPEED_OF_BALLS:
       messages->send_message_request (short_info_messages::MAXIMUM_ACCELERATION);
       balls->set_maximum_speed ();
       break;
 
-      // bottom bumper[1] enable (no gadget)
-    case GAD_BUMP01:
+      /* this option is never used */
+    case sprite_capsule::ENABLE_BOTTOM_PADDLE:
       paddle_selected = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
       break;
 
-      // right bumper[2] enable (no gadget)
-    case GAD_BUMP02:
+      /* the option which enables the right paddle is only
+       * available as a part of chance capsule */
+    case sprite_capsule::ENABLE_RIGHT_PADDLE:
       messages->send_message_request (short_info_messages::RIGHT_PADDLE);
       paddle_selected = paddles->get_paddle (controller_paddles::RIGHT_PADDLE);
       paddle_selected->enable ();
       break;
 
-      // top bumper[3] enable (no gadget)
-    case GAD_BUMP03:
+      /* the option which enables the top paddle is only
+       * available as a part of chance capsule */
+    case sprite_capsule::ENABLE_TOP_PADDLE:
       messages->send_message_request (short_info_messages::TOP_PADDLE);
       paddle_selected = paddles->get_paddle (controller_paddles::TOP_PADDLE);
       paddle_selected->enable ();
       break;
 
-      // right bumper[4] enable (no gadget)
-    case GAD_BUMP04:
+      /* the option which enables the left paddle is only
+       * available as a part of chance capsule */
+    case sprite_capsule::ENABLE_LEFT_PADDLE:
       messages->send_message_request (short_info_messages::LEFT_PADDLE);
       paddle_selected = paddles->get_paddle (controller_paddles::LEFT_PADDLE);
       paddle_selected->enable ();
       break;
 
-      // ball size 2
-    case GAD_SIZE01:
+    case sprite_capsule::BALL_SIZE_2:
       messages->send_message_request (short_info_messages::BIG_BALLS);
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
@@ -550,8 +536,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       balls->set_size_2 ();
       break;
 
-      // ball size 3
-    case GAD_SIZE02:
+    case sprite_capsule::BALL_SIZE_3:
       messages->send_message_request (short_info_messages::HUGE_BALLS);
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
@@ -559,12 +544,10 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       balls->set_size_3 ();
       break;
 
-      // random
-    case GAD_RANDOM:
+    case sprite_capsule::CHANCE:
       break;
 
-      // all options
-    case GAD_MEGA00:
+    case sprite_capsule::ENABLE_HUGELY_OPTIONS:
       messages->send_message_request (short_info_messages::MAXIMUM_OPTIONS);
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
@@ -595,7 +578,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       /* options prices will be to 1 in the next shop
        * this bonus is only available as a part of chance capsule */
-    case GAD_PRICE1:
+    case sprite_capsule::SET_THE_PRICES_TO_1:
       messages->send_message_request (short_info_messages::BUDGET_PRICES);
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
@@ -604,7 +587,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       break;
 
       /* enable the bottom wall */
-    case GAD_WALL01:
+    case sprite_capsule::BOTTOM_WALL:
       messages->send_message_request (short_info_messages::WALL_ENABLE);
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
@@ -615,7 +598,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       break;
 
       /* enable the paddle robot */
-    case GAD_ROBOT1:
+    case sprite_capsule::ROBOT_PADDLE:
       messages->send_message_request (short_info_messages::ROBOT_ENABLE);
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
@@ -626,7 +609,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
       break;
 
       /* enable the balls control */
-    case GAD_CONTRO:
+    case sprite_capsule::BALLS_CONTROL:
       balls->enable_balls_control ();
       messages->send_message_request (short_info_messages::CONTROL_BALLS);
 #ifndef SOUNDISOFF
@@ -636,7 +619,7 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
       /* enable the magnetic eye, no capsule exists to activate it 
        * this bonus is only available as a part of chance capsule */
-    case GAD_OEIL00:
+    case sprite_capsule::MAGNETIC_EYE:
       {
         controller_magnetic_eyes* eyes = controller_magnetic_eyes::get_instance ();
         eyes->create_eye ();
@@ -647,95 +630,148 @@ controller_capsules::gadget_run (sprite_paddle * paddle, Sint32 nuGad)
 
 /**
  * Enable the capsule option in guardians level
+ * @param paddle Paddle which collected the caspule 
+ * @param capsule_id Option identifier
  */
 void
-controller_capsules::gadgetrun2 (sprite_paddle * paddle, Sint32 nuGad)
+controller_capsules::gadgetrun2 (sprite_paddle * paddle, Uint32 capsule_id)
 {
   paddle_selected = paddle;
-  controller_balls *ball = ptNewBalls;
-  switch (nuGad)
+  controller_balls *balls = ptNewBalls;
+  switch (capsule_id)
     {
-      /* paddle invincibility */
-    case GAD_PROTEC:
+    case sprite_capsule::PADDLE_INVINCIBILITY:
       paddle->set_invincibility (200);
       break;
 
-      /* extra life */
-    case GAD_LIFE_P:
+    case sprite_capsule::EXTRA_LIFE:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::EXTRA_LIFE);
 #endif
       current_player->add_life (1);
       break;
 
-      /* multi balls */
-    case GAD_BALLE3:
+    case sprite_capsule::MULTI_BALLS:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
-      ball->multi_balls ();
+      balls->multi_balls ();
       break;
 
      /* power ball 1 (ball size 2) */
-    case GAD_POWER1:
+    case sprite_capsule::POWER_BALL_1:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
-      ball->set_size_2 ();
+      balls->set_size_2 ();
       break;
 
       /* power ball 2 (ball size 3) */
-    case GAD_POWER2:
+    case sprite_capsule::POWER_BALL_2:
 #ifndef SOUNDISOFF
       audio->play_sound (handler_audio::COLLECT_CAPSULE);
 #endif
-      ball->set_size_3 ();
+      balls->set_size_3 ();
       break;
     }
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels: gadgets list of the random gadget
-//-------------------------------------------------------------------------------
-const Uint16
-  controller_capsules::randomlist[128] =
-  { GAD_WALL01, GAD_OEIL00, GAD_FIRE02, GAD_SIZE_M, GAD_ROBOT1, GAD_BALLE2,
-GAD_BALLE3,
-  GAD_POWER1, GAD_CONTRO, GAD_SIZE01, GAD_SIZE02, GAD_OEIL00, GAD_BUMP04,
-    GAD_SPEEDM,
-  GAD_SPEEDM, GAD_SPEEDM, GAD_LIFE_M, GAD_CONTRO, GAD_GLUE00, GAD_FIRE01,
-    GAD_FIRE02,
-  GAD_SIZE_M, GAD_SIZE_P, GAD_BALLE2, GAD_BALLE3, GAD_POWER1, GAD_SPEEDM,
-    GAD_SIZE01,
-  GAD_SIZE02, GAD_SIZE02, GAD_BUMP04, GAD_OEIL00, GAD_NEXTLV, GAD_CONTRO,
-    GAD_LIFE_M,
-  GAD_SPEEDM, GAD_ROBOT1, GAD_FIRE01, GAD_FIRE02, GAD_SIZE_M, GAD_WALL01,
-    GAD_BALLE2,
-  GAD_ROBOT1, GAD_ROBOT1, GAD_ROBOT1, GAD_SIZE01, GAD_SIZE02, GAD_SPEEDM,
-    GAD_BUMP02,
-  GAD_BUMP02, GAD_BUMP03, GAD_INVERS, GAD_LIFE_P, GAD_LIFE_P, GAD_WALL01,
-    GAD_OEIL00,
-  GAD_PRICE1, GAD_SIZE_M, GAD_ROBOT1, GAD_BALLE2, GAD_BALLE3, GAD_POWER1,
-    GAD_SPEEDM,
-  GAD_SIZE01, GAD_WALL01, GAD_FIRE01, GAD_ROBOT1, GAD_OEIL00, GAD_ROBOT1,
-    GAD_BALLE2,
-  GAD_BALLE3, GAD_POWER1, GAD_WALL01, GAD_SIZE01, GAD_SIZE02, GAD_BUMP03,
-    GAD_BUMP04,
-  GAD_SPEEDM, GAD_SPEEDM, GAD_OEIL00, GAD_LIFE_M, GAD_INVERS, GAD_GLUE00,
-    GAD_FIRE01,
-  GAD_FIRE02, GAD_SIZE_M, GAD_SIZE_P, GAD_BALLE2, GAD_BALLE3, GAD_POWER1,
-    GAD_SPEEDM,
-  GAD_SIZE01, GAD_SIZE02, GAD_SIZE02, GAD_BUMP04, GAD_WALL01, GAD_NEXTLV,
-    GAD_INVERS,
-  GAD_LIFE_M, GAD_WALL01, GAD_ROBOT1, GAD_FIRE01, GAD_FIRE02, GAD_SIZE_M,
-    GAD_SIZE_P,
-  GAD_BALLE2, GAD_BALLE3, GAD_POWER1, GAD_SPEEDM, GAD_SIZE01, GAD_WALL01,
-    GAD_WALL01,
-  GAD_BUMP02, GAD_BUMP02, GAD_BUMP03, GAD_INVERS, GAD_WALL01, GAD_WALL01,
-    GAD_GLUE00,
-  GAD_FIRE01, GAD_PRICE1, GAD_SIZE_M, GAD_SIZE_P, GAD_BALLE2, GAD_BALLE3,
-    GAD_POWER1,
-  GAD_WALL01, GAD_WALL01
+/**
+ * List of the options which can be enabled by a chance capsule
+ */
+const Uint16 controller_capsules::randomlist[128] =
+  { sprite_capsule::BOTTOM_WALL,
+    sprite_capsule::MAGNETIC_EYE,
+    sprite_capsule::FIRE_POWER_2,
+    sprite_capsule::SHRINK_PADDLE,
+    sprite_capsule::ROBOT_PADDLE,
+    sprite_capsule::EXTRA_BALLS,
+    sprite_capsule::MULTI_BALLS,
+    sprite_capsule::POWER_BALL_1,
+    sprite_capsule::BALLS_CONTROL,
+    sprite_capsule::BALL_SIZE_2,
+    sprite_capsule::BALL_SIZE_3,
+    sprite_capsule::MAGNETIC_EYE,
+    sprite_capsule::ENABLE_LEFT_PADDLE,
+    sprite_capsule::MAXIMUM_SPEED_OF_BALLS,
+    sprite_capsule::MAXIMUM_SPEED_OF_BALLS,
+    sprite_capsule::MAXIMUM_SPEED_OF_BALLS,
+    sprite_capsule::LOSE_A_LIFE,
+    sprite_capsule::BALLS_CONTROL,
+    sprite_capsule::GLUE,
+    sprite_capsule::FIRE_POWER_1,
+    sprite_capsule::FIRE_POWER_2,
+    sprite_capsule::SHRINK_PADDLE,
+    sprite_capsule::EXPAND_PADDLE,
+    sprite_capsule::EXTRA_BALLS,
+    sprite_capsule::MULTI_BALLS,
+    sprite_capsule::POWER_BALL_1,
+    sprite_capsule::MAXIMUM_SPEED_OF_BALLS,
+    sprite_capsule::BALL_SIZE_2,
+    sprite_capsule::BALL_SIZE_3,
+    sprite_capsule::BALL_SIZE_3,
+    sprite_capsule::ENABLE_LEFT_PADDLE,
+    sprite_capsule::MAGNETIC_EYE,
+    sprite_capsule::NEXT_LEVEL,
+    sprite_capsule::BALLS_CONTROL,
+    sprite_capsule::LOSE_A_LIFE,
+    sprite_capsule::MAXIMUM_SPEED_OF_BALLS,
+    sprite_capsule::ROBOT_PADDLE,
+    sprite_capsule::FIRE_POWER_1,
+    sprite_capsule::FIRE_POWER_2,
+    sprite_capsule::SHRINK_PADDLE,
+    sprite_capsule::BOTTOM_WALL,
+    sprite_capsule::EXTRA_BALLS,
+    sprite_capsule::ROBOT_PADDLE,
+    sprite_capsule::ROBOT_PADDLE,
+    sprite_capsule::ROBOT_PADDLE,
+    sprite_capsule::BALL_SIZE_2,
+    sprite_capsule::BALL_SIZE_3,
+    sprite_capsule::MAXIMUM_SPEED_OF_BALLS,
+    sprite_capsule::ENABLE_RIGHT_PADDLE,
+    sprite_capsule::ENABLE_RIGHT_PADDLE,
+    sprite_capsule::ENABLE_TOP_PADDLE,
+    sprite_capsule::INVERSE_CONTROL,
+    sprite_capsule::EXTRA_LIFE,
+    sprite_capsule::EXTRA_LIFE,
+    sprite_capsule::BOTTOM_WALL,
+    sprite_capsule::MAGNETIC_EYE,
+    sprite_capsule::SET_THE_PRICES_TO_1,
+    sprite_capsule::SHRINK_PADDLE,
+    sprite_capsule::ROBOT_PADDLE,
+    sprite_capsule::EXTRA_BALLS,
+    sprite_capsule::MULTI_BALLS,
+    sprite_capsule::POWER_BALL_1,
+    sprite_capsule::MAXIMUM_SPEED_OF_BALLS,
+    sprite_capsule::BALL_SIZE_2,
+    sprite_capsule::BOTTOM_WALL,
+    sprite_capsule::FIRE_POWER_1,
+    sprite_capsule::ROBOT_PADDLE,
+    sprite_capsule::MAGNETIC_EYE,
+    sprite_capsule::ROBOT_PADDLE,
+    sprite_capsule::EXTRA_BALLS,
+    sprite_capsule::MULTI_BALLS,
+    sprite_capsule::POWER_BALL_1,
+    sprite_capsule::BOTTOM_WALL,
+    sprite_capsule::BALL_SIZE_2,
+    sprite_capsule::BALL_SIZE_3,
+    sprite_capsule::ENABLE_TOP_PADDLE,
+    sprite_capsule::ENABLE_LEFT_PADDLE,
+  sprite_capsule::MAXIMUM_SPEED_OF_BALLS, sprite_capsule::MAXIMUM_SPEED_OF_BALLS, sprite_capsule::MAGNETIC_EYE, sprite_capsule::LOSE_A_LIFE, sprite_capsule::INVERSE_CONTROL, sprite_capsule::GLUE,
+    sprite_capsule::FIRE_POWER_1,
+  sprite_capsule::FIRE_POWER_2, sprite_capsule::SHRINK_PADDLE, sprite_capsule::EXPAND_PADDLE, sprite_capsule::EXTRA_BALLS, sprite_capsule::MULTI_BALLS, sprite_capsule::POWER_BALL_1,
+    sprite_capsule::MAXIMUM_SPEED_OF_BALLS,
+  sprite_capsule::BALL_SIZE_2, sprite_capsule::BALL_SIZE_3, sprite_capsule::BALL_SIZE_3, sprite_capsule::ENABLE_LEFT_PADDLE, sprite_capsule::BOTTOM_WALL, sprite_capsule::NEXT_LEVEL,
+    sprite_capsule::INVERSE_CONTROL,
+  sprite_capsule::LOSE_A_LIFE, sprite_capsule::BOTTOM_WALL, sprite_capsule::ROBOT_PADDLE, sprite_capsule::FIRE_POWER_1, sprite_capsule::FIRE_POWER_2, sprite_capsule::SHRINK_PADDLE,
+    sprite_capsule::EXPAND_PADDLE,
+  sprite_capsule::EXTRA_BALLS, sprite_capsule::MULTI_BALLS, sprite_capsule::POWER_BALL_1, sprite_capsule::MAXIMUM_SPEED_OF_BALLS, sprite_capsule::BALL_SIZE_2, sprite_capsule::BOTTOM_WALL,
+    sprite_capsule::BOTTOM_WALL,
+  sprite_capsule::ENABLE_RIGHT_PADDLE, sprite_capsule::ENABLE_RIGHT_PADDLE, sprite_capsule::ENABLE_TOP_PADDLE, sprite_capsule::INVERSE_CONTROL, sprite_capsule::BOTTOM_WALL, sprite_capsule::BOTTOM_WALL,
+    sprite_capsule::GLUE,
+  sprite_capsule::FIRE_POWER_1, sprite_capsule::SET_THE_PRICES_TO_1, sprite_capsule::SHRINK_PADDLE, sprite_capsule::EXPAND_PADDLE, sprite_capsule::EXTRA_BALLS, sprite_capsule::MULTI_BALLS,
+    sprite_capsule::POWER_BALL_1,
+  sprite_capsule::BOTTOM_WALL, sprite_capsule::BOTTOM_WALL
 };
 
 /**
@@ -743,33 +779,33 @@ GAD_BALLE3,
  */
 Sint16 controller_capsules::cheat_keys[] =
 {
-  SDLK_F1, GAD_GLUE00, 0,
-  SDLK_F2, GAD_NEXTLV, 0,
-  SDLK_F3, GAD_FIRE01, 0,
-  SDLK_F4, GAD_FIRE02, 0,
-  SDLK_F5, GAD_SIZE_M, 0,
-  SDLK_F6, GAD_SIZE_P, 0,
-  SDLK_F7, GAD_LIFE_M, 0,
-  SDLK_F8, GAD_LIFE_P, 0,
-  SDLK_F9, GAD_BALLE2, 0,
-  SDLK_F10, GAD_BALLE3, 0,
-  SDLK_F11, GAD_POWER1, 0,
-  SDLK_F12, GAD_POWER2, 0,
-  SDLK_a, GAD_INVERS, 0,
-  SDLK_z, GAD_SPEEDM, 0,
-  SDLK_e, GAD_BUMP01, 0,
-  SDLK_r, GAD_BUMP02, 0,
-  SDLK_t, GAD_BUMP03, 0,
-  SDLK_y, GAD_BUMP04, 0,
-  SDLK_u, GAD_SIZE01, 0,
-  SDLK_i, GAD_SIZE02, 0,
-  SDLK_o, GAD_RANDOM, 0,
-  SDLK_q, GAD_MEGA00, 0,
-  SDLK_s, GAD_PRICE1, 0,
-  SDLK_d, GAD_WALL01, 0,
-  SDLK_g, GAD_CONTRO, 0,
-  SDLK_h, GAD_OEIL00, 0,
-  SDLK_j, GAD_OEIL00, 0,
-  SDLK_k, GAD_ROBOT1, 0,
+  SDLK_F1, sprite_capsule::GLUE, 0,
+  SDLK_F2, sprite_capsule::NEXT_LEVEL, 0,
+  SDLK_F3, sprite_capsule::FIRE_POWER_1, 0,
+  SDLK_F4, sprite_capsule::FIRE_POWER_2, 0,
+  SDLK_F5, sprite_capsule::SHRINK_PADDLE, 0,
+  SDLK_F6, sprite_capsule::EXPAND_PADDLE, 0,
+  SDLK_F7, sprite_capsule::LOSE_A_LIFE, 0,
+  SDLK_F8, sprite_capsule::EXTRA_LIFE, 0,
+  SDLK_F9, sprite_capsule::EXTRA_BALLS, 0,
+  SDLK_F10, sprite_capsule::MULTI_BALLS, 0,
+  SDLK_F11, sprite_capsule::POWER_BALL_1, 0,
+  SDLK_F12, sprite_capsule::POWER_BALL_2, 0,
+  SDLK_a, sprite_capsule::INVERSE_CONTROL, 0,
+  SDLK_z, sprite_capsule::MAXIMUM_SPEED_OF_BALLS, 0,
+  SDLK_e, sprite_capsule::ENABLE_BOTTOM_PADDLE, 0,
+  SDLK_r, sprite_capsule::ENABLE_RIGHT_PADDLE, 0,
+  SDLK_t, sprite_capsule::ENABLE_TOP_PADDLE, 0,
+  SDLK_y, sprite_capsule::ENABLE_LEFT_PADDLE, 0,
+  SDLK_u, sprite_capsule::BALL_SIZE_2, 0,
+  SDLK_i, sprite_capsule::BALL_SIZE_3, 0,
+  SDLK_o, sprite_capsule::CHANCE, 0,
+  SDLK_q, sprite_capsule::ENABLE_HUGELY_OPTIONS, 0,
+  SDLK_s, sprite_capsule::SET_THE_PRICES_TO_1, 0,
+  SDLK_d, sprite_capsule::BOTTOM_WALL, 0,
+  SDLK_g, sprite_capsule::BALLS_CONTROL, 0,
+  SDLK_h, sprite_capsule::MAGNETIC_EYE, 0,
+  SDLK_j, sprite_capsule::MAGNETIC_EYE, 0,
+  SDLK_k, sprite_capsule::ROBOT_PADDLE, 0,
   0, 0, 0
 };

@@ -4,11 +4,11 @@
  * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.h,v 1.12 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_capsules.h,v 1.13 2007/10/04 05:54:41 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ private:
   /** Paddle selected, used in the cheat mode */
   sprite_paddle * paddle_selected;
   controller_balls *ptNewBalls;
-  sprite_object *ptBob_wall;
+  sprite_wall *ptBob_wall;
   /** Counter time delay before next image */
   Sint32 frame_delay;
   /** Time delay before next image of the animation */
@@ -82,7 +82,7 @@ private:
 public:
     controller_capsules ();
    ~controller_capsules ();
-  void initialize (Sint32 mStep, const Uint32* table, controller_balls * pBall, sprite_object *);
+  void initialize (Sint32 mStep, const Uint32* table, controller_balls * pBall, sprite_wall *);
   void send_capsule_from_bricks (brick_redraw * briPT);
   void send_malus (sprite_ball *);
   void send_malus (sprite_projectile *);
@@ -96,8 +96,8 @@ public:
 
 
 private:
-  void gadget_run (sprite_paddle * paddle, Sint32 nuGad);
-  void gadgetrun2 (sprite_paddle * paddle, Sint32 nuGad);
+  void gadget_run (sprite_paddle * paddle, Uint32 capsule_id);
+  void gadgetrun2 (sprite_paddle * paddle, Uint32 capsule_id);
 
 };
 #endif

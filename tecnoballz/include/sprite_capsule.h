@@ -4,11 +4,11 @@
  * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.h,v 1.8 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_capsule.h,v 1.9 2007/10/04 05:54:41 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,80 +34,6 @@ class sprite_capsule;
 #include "../include/right_panel_score.h"
 #include "../include/handler_display.h"
 #include "../include/sprite_projectile.h"
-
-typedef enum 
-{
-  GAD_VIDE00 = 0,
-  GAD_GLUE00 = 2,
-  GAD_NEXTLV = 4,
-  GAD_PROTEC = 4,
-  GAD_FIRE01 = 6,
-  GAD_FIRE02 = 8,
-  GAD_SIZE_M = 10,
-  GAD_SIZE_P = 12,
-  GAD_LIFE_M = 14,
-  GAD_LIFE_P = 16,
-  GAD_BALLE2 = 18,
-  GAD_BALLE3 = 20,
-  GAD_POWER1 = 22,
-  GAD_POWER2 = 24,
-  GAD_INVERS = 26,
-  GAD_REBUIL = 28,
-  GAD_SPEEDM = 30,
-  GAD_BUMP01 = 32,
-  GAD_BUMP02 = 34,
-  GAD_BUMP03 = 36,
-  GAD_BUMP04 = 38,
-  GAD_SIZE01 = 40,
-  GAD_SIZE02 = 42,
-  GAD_RANDOM = 44,
-  GAD_MEGA00 = 46,
-  GAD_PRICE1 = 48,
-  GAD_WALL01 = 50,
-  GAD_ROBOT1 = 52,
-  GAD_CONTRO = 54,
-  GAD_OEIL00 = 56,
-  GAD_LESSBR = 58,
-  GAD_INFORM = 60,
-  GAD_EXITSH = 62,
-}
-CASPULES_ENUM;
-
-/*
-const Sint32 GAD_VIDE00 = 0;
-const Sint32 GAD_GLUE00 = 2;    // glue (only briks levels)
-const Sint32 GAD_NEXTLV = 4;    // next level (only briks levels)
-const Sint32 GAD_PROTEC = 4;    // bumper protect (only gards levels)
-const Sint32 GAD_FIRE01 = 6;    // fire power 1 (only briks levels)
-const Sint32 GAD_FIRE02 = 8;    // fire power 2 (only briks levels)
-const Sint32 GAD_SIZE_M = 10;   // retrecit la raquette
-const Sint32 GAD_SIZE_P = 12;   // allonge la raquette
-const Sint32 GAD_LIFE_M = 14;   // enleve une vie
-const Sint32 GAD_LIFE_P = 16;   // ajoute une vie
-const Sint32 GAD_BALLE2 = 18;   // ajoute 2 balles
-const Sint32 GAD_BALLE3 = 20;   // ajoute 3 balles
-const Sint32 GAD_POWER1 = 22;   // balle puissance 1
-const Sint32 GAD_POWER2 = 24;   // balle puissance 2
-const Sint32 GAD_INVERS = 26;   // inverseur de commandes
-const Sint32 GAD_REBUIL = 28;   // REBUILD MUR (ONLY SHOP)
-const Sint32 GAD_SPEEDM = 30;   // Vitesse MAXI (pas de Gadgets)
-const Sint32 GAD_BUMP01 = 32;   // BUMP1 ACTIF (pas de Gadgets)
-const Sint32 GAD_BUMP02 = 34;   // BUMP2 ACTIF (pas de Gadgets)
-const Sint32 GAD_BUMP03 = 36;   // BUMP3 ACTIF (pas de Gadgets)
-const Sint32 GAD_BUMP04 = 38;   // BUMP4 ACTIF (pas de Gadgets)
-const Sint32 GAD_SIZE01 = 40;   // Balle taille 2
-const Sint32 GAD_SIZE02 = 42;   // Balle taille 3
-const Sint32 GAD_RANDOM = 44;   // Random
-const Sint32 GAD_MEGA00 = 46;   // Toutes les options
-const Sint32 GAD_PRICE1 = 48;   // Bonus Price=1 (pas de Gadgets)
-const Sint32 GAD_WALL01 = 50;   // Mur du bas actif
-const Sint32 GAD_ROBOT1 = 52;   // Robot actif
-const Sint32 GAD_CONTRO = 54;   // Controle balles
-const Sint32 GAD_OEIL00 = 56;   // Oeil
-const Sint32 GAD_LESSBR = 58;   // Less-Brick (only Shop)
-const Sint32 GAD_INFORM = 60;   // Informations (only Shop)
-const Sint32 GAD_EXITSH = 62;   // Exit (only shop)
-*/
 
 const Sint32 XXX_IMAGES = 7;
 const Sint16 XXX_VIDE00 = -1;
@@ -137,7 +63,60 @@ class sprite_capsule:public sprite_object
   friend class controller_capsules;
   friend class supervisor_shop;
 
+
+public:
+typedef enum 
+{
+  GAD_VIDE00 = 0,
+  GLUE = 2,
+  NEXT_LEVEL = 4,
+  /** Paddle invincibility capsule is available only
+   * in the guardians level */
+  PADDLE_INVINCIBILITY = 4,
+  FIRE_POWER_1 = 6,
+  FIRE_POWER_2 = 8,
+  SHRINK_PADDLE = 10,
+  EXPAND_PADDLE = 12,
+  LOSE_A_LIFE = 14,
+  EXTRA_LIFE = 16,
+  EXTRA_BALLS = 18,
+  MULTI_BALLS = 20,
+  POWER_BALL_1 = 22,
+  POWER_BALL_2 = 24,
+  INVERSE_CONTROL = 26,
+  /** The "rebuild wall" option is not associated with a capsule,
+   * but it is available only in the shop */
+  REBUILD_THE_WALL = 28,
+  /** The "maximum speed of balls" option is not associated with
+   * a capsule, but is only available as a part of chance capsule */
+  MAXIMUM_SPEED_OF_BALLS = 30,
+  ENABLE_BOTTOM_PADDLE = 32,
+  ENABLE_RIGHT_PADDLE = 34,
+  ENABLE_TOP_PADDLE = 36,
+  ENABLE_LEFT_PADDLE = 38,
+  BALL_SIZE_2 = 40,
+  BALL_SIZE_3 = 42,
+  CHANCE = 44,
+  ENABLE_HUGELY_OPTIONS = 46,
+  /** The "set to the prices to 1" option is not associated with a
+   * capsule, but is only available as a part of chance capsule */
+  SET_THE_PRICES_TO_1 = 48,
+  BOTTOM_WALL = 50,
+  ROBOT_PADDLE = 52,
+  BALLS_CONTROL = 54,
+  MAGNETIC_EYE = 56,
+  LESS_BRICKS = 58,
+  SOME_INFOS = 60,
+  LEAVE_SHOP = 62,
+}
+CASPULES_ENUM;
+
+
+
+
 private:
+  /** Capsule direction: BOTTOM_PADDLE, RIGHT_PADDLE, TOP_PADDLE,
+   * or LEFT_PADDLE */
   Uint32 towards;
   Uint32 capsule_identifier;
   sprite_paddle *paddle;
@@ -157,7 +136,6 @@ public:
   void clone_from_capsule (sprite_capsule * capsule);
   Uint32 get_id ();
   sprite_paddle *move ();
-  void gagdet_run (Uint32 id);
 private:
   void set_new_capsule (Uint32 id, const Sint16 *frames, Uint32 xcoord, Uint32 ycoord, sprite_paddle *pad);
   void enable_capsule (Uint32 index);
