@@ -4,11 +4,11 @@
  * @date 2007-02-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: head_animation.cc,v 1.5 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: head_animation.cc,v 1.6 2007/10/04 06:40:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,6 +71,7 @@ head_animation::get_instance ()
     }
   return head_anim_singleton;
 }
+
 
 
 

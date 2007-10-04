@@ -5,11 +5,11 @@
  * @date 2007-1O-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_wall.h,v 1.1 2007/10/04 05:54:41 gurumeditation Exp $
+ * $Id: sprite_wall.h,v 1.2 2007/10/04 06:40:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,12 +32,15 @@ class sprite_wall;
 #include "../include/sprite_object.h"
 class sprite_wall:public sprite_object
   {
+  static sprite_wall* sprite_wall_singleton;
 
   public:
     Sint32 thecounter;
 
-  public:
+  private:
     sprite_wall ();
+  public:
     ~sprite_wall ();
+  static sprite_wall * get_instance ();
   };
 #endif

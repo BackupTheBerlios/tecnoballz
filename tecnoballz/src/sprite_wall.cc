@@ -5,11 +5,11 @@
  * @date 2007-1O-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_wall.cc,v 1.1 2007/10/04 05:54:41 gurumeditation Exp $
+ * $Id: sprite_wall.cc,v 1.2 2007/10/04 06:40:52 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,9 @@
  */
 #include "../include/sprite_wall.h"
 
+
+sprite_wall * sprite_wall::sprite_wall_singleton = NULL;
+
 /**
  * Create the object
  */
@@ -42,4 +45,21 @@ sprite_wall::sprite_wall()
  */
 sprite_wall::~sprite_wall()
 {
+  sprite_wall_singleton = NULL;
 }
+
+/**
+ * Get the object instance
+ * sprite_wall is a singleton
+ * @return the sprite_wall object 
+ */
+sprite_wall *
+sprite_wall::get_instance ()
+{
+  if (NULL == sprite_wall_singleton)
+    {
+      sprite_wall_singleton = new sprite_wall ();
+    }
+  return sprite_wall_singleton;
+}
+
