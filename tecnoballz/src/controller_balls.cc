@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-10-02
+ * @date 2007-10-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.61 $
+ * @version $Revision: 1.62 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.61 2007/10/03 06:25:33 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.62 2007/10/05 06:33:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,27 +34,11 @@
 #include "../include/list_sprites.h"
 
 /** 
- * Create the balls controller into bricks levels
- */
-controller_balls::controller_balls (sprite_object * pwall)
-{
-  littleInit ();
-  wall_sprite = pwall;
-  glue_delay = 60;
-  tilt_delay = 60;
-  max_of_sprites = 20;
-  sprites_have_shades = true;
-  balls_are_controlled = false;
-  sprite_type_id = BOB_BALLES;
-}
-
-/** 
  * Create the balls controller into guards levels
  */
 controller_balls::controller_balls ()
 {
   littleInit ();
-  wall_sprite = NULL;
   glue_delay = 60;
   tilt_delay = 60;
   max_of_sprites = 20;
@@ -879,8 +863,9 @@ controller_balls::collisions_with_walls ()
   Sint32 left_xcoord = sides_bricks->get_left_xcoord ();
   Sint32 right_xcoord = sides_bricks->get_right_xcoord ();
   Sint32 top_ycoord = sides_bricks->get_top_ycoord ();
-  Sint32 bottom_ycoord = wall_sprite->get_y_coord ();
-  bool is_wall = wall_sprite->is_enable ();
+  sprite_wall *wall = sprite_wall::get_instance ();
+  Sint32 bottom_ycoord = wall->get_y_coord ();
+  bool is_wall = wall->is_enable ();
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_ball *ball = sprites_list[i];

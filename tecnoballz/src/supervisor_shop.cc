@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.44 $
+ * @version $Revision: 1.45 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.44 2007/10/04 05:54:41 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.45 2007/10/05 06:33:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -215,7 +215,7 @@ supervisor_shop::first_init ()
   delete
   bmp;
   background_screen->blit_to_surface (game_screen);
-  display->bufferCopy ();       //copy buffer memory into the screen
+  //display->bufferCopy ();       //copy buffer memory into the screen
 
 
   putthetext (box_texts[TEXT_WELCOME]);
@@ -335,11 +335,9 @@ supervisor_shop::main_loop ()
   display_capsules_bought ();
   Ecode = popup_menu->run ();
 
-  //###################################################################
-  // copy buffer surface to screen surface
-  //###################################################################
+  /* copy whole game surface into screen surface */
   display->unlock_surfaces ();
-  display->bufferCTab ();
+  display->window_update ();
 
   //###################################################################
   // escape key to quit the game !

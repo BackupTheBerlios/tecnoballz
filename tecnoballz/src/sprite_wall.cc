@@ -5,11 +5,11 @@
  * @date 2007-1O-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_wall.cc,v 1.2 2007/10/04 06:40:52 gurumeditation Exp $
+ * $Id: sprite_wall.cc,v 1.3 2007/10/05 06:33:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,4 +62,29 @@ sprite_wall::get_instance ()
     }
   return sprite_wall_singleton;
 }
+
+/**
+ * Enable the wall
+ * @param counter Delay counter before disabling the wall
+ */
+void
+sprite_wall::enable (Uint32 counter)
+{
+    thecounter += counter;
+    is_enabled = true;
+}
+
+/**
+ * Disable the wall
+ */
+void
+sprite_wall::disable ()
+{
+    thecounter = 0;
+    is_enabled = false;
+}
+
+
+
+
 

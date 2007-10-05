@@ -5,11 +5,11 @@
  * @date 2007-04-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.21 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.22 2007/10/05 06:33:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,8 +41,7 @@ bool handler_display::optionsync = true;
 handler_display::handler_display ()
 {
   sdl_screen = (SDL_Surface *) NULL;
-  bufSurface = (SDL_Surface *) NULL;
-  tamSurface = (SDL_Surface *) NULL;
+  game_surface = (SDL_Surface *) NULL;
   sdl_ticks_amount = 0;
   frames_counter_modulo = 0;
   tilt_offset = 0;
@@ -78,29 +77,17 @@ handler_display::~handler_display ()
 void
 handler_display::initialize ()
 {
-
   set_video_mode (); 
-
-  /* allocate "buffer" surface */
-  bufLargeur = window_width;
-  bufHauteur = window_height + offsetplus * 2;
-
-  game_screen = new offscreen_surface (bufLargeur, bufHauteur, bitspixels, offsetplus);
-
-  bufSurface = game_screen->get_surface ();
-
-  buf_nextLn = bufSurface->pitch;
-  bufAdresse = (char *) bufSurface->pixels + buf_nextLn * offsetplus;
-  bufProfond = bufSurface->format->BytesPerPixel;
-
-  background_screen = new offscreen_surface (bufLargeur, bufHauteur, bitspixels, offsetplus);
-  tamSurface = background_screen->get_surface ();
-
-
-  /* allocate "tampon" surface */
-  tam_nextLn = tamSurface->pitch;
-  tamAdresse = (char *) tamSurface->pixels + tam_nextLn * offsetplus;
-
+  Uint32 height = window_height + offsetplus * 2;
+  /** Create the main game offscreen */
+  game_screen = new offscreen_surface (window_width, height, bitspixels, offsetplus);
+  game_surface = game_screen->get_surface ();
+  game_screen_pitch = game_surface->pitch;
+  game_screen_pixels = (char *) game_surface->pixels + game_screen_pitch * offsetplus;
+  /** Create the background offscreen */
+  background_screen = new offscreen_surface (window_width, height, bitspixels, offsetplus);
+  SDL_Surface * surface = background_screen->get_surface ();
+  background_pixels = (char *) surface->pixels + surface->pitch * offsetplus;
   previous_sdl_ticks = SDL_GetTicks ();
   delay_value = 0;
 }
@@ -376,7 +363,7 @@ handler_display::get_frames_per_second ()
 Sint32
 handler_display::ecran_next (Sint32 zbase, Sint32 offsx, Sint32 offsy)
 {
-  return (zbase + offsy * buf_nextLn + offsx);
+  return (zbase + offsy * game_screen_pitch + offsx);
 }
 
 /**
@@ -435,6 +422,7 @@ handler_display::get_palette ()
 //------------------------------------------------------------------------------
 // buffer memory: copy buffer to screen
 //------------------------------------------------------------------------------
+/*
 void
 handler_display::bufferCopy ()
 {
@@ -443,38 +431,40 @@ handler_display::bufferCopy ()
   r.y = 0;
   r.w = 640;
   r.h = 480;
-  Sint32 v = SDL_BlitSurface (bufSurface, &r, sdl_screen, &r);
+  Sint32 v = SDL_BlitSurface (game_surface, &r, sdl_screen, &r);
   if (v < 0)
     fprintf (stderr, "handler_display::bufferCopy() BlitSurface error: %s\n",
              SDL_GetError ());
 }
-
-//-----------------------------------------------------------------------------
-// buffer memory: copy buffer to screen
-//------------------------------------------------------------------------------
+/*
+/**
+ * Recopy the game offscreen in the main window
+ */
 void
-handler_display::bufferCTab ()
+handler_display::window_update ()
 {
-  SDL_Rect rsour;
-  rsour.x = 0;
-  rsour.y = offsetplus + tilt_offset;
-  rsour.w = 640;
-  rsour.h = offsetplus + 480 + tilt_offset;
-
-  SDL_Rect rdest;
-  rdest.x = 0;
-  rdest.y = 0;
-  rdest.w = 640;
-  rdest.h = 480;
-
-  Sint32 v = SDL_BlitSurface (bufSurface, &rsour, sdl_screen, &rdest);
-  if (v < 0)
-    fprintf (stderr,
-             "handler_display::bufferCTab() : BlitSurface error: %s\n",
-             SDL_GetError ());
+  SDL_Rect source =
+    {
+      0,
+      offsetplus + tilt_offset,
+      window_width,
+      offsetplus + window_height + tilt_offset
+    };
+  SDL_Rect destination =
+    {
+      0, 0,
+      window_width, window_height
+    };
+  if (SDL_BlitSurface (game_surface, &source, sdl_screen, &destination) < 0)
+    {
+      std::cerr << "(!)handler_display::window_update():" <<
+	  "BlitSurface() return " << SDL_GetError () << std::endl;
+    }
   SDL_UpdateRect (sdl_screen, 0, 0, sdl_screen->w, sdl_screen->h);
   if (tilt_offset > 0)
-    tilt_offset--;
+    {
+      tilt_offset--;
+    }
 }
 
 //-------------------------------------------------------------------------------
@@ -487,11 +477,11 @@ void
 handler_display::clr_shadow (Sint32 offst, Sint32 large, Sint32 haute)
 {
   char zmask = 0x7F;
-  char *bffer = bufAdresse + offst;
-  char *tmpon = tamAdresse + offst;
+  char *bffer = game_screen_pixels + offst;
+  char *tmpon = background_pixels + offst;
   Sint32 a = large;
   Sint32 b = haute;
-  Sint32 n = buf_nextLn - a;
+  Sint32 n = game_screen_pitch - a;
   for (Sint32 j = 0; j < b; j++, bffer += n, tmpon += n)
     {
       for (Sint32 i = 0; i < a; i++)
@@ -523,7 +513,7 @@ handler_display::clr_shadow (Sint32 xcoord, Sint32 ycoord, Sint32 width,
 
   Sint32 h = width;
   Sint32 v = height;
-  Sint32 n = buf_nextLn - h;
+  Sint32 n = game_screen_pitch - h;
   for (Sint32 j = 0; j < v; j++, screen += n, bkgd += n)
     {
       for (Sint32 i = 0; i < h; i++)
@@ -548,11 +538,11 @@ void
 handler_display::set_shadow (Sint32 offst, Sint32 large, Sint32 haute)
 {
   char zmask = (char) (0x80);
-  char *bffer = bufAdresse + offst;
-  char *tmpon = tamAdresse + offst;
+  char *bffer = game_screen_pixels + offst;
+  char *tmpon = background_pixels + offst;
   Sint32 a = large;
   Sint32 b = haute;
-  Sint32 n = buf_nextLn - a;
+  Sint32 n = game_screen_pitch - a;
   for (Sint32 j = 0; j < b; j++, bffer += n, tmpon += n)
     {
       for (Sint32 i = 0; i < a; i++)
@@ -578,7 +568,7 @@ handler_display::buf_affx32 (char *srcPT, char *desPT, Sint32 width,
   Sint32 *s = (Sint32 *) srcPT;
   Sint32 j = heigh;
   Sint32 ms = width;
-  Sint32 md = buf_nextLn;
+  Sint32 md = game_screen_pitch;
   for (Sint32 i = 0; i < j; i++)
     {
       d[0] = s[0];
@@ -605,7 +595,7 @@ handler_display::buf_affx64 (char *srcPT, char *desPT, Sint32 width,
   double *s = (double *) srcPT;
   Sint32 j = heigh;
   Sint32 ms = width;
-  Sint32 md = buf_nextLn;
+  Sint32 md = game_screen_pitch;
   for (Sint32 i = 0; i < j; i++)
     {
       d[0] = s[0];

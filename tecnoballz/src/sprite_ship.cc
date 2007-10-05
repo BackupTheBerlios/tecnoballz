@@ -1,14 +1,14 @@
 /**
  * @file sprite_ship.cc 
  * @brief A flying enemy ships sprite 
- * @date 2007-09-26
+ * @date 2007-10-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ship.cc,v 1.14 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: sprite_ship.cc,v 1.15 2007/10/05 06:33:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -261,7 +261,7 @@ sprite_ship::destroy (sprite_projectile * blast)
     case CODE_MALUS:
     {
       controller_capsules* capsules = controller_capsules::get_instance ();
-      capsules->send_malus (blast);
+      capsules->send_penalty_or_bonus (blast);
     }
     break;
     case CODE_MONEY:
@@ -298,7 +298,7 @@ sprite_ship::destroy (sprite_ball * ball)
     case CODE_MALUS:
     {
       controller_capsules* capsules = controller_capsules::get_instance ();
-      capsules->send_malus (ball);
+      capsules->send_penalty_or_bonus (ball);
     }
     break;
     case CODE_MONEY:

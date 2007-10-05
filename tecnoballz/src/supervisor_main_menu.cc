@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.22 2007/10/02 04:50:34 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.23 2007/10/05 06:33:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -134,10 +134,8 @@ supervisor_main_menu::main_loop ()
     }
   display->unlock_surfaces ();
 
-  //###################################################################
-  // copy whole buffer surface into screen surface
-  //###################################################################
-  display->bufferCTab ();
+  /* copy whole game surface into screen surface */
+  display->window_update ();
 
   /* [F5] key jump to map editor */
 #ifdef UNDER_DEVELOPMENT

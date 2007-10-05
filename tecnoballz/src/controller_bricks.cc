@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-09-29
+ * @date 2007-10-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.33 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.34 2007/10/05 06:33:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -698,7 +698,7 @@ bool controller_bricks::update ()
       if (!redraw->is_gigablitz_destroyed)
         {
           moneys->send_money_from_brick (redraw);
-          capsules->send_capsule_from_bricks (redraw);
+          capsules->send_capsule_from_brick (redraw);
         }
     }
 

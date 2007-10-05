@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-10-02
+ * @date 2007-10-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.49 $
+ * @version $Revision: 1.50 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.49 2007/10/02 04:50:34 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.50 2007/10/05 06:33:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ supervisor_guards_level::supervisor_guards_level ()
   bullets = controller_bullets::get_instance ();
   money_capsules = controller_moneys::get_instance ();
   power_up_capsules = controller_capsules::get_instance ();
-  balls = new controller_balls ();
+  balls = controller_balls::get_instance ();
   viewfinders_paddles = controller_viewfinders::get_instance ();
   player_indicators = controller_indicators::get_instance ();
   gigablitz = controller_gigablitz::get_instance ();
@@ -165,13 +165,9 @@ supervisor_guards_level::first_init ()
                           /* delay of appearance of a penalty capsule */
                           level_desc->capsules_frequency * difficulty_level,
                           /* list of penalties capsules */ 
-                          level_desc->capsules_list,
-                          /* object which control the balls */
-                          balls,
-                          /* object which handles the display of the text (not * applicable) */
-                          NULL);
+                          level_desc->capsules_list);
 
-  //initialize mobile characters at the end of the level
+  /* initialize mobile characters at the end of the level */
   fontes_game->initialise (level_number, 32 * resolution);
   viewfinders_paddles->initialize ();
   display->unlock_surfaces ();
@@ -200,7 +196,7 @@ supervisor_guards_level::main_loop ()
   Sint32 Ecode = -1;
   
   /*
-   * gameover : the player has no more lives
+   * gameover: the player has no more lives
    */
   if (current_player->get_num_of_lifes () <= 0)
     {
@@ -256,7 +252,7 @@ supervisor_guards_level::main_loop ()
       fontes_game->goMoveText ();
       sprites->draw ();
       display->unlock_surfaces ();
-      display->bufferCTab ();
+      display->window_update ();
       if (keyboard->is_left_button () && gameover_counter > 150)
         {
           current_player = handler_players::get_next_player (current_player,
@@ -302,13 +298,11 @@ supervisor_guards_level::main_loop ()
           display->lock_surfaces ();
         }
 
-      //###################################################################
-      // display all sprites in the buffer's memory
-      //###################################################################
+      /* display all sprites in the game offscreen */
       sprites->draw ();
       Ecode = popup_menu->run ();
       display->unlock_surfaces ();
-      display->bufferCTab ();   //copy buffer's memory in the screen
+      display->window_update ();
     }
 
 

@@ -1,14 +1,14 @@
 /**
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-09-30
+ * @date 2007-10-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.60 $
+ * @version $Revision: 1.61 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.60 2007/10/04 06:40:52 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.61 2007/10/05 06:33:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,10 +45,9 @@ supervisor_bricks_level::supervisor_bricks_level ()
   head_anim = head_animation::get_instance ();
   ships = controller_ships::get_instance ();
   magnetic_eyes = controller_magnetic_eyes::get_instance ();
-  //bottom_wall = new sprite_wall ();
   bottom_wall = sprite_wall::get_instance ();
   info_messages = short_info_messages::get_instance ();
-  balls = new controller_balls (bottom_wall);
+  balls = controller_balls::get_instance ();
   viewfinders_paddles = controller_viewfinders::get_instance ();
   paddles = controller_paddles::get_instance ();
   fontes_game = controller_fontes_game::get_instance ();
@@ -61,7 +60,6 @@ supervisor_bricks_level::supervisor_bricks_level ()
   sprite_projectile::start_list ();
   level_number = 1;
   area_number = 1;
-  //next_level = 0;
   gameover_counter = 0;
 #ifdef UNDER_DEVELOPMENT
   backgound_index = 0;
@@ -158,7 +156,7 @@ supervisor_bricks_level::first_init ()
   viewfinders_paddles->create_sprites_list ();
   popup_menu->first_init (sprites_bitmap);
   resources->release_sprites_bitmap ();
-  panel_score->first_init (balls);
+  panel_score->first_init ();
 
   display->lock_surfaces ();
 
@@ -191,28 +189,21 @@ supervisor_bricks_level::first_init ()
   money_capsules->initialize (level_desc->moneys_frequency * difficulty_level,
                               panel_score, player_indicators);
 
-  /* initialize the object which handles bonus and penalties capsules */
+  /* initialize the object which handles bonus and penalty capsules */
   power_up_capsules->initialize (
-    //frequency of appearance of malus
     level_desc->penalties_frequency * difficulty_level,
-    //the list of malus
-    level_desc->malusListe,
-    //the object which handles the balls
-    balls,
-    bottom_wall);
-
+    level_desc->malusListe
+    );
   gem_stones->initialize ();
-
   /* initialize sprite fonts "LEVEL x COMPLETED" */
   fontes_game->initialise (level_number);
-
-
   viewfinders_paddles->initialize ();
-
   display->unlock_surfaces ();
   /* copy the background offscreen to the game offscreen */
-  background_screen->blit_to_surface (game_screen);
-
+  if (has_background)
+    {
+      background_screen->blit_to_surface (game_screen);
+    }
   keyboard->clear_command_keys ();
   keyboard->set_grab_input (true);
   info_messages->send_message_request (short_info_messages::ARE_YOU_READY);
@@ -297,7 +288,7 @@ supervisor_bricks_level::main_loop ()
       player_indicators->display_money_and_reverse ();
       display->unlock_surfaces ();
       panel_score->text_refresh ();
-      display->bufferCTab ();
+      display->window_update ();
       if (keyboard->is_left_button () && gameover_counter > 60)
         {
           current_player = handler_players::get_next_player (current_player, &next_phase, 1);
@@ -370,7 +361,7 @@ supervisor_bricks_level::main_loop ()
       Ecode = popup_menu->run ();
       display->unlock_surfaces ();
       panel_score->text_refresh ();
-      display->bufferCTab ();
+      display->window_update ();
 
       /*
        * jump to next level or next player

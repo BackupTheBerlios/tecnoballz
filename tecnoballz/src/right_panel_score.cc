@@ -4,11 +4,11 @@
  * @date 2007-10-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.19 2007/10/01 15:57:47 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.20 2007/10/05 06:33:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,11 +72,10 @@ right_panel_score::get_instance ()
  * @param balls
  */
 void
-right_panel_score::first_init (controller_balls* b)
+right_panel_score::first_init ()
 {
   initialize ();
-  balls = b;
- temoinAdrs = game_screen->get_pixel_data
+ gauge_pixel = game_screen->get_pixel_data
     (GAUGE_XCOORD * resolution, GAUGE_YCOORD * resolution);
   draw_background ();
 }
@@ -159,6 +158,7 @@ void
 right_panel_score::draw_gigablizt_gauge ()
 {
   controller_gigablitz *gigablitz = controller_gigablitz::get_instance ();
+  controller_balls *balls = controller_balls::get_instance ();
   if (keyboard->is_right_left_buttons () && !gigablitz->is_enable () &&
       !balls->is_sticky_balls_remains ())
     {
@@ -186,7 +186,7 @@ right_panel_score::draw_gigablizt_gauge ()
         }
     }
 
-  char *d = temoinAdrs;
+  char *d = gauge_pixel;
   Sint32 m = game_screen->get_width ();
   char p = 0;
 
