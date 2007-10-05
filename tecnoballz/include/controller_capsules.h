@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.h
  * @brief Capsules controller 
- * @date 2007-04-13
+ * @date 2007-10-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.h,v 1.13 2007/10/04 05:54:41 gurumeditation Exp $
+ * $Id: controller_capsules.h,v 1.14 2007/10/05 08:03:10 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,16 +37,18 @@ class controller_capsules;
 class controller_capsules:public objects_list < sprite_capsule, controller_capsules >
 {
 public:
-  static const Sint32 SGADGET_X1 = 146; //abscissa of the first bonus
-  static const Sint32 SGADGET_Y1 = 2;   //ordinate of the first bonus 
-  static const Sint32 SGADGET_X2 = 280; //abscissa of the bonus indicator
-  static const Sint32 SGADGET_Y2 = 204; //ordinate of the bonus indicator
+  /** X-coordinate of the first capsule in the shop */
+  static const Sint32 SHOP_XCOORD_CAPSULE = 146;
+  /** Y-coordinate of the first capsule in the shop */
+  static const Sint32 SHOP_YCOORD_CAPSULE = 2;
+  /** X-coordinate of the indicator capsule in the shop */
+  static const Sint32 SHIP_XCOORD_INDICATOR = 280;
+  /** Y-coordinate of the indicator capsule in the shop */
+  static const Sint32 SHIP_YCOORD_INDICATOR = 204;
 
 private:
   /** Paddle selected, used in the cheat mode */
   sprite_paddle * paddle_selected;
-  controller_balls *ptNewBalls;
-  sprite_wall *ptBob_wall;
   /** Counter time delay before next image */
   Sint32 frame_delay;
   /** Time delay before next image of the animation */
@@ -55,10 +57,10 @@ private:
   Sint32 frame_index;
   /** Overview capsule of a option in the shop */
   sprite_capsule *overview_capsule;
-
-  // maluses
-  Sint32 malus_step;            // drop malus counter
-  Sint32 malus_frek;            // drop frequency malus
+  /** Counter delay before dropping a penalty/bonus capsule */
+  Uint32 capsule_delay_counter;
+  /** Appearance frequency of the penalty/bonus capsules */
+  Uint32 capsule_delay;
   /** Random list of capsules, bonuses or penalties which can
    * fall in the current level */
   const Uint32 *random_list; 
@@ -69,24 +71,26 @@ private:
   Uint32 num_of_caspules_bought;
   /** Current number of bonus capsules bought in the shop released */
   Uint32 capsules_released_count;
-  Uint32 bonus_step;            // drop frequency bonuses
+  /** Delay before dropping a bonus capsule bought in the shop */
+  Uint32 bonus_delay;
   /** Index of the next bonus capsule of the shopping cart */
   Uint32 shopping_cart_index;
   /** List of the bonus capsules bought in the shop which will fall
    * regularly to the destruction of bricks */
   Sint32 *shopping_cart;
-  /** Cheat keys to enable options in bricks levels, only under development */
+  /** Cheat keys to enable options in bricks levels,
+   * only under development */
   static Sint16 cheat_keys[];
   static const Uint16 randomlist[128];
 
 public:
     controller_capsules ();
    ~controller_capsules ();
-  void initialize (Sint32 mStep, const Uint32* table, controller_balls * pBall, sprite_wall *);
-  void send_capsule_from_bricks (brick_redraw * briPT);
-  void send_malus (sprite_ball *);
-  void send_malus (sprite_projectile *);
-  void check_if_send_capsule (sprite_ball * pball);
+  void initialize (Uint32 delay, const Uint32* random);
+  void send_capsule_from_brick (brick_redraw * brick);
+  void send_penalty_or_bonus (sprite_ball *ball);
+  void send_penalty_or_bonus (sprite_projectile *blast);
+  void check_if_send_capsule (sprite_ball * ball);
   void create_shop_sprites_list ();
   void set_overview_capsule (Uint32 id);
   void move_in_bricks_level ();
@@ -94,10 +98,9 @@ public:
   void play_animation_in_shop (Uint32 value = 0);
   void check_cheat_keys ();
 
-
 private:
-  void gadget_run (sprite_paddle * paddle, Uint32 capsule_id);
-  void gadgetrun2 (sprite_paddle * paddle, Uint32 capsule_id);
+  void run_in_bricks_level (sprite_paddle * paddle, Uint32 capsule_id);
+  void run_in_guards_level (sprite_paddle * paddle, Uint32 capsule_id);
 
 };
 #endif

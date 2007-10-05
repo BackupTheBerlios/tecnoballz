@@ -1,14 +1,14 @@
 /** 
  * @file right_panel_score.h
  * @brief The right panel score in the bricks levels 
- * @date 2007-02-17
+ * @date 2007-10-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.h,v 1.7 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: right_panel_score.h,v 1.8 2007/10/05 08:03:10 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ private:
   static const Uint32 GAUGE_HEIGHT = 27;
   static const Uint32 GAUGE_XCOORD = 526 / 2;
   static const Uint32 GAUGE_YCOORD = 420 / 2;
-  static const Uint32 TEMOINLARG = 10 / 2;
+  /* static const Uint32 GAUGE_WIDTH = 10 / 2; */
   static const Uint32 AREA_NUM_XCOORD = 264; 
   static const Uint32 AREA_NUM_YCOORD = 153;
   static const Uint32 LEVEL_NUM_XCOORD = 296;
@@ -69,8 +69,9 @@ private:
   /** The number of bricks which remain */
   Uint32 bricks_counter;
   Sint32 flip_white;
-  controller_balls *balls;
-  char *temoinAdrs;             // buffer address indicator blitz
+  /** Pointer to the pixel data in the game offscreen
+   * of the gigablitz gauge */
+  char *gauge_pixel;
   /** Countdown berfore Gigablitz launch */ 
   Uint32 gigablitz_countdown;
   Uint32 delay_gigablitz_countdown;
@@ -85,7 +86,7 @@ private:
 public:
    ~right_panel_score ();
   static right_panel_score *get_instance ();
-  void first_init (controller_balls *b);
+  void first_init ();
   void text_refresh ();
   void decrease_bricks_counter (Uint32 dec);
   Uint32 get_bricks_counter ();

@@ -5,11 +5,11 @@
  * @date 2007-03-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_levels.h,v 1.2 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_levels.h,v 1.3 2007/10/05 08:03:10 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ typedef struct
   Uint32 ships_strength;
   /** Appearance frequency of the penalty capsules */
   Uint32 penalties_frequency;
-  /** Appearance frequency of the monay capsules */
+  /** Appearance frequency of the money capsules */
   Uint32 moneys_frequency;
   /** List of the capsules */
   const Uint32 *malusListe;

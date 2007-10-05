@@ -2,14 +2,14 @@
  * @file sprite_wall.h
  * @brief The sprite of the wall used in bricks level 
  * @created 2007-1O-04 
- * @date 2007-1O-04
+ * @date 2007-1O-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_wall.h,v 1.2 2007/10/04 06:40:52 gurumeditation Exp $
+ * $Id: sprite_wall.h,v 1.3 2007/10/05 08:03:10 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,8 @@ class sprite_wall:public sprite_object
     sprite_wall ();
   public:
     ~sprite_wall ();
+    void enable (Uint32 counter);
+    void disable ();
   static sprite_wall * get_instance ();
   };
 #endif

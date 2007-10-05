@@ -5,11 +5,11 @@
  * @date 2007-02-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.h,v 1.11 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: handler_display.h,v 1.12 2007/10/05 08:03:10 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,19 +47,14 @@ private:
   static const Uint32 bitspixels = 8;
   static const Sint32 DELAY_CHANGE_MAX = 10;
   Sint32 offsetplus;
-
-
-  SDL_Surface *bufSurface;
-  SDL_Surface *tamSurface;
-
-  Uint32 bufLargeur;
-  Uint32 bufHauteur;
-  char *bufAdresse;
-  Sint32 buf_nextLn;
-  Sint32 bufProfond;
-  Sint32 tam_nextLn;
-  char *tamAdresse;
-
+  /** The main surface of the game */
+  SDL_Surface *game_surface;
+  /** Pointer to pixels of the game offscreen */
+  char *game_screen_pixels;
+  /** Size of a line in bytes of the game and background offscreens */
+  Sint32 game_screen_pitch;
+  /** Pointer to pixels of the background offscreen */
+  char *background_pixels;
   /** Main window surface */
   SDL_Surface *sdl_screen;
   /** The width of our main window in pixels */
@@ -84,9 +79,10 @@ private:
   Sint32 delay_ticks_amount;
   /** The window tile and icon name */
   static char window_title[25];
-
+  /** Current indexed color palette of the game */
   SDL_Color sdl_palette[256];
-  /** */
+  /** Value of the vertical shift of the screen
+   * when the player tilts */
   Uint32 tilt_offset;
 
 public:
@@ -110,8 +106,7 @@ public:
   void buf_clr64 (char *desPT);
   void enable_palette (unsigned char *adrPal);
   void enable_palette (SDL_Color * adrPal);
-  void bufferCopy ();           // copie normale du Buffer
-  void bufferCTab ();           // copie des 512 pixels gauche du Buffer
+  void window_update ();
   SDL_Color *get_palette ();
   void clr_shadow (Sint32 offst, Sint32 large, Sint32 haute);
   void clr_shadow (Sint32 _iPosX, Sint32 _iPosY, Sint32 _iLarg,

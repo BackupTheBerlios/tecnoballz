@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.h
  * @brief Control the balls. Move and collisions 
- * @date 2007-10-01
+ * @date 2007-10-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.h,v 1.28 2007/10/02 11:25:37 gurumeditation Exp $
+ * $Id: controller_balls.h,v 1.29 2007/10/05 08:03:10 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,6 @@ private:
   sprite_paddle *paddle_top;
   sprite_paddle *paddle_left;
   sprite_paddle *paddle_robot;
-  sprite_object *wall_sprite;
 
 private:
   static Sint32 rb0[16];
@@ -75,9 +74,8 @@ private:
   static Sint32 *brick_jump[15];
 
 public:
-    controller_balls (sprite_object * pwall);
-    controller_balls ();
    ~controller_balls ();
+  controller_balls ();
   void init (Uint32 start, Uint32 glueC,
                    Uint32 speed, Uint32 tiltC, Uint32 table);
   void run_in_bricks_levels ();
