@@ -5,11 +5,11 @@
  * @date 2007-04-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.22 2007/10/05 06:33:42 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.23 2007/10/05 11:18:21 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,9 +45,8 @@ handler_display::handler_display ()
   sdl_ticks_amount = 0;
   frames_counter_modulo = 0;
   tilt_offset = 0;
-  game_speed = 20;              //1000 / 50
-  //game_speed = 17;      //1000 / 60
-  //game_speed = 12;      //1000 / 85
+  /* 1000 / 50 = 20 */
+  game_speed = 20;
   delay_change_counter = 0;
   delay_ticks_amount = 0;
   delay_change_counter = DELAY_CHANGE_MAX;
@@ -419,24 +418,6 @@ handler_display::get_palette ()
   return sdl_palette;
 }
 
-//------------------------------------------------------------------------------
-// buffer memory: copy buffer to screen
-//------------------------------------------------------------------------------
-/*
-void
-handler_display::bufferCopy ()
-{
-  SDL_Rect r;
-  r.x = 0;
-  r.y = 0;
-  r.w = 640;
-  r.h = 480;
-  Sint32 v = SDL_BlitSurface (game_surface, &r, sdl_screen, &r);
-  if (v < 0)
-    fprintf (stderr, "handler_display::bufferCopy() BlitSurface error: %s\n",
-             SDL_GetError ());
-}
-/*
 /**
  * Recopy the game offscreen in the main window
  */

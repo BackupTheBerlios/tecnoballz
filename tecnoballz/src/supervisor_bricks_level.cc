@@ -4,11 +4,11 @@
  * @date 2007-10-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.61 $
+ * @version $Revision: 1.62 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.61 2007/10/05 06:33:42 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.62 2007/10/05 11:18:21 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,6 +103,7 @@ supervisor_bricks_level::~supervisor_bricks_level ()
 void
 supervisor_bricks_level::first_init ()
 {
+  game_screen->clear ();
   sprites->reset ();
   area_number = current_player->get_area_number ();
   level_number = current_player->get_level_number ();

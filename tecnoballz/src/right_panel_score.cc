@@ -1,14 +1,14 @@
 /** 
  * @file right_panel_score.cc 
  * @brief The right panel score in the bricks levels 
- * @date 2007-10-01
+ * @date 2007-10-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.20 2007/10/05 06:33:42 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.21 2007/10/05 11:18:21 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ right_panel_score::right_panel_score ()
   gauge_height = GAUGE_HEIGHT * resolution;
   gigablitz_countdown = gauge_height;
   delay_gigablitz_countdown = 0; 
-  flip_white = 0;
+  flip_white = false;
 }
 
 /**
@@ -87,20 +87,27 @@ void
 right_panel_score::draw_background ()
 {
   bitmap_data *bmp = new bitmap_data ();
-
   bmp->load (handler_resources::BITMAP_RIGHT_PANEL);
 
-  background_screen->blit_surface (bmp, 0, 0, 256 * resolution, 0, bmp->get_width (), 240 * resolution);
-
-  draw (background_screen, AREA_NUM_XCOORD * resolution, AREA_NUM_YCOORD * resolution, current_player->area_number, 2);
-  draw (background_screen, LEVEL_NUM_XCOORD * resolution, LEVEL_NUM_YCOORD * resolution, current_player->level_number, 2);
-  draw (background_screen, PLAYERNAME_XCOORD * resolution, PLAYERNAME_YCOORD * resolution, current_player->player_name);
-  draw (background_screen, BEST_SCORE_XCOORD * resolution, BEST_SCORE_YCOORD * resolution, high_score->get_best_score (), 6);
-  draw (background_screen, BEST_PLAYER_XCOORD * resolution, BEST_PLAYER_YCOORD * resolution, high_score->get_best_playername (), 0);
-
-  //draw_gigablizt_gauge ();
+  /* drawn panel score */
+  offscreen_surface* screen;
+  if (has_background) 
+    {
+      screen = background_screen;
+    }
+  else
+    {
+      screen = game_screen;
+    }
+  screen->blit_surface (bmp, 0, 0, 256 * resolution, 0, bmp->get_width (), 240 * resolution);
   delete bmp;
   bmp = (bitmap_data *) NULL;
+
+  draw (screen, AREA_NUM_XCOORD * resolution, AREA_NUM_YCOORD * resolution, current_player->area_number, 2);
+  draw (screen, LEVEL_NUM_XCOORD * resolution, LEVEL_NUM_YCOORD * resolution, current_player->level_number, 2);
+  draw (screen, PLAYERNAME_XCOORD * resolution, PLAYERNAME_YCOORD * resolution, current_player->player_name);
+  draw (screen, BEST_SCORE_XCOORD * resolution, BEST_SCORE_YCOORD * resolution, high_score->get_best_score (), 6);
+  draw (screen, BEST_PLAYER_XCOORD * resolution, BEST_PLAYER_YCOORD * resolution, high_score->get_best_playername (), 0);
 }
 
 /**
@@ -186,38 +193,37 @@ right_panel_score::draw_gigablizt_gauge ()
         }
     }
 
-  char *d = gauge_pixel;
-  Sint32 m = game_screen->get_width ();
-  char p = 0;
-
-
+  /* draw the vertical gauge */
+  char *dest = gauge_pixel;
+  Sint32 next = game_screen->get_width ();
+  char pixel = 0;
   if (resolution == 1)
     {
       for (Uint32 i = 0; i < gigablitz_countdown; i++)
         {
-          d[0] = p;
-          d[1] = p;
-          d[2] = p;
-          d[3] = p;
-          d[4] = p;
-          d += m;
+          dest[0] = pixel;
+          dest[1] = pixel;
+          dest[2] = pixel;
+          dest[3] = pixel;
+          dest[4] = pixel;
+          dest += next;
         }
     }
   else
     {
       for (Uint32 i = 0; i < gigablitz_countdown; i++)
         {
-          d[0] = p;
-          d[1] = p;
-          d[2] = p;
-          d[3] = p;
-          d[4] = p;
-          d[5] = p;
-          d[6] = p;
-          d[7] = p;
-          d[8] = p;
-          d[9] = p;
-          d += m;
+          dest[0] = pixel;
+          dest[1] = pixel;
+          dest[2] = pixel;
+          dest[3] = pixel;
+          dest[4] = pixel;
+          dest[5] = pixel;
+          dest[6] = pixel;
+          dest[7] = pixel;
+          dest[8] = pixel;
+          dest[9] = pixel;
+          dest += next;
         }
     }
 
@@ -225,42 +231,41 @@ right_panel_score::draw_gigablizt_gauge ()
 
   Sint32 h = (gauge_height) - gigablitz_countdown;
 
-  flip_white = ~flip_white;
+  //flip_white = ~flip_white;
+
+  flip_white = flip_white ? false : true;
   if (flip_white)
     {
-      char p = 130;
-
+      char pixel = 130;
       if (resolution == 1)
         {
           for (Sint32 i = 0; i < h; i++)
             {
-              d[0] = p;
-              d[1] = p;
-              d[2] = p;
-              d[3] = p;
-              d[4] = p;
-              d += m;
+              dest[0] = pixel;
+              dest[1] = pixel;
+              dest[2] = pixel;
+              dest[3] = pixel;
+              dest[4] = pixel;
+              dest += next;
             }
         }
       else
         {
           for (Sint32 i = 0; i < h; i++)
             {
-              d[0] = p;
-              d[1] = p;
-              d[2] = p;
-              d[3] = p;
-              d[4] = p;
-              d[5] = p;
-              d[6] = p;
-              d[7] = p;
-              d[8] = p;
-              d[9] = p;
-              d += m;
+              dest[0] = pixel;
+              dest[1] = pixel;
+              dest[2] = pixel;
+              dest[3] = pixel;
+              dest[4] = pixel;
+              dest[5] = pixel;
+              dest[6] = pixel;
+              dest[7] = pixel;
+              dest[8] = pixel;
+              dest[9] = pixel;
+              dest += next;
             }
         }
-
-
     }
   else
     {
@@ -269,13 +274,13 @@ right_panel_score::draw_gigablizt_gauge ()
           unsigned char *e = temoinCol1;
           for (Sint32 i = 0; i < h; i++)
             {
-              char p = (char) e[i];
-              d[0] = p;
-              d[1] = p;
-              d[2] = p;
-              d[3] = p;
-              d[4] = p;
-              d += m;
+              char pixel = (char) e[i];
+              dest[0] = pixel;
+              dest[1] = pixel;
+              dest[2] = pixel;
+              dest[3] = pixel;
+              dest[4] = pixel;
+              dest += next;
             }
         }
       else
@@ -283,18 +288,18 @@ right_panel_score::draw_gigablizt_gauge ()
           unsigned char *e = temoinCol2;
           for (Sint32 i = 0; i < h; i++)
             {
-              char p = (char) e[i];
-              d[0] = p;
-              d[1] = p;
-              d[2] = p;
-              d[3] = p;
-              d[4] = p;
-              d[5] = p;
-              d[6] = p;
-              d[7] = p;
-              d[8] = p;
-              d[9] = p;
-              d += m;
+              char pixel = (char) e[i];
+              dest[0] = pixel;
+              dest[1] = pixel;
+              dest[2] = pixel;
+              dest[3] = pixel;
+              dest[4] = pixel;
+              dest[5] = pixel;
+              dest[6] = pixel;
+              dest[7] = pixel;
+              dest[8] = pixel;
+              dest[9] = pixel;
+              dest += next;
             }
         }
     }
