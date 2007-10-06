@@ -2,14 +2,14 @@
  * @file main.cc 
  * @brief The main function is where the program starts execution 
  * @created 2002-08-21 
- * @date 2007-09-26
+ * @date 2007-10-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.57 $
+ * @version $Revision: 1.58 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.57 2007/09/26 15:57:40 gurumeditation Exp $
+ * $Id: main.cc,v 1.58 2007/10/06 08:54:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,11 +33,41 @@
 configfile configuration;
 
 /**
+ * Returns to the standard GP2X menu.
+ */
+#ifdef TECNOBALLZ_GP2X
+void
+returnToMenu (void)
+{
+  /* This is how to quit back to the menu - calling exit() will just cause
+   * the GP2X to "hang". execl() will replace the current process image
+   *  with that of the menu program, and then execute it */
+  chdir ("/usr/gp2x");
+  execl ("/usr/gp2x/gp2xmenu", "/usr/gp2x/gp2xmenu", NULL);
+}
+#else
+#ifdef TECNOBALLZ_PSP
+void
+returnToMenu (void)
+{
+  sceKernelExitGame ();
+}
+#endif
+#endif
+
+/**
  * The main function is where the program starts execution
  */
 Sint32
 main (Sint32 arg_count, char **arg_values)
 {
+  /* GP2X or PSP port */
+#ifdef TECNOBALLZ_HANDHELD_CONSOLE
+  /* Use atexit() to call the return-to-menu function,
+   * in case of crashes, etc. */
+  atexit (returnToMenu);
+#endif
+
   configuration.load ();
   if (!configuration.scan_arguments (arg_count, arg_values))
     {

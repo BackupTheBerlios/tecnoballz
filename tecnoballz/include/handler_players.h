@@ -1,14 +1,14 @@
 /** 
  * @file handler_players.h
  * @brief players handler 
- * @date 2007-10-02
+ * @date 2007-10-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.h,v 1.17 2007/10/02 04:50:33 gurumeditation Exp $
+ * $Id: handler_players.h,v 1.18 2007/10/06 08:54:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,6 +52,7 @@ public:
 private:
   /** Maximum number of players */
   static Uint32 max_of_players;
+  /** Pointer to the first player alive */
   static handler_players *first_player;
   /** Pointer to the next player object */
   handler_players *next_player;
@@ -124,8 +125,8 @@ public:
   void add_score (Uint32 value);
   void clear_shopping_cart ();
   Sint32 *get_shopping_cart ();
-  Uint32 get_cou_nb ();
-  void set_cou_nb (Sint32 nombr);
+  Uint32 get_numof_items_in_shopping_cart ();
+  void set_numof_items_in_shopping_cart (Uint32 count);
 
   void clear_collected_gems ();
   bool are_collected_all_gems (Uint32 gemNu);

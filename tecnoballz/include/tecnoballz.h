@@ -2,14 +2,14 @@
  * @file tecnoballz.h
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-10-05
+ * @date 2007-10-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.60 $
+ * @version $Revision: 1.61 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.60 2007/10/05 08:03:10 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.61 2007/10/06 08:54:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-10-05)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-10-06)"
 /** To define only under development  */
 #define UNDER_DEVELOPMENT
 /** Force bytes copy (SPARC unaligned memory access) */
@@ -60,6 +60,21 @@
 #endif
 #ifndef PREFIX
 #define PREFIX ""
+#endif
+
+/** PlayStation Portable port, PSP is a handheld game console released
+ * and currently manufactured by Sony Computer Entertainment */
+/* #define TECNOBALLZ_PSP */
+/** GP2X port, GP2X is an open-source,
+ * Linux-based handheld video game console */
+/* #define TECNOBALLZ_GP2X */
+#ifdef TECNOBALLZ_GP2X
+#undef TECNOBALLZ_PSP
+#define TECNOBALLZ_HANDHELD_CONSOLE
+#endif
+#ifdef TECNOBALLZ_PSP
+#undef TECNOBALLZ_GP2X
+#define TECNOBALLZ_HANDHELD_CONSOLE
 #endif
 
 class tecnoballz;

@@ -1,14 +1,14 @@
 /** 
  * @file handler_players.cc 
  * @brief players handler 
- * @date 2007-10-02
+ * @date 2007-10-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_players.cc,v 1.16 2007/10/02 04:50:33 gurumeditation Exp $
+ * $Id: handler_players.cc,v 1.17 2007/10/06 08:54:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -332,19 +332,19 @@ handler_players::get_shopping_cart ()
  * @return the number of items bought in th shop
  */
 Uint32
-handler_players::get_cou_nb ()
+handler_players::get_numof_items_in_shopping_cart ()
 {
   return shopping_cart_items;
 }
 
-//-----------------------------------------------------------------------------
-// set number of bonuses bought
-//      input   => value: number of bonuses
-//-----------------------------------------------------------------------------
+/**
+ * Set the number of items bought
+ * @param count Number of items 
+ */
 void
-handler_players::set_cou_nb (Sint32 value)
+handler_players::set_numof_items_in_shopping_cart (Uint32 count)
 {
-  shopping_cart_items = value;
+  shopping_cart_items = count;
 }
 
 /**

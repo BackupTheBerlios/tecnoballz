@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.cc 
  * @brief Capsules controller 
- * @date 2007-10-05
+ * @date 2007-10-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.31 2007/10/05 06:33:42 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.32 2007/10/06 08:54:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ controller_capsules::initialize (Uint32 delay,
       controller_bricks *bricks = controller_bricks::get_instance ();
       Uint32 numof_bricks = bricks->get_num_of_bricks ();
       shopping_cart = current_player->get_shopping_cart ();
-      num_of_caspules_bought = current_player->get_cou_nb ();
+      num_of_caspules_bought = current_player->get_numof_items_in_shopping_cart ();
       /* at least a bought bonus? */
       if (num_of_caspules_bought > 0)
         {

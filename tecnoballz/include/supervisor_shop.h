@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_shop.h
  * @brief Shop supervisor 
- * @date 2007-10-02
+ * @date 2007-10-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.22 2007/10/02 04:50:33 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.23 2007/10/06 08:54:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,17 +74,20 @@ private:
     } INFO_ENUM;
 
 
-  static const Uint32 BOX_LENGTH_STRING = 22;  //largeur d'une ligne texte en caracteres
+  /** Length of a text line in chars */
+  static const Uint32 BOX_LENGTH_STRING = 22;
+  /** All strings loaded from a file text */
   char** box_texts;
+  /** tiles_background object only used to initialize
+   * the colors palette */
   tiles_background *tiles_ground;
   sprite_mouse_pointer *mouse_pointer;
   sprite_object *led_indicator;
   controller_capsules *power_up_capsules;
   display_text_bitmap *display_text;
   handler_popup_menu *popup_menu;
-  Sint32 shop_point;            //pointeur
-  Sint32 shoppoint3;            //pointeur
-
+  /* Option currently selected by pressing the left mouse button */ 
+  Sint32 current_selected_option;
   Sint32 optioninfo;            // 0;1;2;3
   /** If true info already seen at least once */
   bool is_already_view_info;
@@ -101,9 +104,8 @@ private:
   sprite_capsule *blink_capsule;
   /** Capsule which draged with the mouse */
   sprite_capsule *drag_sprite;
-  Sint32 *courseList;
-
   // temporary list of the bonuses bought
+  Sint32 *courseList;
   Sint32 coursetemp[MAX_OF_CAPSULES_BOUGHT + 1];
 
   Sint32 shop_xmini;
@@ -113,18 +115,24 @@ private:
   Sint32 shop_ymax2;
 
   Sint32 cadre_offs;
-  Sint32 cadre_flag;            // 1 = display box
+  /** True if drawn the select cursor */
+  bool is_drawn_select_cursor;
   Sint32 cadre_ymin;
   Sint32 cadre_ymax;
   Sint32 cadre_posx;
-  Sint32 cadre_posy;            //mouse y coordinate (collision box)
-  Sint32 cadre_haut;
-  Sint32 cadre_larg;
-  Sint32 angleValue;
-  Sint32 box_colour;
+  Sint32 cadre_posy;
+  /** Maximum height of the select cursor in pixels */
+  Sint32 select_cursor_height;
+  /** Maximum width of the select cursor in pixels */
+  Uint32 select_cursor_width;
+  /** Sinus table index from 0 to 511 used to modify the size of the cursor */
+  Sint32 select_cursor_sin_index;
+  /** Indexed color of the select cursor from 0 to 32 */
+  Sint32 select_cursor_color;
   /** Code of the last key pressed, used for input cheat code */
   Uint32 previous_key_code_down;
-  Uint32 triche_etb;
+  /** Current cheat code which was typed by the player */
+  Uint32 cheat_code_input;
   /** Cheat code is an unsigned 32 bits integer,
    * a string of 4 chars containing the keycodes "ETB\n" */
   Uint32 cheat_code;
@@ -132,7 +140,8 @@ private:
   // table de pointeurs sur "options_prices"
   static Sint32 sh_tablept[MAX_OF_CAPSULES_BOUGHT];
 
-  static Sint32 case_types[];
+  /** Identifiers of the available options and bonus capsules */
+  static Sint32 available_options_id[];
   /** Prices of all the available options in the shop */ 
   static Uint32 options_prices[];
   static char shoptext00[];
@@ -150,7 +159,7 @@ public:
   Uint32 main_loop ();
 
 private:
-  Sint32 testkursor (Sint32 x, Sint32 y);
+  Sint32 get_option_over_mouse_cursor (Sint32 x, Sint32 y);
   void faitcourse (Sint32 gadnu);
   void display_info(); 
   void display_capsules_bought ();
@@ -167,6 +176,6 @@ private:
   void draw_select_cursor ();
   void check_if_enable_cheat ();
 
-  static const unsigned char cyclingtab[];
+  static const unsigned char color_cycling[];
 };
 #endif
