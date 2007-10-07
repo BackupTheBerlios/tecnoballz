@@ -4,11 +4,11 @@
  * @date 2007-10-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.10 2007/10/07 14:22:12 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.11 2007/10/07 19:38:08 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -218,6 +218,8 @@ handler_keyboard::read_events ()
 {
   command_keys[TOGGLE_FULLSCREEN] = false;
   command_keys[DISABLE_TIMER] = false;
+  command_keys[VOLUME_DOWN] = false;
+  command_keys[VOLUME_UP] = false;
   is_left_button_released = 0;
   is_right_button_released = 0;
   SDL_Event event;
@@ -267,11 +269,21 @@ handler_keyboard::read_events ()
                       {
                         last_command_keys[DISABLE_TIMER] = true;
                       }
+                     if (keys[SDLK_PAGEDOWN] == SDL_PRESSED)
+                      {
+                        last_command_keys[VOLUME_DOWN] = true;
+                      }
+                    if (keys[SDLK_PAGEUP] == SDL_PRESSED)
+                      {
+                        last_command_keys[VOLUME_UP] = true;
+                      }
                   }
                 else
                   {
                     if (keys[SDLK_ESCAPE] == SDL_PRESSED)
-                      last_command_keys[QUIT_TECNOBALLZ] = true;
+                      {
+                        last_command_keys[QUIT_TECNOBALLZ] = true;
+                      }
                     if (keys[SDLK_x] == SDL_PRESSED)
                       last_command_keys[CAUSE_GAME_OVER] = true;
                     if (keys[SDLK_q] == SDL_PRESSED)
@@ -390,6 +402,19 @@ handler_keyboard::read_events ()
                   last_command_keys[DISABLE_TIMER] = false;
                   command_keys[DISABLE_TIMER] = true;
                 }
+              if (keys[SDLK_PAGEDOWN] == SDL_RELEASED
+                  && last_command_keys[VOLUME_DOWN])
+                {
+                  last_command_keys[VOLUME_DOWN] = false;
+                  command_keys[VOLUME_DOWN] = true;
+                }
+               if (keys[SDLK_PAGEUP] == SDL_RELEASED
+                  && last_command_keys[VOLUME_UP])
+                {
+                  last_command_keys[VOLUME_UP] = false;
+                  command_keys[VOLUME_UP] = true;
+                }
+ 
             }
 
             if (kbEvt->keysym.unicode > 0)

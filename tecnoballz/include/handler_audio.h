@@ -2,14 +2,14 @@
  * @file handler_audio.h
  * @brief Handler of the sound and music
  * @created 2004-03-22
- * @date 2007-09-26
+ * @date 2007-10-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.h,v 1.8 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: handler_audio.h,v 1.9 2007/10/07 19:38:08 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,6 +57,8 @@ typedef struct
 
 class handler_audio:public virtual tecnoballz
 {
+private:
+    static const Uint32 VOLUME_INC = MIX_MAX_VOLUME / 16;
 public:
 
 /* Differents portions in a area music */
@@ -149,6 +151,7 @@ public:
   void enable_sound ();
 
 private:
+  void sound_volume_ctrl ();
   void query_spec ();
   Uint32 area_music (Uint32);
   void initialize ();
@@ -190,6 +193,8 @@ private:
   bool is_sound_enable;
   /** Current music volume */
   Uint32 music_volume;
+  /** Current audio channel volume */
+  Uint32 channels_volume;
   /** Identifier of the current music loaded and played */
   Sint32 current_music_id;
   /** Pointer to the current music loaded and played */

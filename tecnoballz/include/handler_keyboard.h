@@ -4,11 +4,11 @@
  * @date 2007-10-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.h,v 1.6 2007/10/07 14:22:12 gurumeditation Exp $
+ * $Id: handler_keyboard.h,v 1.7 2007/10/07 19:38:08 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,8 @@ public:
       TOGGLE_FULLSCREEN,
       TOGGLE_POPUP_MENU,
       DISABLE_TIMER,
+      VOLUME_DOWN,
+      VOLUME_UP,
       NUMOF_COMMAND_KEYS
     }
     COMAND_KEYS_ENUM;

@@ -1,15 +1,15 @@
-/** 
+/**
  * @file handler_audio.cc 
  * @brief Handler of the sound and music
  * @created 2004-03-22
  * @date 2007-10-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.cc,v 1.9 2007/10/07 14:22:12 gurumeditation Exp $
+ * $Id: handler_audio.cc,v 1.10 2007/10/07 19:38:08 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,8 @@ handler_audio * handler_audio::audio_singleton = NULL;
 bool handler_audio::is_audio_enable = true;
 
 /** Positions in music modules */
-const musics_pos handler_audio::ptMusicpos[] =
+const musics_pos
+handler_audio::ptMusicpos[] =
   {
     {
       /* first music of a bricks level */
@@ -57,11 +58,13 @@ const musics_pos handler_audio::ptMusicpos[] =
     {0, 0, 15, 15, 28, 29, 30},
     {0, 0, 11, 11, 18, 19, 20},
     {0, 0, 15, 15, 30, 31, 32}
-};
+  };
 
 /** Pointers of all sound effects */
-Mix_Chunk * handler_audio::sound_list[NUM_OF_SOUNDS];
-char handler_audio::sounds_play[NUM_OF_SOUNDS];
+Mix_Chunk *
+handler_audio::sound_list[NUM_OF_SOUNDS];
+char
+handler_audio::sounds_play[NUM_OF_SOUNDS];
 
 /**
  * Create the handler_audoi singleton object, and clear members
@@ -135,21 +138,32 @@ handler_audio::initialize ()
       if (is_verbose)
         {
           std::cout << "handler_audio::initialize() " <<
-            "audio disable!" << std::endl;
+          "audio disable!" << std::endl;
         }
-        return;
+      return;
     }
   if (SDL_Init (SDL_INIT_AUDIO | SDL_INIT_NOPARACHUTE) < 0)
     {
       std::cerr << "handler_audio::initialize() " <<
-        "SDL_Init() return " << SDL_GetError () << std::endl;
+      "SDL_Init() return " << SDL_GetError () << std::endl;
       is_audio_enable = false;
       return;
     }
-  if (Mix_OpenAudio (44100, AUDIO_S16, 2, 4096))
+
+  Sint32 audio_rate, audio_buffers;
+#ifdef TECNOBALLZ_GP2X
+  /* we need a reduced audio rate for the GP2X to make sure sound
+   * doesn't lag */
+  audio_rate = 22050;
+  audio_buffers = 64;
+#else
+  audio_rate = 44100;
+  audio_buffers = 4096;
+#endif
+  if (Mix_OpenAudio (audio_rate, AUDIO_S16, 2, audio_buffers))
     {
       std::cerr << "(!)handler_audio::initialize() " <<
-        "Mix_OpenAudio() return " << SDL_GetError () << std::endl;
+      "Mix_OpenAudio() return " << SDL_GetError () << std::endl;
       is_audio_enable = false;
       SDL_Quit ();
       return;
@@ -157,10 +171,13 @@ handler_audio::initialize ()
 
   if (is_verbose)
     {
-      query_spec();
+      query_spec ();
     }
+  /* get the current volume music setting */
   music_volume = Mix_VolumeMusic (-1);
   Mix_AllocateChannels (8);
+  /* get the current volume channels setting */
+  channels_volume = Mix_Volume (-1, -1);
 
   /* load files waves in memory */
   for (Sint32 i = 0; i < NUM_OF_SOUNDS; i++)
@@ -173,9 +190,9 @@ handler_audio::initialize ()
       char *pathname = resources->get_sound_filename (i);
       if (NULL == pathname)
         {
-          std::cerr << "handler_audio::initialize() " << 
-	    "(!)handler_audio::initialize() file " << i << 
-	    "not found"  << std::endl;
+          std::cerr << "handler_audio::initialize() " <<
+          "(!)handler_audio::initialize() file " << i <<
+          "not found" << std::endl;
           is_audio_enable = false;
           return;
         }
@@ -183,9 +200,9 @@ handler_audio::initialize ()
       Mix_Chunk *ptWav = Mix_LoadWAV (pathname);
       if (NULL == ptWav)
         {
-          std::cerr << "(!)handler_audio::initialize() " << 
-            "Mix_LoadWAV(" << pathname << ") return " <<
-            SDL_GetError () << std::endl;
+          std::cerr << "(!)handler_audio::initialize() " <<
+          "Mix_LoadWAV(" << pathname << ") return " <<
+          SDL_GetError () << std::endl;
           is_audio_enable = false;
           return;
         }
@@ -197,8 +214,8 @@ handler_audio::initialize ()
   is_only_music = false;
   if (is_verbose)
     {
-      std::cout << "handler_audio::initialize() initialize succeded" 
-        << std::endl;
+      std::cout << "handler_audio::initialize() initialize succeded"
+      << std::endl;
     }
 }
 
@@ -213,38 +230,35 @@ handler_audio::query_spec ()
   result = Mix_QuerySpec (&frequency, &format_id, &channels);
   if (result == 0)
     {
-      std::cerr <<  "handler_audio::query_spec() " <<
-	"Mix_QuerySpec return " << Mix_GetError ()
-	<< std::endl;
-    return;
+      std::cerr << "handler_audio::query_spec() " <<
+      "Mix_QuerySpec return " << Mix_GetError () << std::endl;
+      return;
     }
-      char *format = "Unknown";
-      switch (format_id)
-        {
-        case AUDIO_U8:
-          format = "U8";
-          break;
-        case AUDIO_S8:
-          format = "S8";
-          break;
-        case AUDIO_U16LSB:
-          format = "U16LSB";
-          break;
-        case AUDIO_S16LSB:
-          format = "S16LSB";
-          break;
-        case AUDIO_U16MSB:
-          format = "U16MSB";
-          break;
-        case AUDIO_S16MSB:
-          format = "S16MSB";
-          break;
-        }
-      std::cout << "handler_audio::query_spec()" <<
-	" times frequencyency: " <<  frequency <<
-	" format: " << format <<
-	" channels: " << channels
-	<< std::endl;
+  char *format = "Unknown";
+  switch (format_id)
+    {
+    case AUDIO_U8:
+      format = "U8";
+      break;
+    case AUDIO_S8:
+      format = "S8";
+      break;
+    case AUDIO_U16LSB:
+      format = "U16LSB";
+      break;
+    case AUDIO_S16LSB:
+      format = "S16LSB";
+      break;
+    case AUDIO_U16MSB:
+      format = "U16MSB";
+      break;
+    case AUDIO_S16MSB:
+      format = "S16MSB";
+      break;
+    }
+  std::cout << "handler_audio::query_spec()" <<
+  " times frequencyency: " << frequency <<
+  " format: " << format << " channels: " << channels << std::endl;
 }
 
 /**
@@ -356,8 +370,7 @@ handler_audio::stop_lost_music ()
  * Check if the music of the victory is finished
  * @return true if the music of the victory is finished
  */
-bool
-handler_audio::is_win_music_finished ()
+bool handler_audio::is_win_music_finished ()
 {
   if (!is_audio_enable || NULL == song_module)
     {
@@ -389,7 +402,7 @@ handler_audio::stop_music ()
   current_music_id = -1;
 }
 
-/** 
+/**
  * Play a music module
  * @param music_id resource identifier of the music module
  */
@@ -402,7 +415,7 @@ handler_audio::play_music (Uint32 music_id)
     }
 
   /* if a music is played, it is stopped */
-  if (NULL != song_module )
+  if (NULL != song_module)
     {
       if (current_music_id == (Sint32) music_id)
         {
@@ -416,32 +429,32 @@ handler_audio::play_music (Uint32 music_id)
   char *pathname = resources->get_music_filename (music_id);
   if (is_verbose)
     {
-       std::cout << "handler_audio::play_music() " <<
-         "try load pathname '" << pathname << "'" << std::endl;
+      std::cout << "handler_audio::play_music() " <<
+      "try load pathname '" << pathname << "'" << std::endl;
     }
 
   /* load the music in memory */
   current_music = Mix_LoadMUS (pathname);
   if (NULL == current_music)
     {
-       std::cerr << "handler_audio::play_music() " <<
-         "Mix_LoadMUS return " << SDL_GetError () << std::endl;
+      std::cerr << "handler_audio::play_music() " <<
+      "Mix_LoadMUS return " << SDL_GetError () << std::endl;
       return;
     }
   /* Ugly way to access sdl-mixer's internal structures */
   union
-  {
-    int i;
-    void *p;
-  } dummy;
+    {
+      int i;
+      void *p;
+    } dummy;
   memcpy (&song_module, (Uint8 *) current_music + sizeof (dummy),
           sizeof (void *));
 
-  /* start the music */ 
+  /* start the music */
   if (Mix_PlayMusic (current_music, -1) == -1)
     {
       std::cerr << "(!)handler_audio::play_music() " <<
-        SDL_GetError () << std::endl;
+      SDL_GetError () << std::endl;
       return;
     }
 
@@ -450,8 +463,8 @@ handler_audio::play_music (Uint32 music_id)
   current_music_id = music_id;
   if (is_verbose)
     {
-      std::cout << "handler_audio::play_music() module " << 
-        current_music_id << " playing!" << std::endl;
+      std::cout << "handler_audio::play_music() module " <<
+      current_music_id << " playing!" << std::endl;
     }
   if (is_music_enable)
     {
@@ -468,10 +481,62 @@ handler_audio::play_music (Uint32 music_id)
  * Return the portion of the music currently played
  * @return identifier of the portion played
  */
-Uint32
-handler_audio::get_portion_music_played ()
+Uint32 handler_audio::get_portion_music_played ()
 {
   return current_portion_music;
+}
+
+/**
+ * Volume control
+ */
+void
+handler_audio::sound_volume_ctrl (void)
+{
+  Uint32 mvol = music_volume;
+  Uint32 cvol = channels_volume;
+
+  /* volume up */
+  if (keyboard->command_is_pressed (handler_keyboard::VOLUME_UP))
+    {
+      if (is_music_enable)
+        {
+          music_volume =
+            (music_volume + VOLUME_INC >
+             MIX_MAX_VOLUME) ? MIX_MAX_VOLUME : music_volume + VOLUME_INC;
+        }
+      if (is_sound_enable)
+        {
+          channels_volume =
+            (channels_volume + VOLUME_INC >
+             MIX_MAX_VOLUME) ? MIX_MAX_VOLUME : channels_volume + VOLUME_INC;
+        }
+    }
+
+  /* volume down */
+  if (keyboard->command_is_pressed (handler_keyboard::VOLUME_DOWN))
+    {
+      if (is_music_enable)
+        {
+          music_volume = (music_volume <= VOLUME_INC)
+                         ? 0 : music_volume - VOLUME_INC;
+        }
+      if (is_sound_enable)
+        {
+          channels_volume = (channels_volume <= VOLUME_INC)
+                            ? 0 : channels_volume - VOLUME_INC;
+        }
+    }
+
+  if (mvol != music_volume)
+    {
+      Mix_VolumeMusic (music_volume);
+    }
+  if (cvol != channels_volume)
+    {
+      /* set the volume of all channels */
+      Mix_Volume (-1, channels_volume);
+    }
+
 }
 
 /**
@@ -486,7 +551,7 @@ handler_audio::run ()
       return;
     }
 
-  /* 
+  /*
    * [Ctrl] + [S]: enable/disable audio (sound effects and musics) 
    */
   if (keyboard->command_is_pressed (handler_keyboard::TOGGLE_AUDIO, true))
@@ -505,20 +570,20 @@ handler_audio::run ()
         }
     }
   else
-    { 
+    {
       /* [Ctrl] + [F]: enable/disable sound effects */
       if (keyboard->command_is_pressed (handler_keyboard::TOGGLE_SOUND, true))
         {
-          is_sound_enable = is_sound_enable ? false : true; 
+          is_sound_enable = is_sound_enable ? false : true;
           if (!is_sound_enable)
             {
-               for (Sint32 i = 0; i < NUM_OF_SOUNDS; i++)
+              for (Sint32 i = 0; i < NUM_OF_SOUNDS; i++)
                 {
                   sounds_play[i] = false;
                 }
             }
         }
-      /* [Ctrl] + [D]: enable/disable mfx */
+      /* [Ctrl] + [D]: enable/disable musics */
       else
         {
           if (keyboard->
@@ -536,6 +601,7 @@ handler_audio::run ()
             }
         }
     }
+  sound_volume_ctrl ();
   control_music_position ();
   play_requested_sounds ();
 }
@@ -600,18 +666,18 @@ handler_audio::control_music_position ()
         {
           posgo = restart_position;
         }
-      if (song_module->patpos >= 63 && song_module->sngpos == music_2_position)
+      if (song_module->patpos >= 63
+          && song_module->sngpos == music_2_position)
         {
           posgo = restart_position;
         }
       if (posgo >= 0)
         {
           if (is_verbose)
-	    {
-	      std::cout << "handler_audio::execution1() " <<
-		" - Player_SetPosition(" << posgo << ")"
-		<< std::endl;
-	    }
+            {
+              std::cout << "handler_audio::execution1() " <<
+              " - Player_SetPosition(" << posgo << ")" << std::endl;
+            }
           Mix_SetMusicPosition (posgo);
         }
       break;
@@ -619,7 +685,8 @@ handler_audio::control_music_position ()
     case LOST_PORTION:
       if (song_module->sngpos < music_1_position ||
           song_module->sngpos > music_2_position ||
-          (song_module->patpos >= 63 && song_module->sngpos == music_2_position))
+          (song_module->patpos >= 63
+           && song_module->sngpos == music_2_position))
         {
           play_level_music (aera_number, level_number);
         }
@@ -628,7 +695,8 @@ handler_audio::control_music_position ()
     case WIN_PORTION:
       if (song_module->sngpos < music_1_position ||
           song_module->sngpos > music_2_position ||
-          (song_module->patpos >= 63 && song_module->sngpos == music_2_position))
+          (song_module->patpos >= 63
+           && song_module->sngpos == music_2_position))
         {
           if (!Player_Paused ())
             {
@@ -645,8 +713,7 @@ handler_audio::control_music_position ()
   * @param narea area number, form 1 to 5
   * @return music aera identifier
 */
-Uint32
-handler_audio::area_music (Uint32 narea)
+Uint32 handler_audio::area_music (Uint32 narea)
 {
   switch (narea)
     {
@@ -669,7 +736,7 @@ handler_audio::area_music (Uint32 narea)
   return MUSICAREA1;
 }
 
-/** 
+/**
  * Disable the sound effect
  */
 void
@@ -682,7 +749,7 @@ handler_audio::disable_sound ()
     }
 }
 
-/** 
+/**
  * Enable the sound effect
  */
 void
