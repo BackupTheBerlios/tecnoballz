@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.28 2007/10/03 16:00:09 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.29 2007/10/07 06:35:36 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -455,7 +455,7 @@ controller_paddles::move_paddles ()
          kb_paddle_speed *= 0.9; 
       }
       off_x = (Sint32)kb_paddle_speed; 
-      printf("<== %i\n", off_x);
+      //printf("<== %i\n", off_x);
     }
     else if (keyboard->control_is_pressed(handler_keyboard::K_RIGHT))
       {
@@ -468,7 +468,7 @@ controller_paddles::move_paddles ()
          kb_paddle_speed *= 0.9; 
       }
       off_x = (Sint32)kb_paddle_speed; 
-      printf("==> %i\n", off_x);
+      //printf("==> %i\n", off_x);
       }
     else {
       kb_paddle_speed = 0;

@@ -4,11 +4,11 @@
  * @date 2007-10-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.23 2007/10/06 08:54:53 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.24 2007/10/07 06:35:36 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,6 +65,7 @@ private:
       TEXT_ONLY_FOR_AREA_5 = 35,
     } TEXT_ENUM;
 
+   /** Enumerate differents pages of the informations option */
    typedef enum  
     {
       INFO_PADDLES,
@@ -72,8 +73,6 @@ private:
       INFO_AREA_CODE,
       INFO_END
     } INFO_ENUM;
-
-
   /** Length of a text line in chars */
   static const Uint32 BOX_LENGTH_STRING = 22;
   /** All strings loaded from a file text */
@@ -81,23 +80,33 @@ private:
   /** tiles_background object only used to initialize
    * the colors palette */
   tiles_background *tiles_ground;
+  /** Pointer to the sprite mouse pointer */
   sprite_mouse_pointer *mouse_pointer;
+  /** Led who indicates the option over the mouse */
   sprite_object *led_indicator;
+  /** Control all capsules */
   controller_capsules *power_up_capsules;
+  /** Object which draws three lines of texts */
   display_text_bitmap *display_text;
+  /** Object who handles the "ESC" menu */
   handler_popup_menu *popup_menu;
-  /* Option currently selected by pressing the left mouse button */ 
+  /** Option currently selected by pressing the left mouse button */ 
   Sint32 current_selected_option;
-  Sint32 optioninfo;            // 0;1;2;3
+  /** Index of the currently displayed page: INFO_PADDLES,
+   * INFO_LIVES or INFO_AREA_CODE */
+  Uint32 some_infos_index;
   /** If true info already seen at least once */
   bool is_already_view_info;
   /** Current price of the selected option */
   Uint32 current_price;
   /** The number of bought capsules */
   Uint32 num_of_bought_capsules;
-  char *text_lines[3];
-  Sint32 mouse_x_coord;
-  Sint32 mouse_y_coord;
+  /** Pointer to the 3 lignes currently displayed */
+  char *current_text_displayed[3];
+  /** Current x-coordinate of the led indicator */
+  Sint32 led_indicator_xcoord;
+  /** Current y-coordinate of the led indicator */
+  Sint32 led_indicator_ycoord;
   Sint32 get_object;            // drag object : pointer to the table "options_prices" (-1 = no drag object)
   Sint32 pt_get_obj;
   /** Capsule which blinks in the list when it is draged with the mouse */
@@ -160,15 +169,15 @@ public:
 
 private:
   Sint32 get_option_over_mouse_cursor (Sint32 x, Sint32 y);
-  void faitcourse (Sint32 gadnu);
+  void purchase_option_or_capsule (Uint32 option_id);
   void display_info(); 
   void display_capsules_bought ();
   void purchase_bonus_capsule (Sint32 option_num);
   void message_ok ();
-  Sint32 led_moving (Sint32 point);
+  Uint32 led_moving (Sint32 point);
 
   bool decrease_money_amount ();
-  void putthetext (char *ligne);
+  void put_current_text (char *str);
   void display_box_text ();
   void sh_ballade ();
   Sint32 collisions ();
