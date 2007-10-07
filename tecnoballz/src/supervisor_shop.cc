@@ -4,11 +4,11 @@
  * @date 2007-10-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.47 $
+ * @version $Revision: 1.48 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.47 2007/10/07 06:35:36 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.48 2007/10/07 10:44:24 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -758,7 +758,7 @@ supervisor_shop::sh_ballade ()
 {
   /* index on 'options_prices' list, if -1 no drag objet  */
   if (get_object < 0)
-  /* get a object with the mouse */
+    /* get a object with the mouse */
     {
       drag_sprite->disable ();
       pt_get_obj = -1;

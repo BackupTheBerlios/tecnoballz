@@ -1,0 +1,5 @@
+
+
+s		INCBIN	DH1:Tempo/Data/TCC_Data/Disque/b
+*s		INCBIN	DH1:Tempo/Data/TCC_Data/Disque/mod.eqendtheme
+e

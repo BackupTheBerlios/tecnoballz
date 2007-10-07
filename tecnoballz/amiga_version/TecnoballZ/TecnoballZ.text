@@ -1,0 +1,84 @@
+
+                        /========================\
+                         * T E C N O B A L L  Z *
+                        \========================/
+			   ThE uLtImAtE bReAkEr   
+			      /\/\/\/\/\/\/\
+                          ---> VERSION 0.88 <----
+			      /\/\/\/\/\/\/\
+  AGA chip-set / MC68020 processor / 2 Mega-octets RAM / 15Khz Monitor
+                       - (c) 1992-1995  TLK-GAMES -
+                   - AGA-Convertion by BRUNO ETHVIGNOT -
+
+
+            /«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»/
+                      » » » What is shareware ? « « «
+
+        Shareware is a way of getting good software in a cheap way.
+     You get hold of the software for almost nothing, and can test it
+       for a while before deciding if you want to pay the programmer
+       for his/her hard work. And remember that if you don't pay and
+       nobody else do pay than it's pretty sure that the programmer
+      will NOT make any more shareware software. And that will in the
+          end lead to no public-domain software for your machine.
+                So, please pay the author of the software.
+
+                 => This program is in fact shareware! <=
+            /«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»/
+
+             » » » If you like this piece of software ! « « «
+
+    If you use this software and you like it, than I (Bruno ETHVIGNOT)
+      would be eternal grateful to you, if you send me 10 US Dollar,
+         £5, 50FF or any amount you like, as payment for the game.
+     If you would like 1 year of free update (at least 2 update (If I
+     get any bug rapport, or suggestions for improvement)), than send
+                           me $30, £15 or 150FF.
+
+            /«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»/
+           Found a bug ? Or got a great idea ? Or want to pay ? 
+                              Then write to :
+
+                     » » » This is my address... « « «
+
+                             BRUNO  ETHVIGNOT
+                           17A, RUE JULES FERRY
+                              25000 BESANCON
+                                  FRANCE
+                               Or call to...
+                 => +33.81.52.77.36 or => +33.81.52.41.85
+            /«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»/
+
+                       » » » Hard-Disk Install « « «
+                        (Insert TECNOBALLZ in DF0:)
+                         1> Makedir HD0:tecnoballz
+                 1> Copy DF0:tecnoballz HD0:tecnoballz all
+                         1> Ed S:Startup-Sequence
+                     Assign tecnoballz: HD0:tecnoballz
+                            Reboot your machine
+                       1> HD0:tecnoballz/tecnoballz
+
+            /«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»/
+  If you are interested in making your own games or assembler programming
+        then you can buy the source code for only $50, £25 or 250FF
+                 (Code 68020 / AGA Chip-Set / Devpac 3.02)
+            /«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»/
+
+                        » » » Technical info « « «
+
+     129751 bytes of source code, 37568 lines of 68020 assembler code.
+           Assembler time : 58 seconds on a 14 MHZ 68020 A1200 
+                      500 Kilo-Bytes of raw graphics.
+                     Over 70 shapes on screen at once.
+                  27 sound effects, 2 jingles, 17 musics.
+
+            /«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»/
+  If you want ECS version (all Amiga & PC) then send $30, £15 or 150FF to
+                                 TLK GAMES
+                       Jean-Michel MARTIN DE SANTERO
+                                   BP 24
+                              81150 FLORENTIN
+                                  FRANCE
+                            TEL +33.63.53.26.37
+                            FAX +33.63.53.20.11
+            /«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»«»/

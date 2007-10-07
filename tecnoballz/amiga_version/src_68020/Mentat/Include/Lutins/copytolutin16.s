@@ -1,0 +1,69 @@
+*-------------------------------------------------------------------------*
+*********** Recopie un Graphisme 16 couleurs dans un lutin AGA ************
+*-------------------------------------------------------------------------*
+* Entrée	=> d0.w	nombre de ligne du lutin - 1
+*		=> d1.w	taille d'un plan raw-blitter
+*		=> d2.w	taille d'une ligne
+*		=> a0.l	Adr. du lutin paire
+*		=> a1.l	Adr. du lutin impaire
+*		=> a2.l	Adr. du GFX
+* utilise (d0/d1/d2/a0/a1/a2/a4)
+* modifie (a0/a1)
+
+*»»»»»»»»»»»»»»»»»»» VERSION LUTIN 64 PIXELS DE LARGE ««««««««««««««««««««*
+copytolutin16.3:
+		lea	(16,a0),a0		Saute mot ctrl lutin paire
+		lea	(16,a1),a1		Saute mot ctrl lutin impaire
+copylutin16.3:	movem.l	d0/a2/a4,-(a7)
+.loop		move.l	a2,a4
+		move.l	(a4),(a0)+		Plan 1 -> lutin paire
+		move.l	(4,a4),(a0)+		Plan 1 -> lutin paire
+		add.w	d1,a4
+		move.l	(a4),(a0)+		Plan 2 -> lutin paire
+		move.l	(4,a4),(a0)+		Plan 2 -> lutin paire
+		add.w	d1,a4
+		move.l	(a4),(a1)+		Plan 3 -> lutin impaire
+		move.l	(4,a4),(a1)+		Plan 3 -> lutin impaire
+		add.w	d1,a4
+		move.l	(a4),(a1)+		Plan 4 -> lutin impaire
+		move.l	(4,a4),(a1)+		Plan 4 -> lutin impaire
+		add.w	d2,a2
+		dbf	d0,.loop
+		movem.l	(a7)+,d0/a2/a4
+		rts
+
+*»»»»»»»»»»»»»»»»»»» VERSION LUTIN 32 PIXELS DE LARGE ««««««««««««««««««««*
+copytolutin16.2:
+		addq.l	#8,a0			Saute mot ctrl lutin paire
+		addq.l	#8,a1			Saute mot ctrl lutin impaire
+copylutin16.2:	movem.l	d0/a2/a4,-(a7)
+.loop		move.l	a2,a4
+		move.l	(a4),(a0)+		Plan 1 -> lutin paire
+		add.w	d1,a4
+		move.l	(a4),(a0)+		Plan 2 -> lutin paire
+		add.w	d1,a4
+		move.l	(a4),(a1)+		Plan 3 -> lutin impaire
+		add.w	d1,a4
+		move.l	(a4),(a1)+		Plan 4 -> lutin impaire
+		add.w	d2,a2
+		dbf	d0,.loop
+		movem.l	(a7)+,d0/a2/a4
+		rts
+
+*»»»»»»»»»»»»»»»»»»» VERSION LUTIN 16 PIXELS DE LARGE ««««««««««««««««««««*
+copytolutin16.0:
+		addq.l	#4,a0			Saute mot ctrl lutin paire
+		addq.l	#4,a1			Saute mot ctrl lutin impaire
+copylutin16.0:	movem.l	d0/a2/a4,-(a7)
+.loop		move.l	a2,a4
+		move.w	(a4),(a0)+		Plan 1 -> lutin paire
+		add.w	d1,a4
+		move.w	(a4),(a0)+		Plan 2 -> lutin paire
+		add.w	d1,a4
+		move.w	(a4),(a1)+		Plan 3 -> lutin impaire
+		add.w	d1,a4
+		move.w	(a4),(a1)+		Plan 4 -> lutin impaire
+		add.w	d2,a2
+		dbf	d0,.loop
+		movem.l	(a7)+,d0/a2/a4
+		rts
