@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.18 2007/10/03 06:25:33 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.19 2007/10/07 14:22:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,7 +84,8 @@ private:
   Uint32 sticky_state;
   const Sint32 **rebonds_Ga;    //ball rebounds table (move on the left)
   const Sint32 **rebonds_Dr;    //ball rebounds table (move on the right)
-  const Sint32 *rebonds_GD;     //ball rebounds table (left and right)
+  /** Current directions used for bounce a ball */
+  const Sint32 *current_bounces;
   Sint32 *direct_tab;           // table direction si la balle collee
   /** Current stuck ball, NULL if not */
   sprite_ball *stuck_ball;

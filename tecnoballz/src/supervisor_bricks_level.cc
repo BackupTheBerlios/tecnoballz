@@ -4,11 +4,11 @@
  * @date 2007-10-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.62 $
+ * @version $Revision: 1.63 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.62 2007/10/05 11:18:21 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.63 2007/10/07 14:22:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -412,17 +412,17 @@ supervisor_bricks_level::main_loop ()
     }
 
   /* escape key to quit the game! */
-  if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG) ||
+  if (keyboard->command_is_pressed (handler_keyboard::QUIT_TECNOBALLZ) ||
       Ecode == handler_popup_menu::QUIT_TECNOBALLZ)
     {
       next_phase = LEAVE_TECNOBALLZ;
     }
-  if (keyboard->command_is_pressed (handler_keyboard::TOOVERFLAG) ||
+  if (keyboard->command_is_pressed (handler_keyboard::CAUSE_GAME_OVER) ||
       Ecode == handler_popup_menu::CAUSE_GAME_OVER)
     {
       current_player->remove_all_lifes ();
     }
-  if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
+  if (keyboard->command_is_pressed (handler_keyboard::QUIT_TO_MAIN_MENU) ||
       Ecode == handler_popup_menu::QUIT_TO_MAIN_MENU)
     {
       next_phase = MAIN_MENU;

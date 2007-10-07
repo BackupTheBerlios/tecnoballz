@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-10-05
+ * @date 2007-10-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.50 $
+ * @version $Revision: 1.51 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.50 2007/10/05 06:33:42 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.51 2007/10/07 14:22:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,6 +87,7 @@ supervisor_guards_level::~supervisor_guards_level ()
 void
 supervisor_guards_level::first_init ()
 {
+  game_screen->clear ();
 #ifndef SOUNDISOFF
   audio->play_music (handler_audio::MUSICGUARD);
   audio->enable_sound ();
@@ -306,9 +307,7 @@ supervisor_guards_level::main_loop ()
     }
 
 
-  //##############################################################
-  // next levels
-  //##############################################################
+  /* next level */
   if (guards->is_guardians_destroyed () && !is_victory)
     {
       if (count_next > 0)
@@ -347,17 +346,17 @@ supervisor_guards_level::main_loop ()
   cheat_keys ();
 
   /* escape key to quit the game! */
-  if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG) ||
+  if (keyboard->command_is_pressed (handler_keyboard::QUIT_TECNOBALLZ) ||
       Ecode == handler_popup_menu::QUIT_TECNOBALLZ)
     {
       next_phase = LEAVE_TECNOBALLZ;
     }
-  if (keyboard->command_is_pressed (handler_keyboard::TOOVERFLAG) ||
+  if (keyboard->command_is_pressed (handler_keyboard::CAUSE_GAME_OVER) ||
       Ecode == handler_popup_menu::CAUSE_GAME_OVER)
     {
       current_player->remove_all_lifes ();
     }
-  if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
+  if (keyboard->command_is_pressed (handler_keyboard::QUIT_TO_MAIN_MENU) ||
       Ecode == handler_popup_menu::QUIT_TO_MAIN_MENU)
     {
       next_phase = MAIN_MENU;

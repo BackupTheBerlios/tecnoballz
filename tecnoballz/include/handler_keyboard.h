@@ -4,11 +4,11 @@
  * @date 2007-10-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.h,v 1.5 2007/10/03 06:25:33 gurumeditation Exp $
+ * $Id: handler_keyboard.h,v 1.6 2007/10/07 14:22:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,16 +37,16 @@ public:
   typedef enum
     {
       COMMAND_KEY_PAUSE,
-      TOEXITFLAG,
-      TOMENUFLAG,
-      TOOVERFLAG,
-      MFXSFXFLAG,
-      SOUND_FLAG,
-      MUSIC_FLAG,
-      FULLSCFLAG,
-      ESCAPEMENU,
-      WAITVBLOFF,
-      NUMOFFLAGS
+      QUIT_TECNOBALLZ,
+      QUIT_TO_MAIN_MENU,
+      CAUSE_GAME_OVER,
+      TOGGLE_AUDIO,
+      TOGGLE_SOUND,
+      TOGGLE_MUSIC,
+      TOGGLE_FULLSCREEN,
+      TOGGLE_POPUP_MENU,
+      DISABLE_TIMER,
+      NUMOF_COMMAND_KEYS
     }
     COMAND_KEYS_ENUM;
 
@@ -68,16 +68,26 @@ public:
      } KEY_CODES_ENUM;
 
 private:
-  static bool last_command_keys[NUMOFFLAGS];
-  static bool command_keys[NUMOFFLAGS];
+  static bool last_command_keys[NUMOF_COMMAND_KEYS];
+  static bool command_keys[NUMOF_COMMAND_KEYS];
   /** Predefinded keys to control the paddle */
   static Uint32 key_codes[K_MAXOF];
   static handler_keyboard* keyboard_singleton;
 
 private:
-  /* 1 =  grabs mouse and keyboard input */
+  /** True if grabs mouse and keyboard input */
   bool is_grab_input;
-  
+  /** Number of available joysticks */
+  Uint32 numof_joysticks;
+  SDL_Joystick** sdl_joysticks;
+  bool fire_button_down;
+  bool option_button_down;
+  bool start_button_down;
+  bool joy_left;
+  bool joy_right;
+  bool joy_top;
+  bool joy_down;
+
   Sint32 mouse_x_offset;
   Sint32 mouse_y_offset;
   Sint32 previous_mouse_x_coord;
@@ -133,7 +143,11 @@ public:
   void stop_string_input ();
   Uint32 get_key_down_code ();
 
+  bool is_joy_left();
+  bool is_joy_right();
+
 private:
+  void init_joysticks(); 
   void input_string ();
   void input_string (Uint32 code);
   void set_key_code_down (Uint32 code);

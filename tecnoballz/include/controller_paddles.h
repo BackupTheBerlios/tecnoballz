@@ -4,11 +4,11 @@
  * @date 2007-09-27
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.h,v 1.12 2007/10/03 16:00:09 gurumeditation Exp $
+ * $Id: controller_paddles.h,v 1.13 2007/10/07 14:22:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -153,6 +153,7 @@ public:
   void check_if_release_ball ();
   void release_all_balls ();
   void move_paddles ();
+  Sint32 get_paddles_speed ();
   void move_paddle ();
   void init_paddles (controller_gigablitz * blitz, controller_balls * balls);
   void initialize_robot ();

@@ -4,11 +4,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.29 2007/10/07 06:35:36 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.30 2007/10/07 14:22:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -433,6 +433,52 @@ controller_paddles::release_all_balls ()
   paddle_left->release_ball ();
 }
 
+
+
+/**
+ * Calculate the speed of
+ */
+Sint32 
+controller_paddles::get_paddles_speed ()
+{
+
+  Sint32 off_x = 0; 
+  if (keyboard->control_is_pressed(handler_keyboard::K_LEFT))
+    {
+      if ((Sint32)kb_paddle_speed > 0)
+        {
+          kb_paddle_speed = 0;
+        }
+      kb_paddle_speed -= 2;
+      if ((Sint32)kb_paddle_speed < 1) 
+        {
+          kb_paddle_speed *= 0.9; 
+        }
+      off_x = (Sint32)kb_paddle_speed; 
+      //printf("<== %i\n", off_x);
+    }
+  else if (keyboard->control_is_pressed(handler_keyboard::K_RIGHT))
+    {
+      if ((Sint32)kb_paddle_speed < 0)
+        {
+          kb_paddle_speed = 0;
+        }
+      kb_paddle_speed += 2;
+      if ((Sint32)kb_paddle_speed > 1)
+        {
+          kb_paddle_speed *= 0.9; 
+        }
+      off_x = (Sint32)kb_paddle_speed; 
+      //printf("==> %i\n", off_x);
+    }
+  else
+    {
+      kb_paddle_speed = 0;
+      off_x = keyboard->get_mouse_x_offset ();
+    }
+  return off_x;
+}
+
 /** 
  * Control the movements of paddle(s) in the bricks levels
  */
@@ -442,39 +488,8 @@ controller_paddles::move_paddles ()
   Sint32 speed = 0;
   const Sint32 **tabB1, **tabB2, **tabB3, **tabB4;
   Sint32 x = paddle_bottom->x_coord;
-  Sint32 off_x = 0; 
+  Sint32 off_x = get_paddles_speed();
   
-  if (keyboard->control_is_pressed(handler_keyboard::K_LEFT))
-    {
-      if (kb_paddle_speed > 0)
-        {
-          kb_paddle_speed = 0;
-        }
-      kb_paddle_speed -= 2;
-      if (int(kb_paddle_speed) < 1) {
-         kb_paddle_speed *= 0.9; 
-      }
-      off_x = (Sint32)kb_paddle_speed; 
-      //printf("<== %i\n", off_x);
-    }
-    else if (keyboard->control_is_pressed(handler_keyboard::K_RIGHT))
-      {
-      if (int(kb_paddle_speed) < 0)
-        {
-          kb_paddle_speed = 0;
-        }
-      kb_paddle_speed += 2;
-      if (int(kb_paddle_speed) > 1) {
-         kb_paddle_speed *= 0.9; 
-      }
-      off_x = (Sint32)kb_paddle_speed; 
-      //printf("==> %i\n", off_x);
-      }
-    else {
-      kb_paddle_speed = 0;
-      off_x = keyboard->get_mouse_x_offset ();
-    }
-
 
   /* one player mode */
   if (!is_team_mode)
@@ -521,15 +536,15 @@ controller_paddles::move_paddles ()
               tabB4 = paddle_left->rebonds_Dr;
             }
 
-          // selectionne table de rebond balle suivant le deplacement
+          /* select a table of bounces's ball according to paddle's moving */
           if (speed > 10)
 	    {
               speed = 10;
 	    }
-          paddle_bottom->rebonds_GD = *(tabB1 + speed);
-          paddle_right->rebonds_GD = *(tabB2 + speed);
-          paddle_top->rebonds_GD = *(tabB3 + speed);
-          paddle_left->rebonds_GD = *(tabB4 + speed);
+          paddle_bottom->current_bounces = *(tabB1 + speed);
+          paddle_right->current_bounces = *(tabB2 + speed);
+          paddle_top->current_bounces = *(tabB3 + speed);
+          paddle_left->current_bounces = *(tabB4 + speed);
 
           /** Update x or y coordinates of the paddles */
 	  paddle_bottom->set_x_coord (x);
@@ -556,7 +571,7 @@ controller_paddles::move_paddle ()
   Sint32 speed = 0;
   const Sint32 **tabB1;
   Sint32 x = paddle_bottom->x_coord;
-  Sint32 off_x = keyboard->get_mouse_x_offset ();
+  Sint32 off_x = get_paddles_speed();
   /* mode solo */
   if (!is_team_mode)
     {
@@ -583,10 +598,12 @@ controller_paddles::move_paddle ()
           tabB1 = paddle_bottom->rebonds_Dr;
         }
 
-      //select table of rebound ball according to bumper's moving 
+      /* select a table of bounces's ball according to paddle's moving */
       if (speed > 10)
-        speed = 10;
-      paddle_bottom->rebonds_GD = *(tabB1 + speed);
+        {
+          speed = 10;
+        }
+      paddle_bottom->current_bounces = *(tabB1 + speed);
       paddle_bottom->set_x_coord (x);
       paddle_bottom->blink ();
     }
@@ -670,7 +687,7 @@ controller_paddles::move_robot ()
   {
     tabB1 = paddle_robot->rebonds_Dr;
   }
-  paddle_robot->rebonds_GD = *(tabB1 + offset);
+  paddle_robot->current_bounces = *(tabB1 + offset);
 }
 
 /**

@@ -5,11 +5,11 @@
  * @date 2007-04-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.23 2007/10/05 11:18:21 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.24 2007/10/07 14:22:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -107,7 +107,7 @@ handler_display::set_video_mode ()
     }
 
   /* initializes SDL */
-  if (SDL_Init (SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE | SDL_INIT_AUDIO) < 0)
+  if (SDL_Init (SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
     {
       std::cerr << "!handler_display::set_video_mode() " <<
         "SDL_Init() return " << SDL_GetError () << std::endl;
@@ -272,7 +272,7 @@ handler_display::get_info ()
 void
 handler_display::check_if_toggle_fullscreen ()
 {
-  if (keyboard->command_is_pressed (handler_keyboard::FULLSCFLAG) &&
+  if (keyboard->command_is_pressed (handler_keyboard::TOGGLE_FULLSCREEN) &&
       keyboard->get_input_cursor_pos () < 0)
     {
       if (optionfull)

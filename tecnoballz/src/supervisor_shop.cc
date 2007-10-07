@@ -4,11 +4,11 @@
  * @date 2007-10-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.48 $
+ * @version $Revision: 1.49 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.48 2007/10/07 10:44:24 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.49 2007/10/07 14:22:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -331,15 +331,13 @@ supervisor_shop::main_loop ()
   display->unlock_surfaces ();
   display->window_update ();
 
-  //###################################################################
-  // escape key to quit the game !
-  //###################################################################
-  if (keyboard->command_is_pressed (handler_keyboard::TOEXITFLAG) ||
+  /* escape key to quit the game! */
+  if (keyboard->command_is_pressed (handler_keyboard::QUIT_TECNOBALLZ) ||
       Ecode == handler_popup_menu::QUIT_TECNOBALLZ)
     {
       next_phase = LEAVE_TECNOBALLZ;
     }
-  if (keyboard->command_is_pressed (handler_keyboard::TOMENUFLAG) ||
+  if (keyboard->command_is_pressed (handler_keyboard::QUIT_TO_MAIN_MENU) ||
       Ecode == handler_popup_menu::QUIT_TO_MAIN_MENU)
     {
       next_phase = MAIN_MENU;
@@ -783,7 +781,6 @@ supervisor_shop::sh_ballade ()
 
 
 
-    {
       if (keyboard->is_left_button ())
         {
           drag_sprite->enable ();
@@ -894,7 +891,6 @@ supervisor_shop::sh_ballade ()
             }
           get_object = -1;
         }
-    }
 
 }
 

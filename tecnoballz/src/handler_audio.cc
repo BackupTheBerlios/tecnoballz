@@ -2,14 +2,14 @@
  * @file handler_audio.cc 
  * @brief Handler of the sound and music
  * @created 2004-03-22
- * @date 2007-09-26
+ * @date 2007-10-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.cc,v 1.8 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: handler_audio.cc,v 1.9 2007/10/07 14:22:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -487,9 +487,9 @@ handler_audio::run ()
     }
 
   /* 
-   * [Ctrl] + [S]: enable/disable sfx - mfx
+   * [Ctrl] + [S]: enable/disable audio (sound effects and musics) 
    */
-  if (keyboard->command_is_pressed (handler_keyboard::MFXSFXFLAG, true))
+  if (keyboard->command_is_pressed (handler_keyboard::TOGGLE_AUDIO, true))
     {
       if (!is_music_enable || !is_sound_enable)
         {
@@ -506,8 +506,8 @@ handler_audio::run ()
     }
   else
     { 
-      /* [Ctrl] + [F]: enable/disable sfx */
-      if (keyboard->command_is_pressed (handler_keyboard::SOUND_FLAG, true))
+      /* [Ctrl] + [F]: enable/disable sound effects */
+      if (keyboard->command_is_pressed (handler_keyboard::TOGGLE_SOUND, true))
         {
           is_sound_enable = is_sound_enable ? false : true; 
           if (!is_sound_enable)
@@ -522,7 +522,7 @@ handler_audio::run ()
       else
         {
           if (keyboard->
-              command_is_pressed (handler_keyboard::MUSIC_FLAG, true))
+              command_is_pressed (handler_keyboard::TOGGLE_MUSIC, true))
             {
               is_music_enable = is_music_enable ? false : true;
               if (is_music_enable)

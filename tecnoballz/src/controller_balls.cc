@@ -4,11 +4,11 @@
  * @date 2007-10-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.62 $
+ * @version $Revision: 1.63 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.62 2007/10/05 06:33:42 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.63 2007/10/07 14:22:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -647,9 +647,9 @@ controller_balls::collisions_with_paddles ()
                     << "(1) ball->direction " << j;
                   j = 64;
                 }
-              const Sint32 *bounce = touched_paddle->rebonds_GD;
-              bounce = (Sint32 *) ((char *) bounce + j);
-              j = *bounce;
+              const Sint32 *bounces = touched_paddle->current_bounces;
+              bounces = (Sint32 *) ((char *) bounces + j);
+              j = *bounces;
               ball->direction = j;
               if (touched_paddle->sticky_state == sprite_paddle::FREE_STICKY_PADDLE && !touched_paddle->stuck_ball)
                 {
@@ -711,7 +711,7 @@ controller_balls::collisions_with_paddle ()
       ball->paddle_touched = touched_paddle;
       ball->tilt_delay_counter = 0;
       j = ball->direction;
-      monPT = touched_paddle->rebonds_GD;
+      monPT = touched_paddle->current_bounces;
       monPT = (Sint32 *) ((char *) monPT + j);
       ball->direction = *monPT;
       if (touched_paddle->sticky_state == sprite_paddle::FREE_STICKY_PADDLE)
@@ -759,7 +759,7 @@ controller_balls::collisions_with_robot ()
       ball->y_coord = y1 - ball->collision_height;
       paddle->is_hit_ball = true;
       j = ball->direction;
-      monPT = paddle->rebonds_GD;
+      monPT = paddle->current_bounces;
       monPT = (Sint32 *) ((char *) monPT + j);
       ball->direction = *monPT;
 #ifndef SOUNDISOFF

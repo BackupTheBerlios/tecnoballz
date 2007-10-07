@@ -5,11 +5,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.10 2007/10/02 04:50:33 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.11 2007/10/07 14:22:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -300,7 +300,7 @@ handler_popup_menu::run ()
   Sint32 event = -1;
 
   /* [ESC] key: enable / disable menu box */
-  if (keyboard->command_is_pressed (handler_keyboard::ESCAPEMENU))
+  if (keyboard->command_is_pressed (handler_keyboard::TOGGLE_POPUP_MENU))
     {
       is_enabled = true;
     }

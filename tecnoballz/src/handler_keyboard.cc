@@ -4,11 +4,11 @@
  * @date 2007-10-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.9 2007/10/03 06:25:33 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.10 2007/10/07 14:22:12 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,8 @@
 #include "../include/handler_keyboard.h"
 #include "../include/handler_display.h"
 
-bool handler_keyboard::command_keys[NUMOFFLAGS];
-bool handler_keyboard::last_command_keys[NUMOFFLAGS];
+bool handler_keyboard::command_keys[NUMOF_COMMAND_KEYS];
+bool handler_keyboard::last_command_keys[NUMOF_COMMAND_KEYS];
 Uint32 handler_keyboard::key_codes[K_MAXOF] =
 {
   SDLK_LEFT,
@@ -74,11 +74,13 @@ handler_keyboard::handler_keyboard ()
   code_keyup = 0;
   current_input_string = NULL;
 
-  for (Uint32 i = 0; i < NUMOFFLAGS; i++)
+
+  for (Uint32 i = 0; i < NUMOF_COMMAND_KEYS; i++)
     {
       command_keys[i] = false;
       last_command_keys[i] = false;
     }
+  init_joysticks();
 }
 
 /**
@@ -88,7 +90,81 @@ handler_keyboard::~handler_keyboard ()
 {
   object_free ();
   keyboard_singleton = NULL;
+  if (numof_joysticks > 0)
+    {
+      for (Uint32 i = 0; i < numof_joysticks; i++)
+        {
+          if (sdl_joysticks[i] != NULL)
+            {
+              SDL_JoystickClose (sdl_joysticks[i]);
+              sdl_joysticks[i] = NULL;
+            }
+        }
+      delete[] sdl_joysticks;
+      numof_joysticks = 0;
+    }
 }
+
+/**
+ * Open joystick(s) if available 
+ */
+void
+handler_keyboard::init_joysticks()
+{
+  fire_button_down = false;
+  option_button_down = false;
+  start_button_down = false;
+  joy_left = false;
+  joy_right = false;
+  joy_top = false;
+  joy_down = false;
+  numof_joysticks = SDL_NumJoysticks ();
+  if (is_verbose)
+    {
+      std::cout << "handler_keyboard::init_joysticks()" <<
+        " number of joysticks available: " << numof_joysticks << std::endl;
+    }
+  if (numof_joysticks > 0)
+    {
+      sdl_joysticks = new SDL_Joystick *[numof_joysticks];
+      for (Uint32 i = 0; i < numof_joysticks; i++)
+        {
+
+          sdl_joysticks[i] = SDL_JoystickOpen (0);
+          if (sdl_joysticks[i] == NULL)
+            {
+              std::cerr << "(!)handler_keyboard::init_joysticks()" <<
+                       " couldn't open joystick " << i << ": "
+                       << SDL_GetError () << std::endl;
+            }
+          else
+            {
+              if (is_verbose)
+                {
+                  std::cout << "- joystick  : " << SDL_JoystickName (i) << std::endl;
+                  std::cout << "- axes      : " << SDL_JoystickNumAxes (sdl_joysticks[i]) << std::endl; 
+                  std::cout << "- buttons   : " << SDL_JoystickNumButtons (sdl_joysticks[i]) << std::endl;
+                  std::cout << "- trackballs: " << SDL_JoystickNumButtons (sdl_joysticks[i]) << std::endl;
+                  std::cout << "- hats      : " << SDL_JoystickNumHats (sdl_joysticks[i]) << std::endl;
+                }
+            }
+        }
+    }
+}
+
+bool
+handler_keyboard::is_joy_left()
+{
+  return joy_left ? true : false;
+}
+
+bool
+handler_keyboard::is_joy_right()
+{
+  return joy_right ? true : false;
+}
+
+
 
 /**
  * Get the object instance
@@ -140,8 +216,8 @@ handler_keyboard::set_grab_input (bool mode)
 void
 handler_keyboard::read_events ()
 {
-  command_keys[FULLSCFLAG] = false;
-  command_keys[WAITVBLOFF] = false;
+  command_keys[TOGGLE_FULLSCREEN] = false;
+  command_keys[DISABLE_TIMER] = false;
   is_left_button_released = 0;
   is_right_button_released = 0;
   SDL_Event event;
@@ -176,28 +252,36 @@ handler_keyboard::read_events ()
                     keys[SDLK_LCTRL] == SDL_RELEASED)
                   {
                     if (keys[SDLK_p] == SDL_PRESSED)
-                      last_command_keys[COMMAND_KEY_PAUSE] = true;
+                      {
+                        last_command_keys[COMMAND_KEY_PAUSE] = true;
+                      }
                     if (keys[SDLK_f] == SDL_PRESSED)
-                      last_command_keys[FULLSCFLAG] = true;
+                      {
+                        last_command_keys[TOGGLE_FULLSCREEN] = true;
+                      }
                     if (keys[SDLK_ESCAPE] == SDL_PRESSED)
-                      last_command_keys[ESCAPEMENU] = true;
+                      {
+                        last_command_keys[TOGGLE_POPUP_MENU] = true;
+                      }
                     if (keys[SDLK_l] == SDL_PRESSED)
-                      last_command_keys[WAITVBLOFF] = true;
+                      {
+                        last_command_keys[DISABLE_TIMER] = true;
+                      }
                   }
                 else
                   {
                     if (keys[SDLK_ESCAPE] == SDL_PRESSED)
-                      last_command_keys[TOEXITFLAG] = true;
+                      last_command_keys[QUIT_TECNOBALLZ] = true;
                     if (keys[SDLK_x] == SDL_PRESSED)
-                      last_command_keys[TOOVERFLAG] = true;
+                      last_command_keys[CAUSE_GAME_OVER] = true;
                     if (keys[SDLK_q] == SDL_PRESSED)
-                      last_command_keys[TOMENUFLAG] = true;
+                      last_command_keys[QUIT_TO_MAIN_MENU] = true;
                     if (keys[SDLK_f] == SDL_PRESSED)
-                      last_command_keys[SOUND_FLAG] = true;
+                      last_command_keys[TOGGLE_SOUND] = true;
                     if (keys[SDLK_s] == SDL_PRESSED)
-                      last_command_keys[MFXSFXFLAG] = true;
+                      last_command_keys[TOGGLE_AUDIO] = true;
                     if (keys[SDLK_d] == SDL_PRESSED)
-                      last_command_keys[MUSIC_FLAG] = true;
+                      last_command_keys[TOGGLE_MUSIC] = true;
                   }
               }
 
@@ -224,7 +308,7 @@ handler_keyboard::read_events ()
                 && last_command_keys[COMMAND_KEY_PAUSE])
               {
                 last_command_keys[COMMAND_KEY_PAUSE] = false;
-                if (!command_keys[ESCAPEMENU])
+                if (!command_keys[TOGGLE_POPUP_MENU])
                   {
                     command_keys[COMMAND_KEY_PAUSE] =
                       command_keys[COMMAND_KEY_PAUSE] ? false : true;
@@ -240,71 +324,71 @@ handler_keyboard::read_events ()
               }
 
             /* enable context menu [ESC] key */
-            if (keys[ESCAPEMENU] == SDL_RELEASED
-                && last_command_keys[ESCAPEMENU])
+            if (keys[TOGGLE_POPUP_MENU] == SDL_RELEASED
+                && last_command_keys[TOGGLE_POPUP_MENU])
               {
-                last_command_keys[ESCAPEMENU] = false;
-                command_keys[ESCAPEMENU] =
-                  command_keys[ESCAPEMENU] ? false : true;
-                command_keys[COMMAND_KEY_PAUSE] = command_keys[ESCAPEMENU];
+                last_command_keys[TOGGLE_POPUP_MENU] = false;
+                command_keys[TOGGLE_POPUP_MENU] =
+                  command_keys[TOGGLE_POPUP_MENU] ? false : true;
+                command_keys[COMMAND_KEY_PAUSE] = command_keys[TOGGLE_POPUP_MENU];
                 if (is_grab_input && command_keys[COMMAND_KEY_PAUSE])
                   SDL_WM_GrabInput (SDL_GRAB_OFF);
                 if (is_grab_input && !command_keys[COMMAND_KEY_PAUSE])
                   SDL_WM_GrabInput (SDL_GRAB_ON);
 
-                if (!command_keys[ESCAPEMENU])
+                if (!command_keys[TOGGLE_POPUP_MENU])
                   SDL_ShowCursor (SDL_DISABLE);
-                if (command_keys[ESCAPEMENU])
+                if (command_keys[TOGGLE_POPUP_MENU])
                   SDL_ShowCursor (SDL_ENABLE);
               }
 
-            if (keys[SDLK_f] == SDL_RELEASED && last_command_keys[FULLSCFLAG])
+            if (keys[SDLK_f] == SDL_RELEASED && last_command_keys[TOGGLE_FULLSCREEN])
               {
-                last_command_keys[FULLSCFLAG] = false;
-                command_keys[FULLSCFLAG] = true;
+                last_command_keys[TOGGLE_FULLSCREEN] = false;
+                command_keys[TOGGLE_FULLSCREEN] = true;
               }
             {
               if (keys[SDLK_ESCAPE] == SDL_RELEASED
-                  && last_command_keys[TOEXITFLAG])
+                  && last_command_keys[QUIT_TECNOBALLZ])
                 {
-                  last_command_keys[TOEXITFLAG] = false;
-                  command_keys[TOEXITFLAG] = true;
+                  last_command_keys[QUIT_TECNOBALLZ] = false;
+                  command_keys[QUIT_TECNOBALLZ] = true;
                 }
               if (keys[SDLK_x] == SDL_RELEASED
-                  && last_command_keys[TOOVERFLAG])
+                  && last_command_keys[CAUSE_GAME_OVER])
                 {
-                  last_command_keys[TOOVERFLAG] = false;
-                  command_keys[TOOVERFLAG] = true;
+                  last_command_keys[CAUSE_GAME_OVER] = false;
+                  command_keys[CAUSE_GAME_OVER] = true;
                 }
               if (keys[SDLK_q] == SDL_RELEASED
-                  && last_command_keys[TOMENUFLAG])
+                  && last_command_keys[QUIT_TO_MAIN_MENU])
                 {
-                  last_command_keys[TOMENUFLAG] = false;
-                  command_keys[TOMENUFLAG] = true;
+                  last_command_keys[QUIT_TO_MAIN_MENU] = false;
+                  command_keys[QUIT_TO_MAIN_MENU] = true;
                 }
               if (keys[SDLK_f] == SDL_RELEASED
-                  && last_command_keys[SOUND_FLAG])
+                  && last_command_keys[TOGGLE_SOUND])
                 {
-                  last_command_keys[SOUND_FLAG] = false;
-                  command_keys[SOUND_FLAG] = true;
+                  last_command_keys[TOGGLE_SOUND] = false;
+                  command_keys[TOGGLE_SOUND] = true;
                 }
               if (keys[SDLK_s] == SDL_RELEASED
-                  && last_command_keys[MFXSFXFLAG])
+                  && last_command_keys[TOGGLE_AUDIO])
                 {
-                  last_command_keys[MFXSFXFLAG] = false;
-                  command_keys[MFXSFXFLAG] = true;
+                  last_command_keys[TOGGLE_AUDIO] = false;
+                  command_keys[TOGGLE_AUDIO] = true;
                 }
               if (keys[SDLK_d] == SDL_RELEASED
-                  && last_command_keys[MUSIC_FLAG])
+                  && last_command_keys[TOGGLE_MUSIC])
                 {
-                  last_command_keys[MUSIC_FLAG] = false;
-                  command_keys[MUSIC_FLAG] = true;
+                  last_command_keys[TOGGLE_MUSIC] = false;
+                  command_keys[TOGGLE_MUSIC] = true;
                 }
               if (keys[SDLK_l] == SDL_RELEASED
-                  && last_command_keys[WAITVBLOFF])
+                  && last_command_keys[DISABLE_TIMER])
                 {
-                  last_command_keys[WAITVBLOFF] = false;
-                  command_keys[WAITVBLOFF] = true;
+                  last_command_keys[DISABLE_TIMER] = false;
+                  command_keys[DISABLE_TIMER] = true;
                 }
             }
 
@@ -363,10 +447,102 @@ handler_keyboard::read_events ()
           }
           break;
 
+        case SDL_JOYAXISMOTION:
+          {
+            Sint32 deadzone = 4096;
+            /* x axis */
+            if (event.jaxis.axis == 0)
+              {
+                if (event.jaxis.value < -deadzone)
+                  {
+                    joy_left = true;
+                    //sprites_string_set_joy (IJOY_LEFT);
+                    joy_right = false;
+                  }
+                else if (event.jaxis.value > deadzone)
+                  {
+                    joy_left = false;
+                    joy_right = true;
+                    //sprites_string_set_joy (IJOY_RIGHT);
+                  }
+                else
+                  {
+                    joy_left = false;
+                    joy_right = false;
+                    //sprites_string_clr_joy (IJOY_RIGHT);
+                    //sprites_string_clr_joy (IJOY_LEFT);
+                  }
+              }
+            /* y axis */
+            else if (event.jaxis.axis == 1)
+              {
+                if (event.jaxis.value < -deadzone)
+                  {
+                    joy_down = false;
+                    joy_top = true;
+                    //sprites_string_set_joy (IJOY_TOP);
+                  }
+                else if (event.jaxis.value > deadzone)
+                  {
+                    joy_down = true;
+                    joy_top = false;
+                    //sprites_string_set_joy (IJOY_DOWN);
+                  }
+                else
+                  {
+                    joy_down = false;
+                    joy_top = false;
+                    //sprites_string_clr_joy (IJOY_TOP);
+                    //sprites_string_clr_joy (IJOY_DOWN);
+                  }
+              }
+          }
+          break;
+        case SDL_JOYBUTTONDOWN:
+#ifdef TECNOBALLZ_HANDHELD_CONSOLE
+          //handle_console_buttons (&event);
+#else
+          if (event.jbutton.button == 2)
+            {
+              start_button_down = true;
+            }
+          else if (event.jbutton.button == 0)
+            {
+              fire_button_down = true;
+              //sprites_string_set_joy (IJOY_FIRE);
+            }
+          else if (event.jbutton.button == 1)
+            {
+              option_button_down = true;
+              //sprites_string_set_joy (IJOY_OPT);
+            }
+          break;
+#endif
+        case SDL_JOYBUTTONUP:
+#ifdef TECNOBALLZ_HANDHELD_CONSOLE
+          //handle_console_buttons (&event);
+#else
+          if (event.jbutton.button == 2)
+            {
+              start_button_down = false;
+            }
+          else if (event.jbutton.button == 0)
+            {
+              fire_button_down = false;
+              //sprites_string_clr_joy (IJOY_FIRE);
+            }
+          else if (event.jbutton.button == 1)
+            {
+              option_button_down = false;
+              //sprites_string_clr_joy (IJOY_OPT);
+            }
+#endif
+          break;
+
           /* quit the game */
         case SDL_QUIT:
           {
-            command_keys[TOEXITFLAG] = true;
+            command_keys[QUIT_TECNOBALLZ] = true;
           }
           break;
         }
@@ -441,19 +617,19 @@ void
 handler_keyboard::clear_command_keys ()
 {
   command_keys[COMMAND_KEY_PAUSE] = false;
-  command_keys[TOMENUFLAG] = false;
-  command_keys[TOOVERFLAG] = false;
-  command_keys[MFXSFXFLAG] = false;
-  command_keys[SOUND_FLAG] = false;
-  command_keys[MUSIC_FLAG] = false;
-  command_keys[ESCAPEMENU] = false;
+  command_keys[QUIT_TO_MAIN_MENU] = false;
+  command_keys[CAUSE_GAME_OVER] = false;
+  command_keys[TOGGLE_AUDIO] = false;
+  command_keys[TOGGLE_SOUND] = false;
+  command_keys[TOGGLE_MUSIC] = false;
+  command_keys[TOGGLE_POPUP_MENU] = false;
   last_command_keys[COMMAND_KEY_PAUSE] = false;
-  last_command_keys[TOMENUFLAG] = false;
-  last_command_keys[TOOVERFLAG] = false;
-  last_command_keys[MFXSFXFLAG] = false;
-  last_command_keys[SOUND_FLAG] = false;
-  last_command_keys[MUSIC_FLAG] = false;
-  last_command_keys[ESCAPEMENU] = false;
+  last_command_keys[QUIT_TO_MAIN_MENU] = false;
+  last_command_keys[CAUSE_GAME_OVER] = false;
+  last_command_keys[TOGGLE_AUDIO] = false;
+  last_command_keys[TOGGLE_SOUND] = false;
+  last_command_keys[TOGGLE_MUSIC] = false;
+  last_command_keys[TOGGLE_POPUP_MENU] = false;
   if (is_grab_input)
     {
       SDL_WM_GrabInput (SDL_GRAB_ON);
