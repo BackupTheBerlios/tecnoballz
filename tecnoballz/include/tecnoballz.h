@@ -2,14 +2,14 @@
  * @file tecnoballz.h
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-10-07
+ * @date 2007-10-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.62 $
+ * @version $Revision: 1.63 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.62 2007/10/07 06:35:36 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.63 2007/10/08 05:44:03 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-10-07)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-10-08)"
 /** To define only under development  */
 #define UNDER_DEVELOPMENT
 /** Force bytes copy (SPARC unaligned memory access) */
@@ -207,13 +207,11 @@ public:
   static void release_all_objects (configfile * pConf);
 
   static void integer_to_ascii (Sint32 value, Uint32 padding, char *str); 
-  static void intToASCII (Sint32 value, char *strng, Uint32 reste);
 
     tecnoballz ();
    ~tecnoballz ();
   void object_init ();
   void object_free ();
-  Sint32 chaine_cmp (char *srcPT, char *desPT, Sint32 taille);
   void int_to_big_endian (Uint32 *, Uint32 *);
   void big_endian_to_int (Uint32 *, Uint32 *);
 };

@@ -1,14 +1,14 @@
-/** 
+/**
  * @file supervisor_main_menu.cc 
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-10-02
+ * @date 2007-10-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.24 2007/10/07 14:22:12 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.25 2007/10/08 05:44:03 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 #include "../include/handler_players.h"
 #include "../include/controller_guardians.h"
 
-/** 
+/**
  * Create the main menu supervisor 
  */
 supervisor_main_menu::supervisor_main_menu ()
@@ -38,23 +38,23 @@ supervisor_main_menu::supervisor_main_menu ()
   initialize ();
   /* vertical background scrolling */
   tiles_map = new tilesmap_scrolling ();
-  /*  big logo "TecnoballZ" */
+  /*  big TecnoballZ logo */
   tecnoballz_logo = new sprite_object ();
-  fonts_scrolling = new controller_fontes_menu ();
+  font_scrolling = new controller_fontes_menu ();
   text_menu = new sprite_display_menu ();
   mouse_pointer = new sprite_mouse_pointer ();
-  offset_xx1 = 0;
+  tecnoballz_logo_angle = 0;
 }
 
 
-/** 
+/**
  * Release the main menu supervisor 
  */
 supervisor_main_menu::~supervisor_main_menu ()
 {
   delete mouse_pointer;
   delete text_menu;
-  delete fonts_scrolling;
+  delete font_scrolling;
   delete tecnoballz_logo;
   delete tiles_map;
   release ();
@@ -68,7 +68,8 @@ supervisor_main_menu::first_init ()
 {
   if (is_verbose)
     {
-      std::cout << "supervisor_main_menu::first_init() Begin!" << std::endl;
+      std::cout << "supervisor_main_menu::first_init() Begin!"
+	<< std::endl;
     }
   sprites->reset ();
 #ifndef SOUNDISOFF
@@ -83,7 +84,7 @@ supervisor_main_menu::first_init ()
   sprites->add (tecnoballz_logo);
   tecnoballz_logo->enable ();
   tecnoballz_logo->set_coordinates (64 * resolution, 13 * resolution);
-  fonts_scrolling->create_fontes_list ();
+  font_scrolling->create_fontes_list ();
   mouse_pointer->create_pointer_sprite (sprites_bitmap);
   resources->release_sprites_bitmap ();
   tiles_map->initialize (tilesmap_scrolling::TILES_COLOR_MENU,
@@ -93,25 +94,24 @@ supervisor_main_menu::first_init ()
   keyboard->set_grab_input (false);
   if (is_verbose)
     {
-      std::cout << "supervisor_main_menu::first_init() End!" << std::endl;
+      std::cout << "supervisor_main_menu::first_init() End!"
+	<< std::endl;
     }
 }
 
 /**
  * Main loop of the main menu
  */
-Uint32
-supervisor_main_menu::main_loop ()
+Uint32 supervisor_main_menu::main_loop ()
 {
 
   display->wait_frame ();
   /* vertical scrolling of the screen background */
   tiles_map->scroll (-1);
   display->lock_surfaces ();
-  offset_inc ();
   move_tecnoballz_logo ();
   /* scroll text of the menu */
-  fonts_scrolling->move_chars ();
+  font_scrolling->move_chars ();
   mouse_pointer->move ();
   sprites->draw ();
 
@@ -146,39 +146,25 @@ supervisor_main_menu::main_loop ()
   return next_phase;
 }
 
-//------------------------------------------------------------------------------
-// Increment the offset on the sinus table
-//------------------------------------------------------------------------------
-void
-supervisor_main_menu::offset_inc ()
-{
-  Sint32 m = SINUS_MASK;
-  Sint32 a = offset_xx1 + 6;
-  a &= m;
-  offset_xx1 = a;
-}
-
-/** 
+/**
  * Move the logo of TecnoballZ sprite
  */
 void
 supervisor_main_menu::move_tecnoballz_logo ()
 {
-  Sint32 a, b;
+  tecnoballz_logo_angle = (tecnoballz_logo_angle + 6) & SINUS_MASK;
   /* convert unsigned to signed */
   Sint32 res = (Sint32) resolution;
-  a = offset_xx1;
-  Sint16 *s = table_sinL + a;
-  b = ((*s * 20 * res) >> SINUS_DECA) + 32 * res;
-  tecnoballz_logo->set_x_coord (b);
-  if (birth_flag)
+  Uint32 a = tecnoballz_logo_angle;
+  tecnoballz_logo->set_x_coord (((table_sinL[a] * 20 * res) >> SINUS_DECA) +
+				32 * res);
+  if (!birth_flag)
     {
-      a *= 4;
-      a &= SINUS_MASK;
-      s = table_cosL + a;
-      b = ((*s * 5 * res) >> SINUS_DECA) + 7 * res;
-      tecnoballz_logo->set_y_coord (b);
+      return;
     }
+  a = (a * 4) & SINUS_MASK;
+  tecnoballz_logo->set_y_coord (((table_sinL[a] * 5 * res) >> SINUS_DECA) +
+				7 * res);
 }
 
 /**
@@ -191,8 +177,7 @@ supervisor_main_menu::start_new_game ()
 #ifdef UNDER_DEVELOPMENT
   is_enabled_cheat_mode = true;
 #endif
-  Sint32 iplay;
-  
+
   /*
    * check area password validity
    */
@@ -209,88 +194,92 @@ supervisor_main_menu::start_new_game ()
   else
     {
       if (area_count == 6)
-      {
-        area_num = 5;
-        level_num = 13;
-      }
+        {
+          area_num = 5;
+          level_num = 13;
+        }
       else
-      {
-        area_num = area_count;
-        level_num = 12;
-      }
+        {
+          area_num = area_count;
+          level_num = 12;
+        }
       if (is_verbose)
-      {
-        std::cout << "*supervisor_main_menu::start_new_game() " <<
+        {
+          std::cout << "*supervisor_main_menu::start_new_game() " <<
           "password is valid! Password: " << &current_area_code[0] <<
-          "; area number:" << area_num << "; level number:" << level_num << 
+          "; area number:" << area_num << "; level number:" << level_num <<
           "; difficulty level_num: " << difficulty_level << std::endl;
 
+        }
+      grdPt = controller_guardians::level2gdpt (area_num, level_num);
     }
-        grdPt = controller_guardians::level2gdpt (area_num, level_num);
-    }
- 
 
-
-  //###################################################################
-  // initialize enable player(s)
-  //###################################################################
+  /* initialize and enable the player(s) */
+  Sint32 iplay;
   for (iplay = 0; iplay < number_of_players; iplay++)
     {
       Uint32 nlife = initial_num_of_lifes;
+      handler_players* player = handler_players::players_list[iplay];
       if (birth_flag)
-        nlife = nlife + 10;
-      if (chaine_cmp
-          (handler_players::players_list[iplay]->get_name (), "ETB   ", 6))
-        nlife += 5;
-      if (chaine_cmp
-          (handler_players::players_list[iplay]->get_name (), "DJI   ", 6))
-        nlife += 4;
-      if (chaine_cmp
-          (handler_players::players_list[iplay]->get_name (), "JMM   ", 6))
-        nlife += 3;
-      if (chaine_cmp
-          (handler_players::players_list[iplay]->get_name (), "ZBB   ", 6))
-        nlife += 2;
-      if (chaine_cmp
-          (handler_players::players_list[iplay]->get_name (), "REG   ", 6))
-        nlife += 1;
-      handler_players::players_list[iplay]->initialize (nlife, area_num, level_num,
-                                                 600, grdPt);
+	{
+          nlife = nlife + 10;
+	}
+      if (strcmp (player->get_name (), "ETB   ") == 0)
+	{
+          nlife += 5;
+	}
+      if (strcmp (player->get_name (), "DJI   ") == 0)
+	{
+	  nlife += 4;
+	}
+      if (strcmp (player->get_name (), "JMM   ") == 0)
+	{
+	  nlife += 3;
+	}
+      if (strcmp (player->get_name (), "ZBB   ") == 0)
+	{
+	  nlife += 2;
+	}
+      if (strcmp (player->get_name (), "REG   ") == 0)
+	{
+	  nlife += 1;
+	}
+      player->initialize (nlife, area_num, level_num, 600, grdPt);
     }
 
-  
+
   /* disable other player(s) */
   for (Uint32 i = iplay; i < handler_players::MAX_OF_PLAYERS; i++)
     {
       handler_players::players_list[i]->initialize (0, 1, 1, 0, 0);
     }
-  
   current_player = handler_players::players_list[0];
-  
-  Uint32 value = current_player->get_next_phase ();
-  if (value == SHOP)
+
+  Uint32 next = current_player->get_next_phase ();
+  if (next == SHOP)
     {
-      value = BRICKS_LEVEL;
+      next = BRICKS_LEVEL;
     }
-  return value;
+  return next;
 }
 
-
 /**
- * Check area password validity
- * @return if the password is valid return the area number from 1 to 5 
+ * Check area area code validity
+ * @return if the code is valid return the area number from 1 to 5 
  *         or 6 for the very last guardian of the area 5. 
- *         Return 0 if password is not valid
+ *         Return 0 if the code is not valid
  */
 Uint32
 supervisor_main_menu::check_area_code ()
 {
-  Uint32 area_max = 4;
-  Uint32 index = 0;
+  Uint32
+  area_max = 4;
+  Uint32
+  index = 0;
 #ifdef UNDER_DEVELOPMENT
-  /* The number of zones really goes from 1 to 5.  
+  /* The number of zones really goes from 1 to 5.
    * The value 6 makes it possible to jump directly to the
-   * very last guardian of the area 5 */ 
+   * very last guardian of the area 5 */
   area_max = 6;
 #else
   if (birth_flag)
@@ -300,7 +289,8 @@ supervisor_main_menu::check_area_code ()
 #endif
   for (Uint32 area_count = 1; area_count <= area_max; area_count++)
     {
-      for (Uint32 difficulty_count = 1; difficulty_count <= 4; difficulty_count++)
+      for (Uint32 difficulty_count = 1; difficulty_count <= 4;
+           difficulty_count++)
         {
           bool is_valid = true;
           for (Uint32 i = 0; i < 10; i++)
@@ -320,7 +310,7 @@ supervisor_main_menu::check_area_code ()
         }
     }
   return 0;
-} 
+}
 
 /**
  * Static method which return a area code
@@ -337,13 +327,13 @@ supervisor_main_menu::get_area_code (Uint32 aera_num, Uint32 difficulty)
     }
   return &area_codes[(aera_num - 2) * 40 + (difficulty - 1) * 10];
 }
-  
- /**
- * Static method which return the current area code
- * @return the current area code
- */
-char
-*supervisor_main_menu::get_current_area_code ()
+
+/**
+* Static method which return the current area code
+* @return the current area code
+*/
+char *
+supervisor_main_menu::get_current_area_code ()
 {
   return current_area_code;
 }
@@ -361,52 +351,25 @@ supervisor_main_menu::copy_current_area_code (char *destination)
     }
 }
 
-
-
-
-
-/*
-	LARRYHEARD: area 2
-	DANCEFLOOR: area 3
-	ZULUNATION: area 4
-	DANCEMANIA: area 5
-	RINGOFFIRE: area 5 level 12 
-	SHELLSHOCK: area 5 level 13
-*/
-
-const char supervisor_main_menu::area_codes[241] =
-{
-  /* level 12 area 1 */
-	"LARRYHEARD" \
-	"SAUNDERSON" \
-	"JUANATKINS" \
-	"STEPHENSON" \
-  /* level 12 area 2 */
-	"DANCEFLOOR" \
-	"REVOLUTION" \
-	"LOOKTOSEXY" \
-	"REACHINGUP" \
-  /* level 12 area 3 */
-	"ZULUNATION" \
-	"HOUSEPIMPS" \
-	"ANDRONICUS" \
-	"DEFINITIVE" \
-  /* level 12 area 4 */
-	"DANCEMANIA" \
-	"PEPPERMINT" \
-	"SOLARTRIBE" \
-	"PROJECTXYZ" \
-  /* level 12 area 5 (with cheat code enabled) */
-	"RINGOFFIRE" \
-	"POINTBLANK" \
-	"TEMPTATION" \
-	"BLUEMONDAY" \
-  /* level 13 area 5 (with cheat code enabled) */
-	"SHELLSHOCK" \
-	"HOUSEMUSIC" \
-	"DAVECLARKE" \
-	"CYBERACTIF"
-};
-char supervisor_main_menu::current_area_code[AREA_CODE_LENGTH + 1] = 
-"          ";
-
+/** All areas code for every areas and every difficulty levels */
+const char
+supervisor_main_menu::area_codes[241] =
+  {
+    /* level 12 area 1 */
+    "LARRYHEARD" "SAUNDERSON" "JUANATKINS" "STEPHENSON"
+    /* level 12 area 2 */
+    "DANCEFLOOR" "REVOLUTION" "LOOKTOSEXY" "REACHINGUP"
+    /* level 12 area 3 */
+    "ZULUNATION" "HOUSEPIMPS" "ANDRONICUS" "DEFINITIVE"
+    /* level 12 area 4 */
+    "DANCEMANIA" "PEPPERMINT" "SOLARTRIBE" "PROJECTXYZ"
+    /* level 12 area 5 (with cheat code enabled) */
+    "RINGOFFIRE" "POINTBLANK" "TEMPTATION" "BLUEMONDAY"
+    /* level 13 area 5 (with cheat code enabled) */
+    "SHELLSHOCK" "HOUSEMUSIC" "DAVECLARKE" "CYBERACTIF"
+  };
+/** Current input area code used to jump directly to the
+ * end of a area */
+char
+supervisor_main_menu::current_area_code[AREA_CODE_LENGTH + 1] =
+  "          ";

@@ -4,11 +4,11 @@
  * @date 2007-09-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.15 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.16 2007/10/08 05:44:03 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,18 +137,14 @@ sprite_display_menu::check_and_display ()
   Sint32 y = (mousY - y_coord) / line_spacing;
   Uint32 exit_code = check_events ();
 
-  //###################################################################
-  // read color table offset (color line hover by mouse )
-  //###################################################################
+  /* read color table offset (color line over the mouse ) */
   if (menu_color++ > 32)
     {
       menu_color = 0;
     }
   Sint32 color = menu_color;
 
-  //###################################################################
-  // display menu text    
-  //###################################################################
+  /* display menu text */   
   char *desP1 = pixel_data;
   Sint32 offSc = off_source;
   Sint32 offDs = row_size;
@@ -582,11 +578,11 @@ sprite_display_menu::mis_a_jour ()
   d = menuTexte0 + (NUM_OF_COLUMNS * LINE_CODE2) + 10;
   supervisor_main_menu::copy_current_area_code (d);
 
-  //###########################################################
-  // number of players
-  //###########################################################
+  /* number of players */
   d = menuTexte1 + (NUM_OF_COLUMNS * 5) + 24;
-  intToASCII (number_of_players, d, 0);
+  //intToASCII (number_of_players, d, 0);
+  integer_to_ascii (number_of_players, 1, d);
+
 
   //###########################################################
   // copy playes names
@@ -602,9 +598,10 @@ sprite_display_menu::mis_a_jour ()
   s = &difficulte[(difficulty_level - 1) * 4];
   d = menuTexte1 + (NUM_OF_COLUMNS * 12) + 24;
   for (Sint32 i = 0; i < 4; i++)
-    d[i] = s[i];
+    {
+      d[i] = s[i];
+    }
   d = menuTexte1 + (NUM_OF_COLUMNS * 13) + 24;
-  //intToASCII (initial_num_of_lifes, d, 1);
   integer_to_ascii (initial_num_of_lifes, 2, d);
 
 
@@ -638,17 +635,16 @@ sprite_display_menu::clear_input_zone ()
   text_offscreen->clear(0, clear_zone_xcoord, clear_zone_ycoord, clear_zone_width, clear_zone_height);
 }
 
-//------------------------------------------------------------------------------
-// display the cursor (input string)
-//------------------------------------------------------------------------------
 /**
- * Draw the cursor
+ * Draw the input string cursor
  */
 void
 sprite_display_menu::draw_input_cursor ()
 {
-  if (!clear_addr)
-    return;
+  if (clear_addr == NULL)
+    {
+      return;
+    }
   Sint32 xcurs = keyboard->get_input_cursor_pos ();
   if (xcurs < 0)
     {
@@ -752,7 +748,8 @@ char const
 
 
 char
-  sprite_display_menu::menuTexte0[] = "                                "        //0
+  sprite_display_menu::menuTexte0[] =
+  "                                "        //0
   "                                "    //1
   "                                "    //2
   "                                "    //3
@@ -773,13 +770,26 @@ char
   "                                ";   //18
 
 char
-  sprite_display_menu::menuTexte1[] = "                                " "                                " "                                " "                                " "--------------------------------" " e NUMBER OF PLAYERS  u 1 t     " " b PLAYER 1.......... u ......t "      //6
-  " b PLAYER 2.......... u ......t " " b PLAYER 3.......... u ......t " " b PLAYER 4.......... u ......t " " b PLAYER 5.......... u ......t " " b PLAYER 6.......... u ......t " " e DIFFICULTY........ u EASY t  "     // 12
-  " e NUMBER OF LIFES... u 08 t    "    // 13
+  sprite_display_menu::menuTexte1[] =
+  "                                "
+  "                                "
+  "                                "
+  "                                "
+  "--------------------------------"
+  " e NUMBER OF PLAYERS  u 1 t     "
+  " b PLAYER 1.......... u ......t "
+  " b PLAYER 2.......... u ......t "
+  " b PLAYER 3.......... u ......t "
+  " b PLAYER 4.......... u ......t "
+  " b PLAYER 5.......... u ......t "
+  " b PLAYER 6.......... u ......t "
+  " e DIFFICULTY........ u EASY t  "
+  " e NUMBER OF LIFES... u 08 t    "
   " c MAIN MENUqq                  "
   "--------------------------------"
   "                                "
-  "                                " "                                ";
+  "                                "
+  "                                ";
 
 char
   sprite_display_menu::menuTexte2[] =
@@ -800,7 +810,8 @@ char
   "                                "
   "COPYRIGHT (C)1992-2005 TLK-GAMES"
   "TLK-GAMES/BP 24/F81150 FLORENTIN"
-  "         LINUX.TLK.FR           " "                                ";
+  "         LINUX.TLK.FR           "
+  "                                ";
 
 char
   sprite_display_menu::menuTexte3[] =
@@ -822,7 +833,8 @@ char
   " CTRL X  : GO TO GAME-OVER      "
   "--------------------------------"
   " 25,000 POINTS      : BONUS LIFE"
-  "                                " "                                ";
+  "                                "
+  "                                ";
 
 char
   sprite_display_menu::menuTexte4[] =
@@ -843,7 +855,8 @@ char
   " b STEPHANE C.  b POPOLON       "
   " b ZIBIBI       b SHAD          "
   " b REGLIS       b ZE-KING       "
-  "                                " "                                ";
+  "                                "
+  "                                ";
 
 char
   sprite_display_menu::menuTexte5[] =
@@ -864,7 +877,8 @@ char
   "b 09  ?????? ??    ?    ?????? b"
   "b 10  ?????? ??    ?    ?????? b"
   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-  "                                " "                                ";
+  "                                "
+  "                                ";
 
 
 char *

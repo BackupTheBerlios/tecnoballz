@@ -5,11 +5,11 @@
  * @date 2007-10-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.cc,v 1.31 2007/10/02 04:50:34 gurumeditation Exp $
+ * $Id: tecnoballz.cc,v 1.32 2007/10/08 05:44:03 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -242,25 +242,6 @@ tecnoballz::object_free ()
   objects_counter--;
 }
 
-//-------------------------------------------------------------------------------
-// compare two character strings
-//-------------------------------------------------------------------------------
-Sint32
-tecnoballz::chaine_cmp (char *srcPT, char *desPT, Sint32 taille)
-{
-  Sint32 t = taille;
-  char *s = srcPT;
-  char *d = desPT;
-  for (Sint32 i = 0; i < t; i++)
-    {
-      char a = s[i];
-      char b = d[i];
-      if (a != b)
-        return (0);
-    }
-  return 1;
-}
-
 /**
  * Creates a string representing an integer number
  * @param value the integer value to be converted
@@ -299,6 +280,7 @@ tecnoballz::integer_to_ascii (Sint32 value, Uint32 padding, char *str)
 //       => strng:      pointer to ASCII string (finished by  zero)
 //       => reste:      maximum length (1 = 2 chars, 2 = 3 chars, ...)
 //------------------------------------------------------------------------------
+/*
 void
 tecnoballz::intToASCII (Sint32 value, char *strng, Uint32 reste)
 {
@@ -325,6 +307,7 @@ tecnoballz::intToASCII (Sint32 value, char *strng, Uint32 reste)
       zsize = zsize / 10;
     }
 }
+*/
 
 void
 tecnoballz::int_to_big_endian (Uint32 * ptsrc, Uint32 * ptdes)

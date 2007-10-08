@@ -2,14 +2,14 @@
  * @file handler_high_score.cc 
  * @brief high score handler 
  * @created 2004-04-30 
- * @date 2007-09-29
+ * @date 2007-10-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_high_score.cc,v 1.5 2007/09/30 07:23:39 gurumeditation Exp $
+ * $Id: handler_high_score.cc,v 1.6 2007/10/08 05:44:03 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -296,7 +296,7 @@ handler_high_score::is_player_ranked (char *playername, Uint32 score_value,
   player_score *score = scores_tables[difficulty_level - 1];
   for (Uint32 i = 0; i < MAX_OF_HIGH_SCORES; i++)
     {
-      if (chaine_cmp (playername, score[i].player_name, 6))
+      if (strcmp (playername, score[i].player_name) == 0)
         {
           if (score_value > score[i].value)
             {
