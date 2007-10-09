@@ -4,11 +4,11 @@
  * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.h,v 1.6 2007/10/09 05:46:24 gurumeditation Exp $
+ * $Id: sprite_display_menu.h,v 1.7 2007/10/09 15:43:48 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,23 +63,11 @@ private:
 
   /** Pointer to the text file loaded */
   char **texts_of_menus;
-  static const unsigned char cyclingtab[];
+  static const unsigned char color_cycling[];
   /** Number of characters by lines */
   static const Sint32 NUM_OF_COLUMNS = 32;
   /** Number of lines of characters */
   static const Sint32 NUM_OF_ROWS = 19;
-  typedef enum
-    {
-      xMAIN_SECTION,
-      xOPTIONS_SECTION,
-      xABOUT_SECTION,
-      xINFOS_SECTION,
-      xGREETINGS_SECTION,
-      xSCORE_SECTIONS,
-      NUM_OF_SECTIONS
-    }
-    SECTIONS_ENUM;
-
   static const Sint32 LINE_START = 5;
   static const Sint32 LINE_PARAM = 6;
   static const Sint32 LINE_ABOUT = 7;
@@ -89,10 +77,8 @@ private:
   static const Sint32 LINE_CODE1 = 11;
   static const Sint32 LINE_CODE2 = 12;
   static const Sint32 LINE_SORTI = 13;
-
   static const Sint32 LINE_ENTRE = 14;
   static const Sint32 YCOORDNULL = -10240;
-
 
   /** Width of font in pixels 8 or 16 */
   Uint32 font_width;
@@ -102,29 +88,25 @@ private:
   Uint32 line_spacing;
   /** Id of the current menu from MAIN_SECTION to SCORE_SECTIONS */
   Uint32 current_menu_section; 
-  Sint32 menu_color;
-  Sint32 menu_colww;
+  /** Current index of the first color of the line
+   *  under the mouse cursor */
+  Uint32 menu_first_color_index;
   Sint32 y_coord_left_down;
   Sint32 y_coord_right_down;
   bitmap_data *text_offscreen;
-
-  char *clear_addr;
+  /** True if currently cleaning */
+  bool is_clean_zone;
+  /** Height of the zone to clear */
   Uint32 clear_zone_height;
+  /** Width of the zone to clear */
   Uint32 clear_zone_width;
+  /** X-coordinate of the top-left zone to clear */
   Uint32 clear_zone_xcoord;
+  /** Y-coordinate of the top-right zone to clear */
   Uint32 clear_zone_ycoord; 
   Uint32 blink_cursor_delay;
-
-
-  static char ascii2code[128];
-  static char menuTexte0[];     //main menu
-  static char menuTexte1[];     //options menu
-  static char menuTexte2[];     //credits menu
-  static char menuTexte3[];     //infos menu
-  static char menuTexte4[];     //greetings menu
-  static char menuTexte5[];     //best scores menu
-  static char *menu_liste[NUM_OF_SECTIONS];
-
+  /** Offsets of the first 128 ASCII characters */
+  static char ascii_to_index[128];
 public:
   static const char difficulte[];
 public:
@@ -139,9 +121,9 @@ private:
   Uint32 check_events ();
   void clear_text_offscreen ();
   void clear_input_zone ();
-  void clear_init (Uint32 xcoor, Uint32 ycoor, Uint32 width, Uint32 lines);
-  void input_init (Uint32 xcoor, Uint32 ycoor, Uint32 width, char *strng);
-  void clear_stop ();
+  void clear_zone_start (Uint32 xcoord, Uint32 ycoord, Uint32 width, Uint32 height);
+  void start_input_string (Uint32 xcoord, Uint32 ycoord, Uint32 width, char *str);
+  void clear_zone_stop ();
   void draw_input_cursor ();
   void copy_high_score_in_menu ();
 };

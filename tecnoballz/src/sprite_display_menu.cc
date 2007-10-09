@@ -4,11 +4,11 @@
  * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.17 2007/10/09 05:46:24 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.18 2007/10/09 15:43:48 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,10 +52,9 @@ sprite_display_menu::sprite_display_menu ()
     {
       line_spacing = 8;
     }
-  menu_colww = 0;
-  menu_color = 0;
+  menu_first_color_index = 0;
 
-  clear_addr = (char *) NULL;
+  is_clean_zone = false; 
   clear_zone_height = 0;
   clear_zone_width = 0;
   clear_zone_xcoord = 0;
@@ -98,12 +97,7 @@ sprite_display_menu::load_text_file ()
     }
   texts_of_menus =
     resources->load_texts (handler_resources::TEXTS_MAIN_MENU,
-			   MAX_OF_LINES, NUM_OF_COLUMNS, 0, false);
-  for(Uint32 i = 0; i < MAX_OF_LINES; i++)
-    {
-      //printf("%s\n", texts_of_menus[i]);
-    }
-
+                           MAX_OF_LINES, NUM_OF_COLUMNS, 0, false);
 }
 
 /**
@@ -112,13 +106,13 @@ sprite_display_menu::load_text_file ()
 void
 sprite_display_menu::first_init ()
 {
-  load_text_file();
+  load_text_file ();
   load_bitmap_fonts (handler_resources::BITMAP_MENU_FONTS);
 
   /* allocate 512 * 323 pixels buffer for text menu  */
   text_offscreen = new bitmap_data ();
   text_offscreen->create_surface (NUM_OF_COLUMNS * font_width,
-                              NUM_OF_ROWS * line_spacing);
+                                  NUM_OF_ROWS * line_spacing);
 
   /* initialize sprite object */
   make_sprite (text_offscreen);
@@ -126,58 +120,55 @@ sprite_display_menu::first_init ()
   set_coordinates (32 * resolution, 80 * resolution);
 
   /* initialize palette color chars */
-  SDL_Color *palPT = display->get_palette ();
-  SDL_Color *palP1 = palPT + 239;
+  SDL_Color *palette = display->get_palette ();
   Sint32 i = random_counter & 0x0F;
   if (i >= 10)
     {
       i = i - 10;
     }
-  const Uint32 *ptpal = (handler_resources::color_gradations + i * 18);
+  const Uint32 *degrade = (handler_resources::color_gradations + i * 18);
+  SDL_Color *pal = palette + 239;
   for (i = 0; i < 17; i++)
     {
-      Uint32 vacol = ptpal[i];
-      Uint32 vablu = vacol & 0x000000ff;
-      Uint32 vagre = vacol & 0x0000ff00;
-      vagre = vagre >> 8;
-      Uint32 vared = vacol & 0x00ff0000;
-      vared = vared >> 16;
-      palP1->r = vared;
-      palP1->g = vagre;
-      palP1->b = vablu;
-      palP1++;
+      Uint32 color = degrade[i];
+      Uint32 blue = color & 0x000000ff;
+      Uint32 green = color & 0x0000ff00;
+      green = green >> 8;
+      Uint32 red = color & 0x00ff0000;
+      red = red >> 16;
+      pal->r = red;
+      pal->g = green;
+      pal->b = blue;
+      pal++;
     }
-  display->enable_palette (palPT);
+  display->enable_palette (palette);
 }
 
 /**
  * Check events and draw menu text
  * @return exit code DO_NO_EXIT, PROGRAM_EXIT, or START_GAME
  */
-Uint32
-sprite_display_menu::check_and_display ()
+Uint32 sprite_display_menu::check_and_display ()
 {
   clear_input_zone ();
   update_strings ();
-  Sint32 mousY = keyboard->get_mouse_y ();
-  Sint32 y = (mousY - y_coord) / line_spacing;
+  Sint32 y = (keyboard->get_mouse_y () - y_coord) / line_spacing;
   Uint32 exit_code = check_events ();
 
   /* read color table offset (color line over the mouse ) */
-  if (menu_color++ > 32)
+  if (menu_first_color_index++ > 32)
     {
-      menu_color = 0;
+      menu_first_color_index = 0;
     }
-  Sint32 color = menu_color;
+  Uint32 color = menu_first_color_index;
 
-  /* display menu text */   
-  char *desP1 = pixel_data;
-  Sint32 offSc = off_source;
-  Sint32 offDs = row_size;
-  Sint32 offD2 = row_size * (line_spacing - 1);
-  Sint32 *basPT = (Sint32 *) caract_adr;
-  char *p = menu_liste[current_menu_section];
-  char *c = ascii2code;
+  /* display menu text */
+  char * dest = pixel_data;
+  Sint32 s_offset = off_source;
+  Sint32 d_offset1 = row_size;
+  Sint32 d_offset2 = row_size * (line_spacing - 1);
+  Sint32 * font = (Sint32 *) caract_adr;
+  char * c = ascii_to_index;
   Sint32 a, b, j;
 
   /*
@@ -185,36 +176,33 @@ sprite_display_menu::check_and_display ()
    */
   if (resolution == 1)
     {
-      for (Sint32 k = 0; k < NUM_OF_ROWS; k++, desP1 += offD2)
+      for (Sint32 k = 0; k < NUM_OF_ROWS; k++, dest += d_offset2)
         {
-	  p = texts_of_menus[current_menu_section + k]; 
+          char *p = texts_of_menus[current_menu_section + k];
           if (y != k)
             {
-              //######################################
-              // display normal line of 32 characters
-              //######################################
+              /* display normal line of 32 characters */
               for (j = 0; j < NUM_OF_COLUMNS; j++)
                 {
                   a = *(p++) - 32;
-                  if (a)
+                  if (a != 0)
                     {
                       b = c[a];
                       b = b << 3;
 #ifndef BYTES_COPY
-                      Sint32 *s = (Sint32 *) basPT;
-                      Sint32 *d = (Sint32 *) desP1;
+                      Sint32 * s = (Sint32 *) font;
+                      Sint32 * d = (Sint32 *) dest;
                       s = (Sint32 *) ((char *) s + b);
                       for (b = 0; b < 8; b++)
                         {
                           d[0] = s[0];
                           d[1] = s[1];
-                          s = (Sint32 *) ((char *) s + offSc);
-                          d = (Sint32 *) ((char *) d + offDs);
+                          s = (Sint32 *) ((char *) s + s_offset);
+                          d = (Sint32 *) ((char *) d + d_offset1);
                         }
 #else
-
-                      char *s = (char *) basPT;
-                      char *d = desP1;
+                      char * s = (char *) font;
+                      char * d = dest;
                       s += b;
                       for (b = 0; b < 8; b++)
                         {
@@ -226,27 +214,26 @@ sprite_display_menu::check_and_display ()
                           d[5] = s[5];
                           d[6] = s[6];
                           d[7] = s[7];
-                          s += offSc;
-                          d += offDs;
+                          s += s_offset;
+                          d += d_offset1;
                         }
 #endif
                     }
-                  desP1 = desP1 + 8;
+                  dest = dest + 8;
                 }
             }
           else
-            {                   //######################################
-              // display selected line of 32 characters
-              //######################################
+            {
+              /* display selected line of 32 characters */
               for (j = 0; j < NUM_OF_COLUMNS; j++)
                 {
-                  unsigned char pixel = cyclingtab[color];
+                  unsigned char pixel = color_cycling[color];
                   char a = *(p++) - 32;
-                  if (a)
+                  if (a != 0)
                     {
                       b = c[a];
-                      unsigned char *s = (unsigned char *) basPT;
-                      unsigned char *d = (unsigned char *) desP1;
+                      unsigned char * s = (unsigned char *) font;
+                      unsigned char * d = (unsigned char *) dest;
                       b = b << 3;
                       s = s + b;
                       for (b = 0; b < 8; b++)
@@ -254,19 +241,21 @@ sprite_display_menu::check_and_display ()
                           for (Sint32 z = 0; z < 8; z++)
                             {
                               a = s[z];
-                              if (a)
+                              if (a != 0)
                                 {
                                   a = pixel;
                                   d[z] = pixel;
                                 }
                             }
-                          s = s + offSc;
-                          d = d + offDs;
+                          s = s + s_offset;
+                          d = d + d_offset1;
                         }
                     }
-                  desP1 = desP1 + 8;
+                  dest = dest + 8;
                   if (color++ > 32)
-                    color = 0;
+                    {
+                      color = 0;
+                    }
                 }
             }
         }
@@ -278,24 +267,22 @@ sprite_display_menu::check_and_display ()
   else
     {
 
-      for (Sint32 k = 0; k < NUM_OF_ROWS; k++, desP1 += offD2)
+      for (Sint32 k = 0; k < NUM_OF_ROWS; k++, dest += d_offset2)
         {
-	  p = texts_of_menus[current_menu_section + k]; 
+          char* p = texts_of_menus[current_menu_section + k];
           if (y != k)
             {
-              //###########################################################
-              // display normal line of 32 characters
-              //###########################################################
+              /* display normal line of 32 characters */
               for (j = 0; j < NUM_OF_COLUMNS; j++)
                 {
                   a = *(p++) - 32;
-                  if (a)
+                  if (a != 0)
                     {
                       b = c[a];
                       b = b << 4;
 #ifndef BYTES_COPY
-                      Sint32 *s = (Sint32 *) basPT;
-                      Sint32 *d = (Sint32 *) desP1;
+                      Sint32 * s = (Sint32 *) font;
+                      Sint32 * d = (Sint32 *) dest;
                       s = (Sint32 *) ((char *) s + b);
                       for (b = 0; b < 16; b++)
                         {
@@ -303,13 +290,12 @@ sprite_display_menu::check_and_display ()
                           d[1] = s[1];
                           d[2] = s[2];
                           d[3] = s[3];
-                          s = (Sint32 *) ((char *) s + offSc);
-                          d = (Sint32 *) ((char *) d + offDs);
+                          s = (Sint32 *) ((char *) s + s_offset);
+                          d = (Sint32 *) ((char *) d + d_offset1);
                         }
 #else
-
-                      char *s = (char *) basPT;
-                      char *d = desP1;
+                      char * s = (char *) font;
+                      char * d = dest;
                       s += b;
                       for (b = 0; b < 16; b++)
                         {
@@ -329,27 +315,26 @@ sprite_display_menu::check_and_display ()
                           d[13] = s[13];
                           d[14] = s[14];
                           d[15] = s[15];
-                          s += offSc;
-                          d += offDs;
+                          s += s_offset;
+                          d += d_offset1;
                         }
 #endif
                     }
-                  desP1 = desP1 + 16;
+                  dest = dest + 16;
                 }
             }
           else
-            {                   //###########################################################
-              // display selected line of 32 characters
-              //###########################################################
+            {
+              /* display selected line of 32 characters */
               for (j = 0; j < NUM_OF_COLUMNS; j++)
                 {
-                  unsigned char pixel = cyclingtab[color];
+                  unsigned char pixel = color_cycling[color];
                   char a = *(p++) - 32;
-                  if (a)
+                  if (a != 0)
                     {
                       b = c[a];
-                      unsigned char *s = (unsigned char *) basPT;
-                      unsigned char *d = (unsigned char *) desP1;
+                      unsigned char * s = (unsigned char *) font;
+                      unsigned char * d = (unsigned char *) dest;
                       b = b << 4;
                       s = s + b;
                       for (b = 0; b < 16; b++)
@@ -363,13 +348,15 @@ sprite_display_menu::check_and_display ()
                                   d[z] = pixel;
                                 }
                             }
-                          s = s + offSc;
-                          d = d + offDs;
+                          s = s + s_offset;
+                          d = d + d_offset1;
                         }
                     }
-                  desP1 = desP1 + 16;
+                  dest = dest + 16;
                   if (color++ > 32)
-                    color = 0;
+                    {
+                      color = 0;
+                    }
                 }
             }
         }
@@ -393,9 +380,7 @@ sprite_display_menu::check_events ()
   bool is_left_down = keyboard->is_left_button ();
   bool is_right_down = keyboard->is_right_button ();
 
-  //##############################################################
-  // read y where is pressed 
-  //##############################################################
+  /* read y where is pressed */
   if (is_left_down && y_coord_left_down == YCOORDNULL)
     {
       y_coord_left_down = keyboard->get_mouse_y ();
@@ -415,7 +400,8 @@ sprite_display_menu::check_events ()
       is_right_up = keyboard->is_right_button_up (&mposx, &pos_y);
     }
 
-  if ((is_left_up && pos_y == y_coord_left_down) || (is_right_up && pos_y == y_coord_right_down))
+  if ((is_left_up && pos_y == y_coord_left_down)
+      || (is_right_up && pos_y == y_coord_right_down))
     {
       Sint32 incre = 0;
       if (is_left_up)
@@ -439,12 +425,12 @@ sprite_display_menu::check_events ()
             {
             case LINE_START:
               clear_text_offscreen ();
-              clear_stop ();
+              clear_zone_stop ();
               exit_code = START_GAME;
               break;
             case LINE_PARAM:
               clear_text_offscreen ();
-              clear_stop ();
+              clear_zone_stop ();
               current_menu_section = OPTIONS_SECTION;
               break;
             case LINE_ABOUT:
@@ -452,35 +438,38 @@ sprite_display_menu::check_events ()
               audio->play_music (handler_audio::FRIDGE_IN_SPACE_MUSIC);
 #endif
               clear_text_offscreen ();
-              clear_stop ();
+              clear_zone_stop ();
               current_menu_section = ABOUT_SECTION;
               break;
             case LINE_SALUT:
               audio->play_music (handler_audio::MON_LAPIN_MUSIC);
               clear_text_offscreen ();
-              clear_stop ();
+              clear_zone_stop ();
               current_menu_section = GREETINGS_SECTION;
               break;
             case LINE_INFOS:
               audio->play_music (handler_audio::IN_GAME_MUSIC);
               clear_text_offscreen ();
-              clear_stop ();
+              clear_zone_stop ();
               current_menu_section = INFOS_SECTION;
               break;
             case LINE_SCORE:
               audio->play_music (handler_audio::TERMIGATOR_MUSIC);
               clear_text_offscreen ();
-              clear_stop ();
+              clear_zone_stop ();
               copy_high_score_in_menu ();
               current_menu_section = SCORE_SECTIONS;
               break;
 
-              // input area password
+              /* input the code area */
             case LINE_CODE1:
             case LINE_CODE2:
               {
-                char *area_code = supervisor_main_menu::get_current_area_code ();
-                input_init (10, LINE_CODE2, supervisor_main_menu::AREA_CODE_LENGTH, area_code);
+                char *
+                  area_code = supervisor_main_menu::get_current_area_code ();
+                start_input_string (10, LINE_CODE2,
+                            supervisor_main_menu::AREA_CODE_LENGTH,
+                            area_code);
               }
               break;
             case LINE_SORTI:
@@ -496,8 +485,9 @@ sprite_display_menu::check_events ()
           switch (pos_y)
             {
             case 5:
-              clear_init (24, 5, 1, 1);
-              if (++number_of_players > (Sint32)handler_players::MAX_OF_PLAYERS)
+              clear_zone_start (24, 5, 1, 1);
+              if (++number_of_players >
+                  (Sint32) handler_players::MAX_OF_PLAYERS)
                 {
                   number_of_players = 1;
                 }
@@ -505,56 +495,64 @@ sprite_display_menu::check_events ()
 
               // input players names
             case 6:
-              input_init (24, 6, 6,
+              start_input_string (24, 6, 6,
                           handler_players::players_list[0]->get_name ());
               break;
             case 7:
-              input_init (24, 7, 6,
+              start_input_string (24, 7, 6,
                           handler_players::players_list[1]->get_name ());
               break;
             case 8:
-              input_init (24, 8, 6,
+              start_input_string (24, 8, 6,
                           handler_players::players_list[2]->get_name ());
               break;
             case 9:
-              input_init (24, 9, 6,
+              start_input_string (24, 9, 6,
                           handler_players::players_list[3]->get_name ());
               break;
             case 10:
-              input_init (24, 10, 6,
+              start_input_string (24, 10, 6,
                           handler_players::players_list[4]->get_name ());
               break;
             case 11:
-              input_init (24, 11, 6,
+              start_input_string (24, 11, 6,
                           handler_players::players_list[5]->get_name ());
               break;
 
               //
             case 12:
-              clear_init (24, 12, 4, 1);
+              clear_zone_start (24, 12, 4, 1);
               difficulty_level += incre;
-              if (difficulty_level > 4)
-                difficulty_level = 1;
-              if (difficulty_level < 1)
-                difficulty_level = 4;
+              if (difficulty_level > DIFFICULTY_HARD)
+                {
+                  difficulty_level = DIFFICULTY_EASY;
+                }
+              if (difficulty_level < DIFFICULTY_EASY)
+                {
+                 difficulty_level = DIFFICULTY_HARD;
+                }
               update_strings ();
               break;
 
             case 13:
-              clear_init (24, 13, 2, 1);
+              clear_zone_start (24, 13, 2, 1);
               initial_num_of_lifes += incre;
               if (initial_num_of_lifes > 9)
-                initial_num_of_lifes = 1;
+                {
+                  initial_num_of_lifes = 1;
+                }
               if (initial_num_of_lifes < 1)
-                initial_num_of_lifes = 9;
+                {
+                  initial_num_of_lifes = 9;
+                }
               update_strings ();
               break;
 
-              //return to main menu
+              /* return to main menu */
             case 14:
               clear_text_offscreen ();
               current_menu_section = MAIN_SECTION;
-              clear_stop ();
+              clear_zone_stop ();
               break;
             }
           break;
@@ -602,37 +600,31 @@ sprite_display_menu::update_strings ()
   char *dest;
 
   /* copy current area code */
-  //dest = menuTexte0 + (NUM_OF_COLUMNS * LINE_CODE2) + 10;
   dest = texts_of_menus[MAIN_SECTION + LINE_CODE2] + 10;
   supervisor_main_menu::copy_current_area_code (dest);
 
   /* copy number of players */
-  //dest = menuTexte1 + (NUM_OF_COLUMNS * 5) + 24;
   dest = texts_of_menus[OPTIONS_SECTION + 5] + 24;
   integer_to_ascii (number_of_players, 1, dest);
 
   /* copy player names */
-  //dest = menuTexte1 + (NUM_OF_COLUMNS * 6) + 24;
   for (Uint32 i = 0; i < handler_players::MAX_OF_PLAYERS; i++)
     {
       dest = texts_of_menus[OPTIONS_SECTION + 6 + i] + 24;
       source = handler_players::players_list[i]->get_name ();
       for (Uint32 j = 0; j < handler_players::PLAYER_NAME_LENGTH; j++)
-	{
+        {
           dest[j] = source[j];
-	}
-      //dest += NUM_OF_COLUMNS;
+        }
     }
 
   /* copy current difficulty level */
   source = &difficulte[(difficulty_level - 1) * 4];
-  //dest = menuTexte1 + (NUM_OF_COLUMNS * 12) + 24;
   dest = texts_of_menus[OPTIONS_SECTION + 12] + 24;
   for (Sint32 i = 0; i < 4; i++)
     {
       dest[i] = source[i];
     }
-  //dest = menuTexte1 + (NUM_OF_COLUMNS * 13) + 24;
   dest = texts_of_menus[OPTIONS_SECTION + 13] + 24;
   integer_to_ascii (initial_num_of_lifes, 2, dest);
 
@@ -643,9 +635,9 @@ sprite_display_menu::update_strings ()
       source = handler_players::players_list[i]->get_name ();
       if (source[0] != '0' || source[1] != '4' || source[2] != '0' ||
           source[3] != '6' || source[4] != '7' || source[5] != '0')
-	{
+        {
           birth_flag = false;
-	}
+        }
     }
 }
 
@@ -655,7 +647,7 @@ sprite_display_menu::update_strings ()
 void
 sprite_display_menu::clear_text_offscreen ()
 {
-  text_offscreen->clear();
+  text_offscreen->clear ();
 }
 
 /**
@@ -664,11 +656,12 @@ sprite_display_menu::clear_text_offscreen ()
 void
 sprite_display_menu::clear_input_zone ()
 {
-  if (clear_addr == NULL)
+  if (!is_clean_zone)
     {
       return;
     }
-  text_offscreen->clear(0, clear_zone_xcoord, clear_zone_ycoord, clear_zone_width, clear_zone_height);
+  text_offscreen->clear (0, clear_zone_xcoord, clear_zone_ycoord,
+                         clear_zone_width, clear_zone_height);
 }
 
 /**
@@ -677,7 +670,7 @@ sprite_display_menu::clear_input_zone ()
 void
 sprite_display_menu::draw_input_cursor ()
 {
-  if (clear_addr == NULL)
+  if (!is_clean_zone)
     {
       return;
     }
@@ -695,58 +688,69 @@ sprite_display_menu::draw_input_cursor ()
       return;
     }
   char z = 0xEE;
-  char *d = text_offscreen->get_pixel_data(clear_zone_xcoord + xcurs * font_width, clear_zone_ycoord);
+  char *d =
+    text_offscreen->get_pixel_data (clear_zone_xcoord + xcurs * font_width,
+                                    clear_zone_ycoord);
   Uint32 n = row_size;
   for (Uint32 h = 0; h < font_height; h++)
     {
       for (Uint32 w = 0; w < font_width; w++)
         {
           if (0 == d[w])
-	    {
+            {
               d[w] = z;
-	    }
+            }
         }
       d += n;
     }
 }
 
-//------------------------------------------------------------------------------
-// initialize string input
-//------------------------------------------------------------------------------
+/**
+ * Initialize a string to input
+ * @param xcoord X-coordinate in the offscreen menu
+ * @param ycoord Y-coordinate in the offscreen menu
+ * @param width Number of columns  
+ * @parm str Pointer to the string to input
+ */
 void
-sprite_display_menu::input_init (Uint32 xcoor, Uint32 ycoor, Uint32 width,
-                                 char *strng)
+sprite_display_menu::start_input_string (Uint32 xcoord, Uint32 ycoord, Uint32 width,
+                                 char *str)
 {
-  clear_init (xcoor, ycoor, width, 1);
-  if (!strng)
-    return;
+  clear_zone_start (xcoord, ycoord, width, 1);
+  if (str == NULL)
+    {
+      return;
+    }
   blink_cursor_delay = 50;
-  keyboard->set_input_string (strng, width);
+  keyboard->set_input_string (str, width);
 }
 
-//------------------------------------------------------------------------------
-// initialize a "zone clear" (used to modify a string of the menu)
-//------------------------------------------------------------------------------
+/**
+ * Initialize a zone to clear; used to modify a string of the menu
+ * @param xcoord X-coordinate in the offscreen menu
+ * @param ycoord Y-coordinate in the offscreen menu
+ * @param width Number of columns  
+ * @param height Number of lines 
+ */
 void
-sprite_display_menu::clear_init (Uint32 xcoor, Uint32 ycoor, Uint32 width,
-                                 Uint32 lines)
+sprite_display_menu::clear_zone_start (Uint32 xcoord, Uint32 ycoord, Uint32 width,
+                                 Uint32 height)
 {
-  clear_stop ();
-  clear_addr = pixel_data + (ycoor * line_spacing * row_size) +
-    (xcoor * font_width);
+  clear_zone_stop ();
+  is_clean_zone = true;
   clear_zone_width = (width * font_width);
-  clear_zone_height = lines * font_height;
-  clear_zone_xcoord = xcoor * font_width;
-  clear_zone_ycoord = ycoor * line_spacing;
+  clear_zone_height = height * font_height;
+  clear_zone_xcoord = xcoord * font_width;
+  clear_zone_ycoord = ycoord * line_spacing;
 }
 
-//------------------------------------------------------------------------------
-// stop the "zone clear"
-//------------------------------------------------------------------------------
+/**
+ * Disable the cleaning of a zone"
+ */
 void
-sprite_display_menu::clear_stop ()
+sprite_display_menu::clear_zone_stop ()
 {
-  clear_addr = (char *) NULL;
+  is_clean_zone = false;
   keyboard->stop_string_input ();
 }
 
@@ -769,7 +773,7 @@ sprite_display_menu::copy_high_score_in_menu ()
         {
           dest[6 + j] = name[j];
         }
-      integer_to_ascii (score[i].value, 6,  &dest[24]);
+      integer_to_ascii (score[i].value, 6, &dest[24]);
       integer_to_ascii (score[i].area_number, 1, &dest[19]);
       integer_to_ascii (score[i].level_number, 2, &dest[13]);
     }
@@ -782,252 +786,113 @@ char const
   sprite_display_menu::difficulte[] = "EASY" "HARD" "MAD " "DEAD";
 
 
-char
-  sprite_display_menu::menuTexte0[] =
-  "                                "        //0
-  "                                "    //1
-  "                                "    //2
-  "                                "    //3
-  "                                "    //4
-  "        START THE GAMEq         "    //5
-  "          ? OPTIONS ?           "    //6
-  "          > CREDITS <           "    //7
-  "         g GREETINGS g          "    //8
-  "             INFOS              "    //9
-  "          VIEW-SCORES           "    //10 
-  "           PASSWORDq            "    //11
-  "        u ----------? t         "    //12
-  "          GAME  EXITw           "    //13
-  "                                "    //14
-  "                                "    //15
-  "                                "    //16
-  "                                "    //17 
-  "                                ";   //18
-
-char
-  sprite_display_menu::menuTexte1[] =
-  "                                "
-  "                                "
-  "                                "
-  "                                "
-  "--------------------------------"
-  " e NUMBER OF PLAYERS  u 1 t     "
-  " b PLAYER 1.......... u ......t "
-  " b PLAYER 2.......... u ......t "
-  " b PLAYER 3.......... u ......t "
-  " b PLAYER 4.......... u ......t "
-  " b PLAYER 5.......... u ......t "
-  " b PLAYER 6.......... u ......t "
-  " e DIFFICULTY........ u EASY t  "
-  " e NUMBER OF LIFES... u 08 t    "
-  " c MAIN MENUqq                  "
-  "--------------------------------"
-  "                                "
-  "                                "
-  "                                ";
-
-char
-  sprite_display_menu::menuTexte2[] =
-  "--- MAIN CODING - LINUX-PORT ---"
-  "      b BRUNO  ETHVIGNOT b      "
-  "---- BASED ON AMIGA MC680X0 ----"
-  "b BRUNO ETHVIGNOT;JEROME BOLOT b"
-  "                                "
-  "----------- MAIN GFX -----------"
-  "bJEAN MICHEL  MARTIN DE SANTEROb"
-  " --------- OTHER  GFX --------- "
-  "       b RODOLPHE  BONO b       "
-  "                                "
-  "---------- ALL MUSICS ----------"
-  "        b REGIS PARRET b        "
-  "---------SOUNDS EFFECTS---------"
-  "       b LAURENT  GUYON  b      "
-  "                                "
-  "COPYRIGHT (C)1992-2005 TLK-GAMES"
-  "TLK-GAMES/BP 24/F81150 FLORENTIN"
-  "         LINUX.TLK.FR           "
-  "                                ";
-
-char
-  sprite_display_menu::menuTexte3[] =
-  "                                "
-  " BUMPER CONTROL:                "
-  " LEFT MOUSE BUTTON : FIRE       "
-  " RIGHT MOUSE BUTTON: DROP BALL  "
-  " LEFT AND RIGHT    : TILT       "
-  "                     GIGABLITZ  "
-  "--------------------------------"
-  "KEYS RECOGNIZED DURING THE GAME:"
-  " F       : FULL SCREEN          "
-  " P       : PAUSE                "
-  " CTRL ESC: QUIT TECNOBALLZ      "
-  " CTRL D  : DISABLE MFX          "
-  " CTRL F  : DISABLE SFX          "
-  " CTRL S  : DISABLE SFX - MFX    "
-  " CTRL Q  : EXIT TO MENU         "
-  " CTRL X  : GO TO GAME-OVER      "
-  "--------------------------------"
-  " 25,000 POINTS      : BONUS LIFE"
-  "                                "
-  "                                ";
-
-char
-  sprite_display_menu::menuTexte4[] =
-  "                                "
-  "---> BEST GREETINGS  FLY TO <---"
-  "                                "
-  " b ALEXIS       b AURELIEN      "
-  " b BLACKGUARD   b BARTI         "
-  " b DAUBMAN      b DELPHINUS     "
-  " b DARK NIGHT   b FELBRAN       "
-  " b DJI          b JRC           "
-  " b MA DANONE    b LE CHACAL     "
-  " b LE TEXAN     b YANIS         "
-  " b JMM          b ROY           "
-  " b PAT          b PROPERMAN     "
-  " b PASCAL L.    b PASCAL E.     "
-  " b PIXELMAN     b PIERRE DENIS  "
-  " b STEPHANE C.  b POPOLON       "
-  " b ZIBIBI       b SHAD          "
-  " b REGLIS       b ZE-KING       "
-  "                                "
-  "                                ";
-
-char
-  sprite_display_menu::menuTexte5[] =
-  "                                "
-  "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-  "b        BEST  TECNOBALLZ      b"
-  "b                              b"
-  "b POS NAME   LEVEL AREA SCORE  b"
-  "b                              b"
-  "b 01  ?????? ??    ?    ?????? b"
-  "b 02  ?????? ??    ?    ?????? b"
-  "b 03  ?????? ??    ?    ?????? b"
-  "b 04  ?????? ??    ?    ?????? b"
-  "b 05  ?????? ??    ?    ?????? b"
-  "b 06  ?????? ??    ?    ?????? b"
-  "b 07  ?????? ??    ?    ?????? b"
-  "b 08  ?????? ??    ?    ?????? b"
-  "b 09  ?????? ??    ?    ?????? b"
-  "b 10  ?????? ??    ?    ?????? b"
-  "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-  "                                "
-  "                                ";
-
-
-char *
-  sprite_display_menu::menu_liste[NUM_OF_SECTIONS] =
-  { menuTexte0, menuTexte1, menuTexte2,
-  menuTexte3, menuTexte4, menuTexte5
-};
-
-//------------------------------------------------------------------------------
-// offsets of the first 128 ASCII characters 
-//------------------------------------------------------------------------------
-char
-  sprite_display_menu::ascii2code[128] = { 26,  // 32 ' '
-  37,                           // 33 '!'
-  40,                           // 34 '"'
-  26,                           // 35 '#' space
-  26,                           // 36 '$' space
-  26,                           // 37 '%' space
-  26,                           // 38 '&' space
-  40,                           // 39 "'"
-  48,                           // 40 '('
-  49,                           // 41 ')'
-  47,                           // 42 '*'
-  26,                           // 43 '+' space
-  26,                           // 44 ',' 
-  41,                           // 45 '-'
-  42,                           // 46 '.'
-  26,                           // 47 '/' space
-  27,                           // 48 '0'
-  28,                           // 49 '1'
-  29,                           // 50 '2'
-  30,                           // 51 '3'
-  31,                           // 52 '4'
-  32,                           // 53 '5'
-  33,                           // 54 '6'
-  34,                           // 55 '7'
-  35,                           // 56 '8'
-  36,                           // 57 '9'
-  39,                           // 58 ':'
-  38,                           // 59 ';'
-  44,                           // 60 '<'
-  26,                           // 61 '=' space
-  45,                           // 62 '>'
-  43,                           // 63 '?'
-  26,                           // 64 '@' space
-  0,                            // 65 'A'
-  1,                            // 66 'B'
-  2,                            // 67 'C'
-  3,                            // 68 'D'
-  4,                            // 69 'E'
-  5,                            // 70 'F'
-  6,                            // 71 'G'
-  7,                            // 72 'H'
-  8,                            // 73 'I'
-  9,                            // 74 'J'
-  10,                           // 75 'K'
-  11,                           // 76 'L'
-  12,                           // 77 'M'
-  13,                           // 78 'N'
-  14,                           // 79 'O'
-  15,                           // 80 'P'
-  16,                           // 81 'Q'
-  17,                           // 82 'R'
-  18,                           // 83 'S'
-  19,                           // 84 'T'
-  20,                           // 85 'U'
-  21,                           // 86 'V'
-  22,                           // 87 'W'
-  23,                           // 88 'X'
-  24,                           // 89 'Y'
-  25,                           // 90 'Z'
-  48,                           // 91 '['
-  26,                           // 92 '\' space
-  49,                           // 93 ']'
-  26,                           // 94 '^' space
-  26,                           // 95 '_' space
-  26,                           // 96 '`' space
-  26,                           // 97 'a' space
-  47,                           // 98 'b' gray star 
-  52,                           // 99 'c' horizontal lines 
-  26,                           // 100 'd' space
-  50,                           // 101 'e' full square
-  26,                           // 102 'f' space
-  46,                           // 103 'g' gray heart 
-  26,                           // 104 'h' space
-  26,                           // 105 'i' space
-  26,                           // 106 'j' space
-  26,                           // 107 'k' space
-  26,                           // 108 'l' space
-  26,                           // 109 'm' space
-  26,                           // 110 'n' space
-  26,                           // 111 'o' space
-  26,                           // 112 'p' space
-  55,                           // 113 'q' ! white
-  26,                           // 114 'r' space
-  26,                           // 115 's' space
-  53,                           // 116 't' < white
-  54,                           // 117 'u' > white
-  26,                           // 118 'v' space
-  51,                           // 119 'w' pink ellipsis 
-  26,                           // 120 'x' space
-  26,                           // 121 'y' space
-  26,                           // 122 'z' space
-  26,                           // 123 '{' space
-  26,                           // 124 '|' space
-  26,                           // 125 '}' space
-  26,                           // 126 '~' space
-  26                            // 127 ' ' space
+/**
+ * Offsets of the first 128 ASCII characters 
+ */
+char sprite_display_menu::ascii_to_index[128] =
+{ 26,  // 32 ' '
+  37,  // 33 '!'
+  40,  // 34 '"'
+  26,  // 35 '#' space
+  26,  // 36 '$' space
+  26,  // 37 '%' space
+  26,  // 38 '&' space
+  40,  // 39 "'"
+  48,  // 40 '('
+  49,  // 41 ')'
+  47,  // 42 '*'
+  26,  // 43 '+' space
+  26,  // 44 ',' 
+  41,  // 45 '-'
+  42,  // 46 '.'
+  26,  // 47 '/' space
+  27,  // 48 '0'
+  28,  // 49 '1'
+  29,  // 50 '2'
+  30,  // 51 '3'
+  31,  // 52 '4'
+  32,  // 53 '5'
+  33,  // 54 '6'
+  34,  // 55 '7'
+  35,  // 56 '8'
+  36,  // 57 '9'
+  39,  // 58 ':'
+  38,  // 59 ';'
+  44,  // 60 '<'
+  26,  // 61 '=' space
+  45,  // 62 '>'
+  43,  // 63 '?'
+  26,  // 64 '@' space
+  0,   // 65 'A'
+  1,   // 66 'B'
+  2,   // 67 'C'
+  3,   // 68 'D'
+  4,   // 69 'E'
+  5,   // 70 'F'
+  6,   // 71 'G'
+  7,   // 72 'H'
+  8,   // 73 'I'
+  9,   // 74 'J'
+  10,  // 75 'K'
+  11,  // 76 'L'
+  12,  // 77 'M'
+  13,  // 78 'N'
+  14,  // 79 'O'
+  15,  // 80 'P'
+  16,  // 81 'Q'
+  17,  // 82 'R'
+  18,  // 83 'S'
+  19,  // 84 'T'
+  20,  // 85 'U'
+  21,  // 86 'V'
+  22,  // 87 'W'
+  23,  // 88 'X'
+  24,  // 89 'Y'
+  25,  // 90 'Z'
+  48,  // 91 '['
+  26,  // 92 '\' space
+  49,  // 93 ']'
+  26,  // 94 '^' space
+  26,  // 95 '_' space
+  26,  // 96 '`' space
+  26,  // 97 'a' space
+  47,  // 98 'b' gray star 
+  52,  // 99 'c' horizontal lines 
+  26,  // 100 'd' space
+  50,  // 101 'e' full square
+  26,  // 102 'f' space
+  46,  // 103 'g' gray heart 
+  26,  // 104 'h' space
+  26,  // 105 'i' space
+  26,  // 106 'j' space
+  26,  // 107 'k' space
+  26,  // 108 'l' space
+  26,  // 109 'm' space
+  26,  // 110 'n' space
+  26,  // 111 'o' space
+  26,  // 112 'p' space
+  55,  // 113 'q' ! white
+  26,  // 114 'r' space
+  26,  // 115 's' space
+  53,  // 116 't' < white
+  54,  // 117 'u' > white
+  26,  // 118 'v' space
+  51,  // 119 'w' pink ellipsis 
+  26,  // 120 'x' space
+  26,  // 121 'y' space
+  26,  // 122 'z' space
+  26,  // 123 '{' space
+  26,  // 124 '|' space
+  26,  // 125 '}' space
+  26,  // 126 '~' space
+  26   // 127 ' ' space
 };
 
 const unsigned char
-  sprite_display_menu::cyclingtab[] =
-  { 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
-  253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
-  243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
-  249, 250, 251, 252, 253, 254, 255
+  sprite_display_menu::color_cycling[] =
+{
+    239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
+    253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
+    243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
+    249, 250, 251, 252, 253, 254, 255
 };
