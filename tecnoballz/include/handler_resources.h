@@ -2,14 +2,14 @@
  * @file handler_resources.h
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-04-10
+ * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.18 2007/09/30 07:23:39 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.19 2007/10/09 05:46:24 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,14 +45,11 @@ class handler_resources:public virtual tecnoballz
     static char *fnamescore;
     static char tmp_filename[512];
     static char pathstring[512];
-    //static char ze_mapfile[];
-
     static const Uint32 TEXTS_OFFSET = 2048;
     static const Uint32 BITMAP_OFFSET = 4096;
   public:
 
-
-
+    /** Different identifiers of the resources */
     typedef enum
     {
       RESCOSLIST = 0,
@@ -71,6 +68,7 @@ class handler_resources:public virtual tecnoballz
       TEXTS_MESSAGES,
       TEXTS_SCROLL_MENU,
       TEXTS_POPUP_MENU,
+      TEXTS_MAIN_MENU,
 
       BITMAP_HEAD_ANIMATION = BITMAP_OFFSET,
       BITMAP_RIGHT_PANEL,
@@ -93,7 +91,7 @@ class handler_resources:public virtual tecnoballz
 
     static const Sint16 cosinus360[720];
     static const Sint16 *zesinus360;
-    static const Uint32 tabledegas[180];
+    static const Uint32 color_gradations[180];
 
   private:
     /** Size last file loaded in memory */
@@ -115,7 +113,7 @@ class handler_resources:public virtual tecnoballz
     void save_high_score_file (char *buffer, Uint32 size);
     char *locate_data_file (const char *const name);
     char **load_texts (Uint32 resource_id, Uint32 maxof_lines =
-                         0, Uint32 row_length = 0, Uint32 modulo = 0);
+                         0, Uint32 row_length = 0, Uint32 modulo = 0, bool upper_case = true);
     char *get_filename (Uint32 resource_id, Uint32 res = 0);
 
   private:

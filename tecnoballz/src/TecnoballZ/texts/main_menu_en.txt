@@ -77,7 +77,6 @@ KEYS RECOGNIZED DURING THE GAME:
 --------------------------------
  25,000 POINTS      : BONUS LIFE
                                 
-                                
 #
                                 
 ---> BEST GREETINGS  FLY TO <---

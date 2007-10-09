@@ -1,14 +1,14 @@
 /** 
  * @file sprite_display_menu.h
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-03-16
+ * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.h,v 1.5 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_display_menu.h,v 1.6 2007/10/09 05:46:24 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +48,21 @@ public:
     EXIT_ENUM;
 
 private:
+
+    typedef enum
+    {
+      MAIN_SECTION = 0,
+      OPTIONS_SECTION = 19,
+      ABOUT_SECTION = 38,
+      INFOS_SECTION = 57,
+      GREETINGS_SECTION = 76,
+      SCORE_SECTIONS = 95,
+      MAX_OF_LINES = 114,
+    }
+    MENU_TEXTS_ENUM;
+
+  /** Pointer to the text file loaded */
+  char **texts_of_menus;
   static const unsigned char cyclingtab[];
   /** Number of characters by lines */
   static const Sint32 NUM_OF_COLUMNS = 32;
@@ -55,12 +70,12 @@ private:
   static const Sint32 NUM_OF_ROWS = 19;
   typedef enum
     {
-      MAIN_SECTION,
-      OPTIONS_SECTION,
-      ABOUT_SECTION,
-      INFOS_SECTION,
-      GREETINGS_SECTION,
-      SCORE_SECTIONS,
+      xMAIN_SECTION,
+      xOPTIONS_SECTION,
+      xABOUT_SECTION,
+      xINFOS_SECTION,
+      xGREETINGS_SECTION,
+      xSCORE_SECTIONS,
       NUM_OF_SECTIONS
     }
     SECTIONS_ENUM;
@@ -115,11 +130,12 @@ public:
 public:
     sprite_display_menu ();
    ~sprite_display_menu ();
+  void load_text_file();
   void first_init ();
   Uint32 check_and_display ();
 
 private:
-  void mis_a_jour ();
+  void update_strings ();
   Uint32 check_events ();
   void clear_text_offscreen ();
   void clear_input_zone ();
@@ -127,6 +143,6 @@ private:
   void input_init (Uint32 xcoor, Uint32 ycoor, Uint32 width, char *strng);
   void clear_stop ();
   void draw_input_cursor ();
-  void copyScores ();
+  void copy_high_score_in_menu ();
 };
 #endif

@@ -2,14 +2,14 @@
  * @file tecnoballz.h
  * @brief Base of all classes, and main static methods of the game 
  * @created 2002-08-18
- * @date 2007-10-08
+ * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.63 $
+ * @version $Revision: 1.64 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.63 2007/10/08 05:44:03 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.64 2007/10/09 05:46:24 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@
 #include "../include/configfile.h"
 #ifndef __TECNOBALLZ__
 #define __TECNOBALLZ__
-#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-10-08)"
+#define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-10-09)"
 /** To define only under development  */
 #define UNDER_DEVELOPMENT
 /** Force bytes copy (SPARC unaligned memory access) */
@@ -114,7 +114,7 @@ public:
     LEAVE_TECNOBALLZ,
   }
   GAME_PHASE;
-
+  /** Different levels of difficulty */
   typedef enum 
   {
     DIFFICULTY_EASY = 1,
@@ -178,7 +178,6 @@ protected:
   /** Number of players from 1 to 6 */
   static Sint32 number_of_players;
   static const char nomprefix[];
-
   static handler_high_score *high_score;
   /** Handler of the files resources */
   static handler_resources *resources;
@@ -190,10 +189,8 @@ protected:
   static handler_keyboard *keyboard;
   static list_sprites *sprites;
   static handler_players *current_player;
-
   static Sint16 *table_cosL;
   static Sint16 *table_sinL;
-
   /** A bitmap containing the current images of sprites */
   static bitmap_data *sprites_bitmap;
   /**  The main offscreen surface of the game */
@@ -205,9 +202,7 @@ public:
   static void first_init (configfile * pConf);
   static void game_begin ();
   static void release_all_objects (configfile * pConf);
-
   static void integer_to_ascii (Sint32 value, Uint32 padding, char *str); 
-
     tecnoballz ();
    ~tecnoballz ();
   void object_init ();

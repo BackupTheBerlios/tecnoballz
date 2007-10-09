@@ -1,14 +1,14 @@
 /** 
  * @file sprite_display_menu.cc 
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-09-26
+ * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.16 2007/10/08 05:44:03 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.17 2007/10/09 05:46:24 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,6 +61,7 @@ sprite_display_menu::sprite_display_menu ()
   clear_zone_xcoord = 0;
   clear_zone_ycoord = 0;
   blink_cursor_delay = 0;
+  texts_of_menus = NULL;
 }
 
 /**
@@ -78,6 +79,31 @@ sprite_display_menu::~sprite_display_menu ()
       delete bitmap_fonts;
       bitmap_fonts = NULL;
     }
+  if (texts_of_menus != NULL)
+    {
+      delete[](char *) texts_of_menus;
+      texts_of_menus = NULL;
+    }
+}
+
+/**
+ * Read the texts file 
+ */
+void
+sprite_display_menu::load_text_file ()
+{
+  if (texts_of_menus != NULL)
+    {
+      return;
+    }
+  texts_of_menus =
+    resources->load_texts (handler_resources::TEXTS_MAIN_MENU,
+			   MAX_OF_LINES, NUM_OF_COLUMNS, 0, false);
+  for(Uint32 i = 0; i < MAX_OF_LINES; i++)
+    {
+      //printf("%s\n", texts_of_menus[i]);
+    }
+
 }
 
 /**
@@ -86,7 +112,7 @@ sprite_display_menu::~sprite_display_menu ()
 void
 sprite_display_menu::first_init ()
 {
-
+  load_text_file();
   load_bitmap_fonts (handler_resources::BITMAP_MENU_FONTS);
 
   /* allocate 512 * 323 pixels buffer for text menu  */
@@ -107,7 +133,7 @@ sprite_display_menu::first_init ()
     {
       i = i - 10;
     }
-  const Uint32 *ptpal = (handler_resources::tabledegas + i * 18);
+  const Uint32 *ptpal = (handler_resources::color_gradations + i * 18);
   for (i = 0; i < 17; i++)
     {
       Uint32 vacol = ptpal[i];
@@ -132,7 +158,7 @@ Uint32
 sprite_display_menu::check_and_display ()
 {
   clear_input_zone ();
-  mis_a_jour ();
+  update_strings ();
   Sint32 mousY = keyboard->get_mouse_y ();
   Sint32 y = (mousY - y_coord) / line_spacing;
   Uint32 exit_code = check_events ();
@@ -154,13 +180,14 @@ sprite_display_menu::check_and_display ()
   char *c = ascii2code;
   Sint32 a, b, j;
 
+  /*
+   * mode low-res (320 x 200)
+   */
   if (resolution == 1)
     {
-      //######################################################
-      // mode low-res (320 x 200)
-      //######################################################
       for (Sint32 k = 0; k < NUM_OF_ROWS; k++, desP1 += offD2)
         {
+	  p = texts_of_menus[current_menu_section + k]; 
           if (y != k)
             {
               //######################################
@@ -245,16 +272,15 @@ sprite_display_menu::check_and_display ()
         }
     }
 
-
-
-  //##############################################################
-  // mode hi-res (640 x 400)
-  //##############################################################
+  /* 
+   * mode hi-res (640 x 400)
+   */
   else
     {
 
       for (Sint32 k = 0; k < NUM_OF_ROWS; k++, desP1 += offD2)
         {
+	  p = texts_of_menus[current_menu_section + k]; 
           if (y != k)
             {
               //###########################################################
@@ -445,7 +471,7 @@ sprite_display_menu::check_events ()
               audio->play_music (handler_audio::TERMIGATOR_MUSIC);
               clear_text_offscreen ();
               clear_stop ();
-              copyScores ();
+              copy_high_score_in_menu ();
               current_menu_section = SCORE_SECTIONS;
               break;
 
@@ -511,7 +537,7 @@ sprite_display_menu::check_events ()
                 difficulty_level = 1;
               if (difficulty_level < 1)
                 difficulty_level = 4;
-              mis_a_jour ();
+              update_strings ();
               break;
 
             case 13:
@@ -521,7 +547,7 @@ sprite_display_menu::check_events ()
                 initial_num_of_lifes = 1;
               if (initial_num_of_lifes < 1)
                 initial_num_of_lifes = 9;
-              mis_a_jour ();
+              update_strings ();
               break;
 
               //return to main menu
@@ -565,53 +591,61 @@ sprite_display_menu::check_events ()
   return exit_code;
 }
 
-//------------------------------------------------------------------------------
-// update strings menu (passwords, players names, difficulty, num of lifes)
-//------------------------------------------------------------------------------
+/** 
+ * Update strings menu: area code, player names, current difficulty, and
+ * the number of lifes
+ */
 void
-sprite_display_menu::mis_a_jour ()
+sprite_display_menu::update_strings ()
 {
-  const char *s;
-  char *d;
+  const char *source;
+  char *dest;
 
   /* copy current area code */
-  d = menuTexte0 + (NUM_OF_COLUMNS * LINE_CODE2) + 10;
-  supervisor_main_menu::copy_current_area_code (d);
+  //dest = menuTexte0 + (NUM_OF_COLUMNS * LINE_CODE2) + 10;
+  dest = texts_of_menus[MAIN_SECTION + LINE_CODE2] + 10;
+  supervisor_main_menu::copy_current_area_code (dest);
 
-  /* number of players */
-  d = menuTexte1 + (NUM_OF_COLUMNS * 5) + 24;
-  //intToASCII (number_of_players, d, 0);
-  integer_to_ascii (number_of_players, 1, d);
+  /* copy number of players */
+  //dest = menuTexte1 + (NUM_OF_COLUMNS * 5) + 24;
+  dest = texts_of_menus[OPTIONS_SECTION + 5] + 24;
+  integer_to_ascii (number_of_players, 1, dest);
 
-
-  //###########################################################
-  // copy playes names
-  //###########################################################
-  d = menuTexte1 + (NUM_OF_COLUMNS * 6) + 24;
+  /* copy player names */
+  //dest = menuTexte1 + (NUM_OF_COLUMNS * 6) + 24;
   for (Uint32 i = 0; i < handler_players::MAX_OF_PLAYERS; i++)
     {
-      s = handler_players::players_list[i]->get_name ();
-      for (Uint32 j = 0; j < 6; j++)
-        d[j] = s[j];
-      d += NUM_OF_COLUMNS;
+      dest = texts_of_menus[OPTIONS_SECTION + 6 + i] + 24;
+      source = handler_players::players_list[i]->get_name ();
+      for (Uint32 j = 0; j < handler_players::PLAYER_NAME_LENGTH; j++)
+	{
+          dest[j] = source[j];
+	}
+      //dest += NUM_OF_COLUMNS;
     }
-  s = &difficulte[(difficulty_level - 1) * 4];
-  d = menuTexte1 + (NUM_OF_COLUMNS * 12) + 24;
+
+  /* copy current difficulty level */
+  source = &difficulte[(difficulty_level - 1) * 4];
+  //dest = menuTexte1 + (NUM_OF_COLUMNS * 12) + 24;
+  dest = texts_of_menus[OPTIONS_SECTION + 12] + 24;
   for (Sint32 i = 0; i < 4; i++)
     {
-      d[i] = s[i];
+      dest[i] = source[i];
     }
-  d = menuTexte1 + (NUM_OF_COLUMNS * 13) + 24;
-  integer_to_ascii (initial_num_of_lifes, 2, d);
+  //dest = menuTexte1 + (NUM_OF_COLUMNS * 13) + 24;
+  dest = texts_of_menus[OPTIONS_SECTION + 13] + 24;
+  integer_to_ascii (initial_num_of_lifes, 2, dest);
 
-
-  birth_flag = 1;
+  /* check if the first part of the cheat code is enabled */
+  birth_flag = true;
   for (Uint32 i = 0; i < handler_players::MAX_OF_PLAYERS; i++)
     {
-      s = handler_players::players_list[i]->get_name ();
-      if (s[0] != '0' || s[1] != '4' || s[2] != '0' ||
-          s[3] != '6' || s[4] != '7' || s[5] != '0')
-        birth_flag = 0;
+      source = handler_players::players_list[i]->get_name ();
+      if (source[0] != '0' || source[1] != '4' || source[2] != '0' ||
+          source[3] != '6' || source[4] != '7' || source[5] != '0')
+	{
+          birth_flag = false;
+	}
     }
 }
 
@@ -630,8 +664,10 @@ sprite_display_menu::clear_text_offscreen ()
 void
 sprite_display_menu::clear_input_zone ()
 {
-  if (!clear_addr)
-    return;
+  if (clear_addr == NULL)
+    {
+      return;
+    }
   text_offscreen->clear(0, clear_zone_xcoord, clear_zone_ycoord, clear_zone_width, clear_zone_height);
 }
 
@@ -714,29 +750,28 @@ sprite_display_menu::clear_stop ()
   keyboard->stop_string_input ();
 }
 
-//------------------------------------------------------------------------------
-// copy scores table into menu text
-//------------------------------------------------------------------------------
+/**
+ * Copy high score table into the menu
+ */
 void
-sprite_display_menu::copyScores ()
+sprite_display_menu::copy_high_score_in_menu ()
 {
   player_score *score = high_score->get_high_score_table ();
   if (NULL == score)
     {
       return;
     }
-  char *ptext = menuTexte5 + NUM_OF_COLUMNS * 6;
   for (Uint32 i = 0; i < handler_high_score::MAX_OF_HIGH_SCORES; i++)
     {
-      char *pName = score[i].player_name;
+      char *dest = texts_of_menus[SCORE_SECTIONS + 6 + i];
+      char *name = score[i].player_name;
       for (Uint32 j = 0; j < handler_players::PLAYER_NAME_LENGTH; j++)
         {
-          ptext[6 + j] = pName[j];
+          dest[6 + j] = name[j];
         }
-      integer_to_ascii (score[i].value, 6,  &ptext[24]);
-      integer_to_ascii (score[i].area_number, 1, &ptext[19]);
-      integer_to_ascii (score[i].level_number, 2, &ptext[13]);
-      ptext += NUM_OF_COLUMNS;
+      integer_to_ascii (score[i].value, 6,  &dest[24]);
+      integer_to_ascii (score[i].area_number, 1, &dest[19]);
+      integer_to_ascii (score[i].level_number, 2, &dest[13]);
     }
 }
 

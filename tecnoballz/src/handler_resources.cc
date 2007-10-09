@@ -5,11 +5,11 @@
  * @date 2007-04-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.22 2007/09/30 07:23:39 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.23 2007/10/09 05:46:24 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -163,6 +163,8 @@ const char * handler_resources::texts_files[] =
   "scrolltext_%s.txt",
   /* TEXTS_POPUP_MENU */
   "popup_menu_%s.txt",
+  /* TEXTS_MAIN_MENU */
+  "main_menu_%s.txt"
 };
 
 //char handler_resources::ze_mapfile[] = "map??.png";
@@ -436,9 +438,10 @@ handler_resources::release_sprites_bitmap ()
  * @param row_length maximum number of chars by string, 0 if preserve the size of
  *                   the original string  
  * @param modulo 0 if non concatenation, 2 concatene strings 3 by 3 
+ * @param upper_case Change from 'a' to 'z' chars by 'A' to 'Z' chars 
  */
 char **
-handler_resources::load_texts(Uint32 resource_id, Uint32 numof_lines, Uint32 row_length, Uint32 modulo)
+handler_resources::load_texts(Uint32 resource_id, Uint32 numof_lines, Uint32 row_length, Uint32 modulo, bool upper_case)
 {
   resource_id -=TEXTS_OFFSET; 
   const char *file = texts_files[resource_id];
@@ -551,7 +554,7 @@ handler_resources::load_texts(Uint32 resource_id, Uint32 numof_lines, Uint32 row
               for (Uint32 i = 0; i < row_count; i++)
                 {
                   char c = source[i];
-                  if (c >= 'a' && c <= 'z') 
+                  if (upper_case && c >= 'a' && c <= 'z') 
                     {
                       c = c - ('a' - 'A');
                     }
@@ -861,7 +864,7 @@ const Sint16 *
 
 const
   Uint32
-  handler_resources::tabledegas[180] =
+  handler_resources::color_gradations[180] =
   { 0x0400180, 0x0420290, 0x0440392, 0x0500494, 0x0600596, 0x0700698,
   0x0800795, 0x0900893, 0x0A00990, 0x0A20A80, 0x0A40B70, 0x0A60C60,
   0x0A80D50, 0x0AA0E40, 0x0AC0F30, 0x0AE1020, 0x0B01110, 0x0B21200,

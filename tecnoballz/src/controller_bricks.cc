@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-10-05
+ * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.34 $
+ * @version $Revision: 1.35 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.34 2007/10/05 06:33:42 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.35 2007/10/09 05:46:24 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -558,7 +558,7 @@ controller_bricks::set_bricks_palette ()
     {
       i = i - 10;
     }
-  const Uint32 *color_scale = (handler_resources::tabledegas + i * 18);
+  const Uint32 *color_scale = (handler_resources::color_gradations + i * 18);
   for (i = 0; i < 17; i++)
     {
       Uint32 color = color_scale[i];

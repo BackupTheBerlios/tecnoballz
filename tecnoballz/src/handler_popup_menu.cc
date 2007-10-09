@@ -2,14 +2,14 @@
  * @file handler_popup_menu.cc 
  * @brief popup menu handler (When the [Esc] is pressed)
  * @created 2004-08-08 
- * @date 2007-10-02
+ * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.11 2007/10/07 14:22:12 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.12 2007/10/09 05:46:24 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,8 +66,7 @@ handler_popup_menu::~handler_popup_menu ()
 }
 
 /**
- * Initialize the popup menu
- * @param bmp Bitmap where are graphic elements of the menu
+ * Read the texts file 
  */
 void
 handler_popup_menu::load_text_file ()
@@ -96,7 +95,7 @@ handler_popup_menu::initialize_palette()
     {
       i = i - 10;
     }
-  const Uint32 *ptpal = (handler_resources::tabledegas + i * 18);
+  const Uint32 *ptpal = (handler_resources::color_gradations + i * 18);
   for (i = 0; i < 17; i++)
     {
       Uint32 vacol = ptpal[i];

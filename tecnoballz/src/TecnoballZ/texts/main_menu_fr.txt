@@ -3,15 +3,15 @@
                                 
                                 
                                 
-        START THE GAMEq         
+      COMMENCE UNE PARTIEq      
           ? OPTIONS ?           
           > CREDITS <           
-         g GREETINGS g          
+        g SALUTATIONS g         
              INFOS              
-       MEILLEURS SCORES           
+        MEILLEURS SCORES        
            AREA CODE            
         u ----------? t         
-          GAME  EXITw           
+            QUITTER             
                                 
                                 
                                 
@@ -23,35 +23,35 @@
                                 
                                 
 --------------------------------
- e NUMBER OF PLAYERS  u 1 t     
- b PLAYER 1.......... u ......t 
- b PLAYER 2.......... u ......t 
- b PLAYER 3.......... u ......t 
- b PLAYER 4.......... u ......t 
- b PLAYER 5.......... u ......t 
- b PLAYER 6.......... u ......t 
+ e NOMBRE DE JOUEURS  u 1 t     
+ b JOUEUR 1.......... u ......t 
+ b JOUEUR 2.......... u ......t 
+ b JOUEUR 3.......... u ......t 
+ b JOUEUR 4.......... u ......t 
+ b JOUEUR 5.......... u ......t 
+ b JOUEUR 6.......... u ......t 
  e DIFFICULTY........ u EASY t  
- e NUMBER OF LIFES... u 08 t    
- c MAIN MENUqq                  
+ e NOMBRE DE VIES.... u 08 t    
+ c MENU PRINCIALqq              
 --------------------------------
                                 
                                 
                                 
 # credits
---- MAIN CODING - LINUX-PORT ---
+---- DEVELOPPEUR  PRINCIPAL ----
       b BRUNO  ETHVIGNOT b      
----- BASED ON AMIGA MC680X0 ----
+- BASE SUR LA VERSION AMIGA DE -
 b BRUNO ETHVIGNOT;JEROME BOLOT b
                                 
------------ MAIN GFX -----------
+---- PRINCIPAUX GRAPHISMES  ----
 bJEAN MICHEL  MARTIN DE SANTEROb
         b DAVID IGREJA b        
- --------- OTHER  GFX --------- 
+------ AUTRES  GRAPHISMES ------
        b RODOLPHE  BONO b       
                                 
----------- ALL MUSICS ----------
+----- PRINCIPALES MUSIQUES -----
         b REGIS PARRET b        
----------SOUNDS EFFECTS---------
+- BRUITAGES ET AUTRES MUSIQUES -
        b LAURENT  GUYON  b      
                                 
 COPYRIGHT (C)1992-2007 TLK-GAMES
@@ -59,28 +59,27 @@ TLK-GAMES/BP 24/F81150 FLORENTIN
          LINUX.TLK.FR           
 #
                                 
- PADDLE CONTROL:                
- LEFT MOUSE BUTTON : FIRE       
- RIGHT MOUSE BUTTON: DROP BALL  
- LEFT AND RIGHT    : TILT       
+ CONTROL DE LA RAQUETTE:        
+ BOUTON GAUCHE SOURIS : TIR     
+ BOUTON DROIT SOURIS : EJECTE   
+ GAUCHE ET DROIT    : TILT      
                      GIGABLITZ  
 --------------------------------
-KEYS RECOGNIZED DURING THE GAME:
- F       : FULL SCREEN          
+TOUCHES RECONNUES DANS LE JEU   
+ F       : PLEIN ECRAN          
  P       : PAUSE                
  CTRL ESC: QUIT TECNOBALLZ      
- CTRL D  : DISABLE MUSICS       
- CTRL F  : DISABLE SOUND EFFECTS
- CTRL S  : DISABLE SOUND        
- CTRL Q  : EXIT TO MENU         
- CTRL X  : GO TO GAME-OVER      
+ CTRL D  : COUPE LES MUSIQUES   
+ CTRL F  : COUPE LES BRUITAGES  
+ CTRL S  : COUPE LE SON         
+ CTRL Q  : RETOURNE AU MENU     
+ CTRL X  : FIN DE PARTIE        
 --------------------------------
- 25,000 POINTS      : BONUS LIFE
-                                
+ 25 000 POINTS : GAGNE UNE VIE  
                                 
 #
                                 
----> BEST GREETINGS  FLY TO <---
+--> MEILLEURES SALUTATIONS A <--
                                 
  b ALEXIS       b AURELIEN      
  b BLACKGUARD   b BARTI         
@@ -101,9 +100,9 @@ KEYS RECOGNIZED DURING THE GAME:
 # high score table
                                 
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-b        BEST  TECNOBALLZ      b
+b     LES MEILLEURS SCORES     b
 b                              b
-b POS NAME   LEVEL AREA SCORE  b
+b POS NOM   NIVEAU ZONE SCORE  b
 b                              b
 b 01  ?????? ??    ?    ?????? b
 b 02  ?????? ??    ?    ?????? b

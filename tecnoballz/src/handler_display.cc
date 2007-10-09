@@ -2,14 +2,14 @@
  * @file handler_display.cc 
  * @briefi Handle displaying and updating with SDL 
  * @created 2002-08-17 
- * @date 2007-04-05
+ * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.24 2007/10/07 14:22:12 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.25 2007/10/09 05:46:24 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -640,7 +640,7 @@ handler_display::gradation1 ()
   Sint32 i = random_counter & 0x0F;
   if (i >= 10)
     i = i - 10;
-  const Uint32 *ptpal = (handler_resources::tabledegas + i * 18);
+  const Uint32 *ptpal = (handler_resources::color_gradations + i * 18);
   for (i = 0; i < 17; i++)
     {
       Uint32 vacol = ptpal[i];
