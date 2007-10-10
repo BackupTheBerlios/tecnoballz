@@ -4,11 +4,11 @@
  * @date 2007-10-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.h,v 1.7 2007/10/07 19:38:08 gurumeditation Exp $
+ * $Id: handler_keyboard.h,v 1.8 2007/10/10 06:01:28 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 class handler_keyboard:public virtual tecnoballz
 {
 public:
+  static const Sint32 NULL_YCOORD = -10240;
   
   typedef enum
     {
@@ -98,6 +99,8 @@ private:
   /* x and y coordinates of the mouse pointer */
   Sint32 mouse_x_coord;
   Sint32 mouse_y_coord;
+  Sint32 y_coord_left_down;
+  Sint32 y_coord_right_down;
   
   bool is_left_button_down;
   bool is_right_button_down;
@@ -147,6 +150,9 @@ public:
 
   bool is_joy_left();
   bool is_joy_right();
+
+  void start_menu_events();
+  bool menu_events (Sint32 *pos_y, Sint32 *inc);
 
 private:
   void init_joysticks(); 

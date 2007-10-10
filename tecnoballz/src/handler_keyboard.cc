@@ -4,11 +4,11 @@
  * @date 2007-10-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.11 2007/10/07 19:38:08 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.12 2007/10/10 06:01:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +73,8 @@ handler_keyboard::handler_keyboard ()
   string_input_size = 0;
   code_keyup = 0;
   current_input_string = NULL;
-
+  y_coord_left_down = NULL_YCOORD;
+  y_coord_right_down = NULL_YCOORD;
 
   for (Uint32 i = 0; i < NUMOF_COMMAND_KEYS; i++)
     {
@@ -975,3 +976,81 @@ Uint32 handler_keyboard::get_key_down_code ()
 {
   return key_code_down;
 }
+
+/**
+ *
+ */
+void
+handler_keyboard::start_menu_events()
+{
+  y_coord_left_down = NULL_YCOORD;
+  y_coord_right_down = NULL_YCOORD;
+}
+
+/**
+ * Check mouses events for the main menu and popup menu 
+ * @param pos_y Pointer to a integer which will contain y-coordinate
+ *              where the mouse clicked 
+ * @param inc Pointer to a integer which will contain -1 if left mouse
+ *            button clicked, 1 if right button clicked, otherwise 0
+ * @return true if left mouse button clicked, otherwise false
+ */
+bool
+handler_keyboard::menu_events (Sint32 *pos_y, Sint32 *inc)
+{
+  bool is_selected = false;
+  /* check if right or left button are pressed */
+  Sint32 mposx;
+  bool is_left_down = keyboard->is_left_button ();
+  bool is_right_down = keyboard->is_right_button ();
+
+  /* read y where is pressed */
+  if (is_left_down && y_coord_left_down == NULL_YCOORD)
+    {
+      y_coord_left_down = keyboard->get_mouse_y ();
+    }
+  else
+    {
+      if (is_right_down && y_coord_right_down == NULL_YCOORD)
+        {
+          y_coord_right_down = keyboard->get_mouse_y ();
+        }
+    }
+  bool is_right_up = false;
+  bool is_left_up = keyboard->is_left_button_up (&mposx, pos_y);
+  if (!is_left_up)
+    {
+      is_right_up = keyboard->is_right_button_up (&mposx, pos_y);
+    }
+  if ((is_left_up && *pos_y == y_coord_left_down) ||
+      (is_right_up && *pos_y == y_coord_right_down))
+    {
+      *inc = 0;
+      if (is_left_up)
+        {
+          *inc = 1;
+          y_coord_left_down = NULL_YCOORD;
+        }
+      if (is_right_up)
+        {
+          *inc = -1;
+          y_coord_right_down = NULL_YCOORD;
+        }
+      is_selected = true;
+    }
+  if (!is_left_down)
+    {
+      y_coord_left_down = NULL_YCOORD;
+    }
+  if (!is_right_down)
+    {
+      y_coord_right_down = NULL_YCOORD;
+    }
+  return is_selected;
+}
+
+
+
+
+
+

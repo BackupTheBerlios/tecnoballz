@@ -1,14 +1,14 @@
 /** 
  * @file sprite_display_menu.cc 
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-10-09
+ * @date 2007-10-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.18 2007/10/09 15:43:48 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.19 2007/10/10 06:01:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,8 +40,8 @@ sprite_display_menu::sprite_display_menu ()
   clear_sprite_members ();
   current_menu_section = 0;
   text_offscreen = NULL;
-  y_coord_left_down = -10240;
-  y_coord_right_down = -10240;
+  y_coord_left_down =  handler_keyboard::NULL_YCOORD;
+  y_coord_right_down = handler_keyboard::NULL_YCOORD;
   font_width = 8 * resolution;
   font_height = 8 * resolution;
   if (resolution == 2)
@@ -374,51 +374,13 @@ Uint32
 sprite_display_menu::check_events ()
 {
   Uint32 exit_code = DO_NO_EXIT;
-  Sint32 mposx, pos_y;
-
-  /* check if right or left button are pressed */
-  bool is_left_down = keyboard->is_left_button ();
-  bool is_right_down = keyboard->is_right_button ();
-
-  /* read y where is pressed */
-  if (is_left_down && y_coord_left_down == YCOORDNULL)
-    {
-      y_coord_left_down = keyboard->get_mouse_y ();
-    }
-  else
-    {
-      if (is_right_down && y_coord_right_down == YCOORDNULL)
-        {
-          y_coord_right_down = keyboard->get_mouse_y ();
-        }
-    }
-
-  bool is_right_up = false;
-  bool is_left_up = keyboard->is_left_button_up (&mposx, &pos_y);
-  if (!is_left_up)
-    {
-      is_right_up = keyboard->is_right_button_up (&mposx, &pos_y);
-    }
-
-  if ((is_left_up && pos_y == y_coord_left_down)
-      || (is_right_up && pos_y == y_coord_right_down))
-    {
-      Sint32 incre = 0;
-      if (is_left_up)
-        {
-          incre = 1;
-          y_coord_left_down = YCOORDNULL;
-        }
-      if (is_right_up)
-        {
-          incre = -1;
-          y_coord_right_down = YCOORDNULL;
-        }
-
+  Sint32 pos_y = 0;
+  Sint32 incre = 0;
+  if (keyboard->menu_events(&pos_y, &incre)) 
+   {
       pos_y = (pos_y - y_coord) / line_spacing;
       switch (current_menu_section)
         {
-
           /* main menu */
         case MAIN_SECTION:
           switch (pos_y)
@@ -578,15 +540,7 @@ sprite_display_menu::check_events ()
           break;
         }
     }
-  if (!is_left_down)
-    {
-      y_coord_left_down = YCOORDNULL;
-    }
-  if (!is_right_down)
-    {
-      y_coord_right_down = YCOORDNULL;
-    }
-  return exit_code;
+ return exit_code;
 }
 
 /** 

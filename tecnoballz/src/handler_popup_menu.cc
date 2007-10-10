@@ -5,11 +5,11 @@
  * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.12 2007/10/09 05:46:24 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.13 2007/10/10 06:01:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -313,55 +313,12 @@ handler_popup_menu::run ()
       return event;
     }
 
-  /* check if right or left button are pressed */
-  Sint32 mposx, pos_y;
-  bool is_left_down = keyboard->is_left_button ();
-  bool is_right_down = keyboard->is_right_button ();
-
-  /* read y where is pressed */
-  if (is_left_down && y_coord_left_down == NULL_YCOORD)
+  Sint32 pos_y = 0;
+  Sint32 incre = 0;
+  if (keyboard->menu_events(&pos_y, &incre))
     {
-      y_coord_left_down = keyboard->get_mouse_y ();
-    }
-  else
-    {
-      if (is_right_down && y_coord_right_down == NULL_YCOORD)
-        {
-          y_coord_right_down = keyboard->get_mouse_y ();
-        }
-    }
-
-  bool is_right_up = 0;
-  bool is_left_up = keyboard->is_left_button_up (&mposx, &pos_y);
-  if (!is_left_up)
-    {
-      is_right_up = keyboard->is_right_button_up (&mposx, &pos_y);
-    }
-
-  if ((is_left_up && pos_y == y_coord_left_down) || (is_right_up && pos_y == y_coord_right_down))
-    {
-      Sint32 incre = 0;
-      if (is_left_up)
-        {
-          incre = 1;
-          y_coord_left_down = NULL_YCOORD;
-        }
-      if (is_right_up)
-        {
-          incre = -1;
-          y_coord_right_down = NULL_YCOORD;
-        }
       event = (pos_y - y_coord) / vertical_space;
     }
-  if (!is_left_down)
-    {
-      y_coord_left_down = NULL_YCOORD;
-    }
-  if (!is_right_down)
-    {
-      y_coord_right_down = NULL_YCOORD;
-    }
-
 
   /* read color table offset (color line hover by mouse ) */
   if (menu_color++ > 32)
