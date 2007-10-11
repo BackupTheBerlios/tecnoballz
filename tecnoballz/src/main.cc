@@ -5,11 +5,11 @@
  * @date 2007-10-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.58 $
+ * @version $Revision: 1.59 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.58 2007/10/06 08:54:53 gurumeditation Exp $
+ * $Id: main.cc,v 1.59 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -149,12 +149,12 @@ lispreader  =>
 *tecno_boui  => sprite_ship
 *tecno_bump  => sprite_paddle
 *tecno_caps  => sprite_money
-*tecnoDefil  => sprite_fonte_menu
+*tecnoDefil  => sprite_font_menu
 *tecno_fire  => sprite_projectile
 *tecno_gads  => sprite_capsule
 *tecno_gard  => sprite_guardian
 *tecno_miss  => sprite_bullet
-*tecno_text  => sprite_fonte_game
+*tecno_text  => sprite_font_game
  
 *ballDirect  => controller_viewfinders
 *lesBriques  => controller_bricks
@@ -162,7 +162,7 @@ lispreader  =>
 *zeBouiBoui  => controller_ships
 *zeCapsules  => controller_moneys
 *zeCongBall  => controller_spheres
-*zeDefilTxt  => controller_fontes_menu
+*zeDefilTxt  => controller_font_menu
 *zeFireBump  => controller_fires
 *ze_gadgets  => controller_capsules
 *zeGameOver  => controller_game_over
@@ -171,7 +171,7 @@ lispreader  =>
 *zeguardian  => controller_guardians
 *ze_magneye  => controller_magnetic_eyes
 *zeMissiles  => controller_bullets
-*zeMoveText  => controller_fontes_game
+*zeMoveText  => controller_font_game
 *zeNewBalls  => controller_balls
 *zeRaquette  => controller_paddles
 *zexplosion  => controller_explosions

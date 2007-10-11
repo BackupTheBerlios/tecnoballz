@@ -4,11 +4,11 @@
  * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.h,v 1.7 2007/10/09 15:43:48 gurumeditation Exp $
+ * $Id: sprite_display_menu.h,v 1.8 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -118,6 +118,7 @@ public:
 
 private:
   void update_strings ();
+  void set_current_menu_section(Uint32 current);
   Uint32 check_events ();
   void clear_text_offscreen ();
   void clear_input_zone ();

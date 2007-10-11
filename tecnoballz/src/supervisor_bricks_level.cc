@@ -4,11 +4,11 @@
  * @date 2007-10-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.63 $
+ * @version $Revision: 1.64 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.63 2007/10/07 14:22:12 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.64 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
   balls = controller_balls::get_instance ();
   viewfinders_paddles = controller_viewfinders::get_instance ();
   paddles = controller_paddles::get_instance ();
-  fontes_game = controller_fontes_game::get_instance ();
+  fontes_game = controller_font_game::get_instance ();
   gigablitz = controller_gigablitz::get_instance ();
   player_indicators = controller_indicators::get_instance ();
   game_over = controller_game_over::get_instance ();

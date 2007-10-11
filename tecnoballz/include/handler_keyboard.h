@@ -1,14 +1,14 @@
 /** 
  * @file handler_keyboard.cc 
  * @brief Handler of the keyboard and mouse
- * @date 2007-10-03
+ * @date 2007-10-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.h,v 1.8 2007/10/10 06:01:28 gurumeditation Exp $
+ * $Id: handler_keyboard.h,v 1.9 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,8 +76,23 @@ private:
   /** Predefinded keys to control the paddle */
   static Uint32 key_codes[K_MAXOF];
   static handler_keyboard* keyboard_singleton;
+  static Uint32 menu_events_keys[6];
+
+  typedef struct
+   {
+     Sint32 y_coord_left_down;
+     Sint32 y_coord_right_down;
+     Sint32 line_spacing;
+     Sint32 xcenter;
+     Sint32 top_y_coord;
+     Sint32 line_max;
+     Sint32 current_line;
+     Sint32 key_delay;
+     Uint32 previous_key_code_down;
+   } menu_events_stuct;
 
 private:
+  menu_events_stuct menu_events;
   /** True if grabs mouse and keyboard input */
   bool is_grab_input;
   /** Number of available joysticks */
@@ -99,8 +114,6 @@ private:
   /* x and y coordinates of the mouse pointer */
   Sint32 mouse_x_coord;
   Sint32 mouse_y_coord;
-  Sint32 y_coord_left_down;
-  Sint32 y_coord_right_down;
   
   bool is_left_button_down;
   bool is_right_button_down;
@@ -151,8 +164,8 @@ public:
   bool is_joy_left();
   bool is_joy_right();
 
-  void start_menu_events();
-  bool menu_events (Sint32 *pos_y, Sint32 *inc);
+  void start_menu_events(Sint32 spacing, Sint32 max, Sint32 xcenter, Sint32 ytop);
+  bool check_menu_events (Sint32 *pos_y, Sint32 *inc);
 
 private:
   void init_joysticks(); 

@@ -1,14 +1,14 @@
 /** 
- * @file controller_fontes_menu.cc 
+ * @file controller_font_menu.cc 
  * @brief Controller of the menu scroll text 
  * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.1 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_fontes_menu.cc,v 1.3 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_font_menu.cc,v 1.1 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,13 +25,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-#include "../include/controller_fontes_menu.h"
+#include "../include/controller_font_menu.h"
 #include "../include/handler_resources.h"
 
 /**
  * Create the scroll text controller
  */
-controller_fontes_menu::controller_fontes_menu ()
+controller_font_menu::controller_font_menu ()
 {
   littleInit ();
   max_of_sprites = MAX_OF_FONTS + 2;
@@ -44,7 +44,7 @@ controller_fontes_menu::controller_fontes_menu ()
 /**
  * Release the scroll text controller
  */
-controller_fontes_menu::~controller_fontes_menu ()
+controller_font_menu::~controller_font_menu ()
 {
   if (NULL != scrolltexts)
     {
@@ -58,7 +58,7 @@ controller_fontes_menu::~controller_fontes_menu ()
  * Perform some initializations
  */
 void
-controller_fontes_menu::create_fontes_list ()
+controller_font_menu::create_fontes_list ()
 {
   create_sprites_list ();
   Uint32 i;
@@ -67,7 +67,7 @@ controller_fontes_menu::create_fontes_list ()
   Uint32 j = 0;
   for (i = 0; i < MAX_OF_FONTS; i++, j = (j + 18) & SINUS_MASK)
     {
-      sprite_fonte_menu *sprite = sprites_list[i];
+      sprite_font_menu *sprite = sprites_list[i];
       characters_list[i + 1] = sprite;
       sprite->zeCosValue = j;
       sprite->set_x_coord (100);
@@ -90,12 +90,12 @@ controller_fontes_menu::create_fontes_list ()
  * Moving of the fonts
  */ 
 void
-controller_fontes_menu::move_chars ()
+controller_font_menu::move_chars ()
 {
   Sint32 a, b, width;
   Sint16 *table, *sinPT, *cosPT;
-  sprite_fonte_menu *sprite;
-  sprite_fonte_menu *zzBOB;
+  sprite_font_menu *sprite;
+  sprite_font_menu *zzBOB;
   /* convert unsigned to signed */
   Sint32 res = (Sint32) resolution;
 
@@ -115,7 +115,7 @@ controller_fontes_menu::move_chars ()
     {
       depla *= 2;
     }
-  sprite_fonte_menu **sprite_fonts = object_ptr;
+  sprite_font_menu **sprite_fonts = object_ptr;
   for (Uint32 i = 0; i < MAX_OF_FONTS; i++)
     {
       if (NULL == *sprite_fonts)
@@ -203,7 +203,7 @@ controller_fontes_menu::move_chars ()
 }
 
 char
-  controller_fontes_menu::asciiToBob[128] = { 26,       // 32 ' ' space
+  controller_font_menu::asciiToBob[128] = { 26,       // 32 ' ' space
   37,                           // 33 '!'
   39,                           // 34 '''
   26,                           // 35 '#' (space)

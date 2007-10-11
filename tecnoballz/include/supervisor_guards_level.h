@@ -5,11 +5,11 @@
  * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.23 2007/10/02 04:50:33 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.24 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,12 +47,12 @@ class supervisor_guards_level;
 #include "../include/controller_game_over.h"
 #include "../include/controller_spheres.h"
 #include "../include/handler_popup_menu.h"
-#include "../include/controller_fontes_game.h"
+#include "../include/controller_font_game.h"
 
 
 class supervisor_guards_level:public virtual supervisor
 {
-  friend class controller_fontes_game;
+  friend class controller_font_game;
 
 private:
   controller_gigablitz * gigablitz;
@@ -92,7 +92,7 @@ private:
   bool is_victory; 
   /** If true congratulations was already initialized  */
   bool is_victory_initialized;
-  controller_fontes_game *fontes_game;
+  controller_font_game *fontes_game;
 
 private:
   void init_level ();

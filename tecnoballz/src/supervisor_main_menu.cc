@@ -4,11 +4,11 @@
  * @date 2007-10-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.25 2007/10/08 05:44:03 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.26 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ supervisor_main_menu::supervisor_main_menu ()
   tiles_map = new tilesmap_scrolling ();
   /*  big TecnoballZ logo */
   tecnoballz_logo = new sprite_object ();
-  font_scrolling = new controller_fontes_menu ();
+  font_scrolling = new controller_font_menu ();
   text_menu = new sprite_display_menu ();
   mouse_pointer = new sprite_mouse_pointer ();
   tecnoballz_logo_angle = 0;

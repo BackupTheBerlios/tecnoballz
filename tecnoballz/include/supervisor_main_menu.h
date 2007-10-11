@@ -4,11 +4,11 @@
  * @date 2007-10-08
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.h,v 1.12 2007/10/08 05:44:03 gurumeditation Exp $
+ * $Id: supervisor_main_menu.h,v 1.13 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 #include "../include/handler_keyboard.h"
 #include "../include/sprite_object.h"
 #include "../include/list_sprites.h"
-#include "../include/controller_fontes_menu.h"
+#include "../include/controller_font_menu.h"
 #include "../include/display_text_bitmap.h"
 #include "../include/sprite_display_menu.h"
 #include "../include/sprite_mouse_pointer.h"
@@ -49,7 +49,7 @@ class supervisor_main_menu:public virtual supervisor
     /** Big TecnoballZ logo at the top of the screen */
     sprite_object *tecnoballz_logo;
     /** Scrolltext at the bottom of the screen */
-    controller_fontes_menu *font_scrolling;
+    controller_font_menu *font_scrolling;
     /** Handle the text of the main menu */
     sprite_display_menu *text_menu;
     /** Angle from 0 to 511 used for the horizontal displacement

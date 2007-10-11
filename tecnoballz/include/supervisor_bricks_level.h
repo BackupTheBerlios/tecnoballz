@@ -4,11 +4,11 @@
  * @date 2007-10-04
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.28 2007/10/04 05:54:41 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.29 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ class supervisor_bricks_level;
 #include "../include/controller_capsules.h"
 #include "../include/controller_gigablitz.h"
 #include "../include/handler_players.h"
-#include "../include/controller_fontes_game.h"
+#include "../include/controller_font_game.h"
 #include "../include/head_animation.h"
 #include "../include/controller_indicators.h"
 #include "../include/controller_game_over.h"
@@ -71,7 +71,7 @@ class supervisor_bricks_level:public virtual supervisor
   friend class controller_balls;
   friend class controller_paddles;
   friend class controller_capsules;
-  friend class controller_fontes_game;
+  friend class controller_font_game;
   friend class controller_ships;
   friend class sprite_paddle;
 
@@ -93,7 +93,7 @@ private:
   controller_moneys *money_capsules;
   controller_capsules *power_up_capsules;
   controller_gems *gem_stones;
-  controller_fontes_game *fontes_game;
+  controller_font_game *fontes_game;
   controller_gigablitz *gigablitz;
   controller_game_over *game_over;
   sprite_wall *bottom_wall;

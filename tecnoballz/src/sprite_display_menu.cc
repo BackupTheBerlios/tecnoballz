@@ -4,11 +4,11 @@
  * @date 2007-10-10
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.19 2007/10/10 06:01:29 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.20 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@
 sprite_display_menu::sprite_display_menu ()
 {
   clear_sprite_members ();
-  current_menu_section = 0;
+  set_current_menu_section(MAIN_SECTION);
   text_offscreen = NULL;
   y_coord_left_down =  handler_keyboard::NULL_YCOORD;
   y_coord_right_down = handler_keyboard::NULL_YCOORD;
@@ -366,6 +366,13 @@ Uint32 sprite_display_menu::check_and_display ()
   return exit_code;
 }
 
+void
+sprite_display_menu::set_current_menu_section(Uint32 current)
+{
+    current_menu_section = current;
+    keyboard->start_menu_events(line_spacing, NUM_OF_ROWS, display->get_width() >> 1, y_coord);
+}
+
 /**
  * Check mouse events 
  * @return exit code DO_NO_EXIT, PROGRAM_EXIT, or START_GAME
@@ -376,7 +383,7 @@ sprite_display_menu::check_events ()
   Uint32 exit_code = DO_NO_EXIT;
   Sint32 pos_y = 0;
   Sint32 incre = 0;
-  if (keyboard->menu_events(&pos_y, &incre)) 
+  if (keyboard->check_menu_events(&pos_y, &incre)) 
    {
       pos_y = (pos_y - y_coord) / line_spacing;
       switch (current_menu_section)
@@ -393,7 +400,7 @@ sprite_display_menu::check_events ()
             case LINE_PARAM:
               clear_text_offscreen ();
               clear_zone_stop ();
-              current_menu_section = OPTIONS_SECTION;
+              set_current_menu_section(OPTIONS_SECTION);
               break;
             case LINE_ABOUT:
 #ifndef WIN32
@@ -401,26 +408,26 @@ sprite_display_menu::check_events ()
 #endif
               clear_text_offscreen ();
               clear_zone_stop ();
-              current_menu_section = ABOUT_SECTION;
+              set_current_menu_section(ABOUT_SECTION);
               break;
             case LINE_SALUT:
               audio->play_music (handler_audio::MON_LAPIN_MUSIC);
               clear_text_offscreen ();
               clear_zone_stop ();
-              current_menu_section = GREETINGS_SECTION;
+              set_current_menu_section(GREETINGS_SECTION);
               break;
             case LINE_INFOS:
               audio->play_music (handler_audio::IN_GAME_MUSIC);
               clear_text_offscreen ();
               clear_zone_stop ();
-              current_menu_section = INFOS_SECTION;
+              set_current_menu_section(INFOS_SECTION);
               break;
             case LINE_SCORE:
               audio->play_music (handler_audio::TERMIGATOR_MUSIC);
               clear_text_offscreen ();
               clear_zone_stop ();
               copy_high_score_in_menu ();
-              current_menu_section = SCORE_SECTIONS;
+              set_current_menu_section(SCORE_SECTIONS);
               break;
 
               /* input the code area */
@@ -513,7 +520,7 @@ sprite_display_menu::check_events ()
               /* return to main menu */
             case 14:
               clear_text_offscreen ();
-              current_menu_section = MAIN_SECTION;
+              set_current_menu_section(MAIN_SECTION);
               clear_zone_stop ();
               break;
             }
@@ -521,22 +528,22 @@ sprite_display_menu::check_events ()
 
         case ABOUT_SECTION:
           clear_text_offscreen ();
-          current_menu_section = MAIN_SECTION;
+          set_current_menu_section(MAIN_SECTION);
           break;
 
         case INFOS_SECTION:
           clear_text_offscreen ();
-          current_menu_section = MAIN_SECTION;
+          set_current_menu_section(MAIN_SECTION);
           break;
 
         case GREETINGS_SECTION:
           clear_text_offscreen ();
-          current_menu_section = MAIN_SECTION;
+          set_current_menu_section(MAIN_SECTION);
           break;
 
         case SCORE_SECTIONS:
           clear_text_offscreen ();
-          current_menu_section = MAIN_SECTION;
+          set_current_menu_section(MAIN_SECTION);
           break;
         }
     }

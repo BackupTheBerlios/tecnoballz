@@ -5,11 +5,11 @@
  * @date 2007-10-07
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.51 $
+ * @version $Revision: 1.52 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.51 2007/10/07 14:22:12 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.52 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ supervisor_guards_level::supervisor_guards_level ()
   tiles_map = new tilesmap_scrolling ();
   guards = controller_guardians::get_instance ();
   paddles = controller_paddles::get_instance ();
-  fontes_game = controller_fontes_game::get_instance ();
+  fontes_game = controller_font_game::get_instance ();
   explosions = controller_explosions::get_instance ();
   bullets = controller_bullets::get_instance ();
   money_capsules = controller_moneys::get_instance ();

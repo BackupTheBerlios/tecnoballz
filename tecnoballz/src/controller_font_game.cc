@@ -1,11 +1,11 @@
 //*****************************************************************************
 // copyright (c) 1991-2005 TLK Games all rights reserved
 //-----------------------------------------------------------------------------
-// file         : "controller_fontes_game.cc"
+// file         : "controller_font_game.cc"
 // created      : ?
 // updates      : 2005-01-23
 // fonction     : manage mobiles characters ("LEVEL x COMPLETED")
-// id           : $Id: controller_fontes_game.cc,v 1.2 2007/09/12 06:32:48 gurumeditation Exp $
+// id           : $Id: controller_font_game.cc,v 1.1 2007/10/11 05:20:26 gurumeditation Exp $
 //-----------------------------------------------------------------------------
 // TecnoballZ is free software; you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free Software
@@ -21,12 +21,12 @@
 // this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 // Place - Suite 330, Boston, MA 02111-1307, USA.
 //*****************************************************************************
-#include "../include/controller_fontes_game.h"
+#include "../include/controller_font_game.h"
 
 //-----------------------------------------------------------------------------
 // create the object
 //-----------------------------------------------------------------------------
-controller_fontes_game::controller_fontes_game ()
+controller_font_game::controller_font_game ()
 {
   littleInit ();
   size_line1 = 0;
@@ -41,7 +41,7 @@ controller_fontes_game::controller_fontes_game ()
 //-----------------------------------------------------------------------------
 // release the object
 //-----------------------------------------------------------------------------
-controller_fontes_game::~controller_fontes_game ()
+controller_font_game::~controller_font_game ()
 {
   release_sprites_list ();
 }
@@ -50,7 +50,7 @@ controller_fontes_game::~controller_fontes_game ()
 // perform some initializations
 //-----------------------------------------------------------------------------
 void
-controller_fontes_game::initialise (Sint32 level, Sint32 offzt)
+controller_font_game::initialise (Sint32 level, Sint32 offzt)
 {
   chrOffsetX = offzt;
   horz_large = 256 * resolution;
@@ -83,7 +83,7 @@ controller_fontes_game::initialise (Sint32 level, Sint32 offzt)
   monPT = ze_bobText;
   for (Sint32 i = 0; i < size_total; i++)
     {
-      sprite_fonte_game *chara = sprites_list[i];
+      sprite_font_game *chara = sprites_list[i];
       char c = *(monPT++);
       if (c == '\0')
         c = *(monPT++);
@@ -115,7 +115,7 @@ controller_fontes_game::initialise (Sint32 level, Sint32 offzt)
 //                      => yStop: stop Y coordinate
 //-----------------------------------------------------------------------------
 Sint32
-controller_fontes_game::startValue (Sint32 nchar, Sint32 zeRad, Sint32 index,
+controller_font_game::startValue (Sint32 nchar, Sint32 zeRad, Sint32 index,
                                     Sint32 yStrt, Sint32 yOffs, Sint32 yStop)
 {
   Sint32 width = sprites_list[0]->get_sprite_height ();
@@ -129,7 +129,7 @@ controller_fontes_game::startValue (Sint32 nchar, Sint32 zeRad, Sint32 index,
 
   for (Sint32 i = index; i < (nchar + index); i++, xStrt += e, xStop += width)
     {
-      sprite_fonte_game *chara = sprites_list[i];
+      sprite_font_game *chara = sprites_list[i];
       chara->set_coordinates (xStrt, yStrt);
       if (xStrt > xStop)
         xOffs = -1;
@@ -151,11 +151,11 @@ controller_fontes_game::startValue (Sint32 nchar, Sint32 zeRad, Sint32 index,
 // animation of characters sprites
 //-----------------------------------------------------------------------------
 void
-controller_fontes_game::goMoveText ()
+controller_font_game::goMoveText ()
 {
   for (Sint32 i = 0; i < size_total; i++)
     {
-      sprite_fonte_game *chara = sprites_list[i];
+      sprite_font_game *chara = sprites_list[i];
       chara->moveCaract ();
     }
 }
@@ -164,11 +164,11 @@ controller_fontes_game::goMoveText ()
 // enable characters sprites
 //-----------------------------------------------------------------------------
 void
-controller_fontes_game::activeText ()
+controller_font_game::activeText ()
 {
   for (Sint32 i = 0; i < size_total; i++)
     {
-      sprite_fonte_game *chara = sprites_list[i];
+      sprite_font_game *chara = sprites_list[i];
       chara->enable ();
     }
 }
@@ -177,6 +177,6 @@ controller_fontes_game::activeText ()
 // string to display
 //-----------------------------------------------------------------------------
 char
-  controller_fontes_game::ze_bobText[] = "LEVEL[//\0COMPLETED\0";
+  controller_font_game::ze_bobText[] = "LEVEL[//\0COMPLETED\0";
 char
-  controller_fontes_game::ze_endText[] = "[[GAME[[\0FINISHED[\0";
+  controller_font_game::ze_endText[] = "[[GAME[[\0FINISHED[\0";

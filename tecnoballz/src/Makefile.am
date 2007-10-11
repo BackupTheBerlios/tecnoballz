@@ -20,8 +20,8 @@ SOURCES_MAIN = \
   controller_capsules.cc \
   controller_ejectors.cc \
   controller_explosions.cc \
-  controller_fontes_game.cc \
-  controller_fontes_menu.cc \
+  controller_font_game.cc \
+  controller_font_menu.cc \
   controller_game_over.cc \
   controller_gems.cc \
   controller_gigablitz.cc \
@@ -58,8 +58,8 @@ SOURCES_MAIN = \
   sprite_display_menu.cc \
   sprite_display_scores.cc \
   sprite_eye.cc \
-  sprite_fonte_game.cc \
-  sprite_fonte_menu.cc \
+  sprite_font_game.cc \
+  sprite_font_menu.cc \
   sprite_gem.cc \
   sprite_gigablitz.cc \
   sprite_guardian.cc \

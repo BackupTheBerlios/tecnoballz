@@ -1,14 +1,14 @@
-/** 
+/**
  * @file handler_keyboard.cc 
  * @brief Handler of the keyboard and mouse
- * @date 2007-10-03
+ * @date 2007-10-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.12 2007/10/10 06:01:29 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.13 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,20 +31,20 @@
 bool handler_keyboard::command_keys[NUMOF_COMMAND_KEYS];
 bool handler_keyboard::last_command_keys[NUMOF_COMMAND_KEYS];
 Uint32 handler_keyboard::key_codes[K_MAXOF] =
-{
-  SDLK_LEFT,
-  SDLK_RIGHT,
-  SDLK_UP,
-  SDLK_DOWN,
-  SDLK_SPACE,
-  SDLK_LCTRL,
-  SDLK_LALT,
-  SDLK_y,
-  SDLK_x,
-  SDLK_ESCAPE,
-  SDLK_PAGEUP,
-  SDLK_PAGEDOWN
-};
+  {
+    SDLK_LEFT,
+    SDLK_RIGHT,
+    SDLK_UP,
+    SDLK_DOWN,
+    SDLK_SPACE,
+    SDLK_LCTRL,
+    SDLK_LALT,
+    SDLK_y,
+    SDLK_x,
+    SDLK_ESCAPE,
+    SDLK_PAGEUP,
+    SDLK_PAGEDOWN
+  };
 handler_keyboard * handler_keyboard::keyboard_singleton = NULL;
 
 /**
@@ -73,8 +73,8 @@ handler_keyboard::handler_keyboard ()
   string_input_size = 0;
   code_keyup = 0;
   current_input_string = NULL;
-  y_coord_left_down = NULL_YCOORD;
-  y_coord_right_down = NULL_YCOORD;
+  menu_events.y_coord_left_down = NULL_YCOORD;
+  menu_events.y_coord_right_down = NULL_YCOORD;
 
   for (Uint32 i = 0; i < NUMOF_COMMAND_KEYS; i++)
     {
@@ -123,7 +123,7 @@ handler_keyboard::init_joysticks()
   if (is_verbose)
     {
       std::cout << "handler_keyboard::init_joysticks()" <<
-        " number of joysticks available: " << numof_joysticks << std::endl;
+      " number of joysticks available: " << numof_joysticks << std::endl;
     }
   if (numof_joysticks > 0)
     {
@@ -135,15 +135,15 @@ handler_keyboard::init_joysticks()
           if (sdl_joysticks[i] == NULL)
             {
               std::cerr << "(!)handler_keyboard::init_joysticks()" <<
-                       " couldn't open joystick " << i << ": "
-                       << SDL_GetError () << std::endl;
+              " couldn't open joystick " << i << ": "
+              << SDL_GetError () << std::endl;
             }
           else
             {
               if (is_verbose)
                 {
                   std::cout << "- joystick  : " << SDL_JoystickName (i) << std::endl;
-                  std::cout << "- axes      : " << SDL_JoystickNumAxes (sdl_joysticks[i]) << std::endl; 
+                  std::cout << "- axes      : " << SDL_JoystickNumAxes (sdl_joysticks[i]) << std::endl;
                   std::cout << "- buttons   : " << SDL_JoystickNumButtons (sdl_joysticks[i]) << std::endl;
                   std::cout << "- trackballs: " << SDL_JoystickNumButtons (sdl_joysticks[i]) << std::endl;
                   std::cout << "- hats      : " << SDL_JoystickNumHats (sdl_joysticks[i]) << std::endl;
@@ -191,7 +191,7 @@ handler_keyboard::get_instance ()
 void
 handler_keyboard::set_grab_input (bool mode)
 {
-  
+
 #ifdef UNDER_DEVELOPMENT
   return;
 #else
@@ -232,298 +232,298 @@ handler_keyboard::read_events ()
         {
           /* mouse motion event */
         case SDL_MOUSEMOTION:
-          {
-            /* read the x and y coordinates of the mouse */
-            mouse_x_coord = event.motion.x;
-            mouse_y_coord = event.motion.y;
-          }
-          break;
+        {
+          /* read the x and y coordinates of the mouse */
+          mouse_x_coord = event.motion.x;
+          mouse_y_coord = event.motion.y;
+        }
+        break;
 
-          /* a key is pressed */
+        /* a key is pressed */
         case SDL_KEYDOWN:
-          {
-            kbEvt = (SDL_KeyboardEvent *) & event;
-            Uint8 *keys = SDL_GetKeyState (NULL);
+        {
+          kbEvt = (SDL_KeyboardEvent *) & event;
+          Uint8 *keys = SDL_GetKeyState (NULL);
 
-            if (keys[SDLK_RALT] == SDL_RELEASED &&
-                keys[SDLK_LALT] == SDL_RELEASED &&
-                keys[SDLK_LSHIFT] == SDL_RELEASED &&
-                keys[SDLK_RSHIFT] == SDL_RELEASED)
-              {
-
-                if (keys[SDLK_RCTRL] == SDL_RELEASED &&
-                    keys[SDLK_LCTRL] == SDL_RELEASED)
-                  {
-                    if (keys[SDLK_p] == SDL_PRESSED)
-                      {
-                        last_command_keys[COMMAND_KEY_PAUSE] = true;
-                      }
-                    if (keys[SDLK_f] == SDL_PRESSED)
-                      {
-                        last_command_keys[TOGGLE_FULLSCREEN] = true;
-                      }
-                    if (keys[SDLK_ESCAPE] == SDL_PRESSED)
-                      {
-                        last_command_keys[TOGGLE_POPUP_MENU] = true;
-                      }
-                    if (keys[SDLK_l] == SDL_PRESSED)
-                      {
-                        last_command_keys[DISABLE_TIMER] = true;
-                      }
-                     if (keys[SDLK_PAGEDOWN] == SDL_PRESSED)
-                      {
-                        last_command_keys[VOLUME_DOWN] = true;
-                      }
-                    if (keys[SDLK_PAGEUP] == SDL_PRESSED)
-                      {
-                        last_command_keys[VOLUME_UP] = true;
-                      }
-                  }
-                else
-                  {
-                    if (keys[SDLK_ESCAPE] == SDL_PRESSED)
-                      {
-                        last_command_keys[QUIT_TECNOBALLZ] = true;
-                      }
-                    if (keys[SDLK_x] == SDL_PRESSED)
-                      last_command_keys[CAUSE_GAME_OVER] = true;
-                    if (keys[SDLK_q] == SDL_PRESSED)
-                      last_command_keys[QUIT_TO_MAIN_MENU] = true;
-                    if (keys[SDLK_f] == SDL_PRESSED)
-                      last_command_keys[TOGGLE_SOUND] = true;
-                    if (keys[SDLK_s] == SDL_PRESSED)
-                      last_command_keys[TOGGLE_AUDIO] = true;
-                    if (keys[SDLK_d] == SDL_PRESSED)
-                      last_command_keys[TOGGLE_MUSIC] = true;
-                  }
-              }
-
-            if (kbEvt->keysym.unicode > 0)
-              {
-                set_key_code_down (kbEvt->keysym.unicode);
-              }
-            else
-              {
-                set_key_code_down (kbEvt->keysym.sym);
-              }
-          }
-          break;
-
-          /* a key is released */
-        case SDL_KEYUP:
-          {
-            kbEvt = (SDL_KeyboardEvent *) & event;
-            Uint8 *keys = SDL_GetKeyState (NULL);
-
-
-            /* enable pause [P] key */
-            if (keys[SDLK_p] == SDL_RELEASED
-                && last_command_keys[COMMAND_KEY_PAUSE])
-              {
-                last_command_keys[COMMAND_KEY_PAUSE] = false;
-                if (!command_keys[TOGGLE_POPUP_MENU])
-                  {
-                    command_keys[COMMAND_KEY_PAUSE] =
-                      command_keys[COMMAND_KEY_PAUSE] ? false : true;
-                    if (is_grab_input && command_keys[COMMAND_KEY_PAUSE])
-                      {
-                        SDL_WM_GrabInput (SDL_GRAB_OFF);
-                      }
-                    if (is_grab_input && !command_keys[COMMAND_KEY_PAUSE])
-                      {
-                        SDL_WM_GrabInput (SDL_GRAB_ON);
-                      }
-                  }
-              }
-
-            /* enable context menu [ESC] key */
-            if (keys[TOGGLE_POPUP_MENU] == SDL_RELEASED
-                && last_command_keys[TOGGLE_POPUP_MENU])
-              {
-                last_command_keys[TOGGLE_POPUP_MENU] = false;
-                command_keys[TOGGLE_POPUP_MENU] =
-                  command_keys[TOGGLE_POPUP_MENU] ? false : true;
-                command_keys[COMMAND_KEY_PAUSE] = command_keys[TOGGLE_POPUP_MENU];
-                if (is_grab_input && command_keys[COMMAND_KEY_PAUSE])
-                  SDL_WM_GrabInput (SDL_GRAB_OFF);
-                if (is_grab_input && !command_keys[COMMAND_KEY_PAUSE])
-                  SDL_WM_GrabInput (SDL_GRAB_ON);
-
-                if (!command_keys[TOGGLE_POPUP_MENU])
-                  SDL_ShowCursor (SDL_DISABLE);
-                if (command_keys[TOGGLE_POPUP_MENU])
-                  SDL_ShowCursor (SDL_ENABLE);
-              }
-
-            if (keys[SDLK_f] == SDL_RELEASED && last_command_keys[TOGGLE_FULLSCREEN])
-              {
-                last_command_keys[TOGGLE_FULLSCREEN] = false;
-                command_keys[TOGGLE_FULLSCREEN] = true;
-              }
+          if (keys[SDLK_RALT] == SDL_RELEASED &&
+              keys[SDLK_LALT] == SDL_RELEASED &&
+              keys[SDLK_LSHIFT] == SDL_RELEASED &&
+              keys[SDLK_RSHIFT] == SDL_RELEASED)
             {
-              if (keys[SDLK_ESCAPE] == SDL_RELEASED
-                  && last_command_keys[QUIT_TECNOBALLZ])
+
+              if (keys[SDLK_RCTRL] == SDL_RELEASED &&
+                  keys[SDLK_LCTRL] == SDL_RELEASED)
                 {
-                  last_command_keys[QUIT_TECNOBALLZ] = false;
-                  command_keys[QUIT_TECNOBALLZ] = true;
+                  if (keys[SDLK_p] == SDL_PRESSED)
+                    {
+                      last_command_keys[COMMAND_KEY_PAUSE] = true;
+                    }
+                  if (keys[SDLK_f] == SDL_PRESSED)
+                    {
+                      last_command_keys[TOGGLE_FULLSCREEN] = true;
+                    }
+                  if (keys[SDLK_ESCAPE] == SDL_PRESSED)
+                    {
+                      last_command_keys[TOGGLE_POPUP_MENU] = true;
+                    }
+                  if (keys[SDLK_l] == SDL_PRESSED)
+                    {
+                      last_command_keys[DISABLE_TIMER] = true;
+                    }
+                  if (keys[SDLK_PAGEDOWN] == SDL_PRESSED)
+                    {
+                      last_command_keys[VOLUME_DOWN] = true;
+                    }
+                  if (keys[SDLK_PAGEUP] == SDL_PRESSED)
+                    {
+                      last_command_keys[VOLUME_UP] = true;
+                    }
                 }
-              if (keys[SDLK_x] == SDL_RELEASED
-                  && last_command_keys[CAUSE_GAME_OVER])
+              else
                 {
-                  last_command_keys[CAUSE_GAME_OVER] = false;
-                  command_keys[CAUSE_GAME_OVER] = true;
+                  if (keys[SDLK_ESCAPE] == SDL_PRESSED)
+                    {
+                      last_command_keys[QUIT_TECNOBALLZ] = true;
+                    }
+                  if (keys[SDLK_x] == SDL_PRESSED)
+                    last_command_keys[CAUSE_GAME_OVER] = true;
+                  if (keys[SDLK_q] == SDL_PRESSED)
+                    last_command_keys[QUIT_TO_MAIN_MENU] = true;
+                  if (keys[SDLK_f] == SDL_PRESSED)
+                    last_command_keys[TOGGLE_SOUND] = true;
+                  if (keys[SDLK_s] == SDL_PRESSED)
+                    last_command_keys[TOGGLE_AUDIO] = true;
+                  if (keys[SDLK_d] == SDL_PRESSED)
+                    last_command_keys[TOGGLE_MUSIC] = true;
                 }
-              if (keys[SDLK_q] == SDL_RELEASED
-                  && last_command_keys[QUIT_TO_MAIN_MENU])
-                {
-                  last_command_keys[QUIT_TO_MAIN_MENU] = false;
-                  command_keys[QUIT_TO_MAIN_MENU] = true;
-                }
-              if (keys[SDLK_f] == SDL_RELEASED
-                  && last_command_keys[TOGGLE_SOUND])
-                {
-                  last_command_keys[TOGGLE_SOUND] = false;
-                  command_keys[TOGGLE_SOUND] = true;
-                }
-              if (keys[SDLK_s] == SDL_RELEASED
-                  && last_command_keys[TOGGLE_AUDIO])
-                {
-                  last_command_keys[TOGGLE_AUDIO] = false;
-                  command_keys[TOGGLE_AUDIO] = true;
-                }
-              if (keys[SDLK_d] == SDL_RELEASED
-                  && last_command_keys[TOGGLE_MUSIC])
-                {
-                  last_command_keys[TOGGLE_MUSIC] = false;
-                  command_keys[TOGGLE_MUSIC] = true;
-                }
-              if (keys[SDLK_l] == SDL_RELEASED
-                  && last_command_keys[DISABLE_TIMER])
-                {
-                  last_command_keys[DISABLE_TIMER] = false;
-                  command_keys[DISABLE_TIMER] = true;
-                }
-              if (keys[SDLK_PAGEDOWN] == SDL_RELEASED
-                  && last_command_keys[VOLUME_DOWN])
-                {
-                  last_command_keys[VOLUME_DOWN] = false;
-                  command_keys[VOLUME_DOWN] = true;
-                }
-               if (keys[SDLK_PAGEUP] == SDL_RELEASED
-                  && last_command_keys[VOLUME_UP])
-                {
-                  last_command_keys[VOLUME_UP] = false;
-                  command_keys[VOLUME_UP] = true;
-                }
- 
             }
 
-            if (kbEvt->keysym.unicode > 0)
-              {
-                set_keycode_up (kbEvt->keysym.unicode);
-              }
-            else
-              {
-                set_keycode_up (kbEvt->keysym.sym);
-              }
-          }
-          break;
+          if (kbEvt->keysym.unicode > 0)
+            {
+              set_key_code_down (kbEvt->keysym.unicode);
+            }
+          else
+            {
+              set_key_code_down (kbEvt->keysym.sym);
+            }
+        }
+        break;
 
-          /* a mouse button is pressed */
+        /* a key is released */
+        case SDL_KEYUP:
+        {
+          kbEvt = (SDL_KeyboardEvent *) & event;
+          Uint8 *keys = SDL_GetKeyState (NULL);
+
+
+          /* enable pause [P] key */
+          if (keys[SDLK_p] == SDL_RELEASED
+              && last_command_keys[COMMAND_KEY_PAUSE])
+            {
+              last_command_keys[COMMAND_KEY_PAUSE] = false;
+              if (!command_keys[TOGGLE_POPUP_MENU])
+                {
+                  command_keys[COMMAND_KEY_PAUSE] =
+                    command_keys[COMMAND_KEY_PAUSE] ? false : true;
+                  if (is_grab_input && command_keys[COMMAND_KEY_PAUSE])
+                    {
+                      SDL_WM_GrabInput (SDL_GRAB_OFF);
+                    }
+                  if (is_grab_input && !command_keys[COMMAND_KEY_PAUSE])
+                    {
+                      SDL_WM_GrabInput (SDL_GRAB_ON);
+                    }
+                }
+            }
+
+          /* enable context menu [ESC] key */
+          if (keys[TOGGLE_POPUP_MENU] == SDL_RELEASED
+              && last_command_keys[TOGGLE_POPUP_MENU])
+            {
+              last_command_keys[TOGGLE_POPUP_MENU] = false;
+              command_keys[TOGGLE_POPUP_MENU] =
+                command_keys[TOGGLE_POPUP_MENU] ? false : true;
+              command_keys[COMMAND_KEY_PAUSE] = command_keys[TOGGLE_POPUP_MENU];
+              if (is_grab_input && command_keys[COMMAND_KEY_PAUSE])
+                SDL_WM_GrabInput (SDL_GRAB_OFF);
+              if (is_grab_input && !command_keys[COMMAND_KEY_PAUSE])
+                SDL_WM_GrabInput (SDL_GRAB_ON);
+
+              if (!command_keys[TOGGLE_POPUP_MENU])
+                SDL_ShowCursor (SDL_DISABLE);
+              if (command_keys[TOGGLE_POPUP_MENU])
+                SDL_ShowCursor (SDL_ENABLE);
+            }
+
+          if (keys[SDLK_f] == SDL_RELEASED && last_command_keys[TOGGLE_FULLSCREEN])
+            {
+              last_command_keys[TOGGLE_FULLSCREEN] = false;
+              command_keys[TOGGLE_FULLSCREEN] = true;
+            }
+          {
+            if (keys[SDLK_ESCAPE] == SDL_RELEASED
+                && last_command_keys[QUIT_TECNOBALLZ])
+              {
+                last_command_keys[QUIT_TECNOBALLZ] = false;
+                command_keys[QUIT_TECNOBALLZ] = true;
+              }
+            if (keys[SDLK_x] == SDL_RELEASED
+                && last_command_keys[CAUSE_GAME_OVER])
+              {
+                last_command_keys[CAUSE_GAME_OVER] = false;
+                command_keys[CAUSE_GAME_OVER] = true;
+              }
+            if (keys[SDLK_q] == SDL_RELEASED
+                && last_command_keys[QUIT_TO_MAIN_MENU])
+              {
+                last_command_keys[QUIT_TO_MAIN_MENU] = false;
+                command_keys[QUIT_TO_MAIN_MENU] = true;
+              }
+            if (keys[SDLK_f] == SDL_RELEASED
+                && last_command_keys[TOGGLE_SOUND])
+              {
+                last_command_keys[TOGGLE_SOUND] = false;
+                command_keys[TOGGLE_SOUND] = true;
+              }
+            if (keys[SDLK_s] == SDL_RELEASED
+                && last_command_keys[TOGGLE_AUDIO])
+              {
+                last_command_keys[TOGGLE_AUDIO] = false;
+                command_keys[TOGGLE_AUDIO] = true;
+              }
+            if (keys[SDLK_d] == SDL_RELEASED
+                && last_command_keys[TOGGLE_MUSIC])
+              {
+                last_command_keys[TOGGLE_MUSIC] = false;
+                command_keys[TOGGLE_MUSIC] = true;
+              }
+            if (keys[SDLK_l] == SDL_RELEASED
+                && last_command_keys[DISABLE_TIMER])
+              {
+                last_command_keys[DISABLE_TIMER] = false;
+                command_keys[DISABLE_TIMER] = true;
+              }
+            if (keys[SDLK_PAGEDOWN] == SDL_RELEASED
+                && last_command_keys[VOLUME_DOWN])
+              {
+                last_command_keys[VOLUME_DOWN] = false;
+                command_keys[VOLUME_DOWN] = true;
+              }
+            if (keys[SDLK_PAGEUP] == SDL_RELEASED
+                && last_command_keys[VOLUME_UP])
+              {
+                last_command_keys[VOLUME_UP] = false;
+                command_keys[VOLUME_UP] = true;
+              }
+
+          }
+
+          if (kbEvt->keysym.unicode > 0)
+            {
+              set_keycode_up (kbEvt->keysym.unicode);
+            }
+          else
+            {
+              set_keycode_up (kbEvt->keysym.sym);
+            }
+        }
+        break;
+
+        /* a mouse button is pressed */
         case SDL_MOUSEBUTTONDOWN:
-          {
-            switch (event.button.button)
-              {
-              case SDL_BUTTON_LEFT:
-                is_left_button_down = true;
-                break;
-              case SDL_BUTTON_RIGHT:
-                is_right_button_down = true;
-                break;
-              case SDL_BUTTON_MIDDLE:
-                is_middle_button_down = true;
-                break;
-              }
-          }
-          break;
+        {
+          switch (event.button.button)
+            {
+            case SDL_BUTTON_LEFT:
+              is_left_button_down = true;
+              break;
+            case SDL_BUTTON_RIGHT:
+              is_right_button_down = true;
+              break;
+            case SDL_BUTTON_MIDDLE:
+              is_middle_button_down = true;
+              break;
+            }
+        }
+        break;
 
-          /* a mouse button is relased */
+        /* a mouse button is relased */
         case SDL_MOUSEBUTTONUP:
-          {
-            switch (event.button.button)
-              {
-              case SDL_BUTTON_LEFT:
-                if (is_left_button_down)
-                  {
-                    is_left_button_released = true;
-                  }
-                is_left_button_down = false;
-                break;
-              case SDL_BUTTON_RIGHT:
-                if (is_right_button_down)
-                  {
-                    is_right_button_released = true;
-                  }
-                is_right_button_down = false;
-                break;
-              case SDL_BUTTON_MIDDLE:
-                is_middle_button_down = false;
-                break;
-              }
-          }
-          break;
+        {
+          switch (event.button.button)
+            {
+            case SDL_BUTTON_LEFT:
+              if (is_left_button_down)
+                {
+                  is_left_button_released = true;
+                }
+              is_left_button_down = false;
+              break;
+            case SDL_BUTTON_RIGHT:
+              if (is_right_button_down)
+                {
+                  is_right_button_released = true;
+                }
+              is_right_button_down = false;
+              break;
+            case SDL_BUTTON_MIDDLE:
+              is_middle_button_down = false;
+              break;
+            }
+        }
+        break;
 
         case SDL_JOYAXISMOTION:
-          {
-            Sint32 deadzone = 4096;
-            /* x axis */
-            if (event.jaxis.axis == 0)
-              {
-                if (event.jaxis.value < -deadzone)
-                  {
-                    joy_left = true;
-                    //sprites_string_set_joy (IJOY_LEFT);
-                    joy_right = false;
-                  }
-                else if (event.jaxis.value > deadzone)
-                  {
-                    joy_left = false;
-                    joy_right = true;
-                    //sprites_string_set_joy (IJOY_RIGHT);
-                  }
-                else
-                  {
-                    joy_left = false;
-                    joy_right = false;
-                    //sprites_string_clr_joy (IJOY_RIGHT);
-                    //sprites_string_clr_joy (IJOY_LEFT);
-                  }
-              }
-            /* y axis */
-            else if (event.jaxis.axis == 1)
-              {
-                if (event.jaxis.value < -deadzone)
-                  {
-                    joy_down = false;
-                    joy_top = true;
-                    //sprites_string_set_joy (IJOY_TOP);
-                  }
-                else if (event.jaxis.value > deadzone)
-                  {
-                    joy_down = true;
-                    joy_top = false;
-                    //sprites_string_set_joy (IJOY_DOWN);
-                  }
-                else
-                  {
-                    joy_down = false;
-                    joy_top = false;
-                    //sprites_string_clr_joy (IJOY_TOP);
-                    //sprites_string_clr_joy (IJOY_DOWN);
-                  }
-              }
-          }
-          break;
+        {
+          Sint32 deadzone = 4096;
+          /* x axis */
+          if (event.jaxis.axis == 0)
+            {
+              if (event.jaxis.value < -deadzone)
+                {
+                  joy_left = true;
+                  //sprites_string_set_joy (IJOY_LEFT);
+                  joy_right = false;
+                }
+              else if (event.jaxis.value > deadzone)
+                {
+                  joy_left = false;
+                  joy_right = true;
+                  //sprites_string_set_joy (IJOY_RIGHT);
+                }
+              else
+                {
+                  joy_left = false;
+                  joy_right = false;
+                  //sprites_string_clr_joy (IJOY_RIGHT);
+                  //sprites_string_clr_joy (IJOY_LEFT);
+                }
+            }
+          /* y axis */
+          else if (event.jaxis.axis == 1)
+            {
+              if (event.jaxis.value < -deadzone)
+                {
+                  joy_down = false;
+                  joy_top = true;
+                  //sprites_string_set_joy (IJOY_TOP);
+                }
+              else if (event.jaxis.value > deadzone)
+                {
+                  joy_down = true;
+                  joy_top = false;
+                  //sprites_string_set_joy (IJOY_DOWN);
+                }
+              else
+                {
+                  joy_down = false;
+                  joy_top = false;
+                  //sprites_string_clr_joy (IJOY_TOP);
+                  //sprites_string_clr_joy (IJOY_DOWN);
+                }
+            }
+        }
+        break;
         case SDL_JOYBUTTONDOWN:
 #ifdef TECNOBALLZ_HANDHELD_CONSOLE
           //handle_console_buttons (&event);
@@ -567,10 +567,10 @@ handler_keyboard::read_events ()
 
           /* quit the game */
         case SDL_QUIT:
-          {
-            command_keys[QUIT_TECNOBALLZ] = true;
-          }
-          break;
+        {
+          command_keys[QUIT_TECNOBALLZ] = true;
+        }
+        break;
         }
     }
   random_counter += mouse_x_coord;
@@ -664,7 +664,7 @@ handler_keyboard::clear_command_keys ()
   previous_mouse_y_coord = mouse_y_coord;
 }
 
-/** 
+/**
  * Check if a command key is pressed
  * @param code of the command key
  * @param clear true if clear flag after read
@@ -680,7 +680,7 @@ bool handler_keyboard::command_is_pressed (Uint32 code, bool clear)
   return is_pressed;
 }
 
-/** 
+/**
  * Test if mouse left button is pressed
  * @return true if mouse left button is down
  */
@@ -689,7 +689,7 @@ bool handler_keyboard::is_left_button ()
   return is_left_button_down;
 }
 
-/** 
+/**
  * Test if mouse right button is pressed
  * @return true if mouse right button is down
  */
@@ -904,7 +904,7 @@ handler_keyboard::input_string (Uint32 kcode)
           kcode = kcode - 32;
         }
 
-      /* space (32) / ! (33) 
+      /* space (32) / ! (33)
        * , (44) /  - (45) / . (46) /
        * : (58) / 0-9 (48-57) 
        * A-Z (65 to 90)
@@ -961,7 +961,7 @@ Sint32 handler_keyboard::get_input_cursor_pos ()
   return string_cursor_pos;
 }
 
-/** 
+/**
  * Stop using string input
  */
 void
@@ -981,11 +981,20 @@ Uint32 handler_keyboard::get_key_down_code ()
  *
  */
 void
-handler_keyboard::start_menu_events()
+handler_keyboard::start_menu_events(Sint32 spacing, Sint32 max, Sint32 xcenter, Sint32 ytop)
 {
-  y_coord_left_down = NULL_YCOORD;
-  y_coord_right_down = NULL_YCOORD;
+  menu_events.y_coord_left_down = NULL_YCOORD;
+  menu_events.y_coord_right_down = NULL_YCOORD;
+  menu_events.line_spacing = spacing;
+  menu_events.line_max = max;
+  menu_events.xcenter = xcenter;
+  menu_events.current_line = 0;
+  menu_events.top_y_coord = ytop;
 }
+
+
+Uint32 handler_keyboard::menu_events_keys[6] =
+  { K_UP, K_DOWN, K_FIRE, K_RELEASE_BALL, K_GIGABLITZ, K_TILT };
 
 /**
  * Check mouses events for the main menu and popup menu 
@@ -996,24 +1005,95 @@ handler_keyboard::start_menu_events()
  * @return true if left mouse button clicked, otherwise false
  */
 bool
-handler_keyboard::menu_events (Sint32 *pos_y, Sint32 *inc)
+handler_keyboard::check_menu_events (Sint32 *pos_y, Sint32 *inc)
 {
+
+  bool is_key_ctrl = false;
+  Uint32 kcode = 0;
+
+  if (menu_events.key_delay < 1)
+    {
+      for(Uint32 i = 0; i < 6; i++)
+	{
+	  if(!control_is_pressed(menu_events_keys[i]))
+	    {
+	      continue;
+	    }
+	  is_key_ctrl = true;
+	  kcode = menu_events_keys[i];
+	  printf("PRESSED %i\n", menu_events_keys[i]);
+	  if (menu_events.previous_key_code_down != menu_events_keys[i])
+	    {
+	      menu_events.previous_key_code_down = menu_events_keys[i];
+	      menu_events.key_delay = 30;
+	    }
+	  else
+	    {
+	      menu_events.key_delay = 10;
+	    }
+	  break;
+	}
+    }
+  else
+    {
+      kcode = 0;
+      menu_events.key_delay--;
+    }
+ 
+
   bool is_selected = false;
   /* check if right or left button are pressed */
   Sint32 mposx;
   bool is_left_down = keyboard->is_left_button ();
   bool is_right_down = keyboard->is_right_button ();
+  switch(kcode)
+    {
+    case K_FIRE:
+      is_left_down = true;
+      break;
+    case K_RELEASE_BALL:
+      is_right_down = true;
+      break;
+    case K_UP:
+      if(menu_events.current_line == 0)
+        {
+          menu_events.current_line = menu_events.line_max - 1;
+        }
+      else
+        {
+          menu_events.current_line--;
+        }
+      SDL_WarpMouse(menu_events.xcenter, menu_events.top_y_coord +
+		    menu_events.current_line * menu_events.line_spacing);
+      printf("1 SDL_WarpMouse %i %i\n",  menu_events.xcenter, menu_events.top_y_coord + menu_events.current_line * menu_events.line_spacing);
+      printf("%i %i %i\n", menu_events.top_y_coord, menu_events.current_line, menu_events.line_spacing);
+      break;
+    case K_DOWN:
+      if(menu_events.current_line == menu_events.line_max - 1)
+        {
+          menu_events.current_line = 0;
+        }
+      else
+        {
+          menu_events.current_line++;
+        }
+      SDL_WarpMouse(menu_events.xcenter, menu_events.top_y_coord +
+		    menu_events.current_line * menu_events.line_spacing);
+      printf("2 SDL_WarpMouse %i %i\n",  menu_events.xcenter, menu_events.top_y_coord + menu_events.current_line * menu_events.line_spacing);
+      printf("%i %i %i\n", menu_events.top_y_coord, menu_events.current_line, menu_events.line_spacing);
+      break;
+    }
 
   /* read y where is pressed */
-  if (is_left_down && y_coord_left_down == NULL_YCOORD)
+  if (is_left_down && menu_events.y_coord_left_down == NULL_YCOORD)
     {
-      y_coord_left_down = keyboard->get_mouse_y ();
+      menu_events.y_coord_left_down = keyboard->get_mouse_y ();
     }
   else
     {
-      if (is_right_down && y_coord_right_down == NULL_YCOORD)
+      if (is_right_down && menu_events.y_coord_right_down == NULL_YCOORD)
         {
-          y_coord_right_down = keyboard->get_mouse_y ();
+          menu_events.y_coord_right_down = keyboard->get_mouse_y ();
         }
     }
   bool is_right_up = false;
@@ -1022,29 +1102,29 @@ handler_keyboard::menu_events (Sint32 *pos_y, Sint32 *inc)
     {
       is_right_up = keyboard->is_right_button_up (&mposx, pos_y);
     }
-  if ((is_left_up && *pos_y == y_coord_left_down) ||
-      (is_right_up && *pos_y == y_coord_right_down))
+  if ((is_left_up && *pos_y == menu_events.y_coord_left_down) ||
+      (is_right_up && *pos_y == menu_events.y_coord_right_down))
     {
       *inc = 0;
       if (is_left_up)
         {
           *inc = 1;
-          y_coord_left_down = NULL_YCOORD;
+          menu_events.y_coord_left_down = NULL_YCOORD;
         }
       if (is_right_up)
         {
           *inc = -1;
-          y_coord_right_down = NULL_YCOORD;
+          menu_events.y_coord_right_down = NULL_YCOORD;
         }
       is_selected = true;
     }
   if (!is_left_down)
     {
-      y_coord_left_down = NULL_YCOORD;
+      menu_events.y_coord_left_down = NULL_YCOORD;
     }
   if (!is_right_down)
     {
-      y_coord_right_down = NULL_YCOORD;
+      menu_events.y_coord_right_down = NULL_YCOORD;
     }
   return is_selected;
 }

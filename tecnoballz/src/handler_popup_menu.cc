@@ -5,11 +5,11 @@
  * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.13 2007/10/10 06:01:29 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.14 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -315,7 +315,7 @@ handler_popup_menu::run ()
 
   Sint32 pos_y = 0;
   Sint32 incre = 0;
-  if (keyboard->menu_events(&pos_y, &incre))
+  if (keyboard->check_menu_events(&pos_y, &incre))
     {
       event = (pos_y - y_coord) / vertical_space;
     }

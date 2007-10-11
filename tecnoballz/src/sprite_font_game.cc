@@ -1,14 +1,14 @@
 /** 
- * @file sprite_fonte_game.cc 
+ * @file sprite_font_game.cc 
  * @brief The sprite fonte used to display the text "LEVEL COMPLETED" 
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.1 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_fonte_game.cc,v 1.2 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_font_game.cc,v 1.1 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,12 +25,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-#include "../include/sprite_fonte_game.h"
+#include "../include/sprite_font_game.h"
 
 /** 
  * Create a fonte game sprite
  */
-sprite_fonte_game::sprite_fonte_game ()
+sprite_font_game::sprite_font_game ()
 {
   clear_sprite_members ();
   littleInit (0, 0, 0, 0, 0, 0);
@@ -39,7 +39,7 @@ sprite_fonte_game::sprite_fonte_game ()
 /** 
  * Release a fonte game sprite
  */
-sprite_fonte_game::~sprite_fonte_game ()
+sprite_font_game::~sprite_font_game ()
 {
 }
 
@@ -47,7 +47,7 @@ sprite_fonte_game::~sprite_fonte_game ()
 // initialize radius, stop coordinate and start y coordinate
 //-----------------------------------------------------------------------------
 void
-sprite_fonte_game::littleInit (Sint32 zeRad, Sint32 xStop, Sint32 yStrt,
+sprite_font_game::littleInit (Sint32 zeRad, Sint32 xStop, Sint32 yStrt,
                                Sint32 xOffs, Sint32 yOffs, Sint32 yStop)
 {
   angleValue = zeRad;           //radius (pt/sinus table)
@@ -62,7 +62,7 @@ sprite_fonte_game::littleInit (Sint32 zeRad, Sint32 xStop, Sint32 yStrt,
 // characters moving
 //-----------------------------------------------------------------------------
 void
-sprite_fonte_game::moveCaract ()
+sprite_font_game::moveCaract ()
 {
   if (is_enabled)
     {

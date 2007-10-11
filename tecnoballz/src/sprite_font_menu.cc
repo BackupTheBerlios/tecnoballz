@@ -1,14 +1,14 @@
 /** 
- * @file sprite_fonte_menu.cc 
+ * @file sprite_font_menu.cc 
  * @brief The fonte sprite used in the main menu 
  * @date 2007-02-05
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.1 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_fonte_menu.cc,v 1.2 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_font_menu.cc,v 1.1 2007/10/11 05:20:26 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,12 +25,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-#include "../include/sprite_fonte_menu.h"
+#include "../include/sprite_font_menu.h"
 
 /**
  * Create the fonte menu sprite
  */
-sprite_fonte_menu::sprite_fonte_menu ()
+sprite_font_menu::sprite_font_menu ()
 {
   clear_sprite_members ();
 }
@@ -38,6 +38,6 @@ sprite_fonte_menu::sprite_fonte_menu ()
 /**
  * Release the fonte menu sprite
  */
-sprite_fonte_menu::~sprite_fonte_menu ()
+sprite_font_menu::~sprite_font_menu ()
 {
 }
