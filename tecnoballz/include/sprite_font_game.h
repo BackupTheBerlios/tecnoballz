@@ -1,14 +1,14 @@
 /** 
- * @file sprite_fonte_game.h
+ * @file sprite_font_game.h
  * @brief The sprite fonte used to display the text "LEVEL COMPLETED" 
  * @date 2007-02-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.1 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_fonte_game.h,v 1.3 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_font_game.h,v 1.1 2007/10/11 18:53:17 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,12 +27,12 @@
  */
 #ifndef __SPRITE_FONTE_GAME__
 #define __SPRITE_FONTE_GAME__
-class sprite_fonte_game;
+class sprite_font_game;
 #include "../include/sprite_object.h"
 
-class sprite_fonte_game:public sprite_object
+class sprite_font_game:public sprite_object
 {
-  friend class controller_fontes_game;
+  friend class controller_font_game;
 
 private:
    Sint32 angleValue;          //radius value 0 to 511
@@ -43,8 +43,8 @@ private:
   Sint32 posiY_stop;            //stop Y coordinate
 
 public:
-    sprite_fonte_game ();
-   ~sprite_fonte_game ();
+    sprite_font_game ();
+   ~sprite_font_game ();
   void littleInit (Sint32 a, Sint32 x, Sint32 y, Sint32 i,
                    Sint32 l, Sint32 s);
   void moveCaract ();

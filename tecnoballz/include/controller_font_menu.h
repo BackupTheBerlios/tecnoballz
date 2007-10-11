@@ -1,14 +1,14 @@
 /** 
- * @file controller_fontes_menu.cc 
+ * @file controller_font_menu.cc 
  * @brief Controller of the menu scroll text 
  * @date 2007-03-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_fontes_menu.h,v 1.4 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_font_menu.h,v 1.1 2007/10/11 18:53:17 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,8 @@
 #define __CONTROLLER__FONTS_MENU__
 
 #include "../include/objects_list.h"
-#include "../include/sprite_fonte_menu.h"
-class controller_fontes_menu:public objects_list < sprite_fonte_menu, controller_fontes_menu >
+#include "../include/sprite_font_menu.h"
+class controller_font_menu:public objects_list < sprite_font_menu, controller_font_menu >
 {
 private:
   static const Uint32 MAX_OF_FONTS = 14;  //numbers maximum characters
@@ -38,10 +38,10 @@ private:
   static char asciiToBob[128];
 
 private:
-  sprite_fonte_menu * characters_list[MAX_OF_FONTS + 2];
-  sprite_fonte_menu *objectLeft;
-  sprite_fonte_menu *objectRigh;
-  sprite_fonte_menu **object_ptr;
+  sprite_font_menu * characters_list[MAX_OF_FONTS + 2];
+  sprite_font_menu *objectLeft;
+  sprite_font_menu *objectRigh;
+  sprite_font_menu **object_ptr;
   char *scroll_ptr;
   Sint32 offset_xx1;
   Sint32 offset_yy1;
@@ -49,8 +49,8 @@ private:
   char** scrolltexts;
 
 public:
-    controller_fontes_menu ();
-   ~controller_fontes_menu ();
+    controller_font_menu ();
+   ~controller_font_menu ();
   void create_fontes_list ();
   void move_chars ();
 
