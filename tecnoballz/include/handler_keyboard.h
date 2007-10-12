@@ -4,11 +4,11 @@
  * @date 2007-10-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.h,v 1.9 2007/10/11 05:20:26 gurumeditation Exp $
+ * $Id: handler_keyboard.h,v 1.10 2007/10/12 15:30:07 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,13 +80,15 @@ private:
 
   typedef struct
    {
+     bool is_enabled;
      Sint32 y_coord_left_down;
      Sint32 y_coord_right_down;
-     Sint32 line_spacing;
+     Uint32 line_spacing;
      Sint32 xcenter;
      Sint32 top_y_coord;
-     Sint32 line_max;
-     Sint32 current_line;
+     Uint32 line_min;
+     Uint32 line_max;
+     Uint32 current_line;
      Sint32 key_delay;
      Uint32 previous_key_code_down;
    } menu_events_stuct;
@@ -164,7 +166,8 @@ public:
   bool is_joy_left();
   bool is_joy_right();
 
-  void start_menu_events(Sint32 spacing, Sint32 max, Sint32 xcenter, Sint32 ytop);
+  void stop_menu_events();
+  void start_menu_events(Sint32 spacing, Sint32 min, Sint32 max, Sint32 xcenter, Sint32 ytop);
   bool check_menu_events (Sint32 *pos_y, Sint32 *inc);
 
 private:

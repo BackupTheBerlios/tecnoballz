@@ -1,15 +1,15 @@
-/** 
+/**
  * @file handler_popup_menu.cc 
  * @brief popup menu handler (When the [Esc] is pressed)
  * @created 2004-08-08 
- * @date 2007-10-09
+ * @date 2007-10-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.14 2007/10/11 05:20:26 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.15 2007/10/12 15:30:07 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,9 +36,7 @@
  */
 handler_popup_menu::handler_popup_menu ()
 {
-  y_coord_left_down = NULL_YCOORD;
-  y_coord_right_down = NULL_YCOORD;
-  menu_color = 0;
+  menu_first_color_index = 0;
   menu_number = 0;
   texts_of_menus = NULL;
 }
@@ -77,7 +75,7 @@ handler_popup_menu::load_text_file ()
     }
   texts_of_menus =
     resources->load_texts (handler_resources::TEXTS_POPUP_MENU,
-			   MAX_OF_LINES, MAX_OF_CHARS, 0);
+                           MAX_OF_LINES, MAX_OF_CHARS, 0);
   menu_texts_pt[0] = &texts_of_menus[MENU_00];
   menu_texts_pt[1] = &texts_of_menus[MENU_01];
 }
@@ -126,13 +124,13 @@ handler_popup_menu::first_init (bitmap_data * bmp)
     case BRICKS_LEVEL:
       /* determine if restore background (bricks levels and shop only) */
       if (has_background)
-	{
+        {
           is_restore_background = true;
-	}
+        }
       else
-	{
+        {
           is_restore_background = false;
-	}
+        }
       menu_number = 0;
       w = 256 * resolution;
       break;
@@ -145,14 +143,14 @@ handler_popup_menu::first_init (bitmap_data * bmp)
       break;
 
     case GUARDS_LEVEL:
-    default: 
+    default:
       is_restore_background = false;
       menu_number = 0;
       w = 320 * resolution;
       initialize_palette();
       break;
     }
-
+    menu_xcenter = w / 2;
 
   /* determine line height into menu box */
   if (resolution == 2)
@@ -161,7 +159,7 @@ handler_popup_menu::first_init (bitmap_data * bmp)
     }
   else
     {
-       vertical_space = 8;
+      vertical_space = 8;
     }
 
   /* load font bitmap file and perform some initializations */
@@ -188,7 +186,7 @@ handler_popup_menu::build_menu_box(bitmap_data * bmp, Uint32 w)
   num_of_columns = MAX_OF_CHARS;
   Uint32 numof_lines = num_of_lines + 2;
 
-  /* allocate graphic buffer of menu box */ 
+  /* allocate graphic buffer of menu box */
   screen_menu = new bitmap_data ();
   screen_menu->create_surface ((num_of_columns + 2) * char_height, numof_lines * vertical_space);
   screen_menu->clear ();
@@ -219,7 +217,7 @@ handler_popup_menu::build_menu_box(bitmap_data * bmp, Uint32 w)
   y = (y / vertical_space) * vertical_space;
   set_coordinates ((w - sprite_width) / 2, y);
 
-  /* 
+  /*
    * build the frame of menu box (with sprites)
    */
   Sint32 m = screen_menu->get_width () / width - 2;
@@ -249,7 +247,7 @@ handler_popup_menu::build_menu_box(bitmap_data * bmp, Uint32 w)
       draw (ptAdd[7], x, y, NxLine, width, heigh);
     }
 
-} 
+}
 
 /**
  * Display a sprite into the "buffer" (copy byte to byte)
@@ -262,7 +260,7 @@ handler_popup_menu::build_menu_box(bitmap_data * bmp, Uint32 w)
  */
 void
 handler_popup_menu::draw (char *source, Sint32 xcoord, Sint32 ycoord,
-                                Sint32 raw_src, Sint32 width, Sint32 height)
+                          Sint32 raw_src, Sint32 width, Sint32 height)
 {
   char *src = source;
   char *dest = screen_menu->get_pixel_data (xcoord, ycoord);
@@ -302,14 +300,16 @@ handler_popup_menu::run ()
   if (keyboard->command_is_pressed (handler_keyboard::TOGGLE_POPUP_MENU))
     {
       is_enabled = true;
+      keyboard->start_menu_events(vertical_space, 1, num_of_lines, menu_xcenter, get_y_coord() + char_height);
     }
   else
     {
       if (is_enabled && is_restore_background)
         {
-          MSK_bitclr ();
+          restore_rectangle_background ();
         }
       is_enabled = false;
+      keyboard->stop_menu_events();
       return event;
     }
 
@@ -321,9 +321,9 @@ handler_popup_menu::run ()
     }
 
   /* read color table offset (color line hover by mouse ) */
-  if (menu_color++ > 32)
+  if (menu_first_color_index++ > 32)
     {
-      menu_color = 0;
+      menu_first_color_index = 0;
     }
   if (resolution == 1)
     {
@@ -341,7 +341,7 @@ handler_popup_menu::run ()
     {
       if (is_enabled && is_restore_background)
         {
-          MSK_bitclr ();
+          restore_rectangle_background ();
         }
       is_enabled = false;
       keyboard->clear_command_keys ();
@@ -358,13 +358,13 @@ handler_popup_menu::run ()
   return event;
 }
 
-/** 
+/**
  * Display text in 640x480 mode
  */
 void
 handler_popup_menu::display_640 ()
 {
-  Sint32 color = menu_color;
+  Sint32 color = menu_first_color_index;
   char *desP1 = pixel_data + char_height + row_size * vertical_space;
   Sint32 offSc = off_source;
   Sint32 offDs = row_size;
@@ -449,7 +449,7 @@ handler_popup_menu::display_640 ()
 void
 handler_popup_menu::display_320 ()
 {
-  Sint32 color = menu_color;
+  Sint32 color = menu_first_color_index;
   char *desP1 = pixel_data + char_height + row_size * vertical_space;
   Sint32 offSc = off_source;
   Sint32 offDs = row_size;
@@ -529,17 +529,18 @@ handler_popup_menu::display_320 ()
 }
 
 const unsigned char
-  handler_popup_menu::cycling_table[] =
-  { 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
-  253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
-  243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
-  249, 250, 251, 252, 253, 254, 255
-};
+handler_popup_menu::cycling_table[] =
+  {
+    239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
+    253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
+    243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
+    249, 250, 251, 252, 253, 254, 255
+  };
 
 char **
-  handler_popup_menu::menu_texts_pt[2] = {
-    NULL, NULL
-  };
+handler_popup_menu::menu_texts_pt[2] = {
+                                         NULL, NULL
+                                       };
 
 
 

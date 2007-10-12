@@ -4,11 +4,11 @@
  * @date 2007-10-11
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.13 2007/10/11 05:20:26 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.14 2007/10/12 15:30:07 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,9 +73,8 @@ handler_keyboard::handler_keyboard ()
   string_input_size = 0;
   code_keyup = 0;
   current_input_string = NULL;
-  menu_events.y_coord_left_down = NULL_YCOORD;
-  menu_events.y_coord_right_down = NULL_YCOORD;
-
+  stop_menu_events();
+ 
   for (Uint32 i = 0; i < NUMOF_COMMAND_KEYS; i++)
     {
       command_keys[i] = false;
@@ -286,15 +285,25 @@ handler_keyboard::read_events ()
                       last_command_keys[QUIT_TECNOBALLZ] = true;
                     }
                   if (keys[SDLK_x] == SDL_PRESSED)
-                    last_command_keys[CAUSE_GAME_OVER] = true;
+                    {
+                      last_command_keys[CAUSE_GAME_OVER] = true;
+                    }
                   if (keys[SDLK_q] == SDL_PRESSED)
-                    last_command_keys[QUIT_TO_MAIN_MENU] = true;
+                    {
+                      last_command_keys[QUIT_TO_MAIN_MENU] = true;
+                    }
                   if (keys[SDLK_f] == SDL_PRESSED)
-                    last_command_keys[TOGGLE_SOUND] = true;
+                    {
+                      last_command_keys[TOGGLE_SOUND] = true;
+                    }
                   if (keys[SDLK_s] == SDL_PRESSED)
-                    last_command_keys[TOGGLE_AUDIO] = true;
+                    {
+                      last_command_keys[TOGGLE_AUDIO] = true;
+                    }
                   if (keys[SDLK_d] == SDL_PRESSED)
-                    last_command_keys[TOGGLE_MUSIC] = true;
+                    {
+                      last_command_keys[TOGGLE_MUSIC] = true;
+                    }
                 }
             }
 
@@ -345,14 +354,22 @@ handler_keyboard::read_events ()
                 command_keys[TOGGLE_POPUP_MENU] ? false : true;
               command_keys[COMMAND_KEY_PAUSE] = command_keys[TOGGLE_POPUP_MENU];
               if (is_grab_input && command_keys[COMMAND_KEY_PAUSE])
-                SDL_WM_GrabInput (SDL_GRAB_OFF);
+                {
+                  SDL_WM_GrabInput (SDL_GRAB_OFF);
+                }
               if (is_grab_input && !command_keys[COMMAND_KEY_PAUSE])
-                SDL_WM_GrabInput (SDL_GRAB_ON);
+                {
+                  SDL_WM_GrabInput (SDL_GRAB_ON);
+                }
 
               if (!command_keys[TOGGLE_POPUP_MENU])
-                SDL_ShowCursor (SDL_DISABLE);
+                {
+                  SDL_ShowCursor (SDL_DISABLE);
+                }
               if (command_keys[TOGGLE_POPUP_MENU])
-                SDL_ShowCursor (SDL_ENABLE);
+                {
+                  SDL_ShowCursor (SDL_ENABLE);
+                }
             }
 
           if (keys[SDLK_f] == SDL_RELEASED && last_command_keys[TOGGLE_FULLSCREEN])
@@ -977,19 +994,57 @@ Uint32 handler_keyboard::get_key_down_code ()
   return key_code_down;
 }
 
+
+void
+handler_keyboard::stop_menu_events()
+{
+  menu_events.is_enabled = false;
+  menu_events.y_coord_left_down = NULL_YCOORD;
+  menu_events.y_coord_right_down = NULL_YCOORD;
+  menu_events.line_spacing = 0;
+  menu_events.xcenter = 0;
+  menu_events.top_y_coord = 0;
+  menu_events.line_min = 0;
+  menu_events.line_max = 0;
+  menu_events.current_line = 0;
+  menu_events.key_delay = 0;
+}
+
 /**
- *
+ * Start a new vertical menu handler
+ * @param spacing Space between lines in pixels
+ * @param min Minimum line number
+ * @param max Maximum line number
+ * @param xcenter X-coordinate center of the menu
+ * @param ytop Y-coordinate top of the menu 
  */
 void
-handler_keyboard::start_menu_events(Sint32 spacing, Sint32 max, Sint32 xcenter, Sint32 ytop)
+handler_keyboard::start_menu_events(Sint32 spacing, Sint32 min, Sint32 max,
+    Sint32 xcenter, Sint32 ytop)
 {
+  menu_events.is_enabled = true;
   menu_events.y_coord_left_down = NULL_YCOORD;
   menu_events.y_coord_right_down = NULL_YCOORD;
   menu_events.line_spacing = spacing;
+  menu_events.line_min = min;
   menu_events.line_max = max;
   menu_events.xcenter = xcenter;
   menu_events.current_line = 0;
   menu_events.top_y_coord = ytop;
+  Sint32 xmouse, ymouse;
+  SDL_GetMouseState  (&xmouse, &ymouse);
+  if (ymouse < ytop + min * spacing)
+    {
+      menu_events.current_line = min;
+    }
+  else if (ymouse > ytop + max * spacing)
+    {
+      menu_events.current_line = max;
+    }
+  else
+    {
+      menu_events.current_line = (ymouse - ytop) / spacing;
+    }
 }
 
 
@@ -1007,83 +1062,93 @@ Uint32 handler_keyboard::menu_events_keys[6] =
 bool
 handler_keyboard::check_menu_events (Sint32 *pos_y, Sint32 *inc)
 {
-
-  bool is_key_ctrl = false;
+  if (!menu_events.is_enabled)
+    {
+      return false;
+    }
+  bool is_selected = false;
   Uint32 kcode = 0;
+  *inc = 0;
 
+  /* check keyboards events */
+  if(menu_events.previous_key_code_down > 0 &&
+      !control_is_pressed(menu_events.previous_key_code_down))
+    {
+      menu_events.previous_key_code_down = 0;
+      menu_events.key_delay = 0;
+    }
   if (menu_events.key_delay < 1)
     {
       for(Uint32 i = 0; i < 6; i++)
-	{
-	  if(!control_is_pressed(menu_events_keys[i]))
-	    {
-	      continue;
-	    }
-	  is_key_ctrl = true;
-	  kcode = menu_events_keys[i];
-	  printf("PRESSED %i\n", menu_events_keys[i]);
-	  if (menu_events.previous_key_code_down != menu_events_keys[i])
-	    {
-	      menu_events.previous_key_code_down = menu_events_keys[i];
-	      menu_events.key_delay = 30;
-	    }
-	  else
-	    {
-	      menu_events.key_delay = 10;
-	    }
-	  break;
-	}
+        {
+          if(!control_is_pressed(menu_events_keys[i]))
+            {
+              continue;
+            }
+          kcode = menu_events_keys[i];
+          if (menu_events.previous_key_code_down != menu_events_keys[i])
+            {
+              menu_events.previous_key_code_down = menu_events_keys[i];
+              menu_events.key_delay = 30;
+            }
+          else
+            {
+              menu_events.key_delay = 10;
+            }
+          break;
+        }
     }
   else
     {
       kcode = 0;
       menu_events.key_delay--;
     }
- 
 
-  bool is_selected = false;
+
   /* check if right or left button are pressed */
   Sint32 mposx;
-  bool is_left_down = keyboard->is_left_button ();
-  bool is_right_down = keyboard->is_right_button ();
   switch(kcode)
     {
     case K_FIRE:
-      is_left_down = true;
+      *inc = 1;
+      is_selected = true;
       break;
     case K_RELEASE_BALL:
-      is_right_down = true;
+      *inc = -1;
+      is_selected = true;
       break;
     case K_UP:
-      if(menu_events.current_line == 0)
+      if(menu_events.current_line ==  menu_events.line_min)
         {
-          menu_events.current_line = menu_events.line_max - 1;
+          menu_events.current_line = menu_events.line_max;
         }
       else
         {
           menu_events.current_line--;
         }
       SDL_WarpMouse(menu_events.xcenter, menu_events.top_y_coord +
-		    menu_events.current_line * menu_events.line_spacing);
-      printf("1 SDL_WarpMouse %i %i\n",  menu_events.xcenter, menu_events.top_y_coord + menu_events.current_line * menu_events.line_spacing);
-      printf("%i %i %i\n", menu_events.top_y_coord, menu_events.current_line, menu_events.line_spacing);
+                    menu_events.current_line * menu_events.line_spacing);
       break;
     case K_DOWN:
-      if(menu_events.current_line == menu_events.line_max - 1)
+      if(menu_events.current_line == menu_events.line_max)
         {
-          menu_events.current_line = 0;
+          menu_events.current_line =  menu_events.line_min;
         }
       else
         {
           menu_events.current_line++;
         }
       SDL_WarpMouse(menu_events.xcenter, menu_events.top_y_coord +
-		    menu_events.current_line * menu_events.line_spacing);
-      printf("2 SDL_WarpMouse %i %i\n",  menu_events.xcenter, menu_events.top_y_coord + menu_events.current_line * menu_events.line_spacing);
-      printf("%i %i %i\n", menu_events.top_y_coord, menu_events.current_line, menu_events.line_spacing);
+                    menu_events.current_line * menu_events.line_spacing);
       break;
     }
 
+  
+  /*
+   * check mouse events
+   */
+  bool is_left_down = keyboard->is_left_button ();
+  bool is_right_down = keyboard->is_right_button ();
   /* read y where is pressed */
   if (is_left_down && menu_events.y_coord_left_down == NULL_YCOORD)
     {
@@ -1096,6 +1161,7 @@ handler_keyboard::check_menu_events (Sint32 *pos_y, Sint32 *inc)
           menu_events.y_coord_right_down = keyboard->get_mouse_y ();
         }
     }
+
   bool is_right_up = false;
   bool is_left_up = keyboard->is_left_button_up (&mposx, pos_y);
   if (!is_left_up)
@@ -1105,7 +1171,6 @@ handler_keyboard::check_menu_events (Sint32 *pos_y, Sint32 *inc)
   if ((is_left_up && *pos_y == menu_events.y_coord_left_down) ||
       (is_right_up && *pos_y == menu_events.y_coord_right_down))
     {
-      *inc = 0;
       if (is_left_up)
         {
           *inc = 1;

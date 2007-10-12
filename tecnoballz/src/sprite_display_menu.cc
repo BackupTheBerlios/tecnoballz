@@ -1,14 +1,14 @@
-/** 
+/**
  * @file sprite_display_menu.cc 
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-10-10
+ * @date 2007-10-12
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.20 2007/10/11 05:20:26 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.21 2007/10/12 15:30:07 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,6 @@
 sprite_display_menu::sprite_display_menu ()
 {
   clear_sprite_members ();
-  set_current_menu_section(MAIN_SECTION);
   text_offscreen = NULL;
   y_coord_left_down =  handler_keyboard::NULL_YCOORD;
   y_coord_right_down = handler_keyboard::NULL_YCOORD;
@@ -54,7 +53,7 @@ sprite_display_menu::sprite_display_menu ()
     }
   menu_first_color_index = 0;
 
-  is_clean_zone = false; 
+  is_clean_zone = false;
   clear_zone_height = 0;
   clear_zone_width = 0;
   clear_zone_xcoord = 0;
@@ -118,6 +117,7 @@ sprite_display_menu::first_init ()
   make_sprite (text_offscreen);
   enable ();
   set_coordinates (32 * resolution, 80 * resolution);
+  set_current_menu_section(MAIN_SECTION);
 
   /* initialize palette color chars */
   SDL_Color *palette = display->get_palette ();
@@ -261,7 +261,7 @@ Uint32 sprite_display_menu::check_and_display ()
         }
     }
 
-  /* 
+  /*
    * mode hi-res (640 x 400)
    */
   else
@@ -366,11 +366,56 @@ Uint32 sprite_display_menu::check_and_display ()
   return exit_code;
 }
 
+/**
+ * Set a new menu
+ */
 void
 sprite_display_menu::set_current_menu_section(Uint32 current)
 {
-    current_menu_section = current;
-    keyboard->start_menu_events(line_spacing, NUM_OF_ROWS, display->get_width() >> 1, y_coord);
+  current_menu_section = current;
+  Sint32 y = y_coord;
+  Uint32 min = 0;
+  Uint32 max = NUM_OF_ROWS;
+  for(Sint32 i = 0; i < NUM_OF_ROWS; i++)
+    {
+      bool found = false;
+      char *p = texts_of_menus[current + i];
+      for(Sint32 j = 0; j < NUM_OF_COLUMNS; j++)
+        {
+          if(p[j] == ' ' )
+            {
+              continue;
+            }
+          found = true;
+          break;
+        }
+      if (found)
+        {
+          break;
+        }
+      min++;
+    }
+
+  for(Uint32 i = NUM_OF_ROWS - 1; i > 0; i--)
+    {
+      bool found = false;
+      char *p = texts_of_menus[current + i];
+      for(Sint32 j = 0; j < NUM_OF_COLUMNS; j++)
+        {
+          if(p[j] == ' ' )
+            {
+              continue;
+            }
+          found = true;
+          break;
+        }
+      if (found)
+        {
+          break;
+        }
+      max--;
+    }
+  keyboard->start_menu_events(line_spacing, min, max - 1, display->get_width() >> 1, y);
 }
 
 /**
@@ -383,8 +428,8 @@ sprite_display_menu::check_events ()
   Uint32 exit_code = DO_NO_EXIT;
   Sint32 pos_y = 0;
   Sint32 incre = 0;
-  if (keyboard->check_menu_events(&pos_y, &incre)) 
-   {
+  if (keyboard->check_menu_events(&pos_y, &incre))
+    {
       pos_y = (pos_y - y_coord) / line_spacing;
       switch (current_menu_section)
         {
@@ -393,6 +438,7 @@ sprite_display_menu::check_events ()
           switch (pos_y)
             {
             case LINE_START:
+              keyboard->stop_menu_events();
               clear_text_offscreen ();
               clear_zone_stop ();
               exit_code = START_GAME;
@@ -433,14 +479,14 @@ sprite_display_menu::check_events ()
               /* input the code area */
             case LINE_CODE1:
             case LINE_CODE2:
-              {
-                char *
-                  area_code = supervisor_main_menu::get_current_area_code ();
-                start_input_string (10, LINE_CODE2,
-                            supervisor_main_menu::AREA_CODE_LENGTH,
-                            area_code);
-              }
-              break;
+            {
+              char *
+              area_code = supervisor_main_menu::get_current_area_code ();
+              start_input_string (10, LINE_CODE2,
+                                  supervisor_main_menu::AREA_CODE_LENGTH,
+                                  area_code);
+            }
+            break;
             case LINE_SORTI:
               exit_code = PROGRAM_EXIT;
               break;
@@ -465,27 +511,27 @@ sprite_display_menu::check_events ()
               // input players names
             case 6:
               start_input_string (24, 6, 6,
-                          handler_players::players_list[0]->get_name ());
+                                  handler_players::players_list[0]->get_name ());
               break;
             case 7:
               start_input_string (24, 7, 6,
-                          handler_players::players_list[1]->get_name ());
+                                  handler_players::players_list[1]->get_name ());
               break;
             case 8:
               start_input_string (24, 8, 6,
-                          handler_players::players_list[2]->get_name ());
+                                  handler_players::players_list[2]->get_name ());
               break;
             case 9:
               start_input_string (24, 9, 6,
-                          handler_players::players_list[3]->get_name ());
+                                  handler_players::players_list[3]->get_name ());
               break;
             case 10:
               start_input_string (24, 10, 6,
-                          handler_players::players_list[4]->get_name ());
+                                  handler_players::players_list[4]->get_name ());
               break;
             case 11:
               start_input_string (24, 11, 6,
-                          handler_players::players_list[5]->get_name ());
+                                  handler_players::players_list[5]->get_name ());
               break;
 
               //
@@ -498,7 +544,7 @@ sprite_display_menu::check_events ()
                 }
               if (difficulty_level < DIFFICULTY_EASY)
                 {
-                 difficulty_level = DIFFICULTY_HARD;
+                  difficulty_level = DIFFICULTY_HARD;
                 }
               update_strings ();
               break;
@@ -547,10 +593,10 @@ sprite_display_menu::check_events ()
           break;
         }
     }
- return exit_code;
+  return exit_code;
 }
 
-/** 
+/**
  * Update strings menu: area code, player names, current difficulty, and
  * the number of lifes
  */
@@ -675,7 +721,7 @@ sprite_display_menu::draw_input_cursor ()
  */
 void
 sprite_display_menu::start_input_string (Uint32 xcoord, Uint32 ycoord, Uint32 width,
-                                 char *str)
+    char *str)
 {
   clear_zone_start (xcoord, ycoord, width, 1);
   if (str == NULL)
@@ -695,7 +741,7 @@ sprite_display_menu::start_input_string (Uint32 xcoord, Uint32 ycoord, Uint32 wi
  */
 void
 sprite_display_menu::clear_zone_start (Uint32 xcoord, Uint32 ycoord, Uint32 width,
-                                 Uint32 height)
+                                       Uint32 height)
 {
   clear_zone_stop ();
   is_clean_zone = true;
@@ -744,116 +790,116 @@ sprite_display_menu::copy_high_score_in_menu ()
 // strings of the main menu
 //------------------------------------------------------------------------------
 char const
-  sprite_display_menu::difficulte[] = "EASY" "HARD" "MAD " "DEAD";
+sprite_display_menu::difficulte[] = "EASY" "HARD" "MAD " "DEAD";
 
 
 /**
  * Offsets of the first 128 ASCII characters 
  */
 char sprite_display_menu::ascii_to_index[128] =
-{ 26,  // 32 ' '
-  37,  // 33 '!'
-  40,  // 34 '"'
-  26,  // 35 '#' space
-  26,  // 36 '$' space
-  26,  // 37 '%' space
-  26,  // 38 '&' space
-  40,  // 39 "'"
-  48,  // 40 '('
-  49,  // 41 ')'
-  47,  // 42 '*'
-  26,  // 43 '+' space
-  26,  // 44 ',' 
-  41,  // 45 '-'
-  42,  // 46 '.'
-  26,  // 47 '/' space
-  27,  // 48 '0'
-  28,  // 49 '1'
-  29,  // 50 '2'
-  30,  // 51 '3'
-  31,  // 52 '4'
-  32,  // 53 '5'
-  33,  // 54 '6'
-  34,  // 55 '7'
-  35,  // 56 '8'
-  36,  // 57 '9'
-  39,  // 58 ':'
-  38,  // 59 ';'
-  44,  // 60 '<'
-  26,  // 61 '=' space
-  45,  // 62 '>'
-  43,  // 63 '?'
-  26,  // 64 '@' space
-  0,   // 65 'A'
-  1,   // 66 'B'
-  2,   // 67 'C'
-  3,   // 68 'D'
-  4,   // 69 'E'
-  5,   // 70 'F'
-  6,   // 71 'G'
-  7,   // 72 'H'
-  8,   // 73 'I'
-  9,   // 74 'J'
-  10,  // 75 'K'
-  11,  // 76 'L'
-  12,  // 77 'M'
-  13,  // 78 'N'
-  14,  // 79 'O'
-  15,  // 80 'P'
-  16,  // 81 'Q'
-  17,  // 82 'R'
-  18,  // 83 'S'
-  19,  // 84 'T'
-  20,  // 85 'U'
-  21,  // 86 'V'
-  22,  // 87 'W'
-  23,  // 88 'X'
-  24,  // 89 'Y'
-  25,  // 90 'Z'
-  48,  // 91 '['
-  26,  // 92 '\' space
-  49,  // 93 ']'
-  26,  // 94 '^' space
-  26,  // 95 '_' space
-  26,  // 96 '`' space
-  26,  // 97 'a' space
-  47,  // 98 'b' gray star 
-  52,  // 99 'c' horizontal lines 
-  26,  // 100 'd' space
-  50,  // 101 'e' full square
-  26,  // 102 'f' space
-  46,  // 103 'g' gray heart 
-  26,  // 104 'h' space
-  26,  // 105 'i' space
-  26,  // 106 'j' space
-  26,  // 107 'k' space
-  26,  // 108 'l' space
-  26,  // 109 'm' space
-  26,  // 110 'n' space
-  26,  // 111 'o' space
-  26,  // 112 'p' space
-  55,  // 113 'q' ! white
-  26,  // 114 'r' space
-  26,  // 115 's' space
-  53,  // 116 't' < white
-  54,  // 117 'u' > white
-  26,  // 118 'v' space
-  51,  // 119 'w' pink ellipsis 
-  26,  // 120 'x' space
-  26,  // 121 'y' space
-  26,  // 122 'z' space
-  26,  // 123 '{' space
-  26,  // 124 '|' space
-  26,  // 125 '}' space
-  26,  // 126 '~' space
-  26   // 127 ' ' space
-};
+  { 26,  // 32 ' '
+    37,  // 33 '!'
+    40,  // 34 '"'
+    26,  // 35 '#' space
+    26,  // 36 '$' space
+    26,  // 37 '%' space
+    26,  // 38 '&' space
+    40,  // 39 "'"
+    48,  // 40 '('
+    49,  // 41 ')'
+    47,  // 42 '*'
+    26,  // 43 '+' space
+    26,  // 44 ','
+    41,  // 45 '-'
+    42,  // 46 '.'
+    26,  // 47 '/' space
+    27,  // 48 '0'
+    28,  // 49 '1'
+    29,  // 50 '2'
+    30,  // 51 '3'
+    31,  // 52 '4'
+    32,  // 53 '5'
+    33,  // 54 '6'
+    34,  // 55 '7'
+    35,  // 56 '8'
+    36,  // 57 '9'
+    39,  // 58 ':'
+    38,  // 59 ';'
+    44,  // 60 '<'
+    26,  // 61 '=' space
+    45,  // 62 '>'
+    43,  // 63 '?'
+    26,  // 64 '@' space
+    0,   // 65 'A'
+    1,   // 66 'B'
+    2,   // 67 'C'
+    3,   // 68 'D'
+    4,   // 69 'E'
+    5,   // 70 'F'
+    6,   // 71 'G'
+    7,   // 72 'H'
+    8,   // 73 'I'
+    9,   // 74 'J'
+    10,  // 75 'K'
+    11,  // 76 'L'
+    12,  // 77 'M'
+    13,  // 78 'N'
+    14,  // 79 'O'
+    15,  // 80 'P'
+    16,  // 81 'Q'
+    17,  // 82 'R'
+    18,  // 83 'S'
+    19,  // 84 'T'
+    20,  // 85 'U'
+    21,  // 86 'V'
+    22,  // 87 'W'
+    23,  // 88 'X'
+    24,  // 89 'Y'
+    25,  // 90 'Z'
+    48,  // 91 '['
+    26,  // 92 '\' space
+    49,  // 93 ']'
+    26,  // 94 '^' space
+    26,  // 95 '_' space
+    26,  // 96 '`' space
+    26,  // 97 'a' space
+    47,  // 98 'b' gray star
+    52,  // 99 'c' horizontal lines
+    26,  // 100 'd' space
+    50,  // 101 'e' full square
+    26,  // 102 'f' space
+    46,  // 103 'g' gray heart
+    26,  // 104 'h' space
+    26,  // 105 'i' space
+    26,  // 106 'j' space
+    26,  // 107 'k' space
+    26,  // 108 'l' space
+    26,  // 109 'm' space
+    26,  // 110 'n' space
+    26,  // 111 'o' space
+    26,  // 112 'p' space
+    55,  // 113 'q' ! white
+    26,  // 114 'r' space
+    26,  // 115 's' space
+    53,  // 116 't' < white
+    54,  // 117 'u' > white
+    26,  // 118 'v' space
+    51,  // 119 'w' pink ellipsis
+    26,  // 120 'x' space
+    26,  // 121 'y' space
+    26,  // 122 'z' space
+    26,  // 123 '{' space
+    26,  // 124 '|' space
+    26,  // 125 '}' space
+    26,  // 126 '~' space
+    26   // 127 ' ' space
+  };
 
 const unsigned char
-  sprite_display_menu::color_cycling[] =
-{
+sprite_display_menu::color_cycling[] =
+  {
     239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
     253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
     243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
     249, 250, 251, 252, 253, 254, 255
-};
+  };
