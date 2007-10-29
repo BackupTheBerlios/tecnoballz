@@ -4,11 +4,11 @@
  * @date 2007-04-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.h,v 1.9 2007/10/04 05:54:41 gurumeditation Exp $
+ * $Id: sprite_capsule.h,v 1.10 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,36 +35,39 @@ class sprite_capsule;
 #include "../include/handler_display.h"
 #include "../include/sprite_projectile.h"
 
-const Sint32 XXX_IMAGES = 7;
-const Sint16 XXX_VIDE00 = -1;
-const Sint16 XXX_SIZE_P = 0 * XXX_IMAGES;
-const Sint16 XXX_SIZE_M = 1 * XXX_IMAGES;
-const Sint16 XXX_LIFE_P = 2 * XXX_IMAGES;
-const Sint16 XXX_LIFE_M = 3 * XXX_IMAGES;
-const Sint16 XXX_POWER1 = 4 * XXX_IMAGES;
-const Sint16 XXX_POWER2 = 5 * XXX_IMAGES;
-const Sint16 XXX_BALLE2 = 6 * XXX_IMAGES;
-const Sint16 XXX_BALLE3 = 7 * XXX_IMAGES;
-const Sint16 XXX_FIRE01 = 8 * XXX_IMAGES;
-const Sint16 XXX_GLUE00 = 9 * XXX_IMAGES;
-const Sint16 XXX_INVERS = 10 * XXX_IMAGES;
-const Sint16 XXX_FIRE02 = 11 * XXX_IMAGES;
-const Sint16 XXX_SIZE01 = 12 * XXX_IMAGES;
-const Sint16 XXX_SIZE02 = 13 * XXX_IMAGES;
-const Sint16 XXX_RANDOM = 14 * XXX_IMAGES;
-const Sint16 XXX_MEGA00 = 15 * XXX_IMAGES;
-const Sint16 XXX_WALL01 = 16 * XXX_IMAGES;
-const Sint16 XXX_ROBOT1 = 17 * XXX_IMAGES;
-const Sint16 XXX_CONTRO = 18 * XXX_IMAGES;
-const Sint16 XXX_PROTEC = 19 * XXX_IMAGES;
+/*
+const Sint32 NUM_OF_IMAGES = 7;
+const Sint16 NO_IMAGE = -1;
+const Sint16 IMAGE_EXPAND_PADDLE = 0 * NUM_OF_IMAGES;
+const Sint16 IMAGE_SHRINK_PADDLE = 1 * NUM_OF_IMAGES;
+const Sint16 IMAGE_EXTRA_LIFE = 2 * NUM_OF_IMAGES;
+const Sint16 IMAGE_EXPAND_PADDLE = 3 * NUM_OF_IMAGES;
+const Sint16 IMAGE_POWER_BALL_1 = 4 * NUM_OF_IMAGES;
+const Sint16 IMAGE_POWER_BALL_2 = 5 * NUM_OF_IMAGES;
+const Sint16 IMAGE_EXTRA_BALLS = 6 * NUM_OF_IMAGES;
+const Sint16 IMAGE_MULTI_BALLS = 7 * NUM_OF_IMAGES;
+const Sint16 IMAGE_FIRE_POWER_1 = 8 * NUM_OF_IMAGES;
+const Sint16 IMAGE_GLUE = 9 * NUM_OF_IMAGES;
+const Sint16 IMAGE_INVERSE_CONTROL = 10 * NUM_OF_IMAGES;
+const Sint16 IMAGE_FIRE_POWER_2 = 11 * NUM_OF_IMAGES;
+const Sint16 IMAGE_BALL_SIZE_2 = 12 * NUM_OF_IMAGES;
+const Sint16 IMAGE_BALL_SIZE_3 = 13 * NUM_OF_IMAGES;
+const Sint16 IMAGE_CHANCE = 14 * NUM_OF_IMAGES;
+const Sint16 IMAGE_ENABLE_HUGELY_OPTIONS = 15 * NUM_OF_IMAGES;
+const Sint16 IMAGE_BOTTOM_WALL = 16 * NUM_OF_IMAGES;
+const Sint16 IMAGE_ROBOT_PADDLE = 17 * NUM_OF_IMAGES;
+const Sint16 IMAGE_BALLS_CONTROL = 18 * NUM_OF_IMAGES;
+const Sint16 IMAGE_PADDLE_INVINCIBILITY = 19 * NUM_OF_IMAGES;
+*/
 
 class sprite_capsule:public sprite_object
 {
   friend class controller_capsules;
   friend class supervisor_shop;
 
-
 public:
+  static const Uint32 NUM_OF_IMAGES = 7;
+
 typedef enum 
 {
   GAD_VIDE00 = 0,
@@ -115,6 +118,38 @@ CASPULES_ENUM;
 
 
 private:
+
+
+
+  typedef enum
+    {
+      NO_IMAGE = -1,
+      IMAGE_EXPAND_PADDLE = 0 * NUM_OF_IMAGES,
+      IMAGE_SHRINK_PADDLE = 1 * NUM_OF_IMAGES,
+      IMAGE_EXTRA_LIFE = 2 * NUM_OF_IMAGES,
+      IMAGE_LOSE_A_LIFE = 3 * NUM_OF_IMAGES,
+      IMAGE_POWER_BALL_1 = 4 * NUM_OF_IMAGES,
+      IMAGE_POWER_BALL_2 = 5 * NUM_OF_IMAGES,
+      IMAGE_EXTRA_BALLS = 6 * NUM_OF_IMAGES,
+      IMAGE_MULTI_BALLS = 7 * NUM_OF_IMAGES,
+      IMAGE_FIRE_POWER_1 = 8 * NUM_OF_IMAGES,
+      IMAGE_GLUE = 9 * NUM_OF_IMAGES,
+      IMAGE_INVERSE_CONTROL = 10 * NUM_OF_IMAGES,
+      IMAGE_FIRE_POWER_2 = 11 * NUM_OF_IMAGES,
+      IMAGE_BALL_SIZE_2 = 12 * NUM_OF_IMAGES,
+      IMAGE_BALL_SIZE_3 = 13 * NUM_OF_IMAGES,
+      IMAGE_CHANCE = 14 * NUM_OF_IMAGES,
+      IMAGE_ENABLE_HUGELY_OPTIONS = 15 * NUM_OF_IMAGES,
+      IMAGE_BOTTOM_WALL = 16 * NUM_OF_IMAGES,
+      IMAGE_ROBOT_PADDLE = 17 * NUM_OF_IMAGES,
+      IMAGE_BALLS_CONTROL = 18 * NUM_OF_IMAGES,
+      IMAGE_PADDLE_INVINCIBILITY = 19 * NUM_OF_IMAGES
+    }
+  images_enum;
+
+
+
+
   /** Capsule direction: BOTTOM_PADDLE, RIGHT_PADDLE, TOP_PADDLE,
    * or LEFT_PADDLE */
   Uint32 towards;

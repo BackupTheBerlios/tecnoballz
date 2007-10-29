@@ -1,14 +1,14 @@
 /**
  * @file supervisor_shop.cc 
  * @brief Shop supervisor
- * @date 2007-10-06
+ * @date 2007-10-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.49 $
+ * @version $Revision: 1.50 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.49 2007/10/07 14:22:12 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.50 2007/10/29 13:18:54 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -174,11 +174,13 @@ supervisor_shop::first_init ()
   /* initialize the led indicator */
   if (resolution == 1)
     {
-      led_indicator->create_sprite (BOB_LEDSHP, sprites_bitmap, false);
+      led_indicator->create_sprite (sprite_object::SHOP_LED_INDICATOR_320,
+                                    sprites_bitmap, false);
     }
   else
     {
-      led_indicator->create_sprite (BOB_LEDSH2, sprites_bitmap, false);
+      led_indicator->create_sprite (sprite_object::SHOP_LED_INDICATOR_640,
+                                    sprites_bitmap, false);
     }
   sprites->add (led_indicator);
   led_indicator->enable ();

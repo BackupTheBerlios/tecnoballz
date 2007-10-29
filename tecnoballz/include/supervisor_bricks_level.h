@@ -1,14 +1,14 @@
 /** 
  * @file supervisor_bricks_level.h 
  * @brief Bricks levels supervisor 
- * @date 2007-10-04
+ * @date 2007-10-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.h,v 1.29 2007/10/11 05:20:26 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.h,v 1.30 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -93,7 +93,7 @@ private:
   controller_moneys *money_capsules;
   controller_capsules *power_up_capsules;
   controller_gems *gem_stones;
-  controller_font_game *fontes_game;
+  controller_font_game *font_game;
   controller_gigablitz *gigablitz;
   controller_game_over *game_over;
   sprite_wall *bottom_wall;

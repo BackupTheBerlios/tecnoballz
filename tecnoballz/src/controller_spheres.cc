@@ -2,14 +2,14 @@
  * @file controller_spheres.cc 
  * @brief Metallic spheres controller used in congratulations 
  * @created 2004-08-05 
- * @date 2007-04-09
+ * @date 2007-10-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_spheres.cc,v 1.12 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_spheres.cc,v 1.13 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ controller_spheres::controller_spheres ()
   /* 8 metallics spheres */
   max_of_sprites = 12;
   sprites_have_shades = true;
-  sprite_type_id = BOB_ARGENT;
+  sprite_type_id = sprite_object::METALLIC_SPHERE;
   radius_horizontal_variation = 0;
   radius_vertical_variation = 0;
   radius_hinc_variation = 0;

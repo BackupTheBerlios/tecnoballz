@@ -2,14 +2,14 @@
  * @file controller_indicators.cc 
  * @brief Controller of money amount, reverse penalty   
  * @created 2002-11-28 
- * @date 2007-10-04
+ * @date 2007-10-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_indicators.cc,v 1.9 2007/10/04 05:54:41 gurumeditation Exp $
+ * $Id: controller_indicators.cc,v 1.10 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ controller_indicators::controller_indicators ()
   max_of_sprites = 8;
   sprites_have_shades = false;
   y_position = YCOORD_INDICATORS * resolution;
-  sprite_type_id = BOB_MONEY0;
+  sprite_type_id = sprite_object::FONT_MONEY;
   money_posy = y_position;
   life_sprite = NULL;
   reverse_sprite = NULL;

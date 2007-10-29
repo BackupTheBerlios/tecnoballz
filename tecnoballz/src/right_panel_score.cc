@@ -1,14 +1,14 @@
 /** 
  * @file right_panel_score.cc 
  * @brief The right panel score in the bricks levels 
- * @date 2007-10-05
+ * @date 2007-10-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.21 2007/10/05 11:18:21 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.22 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,15 +99,20 @@ right_panel_score::draw_background ()
     {
       screen = game_screen;
     }
-  screen->blit_surface (bmp, 0, 0, 256 * resolution, 0, bmp->get_width (), 240 * resolution);
+  screen->blit_surface (bmp, 0, 0, 256 * resolution, 0,
+                        bmp->get_width (), 240 * resolution);
   delete bmp;
   bmp = (bitmap_data *) NULL;
-
-  draw (screen, AREA_NUM_XCOORD * resolution, AREA_NUM_YCOORD * resolution, current_player->area_number, 2);
-  draw (screen, LEVEL_NUM_XCOORD * resolution, LEVEL_NUM_YCOORD * resolution, current_player->level_number, 2);
-  draw (screen, PLAYERNAME_XCOORD * resolution, PLAYERNAME_YCOORD * resolution, current_player->player_name);
-  draw (screen, BEST_SCORE_XCOORD * resolution, BEST_SCORE_YCOORD * resolution, high_score->get_best_score (), 6);
-  draw (screen, BEST_PLAYER_XCOORD * resolution, BEST_PLAYER_YCOORD * resolution, high_score->get_best_playername (), 0);
+  draw (screen, AREA_NUM_XCOORD * resolution,
+        AREA_NUM_YCOORD * resolution, current_player->area_number, 2);
+  draw (screen, LEVEL_NUM_XCOORD * resolution,
+        LEVEL_NUM_YCOORD * resolution, current_player->level_number, 2);
+  draw (screen, PLAYERNAME_XCOORD * resolution,
+        PLAYERNAME_YCOORD * resolution, current_player->player_name);
+  draw (screen, BEST_SCORE_XCOORD * resolution,
+        BEST_SCORE_YCOORD * resolution, high_score->get_best_score (), 6);
+  draw (screen, BEST_PLAYER_XCOORD * resolution,
+        BEST_PLAYER_YCOORD * resolution, high_score->get_best_playername (), 0);
 }
 
 /**
@@ -116,9 +121,12 @@ right_panel_score::draw_background ()
 void
 right_panel_score::text_refresh ()
 {
-  draw (game_screen, SCORE_XCOORD * resolution, SCORE_YCOORD * resolution, current_player->score_value, 6); 
-  draw (game_screen, LIFES_XCOORD * resolution, LIFES_YCOORD * resolution, bricks_counter, 3); 
-  draw (game_screen, BRICKS_XCOORD * resolution, BRICKS_YCOORD * resolution, current_player->number_of_lifes, 2);
+  draw (game_screen, SCORE_XCOORD * resolution,
+        SCORE_YCOORD * resolution, current_player->score_value, 6); 
+  draw (game_screen, LIFES_XCOORD * resolution,
+        LIFES_YCOORD * resolution, bricks_counter, 3); 
+  draw (game_screen, BRICKS_XCOORD * resolution,
+        BRICKS_YCOORD * resolution, current_player->number_of_lifes, 2);
 }
 
 /**
@@ -227,12 +235,7 @@ right_panel_score::draw_gigablizt_gauge ()
         }
     }
 
-
-
   Sint32 h = (gauge_height) - gigablitz_countdown;
-
-  //flip_white = ~flip_white;
-
   flip_white = flip_white ? false : true;
   if (flip_white)
     {

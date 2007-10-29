@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-10-09
+ * @date 2007-10-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.35 $
+ * @version $Revision: 1.36 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.35 2007/10/09 05:46:24 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.36 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ controller_bricks::controller_bricks ()
       max_of_sprites = 0;
     }
   sprites_have_shades = true;
-  sprite_type_id = BOB_BRICK1;
+  sprite_type_id = sprite_object::BRICKS;
   bricks_redraw = (brick_redraw *) NULL;
   brikTampon = (char *) NULL;
   bricks_map = (brick_info *) NULL;
@@ -341,7 +341,8 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
                   sprite_brick *sprite = new sprite_brick ();
                   if (sprite_template == NULL)
                     {
-                      sprite->create_sprite (BOB_BRICK1, bitmap_bricks, true, true);
+                      sprite->create_sprite (sprite_object::BRICKS,
+                                             bitmap_bricks, true, true);
                       sprite_template = sprite;
                     }
                   else
@@ -349,7 +350,6 @@ controller_bricks::load_level (Sint32 area_nu, Sint32 level_nu)
                       sprite_template->duplicate_to (sprite);
                     }
                   sprites_list[bobindex] = sprite;
-                  //sprites->add (sprite);
                   sprite->set_x_coord(xcoord);
                   sprite->set_y_coord(ycoord);
                   sprite->enable ();

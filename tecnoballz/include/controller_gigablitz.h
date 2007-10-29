@@ -4,11 +4,11 @@
  * @date 2007-04-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.h,v 1.11 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_gigablitz.h,v 1.12 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,6 @@ public:
   void shoot_paddle ();
   void run_in_bricks_levels ();
   void collision1 ();
-  //void create_gigablitz_sprites ();
   void run_in_guardians_level ();
   bool shoot_guardian (Uint32 id, Sint32 xcoord, Sint32 ycoord,
                       Uint32 width, Uint32 height);

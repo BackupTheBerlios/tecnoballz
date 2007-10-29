@@ -1,14 +1,14 @@
 /** 
  * @file controller_ejectors.cc 
  * @brief Ejectors corners controller 
- * @date 2007-09-29
+ * @date 2007-10-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_ejectors.cc,v 1.8 2007/09/29 08:53:48 gurumeditation Exp $
+ * $Id: controller_ejectors.cc,v 1.9 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,8 +60,8 @@ controller_ejectors::create_ejectors_sprites ()
   sprites_list[BOTTOM_LEFT_EJECTOR] = new sprite_object ();
   sprites_list[BOTTOM_RIGHT_EJECTOR] = new sprite_object ();
 
-  sprites_list[TOP_LEFT_EJECTOR]->create_sprite (BOB_EJECT1, sprites_bitmap,
-                                                 1);
+  sprites_list[TOP_LEFT_EJECTOR]->create_sprite (sprite_object::EJECTOR_1,
+                                                 sprites_bitmap, true);
   sprites_list[TOP_LEFT_EJECTOR]->set_coordinates (COORD_EJECTOR_1 *
                                                    resolution,
                                                    (COORD_EJECTOR_1 *
@@ -70,8 +70,8 @@ controller_ejectors::create_ejectors_sprites ()
                                                    [TOP_LEFT_EJECTOR]->
                                                    get_sprite_height () / 2);
 
-  sprites_list[TOP_RIGHT_EJECTOR]->create_sprite (BOB_EJECT4, sprites_bitmap,
-                                                  1);
+  sprites_list[TOP_RIGHT_EJECTOR]->create_sprite (sprite_object::EJECTOR_4,
+                                                  sprites_bitmap, true);
   sprites_list[TOP_RIGHT_EJECTOR]->set_coordinates (COORD_EJECTOR_2 *
                                                     resolution,
                                                     (COORD_EJECTOR_1 *
@@ -80,9 +80,8 @@ controller_ejectors::create_ejectors_sprites ()
                                                     [TOP_RIGHT_EJECTOR]->
                                                     get_sprite_height () / 2);
 
-  sprites_list[BOTTOM_LEFT_EJECTOR]->create_sprite (BOB_EJECT2,
-                                                    sprites_bitmap, 1);
-
+  sprites_list[BOTTOM_LEFT_EJECTOR]->create_sprite (sprite_object::EJECTOR_2,
+                                                    sprites_bitmap, true);
   sprites_list[BOTTOM_LEFT_EJECTOR]->set_coordinates (COORD_EJECTOR_1 *
                                                       resolution,
                                                       (COORD_EJECTOR_2 *
@@ -92,9 +91,8 @@ controller_ejectors::create_ejectors_sprites ()
                                                       get_sprite_height () /
                                                       2);
 
-  sprites_list[BOTTOM_RIGHT_EJECTOR]->create_sprite (BOB_EJECT3,
-                                                     sprites_bitmap, 1);
-
+  sprites_list[BOTTOM_RIGHT_EJECTOR]->create_sprite (sprite_object::EJECTOR_3,
+                                                     sprites_bitmap, true);
   sprites_list[BOTTOM_RIGHT_EJECTOR]->set_coordinates (COORD_EJECTOR_2 *
                                                        resolution,
                                                        (COORD_EJECTOR_2 *

@@ -1,14 +1,14 @@
 /** 
  * @file sprite_paddle.cc 
  * @brief A paddle sprite 
- * @date 2007-10-02
+ * @date 2007-10-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.cc,v 1.15 2007/10/02 15:51:31 gurumeditation Exp $
+ * $Id: sprite_paddle.cc,v 1.16 2007/10/29 13:18:54 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@ sprite_paddle::sprite_paddle (bool has_projectiles)
   is_vertical = false;
   fire_state = NOT_OWN_GUN;
   sticky_state = NOT_STICKY_PADDLE;
-  bump_speed = 0;
   enable_counter = 0;
   is_hit_ball = false;
   paddle_number = 0;
@@ -113,37 +112,40 @@ sprite_paddle::move_projectiles ()
 
 /**
  * Determine if the paddle must to be enabled and enable it if ok
- * @param rTeam True if mode team enabled
- * @param large Paddle's width (8,16,24,32,40,48,56 or 64)
- * @param actif Counter
+ * @param is_team True if mode team enabled
+ * @param size Paddle's width (8,16,24,32,40,48,56 or 64)
+ * @param counter Counter which enable paddle if it 
+ *                is greater than zero
  */
 void
-sprite_paddle::enable_if_ok (Sint32 rTeam, Sint32 large, Sint32 actif)
+sprite_paddle::enable_if_ok (bool is_team, Sint32 size, Uint32 counter)
 {
-  length = large;
+  length = size;
   is_enabled = false;
-  enable_counter = actif;
+  enable_counter = counter;
   if (enable_counter > 0)
     {
       enable_counter--;
       is_enabled = true;
     }
-  if (paddle_number == 1 || (paddle_number == 4 && rTeam == 1))
+  if (paddle_number == controller_paddles::BOTTOM_PADDLE
+      || (paddle_number == controller_paddles::LEFT_PADDLE 
+          && is_team))
     {
       enable_counter = 1;
       is_enabled = true;
     }
-  select_image (large);
+  select_image (size);
 }
 
 /**
  * Set the width and image of a horizontal paddle
- * @param w width of the paddle in pixels
+ * @param size width of the paddle in pixels
  */
 void
-sprite_paddle::set_width (Sint32 w)
+sprite_paddle::set_width (Uint32 size)
 {
-  length = w;
+  length = size;
   collision_width = length;
   select_image (length);
   projectiles->disable_sprites ();
@@ -151,10 +153,10 @@ sprite_paddle::set_width (Sint32 w)
 
 /**
  * Set the height and image of a vertical paddle
- * @param h height of the paddle in pixels
+ * @param h Height of the paddle in pixels
  */
 void
-sprite_paddle::set_height (Sint32 h)
+sprite_paddle::set_height (Uint32 h)
 {
   length = h;
   collision_height = length;
@@ -163,13 +165,13 @@ sprite_paddle::set_height (Sint32 h)
 }
 
 /**
- * select the sprite image of the paddle
- * @param l length of the paddle
+ * Select the sprite image of the paddle
+ * @param size Length of the paddle
  */
 void
-sprite_paddle::select_image (Sint32 l)
+sprite_paddle::select_image (Uint32 size)
 {
-  Sint32 i = (l >> shift_width) - 2;
+  Sint32 i = (size >> shift_width) - 2;
   if (fire_state != NOT_OWN_GUN)
     {
       i += 7;
@@ -182,7 +184,7 @@ sprite_paddle::select_image (Sint32 l)
 }
 
 /**
- * select the sprite image of the paddle
+ * Select the sprite image of the paddle
  */
 void
 sprite_paddle::select_image ()
@@ -218,7 +220,7 @@ sprite_paddle::set_fire_1 ()
 {
   fire_state = OWN_GUN;
   select_image ();
-  projectiles->fire1RunOn ();
+  projectiles->set_fire_1 ();
 }
 
 /**
@@ -229,7 +231,7 @@ sprite_paddle::set_fire_2 ()
 {
   fire_state = OWN_GUN;
   select_image ();
-  projectiles->fire2RunOn ();
+  projectiles->set_fire_2 ();
 }
 
 /**
@@ -238,7 +240,7 @@ sprite_paddle::set_fire_2 ()
 void
 sprite_paddle::release_ball ()
 {
-  /* is the ball glued on bumper? */
+  /* is the ball glued on the paddle? */
   if (sticky_state == BUSY_STICKY_PADDLE)
     {
       /* paddle is free */

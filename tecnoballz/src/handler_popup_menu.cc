@@ -1,15 +1,15 @@
 /**
- * @file handler_popup_menu.cc 
- * @brief popup menu handler (When the [Esc] is pressed)
- * @created 2004-08-08 
- * @date 2007-10-12
+ * @file handler_popup_menu.cc
+ * @brief popup menu handler (When the [Esc] key is pressed)
+ * @created 2004-08-08
+ * @date 2007-10-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.15 2007/10/12 15:30:07 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.16 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ handler_popup_menu::~handler_popup_menu ()
 }
 
 /**
- * Read the texts file 
+ * Read the texts file
  */
 void
 handler_popup_menu::load_text_file ()
@@ -81,33 +81,33 @@ handler_popup_menu::load_text_file ()
 }
 
 /**
- * Initialize palette color chars, if necessary (shop only) 
+ * Initialize palette color chars, if necessary (shop only)
  */
 void
-handler_popup_menu::initialize_palette()
+handler_popup_menu::initialize_palette ()
 {
-  SDL_Color *palPT = display->get_palette ();
-  SDL_Color *palP1 = palPT + 239;
-  Sint32 i = random_counter & 0x0F;
+  SDL_Color *palette = display->get_palette ();
+  SDL_Color *font_pal = palette + 239;
+  Uint32 i = random_counter & 0x0F;
   if (i >= 10)
     {
       i = i - 10;
     }
-  const Uint32 *ptpal = (handler_resources::color_gradations + i * 18);
+  const Uint32 *color_scale = (handler_resources::color_gradations + i * 18);
   for (i = 0; i < 17; i++)
     {
-      Uint32 vacol = ptpal[i];
-      Uint32 vablu = vacol & 0x000000ff;
-      Uint32 vagre = vacol & 0x0000ff00;
-      vagre = vagre >> 8;
-      Uint32 vared = vacol & 0x00ff0000;
-      vared = vared >> 16;
-      palP1->r = vared;
-      palP1->g = vagre;
-      palP1->b = vablu;
-      palP1++;
+      Uint32 color = color_scale[i];
+      Uint32 blue = color & 0x000000ff;
+      Uint32 green = color & 0x0000ff00;
+      green = green >> 8;
+      Uint32 red = color & 0x00ff0000;
+      red = red >> 16;
+      font_pal->r = red;
+      font_pal->g = green;
+      font_pal->b = blue;
+      font_pal++;
     }
-  display->enable_palette (palPT);
+  display->enable_palette (palette);
 }
 
 /**
@@ -117,7 +117,7 @@ handler_popup_menu::initialize_palette()
 void
 handler_popup_menu::first_init (bitmap_data * bmp)
 {
-  load_text_file();
+  load_text_file ();
   Uint32 w;
   switch (current_phase)
     {
@@ -139,7 +139,7 @@ handler_popup_menu::first_init (bitmap_data * bmp)
       is_restore_background = true;
       menu_number = 1;
       w = 320 * resolution;
-      initialize_palette();
+      initialize_palette ();
       break;
 
     case GUARDS_LEVEL:
@@ -147,10 +147,10 @@ handler_popup_menu::first_init (bitmap_data * bmp)
       is_restore_background = false;
       menu_number = 0;
       w = 320 * resolution;
-      initialize_palette();
+      initialize_palette ();
       break;
     }
-    menu_xcenter = w / 2;
+  menu_xcenter = w / 2;
 
   /* determine line height into menu box */
   if (resolution == 2)
@@ -172,7 +172,7 @@ handler_popup_menu::first_init (bitmap_data * bmp)
  * Build menu box where will be drawed the strings of menu
  */
 void
-handler_popup_menu::build_menu_box(bitmap_data * bmp, Uint32 w)
+handler_popup_menu::build_menu_box (bitmap_data * bmp, Uint32 w)
 {
   /* determine height of the menu box */
   if (menu_number == 1)
@@ -188,72 +188,75 @@ handler_popup_menu::build_menu_box(bitmap_data * bmp, Uint32 w)
 
   /* allocate graphic buffer of menu box */
   screen_menu = new bitmap_data ();
-  screen_menu->create_surface ((num_of_columns + 2) * char_height, numof_lines * vertical_space);
+  screen_menu->create_surface ((num_of_columns + 2) * char_height,
+                               numof_lines * vertical_space);
   screen_menu->clear ();
 
   /* save coordinates of the sprites */
-  char *ptAdd[8];
-  const bb_describ *pDesc = sprite_object::zelistBOB[BOB_ESCMEN];
-  Sint32 heigh = pDesc->BB_HAUTEUR;     //high in pixels
-  heigh *= resolution;
-  Sint32 nanim = pDesc->BB_ANIMATE;     //number of animations
-  Sint32 width = pDesc->BB_LARGEUR;     //width in pixels
+  char *sprite_pixels[8];
+  const sprite_description *sprite_desc = sprite_object::zelistBOB[sprite_object::POPUP_MENU];
+  /* height in pixels */
+  Uint32 height = sprite_desc->height;
+  height *= resolution;
+  /* number of animation */
+  Uint32 nanim = sprite_desc->number_of_images;
+  /* width in pixels */
+  Uint32 width = sprite_desc->width;
   width *= resolution;
-  bbPosition *coord = pDesc->BBPOSITION;
-  for (Sint32 i = 0; i < nanim; i++)
+  sprite_coordinates *coord = sprite_desc->coordinates;
+  for (Uint32 i = 0; i < nanim; i++)
     {
-      Sint32 pos_x = (Sint32) coord[i].BB_COORDX;
+      Sint32 pos_x = (Sint32) coord[i].xcoord;
       pos_x *= resolution;
       pos_x *= 16;
-      Sint32 pos_y = (Sint32) coord[i].BB_COORDY;
+      Sint32 pos_y = (Sint32) coord[i].ycoord;
       pos_y *= resolution;
-      ptAdd[i] = bmp->get_pixel_data (pos_x, pos_y);
+      sprite_pixels[i] = bmp->get_pixel_data (pos_x, pos_y);
     }
-  Sint32 NxLine = bmp->get_row_size ();
+  Uint32 raw_src = bmp->get_row_size ();
 
   /* initialize sprite object */
   make_sprite (screen_menu);
-  Sint32 y = (240 * resolution - numof_lines * vertical_space) / 2;
-  y = (y / vertical_space) * vertical_space;
-  set_coordinates ((w - sprite_width) / 2, y);
+  Sint32 ycoord = (240 * resolution - numof_lines * vertical_space) / 2;
+  ycoord = (ycoord / vertical_space) * vertical_space;
+  set_coordinates ((w - sprite_width) / 2, ycoord);
 
   /*
    * build the frame of menu box (with sprites)
    */
-  Sint32 m = screen_menu->get_width () / width - 2;
-  Sint32 x = width;
-  y = screen_menu->get_height () - heigh;
-  draw (ptAdd[0], 0, 0, NxLine, width, heigh);
-  draw (ptAdd[3], 0, y, NxLine, width, heigh);
-  for (Sint32 i = 0; i < m; i++, x += width)
+  Uint32 count = screen_menu->get_width () / width - 2;
+  Sint32 xcoord = width;
+  ycoord = screen_menu->get_height () - height;
+  draw (sprite_pixels[0], 0, 0, raw_src, width, height);
+  draw (sprite_pixels[3], 0, ycoord, raw_src, width, height);
+  for (Uint32 i = 0; i < count; i++, xcoord += width)
     {
-      draw (ptAdd[4], x, 0, NxLine, width, heigh);
-      draw (ptAdd[6], x, y, NxLine, width, heigh);
+      draw (sprite_pixels[4], xcoord, 0, raw_src, width, height);
+      draw (sprite_pixels[6], xcoord, ycoord, raw_src, width, height);
     }
-  draw (ptAdd[1], x, 0, NxLine, width, heigh);
-  draw (ptAdd[2], x, y, NxLine, width, heigh);
+  draw (sprite_pixels[1], xcoord, 0, raw_src, width, height);
+  draw (sprite_pixels[2], xcoord, ycoord, raw_src, width, height);
 
-  m = screen_menu->get_height () / heigh - 2;
-  if (screen_menu->get_height () % heigh)
+  count = screen_menu->get_height () / height - 2;
+  if (screen_menu->get_height () % height)
     {
-      m++;
-    }
-
-  x = screen_menu->get_width () - width;
-  y = heigh;
-  for (Sint32 i = 0; i < m; i++, y += heigh)
-    {
-      draw (ptAdd[5], 0, y, NxLine, width, heigh);
-      draw (ptAdd[7], x, y, NxLine, width, heigh);
+      count++;
     }
 
+  xcoord = screen_menu->get_width () - width;
+  ycoord = height;
+  for (Uint32 i = 0; i < count; i++, ycoord += height)
+    {
+      draw (sprite_pixels[5], 0, ycoord, raw_src, width, height);
+      draw (sprite_pixels[7], xcoord, ycoord, raw_src, width, height);
+    }
 }
 
 /**
  * Display a sprite into the "buffer" (copy byte to byte)
  * @param source Pointer to the pixels of the sprite
- * @param x_coord X-coordinate where draw the sprite
- * @param y_coord Y_coordinate where draw the sprite
+ * @param xcoord X-coordinate where draw the sprite
+ * @param ycoord Y_coordinate where draw the sprite
  * @param raw_src Row size of the source bitmap
  * @param width Width of sprite
  * @param height Hieght of sprite
@@ -289,18 +292,22 @@ handler_popup_menu::draw (char *source, Sint32 xcoord, Sint32 ycoord,
 /**
  * Display and handle menu
  * @return Return code CAUSE_GAME_OVER, QUIT_TO_MAIN_MENU,
- *         or QUIT_TECNOBALLZ 
+ *         or QUIT_TECNOBALLZ
  */
-Sint32
-handler_popup_menu::run ()
+Sint32 handler_popup_menu::run ()
 {
   Sint32 event = -1;
 
   /* [ESC] key: enable / disable menu box */
   if (keyboard->command_is_pressed (handler_keyboard::TOGGLE_POPUP_MENU))
     {
+      if (!is_enabled)
+        {
+          keyboard->start_menu_events (vertical_space, 1, num_of_lines,
+                                       menu_xcenter,
+                                       get_y_coord () + char_height);
+        }
       is_enabled = true;
-      keyboard->start_menu_events(vertical_space, 1, num_of_lines, menu_xcenter, get_y_coord() + char_height);
     }
   else
     {
@@ -309,13 +316,13 @@ handler_popup_menu::run ()
           restore_rectangle_background ();
         }
       is_enabled = false;
-      keyboard->stop_menu_events();
+      keyboard->stop_menu_events ();
       return event;
     }
 
   Sint32 pos_y = 0;
   Sint32 incre = 0;
-  if (keyboard->check_menu_events(&pos_y, &incre))
+  if (keyboard->check_menu_events (&pos_y, &incre))
     {
       event = (pos_y - y_coord) / vertical_space;
     }
@@ -335,7 +342,7 @@ handler_popup_menu::run ()
     }
 
   /* copy menu box into screen */
-  MSKbitcopy ();
+  copy_to_game_screen ();
 
   if (event >= CONTINUE_PLAY_CURRENT && event <= QUIT_TECNOBALLZ)
     {
@@ -530,18 +537,15 @@ handler_popup_menu::display_320 ()
 
 const unsigned char
 handler_popup_menu::cycling_table[] =
-  {
-    239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
-    253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
-    243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
-    249, 250, 251, 252, 253, 254, 255
-  };
+{
+  239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
+  253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
+  243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
+  249, 250, 251, 252, 253, 254, 255
+};
 
 char **
-handler_popup_menu::menu_texts_pt[2] = {
-                                         NULL, NULL
-                                       };
-
-
-
-
+handler_popup_menu::menu_texts_pt[2] =
+{
+  NULL, NULL
+};

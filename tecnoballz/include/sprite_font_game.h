@@ -1,14 +1,15 @@
-/** 
+/**
  * @file sprite_font_game.h
- * @brief The sprite fonte used to display the text "LEVEL COMPLETED" 
- * @date 2007-02-06
+ * @brief The sprite font used to display a char of the
+ *        "LEVEL COMPLETED" string
+ * @date 2007-10-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_font_game.h,v 1.1 2007/10/11 18:53:17 gurumeditation Exp $
+ * $Id: sprite_font_game.h,v 1.2 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,22 +32,28 @@ class sprite_font_game;
 #include "../include/sprite_object.h"
 
 class sprite_font_game:public sprite_object
-{
-  friend class controller_font_game;
+  {
+    friend class controller_font_game;
 
-private:
-   Sint32 angleValue;          //radius value 0 to 511
-  Sint32 posiYStart;            //start Y coordinate
-  Sint32 posiX_stop;            //stop X coordinate
-  Sint32 xIncrement;            //X move offset(1, -1 or 0)
-  Sint32 yIncrement;            //Y move offset (1)
-  Sint32 posiY_stop;            //stop Y coordinate
+  private:
+    /** Radius value from 0 to 511, index on a sinus table */
+    Uint32 current_radius;
+    /** Final y-coordinate */
+    Sint32 ycoord_current;
+    /** Final x-coordinate */
+    Sint32 xcoord_final;
+    /** X increase: 1, -1, or 0 */
+    Sint32 x_inc;
+    /** Y increase: -12 or -16 */
+    Sint32 y_inc;
+    /** Final y-coordinate */
+    Sint32 ycoord_final;
 
-public:
+  public:
     sprite_font_game ();
-   ~sprite_font_game ();
-  void littleInit (Sint32 a, Sint32 x, Sint32 y, Sint32 i,
-                   Sint32 l, Sint32 s);
-  void moveCaract ();
-};
+    ~sprite_font_game ();
+    void initialize (Uint32 radius, Sint32 x_stop, Sint32 y_start,
+                     Sint32 xinc, Sint32 yinc, Sint32 y_stop);
+    void move ();
+  };
 #endif

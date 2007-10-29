@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-10-05
+ * @date 2007-10-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.63 $
+ * @version $Revision: 1.64 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.63 2007/10/07 14:22:12 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.64 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ controller_balls::controller_balls ()
   max_of_sprites = 20;
   sprites_have_shades = true;
   balls_are_controlled = false;
-  sprite_type_id = BOB_BALLES;
+  sprite_type_id = sprite_object::BALLS;
 }
 
 /** 
@@ -57,22 +57,22 @@ controller_balls::~controller_balls ()
 
 /**
  * Initialize the balls before one level
- * @param start time delay before the ball leaves the bumper (first time)
- * @param glueC time delay before the ball leaves (glue option)
- * @param speed time delay before the ball accelerates
- * @param tiltC time delay before "tilt" is available
+ * @param start Time delay before the ball leaves the paddle (first time)
+ * @param glue Time delay before the ball leaves (glue option)
+ * @param speed Time delay before the ball accelerates
+ * @param tilt Time delay before "tilt" is available
  * @param table speed ball (1 to 4)
  */
 void
 controller_balls::init (Uint32 start,
-                        Uint32 glueC, Uint32 speed, Uint32 tiltC,
+                        Uint32 glue, Uint32 speed, Uint32 tilt,
                         Uint32 table)
 {
 
   controller_paddles *paddles = controller_paddles::get_instance ();
 
-  glue_delay = glueC;
-  tilt_delay = tiltC;
+  glue_delay = glue;
+  tilt_delay = tilt;
   Sint16* velocities = sprite_ball::get_velocities (table);
   paddle_bottom = paddles->get_paddle (controller_paddles::BOTTOM_PADDLE);
 
@@ -653,7 +653,7 @@ controller_balls::collisions_with_paddles ()
               ball->direction = j;
               if (touched_paddle->sticky_state == sprite_paddle::FREE_STICKY_PADDLE && !touched_paddle->stuck_ball)
                 {
-                  /* ball is sticked on the bumper */
+                  /* ball is sticked on the paddle */
                   touched_paddle->sticky_state = sprite_paddle::BUSY_STICKY_PADDLE;
                   touched_paddle->stuck_ball = (sprite_ball *) ball;
                   ball->stick_paddle = touched_paddle;

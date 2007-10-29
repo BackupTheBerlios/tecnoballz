@@ -4,11 +4,11 @@
  * @date 2007-09-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.21 2007/09/29 08:53:48 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.22 2007/10/29 13:18:54 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -366,7 +366,6 @@ sprite_projectile::disable_sprites ()
     }
 }
 
-Uint32
-  sprite_projectile::total_fire = 0;
+Uint32 sprite_projectile::total_fire = 0;
 sprite_projectile *
   sprite_projectile::projectiles_list[MAXI_TOTAL_OF_PROJECTILES];

@@ -1,14 +1,14 @@
-/** 
- * @file objects_list.h 
- * @brief Template of management of objects list 
- * @date 2007-02-11
+/**
+ * @file objects_list.h
+ * @brief Template of management of objects list
+ * @date 2007-10-21
  * @copyright 1998-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
-/* 
+/*
  * copyright (c) 1998-2007 TLK Games all rights reserved
- * $Id: objects_list.h,v 1.16 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: objects_list.h,v 1.17 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,33 +34,33 @@ template < class X, class T > class objects_list;
 #include "../include/tecnoballz.h"
 
 template < class X, class T > class objects_list:public virtual tecnoballz
-{
-protected:
-  static T *singleton;
-  X ** sprites_list;
-  Uint32 max_of_sprites;
-  Uint32 num_of_sprites_allocated;
-  Uint32 num_of_sprites;
-  bool sprites_have_shades;
-  Uint32 sprite_type_id;
-  bool is_draw_pixel_by_pixel;
+  {
+  protected:
+    static T *singleton;
+    X ** sprites_list;
+    Uint32 max_of_sprites;
+    Uint32 num_of_sprites_allocated;
+    Uint32 num_of_sprites;
+    bool sprites_have_shades;
+    Uint32 sprite_type_id;
+    bool is_draw_pixel_by_pixel;
 
-public:
-  objects_list ();
-  ~objects_list ();
-  static T * get_instance ();
-  void littleInit ();
-  void release_sprites_list ();
-  void alloc_sprites_list ();
-  void create_sprites_list (Uint32 maxof, bool have_shades = true);
-  void create_sprites_list ();
-  void disable_sprites ();
-  void enable_sprites ();
-  X **get_sprites_list ();
-  X *get_first_sprite ();
-  Uint32 get_max_of_sprites ();
-  void set_max_of_sprites (Uint32 maxof);
-};
+  public:
+    objects_list ();
+    ~objects_list ();
+    static T * get_instance ();
+    void littleInit ();
+    void release_sprites_list ();
+    void alloc_sprites_list ();
+    void create_sprites_list (Uint32 maxof, bool have_shades = true);
+    void create_sprites_list ();
+    void disable_sprites ();
+    void enable_sprites ();
+    X **get_sprites_list ();
+    X *get_first_sprite ();
+    Uint32 get_max_of_sprites ();
+    void set_max_of_sprites (Uint32 maxof);
+  };
 
 template < class X, class T > T* objects_list < X, T >::singleton = NULL;
 
@@ -68,12 +68,12 @@ template < class X, class T > T* objects_list < X, T >::singleton = NULL;
 
 /**
  * Create the list of objects
- */ 
+ */
 template < class X, class T > objects_list < X, T >::objects_list ()
 {
 }
 
-/** 
+/**
  * Release the lits objects
  */
 template < class X, class T > objects_list < X, T >::~objects_list ()
@@ -121,7 +121,7 @@ template < class X, class T > void objects_list < X, T >::release_sprites_list (
         {
           delete sprite;
         }
-        sprites_list[i] = (X *) NULL;
+      sprites_list[i] = (X *) NULL;
     }
   delete[]sprites_list;
   sprites_list = NULL;
@@ -140,7 +140,7 @@ template < class X, class T > X ** objects_list < X, T >::get_sprites_list ()
 }
 
 /**
- * Return first sprite of the list 
+ * Return first sprite of the list
  * @return pointer to the first sprite object of the list
  */
 template < class X, class T > X * objects_list < X, T >::get_first_sprite ()
@@ -161,7 +161,7 @@ template < class X, class T > Uint32 objects_list < X, T >::get_max_of_sprites (
   return max_of_sprites;
 }
 
-/** 
+/**
  * Initialize the maximum number of sprites
  * @param maxof maximum number of sprites
  */
@@ -178,29 +178,29 @@ template < class X, class T > void objects_list < X, T >::alloc_sprites_list ()
   if (0 == max_of_sprites)
     {
       std::cerr << "(!)objects_list::alloc_sprites_list() " <<
-          "Our array should always have at least one element in it!" <<
-          std::endl;
+      "Our array should always have at least one element in it!" <<
+      std::endl;
       throw ("(!)objects_list::alloc_sprites_list() failed! "
-          "At least one element is required");
+             "At least one element is required");
     }
 
   release_sprites_list ();
   try
     {
-       sprites_list = new X*[max_of_sprites];
+      sprites_list = new X*[max_of_sprites];
     }
   catch (std::bad_alloc &)
     {
       std::cerr << "(!)objects_list::alloc_sprites_list() " <<
-        "not enough memory to allocate " <<
-        max_of_sprites << " elements!" << std::endl;
+      "not enough memory to allocate " <<
+      max_of_sprites << " elements!" << std::endl;
       throw;
     }
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprites_list[i] = NULL;
     }
-   num_of_sprites_allocated = max_of_sprites;
+  num_of_sprites_allocated = max_of_sprites;
 }
 
 /**
@@ -221,14 +221,15 @@ template < class X, class T > void objects_list < X, T >::create_sprites_list (U
 template < class X, class T > void objects_list < X, T >::create_sprites_list ()
 {
   alloc_sprites_list ();
- 
+
   X *sprite_template = new X ();
   sprite_template->set_object_pos (0);
   sprites_list[0] = sprite_template;
-  
+
   /* reserves only once the memory required for the
    * graphic data of the sprite */
-  sprite_template->create_sprite (sprite_type_id, sprites_bitmap, sprites_have_shades, is_draw_pixel_by_pixel);
+  sprite_template->create_sprite (sprite_type_id, sprites_bitmap,
+                                  sprites_have_shades, is_draw_pixel_by_pixel);
   sprite_template->set_draw_method (sprite_object::DRAW_WITH_TABLES);
   sprites->add (sprite_template);
   for (Uint32 i = 1; i < max_of_sprites; i++)
@@ -236,8 +237,6 @@ template < class X, class T > void objects_list < X, T >::create_sprites_list ()
       X *sprite = new X ();
       sprite->set_object_pos (i);
       sprite_template->duplicate_to (sprite);
-      //sprite = sprite_template;
-
       sprites_list[i] = sprite;
       sprites->add (sprite);
     }

@@ -2,14 +2,14 @@
  * @file controller_guardians.cc 
  * @brief Guardians controller 
  * @created 2003-01-10 
- * @date 2007-09-18
+ * @date 2007-10-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_guardians.cc,v 1.12 2007/09/18 13:39:11 gurumeditation Exp $
+ * $Id: controller_guardians.cc,v 1.13 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ controller_guardians::controller_guardians ()
   littleInit ();
   max_of_sprites = 2;
   sprites_have_shades = true;
-  sprite_type_id = BOB_INTE1A;
+  sprite_type_id = sprite_object::MEDIUM_GUARDIAN_AREA_1A;
   offset_ptr = 0;
   scrollTemp = 0;
 }
@@ -140,7 +140,8 @@ controller_guardians::create_guardians_list (Sint32 grdPt)
       sprite_object *sprite = new sprite_object ();
       life_gauges_list[i] = sprite;
       sprite->set_object_pos (i);
-      sprite->create_sprite (BOB_GRDNRJ, sprites_bitmap, false);
+      sprite->create_sprite (sprite_object::LIFE_GAUGE,
+                             sprites_bitmap, false);
       sprites->add (sprite);
       sprite->set_coordinates (i * 16 * resolution, 0);
       sprite->enable ();
@@ -539,9 +540,9 @@ const char
   0x3f, 0x3f, 0x3f, 0x3f
 };
 
-//-------------------------------------------------------------------------------
-//
-//-------------------------------------------------------------------------------
+/**
+ * Describe guardian levels
+ */
 gardlevel
   controller_guardians::guard_list[] = {
   /* AREA 1 : intermediaires */
@@ -555,7 +556,7 @@ gardlevel
    17,                          // fenetre de collision y-maxi
    11,                          // centre Y depart tir
    400,                         // frequence tir
-   BOB_INTE1A,                  // numero du BOB
+   sprite_object::MEDIUM_GUARDIAN_AREA_1A,                  // numero du BOB
    LISSA_NB01,                  // numero de la courbe
    {0, -1}                      // table pointeur des tirs
    },
@@ -569,7 +570,7 @@ gardlevel
    42,                          // ymax zone sensible
    24,
    240,                         //delai entre 2 tirs
-   BOB_INTE1B,
+   sprite_object::MEDIUM_GUARDIAN_AREA_1B,
    LISSA_NB02,
    {4, -1}
    },
@@ -585,7 +586,7 @@ gardlevel
    77,                          // ymax zone sensible
    52,
    200,                         //delai entre 2 tirs
-   BOB_FINAL1,
+   sprite_object::FINAL_GUARDIAN_AREA_1,
    LISSA_NB03,
    {0, 4, 8, -1}
    },
@@ -602,7 +603,7 @@ gardlevel
    30,                          // fenetre de collision y-maxi
    21,                          // centre Y depart tir
    300,                         // frequence tir
-   BOB_INTE2A,                  // numero du BOB
+   sprite_object::MEDIUM_GUARDIAN_AREA_2A,                  // numero du BOB
    LISSA_NB02,                  // numero de la courbe
    {12, -1}                     // table pointeur des tirs
    },
@@ -616,7 +617,7 @@ gardlevel
    49,                          // ymax zone sensible
    28,
    280,                         //delai entre 2 tirs
-   BOB_INTE2B,
+   sprite_object::MEDIUM_GUARDIAN_AREA_2B,
    LISSA_NB04,
    {8, -1}
    },
@@ -632,7 +633,7 @@ gardlevel
    66,                          // ymax zone sensible
    45,
    200,                         //delai entre 2 tirs
-   BOB_FINAL2,
+   sprite_object::FINAL_GUARDIAN_AREA_2,
    LISSA_NB15,
    {16, 0, 8, 4, 12, -1}
    },
@@ -650,7 +651,7 @@ gardlevel
    30,                          // fenetre de collision y-maxi
    19,                          // centre Y depart tir
    300,                         // frequence tir
-   BOB_INTE3A,                  // numero du BOB
+   sprite_object::MEDIUM_GUARDIAN_AREA_3A,                  // numero du BOB
    LISSA_NB11,                  // numero de la courbe
    {20, 8, -1}                  // table pointeur des tirs
    },
@@ -664,7 +665,7 @@ gardlevel
    78,                          // ymax zone sensible
    46,
    200,                         //delai entre 2 tirs
-   BOB_INTE3B,
+   sprite_object::MEDIUM_GUARDIAN_AREA_3B,
    LISSA_NB13,
    {24, 4, -1}
    },
@@ -679,7 +680,7 @@ gardlevel
    61,                          // ymax zone sensible
    41,
    250,                         //delai entre 2 tirs
-   BOB_FINAL3,
+   sprite_object::FINAL_GUARDIAN_AREA_3,
    LISSA_NB07,
    {24, 0, 8, 12, 4, 16, -1}
    },
@@ -696,7 +697,7 @@ gardlevel
    42,                          // fenetre de collision y-maxi
    23,                          // centre Y depart tir
    300,                         // frequence tir
-   BOB_INTE4A,                  // numero du BOB
+   sprite_object::MEDIUM_GUARDIAN_AREA_4A,                  // numero du BOB
    LISSA_NB08,                  // numero de la courbe
    {16, 28, 8, -1}              // table pointeur des tirs
    },
@@ -710,7 +711,7 @@ gardlevel
    68,                          // ymax zone sensible
    42,
    400,                         //delai entre 2 tirs
-   BOB_INTE4B,
+   sprite_object::MEDIUM_GUARDIAN_AREA_4B,
    LISSA_NB04,
    {12, 32, 8, -1}
    },
@@ -725,7 +726,7 @@ gardlevel
    73,                          // ymax zone sensible
    49,
    160,                         //delai entre 2 tirs
-   BOB_FINAL4,
+   sprite_object::FINAL_GUARDIAN_AREA_4,
    LISSA_NB05,
    {0, 4, 32, 16, 20, 8, 28, 12, 24, -1}
    },
@@ -741,7 +742,7 @@ gardlevel
    55,                          // fenetre de collision y-maxi
    31,                          // centre Y depart tir
    360,                         // frequence tir
-   BOB_INTE5A,                  // numero du BOB
+   sprite_object::MEDIUM_GUARDIAN_AREA_5A,                  // numero du BOB
    LISSA_NB08,                  // numero de la courbe
    {36, 20, -1}                 // table pointeur des tirs
    },
@@ -755,7 +756,7 @@ gardlevel
    77,                          // ymax zone sensible
    41,
    180,                         //delai entre 2 tirs
-   BOB_INTE5B,
+   sprite_object::MEDIUM_GUARDIAN_AREA_5B,
    LISSA_NB12,
    {40, 0, -1}
 
@@ -772,7 +773,7 @@ gardlevel
    102,                         // ymax zone sensible
    55,
    200,                         //delai entre 2 tirs
-   BOB_FINAL5,
+   sprite_object::FINAL_GUARDIAN_AREA_5,
    LISSA_NB09,
    {24, 8, 40, 12, 4, 0, 16, 20, 28, 36, 32, -1}
    },
@@ -788,7 +789,7 @@ gardlevel
    128,                         //ymax zone sensible
    83,
    150,                         //delai entre 2 tirs
-   BOB_FINAL6,
+   sprite_object::FINAL_GUARDIAN_AREA_6,
    LISSA_NB12,
    {20, 4, 36, 8, 32, 12, 24, 16, 0, 28, 40, -1}
    },

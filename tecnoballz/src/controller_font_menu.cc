@@ -1,14 +1,14 @@
 /** 
  * @file controller_font_menu.cc 
  * @brief Controller of the menu scroll text 
- * @date 2007-03-31
+ * @date 2007-10-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_font_menu.cc,v 1.1 2007/10/11 05:20:26 gurumeditation Exp $
+ * $Id: controller_font_menu.cc,v 1.2 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ controller_font_menu::controller_font_menu ()
   littleInit ();
   max_of_sprites = MAX_OF_FONTS + 2;
   sprites_have_shades = true;
-  sprite_type_id = BOB_DEFILE;
+  sprite_type_id = sprite_object::FONT_MENU;
   offset_xx1 = 0;
   offset_yy1 = 0;
 }
@@ -166,13 +166,15 @@ controller_font_menu::move_chars ()
   offset_yy1 = a;
   depla = 4;
   if (birth_flag)
-    depla *= 2;
+    {
+      depla *= 2;
+    }
   sprite_fonts = object_ptr;
   Sint32 zerad = 25 * res;
   Sint32 zeoff = 200 * res;
   for (Uint32 i = 0; i < MAX_OF_FONTS; i++)
     {
-      if (!*sprite_fonts)
+      if (*sprite_fonts == NULL)
         {
           sprite_fonts = &characters_list[MAX_OF_FONTS];
         }
@@ -183,7 +185,7 @@ controller_font_menu::move_chars ()
       sprite->set_y_coord (b);
     }
 
-  // move the left mask
+  /* move the left mask */
   sprite = objectRigh;
   table = cosPT;
   a = ((*table * width) >> SINUS_DECA) + 152 * res;
@@ -192,7 +194,7 @@ controller_font_menu::move_chars ()
   a = zzBOB->get_y_coord ();
   sprite->set_y_coord (a);
 
-  // move the right mask
+  /* move the right mask */
   sprite = objectLeft;
   table = cosPT + 255;
   a = ((*table * width) >> SINUS_DECA) + 152 * res;
@@ -202,8 +204,9 @@ controller_font_menu::move_chars ()
   sprite->set_y_coord (a);
 }
 
-char
-  controller_font_menu::asciiToBob[128] = { 26,       // 32 ' ' space
+char controller_font_menu::asciiToBob[128] =
+{
+  26,       // 32 ' ' space
   37,                           // 33 '!'
   39,                           // 34 '''
   26,                           // 35 '#' (space)

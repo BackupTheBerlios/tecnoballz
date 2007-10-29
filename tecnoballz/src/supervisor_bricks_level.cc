@@ -1,14 +1,14 @@
 /**
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-10-05
+ * @date 2007-10-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.64 $
+ * @version $Revision: 1.65 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.64 2007/10/11 05:20:26 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.65 2007/10/29 13:18:54 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ supervisor_bricks_level::supervisor_bricks_level ()
   balls = controller_balls::get_instance ();
   viewfinders_paddles = controller_viewfinders::get_instance ();
   paddles = controller_paddles::get_instance ();
-  fontes_game = controller_font_game::get_instance ();
+  font_game = controller_font_game::get_instance ();
   gigablitz = controller_gigablitz::get_instance ();
   player_indicators = controller_indicators::get_instance ();
   game_over = controller_game_over::get_instance ();
@@ -77,7 +77,7 @@ supervisor_bricks_level::~supervisor_bricks_level ()
   delete game_over;
   delete player_indicators;
   delete gigablitz;
-  delete fontes_game;
+  delete font_game;
   delete paddles;
   delete viewfinders_paddles;
   delete balls;
@@ -134,7 +134,7 @@ supervisor_bricks_level::first_init ()
   /*
    * generate the data of the spites
    */
-  bottom_wall->create_sprite (BOB_WALLBO, sprites_bitmap, 0);
+  bottom_wall->create_sprite (sprite_object::BOTTOM_WALL, sprites_bitmap, 0);
   sprites->add (bottom_wall);
   bottom_wall->set_coordinates (32 * resolution, 232 * resolution);
   paddles->initialize_robot ();
@@ -151,7 +151,7 @@ supervisor_bricks_level::first_init ()
   money_capsules->create_sprites_list ();
   power_up_capsules->create_sprites_list (6);
   gem_stones->create_sprites_list ();
-  fontes_game->create_sprites_list ();
+  font_game->create_sprites_list ();
   paddles->create_projectiles_list ();
   player_indicators->create_indicators_sprites ();
   viewfinders_paddles->create_sprites_list ();
@@ -197,7 +197,7 @@ supervisor_bricks_level::first_init ()
     );
   gem_stones->initialize ();
   /* initialize sprite fonts "LEVEL x COMPLETED" */
-  fontes_game->initialise (level_number);
+  font_game->initialize (level_number);
   viewfinders_paddles->initialize ();
   display->unlock_surfaces ();
   /* copy the background offscreen to the game offscreen */
@@ -241,7 +241,7 @@ supervisor_bricks_level::main_loop ()
 #endif
           paddles->disable_all_paddles ();
           bricks->clr_bricks ();
-          fontes_game->disable_sprites ();
+          font_game->disable_sprites ();
           gem_stones->disable_sprites ();
           power_up_capsules->disable_sprites ();
           money_capsules->disable_sprites ();
@@ -343,7 +343,7 @@ supervisor_bricks_level::main_loop ()
           power_up_capsules->move_in_bricks_level ();
           power_up_capsules->check_cheat_keys ();
           gem_stones->move ();
-          fontes_game->goMoveText ();
+          font_game->move ();
           if (bottom_wall->thecounter < 1)
             {
               bottom_wall->disable ();
@@ -395,7 +395,7 @@ supervisor_bricks_level::main_loop ()
             }
           else
             {
-              fontes_game->activeText ();
+              font_game->enable ();
               sprite_projectile::disable_sprites ();
               balls->disable_sprites ();
 #ifndef SOUNDISOFF

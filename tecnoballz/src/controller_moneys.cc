@@ -1,14 +1,14 @@
 /** 
  * @file controller_moneys.cc 
  * @brief Moneys controller 
- * @date 2007-04-13
+ * @date 2007-10-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_moneys.cc,v 1.8 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_moneys.cc,v 1.9 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ controller_moneys::controller_moneys ()
   littleInit ();
   max_of_sprites = 6;
   sprites_have_shades = true;
-  sprite_type_id = BOB_MONEYS;
+  sprite_type_id = sprite_object::MONEY;
 }
 
 /**
@@ -125,7 +125,8 @@ controller_moneys::send_money (sprite_projectile * blast)
 }
 
 /** 
- * Move money capsules and check collision with the paddles in bricks levels 
+ * Move money capsules and check collision with the paddles
+ * in bricks levels 
  */
 void
 controller_moneys::move ()
@@ -182,7 +183,8 @@ controller_moneys::send_money_from_guardian (sprite_ball * ball)
 }
 
 /** 
- * Move money capsules and check collision with the paddle in guardians levels 
+ * Move money capsules and check collision with the paddle
+ * in guardians levels 
  */
 void
 controller_moneys::move_bottom ()

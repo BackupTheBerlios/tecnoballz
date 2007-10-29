@@ -2,14 +2,14 @@
  * @file handler_resources.cc 
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-04-04
+ * @date 2007-10-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.23 2007/10/09 05:46:24 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.24 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -324,7 +324,7 @@ handler_resources::locate_data_file (const char *const name)
 
   if (NULL == name)
     {
-      std::cerr << "handler_resources::locate_data_file() " <<
+      std::cerr << "(!)handler_resources::locate_data_file() " <<
         "NULL pointer was passed as an argument!" << std::endl;
       throw std::ios_base::
         failure ("[!] handler_resources::locate_data_file "
@@ -744,8 +744,8 @@ handler_resources::load_high_score_file ()
     }
   catch (...)
     {
-       std::cerr << "handler_resources::load_high_score_file() " <<
-         "can't open the scores files!";
+       std::cerr << "(!)handler_resources::load_high_score_file() " <<
+         "can't open the scores files!" << std::endl;
        filedata = NULL;
     }
   return filedata;

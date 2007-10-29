@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.h
  * @brief Guardians level supervisor 
  * @created 2003-01-11
- * @date 2007-10-02
+ * @date 2007-10-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.h,v 1.24 2007/10/11 05:20:26 gurumeditation Exp $
+ * $Id: supervisor_guards_level.h,v 1.25 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ private:
   bool is_victory; 
   /** If true congratulations was already initialized  */
   bool is_victory_initialized;
-  controller_font_game *fontes_game;
+  controller_font_game *font_game;
 
 private:
   void init_level ();

@@ -2,14 +2,14 @@
  * @file controller_sides_bricks.cc 
  * @brief Sides bricks controller. The small bricks on the side, the walls top
  *        left and right
- * @date 2007-09-21
+ * @date 2007-10-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_sides_bricks.cc,v 1.13 2007/09/21 05:17:03 gurumeditation Exp $
+ * $Id: controller_sides_bricks.cc,v 1.14 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -147,13 +147,15 @@ controller_sides_bricks::initialize ()
     }
   /* create a sprite object for small horizontal bricks */
   horizontal_brick = new sprite_object ();
-  horizontal_brick->create_sprite (BOB_BRICKH, sprites_bitmap, true);
+  horizontal_brick->create_sprite (sprite_object::HORIZONTAL_SIDE_BRICK,
+				 sprites_bitmap, true);
   horizontal_brick_width = horizontal_brick->get_sprite_width ();
   horizontal_brick_height = horizontal_brick->get_sprite_height ();
 
   /* create a sprite object for small vertical bricks */
   vertical_brick = new sprite_object ();
-  vertical_brick->create_sprite (BOB_BRICKV, sprites_bitmap, true);
+  vertical_brick->create_sprite (sprite_object::VERTICAL_SIDE_BRICK,
+				   sprites_bitmap, true);
   vertical_brick_width = vertical_brick->get_sprite_width ();
   vertical_brick_height = vertical_brick->get_sprite_height ();
 

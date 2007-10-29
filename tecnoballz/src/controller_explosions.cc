@@ -5,11 +5,11 @@
  * @date 2007-09-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_explosions.cc,v 1.5 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: controller_explosions.cc,v 1.6 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ controller_explosions::controller_explosions ()
   max_of_sprites = 28;
   sprites_have_shades = false;
   sound_delay = 0;
-  sprite_type_id = BOB_EXPLO1;
+  sprite_type_id = sprite_object::EXPLOSION_1;
 }
 
 /**
@@ -57,8 +57,35 @@ controller_explosions::create_explosions_list ()
 {
 
   alloc_sprites_list ();
-  Sint32 bobn1 = BOB_EXPLO1;
-  Sint32 bobn2 = BOB_EXPLO2;
+
+  sprite_object *explosion_1 = new sprite_object ();
+  explosion_1->set_object_pos (0);
+  explosion_1->create_sprite (sprite_object::EXPLOSION_1, sprites_bitmap, false);
+  sprites_list[0] = explosion_1;
+  sprites->add (explosion_1);
+
+  sprite_object *explosion_2 = new sprite_object ();
+  explosion_2->set_object_pos (1);
+  explosion_2->create_sprite (sprite_object::EXPLOSION_2, sprites_bitmap, false);
+  sprites_list[1] = explosion_2;
+  sprites->add (explosion_2);
+
+  for (Uint32 i = 0; i < max_of_sprites; i++)
+    {
+      sprite_object *explosion = new sprite_object ();
+      explosion->set_object_pos (i);
+      explosion_1->duplicate_to (explosion);
+      sprites_list[i] = explosion;
+      sprites->add (explosion);
+      explosion = explosion_1;
+      explosion_1 = explosion_2;
+      explosion_2 = explosion;
+    }
+ 
+
+/*
+  Uint32 bobn1 = BOB_EXPLO1;
+  Uint32 bobn2 = BOB_EXPLO2;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
       sprite_object *explosion = new sprite_object ();
@@ -70,6 +97,7 @@ controller_explosions::create_explosions_list ()
       sprites_list[i] = explosion;
       sprites->add (explosion);
     }
+    */
 }
 
 /**
@@ -115,6 +143,8 @@ controller_explosions::play_animation ()
     {
       sprite_object *explosion = sprites_list[i];
       if (explosion->is_enabled)
-        explosion->play_animation_once ();
+        {
+          explosion->play_animation_once ();
+        }
     }
 }

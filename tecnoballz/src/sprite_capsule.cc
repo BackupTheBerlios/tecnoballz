@@ -4,11 +4,11 @@
  * @date 2007-09-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_capsule.cc,v 1.15 2007/10/04 05:54:41 gurumeditation Exp $
+ * $Id: sprite_capsule.cc,v 1.16 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -179,7 +179,7 @@ sprite_capsule::set_in_shop (Uint32 id)
   id = id >> 1;
   random_counter += id;
   Sint32 i = gagdetBrik[id];
-  if (i == XXX_VIDE00)          // empty code, no gaget code ?
+  if (i == NO_IMAGE)          // empty code, no gaget code ?
     {
       is_enabled = false;
     }
@@ -194,7 +194,7 @@ void sprite_capsule::enable_capsule (Uint32 index)
   is_enabled = true;
   frame_index_min = index;
   frame_index = index;
-  index += XXX_IMAGES - 1;
+  index += NUM_OF_IMAGES - 1;
   frame_index_max = index;
   set_image (frame_index);
 }
@@ -310,79 +310,124 @@ sprite_capsule::move ()
   return NULL;
 }
 
-//-------------------------------------------------------------------------------
-// bricks levels : pointers on the images of the animation of the gadget 
-//-------------------------------------------------------------------------------
-const Sint16
-  sprite_capsule::gagdetBrik[] = { XXX_VIDE00,  // *unused*
-  XXX_GLUE00,                   // glue (bricks level only)
-  XXX_VIDE00,                   // *unused*
-  XXX_FIRE01,                   // fire power 1 (bricks level only)
-  XXX_FIRE02,                   // fire power 2 (bricks level only)
-  XXX_SIZE_M,                   // shrink bumper (bricks level only)
-  XXX_SIZE_P,                   // expand bumper (bricks level only)
-  XXX_LIFE_M,                   // lose a life (bricks level only)
-  XXX_LIFE_P,                   // extra life
-  XXX_BALLE2,                   // extra balls
-  XXX_BALLE3,                   // multi balls
-  XXX_POWER1,                   // power ball 1
-  XXX_POWER2,                   // extra life
-  XXX_INVERS,                   // inverse control commands (bricks level only)
-  XXX_VIDE00,                   // REBUILD WALL (ONLY SHOP)
-  XXX_VIDE00,                   // maxi ball speed (no gadget)
-  XXX_VIDE00,                   // bottom bumper[1] enable (no gadget)
-  XXX_VIDE00,                   // right bumper[2] enable (no gadget)
-  XXX_VIDE00,                   // top bumper[3] enable (no gadget)
-  XXX_VIDE00,                   // right bumper[4] enable (no gadget)
-  XXX_SIZE01,                   // ball size 2 
-  XXX_SIZE02,                   // ball size 3
-  XXX_RANDOM,                   // random (bricks level only)
-  XXX_MEGA00,                   // all options (bricks level only)
-  XXX_VIDE00,                   // Bonus price (shop's price at 1 in the shop) (no gadget)
-  XXX_WALL01,                   // bottom wall enable
-  XXX_ROBOT1,                   // robot bumper enable
-  XXX_CONTRO,                   // balls control 
-  XXX_VIDE00,                   // Oeil actif
-  XXX_VIDE00,                   // LESS-BRICK (SHOP ONLY)
-  XXX_VIDE00,                   // INFOS (SHOP ONLY)
-  XXX_VIDE00                    // EXIT (SHOP ONLY)
+/** 
+ * Pointer on the images of the animation of capsules
+ * used in the bricks level
+ */
+const Sint16 sprite_capsule::gagdetBrik[] =
+{
+  /* unused */
+  NO_IMAGE,
+  IMAGE_GLUE,
+  /* unused */
+  NO_IMAGE,
+  IMAGE_FIRE_POWER_1,
+  IMAGE_FIRE_POWER_2,
+  IMAGE_SHRINK_PADDLE,
+  IMAGE_EXPAND_PADDLE,
+  IMAGE_LOSE_A_LIFE,
+  IMAGE_EXTRA_LIFE,
+  IMAGE_EXTRA_BALLS,
+  IMAGE_MULTI_BALLS,
+  IMAGE_POWER_BALL_1,
+  IMAGE_POWER_BALL_2,
+  IMAGE_INVERSE_CONTROL,
+  /* rebuild wall (used in ship only) */
+  NO_IMAGE,
+  /* increase the speed of the balls to the maximum
+   * not capsule */
+  NO_IMAGE,
+  /* enable paddle 1 (not capsule) */
+  NO_IMAGE,
+  /* enable paddle 2 (not capsule) */
+  NO_IMAGE,
+  /* enable paddle 3 (not capsule) */
+  NO_IMAGE,
+  /* enable paddle 4 (not capsule) */
+  NO_IMAGE,
+  IMAGE_BALL_SIZE_2,
+  IMAGE_BALL_SIZE_3,
+  IMAGE_CHANCE,
+  IMAGE_ENABLE_HUGELY_OPTIONS,
+  /* set the price to 1 (not capsule) */
+  NO_IMAGE,
+  IMAGE_BOTTOM_WALL,
+  IMAGE_ROBOT_PADDLE,
+  IMAGE_BALLS_CONTROL,
+  /* enable the magnetic eye (not capsule) */
+  NO_IMAGE,
+  /* less-bricks option (used in ship only) */
+  NO_IMAGE,
+  /* informations (used in ship only) */
+  NO_IMAGE,
+  /* shop exit (used in ship only) */
+  NO_IMAGE
 };
 
-//-------------------------------------------------------------------------------
-// guards levels : pointers on the images of the animation of the gadget 
-//-------------------------------------------------------------------------------
-const
-  Sint16
-  sprite_capsule::gagdetGuar[] = { XXX_VIDE00,  // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_PROTEC,                   // bumper protect (guards levels only)
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_LIFE_P,                   // extra life
-  XXX_VIDE00,                   // *unused*
-  XXX_BALLE3,                   // multi balls
-  XXX_SIZE01,                   // ball size 2 
-  XXX_SIZE02,                   // ball size 3
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00,                   // *unused*
-  XXX_VIDE00                    // *unused*
+/** 
+ * Pointer on the images of the animation of capsules
+ * used in the guards level
+ */
+const Sint16 sprite_capsule::gagdetGuar[] =
+{
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  IMAGE_PADDLE_INVINCIBILITY,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  IMAGE_EXTRA_LIFE,
+  /* unused */
+  NO_IMAGE,
+  IMAGE_MULTI_BALLS,
+  IMAGE_BALL_SIZE_2,
+  IMAGE_BALL_SIZE_3,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE,
+  /* unused */
+  NO_IMAGE 
 };

@@ -1,13 +1,13 @@
 /** 
  * @file list_sprites.cc 
  * @brief Call the drawing methods of all sprites
- * @date 2007-09-25
+ * @date 2007-10-20
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: list_sprites.cc,v 1.11 2007/09/25 05:43:20 gurumeditation Exp $
+ * $Id: list_sprites.cc,v 1.12 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -148,7 +148,7 @@ list_sprites::draw ()
   for (Sint32 i = 0; i < num_of_shadows; i++)
     {
       sprite_object *sprite = shadows[i];
-      sprite->afficheSHA ();
+      sprite->draw_shadow ();
     }
 
   /* draw the objects */

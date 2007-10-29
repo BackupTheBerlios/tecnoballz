@@ -1,14 +1,14 @@
 /**
  * @file handler_keyboard.cc 
  * @brief Handler of the keyboard and mouse
- * @date 2007-10-11
+ * @date 2007-10-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.14 2007/10/12 15:30:07 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.15 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -641,6 +641,14 @@ bool handler_keyboard::key_is_released (Sint32 code)
 bool
 handler_keyboard::control_is_pressed (Uint32 code)
 {
+  /*
+  if(code >= K_MAXOF)
+    {
+      std::cerr << "(!)handler_keyboard::control_is_pressed() " <<
+        code << " is greated or equal to " << K_MAXOF << std::endl;
+      return false;
+    } 
+  */
   Uint8 * keys;
   keys = SDL_GetKeyState (NULL);
   if (keys[key_codes[code]] == SDL_PRESSED)
@@ -1008,6 +1016,7 @@ handler_keyboard::stop_menu_events()
   menu_events.line_max = 0;
   menu_events.current_line = 0;
   menu_events.key_delay = 0;
+  menu_events.previous_key_code_down = 0;
 }
 
 /**
@@ -1022,6 +1031,13 @@ void
 handler_keyboard::start_menu_events(Sint32 spacing, Sint32 min, Sint32 max,
     Sint32 xcenter, Sint32 ytop)
 {
+  if (is_verbose)
+    {
+      std::cout << " handler_keyboard::start_menu_events() " <<
+        " line_spacing: " << spacing << " line_min: " << min <<
+        " line_max: " << max << " xcenter: " << xcenter <<
+        " top_y_coord: " << ytop << std::endl;
+    }
   menu_events.is_enabled = true;
   menu_events.y_coord_left_down = NULL_YCOORD;
   menu_events.y_coord_right_down = NULL_YCOORD;
@@ -1031,6 +1047,7 @@ handler_keyboard::start_menu_events(Sint32 spacing, Sint32 min, Sint32 max,
   menu_events.xcenter = xcenter;
   menu_events.current_line = 0;
   menu_events.top_y_coord = ytop;
+  menu_events.previous_key_code_down = 0;
   Sint32 xmouse, ymouse;
   SDL_GetMouseState  (&xmouse, &ymouse);
   if (ymouse < ytop + min * spacing)
@@ -1074,6 +1091,17 @@ handler_keyboard::check_menu_events (Sint32 *pos_y, Sint32 *inc)
   if(menu_events.previous_key_code_down > 0 &&
       !control_is_pressed(menu_events.previous_key_code_down))
     {
+      switch(menu_events.previous_key_code_down)
+        {
+        case K_FIRE:
+          *inc = 1;
+          is_selected = true;
+          break;
+        case K_RELEASE_BALL:
+          *inc = -1;
+          is_selected = true;
+          break;
+        }
       menu_events.previous_key_code_down = 0;
       menu_events.key_delay = 0;
     }
@@ -1104,18 +1132,17 @@ handler_keyboard::check_menu_events (Sint32 *pos_y, Sint32 *inc)
       menu_events.key_delay--;
     }
 
-
   /* check if right or left button are pressed */
   Sint32 mposx;
   switch(kcode)
     {
     case K_FIRE:
-      *inc = 1;
-      is_selected = true;
+      //*inc = 1;
+      //is_selected = true;
       break;
     case K_RELEASE_BALL:
-      *inc = -1;
-      is_selected = true;
+      //*inc = -1;
+      //is_selected = true;
       break;
     case K_UP:
       if(menu_events.current_line ==  menu_events.line_min)

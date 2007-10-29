@@ -1,14 +1,14 @@
 /** 
  * @file sprite_mouse_pointer.cc 
  * @brief The sprite of the mouse pointer 
- * @date 2007-02-05
+ * @date 2007-10-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_mouse_pointer.cc,v 1.3 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: sprite_mouse_pointer.cc,v 1.4 2007/10/29 13:18:54 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,11 +54,11 @@ sprite_mouse_pointer::create_pointer_sprite (bitmap_data * bmp)
   Uint32 id;
   if (random_counter & 1)
     {
-      id = BOB_MOUSE1;
+      id = sprite_object::MOUSE_POINTER_1;
     }
   else
     {
-      id = BOB_MOUSE2;
+      id = sprite_object::MOUSE_POINTER_2;
     }
   create_sprite (id, bmp, 0);
   sprites->add (this);

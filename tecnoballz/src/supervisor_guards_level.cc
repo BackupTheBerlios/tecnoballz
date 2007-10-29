@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-10-07
+ * @date 2007-10-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.52 $
+ * @version $Revision: 1.53 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.52 2007/10/11 05:20:26 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.53 2007/10/29 13:18:54 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ supervisor_guards_level::supervisor_guards_level ()
   tiles_map = new tilesmap_scrolling ();
   guards = controller_guardians::get_instance ();
   paddles = controller_paddles::get_instance ();
-  fontes_game = controller_font_game::get_instance ();
+  font_game = controller_font_game::get_instance ();
   explosions = controller_explosions::get_instance ();
   bullets = controller_bullets::get_instance ();
   money_capsules = controller_moneys::get_instance ();
@@ -74,7 +74,7 @@ supervisor_guards_level::~supervisor_guards_level ()
   delete money_capsules;
   delete bullets;
   delete explosions;
-  delete fontes_game;
+  delete font_game;
   delete paddles;
   delete guards;
   delete tiles_map;
@@ -98,7 +98,6 @@ supervisor_guards_level::first_init ()
   count_next = 0;
   is_victory_initialized = false;
   is_victory = false;
-//is_victory = true;
   area_number = current_player->get_area_number ();
   level_number = current_player->get_level_number ();
   Sint32 grdP = current_player->getGuardPt ();
@@ -126,7 +125,7 @@ supervisor_guards_level::first_init ()
   explosions->create_explosions_list ();
   viewfinders_paddles->create_sprites_list ();
   /* mobile characters at the end of the level */
-  fontes_game->create_sprites_list ();
+  font_game->create_sprites_list ();
   game_over->create_sprites_list ();
   metallic_spheres->create_sprites_list ();
 
@@ -169,7 +168,7 @@ supervisor_guards_level::first_init ()
                           level_desc->capsules_list);
 
   /* initialize mobile characters at the end of the level */
-  fontes_game->initialise (level_number, 32 * resolution);
+  font_game->initialize (level_number, 32 * resolution);
   viewfinders_paddles->initialize ();
   display->unlock_surfaces ();
   keyboard->clear_command_keys ();
@@ -211,14 +210,15 @@ supervisor_guards_level::main_loop ()
           money_capsules->disable_sprites ();
           guards->disable_sprites ();
           explosions->disable_sprites ();
-          fontes_game->disable_sprites ();
+          font_game->disable_sprites ();
           gigablitz->disable_sprites ();
           balls->disable_sprites ();
           bullets->disable_sprites ();
           if (is_victory && !is_victory_initialized)
             {
               metallic_spheres->initialize ();
-              tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_CONGRATULATIONS, tilesmap_scrolling::MAP_CONGRATULATIONS);
+              tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_CONGRATULATIONS,
+                                     tilesmap_scrolling::MAP_CONGRATULATIONS);
               scroll_speed = 1;
               scroll_start_delay = 300;
               is_victory_initialized = true;
@@ -238,7 +238,10 @@ supervisor_guards_level::main_loop ()
         }
       
       display->lock_surfaces ();
-
+      viewfinders_paddles->run ();
+      player_indicators->display_money_and_lifes ();
+      font_game->move ();
+      sprites->draw ();
       if (gameover_counter >= 1)
         {
           game_over->run (is_victory);
@@ -248,10 +251,6 @@ supervisor_guards_level::main_loop ()
               metallic_spheres->run ();
             }
         }
-      viewfinders_paddles->run ();
-      player_indicators->display_money_and_lifes ();
-      fontes_game->goMoveText ();
-      sprites->draw ();
       display->unlock_surfaces ();
       display->window_update ();
       if (keyboard->is_left_button () && gameover_counter > 150)
@@ -284,7 +283,7 @@ supervisor_guards_level::main_loop ()
           bullets->check_paddle_collisions ();
           money_capsules->move_bottom ();
           power_up_capsules->move_in_guardians_level ();
-          fontes_game->goMoveText ();
+          font_game->move ();
           player_indicators->display_money_and_lifes ();
           /* move Gigablitz and check collision with paddle */
           gigablitz->run_in_guardians_level ();
@@ -334,7 +333,7 @@ supervisor_guards_level::main_loop ()
         }
       else
         {
-          fontes_game->activeText ();
+          font_game->enable ();
           gigablitz->disable_sprites ();
           balls->disable_sprites ();
           bullets->disable_sprites ();
@@ -367,9 +366,9 @@ supervisor_guards_level::main_loop ()
   return next_phase;
 }
 
-//------------------------------------------------------------------------------
-// Calcul le pointeur sur le niveau de la diffculte des gardiens
-//------------------------------------------------------------------------------
+/**
+ * Determine the pointer on the guardians difficulty level 
+ */
 void
 supervisor_guards_level::init_level ()
 {
@@ -412,12 +411,21 @@ supervisor_guards_level::cheat_keys ()
       keyboard->key_is_pressed (SDLK_LCTRL) ||
       keyboard->key_is_pressed (SDLK_RALT) ||
       keyboard->key_is_pressed (SDLK_LALT))
-    return;
+    {
+      return;
+    }
 
   if (keyboard->key_is_pressed (SDLK_F2))
-    guards->killguards ();
+    {
+      guards->killguards ();
+    }
   if (keyboard->key_is_pressed (SDLK_F3))
-    guards->killguards (1);
+    {
+      guards->killguards (1);
+    }
   if (keyboard->key_is_pressed (SDLK_F4))
-    guards->killguards (2);
+    {
+      guards->killguards (2);
+    }
 }
+

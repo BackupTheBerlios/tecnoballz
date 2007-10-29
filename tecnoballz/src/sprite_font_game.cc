@@ -1,14 +1,15 @@
-/** 
+/**
  * @file sprite_font_game.cc 
- * @brief The sprite fonte used to display the text "LEVEL COMPLETED" 
- * @date 2007-02-06
+ * @brief The sprite font used to display a char of the
+ *        "LEVEL COMPLETED" string
+ * @date 2007-10-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_font_game.cc,v 1.1 2007/10/11 05:20:26 gurumeditation Exp $
+ * $Id: sprite_font_game.cc,v 1.2 2007/10/29 13:18:54 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,57 +28,62 @@
  */
 #include "../include/sprite_font_game.h"
 
-/** 
+/**
  * Create a fonte game sprite
  */
 sprite_font_game::sprite_font_game ()
 {
   clear_sprite_members ();
-  littleInit (0, 0, 0, 0, 0, 0);
+  initialize (0, 0, 0, 0, 0, 0);
 }
 
-/** 
+/**
  * Release a fonte game sprite
  */
 sprite_font_game::~sprite_font_game ()
+{}
+
+/**
+ * Initialize radius, stop coordinate and start y coordinate
+ * @param radius Pointer to sinus table from 0 to 511
+ * @param x_stop Final x-coordinate
+ * @param y_start First y-coordinate
+ * @param xinc Horizontal speed in pixels
+ * @param yinc Vertical speed in pixel 
+ * @param y_stop Final y-coordinate
+ */
+void
+sprite_font_game::initialize (Uint32 radius, Sint32 x_stop, Sint32 y_start,
+                              Sint32 xinc, Sint32 yinc, Sint32 y_stop)
 {
+  current_radius = radius;
+  xcoord_final = x_stop;
+  ycoord_current = y_start;
+  x_inc = xinc;
+  y_inc = yinc;
+  ycoord_final = y_stop;
 }
 
-//-----------------------------------------------------------------------------
-// initialize radius, stop coordinate and start y coordinate
-//-----------------------------------------------------------------------------
+/**
+ * Character moving
+ */
 void
-sprite_font_game::littleInit (Sint32 zeRad, Sint32 xStop, Sint32 yStrt,
-                               Sint32 xOffs, Sint32 yOffs, Sint32 yStop)
-{
-  angleValue = zeRad;           //radius (pt/sinus table)
-  posiX_stop = xStop;           //stop x coordinate
-  posiYStart = yStrt;           //start y coordinate
-  xIncrement = xOffs;           //X move offset(1, -1 or 0)
-  yIncrement = yOffs;           //Y move offset (1)
-  posiY_stop = yStop;           //stop Y coordinate
-}
-
-//-----------------------------------------------------------------------------
-// characters moving
-//-----------------------------------------------------------------------------
-void
-sprite_font_game::moveCaract ()
+sprite_font_game::move ()
 {
   if (is_enabled)
     {
-      // ordinate linear moving
-      Sint32 d = posiYStart;
-      if (d > posiY_stop)
+      /* ordinate linear moving */
+      Sint32 d = ycoord_current;
+      if (d > ycoord_final)
         {
-          d += yIncrement;
-          posiYStart = d;
+          d += y_inc;
+          ycoord_current = d;
         }
 
-      // ordinate sinus moving
-      Sint32 a = angleValue + 5;
+      /* ordinate sinus moving */
+      Sint32 a = current_radius + 5;
       a &= SINUS_MASK;
-      angleValue = a;
+      current_radius = a;
       Sint16 *s = table_sinL + a;
       a = *s;
       a *= 10 * resolution;
@@ -85,9 +91,11 @@ sprite_font_game::moveCaract ()
       a = a + d;
       y_coord = a;
 
-      //absciss moving
-      if (x_coord != posiX_stop)
-        x_coord += xIncrement;
+      /* absciss moving */
+      if (x_coord != xcoord_final)
+        {
+          x_coord += x_inc;
+        }
     }
   clip_coordinates ();
 }

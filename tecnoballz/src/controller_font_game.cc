@@ -1,59 +1,65 @@
-//*****************************************************************************
-// copyright (c) 1991-2005 TLK Games all rights reserved
-//-----------------------------------------------------------------------------
-// file         : "controller_font_game.cc"
-// created      : ?
-// updates      : 2005-01-23
-// fonction     : manage mobiles characters ("LEVEL x COMPLETED")
-// id           : $Id: controller_font_game.cc,v 1.1 2007/10/11 05:20:26 gurumeditation Exp $
-//-----------------------------------------------------------------------------
-// TecnoballZ is free software; you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software
-// Foundation; either version 3 of the License, or (at your option) any later
-// version.
-// 
-// TecnoballZ is distributed in the hope that it will be useful, but WITHOUT
-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-// details.
-//
-// You should have received a copy of the GNU General Public License along with
-// this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-// Place - Suite 330, Boston, MA 02111-1307, USA.
-//*****************************************************************************
+/** 
+ * @file controller_font_game.cc 
+ * @brief Handle mobile characters used for "LEVEL n COMPLETED"
+ * @date 2007-10-17
+ * @copyright 1991-2007 TLK Games
+ * @author Bruno Ethvignot
+ * @version $Revision: 1.2 $
+ */
+/* 
+ * copyright (c) 1991-2007 TLK Games all rights reserved
+ * $Id: controller_font_game.cc,v 1.2 2007/10/29 13:18:53 gurumeditation Exp $
+ *
+ * TecnoballZ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TecnoballZ is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+ */
 #include "../include/controller_font_game.h"
 
-//-----------------------------------------------------------------------------
-// create the object
-//-----------------------------------------------------------------------------
+/**
+ * Create the object
+ */
 controller_font_game::controller_font_game ()
 {
   littleInit ();
-  size_line1 = 0;
-  size_line2 = 0;
-  horz_large = 0;
+  size_of_line_1 = 0;
+  size_of_line_2 = 0;
+  horizontal_length = 0;
   max_of_sprites = 20;
   sprites_have_shades = true;
-  sprite_type_id = BOB_LETTRE;
-  chrOffsetX = 0;
+  sprite_type_id = sprite_object::FONT_GAME;
+  horizontal_offset = 0;
 }
 
-//-----------------------------------------------------------------------------
-// release the object
-//-----------------------------------------------------------------------------
+/**
+ * Release the object
+ */
 controller_font_game::~controller_font_game ()
 {
   release_sprites_list ();
 }
 
-//-----------------------------------------------------------------------------
-// perform some initializations
-//-----------------------------------------------------------------------------
+/**
+ * Perform some initializations
+ * @param level
+ * @param offset
+ */
 void
-controller_font_game::initialise (Sint32 level, Sint32 offzt)
+controller_font_game::initialize (Uint32 level, Uint32 offset)
 {
-  chrOffsetX = offzt;
-  horz_large = 256 * resolution;
+  horizontal_offset = offset;
+  horizontal_length = 256 * resolution;
   char *monPT = ze_bobText;
   //if(level <= 12)
   {
@@ -66,110 +72,115 @@ controller_font_game::initialise (Sint32 level, Sint32 offzt)
      {    monPT = ze_endText;
      } */
 
-  //###################################################################
-  // count the number of characters
-  //###################################################################
-  size_line1 = 0;
-  while (*(monPT++))
-    size_line1++;
-  size_line2 = 0;
-  while (*(monPT++))
-    size_line2++;
-  size_total = size_line1 + size_line2;
-
-  //###################################################################
-  // initialize the images for each character
-  //###################################################################
-  monPT = ze_bobText;
-  for (Sint32 i = 0; i < size_total; i++)
+  /* count the number of characters */
+  size_of_line_1 = 0;
+  while (*(monPT++) != 0)
     {
-      sprite_font_game *chara = sprites_list[i];
+      size_of_line_1++;
+    }
+  size_of_line_2 = 0;
+  while (*(monPT++) != 0)
+    {
+      size_of_line_2++;
+    }
+  total_size = size_of_line_1 + size_of_line_2;
+
+  /* initialize the images for each character */
+  monPT = ze_bobText;
+  for (Uint32 i = 0; i < total_size; i++)
+    {
+      sprite_font_game *sprite_char = sprites_list[i];
       char c = *(monPT++);
       if (c == '\0')
-        c = *(monPT++);
-      chara->new_offset (c - 'A');
+	{
+          c = *(monPT++);
+	}
+      sprite_char->new_offset (c - 'A');
     }
 
-  //###################################################################
-  // initialize characters of "LEVEL n"
-  //###################################################################
+  /* initialize characters of "LEVEL n" */
   Sint32 yStrt = 200 * resolution;
-  Sint32 a = startValue (size_line1, 0, 0,
+  Sint32 a = set_start_values (size_of_line_1, 0, 0,
                          yStrt, -6 * resolution, 60 * resolution);
 
-  //###################################################################
-  // initialize characters of "COMPLETED"
-  //###################################################################
+  /* initialize characters of "COMPLETED" */
   yStrt += 10 * resolution;
-  startValue (size_line2, a, size_line1,
+  set_start_values (size_of_line_2, a, size_of_line_1,
               yStrt, -8 * resolution, 80 * resolution);
 }
 
-//-----------------------------------------------------------------------------
-// initialize start values
-// input        => nchar: number of chars peer line
-//                      => zerad: radius
-//                      => index: 
-//                      => yStrt: start y coordinate
-//                      => yOffs: Y move offset 
-//                      => yStop: stop Y coordinate
-//-----------------------------------------------------------------------------
-Sint32
-controller_font_game::startValue (Sint32 nchar, Sint32 zeRad, Sint32 index,
-                                    Sint32 yStrt, Sint32 yOffs, Sint32 yStop)
+/**
+ * Initialize start values for each char of a string
+ * @param length Number of chars
+ * @param zerad Radius
+ * @paral index
+ * @param yStrt Start y-coordinate
+ * @param yOffs Y move offset
+ * @param yStop Stop y-coordinate
+ * @return
+ */
+Uint32
+controller_font_game::set_start_values (Uint32 length, Uint32 zeRad, Uint32 index,
+                                    Sint32 yStrt, Uint32 yOffs, Sint32 yStop)
 {
   Sint32 width = sprites_list[0]->get_sprite_height ();
-  Sint32 e = (horz_large) / nchar;
-  Sint32 xStop = (horz_large - (nchar * width)) / 2;
+  Sint32 e = (horizontal_length) / length;
+  Sint32 x_stop = (horizontal_length - (length * width)) / 2;
   Sint32 xOffs = 0;             //X move offset (1, -1 or 0)
   Sint32 xStrt = e / 2;         //start X coordinate
 
-  xStop += chrOffsetX;
-  xStrt += chrOffsetX;
+  x_stop += horizontal_offset;
+  xStrt += horizontal_offset;
 
-  for (Sint32 i = index; i < (nchar + index); i++, xStrt += e, xStop += width)
+  for (Uint32 i = index; i < (length + index); i++, xStrt += e, x_stop += width)
     {
       sprite_font_game *chara = sprites_list[i];
       chara->set_coordinates (xStrt, yStrt);
-      if (xStrt > xStop)
-        xOffs = -1;
+      if (xStrt > x_stop)
+	{
+          xOffs = -1;
+	}
       else
         {
-          if (xStrt == xStop)
-            xOffs = 0;
+          if (xStrt == x_stop)
+	    {
+              xOffs = 0;
+	    }
           else
-            xOffs = 1;
+	    {
+              xOffs = 1;
+	    }
         }
-      chara->littleInit (zeRad, xStop, yStrt, xOffs, yOffs, yStop);
+      chara->initialize (zeRad, x_stop, yStrt, xOffs, yOffs, yStop);
       zeRad += 8;
       zeRad &= SINUS_MASK;
     }
   return zeRad;
 }
 
-//-----------------------------------------------------------------------------
-// animation of characters sprites
-//-----------------------------------------------------------------------------
+/**
+ * Animation of characters sprites
+ */
 void
-controller_font_game::goMoveText ()
+controller_font_game::move ()
 {
-  for (Sint32 i = 0; i < size_total; i++)
+  for (Uint32 i = 0; i < total_size; i++)
     {
-      sprite_font_game *chara = sprites_list[i];
-      chara->moveCaract ();
+      sprite_font_game *sprite_char = sprites_list[i];
+      sprite_char->move ();
     }
 }
 
-//-----------------------------------------------------------------------------
-// enable characters sprites
-//-----------------------------------------------------------------------------
+/**
+ * Enable character sprites
+ */
 void
-controller_font_game::activeText ()
+controller_font_game::enable ()
 {
-  for (Sint32 i = 0; i < size_total; i++)
+  for (Uint32 i = 0; i < total_size; i++)
     {
-      sprite_font_game *chara = sprites_list[i];
-      chara->enable ();
+      sprite_font_game *sprite_char = sprites_list[i];
+      sprite_char->enable ();
     }
 }
 

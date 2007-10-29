@@ -1,14 +1,14 @@
 /**
  * @file supervisor_main_menu.cc 
  * @brief TecnoballZ's main menu supervisor 
- * @date 2007-10-08
+ * @date 2007-10-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_main_menu.cc,v 1.26 2007/10/11 05:20:26 gurumeditation Exp $
+ * $Id: supervisor_main_menu.cc,v 1.27 2007/10/29 13:18:54 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,7 +80,8 @@ supervisor_main_menu::first_init ()
    * create sprites data
    */
   resources->load_sprites_bitmap ();
-  tecnoballz_logo->create_sprite (BOB_LOGOTB, sprites_bitmap, 1);
+  tecnoballz_logo->create_sprite (sprite_object::TECNOBALLZ_LOGO,
+                                  sprites_bitmap, 1);
   sprites->add (tecnoballz_logo);
   tecnoballz_logo->enable ();
   tecnoballz_logo->set_coordinates (64 * resolution, 13 * resolution);

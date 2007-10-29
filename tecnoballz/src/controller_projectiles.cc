@@ -1,14 +1,14 @@
 /** 
  * @file controller_projectiles.cc 
  * @brief Projectiles controller for a single paddle! 
- * @date 2007-09-27
+ * @date 2007-10-24
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_projectiles.cc,v 1.9 2007/10/02 15:51:31 gurumeditation Exp $
+ * $Id: controller_projectiles.cc,v 1.10 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,14 +36,14 @@ controller_projectiles::controller_projectiles ()
   countTempo = 0;
   max_of_sprites = MAX_OF_PROJECTILES;
   sprites_have_shades = false;
-  sprite_type_id = BOB_FIREBP;
+  sprite_type_id = sprite_object::PROJECTILES;
   if (resolution == 1)
     {
-      scie_sinus = &scieSin320[0];
+      circular_sin = &circular_sin_320[0];
     }
   else
     {
-      scie_sinus = &scieSin640[0];
+      circular_sin = &circular_sin_640[0];
     }
 }
 
@@ -70,7 +70,7 @@ controller_projectiles::create_projectiles_list (sprite_paddle * paddle)
       sprite_projectile *projectile = *(projectiles++);
       projectile->init_members (paddle);
     }
-  fire1RunOn ();
+  set_fire_1 ();
 }
 
 /**
@@ -87,15 +87,15 @@ controller_projectiles::disponible ()
     }
 
   Uint32 t = max_of_sprites;
-  sprite_projectile **blasts = sprites_list;
+  sprite_projectile **projectiles = sprites_list;
 
   /* special fire 7 (circular fire) */
   if (gun_paddle->length == gun_paddle->width_maxi)
     {
       for (Uint32 i = 0; i < t; i++)
         {
-          sprite_projectile *blast = *(blasts++);
-          if (!blast->on_paddle)
+          sprite_projectile *projectile = *(projectiles++);
+          if (!projectile->on_paddle)
             {
               return;
             }
@@ -107,8 +107,8 @@ controller_projectiles::disponible ()
     {
       for (Uint32 i = 0; i < t; i++)
         {
-          sprite_projectile *blast = *(blasts++);
-          if (blast->is_enabled)
+          sprite_projectile *projectile = *(projectiles++);
+          if (projectile->is_enabled)
             {
               return;
             }
@@ -185,10 +185,10 @@ controller_projectiles::init_type1 ()
     {
       x += (paddle_length / 2) - (SIZE_OF_PROJECTILE / 2);
     }
-  sprite_projectile *blast = sprites_list[0];
-  blast->is_enabled = true;
-  blast->x_coord = x;
-  blast->y_coord = y;
+  sprite_projectile *projectile = sprites_list[0];
+  projectile->is_enabled = true;
+  projectile->x_coord = x;
+  projectile->y_coord = y;
 }
 
 /**
@@ -213,16 +213,16 @@ controller_projectiles::init_type2 ()
     {
       x += (paddle_length / 2) - (SIZE_OF_PROJECTILE / 2);
     }
-  sprite_projectile **blasts = sprites_list;
-  sprite_projectile *blast;
-  blast = *(blasts++);
-  blast->is_enabled = true;
-  blast->x_coord = x;
-  blast->y_coord = y;
-  blast = *(blasts++);
-  blast->is_enabled = true;
-  blast->x_coord = x;
-  blast->y_coord = y;
+  sprite_projectile **projectiles = sprites_list;
+  sprite_projectile *projectile;
+  projectile = *(projectiles++);
+  projectile->is_enabled = true;
+  projectile->x_coord = x;
+  projectile->y_coord = y;
+  projectile = *(projectiles++);
+  projectile->is_enabled = true;
+  projectile->x_coord = x;
+  projectile->y_coord = y;
 }
 
 /**
@@ -247,20 +247,20 @@ controller_projectiles::init_type3 ()
     {
       x += (paddle_length / 2) - (SIZE_OF_PROJECTILE / 2);
     }
-  sprite_projectile **blasts = sprites_list;
-  sprite_projectile *blast;
-  blast = *(blasts++);
-  blast->is_enabled = true;
-  blast->x_coord = x;
-  blast->y_coord = y;
-  blast = *(blasts++);
-  blast->is_enabled = true;
-  blast->x_coord = x;
-  blast->y_coord = y;
-  blast = *blasts;
-  blast->is_enabled = true;
-  blast->x_coord = x;
-  blast->y_coord = y;
+  sprite_projectile **projectiles = sprites_list;
+  sprite_projectile *projectile;
+  projectile = *(projectiles++);
+  projectile->is_enabled = true;
+  projectile->x_coord = x;
+  projectile->y_coord = y;
+  projectile = *(projectiles++);
+  projectile->is_enabled = true;
+  projectile->x_coord = x;
+  projectile->y_coord = y;
+  projectile = *projectiles;
+  projectile->is_enabled = true;
+  projectile->x_coord = x;
+  projectile->y_coord = y;
 }
 
 /**
@@ -277,12 +277,12 @@ controller_projectiles::init_type4 ()
   paddle->fire_state = sprite_paddle::OWN_GUN;
   Sint32 x = paddle->x_coord;
   Sint32 y = paddle->y_coord;
-  sprite_projectile **blasts = sprites_list;
-  sprite_projectile *blast;
-  blast = *(blasts++);
-  blast->is_enabled = true;
-  blast->x_coord = x;
-  blast->y_coord = y;
+  sprite_projectile **projectiles = sprites_list;
+  sprite_projectile *projectile;
+  projectile = *(projectiles++);
+  projectile->is_enabled = true;
+  projectile->x_coord = x;
+  projectile->y_coord = y;
   if (paddle->is_vertical)
     {
       y += 18 * resolution;
@@ -291,14 +291,14 @@ controller_projectiles::init_type4 ()
     {
       x += 18 * resolution;
     }
-  blast = *(blasts++);
-  blast->is_enabled = true;
-  blast->x_coord = x;
-  blast->y_coord = y;
-  blast = *(blasts++);
-  blast->is_enabled = true;
-  blast->x_coord = x;
-  blast->y_coord = y;
+  projectile = *(projectiles++);
+  projectile->is_enabled = true;
+  projectile->x_coord = x;
+  projectile->y_coord = y;
+  projectile = *(projectiles++);
+  projectile->is_enabled = true;
+  projectile->x_coord = x;
+  projectile->y_coord = y;
   if (paddle->is_vertical)
     {
       y = paddle->y_coord + paddle->length - 4;
@@ -307,10 +307,10 @@ controller_projectiles::init_type4 ()
     {
       x = paddle->x_coord + paddle->length - 4;
     }
-  blast = *blasts;
-  blast->is_enabled = true;
-  blast->x_coord = x;
-  blast->y_coord = y;
+  projectile = *projectiles;
+  projectile->is_enabled = true;
+  projectile->x_coord = x;
+  projectile->y_coord = y;
 }
 
 /** 
@@ -327,68 +327,68 @@ controller_projectiles::init_type5 ()
   paddle->fire_state = sprite_paddle::OWN_GUN;
   Sint32 x = paddle->x_coord;
   Sint32 y = paddle->y_coord;
-  sprite_projectile **blasts = sprites_list;
-  sprite_projectile *blast;
-  blast = *(blasts++);
-  blast->is_enabled = true;
-  blast->x_coord = x;
-  blast->y_coord = y;
+  sprite_projectile **projectiles = sprites_list;
+  sprite_projectile *projectile;
+  projectile = *(projectiles++);
+  projectile->is_enabled = true;
+  projectile->x_coord = x;
+  projectile->y_coord = y;
   Sint32 quarter = paddle_length / 4;
   if (paddle->is_vertical)
     {
-      Sint32 i = paddle->bumper_FX1;
+      Sint32 i = paddle->projectile_xinc1;
       x += i;
       y += quarter;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
       x += i;
       y += quarter;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
       x -= i;
       y += quarter;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
       x -= i;
       y += quarter - 2 * resolution;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
     }
   else
     {
-      Sint32 i = paddle->bumper_FY1;
+      Sint32 i = paddle->projectile_yinc1;
       y += i;
       x += quarter;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
       y += i;
       x += quarter;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
       y -= i;
       x += quarter;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
       y -= i;
       x += quarter - 2 * resolution;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
     }
 }
 
@@ -404,71 +404,71 @@ controller_projectiles::init_type6 ()
       return;
     }
   paddle->fire_state = sprite_paddle::OWN_GUN;
-  sprite_projectile **blasts = sprites_list;
+  sprite_projectile **projectiles = sprites_list;
   Sint32 x = paddle->x_coord;
   Sint32 y = paddle->y_coord;
   Sint32 offst = 22 * resolution;
 
-  sprite_projectile *blast;
+  sprite_projectile *projectile;
   if (paddle->is_vertical)
     {
-      Sint32 a = x + paddle->bump_xdeca;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = a;
-      blast->y_coord = y;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
+      Sint32 a = x + paddle->projectile_xoffset;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = a;
+      projectile->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
       y += offst;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
       y += offst;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = a;
-      blast->y_coord = y;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = a;
+      projectile->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
     }
   else
     {
-      Sint32 o = y + paddle->bump_ydeca;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = o;
+      Sint32 o = y + paddle->projectile_yoffset;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = o;
       x += offst;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
       x += offst;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = o;
-      blast = *(blasts++);
-      blast->is_enabled = true;
-      blast->x_coord = x;
-      blast->y_coord = y;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = o;
+      projectile = *(projectiles++);
+      projectile->is_enabled = true;
+      projectile->x_coord = x;
+      projectile->y_coord = y;
     }
 }
 
@@ -484,45 +484,45 @@ controller_projectiles::init_type7 ()
   if (paddle->fire_state == sprite_paddle::FIRE)
     {
       paddle->fire_state = sprite_paddle::OWN_GUN;
-      sprite_projectile **blasts = sprites_list;
-      Sint32 x = paddle->x_coord + paddle->bump_Xscie;
-      Sint32 y = paddle->y_coord + paddle->bump_Yscie;
+      sprite_projectile **projectiles = sprites_list;
+      Sint32 x = paddle->x_coord + paddle->projectile_xcenter;
+      Sint32 y = paddle->y_coord + paddle->projectile_ycenter;
       Sint32 j = 0;
       for (Sint32 i = 0; i < 7; i++, j += 8)
         {
-          sprite_projectile *blast = *(blasts++);
-          blast->on_paddle = false;
-          blast->fire_Xscie = x;
-          blast->fire_Yscie = y;
-          blast->indexSinus = j;
+          sprite_projectile *projectile = *(projectiles++);
+          projectile->on_paddle = false;
+          projectile->fire_Xscie = x;
+          projectile->fire_Yscie = y;
+          projectile->indexSinus = j;
         }
     }
 
   /* fire on the paddle */
   else
     {
-      sprite_projectile **blasts = sprites_list;
+      sprite_projectile **projectiles = sprites_list;
       paddle->fire_state = sprite_paddle::OWN_GUN;
       for (Sint32 i = 0; i < 7; i++)
         {
-          sprite_projectile *blast = *(blasts++);
-          if (blast->is_enabled)
+          sprite_projectile *projectile = *(projectiles++);
+          if (projectile->is_enabled)
             {
               return;
             }
         }
-      blasts = sprites_list;
-      Sint32 x = paddle->x_coord + paddle->bump_Xscie;
-      Sint32 y = paddle->y_coord + paddle->bump_Yscie;
+      projectiles = sprites_list;
+      Sint32 x = paddle->x_coord + paddle->projectile_xcenter;
+      Sint32 y = paddle->y_coord + paddle->projectile_ycenter;
       Sint32 j = 0;
       for (Sint32 i = 0; i < 7; i++, j += 8)
         {
-          sprite_projectile *blast = *(blasts++);
-          blast->is_enabled = true;
-          blast->on_paddle = true;
-          blast->fire_Xscie = x;
-          blast->fire_Yscie = y;
-          blast->indexSinus = j;
+          sprite_projectile *projectile = *(projectiles++);
+          projectile->is_enabled = true;
+          projectile->on_paddle = true;
+          projectile->fire_Xscie = x;
+          projectile->fire_Yscie = y;
+          projectile->indexSinus = j;
         }
 
     }
@@ -566,28 +566,26 @@ controller_projectiles::move ()
     }
 }
 
-//-----------------------------------------------------------------------------
-// bumper of 16/32 pixels width: "linear fire"
-//-----------------------------------------------------------------------------
+/**
+ * Move linear projectile (paddle's size: 16/32 pixels)
+ */
 void
 controller_projectiles::move_type1 ()
 {
-  sprite_projectile *xFire = sprites_list[0];
-  sprite_paddle *raket = gun_paddle;
-  Sint32 i = raket->bumper_FX0;
-  xFire->x_coord += i;
-  i = raket->bumper_FY0;
-  xFire->y_coord += i;
+  sprite_projectile *projectile = sprites_list[0];
+  sprite_paddle *paddle = gun_paddle;
+  projectile->x_coord += paddle->projectile_xinc0;
+  projectile->y_coord += paddle->projectile_yinc0;
 }
 
-//-----------------------------------------------------------------------------
-// bumper of 24/48 pixels width: "fishtail fire"
-//-----------------------------------------------------------------------------
+/**
+ * Move "fishtail fire" (paddle's size: 24/48 pixels)
+ */
 void
 controller_projectiles::move_type2 ()
 {
-  sprite_projectile **liste = sprites_list;
-  sprite_paddle *raket = gun_paddle;
+  sprite_projectile **projectiles = sprites_list;
+  sprite_paddle *paddle = gun_paddle;
   Sint32 a = countTempo;
   Sint32 b, c, d;
   a++;
@@ -598,60 +596,60 @@ controller_projectiles::move_type2 ()
   countTempo = a;
   if (a > 10)
     {
-      a = raket->bumper_FX1;
-      b = raket->bumper_FY1;
-      c = raket->bumper_FX2;
-      d = raket->bumper_FY2;
+      a = paddle->projectile_xinc1;
+      b = paddle->projectile_yinc1;
+      c = paddle->projectile_xinc2;
+      d = paddle->projectile_yinc2;
     }
   else
     {
-      a = raket->bumper_FX2;
-      b = raket->bumper_FY2;
-      c = raket->bumper_FX1;
-      d = raket->bumper_FY1;
+      a = paddle->projectile_xinc2;
+      b = paddle->projectile_yinc2;
+      c = paddle->projectile_xinc1;
+      d = paddle->projectile_yinc1;
     }
-  sprite_projectile *xFire;
-  xFire = *(liste++);
-  xFire->x_coord += a;
-  xFire->y_coord += b;
-  xFire = *liste;
-  xFire->x_coord += c;
-  xFire->y_coord += d;
+  sprite_projectile *projectile;
+  projectile = *(projectiles++);
+  projectile->x_coord += a;
+  projectile->y_coord += b;
+  projectile = *projectiles;
+  projectile->x_coord += c;
+  projectile->y_coord += d;
 }
 
 /**
- * Paddle of 32/64 pixels width: "triangle fire"
+ * Move "triangle fire" (paddle's size: 32/64 pixels)
  */
 void
 controller_projectiles::move_type3 ()
 {
-  sprite_projectile **blasts = sprites_list;
+  sprite_projectile **projectiles = sprites_list;
   sprite_paddle *paddle = gun_paddle;
   Sint32 i, j;
-  sprite_projectile *blast;
+  sprite_projectile *projectile;
   /* shot leaves to the left */
-  blast = *(blasts++);
-  i = paddle->bumper_FX1;
-  j = paddle->bumper_FY1;
-  blast->x_coord += i;
-  blast->y_coord += j;
+  projectile = *(projectiles++);
+  i = paddle->projectile_xinc1;
+  j = paddle->projectile_yinc1;
+  projectile->x_coord += i;
+  projectile->y_coord += j;
   /* shot leaves any right */
-  blast = *(blasts++);
-  i = paddle->bumper_FX0;
-  j = paddle->bumper_FY0;
-  blast->x_coord += i;
-  blast->y_coord += j;
+  projectile = *(projectiles++);
+  i = paddle->projectile_xinc0;
+  j = paddle->projectile_yinc0;
+  projectile->x_coord += i;
+  projectile->y_coord += j;
   /* shot leaves to the right */
-  blast = *blasts;
-  i = paddle->bumper_FX2;
-  j = paddle->bumper_FY2;
-  blast->x_coord += i;
-  blast->y_coord += j;
+  projectile = *projectiles;
+  i = paddle->projectile_xinc2;
+  j = paddle->projectile_yinc2;
+  projectile->x_coord += i;
+  projectile->y_coord += j;
 }
 
-//-----------------------------------------------------------------------------
-// bumper of 40/80 pixels width: "fishtail fire" + "linear fire"
-//-----------------------------------------------------------------------------
+/**
+ * Move "fishtail fire" + "linear fire" (paddle of 40/80 pixels width)
+ */
 void
 controller_projectiles::move_type4 ()
 {
@@ -663,71 +661,77 @@ controller_projectiles::move_type4 ()
       i = 0;
     }
   countTempo = i;
-  sprite_projectile **liste = sprites_list;
-  sprite_paddle *raket = gun_paddle;
-  sprite_projectile *xFire;
-
-  xFire = *(liste++);           //[1] linar shot
-  j = raket->bumper_FX0;
-  xFire->x_coord += j;
-  j = raket->bumper_FY0;
-  xFire->y_coord += j;
+  sprite_projectile **projectiles = sprites_list;
+  sprite_paddle *paddle = gun_paddle;
+  sprite_projectile *projectile;
+  /* [1] linar projectile */
+  projectile = *(projectiles++);
+  j = paddle->projectile_xinc0;
+  projectile->x_coord += j;
+  j = paddle->projectile_yinc0;
+  projectile->y_coord += j;
 
   if (i > 10)
     {
-      xFire = *(liste++);       //[2] fishtail shot
-      i = raket->bumper_FX1;
-      j = raket->bumper_FY1;
-      xFire->x_coord += i;
-      xFire->y_coord += j;
-      xFire = *(liste++);       //[3] fishtail shot
-      i = raket->bumper_FX2;
-      j = raket->bumper_FY2;
-      xFire->x_coord += i;
-      xFire->y_coord += j;
+      /* [2] fishtail projectile */
+      projectile = *(projectiles++);
+      i = paddle->projectile_xinc1;
+      j = paddle->projectile_yinc1;
+      projectile->x_coord += i;
+      projectile->y_coord += j;
+      /* [3] fishtail projectile */
+      projectile = *(projectiles++);
+      i = paddle->projectile_xinc2;
+      j = paddle->projectile_yinc2;
+      projectile->x_coord += i;
+      projectile->y_coord += j;
     }
   else
     {
-      xFire = *(liste++);       //[2] fishtail shot
-      i = raket->bumper_FX2;
-      j = raket->bumper_FY2;
-      xFire->x_coord += i;
-      xFire->y_coord += j;
-      xFire = *(liste++);       //[3] fishtail shot
-      i = raket->bumper_FX1;
-      j = raket->bumper_FY1;
-      xFire->x_coord += i;
-      xFire->y_coord += j;
+      /* [2] fishtail projectile */
+      projectile = *(projectiles++);
+      i = paddle->projectile_xinc2;
+      j = paddle->projectile_yinc2;
+      projectile->x_coord += i;
+      projectile->y_coord += j;
+      /* [3] fishtail projectile */
+      projectile = *(projectiles++);
+      i = paddle->projectile_xinc1;
+      j = paddle->projectile_yinc1;
+      projectile->x_coord += i;
+      projectile->y_coord += j;
     }
-
-  xFire = *liste;               //[4] linar shot
-  i = raket->bumper_FX0;
-  j = raket->bumper_FY0;
-  xFire->x_coord += i;
-  xFire->y_coord += j;
+  /* [1] linar projectile */
+  projectile = *projectiles; 
+  i = paddle->projectile_xinc0;
+  j = paddle->projectile_yinc0;
+  projectile->x_coord += i;
+  projectile->y_coord += j;
 }
 
-//-----------------------------------------------------------------------------
-// bumper of 48/96 pixels width: 5 linears shots
-//-----------------------------------------------------------------------------
+/**
+ * Move 5 linears projectiles (paddle of 48/96 pixels width)
+ */
+
 void
 controller_projectiles::move_type5 ()
 {
-  sprite_projectile **liste = sprites_list;
-  sprite_paddle *raket = gun_paddle;
-  Sint32 x = raket->bumper_FX0;
-  Sint32 y = raket->bumper_FY0;
+  sprite_projectile **projectiles = sprites_list;
+  sprite_paddle *paddle = gun_paddle;
+  Sint32 x = paddle->projectile_xinc0;
+  Sint32 y = paddle->projectile_yinc0;
   for (Sint32 i = 0; i < 5; i++)
     {
-      sprite_projectile *xFire = *(liste++);
-      xFire->x_coord += x;
-      xFire->y_coord += y;
+      sprite_projectile *projectile = *(projectiles++);
+      projectile->x_coord += x;
+      projectile->y_coord += y;
     }
 }
 
-//-----------------------------------------------------------------------------
-// bumper of 56/112 pixels width: 4 linears shots + 2 fishtails shots
-//-----------------------------------------------------------------------------
+/**
+ * Move 4 linears projectiles + 2 fishtails projectiles
+ * (paddle of 56/112 pixels)
+ */
 void
 controller_projectiles::move_type6 ()
 {
@@ -740,97 +744,101 @@ controller_projectiles::move_type6 ()
       a = 0;
     }
   countTempo = a;
-  sprite_projectile **liste = sprites_list;
-  sprite_paddle *raket = gun_paddle;
+  sprite_projectile **projectiles = sprites_list;
+  sprite_paddle *paddle = gun_paddle;
 
-  i = raket->bumper_FX0;
-  j = raket->bumper_FY0;
-  sprite_projectile *xFire = *(liste++);
+  i = paddle->projectile_xinc0;
+  j = paddle->projectile_yinc0;
+  sprite_projectile *projectile = *(projectiles++);
 
-  xFire->x_coord += i;
-  xFire->y_coord += j;
-  xFire = *(liste++);
-  xFire->x_coord += i;
-  xFire->y_coord += j;
+  projectile->x_coord += i;
+  projectile->y_coord += j;
+  projectile = *(projectiles++);
+  projectile->x_coord += i;
+  projectile->y_coord += j;
   if (a > 10)
     {
-      xFire = *(liste++);       //[3] fishtail shot
-      i = raket->bumper_FX1;
-      j = raket->bumper_FY1;
-      xFire->x_coord += i;
-      xFire->y_coord += j;
-      xFire = *(liste++);       //[4] fishtail shot
-      i = raket->bumper_FX2;
-      j = raket->bumper_FY2;
-      xFire->x_coord += i;
-      xFire->y_coord += j;
+      /* [3] fishtail projectile */
+      projectile = *(projectiles++);
+      i = paddle->projectile_xinc1;
+      j = paddle->projectile_yinc1;
+      projectile->x_coord += i;
+      projectile->y_coord += j;
+      /* [4] fishtail prjectile */
+      projectile = *(projectiles++);
+      i = paddle->projectile_xinc2;
+      j = paddle->projectile_yinc2;
+      projectile->x_coord += i;
+      projectile->y_coord += j;
     }
   else
     {
-      xFire = *(liste++);       //[3] fishtail shot
-      i = raket->bumper_FX2;
-      j = raket->bumper_FY2;
-      xFire->x_coord += i;
-      xFire->y_coord += j;
-      xFire = *(liste++);       //[4] fishtail shot
-      i = raket->bumper_FX1;
-      j = raket->bumper_FY1;
-      xFire->x_coord += i;
-      xFire->y_coord += j;
+      /* [3] fishtail projectile */
+      projectile = *(projectiles++);
+      i = paddle->projectile_xinc2;
+      j = paddle->projectile_yinc2;
+      projectile->x_coord += i;
+      projectile->y_coord += j;
+      /* [4] fishtail projectile */
+      projectile = *(projectiles++);
+      i = paddle->projectile_xinc1;
+      j = paddle->projectile_yinc1;
+      projectile->x_coord += i;
+      projectile->y_coord += j;
     }
-  i = raket->bumper_FX0;
-  j = raket->bumper_FY0;
-  xFire = *(liste++);
-  xFire->x_coord += i;
-  xFire->y_coord += j;
-  xFire = *liste;
-  xFire->x_coord += i;
-  xFire->y_coord += j;
+  i = paddle->projectile_xinc0;
+  j = paddle->projectile_yinc0;
+  projectile = *(projectiles++);
+  projectile->x_coord += i;
+  projectile->y_coord += j;
+  projectile = *projectiles;
+  projectile->x_coord += i;
+  projectile->y_coord += j;
 }
 
-//-----------------------------------------------------------------------------
-// bumper of 64/128 pixels width: 7 circular shots
-//-----------------------------------------------------------------------------
+/*
+ * Move 7 circular projectiles (paddle of 56/128 pixels)
+ */
 void
 controller_projectiles::move_type7 ()
 {
-  sprite_projectile **blasts = sprites_list;
-  sprite_paddle *raket = gun_paddle;
+  sprite_projectile **projectiles = sprites_list;
+  sprite_paddle *paddle = gun_paddle;
   for (Sint32 i = 0; i < 7; i++)
     {
-      sprite_projectile *blast = *(blasts++);
-      if (!blast->is_enabled)
+      sprite_projectile *projectile = *(projectiles++);
+      if (!projectile->is_enabled)
         {
           continue;
         }
-      Sint32 j = blast->indexSinus;
+      Sint32 j = projectile->indexSinus;
       j += 2;
-      const Sint16 *table = scie_sinus + j;
+      const Sint16 *table = circular_sin + j;
       if (*table == 99)
         {
           j = 0;
-          table = scie_sinus;
+          table = circular_sin;
         }
-      blast->indexSinus = j;
-      if (blast->on_paddle)
+      projectile->indexSinus = j;
+      if (projectile->on_paddle)
         {
           Sint32 k = *(table++);
-          k += raket->x_coord + raket->bump_Xscie;
-          blast->x_coord = k;
+          k += paddle->x_coord + paddle->projectile_xcenter;
+          projectile->x_coord = k;
           k = *table;
-          k += raket->y_coord + raket->bump_Yscie;
-          blast->y_coord = k;
+          k += paddle->y_coord + paddle->projectile_ycenter;
+          projectile->y_coord = k;
         }
       else
         {
-          blast->fire_Xscie += raket->bumper_FX0;
-          blast->fire_Yscie += raket->bumper_FY0;
+          projectile->fire_Xscie += paddle->projectile_xinc0;
+          projectile->fire_Yscie += paddle->projectile_yinc0;
           Sint32 k = *(table++);
-          k += blast->fire_Xscie;
-          blast->x_coord = k;
+          k += projectile->fire_Xscie;
+          projectile->x_coord = k;
           k = *table;
-          k += blast->fire_Yscie;
-          blast->y_coord = k;
+          k += projectile->fire_Yscie;
+          projectile->y_coord = k;
         }
     }
 }
@@ -839,13 +847,13 @@ controller_projectiles::move_type7 ()
  * Enable fire power 1
  */
 void
-controller_projectiles::fire1RunOn ()
+controller_projectiles::set_fire_1 ()
 {
   sprite_projectile **projectiles = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_projectile *blast = *(projectiles++);
-      blast->set_power1 ();
+      sprite_projectile *projectile = *(projectiles++);
+      projectile->set_power1 ();
     }
 }
 
@@ -853,31 +861,22 @@ controller_projectiles::fire1RunOn ()
  * Enable fire power 2
  */
 void
-controller_projectiles::fire2RunOn ()
+controller_projectiles::set_fire_2 ()
 {
   sprite_projectile **projectiles = sprites_list;
   for (Uint32 i = 0; i < max_of_sprites; i++)
     {
-      sprite_projectile *blast = *(projectiles++);
-      blast->set_power2 ();
+      sprite_projectile *projectile = *(projectiles++);
+      projectile->set_power2 ();
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
-Sint16 controller_projectiles::bob11_fire[] =
-{
-  16, 5, 8, 5, 3, 0,            //fire power 2
-    4, 0, 5, 0, 6, 0, 7, 0,     //fire power 1
-8, 0, 9, 0, 10, 0};
-
-//-----------------------------------------------------------------------------
-// sinus fire 7 (640 pixels)
-//-----------------------------------------------------------------------------
+/**
+ * Sinus used for he fire 7 in 640 pixels resolution
+ */
 const
   Sint16
-  controller_projectiles::scieSin640[] =
+  controller_projectiles::circular_sin_640[] =
   { 15 * 2, -3 * 2, 13 * 2, -7 * 2, 11 * 2, -10 * 2, 9 * 2, -12 * 2, 7 * 2,
   13 * 2, 3 * 2, -15 * 2, 0 * 2, -15 * 2,
   -3 * 2, -15 * 2, -6 * 2, -14 * 2, -9 * 2, -12 * 2, -11 * 2, -10 * 2,
@@ -889,12 +888,12 @@ const
   99, 99, 99, 99
 };
 
-//-----------------------------------------------------------------------------
-// sinus fire 7 (320 pixels)
-//-----------------------------------------------------------------------------
+/**
+ * Sinus used for he fire 7 in 320 pixels resolution
+ */
 const
   Sint16
-  controller_projectiles::scieSin320[] =
+  controller_projectiles::circular_sin_320[] =
   { 15, -3, 13, -7, 11, -10, 9, -12, 7, -13, 3, -15, 0, -15,
   -3, -15, -6, -14, -9, -12, -11, -10, -13, -7, -14, -4, -15, -1,
   -15, 3, -13, 7, -11, 10, -9, 12, -7, 13, -3, 15, 0, 15,

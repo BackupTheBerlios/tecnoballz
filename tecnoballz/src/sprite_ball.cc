@@ -4,11 +4,11 @@
  * @date 2007-10-01
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ball.cc,v 1.21 2007/10/01 15:57:47 gurumeditation Exp $
+ * $Id: sprite_ball.cc,v 1.22 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ sprite_ball::init_collisions_points ()
 
 /**
  * perform some initializations
- * @param start Time before the ball leaves the bumper (first time)
+ * @param start Time before the ball leaves the paddle (first time)
  * @param speed Time before the ball accelerates
  * @param paddle Default paddle
  * @param table Speed of the ball from 1 to 4

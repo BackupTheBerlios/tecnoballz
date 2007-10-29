@@ -2,14 +2,14 @@
  * @file controller_game_over.cc 
  * @brief Game Over controller 
  * @created 2002-12-14
- * @date 2007-09-25
+ * @date 2007-10-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_game_over.cc,v 1.10 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: controller_game_over.cc,v 1.11 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ controller_game_over::controller_game_over ()
   max_of_sprites = 8;
   sprites_have_shades = true;
   max_of_sprites = 8;
-  sprite_type_id = BOB_GAMEOV;
+  sprite_type_id = sprite_object::GAME_OVER_LETTERS;
   move_phase = 0;
   sprite_high_score = (sprite_display_scores *) NULL;
 }

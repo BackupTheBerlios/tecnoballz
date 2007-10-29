@@ -1,14 +1,14 @@
 /**
  * @file controller_gigablitz.cc 
  * @brief Gigablitz controller 
- * @date 2007-10-02
+ * @date 2007-10-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.19 2007/10/02 15:51:31 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.20 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,12 @@
 #include "../include/handler_resources.h"
 
 Uint32 controller_gigablitz::numeroBOBs[MAX_OF_GIGABLITZ] =
-  {
-    BOB_GIGAB7,
-    BOB_GIGAB6, BOB_GIGAB5, BOB_GIGAB4, BOB_GIGAB3, BOB_GIGAB2, BOB_GIGAB1};
+{
+  sprite_object::GIGABLITZ_7, sprite_object::GIGABLITZ_6,
+  sprite_object::GIGABLITZ_5, sprite_object::GIGABLITZ_4,
+  sprite_object::GIGABLITZ_3, sprite_object::GIGABLITZ_2,
+  sprite_object::GIGABLITZ_1
+};
 
 /**
  * Create the Gigablitz controller
@@ -88,7 +91,7 @@ controller_gigablitz::create_gigablitz_sprites ()
       gigablitz_sprite->set_draw_method (sprite_object::DRAW_LINE_BY_LINE);
       if (GUARDS_LEVEL == current_phase)
         {
-          gigablitz_sprite->mirrorVert = 1;
+          gigablitz_sprite->is_mirrored_vertically = true;
         }
       Uint32 id = numeroBOBs[i];
       gigablitz_sprite->create_sprite (id, sprites_bitmap, false);
@@ -112,9 +115,9 @@ controller_gigablitz::shoot_paddle  ()
     }
   Uint32 length = paddle_bottom->get_length ();
   Uint32 l = length;
-  /* smallest bumper is of 16 or 32 pixels width */
+  /* smallest paddle is of 16 or 32 pixels width */
   l -= paddle_bottom->width_mini;
-  /* size of bumper step by 8 or 16 pixels */
+  /* size of paddle step by 8 or 16 pixels */
   l >>= paddle_bottom->shift_width;
   l = MAX_OF_GIGABLITZ - l - 1;
   current_gigablitz = sprites_list[l];
@@ -142,8 +145,10 @@ controller_gigablitz::shoot_paddle  ()
       y = y >> 5;
       x = x & 0x001f;
     }
-  if (x)
-    y++;
+  if (x != 0)
+    {
+      y++;
+    }
   num_of_bricks = y;
 #ifndef SOUNDISOFF
   audio->play_sound (handler_audio::GUARDIAN_FIRE);

@@ -1,14 +1,14 @@
 /** 
  * @file controller_viewfinders.cc 
  * @brief Paddles viewfinders controller 
- * @date 2007-09-20
+ * @date 2007-10-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_viewfinders.cc,v 1.7 2007/10/02 11:25:37 gurumeditation Exp $
+ * $Id: controller_viewfinders.cc,v 1.8 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ controller_viewfinders::controller_viewfinders ()
   littleInit ();
   max_of_sprites = 4;
   sprites_have_shades = false;
-  sprite_type_id = BOB_DIRECT;
+  sprite_type_id = sprite_object::VIEWFINDER;
   num_of_paddles = 0;
 }
 

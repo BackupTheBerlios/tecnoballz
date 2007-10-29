@@ -2,14 +2,14 @@
  * @file controller_gems.cc 
  * @brief The gems controller 
  * @created 2004-04-12 
- * @date 2007-02-11
+ * @date 2007-10-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gems.cc,v 1.9 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_gems.cc,v 1.10 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ controller_gems::controller_gems ()
   littleInit ();
   max_of_sprites = MAX_OF_GEMS;
   sprites_have_shades = true;
-  sprite_type_id = BOB_GEMSTO;
+  sprite_type_id = sprite_object::GEM;
 }
 
 /**

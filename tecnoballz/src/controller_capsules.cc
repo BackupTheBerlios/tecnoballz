@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.cc 
  * @brief Capsules controller 
- * @date 2007-10-06
+ * @date 2007-10-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.cc,v 1.32 2007/10/06 08:54:53 gurumeditation Exp $
+ * $Id: controller_capsules.cc,v 1.33 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ controller_capsules::controller_capsules ()
   /* additional table to drawing pixel by pixel is required
    * for color cycling of the chance capsule */
   is_draw_pixel_by_pixel = true;
-  sprite_type_id = BOB_GADGET;
+  sprite_type_id = sprite_object::CAPSULES;
   shopping_cart = NULL;
 }
 
@@ -315,7 +315,7 @@ controller_capsules::play_animation_in_shop (Uint32 speed)
   if (--frame_delay <= 0)
     {
       frame_delay = frame_period / speed;
-      if (++frame_index >= XXX_IMAGES)
+      if (++frame_index >= sprite_capsule::NUM_OF_IMAGES)
         {
           frame_index = 0;
         }

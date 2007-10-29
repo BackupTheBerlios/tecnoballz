@@ -1,14 +1,14 @@
 /** 
  * @file controller_projectiles.h
  * @brief Projectiles controller 
- * @date 2007-02-09
+ * @date 2007-10-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_projectiles.h,v 1.6 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_projectiles.h,v 1.7 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,15 +43,14 @@ class controller_projectiles:public objects_list < sprite_projectile, controller
 private:
   static const Uint32 MAX_OF_PROJECTILES = 7;
   static const Uint32 SIZE_OF_PROJECTILE = 10;
-  static Sint16 bob11_fire[];
-  static const Sint16 scieSin640[];
-  static const Sint16 scieSin320[];
+  static const Sint16 circular_sin_640[];
+  static const Sint16 circular_sin_320[];
 
 private:
   sprite_paddle * gun_paddle;
   Sint32 countTempo;
   Uint32 paddle_length;
-  const Sint16 *scie_sinus;
+  const Sint16 *circular_sin;
 
 public:
     controller_projectiles ();
@@ -74,7 +73,7 @@ public:
   void move_type5 ();
   void move_type6 ();
   void move_type7 ();
-  void fire1RunOn ();
-  void fire2RunOn ();
+  void set_fire_1 ();
+  void set_fire_2 ();
 };
 #endif

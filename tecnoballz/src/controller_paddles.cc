@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.cc
  * @brief Paddles controller 
- * @date 2007-10-02
+ * @date 2007-10-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.30 $
+ * @version $Revision: 1.31 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.30 2007/10/07 14:22:12 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.31 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ controller_paddles::controller_paddles ()
   if (current_phase == GUARDS_LEVEL)
     {
       max_of_sprites = 1;
-      sprite_type_id = BOB_BUMPER;
+      sprite_type_id = sprite_object::PADDLE_IN_GUARDIANS_LEVEL;
       paddle_length = 32 * resolution;
       reverse_counter = 0;
 
@@ -63,7 +63,7 @@ controller_paddles::controller_paddles ()
  else
     {
       max_of_sprites = 5;
-      sprite_type_id = BOB_BUMPHR;
+      sprite_type_id = sprite_object::HORIZONTAL_PADDLE;
       paddle_length = 64 * resolution;
       paddle_bottom = new sprite_paddle ();
       paddle_right = new sprite_paddle ();
@@ -104,7 +104,7 @@ controller_paddles::create_projectiles_list ()
 }
 
 /**
- * Intialize bumpers 
+ * Intialize the paddles 
  */
 void
 controller_paddles::create_paddles_sprites ()
@@ -150,13 +150,15 @@ controller_paddles::create_paddles_sprites ()
 
       /* create bottom paddle sprite */
       paddle_bottom->set_object_pos (0);
-      paddle_bottom->create_sprite (BOB_BUMPHR, sprites_bitmap, true, 0);
+      paddle_bottom->create_sprite (sprite_object::HORIZONTAL_PADDLE,
+				    sprites_bitmap, true, 0);
       sprites->add (paddle_bottom);
       sprites_list[0] = paddle_bottom;
 
       /* create left paddle sprite */
       paddle_right->set_object_pos (1);
-      paddle_right->create_sprite (BOB_BUMPVT, sprites_bitmap, true, 0);
+      paddle_right->create_sprite (sprite_object::VERTICAL_PADLLE,
+				   sprites_bitmap, true, 0);
       sprites->add (paddle_right);
       sprites_list[1] = paddle_right;
 
@@ -166,7 +168,7 @@ controller_paddles::create_paddles_sprites ()
       sprites->add (paddle_top);
       sprites_list[2] = paddle_top;
 
-      /* create right bumper sprite */
+      /* create right paddle sprite */
       paddle_left->set_object_pos (3);
       paddle_right->duplicate_to (paddle_left);
       sprites->add (paddle_left);
@@ -184,7 +186,8 @@ void
 controller_paddles::initialize_robot ()
 {
   paddle_robot->set_object_pos (4);
-  paddle_robot->create_sprite (BOB_ROBOT0, sprites_bitmap, true, 0);
+  paddle_robot->create_sprite (sprite_object::PADDLE_ROBOT,
+                               sprites_bitmap, true, 0);
   sprites->add (paddle_robot);
   sprites_list[4] = paddle_robot;
 }
@@ -234,17 +237,16 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   paddle_bottom->paddle_number = BOTTOM_PADDLE;
   paddle_bottom->is_vertical = false;
   paddle_bottom->enable_if_ok (is_team_mode, paddle_length, 3);
-  paddle_bottom->bump_TFIRE = 2;
-  paddle_bottom->bumper_FX0 = 0;
-  paddle_bottom->bumper_FY0 = -5 * resolution;
-  paddle_bottom->bumper_FX1 = -1 * resolution;
-  paddle_bottom->bumper_FY1 = -4 * resolution;
-  paddle_bottom->bumper_FX2 = 1 * resolution;
-  paddle_bottom->bumper_FY2 = -4 * resolution;
-  paddle_bottom->bump_Xscie = 32 * resolution;
-  paddle_bottom->bump_Yscie = -20 * resolution;
-  paddle_bottom->bump_xdeca = 0;
-  paddle_bottom->bump_ydeca = -10 * resolution;
+  paddle_bottom->projectile_xinc0 = 0;
+  paddle_bottom->projectile_yinc0 = -5 * resolution;
+  paddle_bottom->projectile_xinc1 = -1 * resolution;
+  paddle_bottom->projectile_yinc1 = -4 * resolution;
+  paddle_bottom->projectile_xinc2 = 1 * resolution;
+  paddle_bottom->projectile_yinc2 = -4 * resolution;
+  paddle_bottom->projectile_xcenter = 32 * resolution;
+  paddle_bottom->projectile_ycenter = -20 * resolution;
+  paddle_bottom->projectile_xoffset = 0;
+  paddle_bottom->projectile_yoffset = -10 * resolution;
   paddle_bottom->rebonds_Ga = midi1_left;  // rebonds raquette va a gauche
   paddle_bottom->rebonds_Dr = midi1Right;  // rebonds raquette va a droite
   paddle_bottom->direct_tab = ballePets1;  // table direction balle collee
@@ -256,72 +258,75 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   paddle_right->collision_height = paddle_length;
   paddle_right->paddle_number = RIGHT_PADDLE;
   paddle_right->is_vertical = true;
-  paddle_right->enable_if_ok (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (RIGHT_PADDLE));
-  paddle_right->bump_TFIRE = 2;
-  paddle_right->bumper_FX0 = -5 * resolution;
-  paddle_right->bumper_FY0 = 0;
-  paddle_right->bumper_FX1 = -4 * resolution;
-  paddle_right->bumper_FY1 = 1 * resolution;
-  paddle_right->bumper_FX2 = -4 * resolution;
-  paddle_right->bumper_FY2 = -1 * resolution;
-  paddle_right->bump_Xscie = -20 * resolution;
-  paddle_right->bump_Yscie = 32 * resolution;
-  paddle_right->bump_xdeca = -10 * resolution;
-  paddle_right->bump_ydeca = 0;
+  paddle_right->enable_if_ok (is_team_mode, paddle_length,
+                              current_player->get_paddle_alive_counter (RIGHT_PADDLE));
+  paddle_right->projectile_xinc0 = -5 * resolution;
+  paddle_right->projectile_yinc0 = 0;
+  paddle_right->projectile_xinc1 = -4 * resolution;
+  paddle_right->projectile_yinc1 = 1 * resolution;
+  paddle_right->projectile_xinc2 = -4 * resolution;
+  paddle_right->projectile_yinc2 = -1 * resolution;
+  paddle_right->projectile_xcenter = -20 * resolution;
+  paddle_right->projectile_ycenter = 32 * resolution;
+  paddle_right->projectile_xoffset = -10 * resolution;
+  paddle_right->projectile_yoffset = 0;
   paddle_right->rebonds_Ga = midi2_left;
   paddle_right->rebonds_Dr = midi2Right;
   paddle_right->direct_tab = ballePets2;
   paddle_right->width_mini = width_mini;
   paddle_right->width_maxi = width_maxi;
-  current_player->set_paddle_alive_counter (2, paddle_right->enable_counter);
+  current_player->set_paddle_alive_counter (RIGHT_PADDLE,
+                                            paddle_right->enable_counter);
 
   /* initialize top paddle */ 
   paddle_top->set_coordinates (center, top_y_coord);
   paddle_top->collision_width = paddle_length;
   paddle_top->paddle_number = TOP_PADDLE;
   paddle_top->is_vertical = false;
-  paddle_top->enable_if_ok (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (TOP_PADDLE));
-  paddle_top->bump_TFIRE = 2;
-  paddle_top->bumper_FX0 = 0;
-  paddle_top->bumper_FY0 = 5 * resolution;
-  paddle_top->bumper_FX1 = 1 * resolution;
-  paddle_top->bumper_FY1 = 4 * resolution;
-  paddle_top->bumper_FX2 = -1 * resolution;
-  paddle_top->bumper_FY2 = 4 * resolution;
-  paddle_top->bump_Xscie = 32 * resolution - 5;
-  paddle_top->bump_Yscie = 24 * resolution;
-  paddle_top->bump_xdeca = 0;
-  paddle_top->bump_ydeca = 10 * resolution;
+  paddle_top->enable_if_ok (is_team_mode, paddle_length,
+                            current_player->get_paddle_alive_counter (TOP_PADDLE));
+  paddle_top->projectile_xinc0 = 0;
+  paddle_top->projectile_yinc0 = 5 * resolution;
+  paddle_top->projectile_xinc1 = 1 * resolution;
+  paddle_top->projectile_yinc1 = 4 * resolution;
+  paddle_top->projectile_xinc2 = -1 * resolution;
+  paddle_top->projectile_yinc2 = 4 * resolution;
+  paddle_top->projectile_xcenter = 32 * resolution - 5;
+  paddle_top->projectile_ycenter = 24 * resolution;
+  paddle_top->projectile_xoffset = 0;
+  paddle_top->projectile_yoffset = 10 * resolution;
   paddle_top->rebonds_Ga = midi3_left;
   paddle_top->rebonds_Dr = midi3Right;
   paddle_top->direct_tab = ballePets3;
   paddle_top->width_mini = width_mini;
   paddle_top->width_maxi = width_maxi;
-  current_player->set_paddle_alive_counter (3, paddle_top->enable_counter);
+  current_player->set_paddle_alive_counter (TOP_PADDLE,
+                                            paddle_top->enable_counter);
 
   /* initialize left paddle */ 
   paddle_left->set_coordinates (left_x_coord, center);
   paddle_left->collision_height = paddle_length;
   paddle_left->paddle_number = LEFT_PADDLE;
   paddle_left->is_vertical = true;
-  paddle_left->enable_if_ok (is_team_mode, paddle_length, current_player->get_paddle_alive_counter (LEFT_PADDLE));
-  paddle_left->bump_TFIRE = 2;
-  paddle_left->bumper_FX0 = 5 * resolution;
-  paddle_left->bumper_FY0 = 0 * resolution;
-  paddle_left->bumper_FX1 = 4 * resolution;
-  paddle_left->bumper_FY1 = 1 * resolution;
-  paddle_left->bumper_FX2 = 4 * resolution;
-  paddle_left->bumper_FY2 = -1 * resolution;
-  paddle_left->bump_Xscie = 24 * resolution;
-  paddle_left->bump_Yscie = 32 * resolution - 5;
-  paddle_left->bump_xdeca = 10 * resolution;
-  paddle_left->bump_ydeca = 0;
+  paddle_left->enable_if_ok (is_team_mode, paddle_length,
+                             current_player->get_paddle_alive_counter (LEFT_PADDLE));
+  paddle_left->projectile_xinc0 = 5 * resolution;
+  paddle_left->projectile_yinc0 = 0 * resolution;
+  paddle_left->projectile_xinc1 = 4 * resolution;
+  paddle_left->projectile_yinc1 = 1 * resolution;
+  paddle_left->projectile_xinc2 = 4 * resolution;
+  paddle_left->projectile_yinc2 = -1 * resolution;
+  paddle_left->projectile_xcenter = 24 * resolution;
+  paddle_left->projectile_ycenter = 32 * resolution - 5;
+  paddle_left->projectile_xoffset = 10 * resolution;
+  paddle_left->projectile_yoffset = 0;
   paddle_left->rebonds_Ga = midi4_left;
   paddle_left->rebonds_Dr = midi4Right;
   paddle_left->direct_tab = ballePets4;
   paddle_left->width_mini = width_mini;
   paddle_left->width_maxi = width_maxi;
-  current_player->set_paddle_alive_counter (4, paddle_left->enable_counter);
+  current_player->set_paddle_alive_counter (LEFT_PADDLE
+                                            , paddle_left->enable_counter);
 
   /* initialize robot paddle */
   paddle_robot->set_coordinates (center, bottom_y_coord);
@@ -329,17 +334,16 @@ controller_paddles::init_paddles (controller_gigablitz * blitz, controller_balls
   paddle_robot->collision_width = width_maxi;
   paddle_robot->paddle_number = ROBOT_PADDLE;
   paddle_robot->is_vertical = false;
-  paddle_robot->bump_TFIRE = 2;
-  paddle_robot->bumper_FX0 = 0;
-  paddle_robot->bumper_FY0 = -5 * resolution;
-  paddle_robot->bumper_FX1 = -1 * resolution;
-  paddle_robot->bumper_FY1 = -4 * resolution;
-  paddle_robot->bumper_FX2 = 1 * resolution;
-  paddle_robot->bumper_FY2 = -4 * resolution;
-  paddle_robot->bump_Xscie = 32 * resolution;
-  paddle_robot->bump_Yscie = -20 * resolution;
-  paddle_robot->bump_xdeca = 0;
-  paddle_robot->bump_ydeca = -10 * resolution;
+  paddle_robot->projectile_xinc0 = 0;
+  paddle_robot->projectile_yinc0 = -5 * resolution;
+  paddle_robot->projectile_xinc1 = -1 * resolution;
+  paddle_robot->projectile_yinc1 = -4 * resolution;
+  paddle_robot->projectile_xinc2 = 1 * resolution;
+  paddle_robot->projectile_yinc2 = -4 * resolution;
+  paddle_robot->projectile_xcenter = 32 * resolution;
+  paddle_robot->projectile_ycenter = -20 * resolution;
+  paddle_robot->projectile_xoffset = 0;
+  paddle_robot->projectile_yoffset = -10 * resolution;
   paddle_robot->rebonds_Ga = midi1_left;  // rebonds raquette va a gauche
   paddle_robot->rebonds_Dr = midi1Right;  // rebonds raquette va a droite
   paddle_robot->direct_tab = ballePets1;  // table direction balle collee
@@ -443,7 +447,8 @@ controller_paddles::get_paddles_speed ()
 {
 
   Sint32 off_x = 0; 
-  if (keyboard->control_is_pressed(handler_keyboard::K_LEFT))
+  if (keyboard->control_is_pressed(handler_keyboard::K_LEFT) 
+      || keyboard->is_joy_left() )
     {
       if ((Sint32)kb_paddle_speed > 0)
         {
@@ -457,7 +462,8 @@ controller_paddles::get_paddles_speed ()
       off_x = (Sint32)kb_paddle_speed; 
       //printf("<== %i\n", off_x);
     }
-  else if (keyboard->control_is_pressed(handler_keyboard::K_RIGHT))
+  else if (keyboard->control_is_pressed(handler_keyboard::K_RIGHT)
+      || keyboard->is_joy_right() )
     {
       if ((Sint32)kb_paddle_speed < 0)
         {

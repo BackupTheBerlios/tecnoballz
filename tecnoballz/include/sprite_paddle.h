@@ -1,14 +1,14 @@
 /** 
  * @file sprite_paddle.h
  * @brief A paddle sprite 
- * @date 2007-10-02
+ * @date 2007-10-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_paddle.h,v 1.19 2007/10/07 14:22:12 gurumeditation Exp $
+ * $Id: sprite_paddle.h,v 1.20 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,17 +63,17 @@ public:
 
 private:
   /** Paddle is enabled if the counter is greater than zero */
-  Sint32 enable_counter;
+  Uint32 enable_counter;
   /** True if the paddle is vertical, otherwise horizontal */
   bool is_vertical;
   /** Paddle number from 0 to 5 */
   Uint32 paddle_number;
   /** Paddle length in pixels */
-  Sint32 length;
+  Uint32 length;
   /** Minimum with of the paddle 32 or 64 pixels */
-  Sint32 width_mini;
+  Uint32 width_mini;
   /** Maximum with of the paddle 64 or 128 pixels */
-  Sint32 width_maxi;
+  Uint32 width_maxi;
   /** Shift binary right value (3 or 4) used to convert the length to
    * convert the paddle's length in a interger from 0 to 6 */
   Sint32 shift_width;
@@ -98,18 +98,26 @@ private:
   Sint32 blink_counter;
   /** Used for fire power 1 or fire power 2 */
   controller_projectiles *projectiles;
-  Sint32 bumper_FX0;            // tir inc0. X
-  Sint32 bumper_FY0;            // tir inc0. Y
-  Sint32 bumper_FX1;            // tir inc1. X
-  Sint32 bumper_FY1;            // tir inc1. Y
-  Sint32 bump_TFIRE;            // tir 0, 1, 2
-  Sint32 bumper_FX2;            // tir inc2. X
-  Sint32 bumper_FY2;            // tir inc2. Y
-  Sint32 bump_Xscie;            // tir X centre scie
-  Sint32 bump_Yscie;            // tir Y centre scie
-  Sint32 bump_xdeca;            // decalage tir 6
-  Sint32 bump_ydeca;            // decalage tir 6
-  Sint32 bump_speed;            // vitesse deplacement (maximum 10)
+  /** Used to increase x-coord of a projectile */
+  Sint32 projectile_xinc0;
+  /** Used to increase y-coord of a projectile */
+  Sint32 projectile_yinc0;
+  /** Used to increase x-coord of a projectile */
+  Sint32 projectile_xinc1;
+  /** Used to increase y-coord of a projectile */
+  Sint32 projectile_yinc1;
+  /** Used to increase x-coord of a projectile */
+  Sint32 projectile_xinc2;
+  /** Used to increase y-coord of a projectile */
+  Sint32 projectile_yinc2;
+  /** X-coordinate of center of the circle fire (fire 7) */
+  Sint32 projectile_xcenter;
+  /** Y-coordinate of center of the circle fire (fire 7) */
+  Sint32 projectile_ycenter;
+  /** x-offset used for the fire 6 */
+  Sint32 projectile_xoffset;
+  /** x-offset used for the fire 6 */
+  Sint32 projectile_yoffset;
 
 public:
     sprite_paddle (bool has_projectiles = true);
@@ -117,10 +125,10 @@ public:
   void create_projectiles_list ();
   void fire_projectiles ();
   void move_projectiles ();
-  void enable_if_ok (Sint32 rTeam, Sint32 large, Sint32 actif);
-  void set_width (Sint32 w);
-  void set_height (Sint32 h);
-  void select_image (Sint32 l);
+  void enable_if_ok (bool is_team, Sint32 size, Uint32 counter);
+  void set_width (Uint32 size);
+  void set_height (Uint32 h);
+  void select_image (Uint32 size);
   void select_image ();
   Uint32 get_paddle_number ();
   void set_glue ();
@@ -128,7 +136,6 @@ public:
   void set_fire_2 ();
   void release_ball ();
   void stick_ball (sprite_ball * ball);
-  void directBall ();
   Uint32 get_length ();
   bool is_invincible ();
   void set_invincibility (Sint32 delay);

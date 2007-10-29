@@ -1,14 +1,14 @@
 /** 
  * @file controller_ships.cc 
  * @brief Ship controller 
- * @date 2007-09-25
+ * @date 2007-10-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_ships.cc,v 1.5 2007/09/25 12:11:48 gurumeditation Exp $
+ * $Id: controller_ships.cc,v 1.6 2007/10/29 13:18:53 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ controller_ships::controller_ships ()
   littleInit ();
   max_of_sprites = 8;
   sprites_have_shades = true;
-  sprite_type_id = BOB_ATOMES;
+  sprite_type_id = sprite_object::SHIPS;
 }
 
 /**
