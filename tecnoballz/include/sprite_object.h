@@ -1,14 +1,14 @@
 /**
  * @file sprite_object.h
  * @brief Draw sprites on the screen 
- * @date 2007-10-21
+ * @date 2007-10-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.44 $
+ * @version $Revision: 1.45 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_object.h,v 1.44 2007/10/29 13:18:53 gurumeditation Exp $
+ * $Id: sprite_object.h,v 1.45 2007/10/31 07:35:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

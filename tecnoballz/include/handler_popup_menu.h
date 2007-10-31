@@ -2,14 +2,14 @@
  * @file handler_popup_menu.h
  * @brief popup menu handler (When the [Esc] is pressed)
  * @created 2004-08-08 
- * @date 2007-10-12
+ * @date 2007-10-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.h,v 1.8 2007/10/12 15:30:07 gurumeditation Exp $
+ * $Id: handler_popup_menu.h,v 1.9 2007/10/31 07:35:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,11 +33,14 @@ class handler_popup_menu;
 #include "../include/tecnoballz.h"
 #include "../include/display_text_bitmap.h"
 #include "../include/sprite_object.h"
+#include "../include/handler_menu_events.h"
 
 class handler_popup_menu:public virtual display_text_bitmap,
       public virtual sprite_object
   {
   private:
+    /** Object handle events of the menu */
+    handler_menu_events* menu_events;
     /** Pointer to the text file loaded */
     char **texts_of_menus;
     /** Offscreen used to draw the box menu */
@@ -78,7 +81,6 @@ class handler_popup_menu:public virtual display_text_bitmap,
     MENU_TEXTS_ENUM;
     /** Number maximum of chars by line */
     static const Uint32 MAX_OF_CHARS = 25;
-
   public:
     handler_popup_menu ();
     ~handler_popup_menu ();

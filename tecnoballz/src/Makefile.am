@@ -40,6 +40,7 @@ SOURCES_MAIN = \
   handler_display.cc \
   handler_high_score.cc \
   handler_keyboard.cc \
+  handler_menu_events.cc \
   handler_players.cc \
   handler_popup_menu.cc \
   handler_resources.cc \

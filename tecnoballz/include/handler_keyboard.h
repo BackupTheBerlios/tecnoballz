@@ -1,14 +1,14 @@
-/** 
- * @file handler_keyboard.cc 
+/**
+ * @file handler_keyboard.cc
  * @brief Handler of the keyboard and mouse
- * @date 2007-10-11
+ * @date 2007-10-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.h,v 1.10 2007/10/12 15:30:07 gurumeditation Exp $
+ * $Id: handler_keyboard.h,v 1.11 2007/10/31 07:35:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,17 +25,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA  02110-1301, USA.
  */
-#ifndef __HANDLER_KEYBOARD
-#define __HANDLER_KEYBOARD
+#ifndef __HANDLER_KEYBOARD__
+#define __HANDLER_KEYBOARD__
 
 #include "../include/tecnoballz.h"
 
 class handler_keyboard:public virtual tecnoballz
-{
-public:
-  static const Sint32 NULL_YCOORD = -10240;
-  
-  typedef enum
+  {
+  public:
+    static const Sint32 NULL_YCOORD = -10240;
+
+    typedef enum
     {
       COMMAND_KEY_PAUSE,
       QUIT_TECNOBALLZ,
@@ -54,128 +54,105 @@ public:
     COMAND_KEYS_ENUM;
 
     typedef enum
-     {
-        K_LEFT,
-        K_RIGHT,
-        K_UP,
-        K_DOWN,
-        K_FIRE,
-        K_RELEASE_BALL,
-        K_GIGABLITZ,
-        K_TILT,
-        K_TURBO,
-        K_ESC,
-        K_VOLUME_UP,
-        K_VOLUME_DOWN,
-        K_MAXOF
-     } KEY_CODES_ENUM;
+    {
+      K_LEFT,
+      K_RIGHT,
+      K_UP,
+      K_DOWN,
+      K_FIRE,
+      K_RELEASE_BALL,
+      K_GIGABLITZ,
+      K_TILT,
+      K_TURBO,
+      K_ESC,
+      K_VOLUME_UP,
+      K_VOLUME_DOWN,
+      K_MAXOF
+    } KEY_CODES_ENUM;
 
-private:
-  static bool last_command_keys[NUMOF_COMMAND_KEYS];
-  static bool command_keys[NUMOF_COMMAND_KEYS];
-  /** Predefinded keys to control the paddle */
-  static Uint32 key_codes[K_MAXOF];
-  static handler_keyboard* keyboard_singleton;
-  static Uint32 menu_events_keys[6];
+  private:
+    static bool last_command_keys[NUMOF_COMMAND_KEYS];
+    static bool command_keys[NUMOF_COMMAND_KEYS];
+    /** Predefinded keys to control the paddle */
+    static Uint32 key_codes[K_MAXOF];
+    static handler_keyboard* keyboard_singleton;
 
-  typedef struct
-   {
-     bool is_enabled;
-     Sint32 y_coord_left_down;
-     Sint32 y_coord_right_down;
-     Uint32 line_spacing;
-     Sint32 xcenter;
-     Sint32 top_y_coord;
-     Uint32 line_min;
-     Uint32 line_max;
-     Uint32 current_line;
-     Sint32 key_delay;
-     Uint32 previous_key_code_down;
-   } menu_events_stuct;
+  private:
+    /** True if grabs mouse and keyboard input */
+    bool is_grab_input;
+    /** Number of available joysticks */
+    Uint32 numof_joysticks;
+    SDL_Joystick** sdl_joysticks;
+    bool fire_button_down;
+    bool option_button_down;
+    bool start_button_down;
+    bool joy_left;
+    bool joy_right;
+    bool joy_top;
+    bool joy_down;
 
-private:
-  menu_events_stuct menu_events;
-  /** True if grabs mouse and keyboard input */
-  bool is_grab_input;
-  /** Number of available joysticks */
-  Uint32 numof_joysticks;
-  SDL_Joystick** sdl_joysticks;
-  bool fire_button_down;
-  bool option_button_down;
-  bool start_button_down;
-  bool joy_left;
-  bool joy_right;
-  bool joy_top;
-  bool joy_down;
+    Sint32 mouse_x_offset;
+    Sint32 mouse_y_offset;
+    Sint32 previous_mouse_x_coord;
+    Sint32 previous_mouse_y_coord;
 
-  Sint32 mouse_x_offset;
-  Sint32 mouse_y_offset;
-  Sint32 previous_mouse_x_coord;
-  Sint32 previous_mouse_y_coord;
-  
-  /* x and y coordinates of the mouse pointer */
-  Sint32 mouse_x_coord;
-  Sint32 mouse_y_coord;
-  
-  bool is_left_button_down;
-  bool is_right_button_down;
-  bool is_middle_button_down;
-  bool is_left_button_released;
-  bool is_right_button_released;
+    /* x and y coordinates of the mouse pointer */
+    Sint32 mouse_x_coord;
+    Sint32 mouse_y_coord;
 
-  /* keyboard input delay */
-  Sint32 key_delay;
-  Uint32 key_code_down;
-  Uint32 previous_key_code_down;
-  Uint32 code_keyup;
-  /* cursor position into input string */
-  Sint32 string_cursor_pos;
-  /* input string size */
-  Sint32 string_input_size;
-  /* pointer to the current input string */
-  char *current_input_string;
+    bool is_left_button_down;
+    bool is_right_button_down;
+    bool is_middle_button_down;
+    bool is_left_button_released;
+    bool is_right_button_released;
 
-private:
+    /* keyboard input delay */
+    Sint32 key_delay;
+    Uint32 key_code_down;
+    Uint32 previous_key_code_down;
+    Uint32 code_keyup;
+    /* cursor position into input string */
+    Sint32 string_cursor_pos;
+    /* input string size */
+    Sint32 string_input_size;
+    /* pointer to the current input string */
+    char *current_input_string;
+  private:
     handler_keyboard ();
 
-public:
-   ~handler_keyboard ();
-  static handler_keyboard* get_instance ();
-  
-  void set_grab_input (bool mode);
-  void read_events ();
-  void clear_command_keys ();
-  bool command_is_pressed (Uint32 code, bool clear = false);
-  bool is_left_button ();
-  bool is_right_button ();
-  bool is_right_left_buttons ();
-  bool is_left_button_up (Sint32 * off_x, Sint32 * off_y);
-  bool is_right_button_up (Sint32 * off_x, Sint32 * off_y);
-  Sint32 get_mouse_x_offset ();
-  Sint32 get_mouse_x ();
-  Sint32 get_mouse_y ();
-  bool key_is_pressed (Sint32 code);
-  bool key_is_released (Sint32 code);
-  bool control_is_pressed (Uint32 code);
+  public:
+    ~handler_keyboard ();
+    static handler_keyboard* get_instance ();
 
-  void set_input_string (char *str, Uint32 size);
-  Sint32 get_input_cursor_pos ();
-  void stop_string_input ();
-  Uint32 get_key_down_code ();
+    void set_grab_input (bool mode);
+    void read_events ();
+    void clear_command_keys ();
+    bool command_is_pressed (Uint32 code, bool clear = false);
+    bool is_left_button ();
+    bool is_right_button ();
+    bool is_right_left_buttons ();
+    bool is_left_button_up (Sint32 * off_x, Sint32 * off_y);
+    bool is_right_button_up (Sint32 * off_x, Sint32 * off_y);
+    Sint32 get_mouse_x_offset ();
+    Sint32 get_mouse_x ();
+    Sint32 get_mouse_y ();
+    bool key_is_pressed (Sint32 code);
+    bool key_is_released (Sint32 code);
+    bool control_is_pressed (Uint32 code);
 
-  bool is_joy_left();
-  bool is_joy_right();
+    void set_input_string (char *str, Uint32 size);
+    Sint32 get_input_cursor_pos ();
+    void stop_string_input ();
+    Uint32 get_key_down_code ();
 
-  void stop_menu_events();
-  void start_menu_events(Sint32 spacing, Sint32 min, Sint32 max, Sint32 xcenter, Sint32 ytop);
-  bool check_menu_events (Sint32 *pos_y, Sint32 *inc);
+    bool is_joy_left();
+    bool is_joy_right();
 
-private:
-  void init_joysticks(); 
-  void input_string ();
-  void input_string (Uint32 code);
-  void set_key_code_down (Uint32 code);
-  void set_keycode_up (Uint32 code);
-};
-
+  private:
+    void init_joysticks();
+    void input_string ();
+    void input_string (Uint32 code);
+    void set_key_code_down (Uint32 code);
+    void set_keycode_up (Uint32 code);
+  };
 #endif

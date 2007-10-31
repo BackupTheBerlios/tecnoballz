@@ -1,14 +1,14 @@
 /**
  * @file handler_keyboard.cc 
  * @brief Handler of the keyboard and mouse
- * @date 2007-10-23
+ * @date 2007-10-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.15 2007/10/29 13:18:53 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.16 2007/10/31 07:35:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,8 +73,6 @@ handler_keyboard::handler_keyboard ()
   string_input_size = 0;
   code_keyup = 0;
   current_input_string = NULL;
-  stop_menu_events();
- 
   for (Uint32 i = 0; i < NUMOF_COMMAND_KEYS; i++)
     {
       command_keys[i] = false;
@@ -657,6 +655,23 @@ handler_keyboard::control_is_pressed (Uint32 code)
     }
   else
     {
+      switch(code)
+        {
+          case K_LEFT:
+          return joy_left ? true : false;
+          break;
+          case K_RIGHT:
+          return joy_right ? true : false;
+          break;
+          case K_UP:
+          return joy_top ? true : false;
+          break;
+          case K_DOWN:
+          return joy_down ? true : false;
+          break;
+        }
+
+
       return false;
     }
 }
@@ -1001,228 +1016,4 @@ Uint32 handler_keyboard::get_key_down_code ()
 {
   return key_code_down;
 }
-
-
-void
-handler_keyboard::stop_menu_events()
-{
-  menu_events.is_enabled = false;
-  menu_events.y_coord_left_down = NULL_YCOORD;
-  menu_events.y_coord_right_down = NULL_YCOORD;
-  menu_events.line_spacing = 0;
-  menu_events.xcenter = 0;
-  menu_events.top_y_coord = 0;
-  menu_events.line_min = 0;
-  menu_events.line_max = 0;
-  menu_events.current_line = 0;
-  menu_events.key_delay = 0;
-  menu_events.previous_key_code_down = 0;
-}
-
-/**
- * Start a new vertical menu handler
- * @param spacing Space between lines in pixels
- * @param min Minimum line number
- * @param max Maximum line number
- * @param xcenter X-coordinate center of the menu
- * @param ytop Y-coordinate top of the menu 
- */
-void
-handler_keyboard::start_menu_events(Sint32 spacing, Sint32 min, Sint32 max,
-    Sint32 xcenter, Sint32 ytop)
-{
-  if (is_verbose)
-    {
-      std::cout << " handler_keyboard::start_menu_events() " <<
-        " line_spacing: " << spacing << " line_min: " << min <<
-        " line_max: " << max << " xcenter: " << xcenter <<
-        " top_y_coord: " << ytop << std::endl;
-    }
-  menu_events.is_enabled = true;
-  menu_events.y_coord_left_down = NULL_YCOORD;
-  menu_events.y_coord_right_down = NULL_YCOORD;
-  menu_events.line_spacing = spacing;
-  menu_events.line_min = min;
-  menu_events.line_max = max;
-  menu_events.xcenter = xcenter;
-  menu_events.current_line = 0;
-  menu_events.top_y_coord = ytop;
-  menu_events.previous_key_code_down = 0;
-  Sint32 xmouse, ymouse;
-  SDL_GetMouseState  (&xmouse, &ymouse);
-  if (ymouse < ytop + min * spacing)
-    {
-      menu_events.current_line = min;
-    }
-  else if (ymouse > ytop + max * spacing)
-    {
-      menu_events.current_line = max;
-    }
-  else
-    {
-      menu_events.current_line = (ymouse - ytop) / spacing;
-    }
-}
-
-
-Uint32 handler_keyboard::menu_events_keys[6] =
-  { K_UP, K_DOWN, K_FIRE, K_RELEASE_BALL, K_GIGABLITZ, K_TILT };
-
-/**
- * Check mouses events for the main menu and popup menu 
- * @param pos_y Pointer to a integer which will contain y-coordinate
- *              where the mouse clicked 
- * @param inc Pointer to a integer which will contain -1 if left mouse
- *            button clicked, 1 if right button clicked, otherwise 0
- * @return true if left mouse button clicked, otherwise false
- */
-bool
-handler_keyboard::check_menu_events (Sint32 *pos_y, Sint32 *inc)
-{
-  if (!menu_events.is_enabled)
-    {
-      return false;
-    }
-  bool is_selected = false;
-  Uint32 kcode = 0;
-  *inc = 0;
-
-  /* check keyboards events */
-  if(menu_events.previous_key_code_down > 0 &&
-      !control_is_pressed(menu_events.previous_key_code_down))
-    {
-      switch(menu_events.previous_key_code_down)
-        {
-        case K_FIRE:
-          *inc = 1;
-          is_selected = true;
-          break;
-        case K_RELEASE_BALL:
-          *inc = -1;
-          is_selected = true;
-          break;
-        }
-      menu_events.previous_key_code_down = 0;
-      menu_events.key_delay = 0;
-    }
-  if (menu_events.key_delay < 1)
-    {
-      for(Uint32 i = 0; i < 6; i++)
-        {
-          if(!control_is_pressed(menu_events_keys[i]))
-            {
-              continue;
-            }
-          kcode = menu_events_keys[i];
-          if (menu_events.previous_key_code_down != menu_events_keys[i])
-            {
-              menu_events.previous_key_code_down = menu_events_keys[i];
-              menu_events.key_delay = 30;
-            }
-          else
-            {
-              menu_events.key_delay = 10;
-            }
-          break;
-        }
-    }
-  else
-    {
-      kcode = 0;
-      menu_events.key_delay--;
-    }
-
-  /* check if right or left button are pressed */
-  Sint32 mposx;
-  switch(kcode)
-    {
-    case K_FIRE:
-      //*inc = 1;
-      //is_selected = true;
-      break;
-    case K_RELEASE_BALL:
-      //*inc = -1;
-      //is_selected = true;
-      break;
-    case K_UP:
-      if(menu_events.current_line ==  menu_events.line_min)
-        {
-          menu_events.current_line = menu_events.line_max;
-        }
-      else
-        {
-          menu_events.current_line--;
-        }
-      SDL_WarpMouse(menu_events.xcenter, menu_events.top_y_coord +
-                    menu_events.current_line * menu_events.line_spacing);
-      break;
-    case K_DOWN:
-      if(menu_events.current_line == menu_events.line_max)
-        {
-          menu_events.current_line =  menu_events.line_min;
-        }
-      else
-        {
-          menu_events.current_line++;
-        }
-      SDL_WarpMouse(menu_events.xcenter, menu_events.top_y_coord +
-                    menu_events.current_line * menu_events.line_spacing);
-      break;
-    }
-
-  
-  /*
-   * check mouse events
-   */
-  bool is_left_down = keyboard->is_left_button ();
-  bool is_right_down = keyboard->is_right_button ();
-  /* read y where is pressed */
-  if (is_left_down && menu_events.y_coord_left_down == NULL_YCOORD)
-    {
-      menu_events.y_coord_left_down = keyboard->get_mouse_y ();
-    }
-  else
-    {
-      if (is_right_down && menu_events.y_coord_right_down == NULL_YCOORD)
-        {
-          menu_events.y_coord_right_down = keyboard->get_mouse_y ();
-        }
-    }
-
-  bool is_right_up = false;
-  bool is_left_up = keyboard->is_left_button_up (&mposx, pos_y);
-  if (!is_left_up)
-    {
-      is_right_up = keyboard->is_right_button_up (&mposx, pos_y);
-    }
-  if ((is_left_up && *pos_y == menu_events.y_coord_left_down) ||
-      (is_right_up && *pos_y == menu_events.y_coord_right_down))
-    {
-      if (is_left_up)
-        {
-          *inc = 1;
-          menu_events.y_coord_left_down = NULL_YCOORD;
-        }
-      if (is_right_up)
-        {
-          *inc = -1;
-          menu_events.y_coord_right_down = NULL_YCOORD;
-        }
-      is_selected = true;
-    }
-  if (!is_left_down)
-    {
-      menu_events.y_coord_left_down = NULL_YCOORD;
-    }
-  if (!is_right_down)
-    {
-      menu_events.y_coord_right_down = NULL_YCOORD;
-    }
-  return is_selected;
-}
-
-
-
-
-
 

@@ -1,14 +1,14 @@
 /**
  * @file sprite_display_menu.cc 
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-10-12
+ * @date 2007-10-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.21 2007/10/12 15:30:07 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.22 2007/10/31 07:35:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,6 +60,7 @@ sprite_display_menu::sprite_display_menu ()
   clear_zone_ycoord = 0;
   blink_cursor_delay = 0;
   texts_of_menus = NULL;
+  menu_events = new handler_menu_events();
 }
 
 /**
@@ -81,6 +82,11 @@ sprite_display_menu::~sprite_display_menu ()
     {
       delete[](char *) texts_of_menus;
       texts_of_menus = NULL;
+    }
+  if (menu_events != NULL)
+    {
+      delete menu_events;
+      menu_events = NULL;
     }
 }
 
@@ -415,7 +421,7 @@ sprite_display_menu::set_current_menu_section(Uint32 current)
         }
       max--;
     }
-  keyboard->start_menu_events(line_spacing, min, max - 1, display->get_width() >> 1, y);
+  menu_events->start(line_spacing, min, max - 1, display->get_width() >> 1, y);
 }
 
 /**
@@ -428,7 +434,7 @@ sprite_display_menu::check_events ()
   Uint32 exit_code = DO_NO_EXIT;
   Sint32 pos_y = 0;
   Sint32 incre = 0;
-  if (keyboard->check_menu_events(&pos_y, &incre))
+  if (menu_events->check(&pos_y, &incre))
     {
       pos_y = (pos_y - y_coord) / line_spacing;
       switch (current_menu_section)
@@ -438,7 +444,7 @@ sprite_display_menu::check_events ()
           switch (pos_y)
             {
             case LINE_START:
-              keyboard->stop_menu_events();
+              menu_events->stop();
               clear_text_offscreen ();
               clear_zone_stop ();
               exit_code = START_GAME;

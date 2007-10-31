@@ -2,14 +2,14 @@
  * @file handler_popup_menu.cc
  * @brief popup menu handler (When the [Esc] key is pressed)
  * @created 2004-08-08
- * @date 2007-10-20
+ * @date 2007-10-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.16 2007/10/29 13:18:53 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.17 2007/10/31 07:35:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #include "../include/handler_popup_menu.h"
 #include "../include/sprite_object.h"
 #include "../include/handler_keyboard.h"
+#include "../include/handler_menu_events.h"
 
 /**
  * Create the popup menu handler
@@ -39,6 +40,7 @@ handler_popup_menu::handler_popup_menu ()
   menu_first_color_index = 0;
   menu_number = 0;
   texts_of_menus = NULL;
+  menu_events = new handler_menu_events();
 }
 
 /**
@@ -60,6 +62,11 @@ handler_popup_menu::~handler_popup_menu ()
     {
       delete[](char *) texts_of_menus;
       texts_of_menus = NULL;
+    }
+  if (menu_events != NULL)
+    {
+      delete menu_events;
+      menu_events = NULL;
     }
 }
 
@@ -303,9 +310,9 @@ Sint32 handler_popup_menu::run ()
     {
       if (!is_enabled)
         {
-          keyboard->start_menu_events (vertical_space, 1, num_of_lines,
-                                       menu_xcenter,
-                                       get_y_coord () + char_height);
+          menu_events->start (vertical_space, 1, num_of_lines,
+                              menu_xcenter,
+                              get_y_coord () + char_height);
         }
       is_enabled = true;
     }
@@ -316,13 +323,13 @@ Sint32 handler_popup_menu::run ()
           restore_rectangle_background ();
         }
       is_enabled = false;
-      keyboard->stop_menu_events ();
+      menu_events->stop ();
       return event;
     }
 
   Sint32 pos_y = 0;
   Sint32 incre = 0;
-  if (keyboard->check_menu_events (&pos_y, &incre))
+  if (menu_events->check (&pos_y, &incre))
     {
       event = (pos_y - y_coord) / vertical_space;
     }

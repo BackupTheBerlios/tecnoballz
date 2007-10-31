@@ -1,14 +1,14 @@
 /** 
  * @file controller_capsules.h
  * @brief Capsules controller 
- * @date 2007-10-05
+ * @date 2007-10-29
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_capsules.h,v 1.14 2007/10/05 08:03:10 gurumeditation Exp $
+ * $Id: controller_capsules.h,v 1.15 2007/10/31 07:35:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ private:
   /** Time delay before next image of the animation */
   Sint32 frame_period;
   /** Index of the current image */
-  Sint32 frame_index;
+  Uint32 frame_index;
   /** Overview capsule of a option in the shop */
   sprite_capsule *overview_capsule;
   /** Counter delay before dropping a penalty/bonus capsule */

@@ -4,11 +4,11 @@
  * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.h,v 1.8 2007/10/11 05:20:26 gurumeditation Exp $
+ * $Id: sprite_display_menu.h,v 1.9 2007/10/31 07:35:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ class sprite_display_menu;
 #include "../include/display_text_bitmap.h"
 #include "../include/sprite_object.h"
 #include "../include/bitmap_data.h"
+#include "../include/handler_menu_events.h"
 
 class sprite_display_menu:public virtual display_text_bitmap,
   public virtual sprite_object
@@ -61,6 +62,8 @@ private:
     }
     MENU_TEXTS_ENUM;
 
+  /** Object handle events of the menu */
+  handler_menu_events* menu_events;
   /** Pointer to the text file loaded */
   char **texts_of_menus;
   static const unsigned char color_cycling[];

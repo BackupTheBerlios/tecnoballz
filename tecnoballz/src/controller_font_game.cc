@@ -1,14 +1,14 @@
 /** 
  * @file controller_font_game.cc 
  * @brief Handle mobile characters used for "LEVEL n COMPLETED"
- * @date 2007-10-17
+ * @date 2007-10-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_font_game.cc,v 1.2 2007/10/29 13:18:53 gurumeditation Exp $
+ * $Id: controller_font_game.cc,v 1.3 2007/10/31 07:35:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
