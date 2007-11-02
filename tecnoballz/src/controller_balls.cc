@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-10-17
+ * @date 2007-11-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.64 $
+ * @version $Revision: 1.65 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.64 2007/10/29 13:18:53 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.65 2007/11/02 08:09:45 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1082,7 +1082,7 @@ controller_balls::bricks_collision ()
           x /= brick_width;
           y /= byoff;
 	  /* 16 bricks per lines */
-          y *= controller_bricks::NB_BRICKSH;
+          y *= controller_bricks::MAX_OF_BRICKS_HORIZONTALLY;
           x += y;
           brick_info *brick = (bricks_map + x);
           x = brick->brique_rel;

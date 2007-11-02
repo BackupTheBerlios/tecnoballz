@@ -5,11 +5,11 @@
  * @date 2007-09-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.18 2007/09/16 16:48:29 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.19 2007/11/02 08:09:45 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,10 @@ typedef struct
   /** Brick vertical position in the bricks bitmap
    * 0, 1, 2, 3, 4, 5, 6, 7, or 8 */
   Sint32 v_pos;
-  Sint32 *briqueFond;           // adresse du fond de la brique (modulo 0)
+  /** Pointer to the address of the buffer containing a save of
+   * the background which is under a brick (if has_backfground = true)
+   * modulo = 0 */
+  Sint32 *save_background;
   /** Brick color, 17 colors possibles */
   Uint32 color;
 }
@@ -106,11 +109,12 @@ public:
   /** Maximum number of bricks to erase */
   static const Uint32 MAXBRIKCLR = 2 << 8;
   /** Numbers of bricks peer line */
-  static const Uint32 NB_BRICKSH = 16;
+  static const Uint32 MAX_OF_BRICKS_HORIZONTALLY = 16;
   /** Numbers of lines of bricks */
-  static const Uint32 NB_BRICKSV = 30;
+  static const Uint32 MAX_OF_BRICKS_VERTICALLY = 30;
   /** Maximum number of bricks */
-  static const Uint32 NB_BRICKST = NB_BRICKSH * (NB_BRICKSV + 8);
+  static const Uint32 MAX_OF_BRICKS = MAX_OF_BRICKS_HORIZONTALLY
+    * (MAX_OF_BRICKS_VERTICALLY + 8);
 
 private:
   /** Brick width in pixels in low-res */
@@ -119,20 +123,21 @@ private:
   static const Uint32 BRICK_HEIGHT = 7;
   static const Sint32 offBri_DD = 1;
   static const Sint32 offBri_GG = -1;
-  static const Sint32 offBri_HH = -NB_BRICKSH;
-  static const Sint32 offBri_BB = NB_BRICKSH;
-  static const Sint32 offBri_BG = NB_BRICKSH - 1;
-  static const Sint32 offBri_BD = NB_BRICKSH + 1;
-  static const Sint32 offBri_HG = -NB_BRICKSH - 1;
-  static const Sint32 offBri_HD = -NB_BRICKSH + 1;
+  static const Sint32 offBri_HH = -MAX_OF_BRICKS_HORIZONTALLY;
+  static const Sint32 offBri_BB = MAX_OF_BRICKS_HORIZONTALLY;
+  static const Sint32 offBri_BG = MAX_OF_BRICKS_HORIZONTALLY - 1;
+  static const Sint32 offBri_BD = MAX_OF_BRICKS_HORIZONTALLY + 1;
+  static const Sint32 offBri_HG = -MAX_OF_BRICKS_HORIZONTALLY - 1;
+  static const Sint32 offBri_HD = -MAX_OF_BRICKS_HORIZONTALLY + 1;
   /** Number of bricks per row in a level */ 
   static const Uint32 BRICKS_MAP_WIDTH = 10;
   /** Number of bricks per column in a level */ 
   static const Uint32 BRICKS_MAP_HEIGHT = 17;
-  static const Sint32 LEVEL_SIZE = BRICKS_MAP_WIDTH * BRICKS_MAP_HEIGHT;
-  static const Sint32 LEVELSAREA = 10;  //number of levels in a area
-  static const Sint32 SIZEOFAREA = LEVELSAREA * LEVEL_SIZE;
-  static const Sint32 BRKYOFFSET = 8;   //y-offset between 2 bricks 
+  static const Uint32 LEVEL_SIZE = BRICKS_MAP_WIDTH * BRICKS_MAP_HEIGHT;
+  /** Number of levels in a area */
+  static const Uint32 MAX_OF_LEVELS_IN_AREA = 10;
+  static const Uint32 SIZEOFAREA = MAX_OF_LEVELS_IN_AREA * LEVEL_SIZE;
+  static const Uint32 BRKYOFFSET = 8;   //y-offset between 2 bricks 
 
 private:
   /** Bitmap of the set of current bricks */
@@ -171,7 +176,9 @@ private:
 
 protected:
   Sint32 brique_clr;            // pointeur sur "bricks_redraw"
-  char *brikTampon;             // sauvegarde briques
+  /** Buffer used to save the background under bricks
+   * if has_background = true  */
+  char *background_under_bricks;
   Sint32 offsSource;            // adresse de la page brique
   Sint32 offsDestin;            //
   Sint32 *adr_source;           // adresse de la page brique
@@ -215,7 +222,7 @@ private:
 
 /*
 
-NB_BRICKST = 480 briques a l'ecran
+MAX_OF_BRICKS = 480 briques a l'ecran
 
 
  bricks_map 
@@ -228,7 +235,7 @@ NB_BRICKST = 480 briques a l'ecran
    pixel_offset : adresse ecran relative d'affichage (dans le buffer et le tampon)
    h_pos : abscisse de la brique dans la page Gfx brique (0,1,2,3,4,5,6,7 ou 8)
    v_pos : ordonnee de la brique dans la page Gfx brique (0,2,4,6,8,10 ou 12)
-   briqueFond : adresse absolue du fond 4 couleurs sous la brique (modulo 0)
+   save_background : adresse absolue du fond 4 couleurs sous la brique (modulo 0)
 
 
 
@@ -286,7 +293,7 @@ NB_BRICKST = 480 briques a l'ecran
   pixel_offset => adresse ecran relative d'affichage (buffer et tampon)
   h_pos => abscisse de la brique dans la page graphique brique 0, 2, 4, 6, 8, 10 ou 12  
   v_pos => ordonnee de la brique dans la page graphique brique 0, 1, 2, 3, 4, 5, 6, 7, ou 8 
- *briqueFond => adresse du fond de la brique pour l'effacer (modulo 0)
+ *save_background => adresse du fond de la brique pour l'effacer (modulo 0)
 
 
 Jeu original :

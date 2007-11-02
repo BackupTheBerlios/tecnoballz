@@ -1,14 +1,14 @@
 /**
  * @file sprite_projectile.cc 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-09-29
+ * @date 2007-10-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.22 2007/10/29 13:18:54 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.23 2007/11/02 08:09:45 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -207,7 +207,7 @@ sprite_projectile::check_collisions_with_bricks ()
       redraw->ycoord_collision = y;
       x /= brick_width;
       y /= byoff;
-      y *= controller_bricks::NB_BRICKSH;
+      y *= controller_bricks::MAX_OF_BRICKS_HORIZONTALLY;
       x += y;
       brick_info *map = (bricks_map + x);
       x = map->brique_rel;

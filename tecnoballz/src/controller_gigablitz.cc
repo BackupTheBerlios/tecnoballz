@@ -1,14 +1,14 @@
 /**
  * @file controller_gigablitz.cc 
  * @brief Gigablitz controller 
- * @date 2007-10-26
+ * @date 2007-11-02
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.20 2007/10/29 13:18:53 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.21 2007/11/02 08:09:45 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -249,7 +249,7 @@ controller_gigablitz::collision1 ()
   /* y = y / 16 (space between two bricks in height) */
   y /= byoff;
   /* y = y * 16 (number of bricks on the same line) */
-  y *= controller_bricks::NB_BRICKSH;
+  y *= controller_bricks::MAX_OF_BRICKS_HORIZONTALLY;
   x += y;
   brick_info *bricks_map = bricks->get_bricks_map ();
   for (Uint32 i = 0; i < num_of_bricks; i++, x++)
