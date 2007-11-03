@@ -5,11 +5,11 @@
  * @date 2007-10-20
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.37 $
+ * @version $Revision: 1.38 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.37 2007/11/02 08:09:45 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.38 2007/11/03 16:43:29 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -517,10 +517,10 @@ controller_bricks::color_cycling()
   brick_info *map = bricks_map;
   map += ((6 + BRICKS_MAP_HEIGHT - 9) * MAX_OF_BRICKS_HORIZONTALLY + 3) - 1;
   map = bricks_map + ((6 + BRICKS_MAP_HEIGHT - 1) * MAX_OF_BRICKS_HORIZONTALLY) + 3 + BRICKS_MAP_WIDTH - 1; 
-  Uint32 count = cycling_count++;
+  Sint32 count = cycling_count++;
   for(Uint32 i = 0; i < BRICKS_MAP_HEIGHT; i++, map-=MAX_OF_BRICKS_HORIZONTALLY)
     {
-      if (count >= BRICKS_MAP_WIDTH)
+      if (count >= (Sint32)BRICKS_MAP_WIDTH)
         {
           if (i == BRICKS_MAP_HEIGHT - 1)
             {
@@ -532,7 +532,7 @@ controller_bricks::color_cycling()
         {
           if (map[-count].sprite != NULL)
             {
-               if (!map[-count].sprite->is_cycling ())
+              if (!map[-count].sprite->is_cycling ())
                  {
                    map[-count].sprite->touch();
                  }
