@@ -1,14 +1,14 @@
 /** 
  * @file controller_balls.cc 
  * @brief Control the balls. Move and collisions 
- * @date 2007-11-02
+ * @date 2007-11-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.65 $
+ * @version $Revision: 1.66 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.65 2007/11/02 08:09:45 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.66 2007/11/04 20:51:17 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1051,7 +1051,7 @@ controller_balls::bricks_collision ()
   /* y-offset between 2 bricks: 8 or 16 pixels */
   Sint32 byoff = bricks->getYOffset ();
   /* first indestructible brick */
-  Sint32 indus = bricks->getBkIndus ();
+  Sint32 indestructible = bricks->get_indestructible_offset ();
   sprite_ball **balls = sprites_list;
   brick_info *bricks_map = bricks->get_bricks_map ();
   for (Uint32 i = 0; i < max_of_sprites; i++)
@@ -1085,9 +1085,10 @@ controller_balls::bricks_collision ()
           y *= controller_bricks::MAX_OF_BRICKS_HORIZONTALLY;
           x += y;
           brick_info *brick = (bricks_map + x);
-          x = brick->brique_rel;
+          //x = brick->source_offset;
           /* collision between a ball and a brick? */
-          if (0 == x)
+          //if (0 == x)
+          if (brick->source_offset == 0)
             {
 	      /* no collision */
               continue;
@@ -1098,8 +1099,9 @@ controller_balls::bricks_collision ()
 	    {
 	       brick->sprite->touch();
 	    }
-          x = x - indus;
-          if (x >= 0)
+          //x = x - indestructible; x = x - 25088
+          //if (x >= 0)
+          if (brick->source_offset >= indestructible)
             {
               /* 
                * indestructible brick touched!
@@ -1107,7 +1109,8 @@ controller_balls::bricks_collision ()
               /* collision with indestructible brick */
               indes_col = true;
               /* indestructible/destructible bricks? */
-              if ((x -= brick_width) > 0)
+              //if ((x -= brick_width) > 0)
+              if (brick->source_offset > (Sint32)(indestructible + brick_width))
                 {
                   if (ball->type == sprite_ball::POWER_2)
                     {
@@ -1118,13 +1121,13 @@ controller_balls::bricks_collision ()
                       redraw->sprite = brick->sprite;
                       redraw->is_background = true;
                       /* clear brick code */
-                      brick->brique_rel = 0;
+                      brick->source_offset = 0;
 		      /* restore background under brick */
 		      bricks->bricks_redraw_next ();
                     }
                   else
                     {
-                      x = 2;
+                      //x = 2;
 #ifndef SOUNDISOFF
                       audio->play_sound (handler_audio::HIT_INDESTRUCTIBLE_BRICK2);
 #endif
@@ -1133,7 +1136,7 @@ controller_balls::bricks_collision ()
               else
                 {
 		  /* brick's really indestructible */
-                  x = 1; 
+                  //x = 1; 
 #ifndef SOUNDISOFF
                   audio->play_sound (handler_audio::HIT_INDESTRUCTIBLE_BRICK1);
 #endif
@@ -1154,15 +1157,15 @@ controller_balls::bricks_collision ()
                 {
                   brick->h_pos = 0;
                   /* clear brick code */
-                  brick->brique_rel = 0;
+                  brick->source_offset = 0;
                   redraw->number = brick->number;
                   /* restore background */
                   redraw->is_background = true;
                 }
               else
                 {
-                  brick->brique_rel = brick->brique_rel - ball->strength2;
-                  redraw->number = brick->brique_rel;
+                  brick->source_offset = brick->source_offset - ball->strength2;
+                  redraw->number = brick->pixel_offset;
                   /* redraw a new brick */
                   redraw->is_background = false;
                 }

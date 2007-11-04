@@ -1,14 +1,14 @@
 /**
  * @file sprite_projectile.cc 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-10-02
+ * @date 2007-10-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.23 2007/11/02 08:09:45 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.24 2007/11/04 20:51:17 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -190,7 +190,7 @@ sprite_projectile::check_collisions_with_bricks ()
   /* y-offset between 2 bricks */
   Uint32 byoff = bricks->getYOffset ();
   /* first indestructible brick */
-  Sint32 indus = bricks->getBkIndus ();
+  Sint32 indestructible = bricks->get_indestructible_offset ();
   sprite_projectile **projectiles = projectiles_list;
   brick_info *bricks_map = bricks->get_bricks_map ();
   for (Uint32 i = 0; i < total_fire; i++)
@@ -205,14 +205,18 @@ sprite_projectile::check_collisions_with_bricks ()
       brick_redraw *redraw = bricks->get_bricks_redraw ();
       redraw->xcoord_collision = x;
       redraw->ycoord_collision = y;
+      /*
       x /= brick_width;
       y /= byoff;
       y *= controller_bricks::MAX_OF_BRICKS_HORIZONTALLY;
       x += y;
       brick_info *map = (bricks_map + x);
-      x = map->brique_rel;
+      */
+      brick_info *map = bricks->get_bricks_map(x, y);
+
+      //x = map->source_offset;
       /* collision between a blast and a brick? */
-      if (x == 0)
+      if (map->source_offset == 0)
         {
           /* no collision */
           continue;
@@ -227,13 +231,15 @@ sprite_projectile::check_collisions_with_bricks ()
         {
           map->sprite->touch ();
         }
-      if ((x -= indus) >= 0)
+      //if ((x -= indestructible) >= 0)
+      if (map->source_offset >= indestructible)
         {
           /* 
            * indestructible brick touched!
            */
           /* indestructible-destructible bricks? */
-          if ((x -= brick_width) > 0)
+          //if ((x -= brick_width) > 0)
+          if (map->source_offset >= (Sint32)(indestructible + brick_width))
             {
               /* fire destroys the indestructibles-destructibles bricks? */
               if (blast->can_destroy_indestructible)
@@ -241,7 +247,7 @@ sprite_projectile::check_collisions_with_bricks ()
                   redraw->is_indestructible = true;
                   redraw->pixel_offset = map->pixel_offset;
                   redraw->brick_map = map;
-                  map->brique_rel = 0;
+                  map->source_offset = 0;
                   redraw->number = map->number;
                   /* restore background under brick */
                   redraw->is_background = true;
@@ -249,7 +255,7 @@ sprite_projectile::check_collisions_with_bricks ()
                 }
               else
                 {
-                  x = 2;
+                  //x = 2;
 #ifndef SOUNDISOFF
                   audio->
                     play_sound (handler_audio::HIT_INDESTRUCTIBLE_BRICK2);
@@ -259,7 +265,7 @@ sprite_projectile::check_collisions_with_bricks ()
           else
             {
               /* the brick is really indestructible */
-              x = 1;
+              //x = 1;
 #ifndef SOUNDISOFF
               audio->play_sound (handler_audio::HIT_INDESTRUCTIBLE_BRICK1);
 #endif
@@ -279,15 +285,15 @@ sprite_projectile::check_collisions_with_bricks ()
           if (map->h_pos <= 0)
             {
               map->h_pos = 0;
-              map->brique_rel = 0;
+              map->source_offset = 0;
               redraw->number = map->number;
               /* restore background under brick */
               redraw->is_background = true;
             }
           else
             {
-              map->brique_rel = map->brique_rel - (x * brick_width);
-              redraw->number = map->brique_rel;
+              map->source_offset = map->source_offset - (x * brick_width);
+              redraw->number = map->source_offset;
               /* redraw a new brick */
               redraw->is_background = false;
             }

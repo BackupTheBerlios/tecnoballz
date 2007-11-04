@@ -5,11 +5,11 @@
  * @date 2007-09-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.h,v 1.19 2007/11/02 08:09:45 gurumeditation Exp $
+ * $Id: controller_bricks.h,v 1.20 2007/11/04 20:51:17 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,8 @@ class sprite_paddle;
  */
 typedef struct
 {
-  Sint32 brique_rel;            // adresse source relative Gfx de la brique (collision)
+  /** offset on the pixels brick from the bitmap source */
+  Sint32 source_offset;
   /** Brick is currently display */
   bool is_displayed;
   /** Brick counter */
@@ -148,8 +149,9 @@ private:
   Sint32 less_bricks_count;
   /** Time delay for the "less bricks" option */
   Sint32 less_bricks_delay;
-  brick_info *bricks_map;       // tableau de 16*30
-
+  /** Map of the bricks currently displayed on the screen, 30 lines
+   * of 16 breack each */
+  brick_info *bricks_map;
   /** Width in pixels of a set of bricks */
   Uint32 bricks_height;
   /** Height in pixels of a set of bricks */
@@ -160,7 +162,8 @@ private:
   Uint32 brick_height;
   /** Brick's size in bytes */
   Uint32 brick_size;
-  Sint32 brickIndus;            //first indestructible brick
+  /** Pixels offset on the first indestructible brick */
+  Sint32 indestructible_offset;
   Sint32 brkyoffset;            //y-offset between 2 bricks 
   Sint32 ombre_deca;            //size of shadow in pixels (3 or 6)
   Sint32 ombre_left;            //(4 or 8)
@@ -199,13 +202,14 @@ public:
   void draw_brick (char *pixels, Sint32 offset, Sint32 color);
   void clr_bricks ();
   brick_info* get_bricks_map ();
+  brick_info* get_bricks_map (Sint32 xcoord, Sint32 ycoord);
   brick_redraw* get_bricks_redraw (); 
   brick_redraw* get_bricks_redraw_next (); 
   void bricks_redraw_next (); 
 
 
   Sint32 get_brick_width ();
-  Sint32 getBkIndus ();
+  Sint32 get_indestructible_offset ();
   Sint32 getYOffset ();
 
 private:
@@ -229,7 +233,7 @@ MAX_OF_BRICKS = 480 briques a l'ecran
   fonction : collision des balles/tirs avec les 480 briques de l'ecran
   taille   : 7*480 = 3360 octets
   type     : type structure brick_info 6 mots et 1 pointeur
-   brique_rel : adresse relative du bitmap de la brique, sert pour les collisions/resistance de la brique controller_balls::vitusBrick()
+   offset : adresse relative du bitmap de la brique, sert pour les collisions/resistance de la brique controller_balls::vitusBrick()
    is_displayed : adresse relative du bitmap de la brique
    number : numero de la brique (sert a rien ???)
    pixel_offset : adresse ecran relative d'affichage (dans le buffer et le tampon)
@@ -287,7 +291,7 @@ MAX_OF_BRICKS = 480 briques a l'ecran
  utilisee pour les collisions avec les balles, les tirs et le gigablitz.
  
  
-  brique_rel => adresse source relative de la brique (resistance)
+  offset => adresse source relative de la brique (resistance)
   is_displayed => adresse source relative de la brique 
   number => numero de la brique par rapport a la premiere
   pixel_offset => adresse ecran relative d'affichage (buffer et tampon)

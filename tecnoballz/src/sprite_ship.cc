@@ -1,14 +1,14 @@
 /**
  * @file sprite_ship.cc 
  * @brief A flying enemy ships sprite 
- * @date 2007-11-02
+ * @date 2007-11-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_ship.cc,v 1.16 2007/11/02 08:09:45 gurumeditation Exp $
+ * $Id: sprite_ship.cc,v 1.17 2007/11/04 20:51:17 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -169,9 +169,8 @@ sprite_ship::is_collisions_with_bricks (Uint32 xcoord, Uint32 ycoord)
       y *= controller_bricks::MAX_OF_BRICKS_HORIZONTALLY;
       x += y;
       brick_info *map = (bricks_map + x);
-      x = map->brique_rel;
       /* collision between the ship and a brick? */
-      if (x != 0)
+      if (map->source_offset != 0)
         {
           return true;
         }

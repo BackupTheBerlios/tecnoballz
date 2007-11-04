@@ -1,14 +1,14 @@
 /**
  * @file controller_gigablitz.cc 
  * @brief Gigablitz controller 
- * @date 2007-11-02
+ * @date 2007-11-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gigablitz.cc,v 1.21 2007/11/02 08:09:45 gurumeditation Exp $
+ * $Id: controller_gigablitz.cc,v 1.22 2007/11/04 20:51:17 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -237,7 +237,7 @@ controller_gigablitz::collision1 ()
   /* y-offset between 2 bricks */
   Sint32 byoff = bricks->getYOffset ();
   /* first indestructible brick */
-  Sint32 indus = bricks->getBkIndus ();
+  Sint32 indus = bricks->get_indestructible_offset ();
   if (0 == num_of_bricks)
     {
       return;
@@ -255,7 +255,7 @@ controller_gigablitz::collision1 ()
   for (Uint32 i = 0; i < num_of_bricks; i++, x++)
     {
       brick_info *map = (bricks_map + x);
-      Sint32 v = map->brique_rel;
+      Sint32 v = map->source_offset;
       if (0 == v)
         {
           /* no collision */
@@ -279,7 +279,7 @@ controller_gigablitz::collision1 ()
       redraw->pixel_offset = map->pixel_offset;
       redraw->brick_map = map;
       map->h_pos = -1;
-      map->brique_rel = 0;
+      map->source_offset = 0;
       redraw->number = map->number;
       /* restore background under brick */
       redraw->is_background = true;
