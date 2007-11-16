@@ -1,14 +1,14 @@
 /** 
  * @file display_text_bitmap.h
  * @brief Display bitmap strings 
- * @date 2007-03-17
+ * @date 2007-11-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: display_text_bitmap.h,v 1.7 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: display_text_bitmap.h,v 1.8 2007/11/16 21:02:10 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ public:
   void draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, Sint32 value, Uint32 padding);
   void draw (offscreen_surface *dest, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 length = 0);
   void draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, const char* str, Uint32 length = 0);
-  void print_to_string (char *src, char *dst);
+  void print_to_string (char *src, char *dst, Uint32 length = 0);
   void print_int_to_string (Sint32 value, Sint32 padding, char *dst);
   sprite_object *string2bob (const char *ptStr);
 };

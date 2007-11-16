@@ -4,11 +4,11 @@
  * @date 2007-10-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.50 $
+ * @version $Revision: 1.51 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.50 2007/10/29 13:18:54 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.51 2007/11/16 21:02:10 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -110,10 +110,10 @@ supervisor_shop::first_init ()
   box_texts =
     resources->load_texts (handler_resources::TEXTS_SHOP, 0,
                            BOX_LENGTH_STRING, 3);
-  //for (Uint32 i = 0; i < 36; i++)
-  //  {
-  //    printf ("%02d): %s \n", i, box_texts[i]);
-  //  }
+  for (Uint32 i = 0; i < 36; i++)
+    {
+      printf ("%02d): %s \n", i, box_texts[i]);
+    }
 
 
   Uint32 area_num = current_player->get_area_number ();
@@ -129,32 +129,28 @@ supervisor_shop::first_init ()
                                  box_texts[TEXT_WELCOME]);
   char * dest;
   dest = current_player->get_name ();
-  for (Uint32 i = 0; i < handler_players::PLAYER_NAME_LENGTH; i++)
-    {
-      shoptext00[8 + i] = dest[i];
-    }
+  //for (Uint32 i = 0; i < handler_players::PLAYER_NAME_LENGTH; i++)
+  //  {
+  //    shoptext00[8 + i] = dest[i];
+  //  }
   display_text->print_int_to_string (current_player->get_num_of_lifes (),
                                      2, box_texts[TEXT_LIVES_LEFT]);
   display_text->print_int_to_string (MAX_OF_CAPSULES_BOUGHT, 2,
                                      box_texts[TEXT_CANNOT_BUY_MORE]);
 
 
-  const char * source;
+
   if (area_num > 1)
     {
-      const char * code =
+      char * code = (char *)
         supervisor_main_menu::get_area_code (area_num, difficulty_level);
-      dest = &info_text3[1 * BOX_LENGTH_STRING + 10];
-      for (Uint32 i = 0; i < supervisor_main_menu::AREA_CODE_LENGTH; i++)
-        {
-          dest[i] = code[i];
-        }
-      source = &info_text3[0];
+      display_text->print_to_string (code,
+                                     box_texts[TEXT_AREA_CODE],
+                                     supervisor_main_menu::AREA_CODE_LENGTH);
     }
-  else
-    {
-      source = &info_text3[BOX_LENGTH_STRING * 2];
-    }
+
+
+ /*
   dest = &info_text1[6 * BOX_LENGTH_STRING];
   for (Uint32 i = 0; i < (BOX_LENGTH_STRING * 2); i++)
     {
@@ -168,6 +164,7 @@ supervisor_shop::first_init ()
     {
       dest[i] = source[i];
     }
+    */
 
   resources->load_sprites_bitmap ();
 
@@ -249,31 +246,15 @@ supervisor_shop::main_loop ()
 
   /* display the 3 lines of text  */
   display_box_text ();
-
+  /* display current price and credit */
   display_text->draw (game_screen, 263 * resolution, 227 * resolution,
                       current_price, 6);
   display_text->draw (game_screen, 263 * resolution, 183 * resolution,
                       current_player->get_money_amount (), 6);
-
-
-
+  
   display->lock_surfaces ();
-
-  /* display current price and credit */
-  /*
-     display_text->bufferAff1 (263 * resolution, 227 * resolution,
-     current_price, 100000);
-     display_text->bufferAff1 (263 * resolution, 183 * resolution,
-     current_player->get_money_amount (), 100000);
-   */
-
-
-
-
-
   next_phase = 0;
   sprites->clear ();
-
 
   if (!popup_menu->is_enable ())
     {
@@ -282,11 +263,8 @@ supervisor_shop::main_loop ()
       Sint32 y = mouse_pointer->get_y_coord ();
       if (get_object == -1)     //-1 = not a drag object
         {
-          Sint32
-          x2,
-          y2;
-          bool
-          mousreleas = keyboard->is_left_button_up (&x2, &y2);
+          Sint32 x2, y2;
+          bool mousreleas = keyboard->is_left_button_up (&x2, &y2);
           if (mousreleas)
             {
               Sint32 option = get_option_over_mouse_cursor (x, y);
@@ -651,6 +629,7 @@ supervisor_shop::display_info ()
         {
           put_current_text (box_texts[TEXT_HOPING_HELP]);
         }
+put_current_text (box_texts[TEXT_HOPING_HELP]);
       break;
     }
   if (++some_infos_index > INFO_END)
@@ -932,7 +911,9 @@ supervisor_shop::pos_select ()
 
   // drag object ? then add a possible position, all in bottom.
   if (get_object >= 0)
-    y2 = y2 + select_cursor_height;
+    {
+      y2 = y2 + select_cursor_height;
+    }
 
   if (x >= cadre_posx && y < y2)
     {
@@ -1083,22 +1064,20 @@ supervisor_shop::sh_tablept[MAX_OF_CAPSULES_BOUGHT];
  * Prices of all the available options in the shop 
  */
 Uint32
-supervisor_shop::options_prices[] = {
-                                      60, 75, 150, 350, 25, 50,
-                                      250, 500, 400, 450, 10, 75,
-                                      100, 100, 100, 60, 75, 100,
-                                      60, 150, 0, 0, 0, 0,
-                                      0, 0, 0, 0, 0, 0
-                                    };
+supervisor_shop::options_prices[] =
+{
+  60, 75, 150, 350, 25, 50,
+  250, 500, 400, 450, 10, 75,
+  100, 100, 100, 60, 75, 100,
+  60, 150, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0
+};
 
-//-------------------------------------------------------------------------------
-// texts
-//-------------------------------------------------------------------------------
-char
-supervisor_shop::shoptext00[] =
-  { "WELCOME ...... TO THE "
-    "  TECNOBALL-Z SHOP    " "                      " "PRICE BONUS IS ENABLE "
-  };
+//char
+//supervisor_shop::shoptext00[] =
+//  { "WELCOME ...... TO THE "
+//    "  TECNOBALL-Z SHOP    " "                      " "PRICE BONUS IS ENABLE "
+//  };
 
 //...............................................................................
 char
@@ -1109,6 +1088,8 @@ supervisor_shop::shoptextPT[] = { 0, 1, 2, 3, 4, 5,   //S+/F1/F2/RW/B2/B3
                                   20, 20, 20, 20, 20, 20,       //XX/XX/XX/XX/XX/XX
                                 };
 
+
+/*
 char
 supervisor_shop::info_text1[] = {
                                   "RIGHT BUMPER:NO ACTIVE"
@@ -1144,6 +1125,7 @@ supervisor_shop::info_text3[] = {
                                   " THE PASSWORD FOR THIS"
                                   "  AREA IS ..........  " " NO AVAILABLE PASSWORD" " FOR THIS AREA.       "
                                 };
+*/
 
 const unsigned char
 supervisor_shop::color_cycling[] =

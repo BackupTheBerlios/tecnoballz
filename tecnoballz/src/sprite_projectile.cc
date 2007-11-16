@@ -1,14 +1,14 @@
 /**
  * @file sprite_projectile.cc 
  * @brief The fire sprite of the paddle into the bricks level
- * @date 2007-10-03
+ * @date 2007-11-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_projectile.cc,v 1.24 2007/11/04 20:51:17 gurumeditation Exp $
+ * $Id: sprite_projectile.cc,v 1.25 2007/11/16 21:02:10 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -182,17 +182,13 @@ sprite_projectile::play_projectiles_animations ()
 void
 sprite_projectile::check_collisions_with_bricks ()
 {
-
   controller_bricks *bricks = controller_bricks::get_instance ();
-
   /* brick's width in pixels */
   Uint32 brick_width = bricks->get_brick_width ();
   /* y-offset between 2 bricks */
-  Uint32 byoff = bricks->getYOffset ();
   /* first indestructible brick */
   Sint32 indestructible = bricks->get_indestructible_offset ();
   sprite_projectile **projectiles = projectiles_list;
-  brick_info *bricks_map = bricks->get_bricks_map ();
   for (Uint32 i = 0; i < total_fire; i++)
     {
       sprite_projectile *blast = *(projectiles++);
@@ -205,16 +201,8 @@ sprite_projectile::check_collisions_with_bricks ()
       brick_redraw *redraw = bricks->get_bricks_redraw ();
       redraw->xcoord_collision = x;
       redraw->ycoord_collision = y;
-      /*
-      x /= brick_width;
-      y /= byoff;
-      y *= controller_bricks::MAX_OF_BRICKS_HORIZONTALLY;
-      x += y;
-      brick_info *map = (bricks_map + x);
-      */
       brick_info *map = bricks->get_bricks_map(x, y);
 
-      //x = map->source_offset;
       /* collision between a blast and a brick? */
       if (map->source_offset == 0)
         {
@@ -231,15 +219,13 @@ sprite_projectile::check_collisions_with_bricks ()
         {
           map->sprite->touch ();
         }
-      //if ((x -= indestructible) >= 0)
       if (map->source_offset >= indestructible)
         {
           /* 
            * indestructible brick touched!
            */
           /* indestructible-destructible bricks? */
-          //if ((x -= brick_width) > 0)
-          if (map->source_offset >= (Sint32)(indestructible + brick_width))
+          if (map->source_offset > (Sint32)(indestructible + brick_width))
             {
               /* fire destroys the indestructibles-destructibles bricks? */
               if (blast->can_destroy_indestructible)
@@ -255,7 +241,6 @@ sprite_projectile::check_collisions_with_bricks ()
                 }
               else
                 {
-                  //x = 2;
 #ifndef SOUNDISOFF
                   audio->
                     play_sound (handler_audio::HIT_INDESTRUCTIBLE_BRICK2);
@@ -265,7 +250,6 @@ sprite_projectile::check_collisions_with_bricks ()
           else
             {
               /* the brick is really indestructible */
-              //x = 1;
 #ifndef SOUNDISOFF
               audio->play_sound (handler_audio::HIT_INDESTRUCTIBLE_BRICK1);
 #endif

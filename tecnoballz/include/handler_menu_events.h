@@ -3,14 +3,14 @@
  * @file handler_menu_events.cc
  * @brief Handler the events of the menu
  * @created 2007-1O-29
- * @date 2007-10-29
+ * @date 2007-11-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_menu_events.h,v 1.1 2007/10/31 07:35:29 gurumeditation Exp $
+ * $Id: handler_menu_events.h,v 1.2 2007/11/16 21:02:10 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ class handler_menu_events:public virtual tecnoballz
     Sint32 y_coord_left_down;
     Sint32 y_coord_right_down;
     Uint32 line_spacing;
-    Sint32 xcenter;
+    Sint32 x_center;
     Sint32 top_y_coord;
     Uint32 line_min;
     Uint32 line_max;

@@ -2,14 +2,14 @@
  * @file handler_menu_events.cc 
  * @brief Handler the events of the menu 
  * @created 2007-1O-29
- * @date 2007-10-29
+ * @date 2007-11-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_menu_events.cc,v 1.1 2007/10/31 07:35:29 gurumeditation Exp $
+ * $Id: handler_menu_events.cc,v 1.2 2007/11/16 21:02:10 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ void handler_menu_events::stop()
   y_coord_left_down = handler_keyboard::NULL_YCOORD;
   y_coord_right_down =  handler_keyboard::NULL_YCOORD;
   line_spacing = 0;
-  xcenter = 0;
+  x_center = 0;
   top_y_coord = 0;
   line_min = 0;
   line_max = 0;
@@ -75,7 +75,7 @@ void handler_menu_events::start(Sint32 spacing, Sint32 min, Sint32 max,
     {
       std::cout << " handler_mene_events::start_) " <<
         " line_spacing: " << spacing << " line_min: " << min <<
-        " line_max: " << max << " xcenter: " << xcenter <<
+        " line_max: " << max << " x_center: " << xcenter <<
         " top_y_coord: " << ytop << std::endl;
     }
   is_enabled = true;
@@ -84,7 +84,7 @@ void handler_menu_events::start(Sint32 spacing, Sint32 min, Sint32 max,
   line_spacing = spacing;
   line_min = min;
   line_max = max;
-  xcenter = xcenter;
+  x_center = xcenter;
   current_line = 0;
   top_y_coord = ytop;
   previous_key_code_down = 0;
@@ -201,7 +201,7 @@ handler_menu_events::check (Sint32 *pos_y, Sint32 *inc)
         {
           current_line--;
         }
-      SDL_WarpMouse(xcenter, top_y_coord +
+      SDL_WarpMouse(x_center, top_y_coord +
                     current_line * line_spacing);
       break;
     case handler_keyboard::K_DOWN:
@@ -213,7 +213,7 @@ handler_menu_events::check (Sint32 *pos_y, Sint32 *inc)
         {
           current_line++;
         }
-      SDL_WarpMouse(xcenter, top_y_coord +
+      SDL_WarpMouse(x_center, top_y_coord +
                     current_line * line_spacing);
       break;
     }

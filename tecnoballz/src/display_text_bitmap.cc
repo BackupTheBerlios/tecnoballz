@@ -4,11 +4,11 @@
  * @date 2007-09-13
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: display_text_bitmap.cc,v 1.10 2007/09/13 05:33:21 gurumeditation Exp $
+ * $Id: display_text_bitmap.cc,v 1.11 2007/11/16 21:02:10 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -201,19 +201,23 @@ display_text_bitmap::draw (surface_sdl *dest, Uint32 xcoord, Uint32 ycoord, cons
 
 /**
  * Replace dots string by another string
- * @param src string source
- * @param dst string destination with dots
+ * @param src String source
+ * @param dst String destination with dots
+ * @param lenght Length of the string
  */
-
 void
-display_text_bitmap::print_to_string (char *src, char *dst)
+display_text_bitmap::print_to_string (char *src, char *dst, Uint32 length)
 {
   char *d = strchr (dst, '.');
   if (NULL == d)
     {
       d = dst;
     }
-  strncpy (d, src, strlen(src));
+  if (length == 0)
+    {
+      length = strlen(src);
+    }
+  strncpy (d, src, length);
 }
 
 void
