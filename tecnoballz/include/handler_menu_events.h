@@ -6,11 +6,11 @@
  * @date 2007-11-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_menu_events.h,v 1.2 2007/11/16 21:02:10 gurumeditation Exp $
+ * $Id: handler_menu_events.h,v 1.3 2007/11/17 16:59:43 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,9 @@ class handler_menu_events:public virtual tecnoballz
     void start(Sint32 spacing, Sint32 min, Sint32 max, Sint32 xcenter,
                Sint32 ytop);
     bool check(Sint32 *pos_y, Sint32 *inc);
+
+  private:
+    void check_keys(Uint32 *kcode, Uint32 *prev_kcode);
 
   private:
     static const Uint32 MAX_OF_KEYS = 6;

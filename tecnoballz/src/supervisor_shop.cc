@@ -1,14 +1,14 @@
 /**
- * @file supervisor_shop.cc 
+ * @file supervisor_shop.cc
  * @brief Shop supervisor
- * @date 2007-10-21
+ * @date 2007-11-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.51 $
+ * @version $Revision: 1.52 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.51 2007/11/16 21:02:10 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.52 2007/11/17 16:59:43 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 supervisor_shop::supervisor_shop ()
 {
   initialize ();
+  menu_events = new handler_menu_events();
   tiles_ground = tiles_background::get_instance ();
   mouse_pointer = new sprite_mouse_pointer ();
   led_indicator = new sprite_object ();
@@ -49,22 +50,21 @@ supervisor_shop::supervisor_shop ()
   num_of_bought_capsules = 0;
   led_indicator_xcoord = 0;
   led_indicator_ycoord = 0;
-  get_object = -1;
-  pt_get_obj = 0;
+  is_caspule_drag = false;
   blink_capsule = (sprite_capsule *) NULL;
 
-  shop_xmini = 6 * resolution;
-  shop_xmaxi = 283 * resolution;
-  shop_xmax2 = 51 * resolution;
-  shop_ymax1 = 173 * resolution;
-  shop_ymax2 = 218 * resolution;
+  options_frame_xmin = 6 * resolution;
+  options_frame_xmax1 = 283 * resolution;
+  options_frame_xmax2 = 51 * resolution;
+  options_frame_ymax1 = 173 * resolution;
+  options_frame_ymax2 = 218 * resolution;
 
-  cadre_offs = 0;
+  selected_capsule_index = -1;
   is_drawn_select_cursor = false;
-  cadre_ymin = 3 * resolution;
-  cadre_ymax = 171 * resolution + cadre_ymin;
-  cadre_posx = 292 * resolution;
-  cadre_posy = 0;
+  capsules_frame_ymin = 3 * resolution;
+  capsules_frame_ymax = 171 * resolution + capsules_frame_ymin;
+  select_cursor_xcoord = 292 * resolution;
+  select_cursor_ycoord = 0;
   select_cursor_width = 21 * resolution;
   select_cursor_height = 9 * resolution;
   select_cursor_color = 0;
@@ -97,6 +97,7 @@ supervisor_shop::~supervisor_shop ()
     }
   delete mouse_pointer;
   delete tiles_ground;
+  delete menu_events;
   release ();
 }
 
@@ -129,42 +130,37 @@ supervisor_shop::first_init ()
                                  box_texts[TEXT_WELCOME]);
   char * dest;
   dest = current_player->get_name ();
-  //for (Uint32 i = 0; i < handler_players::PLAYER_NAME_LENGTH; i++)
-  //  {
-  //    shoptext00[8 + i] = dest[i];
-  //  }
   display_text->print_int_to_string (current_player->get_num_of_lifes (),
                                      2, box_texts[TEXT_LIVES_LEFT]);
   display_text->print_int_to_string (MAX_OF_CAPSULES_BOUGHT, 2,
                                      box_texts[TEXT_CANNOT_BUY_MORE]);
 
-
-
+  /* copy area code */
   if (area_num > 1)
     {
       char * code = (char *)
-        supervisor_main_menu::get_area_code (area_num, difficulty_level);
+                    supervisor_main_menu::get_area_code (area_num, difficulty_level);
       display_text->print_to_string (code,
                                      box_texts[TEXT_AREA_CODE],
                                      supervisor_main_menu::AREA_CODE_LENGTH);
     }
 
 
- /*
-  dest = &info_text1[6 * BOX_LENGTH_STRING];
-  for (Uint32 i = 0; i < (BOX_LENGTH_STRING * 2); i++)
-    {
-      dest[i] = source[i];
-    }
+  /*
+   dest = &info_text1[6 * BOX_LENGTH_STRING];
+   for (Uint32 i = 0; i < (BOX_LENGTH_STRING * 2); i++)
+     {
+       dest[i] = source[i];
+     }
 
 
-  source = &sprite_display_menu::difficulte[(difficulty_level - 1) * 4];
-  dest = &info_text1[8 * BOX_LENGTH_STRING + 16];
-  for (Sint32 i = 0; i < 4; i++)
-    {
-      dest[i] = source[i];
-    }
-    */
+   source = &sprite_display_menu::difficulte[(difficulty_level - 1) * 4];
+   dest = &info_text1[8 * BOX_LENGTH_STRING + 16];
+   for (Sint32 i = 0; i < 4; i++)
+     {
+       dest[i] = source[i];
+     }
+     */
 
   resources->load_sprites_bitmap ();
 
@@ -185,13 +181,12 @@ supervisor_shop::first_init ()
   /* initialize the power-up capsules  */
   power_up_capsules->create_shop_sprites_list ();
   current_player->clear_shopping_cart ();
-  Sint32 * tp = coursetemp;
+  Sint32 * tp = temporary_shopping_cart;
   for (Uint32 i = 0; i < MAX_OF_CAPSULES_BOUGHT; i++)
     {
       *(tp++) = 0;
     }
-  sprite_capsule **
-  capsules = power_up_capsules->get_sprites_list ();
+  sprite_capsule **capsules = power_up_capsules->get_sprites_list ();
   drag_sprite = capsules[(MAX_OF_CAPSULES_BOUGHT + 2) - 1 - 1];
 
   /* initialize the mouse pointer */
@@ -208,16 +203,14 @@ supervisor_shop::first_init ()
   bmp->load (handler_resources::BITMAP_SHOP);
   background_screen->blit_surface (bmp, 0, 0, 0, 0, bmp->get_width (),
                                    bmp->get_height ());
-  delete
-  bmp;
+  delete bmp;
   background_screen->blit_to_surface (game_screen);
 
 
   put_current_text (box_texts[TEXT_WELCOME]);
   if (!current_player->is_budget_prices ())
     {
-      char *
-      str = box_texts[TEXT_WELCOME] + BOX_LENGTH_STRING * 2;
+      char *str = box_texts[TEXT_WELCOME] + BOX_LENGTH_STRING * 2;
       for (Uint32 i = 0; i < BOX_LENGTH_STRING; i++)
         {
           str[i] = ' ';
@@ -251,17 +244,17 @@ supervisor_shop::main_loop ()
                       current_price, 6);
   display_text->draw (game_screen, 263 * resolution, 183 * resolution,
                       current_player->get_money_amount (), 6);
-  
+
   display->lock_surfaces ();
   next_phase = 0;
   sprites->clear ();
 
   if (!popup_menu->is_enable ())
     {
-      pos_select ();
+      set_select_cursor_coordinates ();
       Sint32 x = mouse_pointer->get_x_coord ();
       Sint32 y = mouse_pointer->get_y_coord ();
-      if (get_object == -1)     //-1 = not a drag object
+      if (!is_caspule_drag)
         {
           Sint32 x2, y2;
           bool mousreleas = keyboard->is_left_button_up (&x2, &y2);
@@ -279,16 +272,16 @@ supervisor_shop::main_loop ()
               if (!keyboard->is_left_button ())
                 {
                   current_selected_option = get_option_over_mouse_cursor (x, y);
-                  current_price = led_moving (current_selected_option);
+                  current_price = get_price_and_update_led (current_selected_option);
                 }
             }
 
         }
       else
-	{
-          current_price = led_moving (-1);
-	}
-      sh_ballade ();
+        {
+          current_price = get_price_and_update_led (-1);
+        }
+      capsule_drag_and_drop ();
     }
 
   mouse_pointer->move ();
@@ -354,10 +347,11 @@ supervisor_shop::display_capsules_bought ()
  * @return index of the selected bonus from 0 to 24
  *         or otherwise -1 if no bonus is selected
  * */
-Sint32 supervisor_shop::get_option_over_mouse_cursor (Sint32 x, Sint32 y)
+Sint32
+supervisor_shop::get_option_over_mouse_cursor (Sint32 x, Sint32 y)
 {
-  if (x < shop_xmini || x > shop_xmaxi || y > shop_ymax2 ||
-      (x > shop_xmax2 && y > shop_ymax1))
+  if (x < options_frame_xmin || x > options_frame_xmax1 || y > options_frame_ymax2 ||
+      (x > options_frame_xmax2 && y > options_frame_ymax1))
     {
       return -1;
     }
@@ -366,33 +360,33 @@ Sint32 supervisor_shop::get_option_over_mouse_cursor (Sint32 x, Sint32 y)
       x = (x - (6 * resolution)) / (48 * resolution);
       y = (y / (44 * resolution));
       if (y > 4)
-	{
+        {
           x = 0;
-	}
+        }
       Sint32
       i = x + 6 * y;
       led_indicator_xcoord = (x * (48 * resolution)) + (17 * resolution);
       if (resolution == 1)
-	{
+        {
           led_indicator_ycoord = (y * (44 * resolution)) + (36 * resolution);
-	}
+        }
       else
-	{
+        {
           led_indicator_ycoord = (y * (44 * resolution)) + (35 * resolution);
-	}
+        }
       return i;
     }
 }
 
 /**
  * Update LED indicator state, and return the price of
- * the current option 
+ * the current option
  * @param index Index on the selected option from 0 to 24,
  *              otherwise -1 if not option selected
- * @return The price of the selected option 
+ * @return The price of the selected option
 */
 Uint32
-supervisor_shop::led_moving (Sint32 index)
+supervisor_shop::get_price_and_update_led (Sint32 index)
 {
   if (index < 0)
     {
@@ -508,10 +502,10 @@ supervisor_shop::purchase_option_or_capsule (Uint32 option_id)
       else
         {
           if (!current_player->is_rebuild_walls ()
-	      && decrease_money_amount ())
+              && decrease_money_amount ())
             {
-	      current_player->set_rebuild_walls (true);
-	      message_ok ();
+              current_player->set_rebuild_walls (true);
+              display_sales_confirmation (current_selected_option);
             }
         }
       break;
@@ -519,10 +513,10 @@ supervisor_shop::purchase_option_or_capsule (Uint32 option_id)
       /* less bricks option */
     case sprite_capsule::LESS_BRICKS:
       if (current_player->get_less_bricks () <= 0
-	  && decrease_money_amount ()) 
+          && decrease_money_amount ())
         {
-	  current_player->set_less_bricks (10);
-	  message_ok ();
+          current_player->set_less_bricks (10);
+          display_sales_confirmation (current_selected_option);
         }
       break;
 
@@ -535,20 +529,20 @@ supervisor_shop::purchase_option_or_capsule (Uint32 option_id)
 
       /* buy a right, up or left paddle */
     default:
-      {
-        if (option_id >= sprite_capsule::ENABLE_RIGHT_PADDLE 
-	    && option_id <= sprite_capsule::ENABLE_LEFT_PADDLE)
-          {
-            Sint32 i = (option_id - sprite_capsule::ENABLE_RIGHT_PADDLE) / 2 + 2;
-            if (current_player->get_paddle_alive_counter (i) <= 0
-		&& decrease_money_amount ()) 
-	      {
-		current_player->set_paddle_alive_counter (i, 3);
-		message_ok ();
-              }
-          }
-      }
-      break;
+    {
+      if (option_id >= sprite_capsule::ENABLE_RIGHT_PADDLE
+          && option_id <= sprite_capsule::ENABLE_LEFT_PADDLE)
+        {
+          Sint32 i = (option_id - sprite_capsule::ENABLE_RIGHT_PADDLE) / 2 + 2;
+          if (current_player->get_paddle_alive_counter (i) <= 0
+              && decrease_money_amount ())
+            {
+              current_player->set_paddle_alive_counter (i, 3);
+              display_sales_confirmation (current_selected_option);
+            }
+        }
+    }
+    break;
     }
 }
 
@@ -570,35 +564,35 @@ supervisor_shop::display_info ()
   switch (some_infos_index)
     {
     case INFO_PADDLES:
-      {
-        Uint32 area_num = current_player->get_area_number ();
-        Uint32 index = TEXT_PADDLE_RIGHT;
-        Uint32 line = 0;
-        char *dest = box_texts[TEXT_PADDLES];
-        char *src;
-        for (Uint32 i = controller_paddles::RIGHT_PADDLE;
-             i <= controller_paddles::LEFT_PADDLE; i++)
-          {
-            src = box_texts[index];
-            if (current_player->get_paddle_alive_counter (i) == 0)
-              {
-                src += BOX_LENGTH_STRING;
-                if ((area_num >= 2 && i == controller_paddles::TOP_PADDLE) ||
-                    (area_num >= 3 && i == controller_paddles::RIGHT_PADDLE)
-                    || (area_num >= 4
-                        && i == controller_paddles::LEFT_PADDLE))
-                  {
-                    src += BOX_LENGTH_STRING;
-                  }
-              }
-            index++;
-            line++;
-            strncpy (dest, src, BOX_LENGTH_STRING);
-            dest += BOX_LENGTH_STRING;
-          }
-      }
-      put_current_text (box_texts[TEXT_PADDLES]);
-      break;
+    {
+      Uint32 area_num = current_player->get_area_number ();
+      Uint32 index = TEXT_PADDLE_RIGHT;
+      Uint32 line = 0;
+      char *dest = box_texts[TEXT_PADDLES];
+      char *src;
+      for (Uint32 i = controller_paddles::RIGHT_PADDLE;
+           i <= controller_paddles::LEFT_PADDLE; i++)
+        {
+          src = box_texts[index];
+          if (current_player->get_paddle_alive_counter (i) == 0)
+            {
+              src += BOX_LENGTH_STRING;
+              if ((area_num >= 2 && i == controller_paddles::TOP_PADDLE) ||
+                  (area_num >= 3 && i == controller_paddles::RIGHT_PADDLE)
+                  || (area_num >= 4
+                      && i == controller_paddles::LEFT_PADDLE))
+                {
+                  src += BOX_LENGTH_STRING;
+                }
+            }
+          index++;
+          line++;
+          strncpy (dest, src, BOX_LENGTH_STRING);
+          dest += BOX_LENGTH_STRING;
+        }
+    }
+    put_current_text (box_texts[TEXT_PADDLES]);
+    break;
 
     case INFO_LIVES:
       put_current_text (box_texts[TEXT_LIVES_LEFT]);
@@ -614,7 +608,7 @@ supervisor_shop::display_info ()
           put_current_text (box_texts[TEXT_NO_AREA_CODE]);
         }
       break;
-    
+
     case INFO_END:
     default:
       if (is_enabled_cheat_mode)
@@ -629,7 +623,7 @@ supervisor_shop::display_info ()
         {
           put_current_text (box_texts[TEXT_HOPING_HELP]);
         }
-put_current_text (box_texts[TEXT_HOPING_HELP]);
+      put_current_text (box_texts[TEXT_HOPING_HELP]);
       break;
     }
   if (++some_infos_index > INFO_END)
@@ -678,22 +672,22 @@ supervisor_shop::purchase_bonus_capsule (Sint32 capsule_id)
 
   Sint32 *cart = current_player->get_shopping_cart ();
   cart[num_of_bought_capsules] = capsule_id;
-  sh_tablept[num_of_bought_capsules] = current_selected_option;
   sprite_capsule **caspules = power_up_capsules->get_sprites_list ();
   sprite_capsule *capsule = caspules[num_of_bought_capsules++];
   capsule->set_in_shop (capsule_id);
-  message_ok ();
+  display_sales_confirmation (current_selected_option);
   current_player->set_numof_items_in_shopping_cart (num_of_bought_capsules);
 }
 
 /**
- * Change the 3 linges of the text
+ * Display the sales confirmation message
+ * @param option_index Option index
  */
 void
-supervisor_shop::message_ok ()
+supervisor_shop::display_sales_confirmation (Sint32 option_index)
 {
-  char *texte = box_texts[shoptextPT[current_selected_option]];
-  put_current_text (texte);
+  char *text = box_texts[led_index_to_text_index[option_index]];
+  put_current_text (text);
 }
 
 /**
@@ -730,195 +724,199 @@ supervisor_shop::display_box_text ()
 }
 
 /**
- * Drag and drop the bonus capsule 
+ * Drag and drop the bonus capsule
  */
 void
-supervisor_shop::sh_ballade ()
+supervisor_shop::capsule_drag_and_drop ()
 {
   /* index on 'options_prices' list, if -1 no drag objet  */
-  if (get_object < 0)
-    /* get a object with the mouse */
+  if (!is_caspule_drag)
+    /* grab an object with the mouse */
     {
       drag_sprite->disable ();
-      pt_get_obj = -1;
-      if (keyboard->is_left_button ())
+      if (keyboard->is_left_button ()
+          && selected_capsule_index >= 0)
         {
-          Sint32 i = cadre_offs;
-          if (i >= 0)
-            {
-              Sint32 *p = current_player->get_shopping_cart ();
-              sprite_capsule **capsules =
-                power_up_capsules->get_sprites_list ();
-              courseList = p + i;
-              blink_capsule = *(capsules + i);
-              get_object = *(sh_tablept + i);
-              drag_sprite->clone_from_capsule (blink_capsule);
-              blink_capsule->is_enabled = true;
-            }
+          dragged_capsule_pt = current_player->get_shopping_cart ()
+            + selected_capsule_index;
+          sprite_capsule **capsules =
+            power_up_capsules->get_sprites_list ();
+          blink_capsule = *(capsules + selected_capsule_index);
+          is_caspule_drag = true; 
+          drag_sprite->clone_from_capsule (blink_capsule);
+          blink_capsule->is_enabled = true;
         }
       return;
     }
 
-
-
-
-      if (keyboard->is_left_button ())
+  /* drag the bonus capsule */
+  if (keyboard->is_left_button ())
+    {
+      drag_sprite->enable ();
+      drag_sprite->set_coordinates (mouse_pointer->get_x_coord (),
+                                    mouse_pointer->get_y_coord ());
+      if (blink_capsule->is_enabled)
         {
-          drag_sprite->enable ();
-          drag_sprite->set_coordinates (mouse_pointer->get_x_coord (),
-                                        mouse_pointer->get_y_coord ());
-          if (blink_capsule->is_enabled)
-            {
-              blink_capsule->is_enabled = false;
-            }
-          else
-            {
-              blink_capsule->is_enabled = true;
-            }
+          blink_capsule->is_enabled = false;
         }
       else
         {
-          drag_sprite->disable ();
           blink_capsule->is_enabled = true;
-          Sint32 i = cadre_offs;
-          if (i >= 0)
-            {
-              if (i >= (Sint32)num_of_bought_capsules)
-                {
-                  i = num_of_bought_capsules - 1;
-                }
-              Sint32 *p0 = current_player->get_shopping_cart ();
-              Sint32 *p1 = courseList;  //source
-              Sint32 *p2 = p0 + i;      //destination
-              Sint32 *tp = coursetemp;
-              Sint32 value = *p1;       //source code
-              if (p1 != p2)
-                {
-                  Uint32 i = 0;
-                  do
-                    {
-                      if (p0 == p1)     //emplacement source ?
-                        {
-                          p0++;
-                          i++;
-                        }
-                      else
-                        {
-                          if (p0 == p2) //emplacement destination ?
-                            {
-                              if (p1 <= p2)     // source <= destination
-                                {
-                                  if (i++ < MAX_OF_CAPSULES_BOUGHT)
-                                    {
-                                      *(tp++) = *(p0++);
-                                    }
-                                }
-                              if (i++ < MAX_OF_CAPSULES_BOUGHT)
-                                {
-                                  *(tp++) = value;
-                                }
-                            }
-                          if (i++ < MAX_OF_CAPSULES_BOUGHT)
-                            {
-                              *(tp++) = *(p0++);
-                            }
-                        }
-                    }
-                  while (i < MAX_OF_CAPSULES_BOUGHT);
-                  tp = coursetemp;
-                  p0 = current_player->get_shopping_cart ();
-                  for (Uint32 i = 0; i < MAX_OF_CAPSULES_BOUGHT; i++)
-                    {
-                      *(p0++) = *(tp++);
-                    }
-                }
-            }
-          else
-            {
-              Sint32 *p1 = courseList;
-              Sint32 *p2 = p1;
-              Sint32 gadnu = *p1;       //drop bonus code
-              *(p1++) = 0;
-              while (*p1 >= 0)
-                {
-                  *(p2++) = *p1;
-                  *(p1++) = 0;
-                }
-              num_of_bought_capsules--;
-              current_player->set_numof_items_in_shopping_cart (num_of_bought_capsules);
+        }
+      return;
+    }
 
-              Sint32 price = 0;
-              if (current_player->is_budget_prices ())
+  
+  /*
+   * drop a bonus capsule
+   */
+  drag_sprite->disable ();
+  blink_capsule->is_enabled = true;
+  Sint32 i = selected_capsule_index;
+  
+  /* change position of a bonus capsule in the capsules list */
+  if (i >= 0)
+    {
+      if (i >= (Sint32)num_of_bought_capsules)
+        {
+          i = num_of_bought_capsules - 1;
+        }
+      Sint32 *player_cart = current_player->get_shopping_cart ();
+      Sint32 *source = dragged_capsule_pt;
+      Sint32 *dest = player_cart + i;
+      Sint32 *cart = temporary_shopping_cart;
+      Sint32 drop_id = *source;
+      if (source != dest)
+        {
+          Uint32 i = 0;
+          do
+            {
+              if (player_cart == source)
                 {
-                  /* the player collected a chance capsule containing
-                   * a budget prices bonus in the previous bricks level.
-                   * All the options are thus for the price of 1 in 
-                   * the current shop */
-                  price = 1;
+                  player_cart++;
+                  i++;
                 }
               else
                 {
-                  while (available_options_id[i] != sprite_capsule::LEAVE_SHOP)
+                  if (player_cart == dest)
                     {
-                      if (available_options_id[i] == gadnu)
+                      if (source <= dest)
                         {
-                          price = options_prices[i];
-                          break;
+                          if (i++ < MAX_OF_CAPSULES_BOUGHT)
+                            {
+                              *(cart++) = *(player_cart++);
+                            }
                         }
-                      i++;
+                      if (i++ < MAX_OF_CAPSULES_BOUGHT)
+                        {
+                          *(cart++) = drop_id;
+                        }
+                    }
+                  if (i++ < MAX_OF_CAPSULES_BOUGHT)
+                    {
+                      *(cart++) = *(player_cart++);
                     }
                 }
-              current_player->increase_money_amount (price);
             }
-          get_object = -1;
+          while (i < MAX_OF_CAPSULES_BOUGHT);
+          cart = temporary_shopping_cart;
+          player_cart = current_player->get_shopping_cart ();
+          for (Uint32 i = 0; i < MAX_OF_CAPSULES_BOUGHT; i++)
+            {
+              *(player_cart++) = *(cart++);
+            }
         }
+    }
 
+  /* resell a bonus capsule to the shop */
+  else
+    {
+      Sint32 *source = dragged_capsule_pt;
+      Sint32 *dest = source;
+      Sint32 drop_id = *source;
+      *(source++) = 0;
+      while (*source >= 0)
+        {
+          *(dest++) = *source;
+          *(source++) = 0;
+        }
+      num_of_bought_capsules--;
+      current_player->set_numof_items_in_shopping_cart (num_of_bought_capsules);
+      Sint32 price = 0;
+      if (current_player->is_budget_prices ())
+        {
+          /* the player collected a chance capsule containing
+           * a budget prices bonus in the previous bricks level.
+           * All the options are thus for the price of 1 in
+           * the current shop */
+          price = 1;
+        }
+      else
+        {
+          while (available_options_id[i] != sprite_capsule::LEAVE_SHOP)
+            {
+              if (available_options_id[i] == drop_id)
+                {
+                  price = options_prices[i];
+                  break;
+                }
+              i++;
+            }
+        }
+      current_player->increase_money_amount (price);
+    }
+  is_caspule_drag = false;
 }
 
-//-------------------------------------------------------------------------------
-// calculate position of box cursor
-//-------------------------------------------------------------------------------
+/**
+ * Calculate coordinates the
+ * Calculate the coordinates of the cursor which selects a capsule in the list
+ * of the bought capsules
+ *
+ */
 void
-supervisor_shop::pos_select ()
+supervisor_shop::set_select_cursor_coordinates ()
 {
-  Sint32 y = mouse_pointer->get_y_coord () - cadre_ymin;
-  Sint32 o = (y / select_cursor_height);  //y / 9 (height of cursor)
-  y = o * select_cursor_height + cadre_ymin;
-  if (y < cadre_ymin)
+  Sint32 y = mouse_pointer->get_y_coord () - capsules_frame_ymin;
+  Sint32 offset = (y / select_cursor_height);
+  y = offset * select_cursor_height + capsules_frame_ymin;
+  if (y < capsules_frame_ymin)
     {
-      y = cadre_ymin;
+      y = capsules_frame_ymin;
     }
-  if (y > cadre_ymax)
+  if (y > capsules_frame_ymax)
     {
-      y = cadre_ymax;
+      y = capsules_frame_ymax;
     }
-  cadre_posy = y;               //cursor y coordinate
+  /* cursor y coordinate */
+  select_cursor_ycoord = y;
 
-  Sint32 x = mouse_pointer->get_x_coord ();
-  y = mouse_pointer->get_y_coord ();
-  /* don't display cursor (by default) */ 
+  /* don't display cursor by default */
   is_drawn_select_cursor = false;
-  cadre_offs = -1;
-
+  selected_capsule_index = -1;
   /* at least one bonus capsule? */
   if (num_of_bought_capsules < 1)
     {
       return;
     }
 
-  // calculate max. y coordinate
-  Sint32 y2 = num_of_bought_capsules * select_cursor_height + cadre_ymin;
-
-  // drag object ? then add a possible position, all in bottom.
-  if (get_object >= 0)
+  /*
+   * calculate maximum y coordinate
+   */
+  Sint32 ymax = num_of_bought_capsules * select_cursor_height
+    + capsules_frame_ymin;
+  /* if an object is drag, then adds a supplementary place */
+  if (is_caspule_drag)
     {
-      y2 = y2 + select_cursor_height;
+      ymax = ymax + select_cursor_height;
     }
 
-  if (x >= cadre_posx && y < y2)
+  Sint32 x = mouse_pointer->get_x_coord ();
+  y = mouse_pointer->get_y_coord ();
+  if (x >= select_cursor_xcoord && y < ymax)
     {
       is_drawn_select_cursor = true;
-      cadre_offs = o;
+      selected_capsule_index = offset;
     }
 }
 
@@ -954,11 +952,11 @@ supervisor_shop::draw_select_cursor ()
   b = b + select_cursor_height / 5;
   Sint32 w = select_cursor_width - a;
   Sint32 h = select_cursor_height - b;
-  
+
   /* calculation of the coordinates of the cursor */
-  Sint32 x = cadre_posx + (select_cursor_width - w) / 2;
-  Sint32 y = cadre_posy + (select_cursor_height - h) / 2;
-  
+  Sint32 x = select_cursor_xcoord + (select_cursor_width - w) / 2;
+  Sint32 y = select_cursor_ycoord + (select_cursor_height - h) / 2;
+
   /* draw the cursor */
   Uint32 delay = 0;
   Uint32 color = select_cursor_color;
@@ -967,18 +965,18 @@ supervisor_shop::draw_select_cursor ()
   for (Sint32 i = 0; i < h; i++)
     {
       for (Sint32 j = 0; j < w; j++)
-	{
-	  unsigned char pixel = color_cycling[color];
-	  dest[j] = pixel;
-	}
+        {
+          unsigned char pixel = color_cycling[color];
+          dest[j] = pixel;
+        }
       if (++delay == 5)
-	{
-	  delay = 0;
-	  if (color++ > 32)
-	    {
-	      color = 0;
-	    }
-	}
+        {
+          delay = 0;
+          if (color++ > 32)
+            {
+              color = 0;
+            }
+        }
       dest += next_line;
     }
 }
@@ -1024,44 +1022,38 @@ supervisor_shop::check_if_enable_cheat ()
  */
 Sint32
 supervisor_shop::available_options_id[] =
-  {
-    sprite_capsule::EXPAND_PADDLE,
-    sprite_capsule::FIRE_POWER_1,
-    sprite_capsule::FIRE_POWER_2,
-    sprite_capsule::REBUILD_THE_WALL,
-    sprite_capsule::EXTRA_BALLS,
-    sprite_capsule::MULTI_BALLS,
-    sprite_capsule::POWER_BALL_1, sprite_capsule::POWER_BALL_2,
-    sprite_capsule::LESS_BRICKS, sprite_capsule::EXTRA_LIFE,
-    sprite_capsule::SOME_INFOS, sprite_capsule::BOTTOM_WALL,
-    sprite_capsule::ENABLE_LEFT_PADDLE,
-    sprite_capsule::ENABLE_TOP_PADDLE,
-    sprite_capsule::ENABLE_RIGHT_PADDLE,
-    sprite_capsule::BALL_SIZE_2,
-    sprite_capsule::BALL_SIZE_3,
-    sprite_capsule::ROBOT_PADDLE,
-    sprite_capsule::BALLS_CONTROL,
-    sprite_capsule::GLUE,
-    sprite_capsule::LEAVE_SHOP,
-    sprite_capsule::LEAVE_SHOP,
-    sprite_capsule::LEAVE_SHOP,
-    sprite_capsule::LEAVE_SHOP,
-    sprite_capsule::LEAVE_SHOP,
-    sprite_capsule::LEAVE_SHOP,
-    sprite_capsule::LEAVE_SHOP,
-    sprite_capsule::LEAVE_SHOP,
-    sprite_capsule::LEAVE_SHOP,
-    sprite_capsule::LEAVE_SHOP
-  };
-
-//-------------------------------------------------------------------------------
-//
-//-------------------------------------------------------------------------------
-Sint32
-supervisor_shop::sh_tablept[MAX_OF_CAPSULES_BOUGHT];
+{
+  sprite_capsule::EXPAND_PADDLE,
+  sprite_capsule::FIRE_POWER_1,
+  sprite_capsule::FIRE_POWER_2,
+  sprite_capsule::REBUILD_THE_WALL,
+  sprite_capsule::EXTRA_BALLS,
+  sprite_capsule::MULTI_BALLS,
+  sprite_capsule::POWER_BALL_1, sprite_capsule::POWER_BALL_2,
+  sprite_capsule::LESS_BRICKS, sprite_capsule::EXTRA_LIFE,
+  sprite_capsule::SOME_INFOS, sprite_capsule::BOTTOM_WALL,
+  sprite_capsule::ENABLE_LEFT_PADDLE,
+  sprite_capsule::ENABLE_TOP_PADDLE,
+  sprite_capsule::ENABLE_RIGHT_PADDLE,
+  sprite_capsule::BALL_SIZE_2,
+  sprite_capsule::BALL_SIZE_3,
+  sprite_capsule::ROBOT_PADDLE,
+  sprite_capsule::BALLS_CONTROL,
+  sprite_capsule::GLUE,
+  sprite_capsule::LEAVE_SHOP,
+  sprite_capsule::LEAVE_SHOP,
+  sprite_capsule::LEAVE_SHOP,
+  sprite_capsule::LEAVE_SHOP,
+  sprite_capsule::LEAVE_SHOP,
+  sprite_capsule::LEAVE_SHOP,
+  sprite_capsule::LEAVE_SHOP,
+  sprite_capsule::LEAVE_SHOP,
+  sprite_capsule::LEAVE_SHOP,
+  sprite_capsule::LEAVE_SHOP
+};
 
 /**
- * Prices of all the available options in the shop 
+ * Prices of all the available options in the shop
  */
 Uint32
 supervisor_shop::options_prices[] =
@@ -1073,65 +1065,29 @@ supervisor_shop::options_prices[] =
   0, 0, 0, 0, 0, 0
 };
 
-//char
-//supervisor_shop::shoptext00[] =
-//  { "WELCOME ...... TO THE "
-//    "  TECNOBALL-Z SHOP    " "                      " "PRICE BONUS IS ENABLE "
-//  };
-
-//...............................................................................
+/**
+ * Indexes of the texts used for sales confirmation messages
+ */
 char
-supervisor_shop::shoptextPT[] = { 0, 1, 2, 3, 4, 5,   //S+/F1/F2/RW/B2/B3
-                                  6, 7, 8, 9, 10, 11,           //P1/P2/LB/L+/??/WA
-                                  12, 13, 14, 15, 16, 17,       //BL/BU/BR/S2/S3/RB
-                                  18, 19, 20, 20, 20, 20,       //CT/GL/XX/XX/XX/XX
-                                  20, 20, 20, 20, 20, 20,       //XX/XX/XX/XX/XX/XX
-                                };
-
-
-/*
-char
-supervisor_shop::info_text1[] = {
-                                  "RIGHT BUMPER:NO ACTIVE"
-                                  "UP BUMPER   :NO ACTIVE"
-                                  "LEFT BUMPER :NO ACTIVE"
-                                  "     YOU ONLY HAVE    "
-                                  "     00 LIVES LEFT    "
-                                  "                      "
-                                  "                      "
-                                  "                      "
-                                  "  DIFFICULTY IS ....  "
-                                  "I HOPE THIS ASSISTANCE"
-                                  "     WILL HELP YOU    "
-                                  "                      "
-                                  "      TLK  GAMES      "
-                                  "      TECNOBALLZ      "
-                                  "      TLK  GAMES      "
-                                  "  LA CORRUPTION REVET " "   DES  DEGUISEMENTS  " "        INFINIS       "
-                                };
-
-char
-supervisor_shop::info_text2[] = {
-                                  "RIGHT BUMPER:  ACTIVE "
-                                  "RIGHT BUMPER:NO ACTIVE"
-                                  "  BUY A RIGHT BUMPER  "
-                                  "UP BUMPER   :  ACTIVE "
-                                  "UP BUMPER   :NO ACTIVE"
-                                  "     BUY A UP BUMPER  "
-                                  "LEFT[BUMPER :  ACTIVE " "LEFT BUMPER :NO ACTIVE" "  BUY A LEFT BUMPER   "
-                                };
-char
-supervisor_shop::info_text3[] = {
-                                  " THE PASSWORD FOR THIS"
-                                  "  AREA IS ..........  " " NO AVAILABLE PASSWORD" " FOR THIS AREA.       "
-                                };
-*/
+supervisor_shop::led_index_to_text_index[] =
+{
+  /* S+/F1/F2/RW/B2/B3 */
+  0, 1, 2, 3, 4, 5,
+  /* P1/P2/LB/L+/??/WA */
+  6, 7, 8, 9, 10, 11,
+  /* BL/BU/BR/S2/S3/RB */
+ 12, 13, 14, 15, 16, 17,
+ /* CT/GL/XX/XX/XX/XX */
+ 18, 19, 20, 20, 20, 20,
+ /* XX/XX/XX/XX/XX/XX */
+ 20, 20, 20, 20, 20, 20,
+};
 
 const unsigned char
 supervisor_shop::color_cycling[] =
-  {
-    239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
-    253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
-    243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
-    249, 250, 251, 252, 253, 254, 255
-  };
+{
+  239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
+  253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
+  243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
+  249, 250, 251, 252, 253, 254, 255
+};

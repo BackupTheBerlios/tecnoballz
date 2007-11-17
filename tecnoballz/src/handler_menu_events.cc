@@ -5,11 +5,11 @@
  * @date 2007-11-16
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_menu_events.cc,v 1.2 2007/11/16 21:02:10 gurumeditation Exp $
+ * $Id: handler_menu_events.cc,v 1.3 2007/11/17 16:59:43 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,6 +116,51 @@ Uint32 handler_menu_events::keys[MAX_OF_KEYS] =
   handler_keyboard::K_TILT
 };
 
+
+/**
+ * Check key handles
+ */
+void
+handler_menu_events::check_keys(Uint32 *kcode, Uint32 *prev_kcode)
+{
+  *prev_kcode = 0;
+  *kcode = 0;
+  /* check keyboards events */
+  if(previous_key_code_down > 0 &&
+      !keyboard->control_is_pressed(previous_key_code_down))
+    {
+     *prev_kcode = previous_key_code_down;
+      previous_key_code_down = 0;
+      key_delay = 0;
+    }
+  if (key_delay < 1)
+    {
+      for(Uint32 i = 0; i < MAX_OF_KEYS; i++)
+        {
+          if(!keyboard->control_is_pressed(keys[i]))
+            {
+              continue;
+            }
+          *kcode = keys[i];
+          if (previous_key_code_down != keys[i])
+            {
+              previous_key_code_down = keys[i];
+              key_delay = 30;
+            }
+          else
+            {
+              key_delay = 10;
+            }
+          break;
+        }
+    }
+  else
+    {
+      *kcode = 0;
+      key_delay--;
+    }
+}
+
 /**
  * Check mouses events for the main menu and popup menu 
  * @param pos_y Pointer to a integer which will contain y-coordinate
@@ -131,53 +176,20 @@ handler_menu_events::check (Sint32 *pos_y, Sint32 *inc)
     {
       return false;
     }
-  bool is_selected = false;
   Uint32 kcode = 0;
-  *inc = 0;
-
-  /* check keyboards events */
-  if(previous_key_code_down > 0 &&
-      !keyboard->control_is_pressed(previous_key_code_down))
+  Uint32 prev_kcode = 0;
+  check_keys (&kcode, &prev_kcode);
+  bool is_selected = false;
+  switch(prev_kcode)
     {
-      switch(previous_key_code_down)
-        {
-        case handler_keyboard::K_FIRE:
-          *inc = 1;
-          is_selected = true;
-          break;
-        case handler_keyboard::K_RELEASE_BALL:
-          *inc = -1;
-          is_selected = true;
-          break;
-        }
-      previous_key_code_down = 0;
-      key_delay = 0;
-    }
-  if (key_delay < 1)
-    {
-      for(Uint32 i = 0; i < MAX_OF_KEYS; i++)
-        {
-          if(!keyboard->control_is_pressed(keys[i]))
-            {
-              continue;
-            }
-          kcode = keys[i];
-          if (previous_key_code_down != keys[i])
-            {
-              previous_key_code_down = keys[i];
-              key_delay = 30;
-            }
-          else
-            {
-              key_delay = 10;
-            }
-          break;
-        }
-    }
-  else
-    {
-      kcode = 0;
-      key_delay--;
+    case handler_keyboard::K_FIRE:
+      *inc = 1;
+      is_selected = true;
+      break;
+    case handler_keyboard::K_RELEASE_BALL:
+      *inc = -1;
+      is_selected = true;
+      break;
     }
 
   /* check if right or left button are pressed */
@@ -185,12 +197,8 @@ handler_menu_events::check (Sint32 *pos_y, Sint32 *inc)
   switch(kcode)
     {
     case handler_keyboard::K_FIRE:
-      //*inc = 1;
-      //is_selected = true;
       break;
     case handler_keyboard::K_RELEASE_BALL:
-      //*inc = -1;
-      //is_selected = true;
       break;
     case handler_keyboard::K_UP:
       if(current_line ==  line_min)
