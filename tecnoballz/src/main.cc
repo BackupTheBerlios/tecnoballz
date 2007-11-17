@@ -5,11 +5,11 @@
  * @date 2007-10-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.59 $
+ * @version $Revision: 1.60 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.59 2007/10/11 05:20:26 gurumeditation Exp $
+ * $Id: main.cc,v 1.60 2007/11/17 21:37:44 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,7 +112,11 @@ main (Sint32 arg_count, char **arg_values)
 
 /*
  
- a faire
+a faire
+importer le fichier lispreader.c de powermanga et l'encapsuler en c++
+afficher le noiveau de difficulte dans le magasin
+retoucher les briques
+ameliorer la gestion du clavier (genre sdlmame) 
 [OK] desactiver le tilt pour les balles controles
 [OK] utiliser les tilemaps de 16x16 originales dans le definlement menu/gardiens pour eviter
      d'utiliser les tilemaps 32x32 (qui ont ete doubles avec GIMP) refaire donc un mapeditor

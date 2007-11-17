@@ -4,11 +4,11 @@
  * @date 2007-10-31
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.16 2007/10/31 07:35:29 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.17 2007/11/17 21:37:44 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,9 +109,10 @@ handler_keyboard::~handler_keyboard ()
 void
 handler_keyboard::init_joysticks()
 {
-  fire_button_down = false;
-  option_button_down = false;
-  start_button_down = false;
+  joy_fire = false;
+  joy_release = false;
+  joy_gigablitz = false;
+  joy_option = false;
   joy_left = false;
   joy_right = false;
   joy_top = false;
@@ -545,17 +546,21 @@ handler_keyboard::read_events ()
 #else
           if (event.jbutton.button == 2)
             {
-              start_button_down = true;
+              joy_gigablitz = true;
             }
           else if (event.jbutton.button == 0)
             {
-              fire_button_down = true;
+              joy_fire = true;
               //sprites_string_set_joy (IJOY_FIRE);
             }
           else if (event.jbutton.button == 1)
             {
-              option_button_down = true;
+              joy_release = true;
               //sprites_string_set_joy (IJOY_OPT);
+            }
+          else if (event.jbutton.button > 2)
+            {
+              joy_option = true;
             }
           break;
 #endif
@@ -565,17 +570,21 @@ handler_keyboard::read_events ()
 #else
           if (event.jbutton.button == 2)
             {
-              start_button_down = false;
+              joy_gigablitz = false;
             }
           else if (event.jbutton.button == 0)
             {
-              fire_button_down = false;
+              joy_fire = false;
               //sprites_string_clr_joy (IJOY_FIRE);
             }
           else if (event.jbutton.button == 1)
             {
-              option_button_down = false;
+              joy_release = false;
               //sprites_string_clr_joy (IJOY_OPT);
+            }
+          else if (event.jbutton.button > 2)
+            {
+              joy_option = true;
             }
 #endif
           break;
@@ -669,6 +678,18 @@ handler_keyboard::control_is_pressed (Uint32 code)
           case K_DOWN:
           return joy_down ? true : false;
           break;
+          case K_FIRE:
+          return joy_fire ? true : false;
+          break;
+          case K_RELEASE_BALL:
+          return joy_release ? true : false;
+          break;
+          case K_GIGABLITZ:
+          return joy_gigablitz ? true : false;
+          break;
+          case K_ESC:
+          return joy_option ? true : false;
+          break;
         }
 
 
@@ -736,6 +757,25 @@ bool handler_keyboard::is_left_button ()
 bool handler_keyboard::is_right_button ()
 {
   return is_right_button_down;
+}
+
+
+/**
+ * Check if player want send a gigablitz or enable tilt 
+ * @return true if want send a gigablitz or enable tilt 
+ */
+bool
+handler_keyboard::is_gigablitz_or_tilt ()
+{
+  if (is_right_left_buttons() ||
+      keyboard->control_is_pressed (handler_keyboard::K_GIGABLITZ))
+      {
+        return true;
+      }
+  else
+    {
+      return false;
+    }
 }
 
 /**

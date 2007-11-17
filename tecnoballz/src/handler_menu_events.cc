@@ -1,15 +1,15 @@
-/** 
- * @file handler_menu_events.cc 
- * @brief Handler the events of the menu 
+/**
+ * @file handler_menu_events.cc
+ * @brief Handler the events of the menu
  * @created 2007-1O-29
- * @date 2007-11-16
+ * @date 2007-11-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_menu_events.cc,v 1.3 2007/11/17 16:59:43 gurumeditation Exp $
+ * $Id: handler_menu_events.cc,v 1.4 2007/11/17 21:37:44 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,22 +30,25 @@
 #include "../include/handler_keyboard.h"
 
 /**
- *
+ * Create menu events object
  */
 handler_menu_events::handler_menu_events()
 {
   stop();
 }
 
+/**
+ * Release menu events object
+ */
 handler_menu_events::~handler_menu_events()
 {
   stop();
 }
 
 /**
- *
+ * Stop menu events
  */
-void handler_menu_events::stop() 
+void handler_menu_events::stop()
 {
   is_enabled = false;
   y_coord_left_down = handler_keyboard::NULL_YCOORD;
@@ -58,6 +61,34 @@ void handler_menu_events::stop()
   current_line = 0;
   key_delay = 0;
   previous_key_code_down = 0;
+  row_spacing = 0; 
+  row_min = 0;
+  row_max = 0;
+  current_row = 0;
+  left_x_coord = 0;
+}
+
+/**
+ * Start a new horizontal/vertical menu handler
+ * @param xspace Space between lines in pixels
+ * @param yspace Space between rows in pixels
+ * @param xmin Minimum row number
+ * @param ymin Minimum line number
+ * @param xmax Maximum row number
+ * @param ymax Maximum line number
+ * @param xleft X-coordinate left of the menu
+ * @param ytop Y-coordinate top of the menu
+ */
+void handler_menu_events::begin(Sint32 xspace, Sint32 yspace,
+                                Sint32 xmin, Sint32 ymin, Sint32 xmax,
+                                Sint32 ymax, Sint32 xleft, Sint32 ytop)
+{
+  row_spacing = xspace;
+  row_min = xmin;
+  row_max = xmax;
+  current_row = 0;
+  left_x_coord = xleft;
+  start(yspace, ymin, ymax, 0, ytop);
 }
 
 /**
@@ -66,17 +97,17 @@ void handler_menu_events::stop()
  * @param min Minimum line number
  * @param max Maximum line number
  * @param xcenter X-coordinate center of the menu
- * @param ytop Y-coordinate top of the menu 
+ * @param ytop Y-coordinate top of the menu
  */
 void handler_menu_events::start(Sint32 spacing, Sint32 min, Sint32 max,
-    Sint32 xcenter, Sint32 ytop)
+                                Sint32 xcenter, Sint32 ytop)
 {
   if (is_verbose)
     {
       std::cout << " handler_mene_events::start_) " <<
-        " line_spacing: " << spacing << " line_min: " << min <<
-        " line_max: " << max << " x_center: " << xcenter <<
-        " top_y_coord: " << ytop << std::endl;
+      " line_spacing: " << spacing << " line_min: " << min <<
+      " line_max: " << max << " x_center: " << xcenter <<
+      " top_y_coord: " << ytop << std::endl;
     }
   is_enabled = true;
   y_coord_left_down = handler_keyboard::NULL_YCOORD;
@@ -104,43 +135,49 @@ void handler_menu_events::start(Sint32 spacing, Sint32 min, Sint32 max,
     }
 }
 
-
-
+/**
+ * Code keys recognized in a menu
+ */
 Uint32 handler_menu_events::keys[MAX_OF_KEYS] =
 {
   handler_keyboard::K_UP,
   handler_keyboard::K_DOWN,
+  handler_keyboard::K_LEFT,
+  handler_keyboard::K_RIGHT,
   handler_keyboard::K_FIRE,
   handler_keyboard::K_RELEASE_BALL,
   handler_keyboard::K_GIGABLITZ,
   handler_keyboard::K_TILT
 };
 
-
 /**
  * Check key handles
+ * @param kcode Pointer the current key code down
+ * @param prev_kcode Pointer the previous key code down
  */
-void
+bool
 handler_menu_events::check_keys(Uint32 *kcode, Uint32 *prev_kcode)
 {
+  bool is_pressed = false;
   *prev_kcode = 0;
   *kcode = 0;
   /* check keyboards events */
-  if(previous_key_code_down > 0 &&
+  if (previous_key_code_down > 0 &&
       !keyboard->control_is_pressed(previous_key_code_down))
     {
-     *prev_kcode = previous_key_code_down;
+      *prev_kcode = previous_key_code_down;
       previous_key_code_down = 0;
       key_delay = 0;
     }
   if (key_delay < 1)
     {
-      for(Uint32 i = 0; i < MAX_OF_KEYS; i++)
+      for (Uint32 i = 0; i < MAX_OF_KEYS; i++)
         {
-          if(!keyboard->control_is_pressed(keys[i]))
+          if (!keyboard->control_is_pressed(keys[i]))
             {
               continue;
             }
+          is_pressed = true;
           *kcode = keys[i];
           if (previous_key_code_down != keys[i])
             {
@@ -159,12 +196,96 @@ handler_menu_events::check_keys(Uint32 *kcode, Uint32 *prev_kcode)
       *kcode = 0;
       key_delay--;
     }
+  return is_pressed;
 }
 
 /**
- * Check mouses events for the main menu and popup menu 
+ * Check keys events for the shop
+ */
+bool
+handler_menu_events::check ()
+{
+  if (!is_enabled)
+    {
+      return false;
+    }
+  Uint32 kcode = 0;
+  Uint32 prev_kcode = 0;
+  bool is_pressed = check_keys (&kcode, &prev_kcode);
+  bool is_selected = false;
+  switch (prev_kcode)
+    {
+    case handler_keyboard::K_FIRE:
+      is_selected = true;
+      break;
+    case handler_keyboard::K_RELEASE_BALL:
+      is_selected = true;
+      break;
+    }
+  /* check if right or left button are pressed */
+  bool is_warp = false;
+  if (is_pressed)
+    {
+      switch (kcode)
+        {
+        case handler_keyboard::K_LEFT:
+          if (current_row == row_min)
+            {
+              current_row = row_max;
+            }
+          else
+            {
+              current_row--;
+            }
+          is_warp = true;
+          break;
+        case handler_keyboard::K_RIGHT:
+          if (current_row == row_max)
+            {
+              current_row =  row_min;
+            }
+          else
+            {
+              current_row++;
+            }
+          is_warp = true;
+          break;
+        case handler_keyboard::K_UP:
+          if (current_line ==  line_min)
+            {
+              current_line = line_max;
+            }
+          else
+            {
+              current_line--;
+            }
+          is_warp = true;
+          break;
+        case handler_keyboard::K_DOWN:
+          if (current_line == line_max)
+            {
+              current_line =  line_min;
+            }
+          else
+            {
+              current_line++;
+            }
+          is_warp = true;
+          break;
+        }
+      if (is_warp)
+        {
+          SDL_WarpMouse(left_x_coord + current_row * row_spacing,
+                        top_y_coord + current_line * line_spacing);
+        }
+    }
+  return is_selected;
+}
+
+/**
+ * Check mouses events for the main menu and popup menu
  * @param pos_y Pointer to a integer which will contain y-coordinate
- *              where the mouse clicked 
+ *              where the mouse clicked
  * @param inc Pointer to a integer which will contain -1 if left mouse
  *            button clicked, 1 if right button clicked, otherwise 0
  * @return true if left mouse button clicked, otherwise false
@@ -180,7 +301,7 @@ handler_menu_events::check (Sint32 *pos_y, Sint32 *inc)
   Uint32 prev_kcode = 0;
   check_keys (&kcode, &prev_kcode);
   bool is_selected = false;
-  switch(prev_kcode)
+  switch (prev_kcode)
     {
     case handler_keyboard::K_FIRE:
       *inc = 1;
@@ -194,14 +315,14 @@ handler_menu_events::check (Sint32 *pos_y, Sint32 *inc)
 
   /* check if right or left button are pressed */
   Sint32 mposx;
-  switch(kcode)
+  switch (kcode)
     {
     case handler_keyboard::K_FIRE:
       break;
     case handler_keyboard::K_RELEASE_BALL:
       break;
     case handler_keyboard::K_UP:
-      if(current_line ==  line_min)
+      if (current_line ==  line_min)
         {
           current_line = line_max;
         }
@@ -213,7 +334,7 @@ handler_menu_events::check (Sint32 *pos_y, Sint32 *inc)
                     current_line * line_spacing);
       break;
     case handler_keyboard::K_DOWN:
-      if(current_line == line_max)
+      if (current_line == line_max)
         {
           current_line =  line_min;
         }
@@ -226,7 +347,7 @@ handler_menu_events::check (Sint32 *pos_y, Sint32 *inc)
       break;
     }
 
-  
+
   /*
    * check mouse events
    */

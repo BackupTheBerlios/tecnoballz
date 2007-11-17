@@ -4,11 +4,11 @@
  * @date 2007-11-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.52 $
+ * @version $Revision: 1.53 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.52 2007/11/17 16:59:43 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.53 2007/11/17 21:37:44 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -111,10 +111,10 @@ supervisor_shop::first_init ()
   box_texts =
     resources->load_texts (handler_resources::TEXTS_SHOP, 0,
                            BOX_LENGTH_STRING, 3);
-  for (Uint32 i = 0; i < 36; i++)
-    {
-      printf ("%02d): %s \n", i, box_texts[i]);
-    }
+  //for (Uint32 i = 0; i < 36; i++)
+  //  {
+  //    printf ("%02d): %s \n", i, box_texts[i]);
+  //  }
 
 
   Uint32 area_num = current_player->get_area_number ();
@@ -219,6 +219,19 @@ supervisor_shop::first_init ()
 
   keyboard->set_grab_input (false);
   tiles_ground->set_4_color_palette ();
+
+
+  menu_events->begin(
+    48 * resolution,
+    44 * resolution,
+    0,
+    0,
+    5,
+    3,
+    options_frame_xmin,
+    0
+  );
+
 }
 
 /**
@@ -227,8 +240,6 @@ supervisor_shop::first_init ()
 Uint32
 supervisor_shop::main_loop ()
 {
-  Sint32
-  Ecode = -1;
   display->wait_frame ();
 
   /* copy the background offscreen to the game offscreen */
@@ -257,8 +268,9 @@ supervisor_shop::main_loop ()
       if (!is_caspule_drag)
         {
           Sint32 x2, y2;
-          bool mousreleas = keyboard->is_left_button_up (&x2, &y2);
-          if (mousreleas)
+          bool is_left_up = keyboard->is_left_button_up (&x2, &y2);
+          is_left_up |= menu_events->check();
+          if (is_left_up)
             {
               Sint32 option = get_option_over_mouse_cursor (x, y);
               if (option == current_selected_option)
@@ -271,8 +283,10 @@ supervisor_shop::main_loop ()
             {
               if (!keyboard->is_left_button ())
                 {
-                  current_selected_option = get_option_over_mouse_cursor (x, y);
-                  current_price = get_price_and_update_led (current_selected_option);
+                  current_selected_option =
+                    get_option_over_mouse_cursor (x, y);
+                  current_price =
+                    get_price_and_update_led (current_selected_option);
                 }
             }
 
@@ -298,7 +312,7 @@ supervisor_shop::main_loop ()
   draw_select_cursor ();
   sprites->draw ();
   display_capsules_bought ();
-  Ecode = popup_menu->run ();
+  Sint32 popup_event = popup_menu->run ();
 
   /* copy whole game surface into screen surface */
   display->unlock_surfaces ();
@@ -306,12 +320,12 @@ supervisor_shop::main_loop ()
 
   /* escape key to quit the game! */
   if (keyboard->command_is_pressed (handler_keyboard::QUIT_TECNOBALLZ) ||
-      Ecode == handler_popup_menu::QUIT_TECNOBALLZ)
+      popup_event == handler_popup_menu::QUIT_TECNOBALLZ)
     {
       next_phase = LEAVE_TECNOBALLZ;
     }
   if (keyboard->command_is_pressed (handler_keyboard::QUIT_TO_MAIN_MENU) ||
-      Ecode == handler_popup_menu::QUIT_TO_MAIN_MENU)
+      popup_event == handler_popup_menu::QUIT_TO_MAIN_MENU)
     {
       next_phase = MAIN_MENU;
     }
@@ -363,8 +377,7 @@ supervisor_shop::get_option_over_mouse_cursor (Sint32 x, Sint32 y)
         {
           x = 0;
         }
-      Sint32
-      i = x + 6 * y;
+      Sint32 i = x + 6 * y;
       led_indicator_xcoord = (x * (48 * resolution)) + (17 * resolution);
       if (resolution == 1)
         {
@@ -738,11 +751,11 @@ supervisor_shop::capsule_drag_and_drop ()
           && selected_capsule_index >= 0)
         {
           dragged_capsule_pt = current_player->get_shopping_cart ()
-            + selected_capsule_index;
+                               + selected_capsule_index;
           sprite_capsule **capsules =
             power_up_capsules->get_sprites_list ();
           blink_capsule = *(capsules + selected_capsule_index);
-          is_caspule_drag = true; 
+          is_caspule_drag = true;
           drag_sprite->clone_from_capsule (blink_capsule);
           blink_capsule->is_enabled = true;
         }
@@ -766,14 +779,14 @@ supervisor_shop::capsule_drag_and_drop ()
       return;
     }
 
-  
+
   /*
    * drop a bonus capsule
    */
   drag_sprite->disable ();
   blink_capsule->is_enabled = true;
   Sint32 i = selected_capsule_index;
-  
+
   /* change position of a bonus capsule in the capsules list */
   if (i >= 0)
     {
@@ -904,7 +917,7 @@ supervisor_shop::set_select_cursor_coordinates ()
    * calculate maximum y coordinate
    */
   Sint32 ymax = num_of_bought_capsules * select_cursor_height
-    + capsules_frame_ymin;
+                + capsules_frame_ymin;
   /* if an object is drag, then adds a supplementary place */
   if (is_caspule_drag)
     {
@@ -1076,11 +1089,11 @@ supervisor_shop::led_index_to_text_index[] =
   /* P1/P2/LB/L+/??/WA */
   6, 7, 8, 9, 10, 11,
   /* BL/BU/BR/S2/S3/RB */
- 12, 13, 14, 15, 16, 17,
- /* CT/GL/XX/XX/XX/XX */
- 18, 19, 20, 20, 20, 20,
- /* XX/XX/XX/XX/XX/XX */
- 20, 20, 20, 20, 20, 20,
+  12, 13, 14, 15, 16, 17,
+  /* CT/GL/XX/XX/XX/XX */
+  18, 19, 20, 20, 20, 20,
+  /* XX/XX/XX/XX/XX/XX */
+  20, 20, 20, 20, 20, 20,
 };
 
 const unsigned char

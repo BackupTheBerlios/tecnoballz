@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-10-20
+ * @date 2007-11-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.39 $
+ * @version $Revision: 1.40 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.39 2007/11/04 20:51:17 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.40 2007/11/17 21:37:44 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -210,8 +210,8 @@ controller_bricks::initialize ()
         }
       bposx = i * 112 * resolution;
 
-      bposx = 0 * 112 * resolution;     //test only
-      bposy = 0 * 63 * resolution;      //test only
+      //bposx = 0 * 112 * resolution;     //test only
+      //bposy = 0 * 63 * resolution;      //test only
 
       if (is_verbose)
         {

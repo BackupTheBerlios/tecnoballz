@@ -4,11 +4,11 @@
  * @date 2007-10-23
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.31 $
+ * @version $Revision: 1.32 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.31 2007/10/29 13:18:53 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.32 2007/11/17 21:37:44 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -504,8 +504,7 @@ controller_paddles::move_paddles ()
       rakVdroite = 0;
 
       /* if 2 mouse buttons are pressed or GigaBlitz run also no test */
-      if (!keyboard->is_right_left_buttons () 
-	  && !keyboard->control_is_pressed (handler_keyboard::K_GIGABLITZ) 
+      if (!keyboard->is_gigablitz_or_tilt () 
 	  && !gigablitz->is_enable ())
         {
           if (reverse_counter > 0)

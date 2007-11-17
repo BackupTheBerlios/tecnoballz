@@ -4,11 +4,11 @@
  * @date 2007-11-03
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.66 $
+ * @version $Revision: 1.67 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_balls.cc,v 1.66 2007/11/04 20:51:17 gurumeditation Exp $
+ * $Id: controller_balls.cc,v 1.67 2007/11/17 21:37:44 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -290,7 +290,7 @@ controller_balls::check_outside_balls_guards_level ()
 void
 controller_balls::activate_tilt ()
 {
-  if (!keyboard->is_right_left_buttons ())
+  if (!keyboard->is_gigablitz_or_tilt ())
     {
       return;
     }

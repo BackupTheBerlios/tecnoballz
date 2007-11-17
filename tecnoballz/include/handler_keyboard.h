@@ -1,14 +1,14 @@
 /**
  * @file handler_keyboard.cc
  * @brief Handler of the keyboard and mouse
- * @date 2007-10-31
+ * @date 2007-11-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.h,v 1.11 2007/10/31 07:35:29 gurumeditation Exp $
+ * $Id: handler_keyboard.h,v 1.12 2007/11/17 21:37:44 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,9 +83,10 @@ class handler_keyboard:public virtual tecnoballz
     /** Number of available joysticks */
     Uint32 numof_joysticks;
     SDL_Joystick** sdl_joysticks;
-    bool fire_button_down;
-    bool option_button_down;
-    bool start_button_down;
+    bool joy_fire;
+    bool joy_release;
+    bool joy_gigablitz;
+    bool joy_option;
     bool joy_left;
     bool joy_right;
     bool joy_top;
@@ -130,6 +131,7 @@ class handler_keyboard:public virtual tecnoballz
     bool command_is_pressed (Uint32 code, bool clear = false);
     bool is_left_button ();
     bool is_right_button ();
+    bool is_gigablitz_or_tilt ();
     bool is_right_left_buttons ();
     bool is_left_button_up (Sint32 * off_x, Sint32 * off_y);
     bool is_right_button_up (Sint32 * off_x, Sint32 * off_y);

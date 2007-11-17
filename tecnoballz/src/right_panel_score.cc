@@ -4,11 +4,11 @@
  * @date 2007-10-26
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: right_panel_score.cc,v 1.22 2007/10/29 13:18:53 gurumeditation Exp $
+ * $Id: right_panel_score.cc,v 1.23 2007/11/17 21:37:44 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -174,8 +174,8 @@ right_panel_score::draw_gigablizt_gauge ()
 {
   controller_gigablitz *gigablitz = controller_gigablitz::get_instance ();
   controller_balls *balls = controller_balls::get_instance ();
-  if (keyboard->is_right_left_buttons () && !gigablitz->is_enable () &&
-      !balls->is_sticky_balls_remains ())
+  if (keyboard->is_gigablitz_or_tilt () 
+      && !gigablitz->is_enable () && !balls->is_sticky_balls_remains ())
     {
       if (++delay_gigablitz_countdown >= DELAY_GIGABLITZ_COUNTDOWN)
         {
