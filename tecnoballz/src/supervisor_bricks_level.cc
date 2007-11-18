@@ -1,14 +1,14 @@
 /**
  * @file supervisor_bricks_level.cc 
  * @brief Bricks levels supervisor 
- * @date 2007-10-17
+ * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.65 $
+ * @version $Revision: 1.66 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_bricks_level.cc,v 1.65 2007/10/29 13:18:54 gurumeditation Exp $
+ * $Id: supervisor_bricks_level.cc,v 1.66 2007/11/18 16:13:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -290,7 +290,7 @@ supervisor_bricks_level::main_loop ()
       display->unlock_surfaces ();
       panel_score->text_refresh ();
       display->window_update ();
-      if (keyboard->is_left_button () && gameover_counter > 60)
+      if (keyboard->wait_key () && gameover_counter > 60)
         {
           current_player = handler_players::get_next_player (current_player, &next_phase, 1);
         }
@@ -381,7 +381,7 @@ supervisor_bricks_level::main_loop ()
 #endif
                 }
               if (count_next > 20000000 ||
-                  keyboard->key_is_pressed (SDLK_SPACE) || music_finished)
+                  keyboard->wait_key() || music_finished)
                 {
                   sides_bricks->save_state_of_walls ();
                   current_player = handler_players::get_next_player (current_player,

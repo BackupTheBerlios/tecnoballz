@@ -2,14 +2,14 @@
  * @file controller_bricks.cc 
  * @brief Control the bricks in bricks levels
  * @created 1996-11-13
- * @date 2007-11-17
+ * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.40 $
+ * @version $Revision: 1.41 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.40 2007/11/17 21:37:44 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.41 2007/11/18 16:13:19 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -448,7 +448,7 @@ controller_bricks::draw_bricks ()
           Sint32 pos_x = map->h_pos;
 	  /* range from y >=0 to y <= 8 */
           Sint32 pos_y = map->v_pos;
-          if (pos_x || pos_y)
+          if (pos_x != 0 || pos_y != 0)
             {
 	      /* convert planar to chunky */
               pos_x *= 8 * resolution;
@@ -558,6 +558,8 @@ controller_bricks::color_cycling()
 void
 controller_bricks::set_bricks_palette ()
 {
+  display->set_color_gradation ();
+  /*
   SDL_Color *palette = display->get_palette ();
   SDL_Color *bricks_pal = palette + 239;
   Uint32 i = random_counter & 0x0f;
@@ -580,6 +582,7 @@ controller_bricks::set_bricks_palette ()
       bricks_pal++;
     }
   display->enable_palette (palette);
+  */
 }
 
 /**

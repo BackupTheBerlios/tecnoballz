@@ -1,15 +1,15 @@
 /**
- * @file supervisor_map_editor.cc 
- * @brief The tile map editor for the menu and guardians levels 
- * @created 2004-09-13 
- * @date 2007-10-02
+ * @file supervisor_map_editor.cc
+ * @brief The tile map editor for the menu and guardians levels
+ * @created 2004-09-13
+ * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.24 2007/10/07 14:22:12 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.25 2007/11/18 16:13:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,7 +133,7 @@ supervisor_map_editor::first_init ()
   resources->release_sprites_bitmap ();
 
 
-  Sint32        edmap = tilesmap_scrolling::MAP_MENU;
+  Sint32 edmap = tilesmap_scrolling::MAP_MENU;
   //Sint32        edmap = tilesmap_scrolling::MAP_GUARDIANS;
   //Sint32 edmap = tilesmap_scrolling::MAP_CONGRATULATIONS;
 
@@ -144,15 +144,13 @@ supervisor_map_editor::first_init ()
   tile_mask1 = 0xffffffff ^ (tile_width - 1);
   tile_mask2 = ~tile_mask1;
   map_width = tiles_map->get_map_width ();
-
-  display->gradation1 ();
+  display->set_color_gradation ();
 }
 
 /**
  * Main loop
  */
-Uint32
-supervisor_map_editor::main_loop ()
+Uint32 supervisor_map_editor::main_loop ()
 {
   display->wait_frame ();
 
@@ -193,15 +191,18 @@ supervisor_map_editor::main_loop ()
 
   if (keyboard->key_is_pressed (SDLK_F1))
     {
-      tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_MENU, tilesmap_scrolling::MAP_MENU);
+      tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_MENU,
+                             tilesmap_scrolling::MAP_MENU);
     }
   else if (keyboard->key_is_pressed (SDLK_F2))
     {
-      tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_GUARDIANS, tilesmap_scrolling::MAP_GUARDIANS);
+      tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_GUARDIANS,
+                             tilesmap_scrolling::MAP_GUARDIANS);
     }
   else if (keyboard->key_is_pressed (SDLK_F3))
     {
-      tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_CONGRATULATIONS, tilesmap_scrolling::MAP_CONGRATULATIONS);
+      tiles_map->switch_map (tilesmap_scrolling::TILES_COLOR_CONGRATULATIONS,
+                             tilesmap_scrolling::MAP_CONGRATULATIONS);
     }
 
   /* save the map */
@@ -291,7 +292,7 @@ supervisor_map_editor::view_tiles ()
 }
 
 /**
- * Create a brush from tiles bitmap 
+ * Create a brush from tiles bitmap
  */
 void
 supervisor_map_editor::tiles_to_brush ()
@@ -312,7 +313,7 @@ supervisor_map_editor::tiles_to_brush ()
   /*
    * copy tiles offsets to brush map
    */
-  Uint32 width = tiles_bitmap->get_width() / tile_width; 
+  Uint32 width = tiles_bitmap->get_width () / tile_width;
   Sint32 offset =
     (current_selection->y1 / tile_width) * width +
     (current_selection->x1 / tile_width);
@@ -360,11 +361,12 @@ supervisor_map_editor::check_keys ()
  * Determine vertical scrolling speed
  * @return srolling speed
  */
-Sint32
-supervisor_map_editor::get_speed ()
+Sint32 supervisor_map_editor::get_speed ()
 {
-  Sint32 speed = 0;
-  Uint32 mousY = keyboard->get_mouse_y ();
+  Sint32
+  speed = 0;
+  Uint32
+  mousY = keyboard->get_mouse_y ();
   if (mousY > 0 && mousY < 8 * resolution)
     {
       speed = -16 * resolution;
@@ -522,15 +524,13 @@ supervisor_map_editor::highlight_selection ()
     }
   Uint32 x1 = current_selection->x1;
   Uint32 x2 = current_selection->x2;
-  if (current_selection->y_offset > (Sint32)current_selection->y1  ||
-      current_selection->y_offset > (Sint32)current_selection->y2)
+  if (current_selection->y_offset > (Sint32) current_selection->y1 ||
+      current_selection->y_offset > (Sint32) current_selection->y2)
     {
       return;
     }
   Uint32 y1 = current_selection->y1 - current_selection->y_offset;
   Uint32 y2 = current_selection->y2 - current_selection->y_offset;
-  //std::cout << ">> x1:" << x1  << " y1:" << y1 << "/  x2:" << x2 << " y2:" << y2 << std::endl;
-
 
   if (x1 > x2)
     {
@@ -546,7 +546,6 @@ supervisor_map_editor::highlight_selection ()
       y2 = y;
     }
   Uint32 height = y2 - y1;
-  //printf("height %i = %i - %i\n", height, y2, y1); 
 
   if (cycled_colors_index++ > MAX_OF_CYCLED_COLORS)
     {
@@ -768,34 +767,36 @@ supervisor_map_editor::draw_brush ()
 /**
  * Save tiles map file
  */
-bool
-supervisor_map_editor::save_tilesmap ()
+bool supervisor_map_editor::save_tilesmap ()
 {
-  Uint32 map_size = tilesmap_scrolling::MAP_HEIGHT * map_width;
+  Uint32
+  map_size = tilesmap_scrolling::MAP_HEIGHT * map_width;
 //map_size = map_size * 2;
-  Uint32 bytes_size = map_size * sizeof (Uint16);
+  Uint32
+  bytes_size = map_size * sizeof (Uint16);
 
-/*  
-  Uint16 *map2 = new Uint16[map_size];
-  for (Uint32 v = 0; v < map_size; v++)
-    {
-      map2[v] = 0;
-    }
-  Uint16 *map = (Uint16 *) tiles_map->map_tiles;
-  Uint16 *x2 = map2;
-  for (Uint32 v = 0; v < tilesmap_scrolling::MAP_HEIGHT; v++)
-    {
-      for (Uint32 w = 0; w < map_width; w++)
-        {
-          x2[w] = map[w];
-          x2[w + map_width] = map[w];
-        }
-        map = map + map_width;
-        x2 = x2 + map_width + map_width ;
-    }
-*/
+  /*
+    Uint16 *map2 = new Uint16[map_size];
+    for (Uint32 v = 0; v < map_size; v++)
+      {
+        map2[v] = 0;
+      }
+    Uint16 *map = (Uint16 *) tiles_map->map_tiles;
+    Uint16 *x2 = map2;
+    for (Uint32 v = 0; v < tilesmap_scrolling::MAP_HEIGHT; v++)
+      {
+        for (Uint32 w = 0; w < map_width; w++)
+          {
+            x2[w] = map[w];
+            x2[w + map_width] = map[w];
+          }
+          map = map + map_width;
+          x2 = x2 + map_width + map_width ;
+      }
+  */
 
-  Uint16 *filedata;
+  Uint16 *
+  filedata;
   try
     {
       filedata = new Uint16[map_size];
@@ -804,17 +805,19 @@ supervisor_map_editor::save_tilesmap ()
     {
       std::
       cerr << "(!)supervisor_map_editor::save_tilesmap() "
-      "not enough memory to allocate " << map_size <<
-      " bytes!" << std::endl;
+      "not enough memory to allocate " << map_size << " bytes!" << std::endl;
       throw;
     }
 
-  Uint16 *map = (Uint16 *) tiles_map->map_tiles;
+  Uint16 *
+  map = (Uint16 *) tiles_map->map_tiles;
 //map = map2;
-  unsigned char *buffer = (unsigned char *) filedata;
+  unsigned char *
+  buffer = (unsigned char *) filedata;
   for (Uint32 i = 0; i < map_size; i++)
     {
-      Uint16 code = *map;
+      Uint16
+      code = *map;
       code = code << 2;
       /* convert short int to big endian */
       buffer[1] = code;
@@ -829,13 +832,15 @@ supervisor_map_editor::save_tilesmap ()
 #else
   umask (0002);
 #endif
-  char *filename = "edmap.data";
-  Sint32 handle = open (filename, O_WRONLY | O_CREAT, 00666);
+  char *
+  filename = "edmap.data";
+  Sint32
+  handle = open (filename, O_WRONLY | O_CREAT, 00666);
   if (-1 == handle)
     {
       std::cerr << "supervisor_map_editor::save_tilesmap() file " <<
-        filename << "; error " << strerror (errno) << std::endl;
-       delete[]filedata;
+      filename << "; error " << strerror (errno) << std::endl;
+      delete[]filedata;
       return false;
     }
 #ifdef WIN32
@@ -846,24 +851,24 @@ supervisor_map_editor::save_tilesmap ()
   if (close (handle) == -1)
     {
       std::cerr << "supervisor_map_editor::save_tilesmap() file " <<
-        filename << "; error " << strerror (errno) << std::endl;
-       delete[]filedata;
+      filename << "; error " << strerror (errno) << std::endl;
+      delete[]filedata;
       return false;
     }
   delete[]filedata;
   if (is_verbose)
     {
       std::cout << "supervisor_map_editor::save_tilesmap() " <<
-        filename << "file was saved" << std::endl;
+      filename << "file was saved" << std::endl;
     }
   return true;
 }
 
 const unsigned char
 supervisor_map_editor::cycled_colors_list[MAX_OF_CYCLED_COLORS] =
-  {
-    239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
-    253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
-    243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
-    249, 250, 251, 252, 253, 254, 255
-  };
+{
+  239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
+  253, 254, 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245, 244,
+  243, 242, 241, 240, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
+  249, 250, 251, 252, 253, 254, 255
+};

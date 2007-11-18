@@ -2,14 +2,14 @@
  * @file supervisor_guards_level.cc 
  * @brief Guardians level supervisor 
  * @created 2003-01-09
- * @date 2007-10-20
+ * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.53 $
+ * @version $Revision: 1.54 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_guards_level.cc,v 1.53 2007/10/29 13:18:54 gurumeditation Exp $
+ * $Id: supervisor_guards_level.cc,v 1.54 2007/11/18 16:13:20 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -193,7 +193,7 @@ supervisor_guards_level::first_init ()
 Uint32
 supervisor_guards_level::main_loop ()
 {
-  Sint32 Ecode = -1;
+  Sint32 popup_event = -1;
   
   /*
    * gameover: the player has no more lives
@@ -253,7 +253,7 @@ supervisor_guards_level::main_loop ()
         }
       display->unlock_surfaces ();
       display->window_update ();
-      if (keyboard->is_left_button () && gameover_counter > 150)
+      if (keyboard->wait_key () && gameover_counter > 150)
         {
           current_player = handler_players::get_next_player (current_player,
                                                     &next_phase,
@@ -300,7 +300,7 @@ supervisor_guards_level::main_loop ()
 
       /* display all sprites in the game offscreen */
       sprites->draw ();
-      Ecode = popup_menu->run ();
+      popup_event = popup_menu->run ();
       display->unlock_surfaces ();
       display->window_update ();
     }
@@ -315,7 +315,7 @@ supervisor_guards_level::main_loop ()
           gigablitz->disable_sprites ();
           balls->disable_sprites ();
           bullets->disable_sprites ();
-          if (count_next > 500 || keyboard->key_is_pressed (SDLK_SPACE))
+          if (count_next > 500 || keyboard->wait_key())
             {
               is_victory = current_player->zlastlevel ();
               if (is_victory)
@@ -346,17 +346,17 @@ supervisor_guards_level::main_loop ()
 
   /* escape key to quit the game! */
   if (keyboard->command_is_pressed (handler_keyboard::QUIT_TECNOBALLZ) ||
-      Ecode == handler_popup_menu::QUIT_TECNOBALLZ)
+      popup_event == handler_popup_menu::QUIT_TECNOBALLZ)
     {
       next_phase = LEAVE_TECNOBALLZ;
     }
   if (keyboard->command_is_pressed (handler_keyboard::CAUSE_GAME_OVER) ||
-      Ecode == handler_popup_menu::CAUSE_GAME_OVER)
+      popup_event == handler_popup_menu::CAUSE_GAME_OVER)
     {
       current_player->remove_all_lifes ();
     }
   if (keyboard->command_is_pressed (handler_keyboard::QUIT_TO_MAIN_MENU) ||
-      Ecode == handler_popup_menu::QUIT_TO_MAIN_MENU)
+      popup_event == handler_popup_menu::QUIT_TO_MAIN_MENU)
     {
       next_phase = MAIN_MENU;
     }

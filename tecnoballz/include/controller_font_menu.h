@@ -1,14 +1,14 @@
 /** 
- * @file controller_font_menu.cc 
+ * @file controller_font_menu.h
  * @brief Controller of the menu scroll text 
- * @date 2007-03-31
+ * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_font_menu.h,v 1.1 2007/10/11 18:53:17 gurumeditation Exp $
+ * $Id: controller_font_menu.h,v 1.2 2007/11/18 16:13:19 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@
 class controller_font_menu:public objects_list < sprite_font_menu, controller_font_menu >
 {
 private:
-  static const Uint32 MAX_OF_FONTS = 14;  //numbers maximum characters
-  //static char scrollText[];
+  /** Numbers maximum characters */
+  static const Uint32 MAX_OF_FONTS = 14;
   static char asciiToBob[128];
 
 private:

@@ -1,14 +1,14 @@
 /**
- * @file handler_keyboard.cc 
+ * @file handler_keyboard.cc
  * @brief Handler of the keyboard and mouse
- * @date 2007-10-31
+ * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.17 2007/11/17 21:37:44 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.18 2007/11/18 16:13:19 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,20 +31,17 @@
 bool handler_keyboard::command_keys[NUMOF_COMMAND_KEYS];
 bool handler_keyboard::last_command_keys[NUMOF_COMMAND_KEYS];
 Uint32 handler_keyboard::key_codes[K_MAXOF] =
-  {
-    SDLK_LEFT,
-    SDLK_RIGHT,
-    SDLK_UP,
-    SDLK_DOWN,
-    SDLK_SPACE,
-    SDLK_LCTRL,
-    SDLK_LALT,
-    SDLK_y,
-    SDLK_x,
-    SDLK_ESCAPE,
-    SDLK_PAGEUP,
-    SDLK_PAGEDOWN
-  };
+{
+  SDLK_LEFT,
+  SDLK_RIGHT,
+  SDLK_UP,
+  SDLK_DOWN,
+  SDLK_SPACE,
+  SDLK_LCTRL,
+  SDLK_LALT,
+  SDLK_PAGEUP,
+  SDLK_PAGEDOWN
+};
 handler_keyboard * handler_keyboard::keyboard_singleton = NULL;
 
 /**
@@ -79,6 +76,8 @@ handler_keyboard::handler_keyboard ()
       last_command_keys[i] = false;
     }
   init_joysticks();
+  is_key_waiting = true;
+  wait_key_pressed = -1;
 }
 
 /**
@@ -104,7 +103,7 @@ handler_keyboard::~handler_keyboard ()
 }
 
 /**
- * Open joystick(s) if available 
+ * Open joystick(s) if available
  */
 void
 handler_keyboard::init_joysticks()
@@ -151,6 +150,7 @@ handler_keyboard::init_joysticks()
     }
 }
 
+/*
 bool
 handler_keyboard::is_joy_left()
 {
@@ -162,13 +162,13 @@ handler_keyboard::is_joy_right()
 {
   return joy_right ? true : false;
 }
-
+*/
 
 
 /**
  * Get the object instance
  * handler_keyboard is a singleton
- * @return the handler_keyboard object 
+ * @return the handler_keyboard object
  */
 handler_keyboard *
 handler_keyboard::get_instance ()
@@ -561,6 +561,7 @@ handler_keyboard::read_events ()
           else if (event.jbutton.button > 2)
             {
               joy_option = true;
+              last_command_keys[TOGGLE_POPUP_MENU] = true;
             }
           break;
 #endif
@@ -584,7 +585,14 @@ handler_keyboard::read_events ()
             }
           else if (event.jbutton.button > 2)
             {
-              joy_option = true;
+              joy_option = false;
+             if (last_command_keys[TOGGLE_POPUP_MENU])
+               {
+                 last_command_keys[TOGGLE_POPUP_MENU] = false;
+                 command_keys[TOGGLE_POPUP_MENU] =
+                   command_keys[TOGGLE_POPUP_MENU] ? false : true;
+                 command_keys[COMMAND_KEY_PAUSE] = command_keys[TOGGLE_POPUP_MENU];
+               }
             }
 #endif
           break;
@@ -605,7 +613,7 @@ handler_keyboard::read_events ()
 /**
  * Check if a key is pressed
  * @param code a SDL Keysym definition
- * @return true if the key is pressed 
+ * @return true if the key is pressed
  */
 bool handler_keyboard::key_is_pressed (Sint32 code)
 {
@@ -642,8 +650,8 @@ bool handler_keyboard::key_is_released (Sint32 code)
 
 /**
  * Check if a control key is pressed
- * @param code A code of key 
- * @return true if the key is pressed 
+ * @param code A code of key
+ * @return true if the key is pressed
  */
 bool
 handler_keyboard::control_is_pressed (Uint32 code)
@@ -654,7 +662,7 @@ handler_keyboard::control_is_pressed (Uint32 code)
       std::cerr << "(!)handler_keyboard::control_is_pressed() " <<
         code << " is greated or equal to " << K_MAXOF << std::endl;
       return false;
-    } 
+    }
   */
   Uint8 * keys;
   keys = SDL_GetKeyState (NULL);
@@ -664,41 +672,36 @@ handler_keyboard::control_is_pressed (Uint32 code)
     }
   else
     {
-      switch(code)
+      switch (code)
         {
-          case K_LEFT:
+        case K_LEFT:
           return joy_left ? true : false;
           break;
-          case K_RIGHT:
+        case K_RIGHT:
           return joy_right ? true : false;
           break;
-          case K_UP:
+        case K_UP:
           return joy_top ? true : false;
           break;
-          case K_DOWN:
+        case K_DOWN:
           return joy_down ? true : false;
           break;
-          case K_FIRE:
+        case K_FIRE:
           return joy_fire ? true : false;
           break;
-          case K_RELEASE_BALL:
+        case K_RELEASE_BALL:
           return joy_release ? true : false;
           break;
-          case K_GIGABLITZ:
+        case K_GIGABLITZ:
           return joy_gigablitz ? true : false;
           break;
-          case K_ESC:
-          return joy_option ? true : false;
-          break;
         }
-
-
       return false;
     }
 }
 
 /**
- * Clear some command keys and set grab input 
+ * Clear some command keys and set grab input
  */
 void
 handler_keyboard::clear_command_keys ()
@@ -723,6 +726,8 @@ handler_keyboard::clear_command_keys ()
     }
   previous_mouse_x_coord = mouse_x_coord;
   previous_mouse_y_coord = mouse_y_coord;
+  is_key_waiting = true;
+  wait_key_pressed = -1;
 }
 
 /**
@@ -761,17 +766,17 @@ bool handler_keyboard::is_right_button ()
 
 
 /**
- * Check if player want send a gigablitz or enable tilt 
- * @return true if want send a gigablitz or enable tilt 
+ * Check if player want send a gigablitz or enable tilt
+ * @return true if want send a gigablitz or enable tilt
  */
 bool
 handler_keyboard::is_gigablitz_or_tilt ()
 {
   if (is_right_left_buttons() ||
       keyboard->control_is_pressed (handler_keyboard::K_GIGABLITZ))
-      {
-        return true;
-      }
+    {
+      return true;
+    }
   else
     {
       return false;
@@ -795,7 +800,7 @@ bool handler_keyboard::is_right_left_buttons ()
 }
 
 /**
- * Test if the left mouse button were released 
+ * Test if the left mouse button were released
  * @param x_coord pointer to integer in which to return x mouse
  * @param y_coord pointer to integer in which to return y mouse
  * @return true if the left mouse button is released
@@ -808,7 +813,7 @@ bool handler_keyboard::is_left_button_up (Sint32 * x_coord, Sint32 * y_coord)
 }
 
 /**
- * Test if the right mouse button were released 
+ * Test if the right mouse button were released
  * @param x_coord pointer to integer in which to return x mouse
  * @param y_coord pointer to integer in which to return y mouse
  * @return true if the right mouse button is released
@@ -822,7 +827,7 @@ bool handler_keyboard::is_right_button_up (Sint32 * x_coord, Sint32 * y_coord)
 
 /**
  * Caculate and return offset of horizontal displacement of the mouse
- * @return the mouse horizonal offset 
+ * @return the mouse horizonal offset
  */
 Sint32 handler_keyboard::get_mouse_x_offset ()
 {
@@ -836,7 +841,7 @@ Sint32 handler_keyboard::get_mouse_x_offset ()
 }
 
 /**
- * Return absolute mouse y coordinate 
+ * Return absolute mouse y coordinate
  * @return the mouse pointer y coordinate
  */
 Sint32 handler_keyboard::get_mouse_y ()
@@ -845,7 +850,7 @@ Sint32 handler_keyboard::get_mouse_y ()
 }
 
 /**
- * Return absolute mouse x coordinate 
+ * Return absolute mouse x coordinate
  * @return the mouse pointer x coordinate
  */
 Sint32 handler_keyboard::get_mouse_x ()
@@ -986,7 +991,7 @@ handler_keyboard::input_string (Uint32 kcode)
 
       /* space (32) / ! (33)
        * , (44) /  - (45) / . (46) /
-       * : (58) / 0-9 (48-57) 
+       * : (58) / 0-9 (48-57)
        * A-Z (65 to 90)
        */
       if ((kcode >= ' ' && kcode <= '!') ||
@@ -1052,8 +1057,56 @@ handler_keyboard::stop_string_input ()
   current_input_string = NULL;
 }
 
-Uint32 handler_keyboard::get_key_down_code ()
+
+/**
+ * Set the code of the last key down
+ * @return last pressed key code
+ */
+Uint32
+handler_keyboard::get_key_down_code ()
 {
   return key_code_down;
 }
 
+
+/**
+ * Wait a key (used for press an key to continue)
+ * @return true if a key is pressed and released
+ */
+bool
+handler_keyboard::wait_key ()
+{
+  if (is_key_waiting)
+    {
+      if (!control_is_pressed(K_FIRE) &&  
+          !control_is_pressed(K_RELEASE_BALL) &&
+          !control_is_pressed(K_GIGABLITZ))
+        {
+          is_key_waiting = false;
+        }
+      return false;
+    }
+  if (control_is_pressed(K_FIRE))
+    {
+      wait_key_pressed = K_FIRE; 
+      return false;
+    } 
+  else if (control_is_pressed(K_RELEASE_BALL))
+    {
+      wait_key_pressed = K_RELEASE_BALL; 
+      return false;
+    }
+  else if (control_is_pressed(K_GIGABLITZ))
+    {
+      wait_key_pressed = K_GIGABLITZ; 
+      return false;
+    }
+
+  if (wait_key_pressed == K_FIRE ||
+      wait_key_pressed == K_RELEASE_BALL ||
+      wait_key_pressed == K_GIGABLITZ)
+    {
+      return true;
+    }
+  return false;
+}

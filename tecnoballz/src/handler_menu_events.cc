@@ -5,11 +5,11 @@
  * @date 2007-11-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_menu_events.cc,v 1.4 2007/11/17 21:37:44 gurumeditation Exp $
+ * $Id: handler_menu_events.cc,v 1.5 2007/11/18 16:13:19 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -146,8 +146,7 @@ Uint32 handler_menu_events::keys[MAX_OF_KEYS] =
   handler_keyboard::K_RIGHT,
   handler_keyboard::K_FIRE,
   handler_keyboard::K_RELEASE_BALL,
-  handler_keyboard::K_GIGABLITZ,
-  handler_keyboard::K_TILT
+  handler_keyboard::K_GIGABLITZ
 };
 
 /**

@@ -1,15 +1,15 @@
-/** 
- * @file controller_gems.cc 
- * @brief The gems controller 
- * @created 2004-04-12 
- * @date 2007-03-09
+/**
+ * @file controller_gems.h
+ * @brief The gems controller
+ * @created 2004-04-12
+ * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
-/* 
+/*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_gems.h,v 1.7 2007/09/12 06:32:48 gurumeditation Exp $
+ * $Id: controller_gems.h,v 1.8 2007/11/18 16:13:19 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,18 +36,18 @@ class controller_gems;
 #include "../include/handler_players.h"
 
 class controller_gems:public objects_list < sprite_gem, controller_gems >
-{
-public:
-  static const Uint32 MAX_OF_GEMS = 6;
+  {
+  public:
+    static const Uint32 MAX_OF_GEMS = 6;
 
-private:
+  private:
 
-public:
+  public:
     controller_gems ();
-   ~controller_gems ();
-  void initialize ();
-  void send (sprite_ball * ball);
-  void send (sprite_projectile * blast);
-  void move ();
-};
+    ~controller_gems ();
+    void initialize ();
+    void send (sprite_ball * ball);
+    void send (sprite_projectile * blast);
+    void move ();
+  };
 #endif

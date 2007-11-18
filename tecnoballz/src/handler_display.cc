@@ -5,11 +5,11 @@
  * @date 2007-10-09
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.25 2007/10/09 05:46:24 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.26 2007/11/18 16:13:19 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -595,6 +595,7 @@ handler_display::buf_affx64 (char *srcPT, char *desPT, Sint32 width,
 //------------------------------------------------------------------------------
 // copy an image
 //------------------------------------------------------------------------------
+/*
 void
 handler_display::genericGFX (char *sAdre, Sint32 sLarg, Sint32 sHaut,
                              Sint32 sNext, char *dAdre, Sint32 dLarg,
@@ -619,6 +620,7 @@ handler_display::genericGFX (char *sAdre, Sint32 sLarg, Sint32 sHaut,
         d[j] = s[j];
     }
 }
+*/
 
 /**
  * Tilt the screen 10 or 20 pixels upwards
@@ -629,30 +631,32 @@ handler_display::tilt_screen ()
   tilt_offset = 10 * resolution;
 }
 
-//------------------------------------------------------------------------------
-// select colour gradation
-//------------------------------------------------------------------------------
+/** 
+ * Select colour gradation
+ */
 void
-handler_display::gradation1 ()
+handler_display::set_color_gradation ()
 {
-  SDL_Color *palPT = display->get_palette ();
-  SDL_Color *palP1 = palPT + 239;
+  SDL_Color *palette = display->get_palette ();
+  SDL_Color *pal = palette + 239;
   Sint32 i = random_counter & 0x0F;
   if (i >= 10)
-    i = i - 10;
-  const Uint32 *ptpal = (handler_resources::color_gradations + i * 18);
+    {
+      i = i - 10;
+    }
+  const Uint32 *color_scale = (handler_resources::color_gradations + i * 18);
   for (i = 0; i < 17; i++)
     {
-      Uint32 vacol = ptpal[i];
+      Uint32 vacol = color_scale[i];
       Uint32 vablu = vacol & 0x000000ff;
       Uint32 vagre = vacol & 0x0000ff00;
       vagre = vagre >> 8;
       Uint32 vared = vacol & 0x00ff0000;
       vared = vared >> 16;
-      palP1->r = vared;
-      palP1->g = vagre;
-      palP1->b = vablu;
-      palP1++;
+      pal->r = vared;
+      pal->g = vagre;
+      pal->b = vablu;
+      pal++;
     }
-  display->enable_palette (palPT);
+  display->enable_palette (palette);
 }

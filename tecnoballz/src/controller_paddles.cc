@@ -1,14 +1,14 @@
 /** 
  * @file controller_paddles.cc
  * @brief Paddles controller 
- * @date 2007-10-23
+ * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.32 $
+ * @version $Revision: 1.33 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.32 2007/11/17 21:37:44 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.33 2007/11/18 16:13:19 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -447,8 +447,7 @@ controller_paddles::get_paddles_speed ()
 {
 
   Sint32 off_x = 0; 
-  if (keyboard->control_is_pressed(handler_keyboard::K_LEFT) 
-      || keyboard->is_joy_left() )
+  if (keyboard->control_is_pressed(handler_keyboard::K_LEFT))
     {
       if ((Sint32)kb_paddle_speed > 0)
         {
@@ -462,8 +461,7 @@ controller_paddles::get_paddles_speed ()
       off_x = (Sint32)kb_paddle_speed; 
       //printf("<== %i\n", off_x);
     }
-  else if (keyboard->control_is_pressed(handler_keyboard::K_RIGHT)
-      || keyboard->is_joy_right() )
+  else if (keyboard->control_is_pressed(handler_keyboard::K_RIGHT))
     {
       if ((Sint32)kb_paddle_speed < 0)
         {
@@ -560,7 +558,7 @@ controller_paddles::move_paddles ()
 
     }
 
-  // Mode Team (On Amiga I had two mice simultaneously)
+  /* team mode (on Amiga I had two mice simultaneously) */
   else
     {
 
@@ -613,7 +611,7 @@ controller_paddles::move_paddle ()
       paddle_bottom->blink ();
     }
 
-  // mode team, no implemented (on Amiga I had two mice simultaneously)
+  /* team mode (on Amiga I had two mice simultaneously) */
   else
     {
 

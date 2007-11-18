@@ -1,14 +1,14 @@
 /**
- * @file handler_keyboard.cc
+ * @file handler_keyboard.h
  * @brief Handler of the keyboard and mouse
- * @date 2007-11-17
+ * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.h,v 1.12 2007/11/17 21:37:44 gurumeditation Exp $
+ * $Id: handler_keyboard.h,v 1.13 2007/11/18 16:13:19 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,12 +59,9 @@ class handler_keyboard:public virtual tecnoballz
       K_RIGHT,
       K_UP,
       K_DOWN,
-      K_FIRE,
       K_RELEASE_BALL,
+      K_FIRE,
       K_GIGABLITZ,
-      K_TILT,
-      K_TURBO,
-      K_ESC,
       K_VOLUME_UP,
       K_VOLUME_DOWN,
       K_MAXOF
@@ -118,6 +115,9 @@ class handler_keyboard:public virtual tecnoballz
     Sint32 string_input_size;
     /* pointer to the current input string */
     char *current_input_string;
+
+    bool is_key_waiting;
+    Sint32 wait_key_pressed;
   private:
     handler_keyboard ();
 
@@ -147,8 +147,12 @@ class handler_keyboard:public virtual tecnoballz
     void stop_string_input ();
     Uint32 get_key_down_code ();
 
-    bool is_joy_left();
-    bool is_joy_right();
+    //bool is_joy_left();
+    //bool is_joy_right();
+
+    bool wait_key();
+
+    
 
   private:
     void init_joysticks();
