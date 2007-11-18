@@ -5,11 +5,11 @@
  * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.41 $
+ * @version $Revision: 1.42 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_bricks.cc,v 1.41 2007/11/18 16:13:19 gurumeditation Exp $
+ * $Id: controller_bricks.cc,v 1.42 2007/11/18 21:26:30 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -559,30 +559,6 @@ void
 controller_bricks::set_bricks_palette ()
 {
   display->set_color_gradation ();
-  /*
-  SDL_Color *palette = display->get_palette ();
-  SDL_Color *bricks_pal = palette + 239;
-  Uint32 i = random_counter & 0x0f;
-  if (i >= 10)
-    {
-      i = i - 10;
-    }
-  const Uint32 *color_scale = (handler_resources::color_gradations + i * 18);
-  for (i = 0; i < 17; i++)
-    {
-      Uint32 color = color_scale[i];
-      Uint32 blue = color & 0x000000ff;
-      Uint32 green = color & 0x0000ff00;
-      green = green >> 8;
-      Uint32 red = color & 0x00ff0000;
-      red = red >> 16;
-      bricks_pal->r = red;
-      bricks_pal->g = green;
-      bricks_pal->b = blue;
-      bricks_pal++;
-    }
-  display->enable_palette (palette);
-  */
 }
 
 /**

@@ -5,11 +5,11 @@
  * @date 2007-09-21
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: configfile.cc,v 1.28 2007/09/26 15:57:40 gurumeditation Exp $
+ * $Id: configfile.cc,v 1.29 2007/11/18 21:26:30 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,9 +100,9 @@ configfile::resetvalue ()
   absolute_mouse_positioning = false;
 }
 
-//------------------------------------------------------------------------------
-// display values
-//------------------------------------------------------------------------------
+/**
+ * Display values
+ */
 void
 configfile::configinfo ()
 {
@@ -226,6 +226,10 @@ configfile::load ()
   if (!reader.read_bool ("verbose", &is_verbose))
     {
       is_verbose = false;
+    }
+  if (!reader.read_bool ("absolute_mouse", &absolute_mouse_positioning))
+    {
+      absolute_mouse_positioning = false;
     }
 
   /* read window resolution: 1 = 320*240; 2 = 640*480 */
@@ -362,6 +366,7 @@ configfile::save ()
                handler_display::optionfull ? "#t" : "#f");
       fprintf (config, "\t(sound %s)\n", audio ? "#t" : "#f");
       fprintf (config, "\t(verbose %s)\n", is_verbose ? "#t" : "#f");
+      fprintf (config, "\t(absolute_mouse %s)\n", absolute_mouse_positioning ? "#t" : "#f");
       fprintf (config, "\n\t;; window size 1 (low-res) or 2 (high-res):\n");
       fprintf (config, "\t(resolution  %d)\n", resolution);
       fprintf (config,

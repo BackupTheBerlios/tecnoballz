@@ -5,11 +5,11 @@
  * @date 2007-11-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_menu_events.cc,v 1.5 2007/11/18 16:13:19 gurumeditation Exp $
+ * $Id: handler_menu_events.cc,v 1.6 2007/11/18 21:26:30 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -160,6 +160,10 @@ handler_menu_events::check_keys(Uint32 *kcode, Uint32 *prev_kcode)
   bool is_pressed = false;
   *prev_kcode = 0;
   *kcode = 0;
+  if (keyboard->get_input_cursor_pos() >= 0)
+    {
+      return false;
+    }
   /* check keyboards events */
   if (previous_key_code_down > 0 &&
       !keyboard->control_is_pressed(previous_key_code_down))

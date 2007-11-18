@@ -4,11 +4,11 @@
  * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.cc,v 1.18 2007/11/18 16:13:19 gurumeditation Exp $
+ * $Id: handler_keyboard.cc,v 1.19 2007/11/18 21:26:30 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,6 +44,13 @@ Uint32 handler_keyboard::key_codes[K_MAXOF] =
 };
 handler_keyboard * handler_keyboard::keyboard_singleton = NULL;
 
+#ifdef TECNOBALLZ_GP2X 
+bool handler_keyboard::gp2x_buttons[GP2X_NUM_BUTTONS];
+#endif
+#ifdef TECNOBALLZ_PSP
+bool handler_keyboard::psp_buttons[PSP_NUM_BUTTONS];
+#endif
+
 /**
  * Create the handler_keyboard singleton object, and clear members
  */
@@ -77,7 +84,23 @@ handler_keyboard::handler_keyboard ()
     }
   init_joysticks();
   is_key_waiting = true;
-  wait_key_pressed = -1;
+  wait_key_pressed = false;
+  joy_code_down = 0;
+  joy_code_down_prev = 0;
+  joy_up = 0;
+  input_joy_tempo = 0;
+#ifdef TECNOBALLZ_GP2X  
+  for (Uint32 i = 0; i < GP2X_NUM_BUTTONS; i++);
+    {
+      gp2x_buttons[i] = false;
+    }
+#endif
+#ifdef TECNOBALLZ_PSP
+ for (Uint32 i = 0; i < PSP_NUM_BUTTONS; i++);
+   {
+     psp_buttons[i] = false;
+   }
+#endif
 }
 
 /**
@@ -150,21 +173,6 @@ handler_keyboard::init_joysticks()
     }
 }
 
-/*
-bool
-handler_keyboard::is_joy_left()
-{
-  return joy_left ? true : false;
-}
-
-bool
-handler_keyboard::is_joy_right()
-{
-  return joy_right ? true : false;
-}
-*/
-
-
 /**
  * Get the object instance
  * handler_keyboard is a singleton
@@ -208,6 +216,244 @@ handler_keyboard::set_grab_input (bool mode)
     }
 #endif
 }
+
+/**
+ * Handle buttons of handheld video game console
+ * @param event Pointer to a SDL_Event structure
+ */
+#ifdef TECNOBALLZ_HANDHELD_CONSOLE
+static void
+handle_console_buttons (SDL_Event *event)
+{
+#ifdef TECNOBALLZ_GP2X
+  if (event->jbutton.button >= GP2X_NUM_BUTTONS)
+    {
+      return;
+    }
+   if (event->type == SDL_JOYBUTTONDOWN)
+     {
+       gp2x_buttons[event->jbutton.button] = true;
+       if (event->jbutton.button == GP2X_BUTTON_UP
+         || event->jbutton.button == GP2X_BUTTON_UPRIGHT
+         || event->jbutton.button == GP2X_BUTTON_UPRIGHT)
+         {
+           set_joy (IJOY_TOP);
+         }
+       if (event->jbutton.button == GP2X_BUTTON_DOWN  
+         || event->jbutton.button == GP2X_BUTTON_DOWNLEFT
+         || event->jbutton.button == GP2X_BUTTON_DOWNRIGHT)
+         {
+           set_joy (IJOY_DOWN);
+         }
+
+       if (event->jbutton.button == GP2X_BUTTON_LEFT 
+         || event->jbutton.button == GP2X_BUTTON_UPLEFT
+         || event->jbutton.button == GP2X_BUTTON_DOWNLEFT
+         || event->jbutton.button == GP2X_BUTTON_L)
+         {
+           set_joy (IJOY_LEFT);
+         }
+
+       if (event->jbutton.button == GP2X_BUTTON_RIGHT 
+         || event->jbutton.button == GP2X_BUTTON_UPRIGHT
+         || event->jbutton.button == GP2X_BUTTON_DOWNRIGHT
+         || event->jbutton.button == GP2X_BUTTON_R)
+         {
+           set_joy (IJOY_RIGHT);
+         }
+       if (event->jbutton.button == GP2X_BUTTON_A
+           || event->jbutton.button == GP2X_BUTTON_B
+           || event->jbutton.button == GP2X_BUTTON_CLICK)
+         {
+           set_joy (IJOY_FIRE);
+         }
+       if (event->jbutton.button == GP2X_BUTTON_X
+           || event->jbutton.button == GP2X_BUTTON_Y)
+         {
+           set_joy (IJOY_OPT);
+         }
+       if (event->jbutton.button == GP2X_BUTTON_SELECT)
+         {
+           last_command_keys[TOGGLE_POPUP_MENU] = true;
+         }
+     }
+   else
+     {
+       gp2x_buttons[event->jbutton.button] = false;
+       if (event->jbutton.button == GP2X_BUTTON_UP
+         || event->jbutton.button == GP2X_BUTTON_UPRIGHT
+         || event->jbutton.button == GP2X_BUTTON_UPRIGHT)
+         {
+           clr_joy (IJOY_TOP);
+         }
+       if (event->jbutton.button == GP2X_BUTTON_DOWN  
+         || event->jbutton.button == GP2X_BUTTON_DOWNLEFT
+         || event->jbutton.button == GP2X_BUTTON_DOWNRIGHT)
+         {
+           clr_joy (IJOY_DOWN);
+         }
+
+       if (event->jbutton.button == GP2X_BUTTON_LEFT 
+         || event->jbutton.button == GP2X_BUTTON_UPLEFT
+         || event->jbutton.button == GP2X_BUTTON_DOWNLEFT
+         || event->jbutton.button == GP2X_BUTTON_L)
+         {
+           clr_joy (IJOY_LEFT);
+         }
+
+       if (event->jbutton.button == GP2X_BUTTON_RIGHT 
+         || event->jbutton.button == GP2X_BUTTON_UPRIGHT
+         || event->jbutton.button == GP2X_BUTTON_DOWNRIGHT
+         || event->jbutton.button == GP2X_BUTTON_R)
+         {
+           clr_joy (IJOY_RIGHT);
+         }
+       if (event->jbutton.button == GP2X_BUTTON_A
+           || event->jbutton.button == GP2X_BUTTON_B
+           || event->jbutton.button == GP2X_BUTTON_CLICK)
+         {
+           clr_joy (IJOY_FIRE);
+         }
+       if (event->jbutton.button == GP2X_BUTTON_X
+           || event->jbutton.button == GP2X_BUTTON_Y)
+         {
+           clr_joy (IJOY_OPTION);
+         }
+
+       if (event->jbutton.button == GP2X_BUTTON_SELECT)
+         {
+           last_command_keys[TOGGLE_POPUP_MENU] = false;
+         }
+     }
+  /* This button mapping conforms to the GP2X Common User Interface
+     Recommendations, as of 2006-07-29, available from
+     http://wiki.gp2x.org/wiki/Common_User_Interface_Recommendations */
+
+  /* Directions (UDLR) */
+  joy_top = gp2x_buttons[GP2X_BUTTON_UP]
+              | gp2x_buttons[GP2X_BUTTON_UPLEFT]
+              | gp2x_buttons[GP2X_BUTTON_UPRIGHT];
+  joy_down = gp2x_buttons[GP2X_BUTTON_DOWN]
+              | gp2x_buttons[GP2X_BUTTON_DOWNLEFT]
+              | gp2x_buttons[GP2X_BUTTON_DOWNRIGHT];
+  joy_left = gp2x_buttons[GP2X_BUTTON_LEFT]
+              | gp2x_buttons[GP2X_BUTTON_UPLEFT]
+              | gp2x_buttons[GP2X_BUTTON_DOWNLEFT]
+              | gp2x_buttons[GP2X_BUTTON_L];
+  joy_right = gp2x_buttons[GP2X_BUTTON_RIGHT]
+              | gp2x_buttons[GP2X_BUTTON_UPRIGHT]
+              | gp2x_buttons[GP2X_BUTTON_DOWNRIGHT]
+              | gp2x_buttons[GP2X_BUTTON_R];
+
+  /* pause (in game) / Return (in menu) */
+  keys_down[K_PAUSE] = keys_down[K_RETURN]
+    = gp2x_buttons[GP2X_BUTTON_START];
+
+  /* escape (exit to menu) */
+  //keys_down[K_ESCAPE] = gp2x_buttons[GP2X_BUTTON_SELECT];
+
+  /* volume ctrl */
+  keys_down[K_PAGEUP] = gp2x_buttons[GP2X_BUTTON_VOLUP];
+  keys_down[K_PAGEDOWN] =  gp2x_buttons[GP2X_BUTTON_VOLDOWN];
+
+  joy_fire = gp2x_buttons[GP2X_BUTTON_A]
+              | gp2x_buttons[GP2X_BUTTON_B]
+              | gp2x_buttons[GP2X_BUTTON_CLICK];
+
+  /* special (powerup), also control for multi-key commands */
+  joy_release = gp2x_buttons[GP2X_BUTTON_X]
+                | gp2x_buttons[GP2X_BUTTON_Y];
+
+  /* Quit */
+  quit_game = gp2x_buttons[GP2X_BUTTON_CLICK]
+              & gp2x_buttons[GP2X_BUTTON_START];
+#endif
+#ifdef TECNOBALLZ_PSP
+  if (event->jbutton.button >= PSP_NUM_BUTTONS)
+    {
+      return;
+    }
+   if (event->type == SDL_JOYBUTTONDOWN)
+     {
+       psp_buttons[event->jbutton.button] = true;
+       if (event->jbutton.button == PSP_BUTTON_UP)
+         {
+           set_joy (IJOY_TOP);
+         }
+       if (event->jbutton.button == PSP_BUTTON_DOWN)  
+         {
+           set_joy (IJOY_DOWN);
+         }
+
+       if (event->jbutton.button == PSP_BUTTON_LEFT)
+         {
+           set_joy (IJOY_LEFT);
+         }
+
+       if (event->jbutton.button == PSP_BUTTON_RIGHT) 
+         {
+           set_joy (IJOY_RIGHT);
+         }
+       if (event->jbutton.button == PSP_BUTTON_A)
+         {
+           set_joy (IJOY_FIRE);
+         }
+       if (event->jbutton.button == PSP_BUTTON_X)
+         {
+           set_joy (IJOY_OPT);
+         }
+     }
+   else
+     {
+       psp_buttons[event->jbutton.button] = false;
+       if (event->jbutton.button == PSP_BUTTON_UP)
+         {
+           clr_joy (IJOY_TOP);
+         }
+       if (event->jbutton.button == PSP_BUTTON_DOWN)  
+         {
+           clr_joy (IJOY_DOWN);
+         }
+
+       if (event->jbutton.button == PSP_BUTTON_LEFT)
+         {
+           clr_joy (IJOY_LEFT);
+         }
+
+       if (event->jbutton.button == PSP_BUTTON_RIGHT) 
+         {
+           clr_joy (IJOY_RIGHT);
+         }
+       if (event->jbutton.button == PSP_BUTTON_A)
+         {
+           clr_joy (IJOY_FIRE);
+         }
+       if (event->jbutton.button == PSP_BUTTON_X)
+         {
+           clr_joy (IJOY_OPTION);
+         }
+     }
+
+  /* Directions (UDLR) */
+  joy_top = psp_buttons[PSP_BUTTON_UP];
+  joy_down = psp_buttons[PSP_BUTTON_DOWN];
+  joy_left = psp_buttons[PSP_BUTTON_LEFT];
+  joy_right = psp_buttons[PSP_BUTTON_RIGHT];
+  
+  /* pause (in game) / Return (in menu) */
+  keys_down[K_PAUSE] = keys_down[K_RETURN]
+    = psp_buttons[PSP_BUTTON_START];
+
+  /* escape (exit to menu) */
+  keys_down[K_ESCAPE] = psp_buttons[PSP_BUTTON_SELECT];
+  
+  joy_fire = psp_buttons[PSP_BUTTON_A];
+
+  /* special (powerup), also control for multi-key commands */
+  joy_release = psp_buttons[PSP_BUTTON_X];
+#endif
+}
+#endif
 
 /**
  * Read keyboard mouse and exit events
@@ -498,21 +744,21 @@ handler_keyboard::read_events ()
               if (event.jaxis.value < -deadzone)
                 {
                   joy_left = true;
-                  //sprites_string_set_joy (IJOY_LEFT);
+                  set_joy (IJOY_LEFT);
                   joy_right = false;
                 }
               else if (event.jaxis.value > deadzone)
                 {
                   joy_left = false;
                   joy_right = true;
-                  //sprites_string_set_joy (IJOY_RIGHT);
+                  set_joy (IJOY_RIGHT);
                 }
               else
                 {
                   joy_left = false;
                   joy_right = false;
-                  //sprites_string_clr_joy (IJOY_RIGHT);
-                  //sprites_string_clr_joy (IJOY_LEFT);
+                  clr_joy (IJOY_RIGHT);
+                  clr_joy (IJOY_LEFT);
                 }
             }
           /* y axis */
@@ -522,70 +768,74 @@ handler_keyboard::read_events ()
                 {
                   joy_down = false;
                   joy_top = true;
-                  //sprites_string_set_joy (IJOY_TOP);
+                  set_joy (IJOY_TOP);
                 }
               else if (event.jaxis.value > deadzone)
                 {
                   joy_down = true;
                   joy_top = false;
-                  //sprites_string_set_joy (IJOY_DOWN);
+                  set_joy (IJOY_DOWN);
                 }
               else
                 {
                   joy_down = false;
                   joy_top = false;
-                  //sprites_string_clr_joy (IJOY_TOP);
-                  //sprites_string_clr_joy (IJOY_DOWN);
+                  clr_joy (IJOY_TOP);
+                  clr_joy (IJOY_DOWN);
                 }
             }
         }
         break;
         case SDL_JOYBUTTONDOWN:
 #ifdef TECNOBALLZ_HANDHELD_CONSOLE
-          //handle_console_buttons (&event);
+          handle_console_buttons (&event);
 #else
           if (event.jbutton.button == 2)
             {
               joy_gigablitz = true;
+              set_joy (IJOY_GIGABLITZ);
             }
           else if (event.jbutton.button == 0)
             {
               joy_fire = true;
-              //sprites_string_set_joy (IJOY_FIRE);
+              set_joy (IJOY_FIRE);
             }
           else if (event.jbutton.button == 1)
             {
               joy_release = true;
-              //sprites_string_set_joy (IJOY_OPT);
+              set_joy (IJOY_RELEASE);
             }
           else if (event.jbutton.button > 2)
             {
               joy_option = true;
               last_command_keys[TOGGLE_POPUP_MENU] = true;
+              set_joy (IJOY_OPTION);
             }
           break;
 #endif
         case SDL_JOYBUTTONUP:
 #ifdef TECNOBALLZ_HANDHELD_CONSOLE
-          //handle_console_buttons (&event);
+          handle_console_buttons (&event);
 #else
           if (event.jbutton.button == 2)
             {
               joy_gigablitz = false;
+              clr_joy (IJOY_GIGABLITZ);
             }
           else if (event.jbutton.button == 0)
             {
               joy_fire = false;
-              //sprites_string_clr_joy (IJOY_FIRE);
+              clr_joy (IJOY_FIRE);
             }
           else if (event.jbutton.button == 1)
             {
               joy_release = false;
-              //sprites_string_clr_joy (IJOY_OPT);
+              clr_joy (IJOY_RELEASE);
             }
           else if (event.jbutton.button > 2)
             {
               joy_option = false;
+              clr_joy (IJOY_OPTION);
              if (last_command_keys[TOGGLE_POPUP_MENU])
                {
                  last_command_keys[TOGGLE_POPUP_MENU] = false;
@@ -727,7 +977,7 @@ handler_keyboard::clear_command_keys ()
   previous_mouse_x_coord = mouse_x_coord;
   previous_mouse_y_coord = mouse_y_coord;
   is_key_waiting = true;
-  wait_key_pressed = -1;
+  wait_key_pressed = false;
 }
 
 /**
@@ -772,8 +1022,8 @@ bool handler_keyboard::is_right_button ()
 bool
 handler_keyboard::is_gigablitz_or_tilt ()
 {
-  if (is_right_left_buttons() ||
-      keyboard->control_is_pressed (handler_keyboard::K_GIGABLITZ))
+  if (is_middle_button_down ||
+      control_is_pressed (K_GIGABLITZ))
     {
       return true;
     }
@@ -787,6 +1037,7 @@ handler_keyboard::is_gigablitz_or_tilt ()
  * Test if mouse right and left button are pressed (start gigablitz)
  * @return true if mouse right and left buttons are down
  */
+/*
 bool handler_keyboard::is_right_left_buttons ()
 {
   if (is_right_button_down && is_left_button_down)
@@ -798,6 +1049,7 @@ bool handler_keyboard::is_right_left_buttons ()
       return false;
     }
 }
+*/
 
 /**
  * Test if the left mouse button were released
@@ -890,6 +1142,35 @@ handler_keyboard::set_keycode_up (Uint32 kcode)
     }
 }
 
+
+/**
+ * Set a joystick code
+ * @param code A joystick code, a buttom is down
+ */
+void
+handler_keyboard::set_joy (Uint32 code)
+{
+  joy_code_down = code;
+  input_joy_tempo = 0;
+}
+
+/**
+ * Clear a joystick code, a button is up
+ * @param code A joystick code
+ */
+void
+handler_keyboard::clr_joy (Uint32 code)
+{
+  joy_up = code;
+  if (joy_up == joy_code_down)
+    {
+      joy_code_down = 0;
+      input_joy_tempo = 0;
+      key_delay = 0;
+      joy_code_down_prev = 0;
+    }
+}
+
 /**
  * Handle string input
  */
@@ -920,9 +1201,103 @@ handler_keyboard::input_string ()
       kcode = 0;
       key_delay--;
     }
-  if (current_input_string)
+  if (current_input_string == NULL)
     {
-      input_string (kcode);
+      return;
+    }
+  input_string (kcode);
+
+  /* input string with the joystick */
+  Sint32 joycode = 0;
+  if (input_joy_tempo < 1)
+    {
+      joycode = joy_code_down;
+      if (joy_code_down > 0)
+        {
+          /* button pressed for the first time? */
+          if (joy_code_down_prev != joy_code_down)
+            {
+              joy_code_down_prev = joy_code_down;
+              input_joy_tempo = 40;
+            }
+          else
+            {
+              input_joy_tempo = 5;
+            }
+        }
+    }
+  else
+    {
+      joycode = 0;
+      input_joy_tempo--;
+    }
+  if (joycode > 0)
+    {
+      switch (joycode)
+        {
+        case IJOY_FIRE:
+        case IJOY_RELEASE:
+          current_input_string[string_cursor_pos] = ' ';
+          break;
+        case IJOY_OPTION:
+        case IJOY_GIGABLITZ:
+          input_string (SDLK_RETURN);
+          break;
+        case IJOY_LEFT:
+          input_string (SDLK_LEFT);
+          break;
+        case IJOY_RIGHT:
+          input_string (SDLK_RIGHT);
+          break;
+        case IJOY_TOP:
+          {
+            char c = current_input_string[string_cursor_pos] + 1;
+
+      /* space (32) / ! (33)
+       * , (44) /  - (45) / . (46) /
+       * 0-9 (48-57) : (58)
+       * A-Z (65 to 90)
+       */
+            if (c > 90)
+              {
+                c = 32;
+              }
+            else if (c > 58 && c < 65)
+              {
+                c = 65;
+              }
+            else if (c > 46 && c < 48)
+              {
+                c = 48;
+              }
+            else if (c > 33 && c < 44)
+              {
+                c = 44;
+              }
+            current_input_string[string_cursor_pos] = c;
+          }
+          break;
+        case IJOY_DOWN:
+          char c = current_input_string[string_cursor_pos] - 1;
+          if (c < 32)
+            {
+              c = 90;
+            }
+          else if (c < 44 && c > 33)
+            {
+              c = 33;
+            }
+          else if (c < 48 && c > 46)
+            {
+              c = 46;
+            }
+          else if (c < 65 && c > 58)
+            {
+              c = 58;
+            }
+          current_input_string[string_cursor_pos] = c;
+          break;
+        }
     }
 }
 
@@ -1080,31 +1455,23 @@ handler_keyboard::wait_key ()
     {
       if (!control_is_pressed(K_FIRE) &&  
           !control_is_pressed(K_RELEASE_BALL) &&
-          !control_is_pressed(K_GIGABLITZ))
+          !control_is_pressed(K_GIGABLITZ) &&
+          !is_left_button_down)
         {
           is_key_waiting = false;
         }
+      wait_key_pressed = false;
       return false;
     }
-  if (control_is_pressed(K_FIRE))
+  if (control_is_pressed(K_FIRE) || 
+      control_is_pressed(K_RELEASE_BALL) ||
+      control_is_pressed(K_GIGABLITZ) ||
+      is_left_button_down)
     {
-      wait_key_pressed = K_FIRE; 
-      return false;
-    } 
-  else if (control_is_pressed(K_RELEASE_BALL))
-    {
-      wait_key_pressed = K_RELEASE_BALL; 
+      wait_key_pressed = true;
       return false;
     }
-  else if (control_is_pressed(K_GIGABLITZ))
-    {
-      wait_key_pressed = K_GIGABLITZ; 
-      return false;
-    }
-
-  if (wait_key_pressed == K_FIRE ||
-      wait_key_pressed == K_RELEASE_BALL ||
-      wait_key_pressed == K_GIGABLITZ)
+  if (wait_key_pressed)
     {
       return true;
     }

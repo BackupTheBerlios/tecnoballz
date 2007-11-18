@@ -4,11 +4,11 @@
  * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: controller_paddles.cc,v 1.33 2007/11/18 16:13:19 gurumeditation Exp $
+ * $Id: controller_paddles.cc,v 1.34 2007/11/18 21:26:30 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -447,6 +447,7 @@ controller_paddles::get_paddles_speed ()
 {
 
   Sint32 off_x = 0; 
+  bool is_key_down = false;
   if (keyboard->control_is_pressed(handler_keyboard::K_LEFT))
     {
       if ((Sint32)kb_paddle_speed > 0)
@@ -459,7 +460,7 @@ controller_paddles::get_paddles_speed ()
           kb_paddle_speed *= 0.9; 
         }
       off_x = (Sint32)kb_paddle_speed; 
-      //printf("<== %i\n", off_x);
+      is_key_down = true;
     }
   else if (keyboard->control_is_pressed(handler_keyboard::K_RIGHT))
     {
@@ -473,13 +474,32 @@ controller_paddles::get_paddles_speed ()
           kb_paddle_speed *= 0.9; 
         }
       off_x = (Sint32)kb_paddle_speed; 
-      //printf("==> %i\n", off_x);
+      is_key_down = true;
     }
+
+  if (absolute_mouse_positioning)
+    {
+      if (!is_key_down)
+        {
+          kb_paddle_speed = 0;
+          off_x = keyboard->get_mouse_x () - paddle_bottom->x_coord;
+        }
+      else
+        {
+          SDL_WarpMouse (paddle_bottom->x_coord + off_x,
+                         display->get_height() >> 1);
+        }
+    }
+
   else
     {
-      kb_paddle_speed = 0;
-      off_x = keyboard->get_mouse_x_offset ();
+      if (!is_key_down)
+        {
+          kb_paddle_speed = 0;
+          off_x = keyboard->get_mouse_x_offset ();
+        }
     }
+ 
   return off_x;
 }
 
@@ -555,6 +575,7 @@ controller_paddles::move_paddles ()
           paddle_top->set_x_coord (x);
           paddle_left->set_y_coord (x - 16);
         }
+
 
     }
 
