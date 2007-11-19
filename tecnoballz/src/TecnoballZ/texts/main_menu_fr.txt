@@ -61,9 +61,9 @@ TLK-GAMES/BP 24/F81150 FLORENTIN
                                 
  CONTROL DE LA RAQUETTE:        
  BOUTON GAUCHE SOURIS : TIR     
- BOUTON DROIT SOURIS : EJECTE   
- GAUCHE ET DROIT    : TILT      
-                     GIGABLITZ  
+ BOUTON DROIT SOURIS  : EJECTE   
+ BOUTON MILIEU        : TILT      
+                    OU GIGABLITZ  
 --------------------------------
 TOUCHES RECONNUES DANS LE JEU   
  F       : PLEIN ECRAN          

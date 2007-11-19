@@ -1,5 +1,5 @@
-2007-11-17
-TecnoballZ 0.91++
+2007-11-19
+TecnoballZ 0.92
 Autoconf and automake was improved
 The code was compiled with GCC 4.1.2
 The code was considerably cleaned up and rewritten
@@ -11,6 +11,8 @@ Resources files were renamed
 The graphic files were converted from BMP to PNG
 New graphics was realized for the mode 640x480
 The license was changed to the GPLv3
+Joystick and keyboard support was added
+GP2X and PSP support
 Various bugs were fixed
 
 2005-02-04

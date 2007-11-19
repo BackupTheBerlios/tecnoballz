@@ -5,11 +5,11 @@
  * @date 2007-10-06
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.60 $
+ * @version $Revision: 1.61 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: main.cc,v 1.60 2007/11/17 21:37:44 gurumeditation Exp $
+ * $Id: main.cc,v 1.61 2007/11/19 12:44:15 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ returnToMenu (void)
 void
 returnToMenu (void)
 {
-  sceKernelExitGame ();
+  //sceKernelExitGame ();
 }
 #endif
 #endif

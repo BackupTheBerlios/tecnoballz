@@ -4,11 +4,11 @@
  * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_keyboard.h,v 1.14 2007/11/18 21:26:30 gurumeditation Exp $
+ * $Id: handler_keyboard.h,v 1.15 2007/11/19 12:44:15 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,53 +36,53 @@ class handler_keyboard:public virtual tecnoballz
     static const Sint32 NULL_YCOORD = -10240;
 
   private:
-#ifdef TECNOBALLZ_GP2X 
+#ifdef TECNOBALLZ_GP2X
     /* GP2X button codes, as received through SDL joystick events */
-    typedef enum 
-      {
-        GP2X_BUTTON_UP,
-        GP2X_BUTTON_UPLEFT,
-        GP2X_BUTTON_LEFT,
-        GP2X_BUTTON_DOWNLEFT,
-        GP2X_BUTTON_DOWN,
-        GP2X_BUTTON_DOWNRIGHT,
-        GP2X_BUTTON_RIGHT,
-        GP2X_BUTTON_UPRIGHT,
-        GP2X_BUTTON_START,
-        GP2X_BUTTON_SELECT,
-        GP2X_BUTTON_R,
-        GP2X_BUTTON_L,
-        GP2X_BUTTON_A,
-        GP2X_BUTTON_B,
-        GP2X_BUTTON_Y,
-        GP2X_BUTTON_X,
-        GP2X_BUTTON_VOLUP,
-        GP2X_BUTTON_VOLDOWN,
-        GP2X_BUTTON_CLICK,
-        GP2X_NUM_BUTTONS
-      } GP2X_BUTTONS_CODE;
+    typedef enum
+    {
+      GP2X_BUTTON_UP,
+      GP2X_BUTTON_UPLEFT,
+      GP2X_BUTTON_LEFT,
+      GP2X_BUTTON_DOWNLEFT,
+      GP2X_BUTTON_DOWN,
+      GP2X_BUTTON_DOWNRIGHT,
+      GP2X_BUTTON_RIGHT,
+      GP2X_BUTTON_UPRIGHT,
+      GP2X_BUTTON_START,
+      GP2X_BUTTON_SELECT,
+      GP2X_BUTTON_R,
+      GP2X_BUTTON_L,
+      GP2X_BUTTON_A,
+      GP2X_BUTTON_B,
+      GP2X_BUTTON_Y,
+      GP2X_BUTTON_X,
+      GP2X_BUTTON_VOLUP,
+      GP2X_BUTTON_VOLDOWN,
+      GP2X_BUTTON_CLICK,
+      GP2X_NUM_BUTTONS
+    } GP2X_BUTTONS_CODE;
     /* The current state of all the GP2X buttons is stored in
      * this array - used to handle multi-key actions */
     static bool gp2x_buttons[GP2X_NUM_BUTTONS];
 #endif
 #ifdef TECNOBALLZ_PSP
     /* PSP button codes, as received through SDL joystick events */
-    typedef enum 
-      {
-        PSP_BUTTON_Y,
-        PSP_BUTTON_B,
-        PSP_BUTTON_A,
-        PSP_BUTTON_X,
-        PSP_BUTTON_L,
-        PSP_BUTTON_R,
-        PSP_BUTTON_DOWN,
-        PSP_BUTTON_LEFT,
-        PSP_BUTTON_UP,
-        PSP_BUTTON_RIGHT,
-        PSP_BUTTON_SELECT,
-        PSP_BUTTON_START,
-        PSP_NUM_BUTTONS
-      } PSP_BUTTONS_CODE;
+    typedef enum
+    {
+      PSP_BUTTON_Y,
+      PSP_BUTTON_B,
+      PSP_BUTTON_A,
+      PSP_BUTTON_X,
+      PSP_BUTTON_L,
+      PSP_BUTTON_R,
+      PSP_BUTTON_DOWN,
+      PSP_BUTTON_LEFT,
+      PSP_BUTTON_UP,
+      PSP_BUTTON_RIGHT,
+      PSP_BUTTON_SELECT,
+      PSP_BUTTON_START,
+      PSP_NUM_BUTTONS
+    } PSP_BUTTONS_CODE;
     static bool psp_buttons[PSP_NUM_BUTTONS];
 #endif
 
@@ -137,14 +137,14 @@ class handler_keyboard:public virtual tecnoballz
     static bool command_keys[NUMOF_COMMAND_KEYS];
     /** Predefinded keys to control the paddle */
     static Uint32 key_codes[K_MAXOF];
-    static handler_keyboard* keyboard_singleton;
+    static handler_keyboard *keyboard_singleton;
 
   private:
     /** True if grabs mouse and keyboard input */
     bool is_grab_input;
     /** Number of available joysticks */
     Uint32 numof_joysticks;
-    SDL_Joystick** sdl_joysticks;
+    SDL_Joystick **sdl_joysticks;
     bool joy_fire;
     bool joy_release;
     bool joy_gigablitz;
@@ -190,12 +190,12 @@ class handler_keyboard:public virtual tecnoballz
     Sint32 wait_key_pressed;
   private:
     handler_keyboard ();
-#ifdef TECNOBALLZ_HANDHELD_CONSOLE 
-    display_handle_console_buttons (SDL_Event *event);
+#ifdef TECNOBALLZ_HANDHELD_CONSOLE
+    void handle_console_buttons (SDL_Event * event);
 #endif
   public:
     ~handler_keyboard ();
-    static handler_keyboard* get_instance ();
+    static handler_keyboard *get_instance ();
 
     void set_grab_input (bool mode);
     void read_events ();
@@ -217,10 +217,12 @@ class handler_keyboard:public virtual tecnoballz
     Sint32 get_input_cursor_pos ();
     void stop_string_input ();
     Uint32 get_key_down_code ();
-    bool wait_key();
+    bool wait_key ();
 
   private:
-    void init_joysticks();
+    void toggle_popup_menu ();
+    void toggle_pause ();
+    void init_joysticks ();
     void set_joy (Uint32 code);
     void clr_joy (Uint32 code);
     void input_string ();

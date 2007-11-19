@@ -15,7 +15,8 @@ AC_PROG_CC
 AC_PROG_CXX
 
 dnl  Default flags
-CXXFLAGS="-g -O3 -Wall"
+#CXXFLAGS="-g -O3 -Wall"
+CXXFLAGS=" -O3 -Wall"
 
 dnl  Check for X
 AC_PATH_X

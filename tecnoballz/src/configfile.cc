@@ -2,14 +2,14 @@
  * @file configfile.cc 
  * @brief Config file handler 
  * @created 2005-01-22
- * @date 2007-09-21
+ * @date 2007-11-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: configfile.cc,v 1.29 2007/11/18 21:26:30 gurumeditation Exp $
+ * $Id: configfile.cc,v 1.30 2007/11/19 12:44:15 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ configfile::resetvalue ()
   resolution = 2;
   has_background = false;
   is_verbose = false;
-  handler_display::optionfull = 0;
+  handler_display::optionfull = 1;
   difficulty_level = DIFFICULTY_NORMAL;
   initial_num_of_lifes = 5;
   number_of_players = 1;
@@ -295,9 +295,11 @@ configfile::load ()
         {
           strncpy (thePlayers[i], sName.c_str (), 6);
         }
-
     }
   lisp_free (root_obj);
+#ifdef TECNOBALLZ_GP2X
+  resolution = 1;
+#endif
 }
 
 /**

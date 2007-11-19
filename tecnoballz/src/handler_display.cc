@@ -2,14 +2,14 @@
  * @file handler_display.cc 
  * @briefi Handle displaying and updating with SDL 
  * @created 2002-08-17 
- * @date 2007-10-09
+ * @date 2007-11-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_display.cc,v 1.26 2007/11/18 16:13:19 gurumeditation Exp $
+ * $Id: handler_display.cc,v 1.27 2007/11/19 12:44:15 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -117,6 +117,9 @@ handler_display::set_video_mode ()
 
   /* test if the video mode is available */
   Uint32 flag = SDL_ANYFORMAT;
+#ifdef TECNOBALLZ_HANDHELD_CONSOLE
+  flag = SDL_SWSURFACE | SDL_FULLSCREEN;
+#endif
   if (optionfull)
     {
       flag = flag | SDL_FULLSCREEN;

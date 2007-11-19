@@ -7,20 +7,17 @@
   autoconf/automake, Debian packages and tests
 
 * Jean-Michel Martin de Santero <jm at tlk dot fr>
-  Design of all sprites and backgrounds
+  Design of all sprites and backgrounds in low-res
 
 * Jerome Bolot
   One of main programmer of the first Tecnoball on Amiga,
   which inspired TecnoballZ Amiga and this release.
 
 * David Igreja <david at tlk dot fr>
-  Design of some backgrounds  
+  Design of all sprites and backgrounds in hi-res
 
 * Rodolphe Bono
   Additionnal graphics 
-
-* Bruno Ethvignot
-  Switch from low-res to high-res Amiga graphics
 
 * Regis Parret
   Authors of all musics of the game. All musics were created

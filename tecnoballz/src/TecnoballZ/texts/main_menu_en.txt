@@ -60,10 +60,10 @@ TLK-GAMES/BP 24/F81150 FLORENTIN
 #
                                 
  PADDLE CONTROL:                
- LEFT MOUSE BUTTON : FIRE       
- RIGHT MOUSE BUTTON: DROP BALL  
- LEFT AND RIGHT    : TILT       
-                     GIGABLITZ  
+ LEFT MOUSE BUTTON  : FIRE       
+ RIGHT MOUSE BUTTON : DROP BALL  
+ MIDDLE MOUSE BUTTON: TILT       
+                    OR GIGABLITZ  
 --------------------------------
 KEYS RECOGNIZED DURING THE GAME:
  F       : FULL SCREEN          
