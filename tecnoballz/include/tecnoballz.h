@@ -5,11 +5,11 @@
  * @date 2007-11-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.74 $
+ * @version $Revision: 1.75 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: tecnoballz.h,v 1.74 2007/11/19 13:30:40 gurumeditation Exp $
+ * $Id: tecnoballz.h,v 1.75 2007/11/19 13:43:58 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@
 #define __TECNOBALLZ__
 #define TECNOBALLZ_VERSION	"TECNOBALLZ 0.91+ (2007-11-19)"
 /** To define only under development  */
-#define UNDER_DEVELOPMENT 
+/* #define UNDER_DEVELOPMENT  */
 /** Force bytes copy (SPARC unaligned memory access) */
 /* #define BYTES_COPY */
 #ifndef SCOREFILE
