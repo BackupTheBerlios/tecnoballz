@@ -1,0 +1,94 @@
+TARGET = tecnoballz_psp
+
+OBJS = bitmap_data.o \
+  configfile.o \
+  controller_balls.o \
+  controller_bricks.o \
+  controller_bullets.o \
+  controller_capsules.o \
+  controller_ejectors.o \
+  controller_explosions.o \
+  controller_font_game.o \
+  controller_font_menu.o \
+  controller_game_over.o \
+  controller_gems.o \
+  controller_gigablitz.o \
+  controller_guardians.o \
+  controller_indicators.o \
+  controller_magnetic_eyes.o \
+  controller_moneys.o \
+  controller_paddles.o \
+  controller_projectiles.o \
+  controller_ships.o \
+  controller_sides_bricks.o \
+  controller_spheres.o \
+  controller_viewfinders.o \
+  display_text_bitmap.o \
+  handler_audio.o \
+  handler_display.o \
+  handler_high_score.o \
+  handler_keyboard.o \
+  handler_levels.o \
+  handler_menu_events.o \
+  handler_players.o \
+  handler_popup_menu.o \
+  handler_resources.o \
+  head_animation.o \
+  lispreader.o \
+  list_sprites.o \
+  main.o \
+  offscreen_surface.o \
+  right_panel_score.o \
+  short_info_messages.o \
+  sprite_ball.o \
+  sprite_brick.o \
+  sprite_bullet.o \
+  sprite_capsule.o \
+  sprite_display_menu.o \
+  sprite_display_scores.o \
+  sprite_eye.o \
+  sprite_font_game.o \
+  sprite_font_menu.o \
+  sprite_gem.o \
+  sprite_gigablitz.o \
+  sprite_guardian.o \
+  sprite_money.o \
+  sprite_mouse_pointer.o \
+  sprite_object.o \
+  sprite_paddle.o \
+  sprite_projectile.o \
+  sprite_ship.o \
+  sprite_wall.o \
+  supervisor_bricks_level.o \
+  supervisor.o \
+  supervisor_guards_level.o \
+  supervisor_main_menu.o \
+  supervisor_map_editor.o \
+  supervisor_shop.o \
+  surface_sdl.o \
+  tecnoballz.o \
+  tiles_background.o \
+  tilesmap_scrolling.o \
+  tinystr.o \
+  tinyxml.o \
+  tinyxmlerror.o \
+  tinyxmlparser.o \
+
+INCDIR = 
+CC       = psp-gcc
+CXX      = psp-g++
+
+CFLAGS = -DTECNOBALLZ_PSP -O2 -G0 -Wall
+CFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
+CXXFLAGS = $(CFLAGS)
+ASFLAGS = $(CFLAGS)
+
+LIBS=-lSDL_mixer -lSDL_image -lSDL -lpspaudiolib -lpspaudio -lmikmod -logg -lvorbis -lvorbisidec -lpspgum -lpspgu -lpsphprm -lpng -ljpeg -lz -lc -lm -lgcc -lstdc++
+LIBDIR =
+LDFLAGS =
+
+EXTRA_TARGETS = EBOOT.PBP
+PSP_EBOOT_TITLE = TecnoballZ 
+
+PSPSDK=$(shell psp-config --pspsdk-path)
+include $(PSPSDK)/lib/build.mak

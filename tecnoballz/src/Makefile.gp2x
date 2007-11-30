@@ -1,0 +1,110 @@
+#
+# TecnoballZ GP2X make file
+#
+
+CROSS_COMPILE = /usr/local/gp2xdev/bin/gp2x-
+
+SDL_CFLAGS = `/usr/local/gp2xdev/bin/sdl-config --cflags`
+SDL_LIBS = `/usr/local/gp2xdev/bin/sdl-config --libs`
+
+CXX = $(CROSS_COMPILE)g++
+CC = $(CROSS_COMPILE)gcc
+LD = $(CROSS_COMPILE)ld
+STRIP = $(CROSS_COMPILE)strip
+
+CCFLAGS := -Wall -Wshadow -O2 -mcpu=arm920 -mtune=arm920t -fstrict-aliasing -DTECNOBALLZ_GP2X
+CCFLAGS += -I/usr/local/gp2xdev/include/ $(SDL_CFLAGS) $(DEFINES)
+
+LIBS := -lmikmod -lSDL_image -lSDL_mixer -lmad -lvorbisidec
+
+TARGET = tecnoballz.gpe
+SRC = bitmap_data.cc \
+  configfile.cc \
+  controller_balls.cc \
+  controller_bricks.cc \
+  controller_bullets.cc \
+  controller_capsules.cc \
+  controller_ejectors.cc \
+  controller_explosions.cc \
+  controller_font_game.cc \
+  controller_font_menu.cc \
+  controller_game_over.cc \
+  controller_gems.cc \
+  controller_gigablitz.cc \
+  controller_guardians.cc \
+  controller_indicators.cc \
+  controller_magnetic_eyes.cc \
+  controller_moneys.cc \
+  controller_paddles.cc \
+  controller_projectiles.cc \
+  controller_ships.cc \
+  controller_sides_bricks.cc \
+  controller_spheres.cc \
+  controller_viewfinders.cc \
+  display_text_bitmap.cc \
+  handler_audio.cc \
+  handler_display.cc \
+  handler_high_score.cc \
+  handler_keyboard.cc \
+  handler_levels.cc \
+  handler_menu_events.cc \
+  handler_players.cc \
+  handler_popup_menu.cc \
+  handler_resources.cc \
+  head_animation.cc \
+  lispreader.cc \
+  list_sprites.cc \
+  main.cc \
+  offscreen_surface.cc \
+  right_panel_score.cc \
+  short_info_messages.cc \
+  sprite_ball.cc \
+  sprite_brick.cc \
+  sprite_bullet.cc \
+  sprite_capsule.cc \
+  sprite_display_menu.cc \
+  sprite_display_scores.cc \
+  sprite_eye.cc \
+  sprite_font_game.cc \
+  sprite_font_menu.cc \
+  sprite_gem.cc \
+  sprite_gigablitz.cc \
+  sprite_guardian.cc \
+  sprite_money.cc \
+  sprite_mouse_pointer.cc \
+  sprite_object.cc \
+  sprite_paddle.cc \
+  sprite_projectile.cc \
+  sprite_ship.cc \
+  sprite_wall.cc \
+  supervisor_bricks_level.cc \
+  supervisor.cc \
+  supervisor_guards_level.cc \
+  supervisor_main_menu.cc \
+  supervisor_map_editor.cc \
+  supervisor_shop.cc \
+  surface_sdl.cc \
+  tecnoballz.cc \
+  tiles_background.cc \
+  tilesmap_scrolling.cc \
+  tinystr.cc \
+  tinyxml.cc \
+  tinyxmlerror.cc \
+  tinyxmlparser.cc \
+
+all : $(TARGET)
+
+OBJS = $(SRC:.cc=.o)
+DEPS = $(SRC:.cc=.d)
+
+$(TARGET): $(OBJS)
+	$(CC) $(LDFLAGS) -static -s -lm -o $@ $(OBJS) $(LIBS) $(SDL_LIBS)
+	$(STRIP) $(TARGET)
+
+.c.o:
+	$(CXX) $(CCFLAGS) -MMD -c $< -o $*.o
+
+clean:
+	rm -f $(TARGET) *.o *.d
+
+-include $(DEPS)
