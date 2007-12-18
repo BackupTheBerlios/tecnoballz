@@ -1,10 +1,10 @@
 
 AC_PREREQ(2.50)
 dnl AC_INIT(src/technoBall.cc)
-AC_INIT(tecnoballz, 0.91-cvs20050828, tecnoballz@tlk.fr)
+AC_INIT(tecnoballz, 0.93, tecnoballz@tlk.fr)
 AC_CONFIG_AUX_DIR(autotools)
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE(tecnoballz,0.91-cvs20050828)
+AM_INIT_AUTOMAKE(tecnoballz,0.93)
 AM_CONFIG_HEADER(config.h)
 
 dnl Ha Ha ! I are using teh maintainer mode!!!
@@ -81,5 +81,5 @@ dnl    AC_MSG_ERROR([*** SDL_image library not found!])
 
 
 dnl  Output makefiles
-AC_OUTPUT(Makefile src/Makefile src/TecnoballZ/Makefile src/TecnoballZ/hires/Makefile src/TecnoballZ/lores/Makefile src/TecnoballZ/textures/Makefile src/TecnoballZ/musics/Makefile src/TecnoballZ/sounds/Makefile)
+AC_OUTPUT(Makefile src/Makefile src/TecnoballZ/Makefile src/TecnoballZ/hires/Makefile src/TecnoballZ/lores/Makefile src/TecnoballZ/textures/Makefile src/TecnoballZ/musics/Makefile src/TecnoballZ/sounds/Makefile src/TecnoballZ/texts/Makefile)
 

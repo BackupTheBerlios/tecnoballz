@@ -1,3 +1,8 @@
+2007-12-18
+TecnoballZ 0.92+
+The code was compiled with GCC 4.3
+Fix Makefile
+
 2007-11-19
 TecnoballZ 0.92
 Autoconf and automake was improved

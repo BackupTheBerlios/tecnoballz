@@ -2,14 +2,14 @@
  * @file handler_resources.cc 
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-10-18
+ * @date 2007-12-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.24 2007/10/29 13:18:53 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.25 2007/12/18 11:23:23 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -308,7 +308,6 @@ const char * handler_resources::folderlist[] =
 char *
 handler_resources::locate_data_file (const char *const name)
 {
-
 /*
   if (is_verbose)
     {
@@ -316,7 +315,7 @@ handler_resources::locate_data_file (const char *const name)
         cout << "(*) handler_resources::locate_data_file(" << name << ")" << std::
         endl;
     }
-*/
+ */
 
   /* clear path name string */
   for (Sint32 i = 0; i < 256; i++)
@@ -364,12 +363,12 @@ handler_resources::locate_data_file (const char *const name)
           strcat (pathname, subdir);
           strcat (pathname, name);
         }
-        /*
+      /*
       if (is_verbose)
         {
           std::cout << "handler_resources::locate_data_file() try " << pathname << std::endl;
         }
-        */
+      */
 #ifdef WIN32
       struct _stat s;
       if (_stat (pathname, &s) == 0 && !_S_ISDIR (s.st_mode))
@@ -380,14 +379,14 @@ handler_resources::locate_data_file (const char *const name)
       struct stat s;
       if (stat (pathname, &s) == 0 && !S_ISDIR (s.st_mode))
         {
-/*
+            /*
           if (is_verbose)
             {
               std::
                 cout << "handler_resources::locate_data_file(" << pathname <<
                 ") find!" << std::endl;
             }
-*/
+            */
           return pathname;
         }
 #endif
