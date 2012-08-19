@@ -2,14 +2,14 @@
  * @file handler_resources.cc 
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-12-18
+ * @date 2012-08-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.26 2012/08/19 17:58:42 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.27 2012/08/19 19:14:25 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -758,6 +758,8 @@ handler_resources::load_high_score_file ()
 void
 handler_resources::save_high_score_file (char *buffer, Uint32 size)
 {
+  size_t left;
+  ssize_t bytes_written;
 #ifdef WIN32
   /* set umask so that files are group-writable */
   _umask (0002);
@@ -771,14 +773,21 @@ handler_resources::save_high_score_file (char *buffer, Uint32 size)
                "handler_resources::saveScores(): file:%s / error:%s\n",
                fnamescore, strerror (errno));
     }
-#ifdef WIN32
-  _write (fhand, buffer, size);
-#else
-  ssize_t bytes_written = write (fhand, buffer, size);
-  if (bytes_written == -1)
+  left = size;
+  while (left > 0)
     {
-       std::cerr << "(!)handler_resources::saveScores():" <<
-         " filename: " << fnamescore << "; error: " << strerror (errno);  
+#ifdef WIN32
+      bytes_written = _write (fhand, buffer + size - left, left);
+#else
+      bytes_written = write (fhand, buffer + size - left, left);
+      if (bytes_written == -1)
+        {
+          std::cerr << "(!)handler_resources::saveScores():" <<
+             " filename: " << fnamescore << "; error: " << strerror (errno);  
+          close (fhand);
+          return;
+        }
+        left -= bytes_written;
     }
 #endif
   if (close (fhand) == -1)

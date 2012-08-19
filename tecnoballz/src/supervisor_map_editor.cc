@@ -5,11 +5,11 @@
  * @date 2012-08-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.26 2012/08/19 17:58:42 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.27 2012/08/19 19:14:25 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -774,6 +774,8 @@ bool supervisor_map_editor::save_tilesmap ()
 //map_size = map_size * 2;
   Uint32
   bytes_size = map_size * sizeof (Uint16);
+  size_t left;
+  ssize_t bytes_written;
 
   /*
     Uint16 *map2 = new Uint16[map_size];
@@ -843,14 +845,22 @@ bool supervisor_map_editor::save_tilesmap ()
       delete[]filedata;
       return false;
     }
-#ifdef WIN32
-  _write (handle, filedata, bytes_size);
-#else
-  ssize_t bytes_written = write (handle, filedata, bytes_size);
-  if (bytes_written == -1)
+  left = bytes_size;
+  while (left > 0)
     {
-       std::cerr << "(!)supervisor_map_editor::save_tilesmap():" <<
-         " filename: " << filename << "; error: " << strerror (errno);  
+#ifdef WIN32
+      bytes_written = _write (handle, filedata + bytes_size - left, left);
+#else
+      bytes_written = write (handle, filedata + bytes_size - left, left);
+      if (bytes_written == -1)
+       {
+         std::cerr << "(!)supervisor_map_editor::save_tilesmap():" <<
+          " filename: " << filename << "; error: " << strerror (errno);  
+         close (handle);
+         delete[]filedata;
+         return false;
+       }
+      left -= bytes_written;
     }
 #endif
   if (close (handle) == -1)

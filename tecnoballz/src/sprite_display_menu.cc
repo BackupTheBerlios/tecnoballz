@@ -4,11 +4,11 @@
  * @date 2012-08-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.23 2012/08/19 17:58:42 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.24 2012/08/19 19:14:25 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -234,10 +234,10 @@ Uint32 sprite_display_menu::check_and_display ()
               for (j = 0; j < NUM_OF_COLUMNS; j++)
                 {
                   unsigned char pixel = color_cycling[color];
-                  char a = *(p++) - 32;
+                  a = *(p++) - 32;
                   if (a != 0)
                     {
-                      b = c[(int)a];
+                      b = c[a];
                       unsigned char * s = (unsigned char *) font;
                       unsigned char * d = (unsigned char *) dest;
                       b = b << 3;
@@ -335,10 +335,10 @@ Uint32 sprite_display_menu::check_and_display ()
               for (j = 0; j < NUM_OF_COLUMNS; j++)
                 {
                   unsigned char pixel = color_cycling[color];
-                  char a = *(p++) - 32;
+                  a = *(p++) - 32;
                   if (a != 0)
                     {
-                      b = c[(int)a];
+                      b = c[a];
                       unsigned char * s = (unsigned char *) font;
                       unsigned char * d = (unsigned char *) dest;
                       b = b << 4;

@@ -5,11 +5,11 @@
  * @date 2012-08-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.18 2012/08/19 17:58:42 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.19 2012/08/19 19:14:25 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -424,10 +424,10 @@ handler_popup_menu::display_640 ()
           for (j = 0; j < num_of_columns; j++)
             {
               unsigned char pixel = cycling_table[color];
-              char a = *(p++) - 32;
+              a = *(p++) - 32;
               if (a != 0)
                 {
-                  b = c[(int)a];
+                  b = c[a];
                   unsigned char *s = (unsigned char *) basPT;
                   unsigned char *d = (unsigned char *) desP1;
                   b = b << 4;
@@ -509,10 +509,10 @@ handler_popup_menu::display_320 ()
           for (j = 0; j < num_of_columns; j++)
             {
               unsigned char pixel = cycling_table[color];
-              char a = *(p++) - 32;
+              a = *(p++) - 32;
               if (a != 0)
                 {
-                  b = c[(int)a];
+                  b = c[a];
                   unsigned char *s = (unsigned char *) basPT;
                   unsigned char *d = (unsigned char *) desP1;
                   b = b << 3;
