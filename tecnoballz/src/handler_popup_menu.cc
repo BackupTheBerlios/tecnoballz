@@ -2,14 +2,14 @@
  * @file handler_popup_menu.cc
  * @brief popup menu handler (When the [Esc] key is pressed)
  * @created 2004-08-08
- * @date 2007-10-31
+ * @date 2012-08-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_popup_menu.cc,v 1.17 2007/10/31 07:35:29 gurumeditation Exp $
+ * $Id: handler_popup_menu.cc,v 1.18 2012/08/19 17:58:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -427,7 +427,7 @@ handler_popup_menu::display_640 ()
               char a = *(p++) - 32;
               if (a != 0)
                 {
-                  b = c[a];
+                  b = c[(int)a];
                   unsigned char *s = (unsigned char *) basPT;
                   unsigned char *d = (unsigned char *) desP1;
                   b = b << 4;
@@ -512,7 +512,7 @@ handler_popup_menu::display_320 ()
               char a = *(p++) - 32;
               if (a != 0)
                 {
-                  b = c[a];
+                  b = c[(int)a];
                   unsigned char *s = (unsigned char *) basPT;
                   unsigned char *d = (unsigned char *) desP1;
                   b = b << 3;

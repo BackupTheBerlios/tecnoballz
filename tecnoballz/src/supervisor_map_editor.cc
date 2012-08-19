@@ -2,14 +2,14 @@
  * @file supervisor_map_editor.cc
  * @brief The tile map editor for the menu and guardians levels
  * @created 2004-09-13
- * @date 2007-11-18
+ * @date 2012-08-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_map_editor.cc,v 1.25 2007/11/18 16:13:20 gurumeditation Exp $
+ * $Id: supervisor_map_editor.cc,v 1.26 2012/08/19 17:58:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -832,7 +832,7 @@ bool supervisor_map_editor::save_tilesmap ()
 #else
   umask (0002);
 #endif
-  char *
+  const char *
   filename = "edmap.data";
   Sint32
   handle = open (filename, O_WRONLY | O_CREAT, 00666);
@@ -846,7 +846,12 @@ bool supervisor_map_editor::save_tilesmap ()
 #ifdef WIN32
   _write (handle, filedata, bytes_size);
 #else
-  write (handle, filedata, bytes_size);
+  ssize_t bytes_written = write (handle, filedata, bytes_size);
+  if (bytes_written == -1)
+    {
+       std::cerr << "(!)supervisor_map_editor::save_tilesmap():" <<
+         " filename: " << filename << "; error: " << strerror (errno);  
+    }
 #endif
   if (close (handle) == -1)
     {

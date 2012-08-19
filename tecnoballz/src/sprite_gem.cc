@@ -2,14 +2,14 @@
  * @file sprite_gem.cc 
  * @brief The gem sprite 
  * @created 2004-04-12 
- * @date 2007-09-25
+ * @date 2012-08-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_gem.cc,v 1.12 2007/09/26 06:02:01 gurumeditation Exp $
+ * $Id: sprite_gem.cc,v 1.13 2012/08/19 17:58:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,7 +99,7 @@ sprite_gem::init_gem (Sint32 xcoord, Sint32 ycoord, sprite_paddle * pad)
   paddle = pad;
   towards = paddle->get_paddle_number ();
   speed_of_moving = resolution;
-  Uint32 h = (random_counter >> 4 + rand_count++) & 7;
+  Uint32 h = ((random_counter >> 4) + rand_count++) & 7;
   random_counter += xcoord;
   h = gem_random[h];
   gem_id = h;

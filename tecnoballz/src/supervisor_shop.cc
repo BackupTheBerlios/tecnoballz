@@ -1,14 +1,14 @@
 /**
  * @file supervisor_shop.cc
  * @brief Shop supervisor
- * @date 2007-11-17
+ * @date 2012-08-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.53 $
+ * @version $Revision: 1.54 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.cc,v 1.53 2007/11/17 21:37:44 gurumeditation Exp $
+ * $Id: supervisor_shop.cc,v 1.54 2012/08/19 17:58:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -128,8 +128,8 @@ supervisor_shop::first_init ()
   /* copy name player into menu text */
   display_text->print_to_string (current_player->get_name (),
                                  box_texts[TEXT_WELCOME]);
-  char * dest;
-  dest = current_player->get_name ();
+  //char * dest;
+  //dest = current_player->get_name ();
   display_text->print_int_to_string (current_player->get_num_of_lifes (),
                                      2, box_texts[TEXT_LIVES_LEFT]);
   display_text->print_int_to_string (MAX_OF_CAPSULES_BOUGHT, 2,
@@ -699,7 +699,7 @@ supervisor_shop::purchase_bonus_capsule (Sint32 capsule_id)
 void
 supervisor_shop::display_sales_confirmation (Sint32 option_index)
 {
-  char *text = box_texts[led_index_to_text_index[option_index]];
+  char *text = box_texts[(int)led_index_to_text_index[option_index]];
   put_current_text (text);
 }
 

@@ -5,11 +5,11 @@
  * @date 2007-12-18
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 /* 
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.cc,v 1.25 2007/12/18 11:23:23 gurumeditation Exp $
+ * $Id: handler_resources.cc,v 1.26 2012/08/19 17:58:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@
 #endif
 #endif
 
-char * handler_resources::fnamescore = SCOREFILE;
+const char * handler_resources::fnamescore = SCOREFILE;
 const char *
   handler_resources::folder_640 = "hires/";
 const char *
@@ -620,7 +620,7 @@ handler_resources::loadfile_with_lang (const char *const filename, Uint32 * cons
  * @param fname filename specified by path
  */
 char *
-handler_resources::load_file (char *fname)
+handler_resources::load_file (const char *fname)
 {
   return load_file (fname, &last_filesize_loaded);
 }
@@ -632,7 +632,7 @@ handler_resources::load_file (char *fname)
  * return a pointer to the file data 
 */
 char *
-handler_resources::load_file (char *fname, Uint32 * fsize)
+handler_resources::load_file (const char *fname, Uint32 * fsize)
 {
   /* locate a file under one of the data directories */
   char *pname = locate_data_file (fname);
@@ -774,7 +774,12 @@ handler_resources::save_high_score_file (char *buffer, Uint32 size)
 #ifdef WIN32
   _write (fhand, buffer, size);
 #else
-  write (fhand, buffer, size);
+  ssize_t bytes_written = write (fhand, buffer, size);
+  if (bytes_written == -1)
+    {
+       std::cerr << "(!)handler_resources::saveScores():" <<
+         " filename: " << fnamescore << "; error: " << strerror (errno);  
+    }
 #endif
   if (close (fhand) == -1)
     {

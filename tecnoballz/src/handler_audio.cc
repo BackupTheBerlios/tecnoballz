@@ -2,14 +2,14 @@
  * @file handler_audio.cc 
  * @brief Handler of the sound and music
  * @created 2004-03-22
- * @date 2007-10-07
+ * @date 2012-08-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_audio.cc,v 1.10 2007/10/07 19:38:08 gurumeditation Exp $
+ * $Id: handler_audio.cc,v 1.11 2012/08/19 17:58:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -234,7 +234,7 @@ handler_audio::query_spec ()
       "Mix_QuerySpec return " << Mix_GetError () << std::endl;
       return;
     }
-  char *format = "Unknown";
+  const char *format = "Unknown";
   switch (format_id)
     {
     case AUDIO_U8:

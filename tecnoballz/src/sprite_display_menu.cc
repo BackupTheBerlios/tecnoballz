@@ -1,14 +1,14 @@
 /**
  * @file sprite_display_menu.cc 
  * @brief Sprite wich display text of the menu in the menu principal 
- * @date 2007-10-31
+ * @date 2012-08-19
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: sprite_display_menu.cc,v 1.22 2007/10/31 07:35:29 gurumeditation Exp $
+ * $Id: sprite_display_menu.cc,v 1.23 2012/08/19 17:58:42 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -237,7 +237,7 @@ Uint32 sprite_display_menu::check_and_display ()
                   char a = *(p++) - 32;
                   if (a != 0)
                     {
-                      b = c[a];
+                      b = c[(int)a];
                       unsigned char * s = (unsigned char *) font;
                       unsigned char * d = (unsigned char *) dest;
                       b = b << 3;
@@ -338,7 +338,7 @@ Uint32 sprite_display_menu::check_and_display ()
                   char a = *(p++) - 32;
                   if (a != 0)
                     {
-                      b = c[a];
+                      b = c[(int)a];
                       unsigned char * s = (unsigned char *) font;
                       unsigned char * d = (unsigned char *) dest;
                       b = b << 4;
