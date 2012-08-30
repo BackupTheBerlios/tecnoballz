@@ -2,14 +2,14 @@
  * @file handler_resources.h
  * @brief Handler of the files resources 
  * @created 2004-04-20 
- * @date 2007-10-09
+ * @date 2012-08-30 
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: handler_resources.h,v 1.19 2007/10/09 05:46:24 gurumeditation Exp $
+ * $Id: handler_resources.h,v 1.20 2012/08/30 13:19:05 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ class handler_resources:public virtual tecnoballz
     static const char *folderdata;
     static const char *folder_320;
     static const char *folder_640;
-    static char *fnamescore;
+    static const char *fnamescore;
     static char tmp_filename[512];
     static char pathstring[512];
     static const Uint32 TEXTS_OFFSET = 2048;
@@ -118,8 +118,8 @@ class handler_resources:public virtual tecnoballz
 
   private:
     char *loadfile_with_lang (const char *const filename, Uint32 * const fsize);
-    char *load_file (char *fname);
-    char *load_file (char *fname, Uint32 * fsize);
+    char *load_file (const char *fname);
+    char *load_file (const char *fname, Uint32 * fsize);
   };
 
 #endif

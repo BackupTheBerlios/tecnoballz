@@ -4,11 +4,11 @@
  * @date 2007-11-17
  * @copyright 1991-2007 TLK Games
  * @author Bruno Ethvignot
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 /*
  * copyright (c) 1991-2007 TLK Games all rights reserved
- * $Id: supervisor_shop.h,v 1.26 2007/11/17 16:59:43 gurumeditation Exp $
+ * $Id: supervisor_shop.h,v 1.27 2012/08/30 13:19:05 gurumeditation Exp $
  *
  * TecnoballZ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -164,7 +164,7 @@ class supervisor_shop:public supervisor
     /** Prices of all the available options in the shop */
     static Uint32 options_prices[];
     /** Indexes of the texts used for sales confirmation messages */
-    static char led_index_to_text_index[];
+    static unsigned char led_index_to_text_index[];
 
   public:
     supervisor_shop ();
